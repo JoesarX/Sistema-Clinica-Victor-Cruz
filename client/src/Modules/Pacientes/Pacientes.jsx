@@ -34,6 +34,11 @@ const Pacientes = () => {
               <b>Direccion:</b> {paciente.direccion}<br/>
               <b>Telefono Celular:</b> {paciente.telefono}<br/>
               <b>Correo Electronico:</b> {paciente.correo}<br/>
+              <b>Padecimientos y Alergias:</b> {paciente.padecimientos}<br/>
+              <b>Enfermedades:</b> {paciente.enfermedades}<br/>
+              <b>Medicamentos:</b> {paciente.medicamentos}<br/>
+              <b>Historial Medico:</b> {paciente.historial}<br/>
+              
             </p>
           </div>
         ))}
