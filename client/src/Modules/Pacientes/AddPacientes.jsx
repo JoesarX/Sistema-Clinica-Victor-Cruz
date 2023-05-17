@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React from 'react'
-import { Navigate } from 'react-router-dom'
+//import { Navigate } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 
 const AddPacientes = () => {
