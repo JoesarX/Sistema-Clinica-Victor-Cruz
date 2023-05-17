@@ -1,28 +1,33 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import PacientesService from '../../Services/PacientesService';
 
 const Pacientes = () => {
-  const [pacientes, setPacientes] = React.useState([])
+  const [pacientes, setPacientes] = useState([]);
   const navigate = useNavigate();
+
   const handleAddPacientesClick = () => {
     navigate('/pacientes/crear');
   };
 
-  React.useEffect(() => {
+  const handleEditPacientesClick = (id) => {
+    navigate(`/pacientes/${id}`);
+  };
+
+  const handleDeletePacientesClick = (id) => {
+    console.log("delete call works, id: " + id);
+    //llamar a la funcion de delete de services
+  };
+
+  useEffect(() => {
     const fetchAllPacientes = async () => {
-      try {
-        const res = await axios.get('http://localhost:8000/pacientes')
-        //console.log(res.data)
-        setPacientes(res.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchAllPacientes()
-  }, [])
+      const pacientesData = await PacientesService.getAllPacientes();
+      setPacientes(pacientesData);
+    };
+    fetchAllPacientes();
+  }, []);
 
 
   return (
@@ -44,6 +49,8 @@ const Pacientes = () => {
               <b>Enfermedades:</b> {paciente.enfermedades}<br />
               <b>Medicamentos:</b> {paciente.medicamentos}<br />
               <b>Historial Medico:</b> {paciente.historial}<br />
+              <button onClick={() => handleEditPacientesClick(paciente.id)}>Edit</button>
+              <button onClick={() => handleDeletePacientesClick(paciente.id)}>Delete</button>
 
             </p>
           </div>

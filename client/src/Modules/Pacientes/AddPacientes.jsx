@@ -1,10 +1,9 @@
-import axios from 'axios'
 import React from 'react'
-//import { Navigate } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
+import PacientesService from '../../Services/PacientesService';
 
 const AddPacientes = () => {
-    const [pacientes, setPacientes] = React.useState({
+    const [paciente, setPaciente] = React.useState({
         nombre_completo: '',
         estado_civil: '',
         edad: '',
@@ -18,24 +17,20 @@ const AddPacientes = () => {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setPacientes((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
+        setPaciente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
     }
     // console.log(pacientes)
     const handleSubmit = async e => {
         if (validations()) {
             e.preventDefault()
-            try {
-                await axios.post('http://localhost:8000/pacientes', pacientes)
-                alert('Paciente Agregado')
-                navigate('/pacientes')
-            } catch (error) {
-                console.log(error)
-            }
-        }
+            await PacientesService.postPaciente(paciente);
+            alert('Paciente Agregado')
+            navigate('/pacientes')
+        }   
     }
 
     const validations = () => {
-        const { nombre_completo, estado_civil, edad, direccion, telefono } = pacientes
+        const { nombre_completo, estado_civil, edad, direccion, telefono } = paciente
         if (nombre_completo === null || nombre_completo === '') {
             alert('Nombre Completo es requerido')
             return false
