@@ -20,8 +20,8 @@ const Home = () => {
                 <nav>
                     <div className="buttons">
                         <button >Inicio</button>
-                        <button onClick={handleIniciarClick}>Laboratorio</button>
-                        <button onClick={handleLabClick}>Iniciar Sesión</button>
+                        <button onClick={handleLabClick}>Laboratorio</button>
+                        <button onClick={handleIniciarClick}>Iniciar Sesión</button>
                     </div>
                 </nav>
             </header>
