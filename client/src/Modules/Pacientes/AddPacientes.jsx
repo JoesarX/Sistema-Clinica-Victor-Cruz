@@ -44,7 +44,7 @@ const AddPacientes = () => {
             alert('Estado Civil es requerido')
             return false
         }
-        if (edad === null || edad === 0) {
+        if (edad === null || edad === '') {
             alert('Edad es requerido')
             return false
         }
