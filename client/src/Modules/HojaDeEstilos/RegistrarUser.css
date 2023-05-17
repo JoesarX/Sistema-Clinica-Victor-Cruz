@@ -28,8 +28,8 @@
     outline: none;
 }
 
-.login-form {
-    max-width: 400px;
+.register-form {
+    max-width: 500px;
     margin: auto;
     padding: 40px;
     background-color: #f5f5f5;
@@ -39,32 +39,33 @@
     text-align: center;
   }
   
-  .login-form h2 {
-    margin-bottom: 40px;
+  .register-form h2 {
+    margin-bottom: 20px;
   }
   
   .form-group {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+    text-align: left;
   }
   
   .form-group label {
     display: block;
     margin-bottom: 5px;
-    text-align: left;
   }
   
+  input[type='text'],
   input[type='email'],
   input[type='password'] {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
   
   button[type='submit'] {
     width: 100%;
-    padding: 12px;
-    background-color: #677A92;
+    padding: 14px;
+    background-color:#677A92;
     color: white;
     border: none;
     border-radius: 4px;
@@ -72,5 +73,5 @@
   }
   
   button[type='submit']:hover {
-    background-color: #3b597e;
+    background-color:#3b597e;
   }

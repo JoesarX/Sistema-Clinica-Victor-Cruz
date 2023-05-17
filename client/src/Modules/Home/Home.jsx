@@ -4,17 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 
+
 const Home = () => {
     const navigate = useNavigate();
+    const handleIniciarClick = () => {
+        navigate('/iniciarsesion');
+    };
+    const handleLabClick = () => {
+        navigate('/laboratorio');
+    };
     return (
         <div className="scrollable-page">
             <header className="header">
                 <div className="logo">Logo</div>
                 <nav>
                     <div className="buttons">
-                        <button>Inicio</button>
-                        <button>Laboratorio</button>
-                        <button>Iniciar Sesión</button>
+                        <button >Inicio</button>
+                        <button onClick={handleLabClick}>Laboratorio</button>
+                        <button  onClick={handleIniciarClick}>Iniciar Sesión</button>
                     </div>
                 </nav>
             </header>
