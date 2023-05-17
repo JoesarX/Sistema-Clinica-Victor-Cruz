@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React from 'react'
-import { Navigate } from 'react-router-dom'
+//import { Navigate } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
 
 const AddPacientes = () => {
@@ -44,7 +44,7 @@ const AddPacientes = () => {
             alert('Estado Civil es requerido')
             return false
         }
-        if (edad === null || edad === 0) {
+        if (edad === null || edad === '') {
             alert('Edad es requerido')
             return false
         }
