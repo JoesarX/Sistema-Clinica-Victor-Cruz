@@ -8,7 +8,7 @@
 
 .scrollable-page {
     height: 100vh;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .buttons button {
@@ -29,14 +29,92 @@
 }
 
 .background-div {
-    position: absolute;
-    width: 100%;
+    position: relative;
+    width: 1480px;
     height: 314px;
     left: -1px;
-    top: 120px;
+    top: 50px;
+}
+
+.background-div::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
     background-image: url('../Imagenes/clinicback.jpg');
     background-repeat: no-repeat; 
     background-size: cover;
     background-position: center;
-    filter: blur(5px);
+    filter: blur(2px);
+}
+
+.background-div .contentM {
+    position: absolute;
+    width: 10%;
+    height: 100%;
+    left: 200px;
+    top: 0;
+}
+
+.background-div .contentM h1 {
+    font-size: 24px;
+    color: #fff;
+}
+
+.background-div .contentM p {
+    font-size: 16px;
+    color: #fff;
+}
+
+.background-div .contentV {
+    position: absolute;
+    width: 100px;
+    height: 100%;
+    left: 900px;
+    top: 0;
+}
+
+.background-div .contentV h1 {
+    font-size: 24px;
+    color: #fff;
+}
+
+.background-div .contentV p {
+    font-size: 16px;
+    color: #fff;
+}
+
+.biography-card {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
   }
+  
+  .image-container {
+    flex: 0 0 150px;
+    margin-right: 20px;
+    background-image: url('../Imagenes/doctor.jpg');
+  }
+  
+  .image-container img {
+    width: 1000000%;
+    height: auto;
+    border-radius: 50%;
+  }
+  
+  .biography-container {
+    flex: 1;
+  }
+  
+  .biography-container h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .biography-container p {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
