@@ -2,12 +2,12 @@ import express from "express";
 
 const router = express.Router();
 
-const pacientesRouter = (pool) => {
+const expedientesRouter = (pool) => {
     //Get all patients
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM pacientes ";
+            const sqlSelect = "SELECT * FROM expedientes ";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -22,7 +22,7 @@ const pacientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO pacientes (`nombre_completo`, `estado_civil`, `edad`, `correo`, `telefono`, `direccion`, `numero_identidad`, `padecimientos`) VALUES (?)";
+                "INSERT INTO expedientes (`nombre_completo`, `estado_civil`, `edad`, `correo`, `telefono`, `direccion`, `numero_identidad`, `padecimientos`) VALUES (?)";
             const values = [
                 req.body.nombre_completo,
                 req.body.estado_civil,
@@ -35,7 +35,7 @@ const pacientesRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
-            res.json("Paciente añadido exitosamente!");
+            res.json("Expediente añadido exitosamente!");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
@@ -46,7 +46,7 @@ const pacientesRouter = (pool) => {
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM pacientes WHERE id =" + req.params.id;
+            const sqlSelect = "SELECT * FROM expedientes WHERE id =" + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])
@@ -60,7 +60,7 @@ const pacientesRouter = (pool) => {
     router.delete("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM pacientes where id = " + req.params.id;
+            const sqlSelect = "delete FROM expedientes where id = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -90,7 +90,7 @@ const pacientesRouter = (pool) => {
             } = req.body;
 
             const q =
-                "UPDATE pacientes SET nombre_completo = ?, estado_civil = ?, edad = ?, correo = ?, telefono = ?, direccion = ?, numero_identidad = ?, padecimientos = ?, enfermedades = ?, medicamentos = ?, historial = ? WHERE id = ?";
+                "UPDATE expedientes SET nombre_completo = ?, estado_civil = ?, edad = ?, correo = ?, telefono = ?, direccion = ?, numero_identidad = ?, padecimientos = ?, enfermedades = ?, medicamentos = ?, historial = ? WHERE id = ?";
 
             const values = [
                 nombre_completo,
@@ -109,7 +109,7 @@ const pacientesRouter = (pool) => {
 
             await connection.query(q, values);
             connection.release();
-            res.json("Paciente actualizado exitosamente!");
+            res.json("Expediente actualizado exitosamente!");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
@@ -122,4 +122,4 @@ const pacientesRouter = (pool) => {
     return router;
 };
 
-export default pacientesRouter;
+export default expedientesRouter;
