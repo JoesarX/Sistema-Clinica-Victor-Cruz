@@ -22,16 +22,18 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO expedientes (`nombre_completo`, `estado_civil`, `edad`, `correo`, `telefono`, `direccion`, `numero_identidad`, `padecimientos`) VALUES (?)";
+                "INSERT INTO `expedientes` (`nombre`, `edad`, `fecha_nacimiento`, `sexo`, `correo`, `telefono`, `numid`, `estado_civil`, `padecimientos`, `ocupacion`) VALUES (?)";
             const values = [
-                req.body.nombre_completo,
-                req.body.estado_civil,
+                req.body.nombre,
                 req.body.edad,
+                req.body.fecha_nacimiento,
+                req.body.sexo,
                 req.body.correo,
                 req.body.telefono,
-                req.body.direccion,
-                req.body.numero_identidad,
+                req.body.numid,
+                req.body.estado_civil,
                 req.body.padecimientos,
+                req.body.ocupacion
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -115,10 +117,6 @@ const expedientesRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-
-
-
-
     return router;
 };
 

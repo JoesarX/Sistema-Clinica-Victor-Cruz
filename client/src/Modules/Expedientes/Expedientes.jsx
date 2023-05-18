@@ -49,18 +49,19 @@ const Expedientes = () => {
         <button onClick={handleAddExpedientesClick}>Agregar Expediente</button>
         {expedientes.map((expediente) => (
           //maps must have a key if you decide to keey using them
-          <div className='expedienteCard' key={expediente.id}>
-            <h2>{expediente.nombre_completo}</h2>
+          <div className='expedienteCard' key={expediente.idpaciente}>
+            <h2>{expediente.nombre}</h2>
+
             <p>
-              <b>Estado Civil:</b> {expediente.estado_civil}<br />
               <b>Edad:</b> {expediente.edad} años<br />
-              <b>Direccion:</b> {expediente.direccion}<br />
-              <b>Telefono Celular:</b> {expediente.telefono}<br />
-              <b>Correo Electronico:</b> {expediente.correo}<br />
-              <b>Padecimientos y Alergias:</b> {expediente.padecimientos}<br />
-              <b>Enfermedades:</b> {expediente.enfermedades}<br />
-              <b>Medicamentos:</b> {expediente.medicamentos}<br />
-              <b>Historial Medico:</b> {expediente.historial}<br />
+              <b>Fecha de Nacimiento:</b> {new Date(expediente.fecha_nacimiento).toLocaleDateString("en-US", { day: '2-digit', month: '2-digit', year: 'numeric' })}<br />
+              <b>Sexo:</b> {expediente.sexo}<br />
+              <b>Correo:</b> {expediente.correo}<br />
+              <b>Telefono:</b> {expediente.telefono}<br />
+              <b>Numero de Identidad:</b> {expediente.numid}<br />
+              <b>Estado Civil:</b> {expediente.estado_civil}<br />
+              <b>Padecimientos:</b> {expediente.padecimientos}<br />
+              <b>Ocupacion:</b> {expediente.ocupacion}<br />
               <button onClick={() => handleEditExpedientesClick(expediente.id)}>Edit</button>
               <button onClick={() => handleDeleteExpedientesClick(expediente.id)}>Delete</button>
 
