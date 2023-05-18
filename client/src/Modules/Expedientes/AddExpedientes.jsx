@@ -23,7 +23,7 @@ const AddExpedientes = () => {
     const handleSubmit = async e => {
         if (validations()) {
             e.preventDefault()
-            await ExpedientesService.postExpediente(expediente);
+            await ExpedientesService.postExpedientes(expediente);
             alert('Expediente Agregado')
             navigate('/expedientes')
         }   
@@ -58,7 +58,7 @@ const AddExpedientes = () => {
         <div>
             <h1>Agregar un Expediente</h1>
             <form>
-                <input type="text" placeholder="Nombre Completo" onChange={handleChange} name='nombre_completo' />
+                <input type="text" placeholder="Nombre Completo"  onChange={handleChange} name='nombre_completo' />
                 <input type="text" placeholder="Estado Civil" onChange={handleChange} name='estado_civil' />
                 <input type="number" placeholder="Edad" onChange={handleChange} name='edad' />
                 <input type="text" placeholder="Direccion" onChange={handleChange} name='direccion' />

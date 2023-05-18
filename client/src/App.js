@@ -29,6 +29,7 @@ function App() {
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
           <Route path="/expedientes/:expedienteId" element={<EditExpedientes/>}/>
+          
         </Routes>
       </BrowserRouter>
       
