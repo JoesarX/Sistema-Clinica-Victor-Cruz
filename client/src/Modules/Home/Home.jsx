@@ -117,6 +117,20 @@ const Home = () => {
                     Agenda una Cita
                 </h1>
                 <button onClick={handleCitaClick}>Agendar Cita</button>
+                <div>
+                    <h1>Appointment Calendar</h1>
+                    <Calendar
+                        localizer={localizer}
+                        events={[]} // Provide your own events data here
+                        startAccessor="start"
+                        endAccessor="end"
+                        selectable={true}
+                        onSelectSlot={(slotInfo) => {
+                            console.log('Selected slot:', slotInfo);
+                            // Implement your logic to handle the selected slot here
+                        }}
+                    />
+                </div>
                 <h1>
                     Contactanos
                 </h1>

@@ -7,7 +7,6 @@
 }
 
 .scrollable-page {
-    width: 100%;  
     height: 100vh;
     overflow-y: auto;
 }
@@ -33,7 +32,7 @@
 
 .background-div {
     position: relative;
-    width: 100%;
+    width: 1464.8px;
     height: 314px;
     left: -1px;
     top: 50px;
@@ -42,7 +41,7 @@
 .background-div::before {
     content: '';
     position: absolute;
-    width: 100%;
+    width: 1464.8px;
     height: 314px;
     left: 0;
     top: 0;
@@ -91,7 +90,7 @@
 
 .biography-card {
   position: relative;
-  width: 100%;
+  width: 1420px;
   height: 314px;
   left: -1px;
   top: 50px;
