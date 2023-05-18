@@ -10,26 +10,26 @@ app.listen(8000, () => {
 });
 
 //LOCALHOST MYSQL CONNECTION
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "softwaredb",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
-
-//HEROKU MYSQL CONNECTION
 // const pool = mysql.createPool({
-//   host: "us-cdbr-east-06.cleardb.net",
-//   user: "b3d6146967a4b4",
-//   password: "ea90b0e8",
-//   database: "heroku_9fb29a24254053e",
+//   host: "localhost",
+//   user: "root",
+//   password: "password",
+//   database: "softwaredb",
 //   waitForConnections: true,
 //   connectionLimit: 10,
 //   queueLimit: 0,
 // });
+
+//HEROKU MYSQL CONNECTION
+const pool = mysql.createPool({
+  host: "us-cdbr-east-06.cleardb.net",
+  user: "b3d6146967a4b4",
+  password: "ea90b0e8",
+  database: "heroku_9fb29a24254053e",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
 
 app.use(express.json());
 app.use(cors());

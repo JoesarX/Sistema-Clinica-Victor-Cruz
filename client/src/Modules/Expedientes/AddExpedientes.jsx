@@ -3,24 +3,37 @@ import { useNavigate } from 'react-router-dom';
 import ExpedientesService from '../../Services/ExpedientesService';
 
 const AddExpedientes = () => {
+    {/* req.body.nombre,
+        req.body.edad,
+        req.body.fecha_nacimiento,
+        req.body.sexo,
+        req.body.correo,
+        req.body.telefono,
+        req.body.numid,
+        req.body.estado_civil,
+        req.body.padecimientos,
+        req.body.ocupacion */}
     const [expediente, setExpediente] = React.useState({
-        nombre_completo: '',
-        estado_civil: '',
+        nombre: '',
         edad: '',
-        direccion: '',
-        telefono: '',
+        fecha_nacimiento: '',
+        sexo: 'Masculino',
         correo: '',
+        telefono: '',
+        numid: null,
+        estado_civil: '',
         padecimientos: '',
-        enfermedades: '',
-        medicamentos: ''
+        ocupacion: ''
     })
     const navigate = useNavigate();
 
     const handleChange = (e) => {
         setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
+        console.log(expediente)
     }
     // console.log(expedientes)
     const handleSubmit = async e => {
+        e.preventDefault();
         if (validations()) {
             e.preventDefault()
             await ExpedientesService.postExpedientes(expediente);
@@ -30,25 +43,31 @@ const AddExpedientes = () => {
     }
 
     const validations = () => {
-        const { nombre_completo, estado_civil, edad, direccion, telefono } = expediente
-        if (nombre_completo === null || nombre_completo === '') {
+        const {  nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } = expediente
+        if (nombre === null || nombre === '') {
             alert('Nombre Completo es requerido')
+            return false
+        }
+        if (edad === null || edad === '' || edad < 0) {
+            alert('Una edad valida es requerida')
+            return false
+        }
+        const selectedDate = new Date(fecha_nacimiento);
+        const currentDate = new Date();
+        if (isNaN(selectedDate.getTime())) {
+            alert('Una Fecha valida de Nacimiento es requerida');
+            return false;
+        }
+        if( selectedDate > currentDate){
+            alert('La Fecha de Nacimiento no puede ser mayor a la fecha actual');
+            return false;
+        }
+        if(sexo === null || sexo === ''){
+            alert('Sexo es requerido')
             return false
         }
         if (estado_civil === null || estado_civil === '') {
             alert('Estado Civil es requerido')
-            return false
-        }
-        if (edad === null || edad === '') {
-            alert('Edad es requerido')
-            return false
-        }
-        if (direccion === null || direccion === '') {
-            alert('Direccion es requerido')
-            return false
-        }
-        if (telefono === null || telefono === '') {
-            alert('Telefono es requerido')
             return false
         }
         return true
@@ -58,15 +77,21 @@ const AddExpedientes = () => {
         <div>
             <h1>Agregar un Expediente</h1>
             <form>
-                <input type="text" placeholder="Nombre Completo"  onChange={handleChange} name='nombre_completo' />
-                <input type="text" placeholder="Estado Civil" onChange={handleChange} name='estado_civil' />
-                <input type="number" placeholder="Edad" onChange={handleChange} name='edad' />
-                <input type="text" placeholder="Direccion" onChange={handleChange} name='direccion' />
-                <input type="text" placeholder="Telefono Celular" onChange={handleChange} name='telefono' />
-                <input type="text" placeholder="Correo Electronico" onChange={handleChange} name='correo' />
-                <input type="text" placeholder="Padecimientos y Alergias" onChange={handleChange} name='padecimientos' />
-                <input type="text" placeholder="Enfermedades" onChange={handleChange} name='enfermedades' />
-                <input type="text" placeholder="Medicamentos" onChange={handleChange} name='medicamentos' />
+                <input type="text" placeholder="Nombre Completo"  onChange={handleChange} name='nombre' />
+                <input type="number" placeholder="Edad"  onChange={handleChange} name='edad' />
+                <input type="date" placeholder="Fecha de Nacimiento"  onChange={handleChange} name='fecha_nacimiento' />
+                <select onChange={handleChange} name='sexo'>
+                    <option value='Masculino'>Masculino</option>
+                    <option value='Femenino'>Femenino</option>
+                    <option value='Otro'>Otro</option>
+                </select>
+                
+                <input type="email" placeholder="Correo"  onChange={handleChange} name='correo' />
+                <input type="text" placeholder="Telefono"  onChange={handleChange} name='telefono' />
+                <input type="number" placeholder="Numero de Identidad"  onChange={handleChange} name='numid' />
+                <input type="text" placeholder="Estado Civil"  onChange={handleChange} name='estado_civil' />
+                <input type="text" placeholder="Padecimientos"  onChange={handleChange} name='padecimientos' />
+                <input type="text" placeholder="Ocupacion"  onChange={handleChange} name='ocupacion' />
                 <button type="submit" onClick={handleSubmit}>Agregar Expediente</button>
             </form>
         </div>
