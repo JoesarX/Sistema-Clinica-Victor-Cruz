@@ -2,13 +2,23 @@ import React from 'react'
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
 
 const Home = () => {
+    const localizer = momentLocalizer(moment);
     const navigate = useNavigate();
+    const handleReturnClick = () => {
+        navigate('/');
+    };
     const handleIniciarClick = () => {
         navigate('/iniciarsesion');
+    };
+    const handleCitaClick = () => {
+        navigate('/citas');
     };
     const handleLabClick = () => {
         navigate('/laboratorio');
@@ -19,15 +29,12 @@ const Home = () => {
                 <div className="logo">Logo</div>
                 <nav>
                     <div className="buttons">
-                        <button >Inicio</button>
+                        <button onClick={handleReturnClick}>Inicio</button>
                         <button onClick={handleLabClick}>Laboratorio</button>
                         <button onClick={handleIniciarClick}>Iniciar Sesión</button>
                     </div>
                 </nav>
             </header>
-
-
-
             <div className="container">
                 <div class="background-div">
                     <div class="contentM">
@@ -80,25 +87,23 @@ const Home = () => {
             </div>
 
             <div className="frame">
-      <div className="biography-card">
-        <div className="image-container">
-          <div className="biography-container">
-            <span>
-              <h2>Dr. Victor Cruz</h2>
-              <p>
-                Especialista en Epidemiologia y Salud Ocupacional, con mas de 30 años como medico, tiene una larga experiencia sirviendo a la comunidad
-              </p>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-            <div>
+                <div className="biography-card">
+                    <div className="image-container">
+                        <div className="biography-container">
+                            <span>
+                                <h2>Dr. Victor Cruz</h2>
+                                <p>
+                                    Especialista en Epidemiologia y Salud Ocupacional, con mas de 30 años como medico, tiene una larga experiencia sirviendo a la comunidad
+                                </p>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="contactanos-container">
                 <h1>
-                    Nuestra Ubicacion
+                    Ubicacion
                 </h1>
-
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn"
                     width="400"
                     height="300"
@@ -107,23 +112,33 @@ const Home = () => {
                     loading="lazy"
                 ></iframe>
             </div>
-
-
-            <div>
+            <div className="contactanos-container">
                 <h1>
                     Agenda una Cita
                 </h1>
-            </div>
-
-            <div>
+                <button onClick={handleCitaClick}>Agendar Cita</button>
+                <div>
+                    <h1>Appointment Calendar</h1>
+                    <Calendar
+                        localizer={localizer}
+                        events={[]} // Provide your own events data here
+                        startAccessor="start"
+                        endAccessor="end"
+                        selectable={true}
+                        onSelectSlot={(slotInfo) => {
+                            console.log('Selected slot:', slotInfo);
+                            // Implement your logic to handle the selected slot here
+                        }}
+                    />
+                </div>
                 <h1>
                     Contactanos
                 </h1>
+                <p>
+                    Contacto
+                </p>
             </div>
-
-
-
-        </div>
+        </div >
     )
 }
 
