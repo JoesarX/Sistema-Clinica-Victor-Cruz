@@ -4,8 +4,11 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
     const navigate = useNavigate();
     const handlePacientesClick = () => {
-        navigate('/pacientes');
+        navigate('/expedientes');
     };
+
+    
+
     return (  
         <div>
             <h1>Home</h1>

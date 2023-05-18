@@ -6,6 +6,9 @@ import ExpedientesService from '../../Services/ExpedientesService';
 
 const Expedientes = () => {
   const [expedientes, setExpedientes] = useState([]);
+
+
+
   const navigate = useNavigate();
 
   const handleAddExpedientesClick = () => {
@@ -17,9 +20,16 @@ const Expedientes = () => {
   };
 
   const handleDeleteExpedientesClick = (id) => {
-    console.log("delete call works, id: " + id);
-    //llamar a la funcion de delete de services
+    
+    const deleteExpediente = async () => {
+      await ExpedientesService.deleteExpedientes(id);
+      
+    };
+    deleteExpediente();
+    window.location.reload();
   };
+
+
 
   useEffect(() => {
     const fetchAllExpedientes = async () => {
@@ -28,6 +38,8 @@ const Expedientes = () => {
     };
     fetchAllExpedientes();
   }, []);
+
+
 
 
   return (
