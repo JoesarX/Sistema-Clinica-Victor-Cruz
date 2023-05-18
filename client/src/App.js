@@ -7,6 +7,7 @@ import {
   Routes,
 } from "react-router-dom";
 import Home from "./Modules/Home/Home";
+import Citas from "./Modules/Home/Citas";
 import IniciarSesion from "./Modules/Home/IniciarSesion";
 import Laboratorio from "./Modules/Home/Laboratorio";
 import RegistrarUser from "./Modules/Home/RegistrarUser";
@@ -23,7 +24,7 @@ function App() {
           <Route path="/iniciarsesion" element={<IniciarSesion/>}/>
           <Route path="/laboratorio" element={<Laboratorio/>}/>
           <Route path="/registrar-user" element={<RegistrarUser/>}/>
-          
+          <Route path="/citas" element={<Citas/>}/>
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
           <Route path="/expedientes/:expedienteId" element={<EditExpedientes/>}/>
