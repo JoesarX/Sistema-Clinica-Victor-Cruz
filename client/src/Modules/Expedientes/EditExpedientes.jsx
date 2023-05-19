@@ -7,33 +7,37 @@ import { useState } from 'react'
 
 
 const EditExpedientes = () => {
-  
+  const url = window.location.href;
+  const id = url.substring(url.lastIndexOf('/') + 1);
+  console.log(id)
+
   useEffect(() => {
 
     const fetchExpediente = async () => {
       try {
         const expedienteData = await ExpedientesService.getOneExpediente(id);
-        
+
         setExpedientess([expedienteData]);
-        setExpediente(expedienteData); 
+        setExpediente(expedienteData);
       } catch (error) {
         console.log(error);
       }
     };
 
     fetchExpediente();
-  },);
+  },[id]);
 
   const [expediente, setExpediente] = React.useState({
-    nombre_completo: '',
-    estado_civil: '',
+    nombre: '',
     edad: '',
-    direccion: '',
-    telefono: '',
+    fecha_nacimiento: '',
+    sexo: '',
     correo: '',
+    telefono: '',
+    numid: null,
+    estado_civil: '',
     padecimientos: '',
-    enfermedades: '',
-    medicamentos: ''
+    ocupacion: ''
   })
   const navigate = useNavigate();
 
@@ -47,48 +51,49 @@ const EditExpedientes = () => {
     };
     console.log(expediente)
     editExpediente();
-
     navigate('/expedientes')
   };
 
-  const url = window.location.href;
-  const id = url.substring(url.lastIndexOf('/') + 1);
-  
+ 
 
   const handleChange = (e) => {
     setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
-    
+
   };
   // console.log(expedientes)
 
 
-  
+
   return (
     <div>
 
       <div className='expedientesDiv'>
         {expedienteData.map((expediente) => (
           //maps must have a key if you decide to keey using them
-          <div className='expedienteCard' key={expediente.id}>
+          <div className='expedienteCard' key={expediente.idpaciente}>
             <h1>Editar Expediente</h1>
             <h2>{expediente.nombre_completo}</h2>
-         
-              <form >
-             
-                <input type="text" defaultValue={expediente.nombre_completo}  onChange={handleChange} name='nombre_completo' />
-               <input type="text" placeholder="Estado Civil" defaultValue={expediente.estado_civil}  onChange={handleChange} name='estado_civil' />
-                <input type="number" placeholder="Edad" defaultValue={expediente.edad}  onChange={handleChange} name='edad' />
-                <input type="text" placeholder="Direccion" defaultValue={expediente.direccion}  onChange={handleChange} name='direccion' />
-                <input type="number" placeholder="Telefono Celular" defaultValue={expediente.telefono}  onChange={handleChange} name='telefono' />
-                <input type="text" placeholder="Correo Electronico" defaultValue={expediente.correo}  onChange={handleChange} name='correo' />
-                <input type="text" placeholder="Padecimientos y Alergias" defaultValue={expediente.padecimientos}  onChange={handleChange} name='padecimientos' />
-                <input type="text" placeholder="Enfermedades" defaultValue={expediente.enfermedades}  onChange={handleChange} name='enfermedades' />
-                <input type="text" placeholder="Medicamentos" defaultValue={expediente.medicamentos}  onChange={handleChange} name='medicamentos' />
-                <input type="text" placeholder="Historial Medico" defaultValue={expediente.historial} onChange={handleChange} name='historial' />
-                <input type="text" placeholder="Historial Familiar" defaultValue={expediente.historial_familiar}  onChange={handleChange} name='historial_familiar' />
-                <button type="submit" onClick={() => EditHandler()}>Editar Expediente</button>
-              </form>
-          
+
+            <form >
+
+              <input type="text" placeholder = "Nombre" defaultValue={expediente.nombre} onChange={handleChange} name='nombre' />
+              <input type="number" placeholder="Edad" defaultValue={expediente.edad} onChange={handleChange} name='edad' />
+              <input type="date" placeholder="Fecha Nacimiento" defaultValue={expediente.fecha_nacimiento} onChange={handleChange} name='fecha_nacimiento' />
+              <select onChange={handleChange} name='sexo'>
+                    <option value='Masculino'>Masculino</option>
+                    <option value='Femenino'>Femenino</option>
+                    <option value='Otro'>Otro</option>
+                </select>
+              <input type="email" placeholder="Correo" defaultValue={expediente.correo} onChange={handleChange} name='correo' />
+              <input type="text" placeholder="Telefono" defaultValue={expediente.telefono} onChange={handleChange} name='telefono' />
+              <input type="text" placeholder="Numero de Identidad" defaultValue={expediente.numid} onChange={handleChange} name='numid' />
+              <input type="text" placeholder="Estado Civil" defaultValue={expediente.estado_civil} onChange={handleChange} name='estado_civil' />
+              <input type="text" placeholder="Padecimientos" defaultValue={expediente.padecimientos} onChange={handleChange} name='padecimientos' />
+              <input type="text" placeholder="Ocupacion" defaultValue={expediente.ocupacion} onChange={handleChange} name='ocupacion' />
+              
+              <button type="submit" onClick={() => EditHandler()}>Editar Expediente</button>
+            </form>
+
           </div>
         ))}
 
@@ -101,4 +106,4 @@ const EditExpedientes = () => {
 }
 
 
-export default EditExpedientes
+export default EditExpedientes;

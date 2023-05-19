@@ -72,7 +72,7 @@ const AddExpedientes = () => {
         }
         return true
     }
-
+console.log("hola");
     return (
         <div>
             <h1>Agregar un Expediente</h1>

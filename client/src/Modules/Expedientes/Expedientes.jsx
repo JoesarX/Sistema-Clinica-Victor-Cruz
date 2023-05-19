@@ -62,8 +62,8 @@ const Expedientes = () => {
               <b>Estado Civil:</b> {expediente.estado_civil}<br />
               <b>Padecimientos:</b> {expediente.padecimientos}<br />
               <b>Ocupacion:</b> {expediente.ocupacion}<br />
-              <button onClick={() => handleEditExpedientesClick(expediente.id)}>Edit</button>
-              <button onClick={() => handleDeleteExpedientesClick(expediente.id)}>Delete</button>
+              <button onClick={() => handleEditExpedientesClick(expediente.idpaciente)}>Edit</button>
+              <button onClick={() => handleDeleteExpedientesClick(expediente.idpaciente)}>Delete</button>
 
             </p>
           </div>
