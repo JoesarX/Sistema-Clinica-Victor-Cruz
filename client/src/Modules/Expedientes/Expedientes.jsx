@@ -101,42 +101,23 @@ const Expedientes = () => {
 
 
 
+   
    return (
-      <div style={{ backgroundColor: 'rgb(227, 235, 248)' }}>
-         <h1>Expedientes</h1>
-         <div
-            className='expedientesGrid'
-            style={{
-               height: '90vh',
-               width: '100%',
-               display: 'flex',
-               justifyContent: 'center',
-               border: 'none',
-            }}
-         >
-            <Box
-               sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  border: 'none',
-                  width: '100%',
-                  marginLeft: '15px',
-                  marginRight: '15px',
-               }}
-            >
-               <ThemeProvider theme={theme}>
+      <div className='expedientesGrid'>
+        <div className='expedientesGridBox'>
+        <ThemeProvider theme={theme}>
                   <DataGrid
                      rows={expedientes}
                      getRowId={(row) => row.pacienteId}
                      columns={[
-                        //{ field: 'idpaciente', headerName: 'ID', flex: 1 },
-                        { field: 'nombre', headerName: 'Nombre', flex: 5 },
-                        { field: 'edad', headerName: 'Edad', flex: 1 },
-                        //{ field: 'fecha_nacimiento', headerName: 'Fecha de Nacimiento', flex: 1 },
-                        { field: 'sexo', headerName: 'Sexo', flex: 1 },
-                        { field: 'correo', headerName: 'Correo', flex: 5 },
-                        { field: 'telefono', headerName: 'Telefono', flex: 3 },
-                        { field: 'numid', headerName: 'Numero de Identidad', flex: 4 },
+                        //{ field: 'idpaciente', headerName: 'ID', flex: 1 , headerClassName: 'column-header'},
+                        { field: 'nombre', headerName: 'Nombre', flex: 5 , headerClassName: 'column-header', headerClassName: 'column-header'},
+                        { field: 'edad', headerName: 'Edad', flex: 1 , headerClassName: 'column-header'},
+                        //{ field: 'fecha_nacimiento', headerName: 'Fecha de Nacimiento', flex: 1 , headerClassName: 'column-header'},
+                        { field: 'sexo', headerName: 'Sexo', flex: 1 , headerClassName: 'column-header'},
+                        { field: 'correo', headerName: 'Correo', flex: 5 , headerClassName: 'column-header'},
+                        { field: 'telefono', headerName: 'Telefono', flex: 3 , headerClassName: 'column-header'},
+                        { field: 'numid', headerName: 'Numero de Identidad', flex: 4 , headerClassName: 'column-header'},
                         //{ field: 'estado_civil', headerName: 'Estado Civil', flex: 1 },
                         //{ field: 'padecimientos', headerName: 'Padecimientos', flex: 1 },
                         //{ field: 'ocupacion', headerName: 'Ocupacion', flex: 1 },
@@ -159,44 +140,15 @@ const Expedientes = () => {
                      components={{
                         Toolbar: CustomToolbar,
                      }}
-                     sx={{
-                        '& .MuiDataGrid-root': {
-                           border: 'none !important', // Remove the outside border
-                           borderRadius: '0',
-                           borderLeft: '0px solid rgb(227, 235, 248)',
-                           borderColor: 'rgb(227, 235, 248)',
-                           backgroundColor: 'rgb(227, 235, 248)',
-                           boxShadow: 'none', // Remove the shadow
-                        },
-                        '& .MuiDataGrid-window': {
-                           border: 'none', // Remove the border between rows and header/footer
-                        },
-                        '& .MuiDataGrid-row': {
-                           marginBottom: '8px', // Add separation between rows
-                           borderRadius: 4,
-                           backgroundColor: '#FFFFFF',
-                           '&:last-child': {
-                              marginBottom: '0', // Remove margin bottom for the last row
-                           },
-                        },
-                        '& .MuiDataGrid-cell': {
-                           borderBottom: 'none',
-                           fontSize: '20px',
-                        },
-                        '& .MuiDataGrid-colCellTitle': {
-                           fontSize: '18px',
-                           fontWeight: 'bold !important',
-                           color: '#1976d2 !important',
-                         },
-                     }}
+                     
                      columnVisibilityModel={columnVisibilityModel}
                      onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
                   />
                </ThemeProvider>
-            </Box>
-         </div>
+        </div>
       </div>
-   );
+    );
+    
 
 
 }
