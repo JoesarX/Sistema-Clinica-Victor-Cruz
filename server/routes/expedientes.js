@@ -22,16 +22,18 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO expedientes (`nombre_completo`, `estado_civil`, `edad`, `correo`, `telefono`, `direccion`, `numero_identidad`, `padecimientos`) VALUES (?)";
+                "INSERT INTO `expedientes` (`nombre`, `edad`, `fecha_nacimiento`, `sexo`, `correo`, `telefono`, `numid`, `estado_civil`, `padecimientos`, `ocupacion`) VALUES (?)";
             const values = [
-                req.body.nombre_completo,
-                req.body.estado_civil,
+                req.body.nombre,
                 req.body.edad,
+                req.body.fecha_nacimiento,
+                req.body.sexo,
                 req.body.correo,
                 req.body.telefono,
-                req.body.direccion,
-                req.body.numero_identidad,
+                req.body.numid,
+                req.body.estado_civil,
                 req.body.padecimientos,
+                req.body.ocupacion
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -46,7 +48,7 @@ const expedientesRouter = (pool) => {
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM expedientes WHERE id =" + req.params.id;
+            const sqlSelect = "SELECT * FROM expedientes WHERE idpaciente =" + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])
@@ -60,7 +62,7 @@ const expedientesRouter = (pool) => {
     router.delete("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM expedientes where id = " + req.params.id;
+            const sqlSelect = "delete FROM expedientes where idpaciente = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -76,34 +78,32 @@ const expedientesRouter = (pool) => {
             const connection = await pool.getConnection();
             const { id } = req.params;
             const {
-                nombre_completo,
-                estado_civil,
+                nombre,
                 edad,
+                fecha_nacimiento,
+                sexo,
                 correo,
                 telefono,
-                direccion,
-                numero_identidad,
+                numid,
+                estado_civil,
                 padecimientos,
-                enfermedades,
-                medicamentos,
-                historial
+                ocupacion
             } = req.body;
 
             const q =
-                "UPDATE expedientes SET nombre_completo = ?, estado_civil = ?, edad = ?, correo = ?, telefono = ?, direccion = ?, numero_identidad = ?, padecimientos = ?, enfermedades = ?, medicamentos = ?, historial = ? WHERE id = ?";
+                "UPDATE expedientes SET nombre = ?, edad = ?, fecha_nacimiento = ?, sexo = ?, correo = ?,  telefono = ?, numid = ?, estado_civil = ?, padecimientos = ?, ocupacion = ? WHERE idpaciente = ?";
 
             const values = [
-                nombre_completo,
-                estado_civil,
+                nombre,
                 edad,
+                fecha_nacimiento,
+                sexo,
                 correo,
                 telefono,
-                direccion,
-                numero_identidad,
+                numid,
+                estado_civil,
                 padecimientos,
-                enfermedades,
-                medicamentos,
-                historial,
+                ocupacion,
                 id
             ];
 
@@ -115,10 +115,6 @@ const expedientesRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-
-
-
-
     return router;
 };
 
