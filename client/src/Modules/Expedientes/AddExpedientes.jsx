@@ -3,16 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import ExpedientesService from '../../Services/ExpedientesService';
 
 const AddExpedientes = () => {
-    {/* req.body.nombre,
-        req.body.edad,
-        req.body.fecha_nacimiento,
-        req.body.sexo,
-        req.body.correo,
-        req.body.telefono,
-        req.body.numid,
-        req.body.estado_civil,
-        req.body.padecimientos,
-        req.body.ocupacion */}
     const [expediente, setExpediente] = React.useState({
         nombre: '',
         edad: '',
