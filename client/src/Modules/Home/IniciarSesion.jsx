@@ -2,15 +2,18 @@ import React from 'react'
 import '../HojaDeEstilos/IniciarSesion.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import UsuariosService from '../../Services/UsuariosService';
 
 
 const IniciarSesion = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    
     const [rememberMe, setRememberMe] = useState(false);
+    
+    
     const navigate = useNavigate();
-
+    
+    
+    
     const handleReturnClick = () => {
         navigate('/');
     };
@@ -19,11 +22,13 @@ const IniciarSesion = () => {
         navigate('/registrar-user');
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async e => {
         e.preventDefault();
-
-    };
-
+        
+        
+      
+  }
+  
     return (
 
         <div className="scrollable-page">
@@ -41,26 +46,28 @@ const IniciarSesion = () => {
 
             <div className="login-form">
                 <h2>Iniciar Sesion</h2>
-                <form onSubmit={handleSubmit}>
+                <form >
                     <div className="form-group">
                         <label htmlFor="email">Nombre de Usuario: </label>
                         <input
                             type="email"
                             id="email"
-
+                            
+                            name='correouser'
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Contraseña:</label>
+                        <label htmlFor="password" >Contraseña:</label>
                         <input
                             type="password"
                             id="password"
-
+                           
+                            name='password'
                         />
                     </div>
+                    <button type="submit" onClick={handleSubmit} >Iniciar Sesion</button>
                     
-
-                    <button type="submit">Iniciar Sesion</button>
+                    
                 </form>
             </div>
         </div>

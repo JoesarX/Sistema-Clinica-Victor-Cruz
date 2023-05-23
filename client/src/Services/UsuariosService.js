@@ -12,15 +12,7 @@ export const getAllusuarios = async () => {
     }
 };
 
-export const getOneUsuario = async (email) => {
-    try {
-        const res = await axios.get(`${API_URL}/usuarios/${email}`);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Failed to fetch usuario');
-    }
-};
+
 
 export const postUsuarios = async (usuario) => {
     try {
@@ -55,7 +47,7 @@ export const deleteusuarios = async (id) => {
 const Services ={
     getAllusuarios,
     postUsuarios,
-    getOneUsuario,
+   
     deleteusuarios,
     editusuarios
     // Other functions
