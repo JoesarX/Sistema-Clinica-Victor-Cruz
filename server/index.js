@@ -3,6 +3,8 @@ import mysql from "mysql2/promise";
 import cors from "cors";
 import expedientesRouter from "./routes/expedientes.js"
 
+import usuariosRouter from "./routes/usuarios.js"
+
 const app = express();
 
 app.listen(8000, () => {
@@ -39,3 +41,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a parameter
+
+
+app.use("/usuarios", usuariosRouter(pool)); // Pass the pool object as a parameter
