@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
-
-
 const Home = () => {
     const navigate = useNavigate();
     const handleReturnClick = () => {
@@ -23,12 +21,10 @@ const Home = () => {
 
     return (
         <div className="scrollable-page">
-            <header className="header">
-                <div className="buttons">
-                    <button style={{ fontSize: '24px' }} onClick={handleReturnClick}>INICIO</button>
-                    <button style={{ fontSize: '24px' }} onClick={handleLabClick}>LABORATORIO</button>
-                    <button style={{ fontSize: '24px' }} onClick={handleIniciarClick}>INICIAR SESIÓN</button>
-                </div>
+            <header className="headerT">
+                <button className="bt" style={{ fontSize: '24px' }} onClick={handleReturnClick}>INICIO</button>
+                <button className="bt" style={{ fontSize: '24px' }} onClick={handleLabClick}>LABORATORIO</button>
+                <button className="bt" style={{ fontSize: '24px' }} onClick={handleIniciarClick}>INICIAR SESIÓN</button>
             </header>
             <div className="imagenes">
                 <Slide>
@@ -65,7 +61,6 @@ const Home = () => {
                 </div>
                 <div className="container1">
                     <div className="iconContainer">
-                        {/* <FontAwesomeIcon icon="fa-solid fa-flask" /> */}
                     </div>
                     <h1 className="head1">Laboratorio</h1>
                     <div className="textoL">
@@ -98,7 +93,7 @@ const Home = () => {
                 <p style={{ color: '#fff' }}>Col.Kennedy, Tegucigalpa</p>
                 <p style={{ color: '#fff' }}>(504) 2228-3233</p>
                 <button // onClick={handleClick} 
-                    className='boton'
+                    className='botonCon'
                 >
                     Contactanos para responder tus dudas
                 </button>

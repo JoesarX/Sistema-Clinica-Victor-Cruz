@@ -1,33 +1,20 @@
-.header {
+.bt{
+  color: #fff;
+  background-color: #1E60A6;
+  border: #1E60A6;
+  padding-left: 70px;
+}
+.headerT{
   display: flex;
   justify-content: flex-end;
   align-items: center;
   background-color: #1E60A6;
   padding: 35px;
 }
-
 .scrollable-page {
   height: 100vh;
   overflow-y: auto;
   background-color: #E4EBF9;
-}
-
-
-.contactanos-container {
-  position: relative;
-  width: 1420px;
-  height: 414px;
-  left: -1px;
-  top: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  background-color: #f5f5f5;
-  border: 2px solid gray;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .servicios {
@@ -161,7 +148,7 @@
   font-weight: normal;
 }
 
-.boton {
+.botonCon {
   background-color: #1E60A6;
   border-radius: 10px;
   padding: 10px 20px;
