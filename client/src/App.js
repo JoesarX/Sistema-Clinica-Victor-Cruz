@@ -9,6 +9,8 @@ import {
 import Home from "./Modules/Home/Home";
 import Citas from "./Modules/Home/Citas";
 import IniciarSesion from "./Modules/Home/IniciarSesion";
+import Servicios from "./Modules/Home/Servicios";
+import Acercade from "./Modules/Home/Acercade";
 import Laboratorio from "./Modules/Home/Laboratorio";
 import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
@@ -23,6 +25,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/iniciarsesion" element={<IniciarSesion/>}/>
+          <Route path="/acerca-de" element={<Acercade/>}/>
+          <Route path="/servicios" element={<Servicios/>}/>
           <Route path="/laboratorio" element={<Laboratorio/>}/>
           <Route path="/registrar-user" element={<RegistrarUser/>}/>
           <Route path="/citas" element={<Citas/>}/>
