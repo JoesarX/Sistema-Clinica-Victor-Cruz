@@ -42,6 +42,19 @@ const usuariosRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+     //Login
+     router.get("/usuarios",async (req,res)=>{
+        try{
+            const connection = await pool.getConnection();
+            const q = "SELECT * FROM usuarios WHERE correouser = `"+{req}+"`";
+            await connection.query(q);
+            connection.release();
+            res.json("Verificando");
+        }catch(error){
+            console.log("fijate acá:"+ error)
+        }
+    });
+    
     return router;
 };
 
