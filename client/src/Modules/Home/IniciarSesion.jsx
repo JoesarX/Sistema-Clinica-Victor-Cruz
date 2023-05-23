@@ -4,16 +4,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 
-
 const IniciarSesion = () => {
-    
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-    
-    
     const navigate = useNavigate();
-    
-    
-    
+
     const handleReturnClick = () => {
         navigate('/');
     };
@@ -22,13 +18,22 @@ const IniciarSesion = () => {
         navigate('/registrar-user');
     };
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Este es el email: "+email);
+        console.log("Esta es la clave: "+password);
         
-        
-      
-  }
-  
+        if(await UsuariosService.loginUsuarios(email,password)){
+         const user = email;
+         localStorage.setItem("isLoggedIn", true);
+         alert("Bienvenido!");
+         navigate("/expedientes"); 
+        }else{
+         alert("Email o contraseña incorrecta!");
+        }
+
+    };
+
     return (
 
         <div className="scrollable-page">
@@ -46,28 +51,28 @@ const IniciarSesion = () => {
 
             <div className="login-form">
                 <h2>Iniciar Sesion</h2>
-                <form >
+                <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="email">Nombre de Usuario: </label>
                         <input
                             type="email"
                             id="email"
-                            
-                            name='correouser'
+                            value={email}
+                            onChange= {(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password" >Contraseña:</label>
+                        <label htmlFor="password">Contraseña:</label>
                         <input
                             type="password"
                             id="password"
-                           
-                            name='password'
+                            value={password}
+                            onChange= {(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    <button type="submit" onClick={handleSubmit} >Iniciar Sesion</button>
                     
-                    
+
+                    <button type="submit" onClick={handleSubmit}>Iniciar Sesion</button>
                 </form>
             </div>
         </div>
