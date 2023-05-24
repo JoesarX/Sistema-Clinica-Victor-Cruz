@@ -4,11 +4,10 @@ import '../HojaDeEstilos/Servicios.css';
 const Acercade = () => {
 
 
-    return (
-        <div className="scrollable-page">
-          Hola Mundo
-        </div>
-    );
+  return (
+    <div className="hello_world">
+    </div>
+  );
 };
 
 export default Acercade;
