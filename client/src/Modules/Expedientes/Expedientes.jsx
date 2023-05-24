@@ -17,11 +17,13 @@ const Expedientes = () => {
 
 
    const navigate = useNavigate();
+   const isLoggedIn = localStorage.getItem("isLoggedIn");
 
    // const handleAddExpedientesClick = () => {
    //    navigate('/expedientes/crear');
    // };
 
+  
    const handleEditExpedientesClick = (id) => {
       navigate(`/expedientes/${id}`);
    };
@@ -82,6 +84,11 @@ const Expedientes = () => {
    }
 
    useEffect(() => {
+       //validación login
+   if (!isLoggedIn) {
+      // Redirigir si no se cumple la verificación
+       navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+    }
       const fetchAllExpedientes = async () => {
          try {
             const expedientesData = await ExpedientesService.getAllExpedientes();

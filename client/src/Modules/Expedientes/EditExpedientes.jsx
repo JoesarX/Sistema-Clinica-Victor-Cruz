@@ -4,13 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import ExpedientesService from '../../Services/ExpedientesService';
 import { useEffect } from 'react'
 import { useState } from 'react'
+import moment from 'moment';
 
 
 const EditExpedientes = () => {
   const url = window.location.href;
   const id = url.substring(url.lastIndexOf('/') + 1);
   console.log(id)
-
+ 
   useEffect(() => {
 
     const fetchExpediente = async () => {
@@ -53,14 +54,16 @@ const EditExpedientes = () => {
     editExpediente();
     navigate('/expedientes')
   };
-
+  const defaultValue = expediente.sexo;
+  console.log(defaultValue)
  
 
   const handleChange = (e) => {
     setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
   };
-  // console.log(expedientes)
+   console.log(expediente)
+   console.log(expedienteData)
 
 
 
@@ -78,11 +81,11 @@ const EditExpedientes = () => {
 
               <input type="text" placeholder = "Nombre" defaultValue={expediente.nombre} onChange={handleChange} name='nombre' />
               <input type="number" placeholder="Edad" defaultValue={expediente.edad} onChange={handleChange} name='edad' />
-              <input type="date" placeholder="Fecha Nacimiento" defaultValue={expediente.fecha_nacimiento} onChange={handleChange} name='fecha_nacimiento' />
-              <select onChange={handleChange} name='sexo'>
-                    <option value='Masculino'>Masculino</option>
-                    <option value='Femenino'>Femenino</option>
-                    <option value='Otro'>Otro</option>
+              <input type="date" placeholder="Fecha Nacimiento" value={moment(expediente.fecha_nacimiento).format("YYYY-MM-DD")} onChange={handleChange} name='fecha_nacimiento' />
+              <select onChange={handleChange}  defaultValue={defaultValue} name='sexo'>
+                    <option value='M'>Masculino</option>
+                    <option value='F'>Femenino</option>
+                    <option value='O'>Otro</option>
                 </select>
               <input type="email" placeholder="Correo" defaultValue={expediente.correo} onChange={handleChange} name='correo' />
               <input type="text" placeholder="Telefono" defaultValue={expediente.telefono} onChange={handleChange} name='telefono' />

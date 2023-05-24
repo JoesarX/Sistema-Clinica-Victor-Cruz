@@ -12,15 +12,7 @@ export const getAllusuarios = async () => {
     }
 };
 
-export const getOneUsuario = async (email) => {
-    try {
-        const res = await axios.get(`${API_URL}/usuarios/${email}`);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Failed to fetch usuario');
-    }
-};
+
 
 export const postUsuarios = async (usuario) => {
     try {
@@ -51,14 +43,37 @@ export const deleteusuarios = async (id) => {
         throw new Error('Failed to delete usuario');
     }
 };
+//Para iniciar sesión
+export const loginUsuarios= async(uEmail, uPassword)=>{
+    try{
+        const user = await axios.get(`${API_URL}/usuarios/`,uEmail);
+        const PW = await axios.get(`${API_URL}/usuarios/`,uPassword);
+        const userInfo= user.data
+        const passwordInfo=PW.data
+        const emailEncontrado= userInfo.find(user => user.correouser === uEmail && user.password === uPassword);
+        if(emailEncontrado){
+            return true;
+    
+        }else{
+            return false;
+        }
+       
+    }catch (error){
+       // console.log("Este es el Email: "+user+" Este es el PW: "+PW)
+       console.log("Esto da: "+error)
+    }
+
+};
+    
 
 const Services ={
     getAllusuarios,
     postUsuarios,
-    getOneUsuario,
+   
     deleteusuarios,
-    editusuarios
+    editusuarios,
     // Other functions
+    loginUsuarios
 };
 
 export default Services;
