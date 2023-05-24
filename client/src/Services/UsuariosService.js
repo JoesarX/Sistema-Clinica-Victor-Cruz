@@ -64,6 +64,30 @@ export const loginUsuarios= async(uEmail, uPassword)=>{
     }
 
 };
+export const loginAdmin= async(uEmail, uPassword)=>{
+    try{
+        console.log("Este es el Email: "+uEmail+" Este es el PW: "+uPassword)
+        const Adminuser = await axios.get(`${API_URL}/usuarios_admin/`,uEmail);
+        
+        const Admininfo= Adminuser.data
+        console.log( Adminuser.data)
+     
+        console.log("Este es el Email DB: "+Admininfo.id+" Este es el PW DB: "+Admininfo.password)
+        const emailEncontrado= Admininfo.find(Adminuser => Adminuser.correo === uEmail && Adminuser.password === uPassword);
+        if(emailEncontrado){
+            return true;
+    
+        }else{
+            return false;
+        }
+       
+    }catch (error){
+        
+       console.log("Esto da: "+error)
+       console.log("PTM esto es el login admin")
+    }
+
+};
     
 
 const Services ={
@@ -73,7 +97,8 @@ const Services ={
     deleteusuarios,
     editusuarios,
     // Other functions
-    loginUsuarios
+    loginUsuarios,
+    loginAdmin
 };
 
 export default Services;

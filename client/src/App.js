@@ -19,12 +19,6 @@ import EditExpedientes from "./Modules/Expedientes/EditExpedientes";
 
 
 function App() {
-  // Obtén el estado de autenticación desde localStorage
-  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-  window.addEventListener("beforeunload", function(event) {
-    // Borrar el almacenamiento local
-    localStorage.clear();
-  })
   return (
     <div className="App">
       <BrowserRouter>

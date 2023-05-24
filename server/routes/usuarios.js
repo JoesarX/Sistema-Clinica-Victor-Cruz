@@ -17,7 +17,19 @@ const usuariosRouter = (pool) => {
     });
     
 
-   
+   //Para login de admin
+   router.get("/usuarios_admin/", async (req, res) => {
+    try {
+        const connection = await pool.getConnection();
+        const sqlSelect = "SELECT * FROM usuarios_admin ";
+        const [rows, fields] = await connection.query(sqlSelect);
+        connection.release();
+        res.json(rows);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 
 
