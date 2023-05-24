@@ -22,6 +22,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Autocomplete from '@mui/material/Autocomplete';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+
 
 //STYLES
 import ExpedientesService from '../../Services/ExpedientesService';
@@ -277,58 +280,59 @@ const Expedientes = () => {
             <Modal open={isModalOpen} onClose={toggleModal}>
                <div className='modalContainer'>
                   <h2 className="modalHeader">Agregar Expediente</h2>
-                  {/* <form onSubmit={handleModalSubmit} className='modalForm'>
-                     <input type="text" placeholder="Nombre Completo" onChange={handleModalFieldChange} name='nombre' />
-                     <input type="number" placeholder="Edad" onChange={handleModalFieldChange} name='edad' />
-                     <input type="date" placeholder="Fecha de Nacimiento" onChange={handleModalFieldChange} name='fecha_nacimiento' />
-                     <select onChange={handleModalFieldChange} name='sexo'>
-                        <option value='Masculino'>Masculino</option>
-                        <option value='Femenino'>Femenino</option>
-                        <option value='Otro'>Otro</option>
-                     </select>
-
-                     <input type="email" placeholder="Correo" onChange={handleModalFieldChange} name='correo' />
-                     <input type="text" placeholder="Telefono" onChange={handleModalFieldChange} name='telefono' />
-                     <input type="number" placeholder="Numero de Identidad" onChange={handleModalFieldChange} name='numid' />
-                     <input type="text" placeholder="Estado Civil" onChange={handleModalFieldChange} name='estado_civil' />
-                     <input type="text" placeholder="Padecimientos" onChange={handleModalFieldChange} name='padecimientos' />
-                     <input type="text" placeholder="Ocupacion" onChange={handleModalFieldChange} name='ocupacion' />
-                     <button type="submit" onClick={handleModalSubmit}>Agregar Expediente</button>
-                  </form> */}
                   <Box
                      component="form"
                      sx={{
-                        '& > :not(style)': { m: 1, width: '25ch' },
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '10px',
                      }}
                      noValidate
                      autoComplete="off"
                   >
                      <TextField id="nombre" label="Nombre Completo" variant="outlined" />
-                     <TextField id="edad" label="Edad" variant="outlined" type='number' />
-                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker />
-                     </LocalizationProvider>
-                     <RadioGroup
-                        row
-                        aria-labelledby="demo-row-radio-buttons-group-label"
-                        name="sexo"
-                     >
-                        <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                        <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                     </RadioGroup>
-                     <TextField id="correo" label="Correo Electronico" variant="outlined" type='email' />
-                     <TextField id="telefono" label="Telefono" variant="outlined" />
-                     <TextField id="numid" label="Numero de Identidad" variant="outlined" type='number' />
-                     <Autocomplete
-                        disablePortal
-                        id="estado_civil"
-                        options={listaEstadoCivil}
-                        sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Estado Civil" />}
-                     />
+                     <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                           <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker id="fecha_nacimiento" label="Fecha de Nacimiento" />
+                           </LocalizationProvider>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                           <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" id='sexo'>
+                              <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                              <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                           </RadioGroup>
+                        </Grid>
+                     </Grid>
+                     <TextField id="ocupacion" label="Ocupación" variant="outlined" />
+                     <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                           <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                           <TextField id="telefono" label="Teléfono" variant="outlined" />
+                        </Grid>
+                     </Grid>
+                     <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                           <TextField id="numid" label="Número de Identidad" variant="outlined" type='number' />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                           <Autocomplete
+                              disablePortal
+                              id="estado_civil"
+                              options={listaEstadoCivil}
+                              renderInput={(params) => <TextField {...params} label="Estado Civil" />}
+                           />
+                        </Grid>
+                     </Grid>
+                     <Button onClick={handleModalSubmit} variant="contained" style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+                        Agregar Expediente
+                     </Button>
                   </Box>
                </div>
             </Modal>
+
          </div>
       </div>
    );
