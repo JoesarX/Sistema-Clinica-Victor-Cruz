@@ -32,13 +32,13 @@
     border: #1E60A6;
     padding-left: 70px;
     transition: transform 0.3s ease-in-out;
-}
-
-.bt1:hover {
+  }
+  
+  .bt1:hover {
     transform: translateX(10px);
-}
-
-.bt1::before {
+  }
+  
+  .bt1::before {
     position: absolute;
     top: 0;
     left: -100%;
@@ -46,11 +46,12 @@
     height: 100%;
     transition: left 0.3s ease-in-out;
     z-index: -1;
-}
-
-.bt1:hover::before {
+  }
+  
+  .bt1:hover::before {
     left: 0;
-}
+  }
+  
 
 .bt2 {
     color: #fff;
@@ -122,3 +123,191 @@
     position: relative;
     z-index: 1;
 }
+
+.about-us-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px;
+    margin-bottom: 60px;
+  }
+  
+  h1, h2 {
+    color: #333;
+    font-size: 32px;
+    margin-bottom: 20px;
+    margin-bottom: 60px;
+  }
+  
+  .mission-vision-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 60px;
+    padding: 40px;
+    background-color: #E3F2FD;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .mission-vision-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+   
+  }
+  
+  .mission, .vision {
+    flex-basis: 50%;
+  }
+  
+  .mission {
+    border-right: none;
+    padding-right: 0;
+    margin-right: 40px;
+  }
+  
+  .vision {
+    padding-left: 0;
+  }
+  
+
+  .mission h2,
+  .vision h2 {
+    font-size: 34px;
+    margin-bottom: 10px;
+    color: #000;
+    text-align: center;
+  }
+  
+  .mission p,
+  .vision p {
+    font-size: 24px;
+    line-height: 1.5;
+    color: #000;
+  }
+  
+  
+  .company-description {
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+    padding: 40px;
+    background-color: #E3F2FD;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .company-description:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .image-container {
+    flex-shrink: 0;
+    margin-right: 20px;
+  }
+  
+
+
+  .image-container img {
+    width: 350px;
+    height: auto;
+    filter: drop-shadow(2px); /* Adjust the blur amount as desired */
+  }
+  
+
+  .text-container {
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .company-description h2 {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+  
+  .company-description p {
+    font-size: 22px;
+    line-height: 1.5;
+    justify-content: center;
+  }
+  
+  
+  
+  
+  
+  .person-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+    padding: 40px;
+    background-color: #E3F2FD;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+
+  .person-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .person-image {
+    flex-basis: 30%;
+    margin-right: 40px;
+  }
+  
+  .person-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .person-image img:hover {
+    transform: scale(1.1);
+  }
+  
+
+  .employee-description {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+    padding: 40px;
+    background-color: #E3F2FD;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .employee-description:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .employee-description h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .employee-description p {
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  
+  .footer {
+    height: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1E60A6;
+    padding: 35px;
+  }
+  
