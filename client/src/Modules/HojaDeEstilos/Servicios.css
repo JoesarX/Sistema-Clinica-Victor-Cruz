@@ -1,0 +1,57 @@
+.headerT {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: #1E60A6;
+    padding: 35px;
+}
+
+.scrollable-page {
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #E4EBF9;
+}
+
+.service img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.service {
+    position: relative;
+    min-height: 10vw;
+    max-height: 15vw;
+    border-radius: 1rem;
+    box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    width: 100%;
+}
+
+.service .text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+    color: white;
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin: 1rem;
+}
+
+.services {
+    max-width: 1500px;
+    margin: 0 auto;
+    display: grid;
+    padding: 2rem;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 10fr));
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+}

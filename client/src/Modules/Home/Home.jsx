@@ -10,10 +10,71 @@ import doctor_slide from '../Imagenes/doctor_slide.jpeg';
 import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-
+import { faFlask } from '@fortawesome/free-solid-svg-icons';
+import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
+import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
+
+    function mostrarBotones1() {
+        var boton1 = document.getElementById('bt1');
+        var boton2 = document.getElementById('bt2');
+        var div1 = document.getElementById('m1');
+        var div2 = document.getElementById('mi1');
+        div1.style.display = 'block';
+        div2.style.display = 'block';
+        boton1.style.visibility = 'visible';
+        boton1.style.top = '30px';
+        boton2.style.visibility = 'visible';
+        boton2.style.top = '60px';
+    }
+
+    function ocultarBotones1() {
+        var boton1 = document.getElementById('bt1');
+        var boton2 = document.getElementById('bt2');
+        var div2 = document.getElementById('mi1');
+        div2.style.display = 'none';
+        boton1.style.visibility = 'hidden';
+        boton2.style.visibility = 'hidden';
+    }
+
+    function mostrarBotones2() {
+        var boton1 = document.getElementById('bt3');
+        var boton2 = document.getElementById('bt4');
+        var div1 = document.getElementById('m2');
+        var div2 = document.getElementById('mi2');
+        div1.style.display = 'block';
+        div2.style.display = 'block';
+        boton1.style.visibility = 'visible';
+        boton1.style.top = '30px';
+        boton2.style.visibility = 'visible';
+        boton2.style.top = '60px';
+    }
+
+    function ocultarBotones2() {
+        var boton1 = document.getElementById('bt3');
+        var boton2 = document.getElementById('bt4');
+        var div2 = document.getElementById('mi2');
+        div2.style.display = 'none';
+        boton1.style.visibility = 'hidden';
+        boton2.style.visibility = 'hidden';
+    }
+
+    window.onload = function () {
+        ocultarBotones1();
+        ocultarBotones2();
+        var botonPrincipal = document.getElementById('btp1');
+        var botonPrincipal2 = document.getElementById('btp2');
+        botonPrincipal.addEventListener('mouseenter', mostrarBotones1);
+        botonPrincipal.addEventListener('mouseleave', ocultarBotones1);
+        botonPrincipal2.addEventListener('mouseenter', mostrarBotones2);
+        botonPrincipal2.addEventListener('mouseleave', ocultarBotones2);
+    };
+
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
@@ -30,7 +91,7 @@ const Home = () => {
         navigate('/laboratorio');
     };
 
-    
+
     const handleServicios = () => {
         navigate('/servicios');
     };
@@ -62,30 +123,24 @@ const Home = () => {
                 <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>INICIO</button>
                 <button className="bt" style={{ fontSize: '18px' }} onClick={handleLabClick}>LABORATORIO</button>
                 <button className="bt" style={{ fontSize: '18px' }} onClick={handleIniciarClick}>INICIAR SESIÓN</button>
-                <button className="bt1" style={{ fontSize: '18px' }} onClick={toggleDropdown}>ACERCA DE
+                <button className="bt1" style={{ fontSize: '18px' }} id="btp1" onMouseEnter={mostrarBotones1}
+                    onMouseLeave={ocultarBotones1}>ACERCA DE
+                    <div className="menu_desplegable" id='m1'>
+                        <div className="menu_item" id='mi1'>
+                            <button className='bt_menu' id='bt1' onClick={handleAcercade}>Sobre Nosotros</button>
+                            <button className='bt_menu' id='bt2' onClick={handleAcercade}>Contáctanos</button>
+                        </div>
+                    </div>
                 </button>
-                {isDropdownOpen && (
-                    <ul className="dropdown-menu">
-                        <li>
-                            <button className="dropdown-item" onClick={handleAcercade}>Sobre nosotros</button>
-                        </li>
-                        <li>
-                            <button className="dropdown-item" onClick={handleAcercade}>Contactanos</button>
-                        </li>
-                    </ul>
-                )}
-                <button className="bt2" style={{ fontSize: '18px' }} onClick={toggleDropdown}>SERVICIOS</button>
-                {isDropdownOpen && (
-                    <ul className="dropdown-menu">
-                        <li>
-                            <button className="dropdown-item" onClick={handleServicios}>Servicios</button>
-                        </li>
-                        <li>
-                            <button className="dropdown-item" onClick={handleServicios}>Otros Servicios</button>
-                        </li>
-                    </ul>
-                )}
-
+                <button className="bt2" style={{ fontSize: '18px' }} id="btp2" onMouseEnter={mostrarBotones2}
+                    onMouseLeave={ocultarBotones2}>SERVICIOS
+                    <div className="menu_desplegable" id='m2'>
+                        <div className="menu_item" id='mi2'>
+                            <button className='bt_menu' id='bt3' onClick={handleServicios}>Servicios</button>
+                            <button className='bt_menu' id='bt4' onClick={handleServicios}>Otros Servicios</button>
+                        </div>
+                    </div>
+                </button>
             </header>
             <div className="imagenes">
                 <Slide {...properties}>
@@ -106,7 +161,9 @@ const Home = () => {
             <div className="container">
                 <div className="container1">
                     <div className="iconContainer">
-                        <FontAwesomeIcon icon={faHeart} />
+                        <div style={{ position: 'relative', left: '70px', top: '80px' }}>
+                            <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
                     </div>
                     <h1 className="head1">Clinica</h1>
                     <div className="textoC">
@@ -115,6 +172,10 @@ const Home = () => {
                 </div>
                 <div className="container1">
                     <div className="iconContainer">
+                        <div style={{ position: 'relative', left: '85px', top: '70px' }}>
+                            <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
+
                     </div>
                     <h1 className="head1">Salud ocupacional</h1>
                     <div className="textoS">
@@ -122,14 +183,20 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="container1">
-                    <div className="iconContainer">
+                    <div className="iconContainer" >
+                        <div style={{ position: 'relative', left: '83px', top: '70px' }}>
+                            <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
+
                     </div>
+
                     <h1 className="head1">Laboratorio</h1>
                     <div className="textoL">
                         Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.
                     </div>
                 </div>
             </div>
+
             <div className="container2">
                 <h1 className="ruta">Estamos ubicados en:</h1>
                 <iframe
@@ -143,18 +210,15 @@ const Home = () => {
                 ></iframe>
                 <div className="linea">
                 </div>
-                <h1 className="agendar">Agenda una cita</h1>
-                <button className="btnA" onClick={handleCitaClick}>Revisa nuestra disponibilidad</button>
-                <button className='botonA'>
-                    ∧
-                </button>
+
+                <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', right: '140px', top: '85px', fontSize: '100px' }} />
+                <h1 className="agendar" style={{ position: 'relative', left: '70px', top: '-50px' }}>Agenda una cita</h1>
+                <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-60px' }}>Revisa nuestra disponibilidad</button>
             </div>
             <footer className="footer">
-                <p style={{ color: '#fff' }}>Col.Kennedy, Tegucigalpa</p>
-                <p style={{ color: '#fff' }}>(504) 2228-3233</p>
-                <button // onClick={handleClick} 
-                    className='botonCon'
-                >
+                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faLocationDot} /> Col.Kennedy, Tegucigalpa</p>
+                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faPhone} /> (504) 2228-3233</p>
+                <button className='botonCon' >
                     Contactanos para responder tus dudas
                 </button>
             </footer>
