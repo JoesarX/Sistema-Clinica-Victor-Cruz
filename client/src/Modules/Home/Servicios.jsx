@@ -39,17 +39,6 @@ const Servicios = () => {
     navigate('/acerca-de');
   };
 
-
-
-  const properties = {
-    duration: 3000,
-    transitionDuration: 500,
-    infinite: true,
-    indicators: true,
-    arrows: true
-  };
-
-
   return (
     <div className="scrollable-page">
       <header className="headerT">
@@ -81,38 +70,34 @@ const Servicios = () => {
         )}
       </header>
 
+      <div className="info header">
+        NUESTROS SERVICIOS
+      </div>
+
+      <div className="info">
+        Los servicios que tenemos a disposición para los clientes son varios, incluyendo: 
+      </div>
+
       <div class="services">
         <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
+          <img src={doctor_slide} />
+          <div class="text">Salud Ocupacional</div>
         </div>
         <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
+          <img src={doctor_slide} />
+          <div class="text">Salubrista</div>
         </div>
         <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
+          <img src={doctor_slide} />
+          <div class="text">Epidemiología</div>
         </div>
         <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
+          <img src={doctor_slide} />
+          <div class="text">Medicina Interna</div>
         </div>
         <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
-        </div>
-        <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
-        </div>
-        <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
-        </div>
-        <div class="service">
-          <img src={doctor_slide}/>
-          <div class="text">Servicio</div>
+          <img src={doctor_slide} />
+          <div class="text">Medicina General</div>
         </div>
       </div>
 
