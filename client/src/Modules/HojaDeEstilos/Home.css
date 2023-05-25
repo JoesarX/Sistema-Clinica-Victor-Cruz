@@ -1,161 +1,267 @@
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #677A92;
-    padding: 35px;
+.bt{
+  color: #fff;
+  background-color: #1E60A6;
+  border: #1E60A6;
+  padding-left: 70px;
+  transition: transform 0.3s ease-in-out;
 }
 
+.bt:hover {
+  transform: translateX(10px);
+}
+
+.bt::before {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transition: left 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.bt:hover::before {
+  left: 0;
+}
+
+
+.bt1{
+  color: #fff;
+  background-color: #1E60A6;
+  border: #1E60A6;
+  padding-left: 70px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.bt1:hover {
+  transform: translateX(10px);
+}
+
+.bt1::before {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transition: left 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.bt1:hover::before {
+  left: 0;
+}
+
+.bt2{
+  color: #fff;
+  background-color: #1E60A6;
+  border: #1E60A6;
+  padding-left: 70px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.bt2:hover {
+  transform: translateX(10px);
+}
+
+.bt2::before {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  transition: left 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.bt2:hover::before {
+  left: 0;
+}
+
+
+.headerT{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: #1E60A6;
+  padding: 35px;
+}
 .scrollable-page {
-    height: 100vh;
-    overflow-y: auto;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #E4EBF9;
 }
 
-.buttons button {
-    margin-right: 20px;
-    background-color: transparent;
-    border: none;
-    color: #ffff;
-    cursor: pointer;
-    font-size: 18px;
+.servicios {
+  height: 200px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  background-color: #1E60A6;
 }
 
-.buttons button:hover {
-    color: #ffffff6c;
-}
-
-.buttons button:focus {
-    outline: none;
-}
-
-
-
-.background-div {
-    position: relative;
-    width: 1464.8px;
-    height: 314px;
-    left: -1px;
-    top: 50px;
-}
-
-.background-div::before {
-    content: '';
-    position: absolute;
-    width: 1464.8px;
-    height: 314px;
-    left: 0;
-    top: 0;
-    background-image: url('../Imagenes/clinicback.jpg');
-    background-size: cover;
-    background-position: center;
-    filter: blur(5px);
-    white-space: nowrap;
-}
-
-.background-div .contentM {
-    position: absolute;
-    width: 300px;
-    height: 100%;
-    left: 200px;
-    top: 0;
-}
-
-.background-div .contentM h1 {
-    font-size: 30px;
-    justify-content: center;
-}
-
-.background-div .contentM p {
-    font-size: 20px;
-    justify-content: center;
-}
-
-.background-div .contentV {
-    position: absolute;
-    width: 300px;
-    height: 100%;
-    left: 900px;
-    top: 0;
-}
-
-.background-div .contentV h1 {
-    font-size:30px;
-    justify-content: center;
-}
-
-.background-div .contentV p {
-    font-size: 20px;
-    justify-content: center;
-}
-
-.biography-card {
+.iconContainer {
+  width: 260px;
+  height: 260px;
+  background: #fff;
+  border-radius: 100%;
   position: relative;
-  width: 1420px;
-  height: 314px;
-  left: -1px;
-  top: 50px;
+  top: -95px;
+}
+
+.container1 {
+  width: 370px;
+  height: 600px;
+  background: #1E60A6;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  top: 20px;
+}
+
+
+.container {
+  height: 800px;
+  width: 100%;
   display: flex;
   align-items: center;
-  background-color: #f5f5f5;
-  border: 2px solid gray;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  gap: 60px;
+  background-color: #1E60A6;
 }
 
-.image-container {
-  flex: 0 0 150px;
-  margin-right: 20px;
-  background-image: url('../Imagenes/doctor.jpg');
-  background-size: 100% auto;
-  background-position: top left; 
+.container2 {
+  height: 1000px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.biography-container {
-  flex-grow: 1;
+.footer {
+  height: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1E60A6;
+  padding: 35px;
+}
+
+.head1 {
+  position: relative;
+  top: -70px;
+  font-size: 40px;
+  text-align: center;
+  color: #8FC1B5;
+}
+
+.textoC {
+  font-size: 20px;
+  height: 200px;
+  width: 250px;
+  position: relative;
+  top: -50px;
+  text-align: center;
+  color: #fff;
+}
+
+.textoS {
+  height: 200px;
+  width: 250px;
+  font-size: 20px;
+  position: relative;
+  top: -50px;
+  text-align: center;
+  color: #fff;
+}
+
+.textoL {
+  font-size: 20px;
+  height: 200px;
+  width: 250px;
+  position: relative;
+  top: -50px;
+  text-align: center;
+  color: #fff;
+}
+
+.ruta {
+  width: 420px;
+  height: 50px;
+  text-align: center;
+  font-size: 40px;
+  background-color: #346A78;
+  border-radius: 10px;
+  font-weight: normal;
+  color: #ffff;
+  margin: 100px;
+}
+
+.frame{
+  height:400px ;
+  width: 800px;
+  border-radius: 40px;
 }
 
 
-  
-  .biography-container h2 {
-    margin: 0;
-    font-size: 24px;
-    color: #333;
-  }
-  
-  .biography-container p {
-    
-    left: 50px;
-    margin: 5px 0;
-    color: #666;
-  }
-  .contactanos-container{
-    position: relative;
-    width: 1420px;
-    height: 414px;
-    left: -1px;
-    top: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-    background-color: #f5f5f5;
-    border: 2px solid gray;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .contactanos-container h1 {
-    flex-basis: 100%;
-    margin: 0;
-  }
-  
-  .contactanos-container iframe {
-    width: 40%;
-    height: 300px;
-    border: 0;
-  }
+.btnA {
+  background-color: #346A78;
+  border-radius: 10px;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  width: 400px;
+}
 
-  
-  
+.agendar {
+  font-size: 40px;
+  font-weight: normal;
+}
+
+.botonCon {
+  background-color: #1E60A6;
+  border-radius: 10px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+.linea{
+  margin: 50px;
+  background-color: #346A78;
+  height: 4px;
+  width: 1000px;
+}
+
+.botonA{
+  height: 35px;
+  width: 50px;
+  background-color: #346A78;
+  border-radius: 10px;
+  color: #ffff;
+  position: relative;
+  left: 650px;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.imagenes {
+  width: 100%;
+  height: auto; 
+}
+
+.each-slide img {
+  width: 100%;
+  height: auto; 
+}
+
+
+
+
+
+
+
