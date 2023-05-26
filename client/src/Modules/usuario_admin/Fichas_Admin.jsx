@@ -33,4 +33,18 @@ const Popup = (props) => {
   );
 };
 
+const Popup2 = (props) => {
+  let {  setNombre,setRol,setId,setCorreo, setCelular, openPopup2, setOpenPopup2 } = props;
+  console.log(props);
+  return (
+   
+    <Dialog open={openPopup2} onClose={() => setOpenPopup2(false)} maxWidth="md" >
+      <DialogTitle sx={{ bgcolor: 'rgb(184,184,184)' }}>Agregar Administrador</DialogTitle>
+      <DialogContent sx={{ bgcolor: 'rgb(184,184,184)' }} style={{ display: 'flex', alignItems: 'center' }}>
+        
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 export default Popup;

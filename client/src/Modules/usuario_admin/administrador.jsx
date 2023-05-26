@@ -14,14 +14,14 @@ import AdministradoresService from '../../Services/AdministradoresService';
 import './administradorStyle.css';
 
 const Administradores = () => {
-   const [expedientes, setAdministradores] = useState([]);
+   const [usuarios_admin, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
    let [nombre, setNombre] = useState('5');
    let [rol, setRol] = useState('');
    let [id, setId] = useState('');
    let [email, setEmail] = useState('');
-   let [cel, setCel] = useState('');
+   let [telefono, setTelefono] = useState('');
    const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
 
    const navigate = useNavigate();
@@ -74,7 +74,7 @@ const Administradores = () => {
 
    function CustomToolbar() {
       const handleAgregarAdministradorClick = () => {
-         navigate('/administrador/crear');
+         //navigate('/administrador/crear');
       };
 
       return (
@@ -90,7 +90,13 @@ const Administradores = () => {
                   Agregar Administrador
                </Button>
             </div>
+            {handleAgregarAdministradorClick && (
+            <Popup2
+               openPopup={openPopup}
+            />
+            )}
          </GridToolbarContainer>
+         
       );
    }
 
@@ -121,7 +127,7 @@ const Administradores = () => {
          <div className='administradoresGridBox'>
             <ThemeProvider theme={theme}>
                <DataGrid onRowClick={(params) => handleSelectedAdministradoresClick(params.row)}
-                  rows={expedientes}
+                  rows={usuarios_admin}
                   getRowId={(row) => row.adminId}
                   columns={[
                      //{ field: 'idpaciente', headerName: 'ID', flex: 1 , headerClassName: 'column-header'},
@@ -202,11 +208,7 @@ const Administradores = () => {
                setRol={rol}
                setId={id}
                setEmail={email}
-
-
-
             />
-
          )}
       </div>
    );
