@@ -13,6 +13,11 @@ import { faBullseye } from '@fortawesome/free-solid-svg-icons';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
+import { faBullseyeArrow } from '@fortawesome/free-solid-svg-icons';
+import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 
 const Acercade = () => {
 
@@ -119,7 +124,7 @@ const Acercade = () => {
       <header className="headerT">
         <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>INICIO</button>
         <button className="bt" style={{ fontSize: '18px' }} onClick={handleLabClick}>LABORATORIO</button>
-        <button className="bt" style={{ fontSize: '18px' }} onClick={handleIniciarClick}>INICIAR SESIÓN</button>
+        <button className="bt" style={{ fontSize: '18px' }} onClick={handleIniciarClick} > <FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</button>
         <button className="bt1" style={{ fontSize: '18px' }} id="btp1" onMouseEnter={mostrarBotones1}
           onMouseLeave={ocultarBotones1}>ACERCA DE
           <div className="menu_desplegable" id='m1'>
