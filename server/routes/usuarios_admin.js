@@ -37,12 +37,14 @@ const adminRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `usuarios_admin` (`nombre`, `correo`, `rol`, `password`, `correo`) VALUES (?)";
+                "INSERT INTO `usuarios_admin` (`nombre`, `correo`, `rol`, `password`, `telefono`, `sexo`) VALUES (?)";
             const values = [
                 req.body.nombre,
                 req.body.correo,
                 req.body.rol,
-                req.body.password
+                req.body.password,
+                req.body.telefono,
+                req.body.sexo
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -59,14 +61,24 @@ const adminRouter = (pool) => {
             const connection = await pool.getConnection();
             const { id } = req.params;
             const {
-                rol
+                rol,
+                nombre,
+                correo,
+                password,
+                sexo,
+                telefono
             } = req.body;
 
             const q =
-                "UPDATE usuarios_admin SET rol = ? WHERE id = ?";
+                "UPDATE usuarios_admin SET rol = ?, nombre = ?, correo = ?, password = ?, rol = ?, sexo = ?, telefono = ? WHERE id = ?";
 
             const values = [
                 rol,
+                nombre,
+                correo,
+                password,
+                sexo,
+                telefono,
                 id
             ];
 
