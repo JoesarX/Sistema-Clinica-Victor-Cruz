@@ -8,7 +8,7 @@ const adminRouter = (pool) => {
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM usuarios_admin ";
+            const sqlSelect = "select * from usuarios_admin";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -95,4 +95,4 @@ const adminRouter = (pool) => {
     return router;
 };
 
-export default adminRouter
+export default adminRouter;

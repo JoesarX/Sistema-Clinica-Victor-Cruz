@@ -27,7 +27,7 @@ const IniciarSesion = () => {
         }else if(await UsuariosService.loginAdmin(email,password)){
             alert("Bienvenido admin!");
             localStorage.setItem("AdminLoggedIn", true);
-            navigate("/"); 
+            navigate("/Administrador"); 
         }else{
             alert("Email o contraseña incorrecta!");
         }

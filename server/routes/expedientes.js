@@ -3,6 +3,7 @@ import express from "express";
 const router = express.Router();
 
 const expedientesRouter = (pool) => {
+    
     //Get all patients
     router.get("/", async (req, res) => {
         try {

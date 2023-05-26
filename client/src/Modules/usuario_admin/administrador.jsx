@@ -17,20 +17,32 @@ const Administradores = () => {
    const [expedientes, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
+   let [nombre, setNombre] = useState('5');
+   let [rol, setRol] = useState('');
+   let [id, setId] = useState('');
+   let [email, setEmail] = useState('');
+   let [cel, setCel] = useState('');
    const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
 
    const navigate = useNavigate();
    const isLoggedIn = localStorage.getItem("isLoggedIn");
 
-  
+
    const handleEditAdministradoresClick = (id) => {
       navigate(`/usuarios_admin/${id}`);
-      
+
    };
    //para el Popup
-   const handleSelectedAdministradoresClick= (id)=>{
-      setSelectedAdministradorId(id);
+   const handleSelectedAdministradoresClick = (row) => {
+
+
       setOpenPopup(true);
+      setNombre(row.nombre);
+      setRol(row.rol);
+      setId(row.id);
+      setEmail(row.correo);
+      
+      setSelectedAdministradorId(row.id);
    }
 
    const handleDeleteAdministradoresClick = (id) => {
@@ -83,11 +95,11 @@ const Administradores = () => {
    }
 
    useEffect(() => {
-       //validación login
-   if (!isLoggedIn) {
-      // Redirigir si no se cumple la verificación
-       navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
-    }
+      //validación login
+      if (!isLoggedIn) {
+         // Redirigir si no se cumple la verificación
+         navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+      }
       const fetchAllAdministradores = async () => {
          try {
             const administradoresData = await AdministradoresService.getAllAdministradores();
@@ -108,7 +120,7 @@ const Administradores = () => {
       <div className='administradoresGrid'>
          <div className='administradoresGridBox'>
             <ThemeProvider theme={theme}>
-               <DataGrid onRowClick={(params) => handleSelectedAdministradoresClick(params.row.adminId)}
+               <DataGrid onRowClick={(params) => handleSelectedAdministradoresClick(params.row)}
                   rows={expedientes}
                   getRowId={(row) => row.adminId}
                   columns={[
@@ -186,8 +198,15 @@ const Administradores = () => {
             <Popup
                openPopup={openPopup}
                setOpenPopup={setOpenPopup}
-               onClick={() => setOpenPopup(true)}
+               setNombre={nombre}
+               setRol={rol}
+               setId={id}
+               setEmail={email}
+
+
+
             />
+
          )}
       </div>
    );
@@ -196,4 +215,4 @@ const Administradores = () => {
 
 }
 
-export default Administradores
+export default Administradores;

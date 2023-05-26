@@ -1,21 +1,16 @@
 
 import React from 'react';
 import { Dialog, DialogContent, DialogTitle,Box,Typography } from '@mui/material';
-import {makeStyles} from '@mui/styles';
+
 import{Person2, Person, CenterFocusStrong} from '@mui/icons-material';
-const useStyles = makeStyles (theme =>({
-    dialogWrapper:{
-        padding : '16px',
-        position: 'absolute',
-        top: '40px',
-    }
-}))
+
 
 const Popup = (props) => {
-  const {  children, openPopup, setOpenPopup } = props;
-  const classes = useStyles();
+  let {  setNombre,setRol,setId,setCorreo, setCelular, openPopup, setOpenPopup } = props;
+  console.log(props);
   return (
-    <Dialog open={openPopup} onClose={() => setOpenPopup(false)} maxWidth="md" className={classes.dialogWrapper}>
+   
+    <Dialog open={openPopup} onClose={() => setOpenPopup(false)} maxWidth="md" >
       <DialogTitle sx={{ bgcolor: 'rgb(184,184,184)' }}>Información del colaborador</DialogTitle>
       <DialogContent sx={{ bgcolor: 'rgb(184,184,184)' }} style={{ display: 'flex', alignItems: 'center' }}>
   
@@ -27,11 +22,10 @@ const Popup = (props) => {
           </Box>
           
           <Box sx={{ bgcolor: 'white', flex: 1 }} p={0}>
-            <h2>Pedro Daniel Mendoza Amador</h2>
-            <h2>Medico</h2>
-            <h2>0601-2002-01315</h2>
-            <h2>Pedro@pedro.com</h2>
-            <h2>98967807</h2>
+            <h2>{setNombre}</h2>
+            <h2>{setRol}</h2>
+            <h2>{setId}</h2>
+            <h2>{setCorreo}</h2>
           </Box>
         </Box>
       </DialogContent>
