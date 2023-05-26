@@ -9,12 +9,10 @@ import doctor from '../Imagenes/doctor.jpg';
 import hospital from '../Imagenes/hospital.jpeg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBullseye } from '@fortawesome/free-solid-svg-icons';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
-import { faBullseyeArrow } from '@fortawesome/free-solid-svg-icons';
+import { faStar} from '@fortawesome/free-solid-svg-icons';
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
@@ -151,24 +149,28 @@ const Acercade = () => {
         <div className="mission-vision-container">
           <div className="mission">
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', fontSize: '40px'}}>
-              <FontAwesomeIcon icon={faBullseye} />
+              <FontAwesomeIcon icon={faCircleDot} style={{ color: '#D3B938', fontSize: '50px' }}/>
             </div>
-            <h2>Mission</h2>
-            <p>Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es
+            <span>
+            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px'}}>Mission</h2>
+            <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es
               proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en
               la prevención, el diagnóstico y el tratamiento de enfermedades. Estamos dedicados
               a proporcionar atención médica individualizada, segura y eficiente mediante la
               utilización de tecnologías.</p>
+            </span>
           </div>
 
           <div className="vision">
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', fontSize: '40px' }}>
-              <FontAwesomeIcon icon={faEye} />
+              <FontAwesomeIcon icon={faStar} style={{ color: '#D3B938', fontSize: '50px' }} />
             </div>
-            <h2>Vision</h2>
-            <p>Ser conocido como la clínica médica y laboratorio de análisis clínicos que garantice
-              su excelencia en el servicio al paciente, la precisión de sus diagnósticos y la
-              atención personalizada de su personal de expertos altamente calificados.</p>
+            <span>
+              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px'}}>Vision</h2>
+              <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>Ser conocido como la clínica médica y laboratorio de análisis clínicos que garantice
+                su excelencia en el servicio al paciente, la precisión de sus diagnósticos y la
+                atención personalizada de su personal de expertos altamente calificados.</p>
+            </span>
           </div>
         </div>
 
@@ -177,8 +179,10 @@ const Acercade = () => {
             <img src={hospital} />
           </div>
           <div className="text-container">
-            <h2>Company Description</h2>
-            <p>Our company is a leading provider of cutting-edge technology solutions. We specialize in developing software applications and providing consulting services to clients across various industries. With a focus on delivering exceptional value and driving digital transformation, we help businesses achieve their goals and stay ahead in today's competitive market.</p>
+            <span>
+              <h2  style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Company Description</h2>
+              <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px' }}>Our company is a leading provider of cutting-edge technology solutions. We specialize in developing software applications and providing consulting services to clients across various industries. With a focus on delivering exceptional value and driving digital transformation, we help businesses achieve their goals and stay ahead in today's competitive market.</p>
+            </span>
           </div>
         </div>
 
@@ -187,14 +191,21 @@ const Acercade = () => {
             <img src={doctor} />
           </div>
           <div className="person-description">
-            <h2>John Doe</h2>
-            <p>John Doe is the founder and CEO of our company. With over 20 years of experience in the technology sector, he has led our organization to numerous successes. John is passionate about driving innovation and creating a positive impact through technology.</p>
+            <span>
+              <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px', left: '300px'}}> Dr. Victor Cruz</h2>
+              <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px' }}>John Doe is the founder and CEO of our company. With over 20 years of experience in the technology sector, he has led our organization to numerous successes. John is passionate about driving innovation and creating a positive impact through technology.</p>
+            </span>
           </div>
         </div>
 
         <div className="employee-description">
-          <h2>Our Team</h2>
-          <p>We have a team of dedicated professionals who are experts in their respective fields. From software engineers to designers and project managers, our team works collaboratively to deliver outstanding results for our clients. With a shared commitment to excellence, we constantly strive to exceed expectations and push the boundaries of what's possible.</p>
+          <FontAwesomeIcon icon={faPeopleGroup} style={{ color: 'rgb(255, 255, 255)', fontSize: '110px',  position: 'relative', top: 5,left:'-8px' }} />
+
+          <span>
+            <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Our Team</h2>
+            <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px'}}>We have a team of dedicated professionals who are experts in their respective fields. From software engineers to designers and project managers, our team works collaboratively to deliver outstanding results for our clients. With a shared commitment to excellence, we constantly strive to exceed expectations and push the boundaries of what's possible.</p>
+          </span>
+          
         </div>
       </div>
 
