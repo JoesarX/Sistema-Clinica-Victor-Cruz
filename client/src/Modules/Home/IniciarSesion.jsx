@@ -4,6 +4,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 const IniciarSesion = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -20,16 +25,16 @@ const IniciarSesion = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Este es el email: "+email);
-        console.log("Esta es la clave: "+password);
-        
-        if(await UsuariosService.loginUsuarios(email,password)){
-         const user = email;
-         localStorage.setItem("isLoggedIn", true);
-         alert("Bienvenido!");
-         navigate("/expedientes"); 
-        }else{
-         alert("Email o contraseña incorrecta!");
+        console.log("Este es el email: " + email);
+        console.log("Esta es la clave: " + password);
+
+        if (await UsuariosService.loginUsuarios(email, password)) {
+            const user = email;
+            localStorage.setItem("isLoggedIn", true);
+            alert("Bienvenido!");
+            navigate("/expedientes");
+        } else {
+            alert("Email o contraseña incorrecta!");
         }
 
     };
@@ -37,15 +42,14 @@ const IniciarSesion = () => {
     return (
 
         <div className="scrollable-page">
-            <header className="header">
-                <div className="logo">Logo</div>
+            <header className="headerT">
                 <nav>
-                    <div className="buttons">
-                        <button onClick={handleReturnClick}>Volver a Inicio</button>
-                        <button onClick={handleRegisternClick}>Registrarse</button>
-                    </div>
+                    <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>Volver a Inicio</button>
+                    <button className="bt" style={{ fontSize: '18px' }} onClick={handleRegisternClick}> <FontAwesomeIcon icon={faUser} />Registrarse</button>
+
                 </nav>
             </header>
+
 
             <div></div>
 
@@ -58,7 +62,7 @@ const IniciarSesion = () => {
                             type="email"
                             id="email"
                             value={email}
-                            onChange= {(e) => setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="form-group">
@@ -67,14 +71,23 @@ const IniciarSesion = () => {
                             type="password"
                             id="password"
                             value={password}
-                            onChange= {(e) => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
-                    
+
 
                     <button type="submit" onClick={handleSubmit}>Iniciar Sesion</button>
                 </form>
             </div>
+
+            <footer className="footer">
+                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faLocationDot} /> Col.Kennedy, Tegucigalpa</p>
+                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faPhone} /> (504) 2230-3901</p>
+                <button className='botonCon' >
+                    Contactanos para responder tus dudas
+                </button>
+            </footer>
+
         </div>
 
 
