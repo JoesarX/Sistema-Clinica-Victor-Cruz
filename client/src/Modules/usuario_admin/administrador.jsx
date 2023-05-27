@@ -23,8 +23,9 @@ const Administradores = () => {
    let [rol, setRol] = useState('');
    let [id, setId] = useState('');
    let [email, setEmail] = useState('');
-   let [telefono, setTelefono] = useState('');
+   let [cel, setCel] = useState('');
    let [sexo, setSexo] = useState('');
+   let [contraseña, setContraseña] = useState('');
    const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
 
    const navigate = useNavigate();
@@ -41,6 +42,13 @@ const Administradores = () => {
       setRol(row.rol);
       setId(row.id);
       setEmail(row.correo);
+      setCel(row.telefono);
+      setSexo(row.sexo);
+      setContraseña(row.password);
+      console.log("Esto es el correo: "+row.correo);
+      console.log("Esto es el tel: "+row.telefono);
+      console.log("Esto es el sexo: "+row.sexo);
+      console.log("Esto es el pw: "+row.password);
       setSelectedAdministradorId(row.id);
    }
 
@@ -194,12 +202,15 @@ const Administradores = () => {
          </div>
          {selectedAdministradorId && (
             <Popup
-               openPopup={openPopup}
-               setOpenPopup={setOpenPopup}
-               setNombre={nombre}
-               setRol={rol}
-               setId={id}
-               setEmail={email}
+            openPopup={openPopup}
+            setOpenPopup={setOpenPopup}
+            setNombre={nombre}
+            setRol={rol}
+            setId={id}
+            setCorreo={email}
+            setCelular={cel}
+            setSexo={sexo}
+            setContraseña={contraseña}
             />
          )}
       </div>
