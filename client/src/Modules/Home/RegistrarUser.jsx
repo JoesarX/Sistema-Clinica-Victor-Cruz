@@ -2,6 +2,7 @@ import React from 'react'
 import '../HojaDeEstilos/RegistrarUser.css';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
+import Footer from './Footer';
 
 
 
@@ -152,13 +153,7 @@ const RegistrarUser = () => {
         </form>
       </div>
 
-      <footer className="footer">
-        <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faLocationDot} /> Col.Kennedy, Tegucigalpa</p>
-        <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faPhone} /> (504) 2230-3901</p>
-        <button className='botonCon' >
-          Contactanos para responder tus dudas
-        </button>
-      </footer>
+      <Footer />
 
     </div>
 
