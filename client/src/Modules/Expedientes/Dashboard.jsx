@@ -10,6 +10,8 @@ import { faTable} from '@fortawesome/free-solid-svg-icons'
 import { faRulerVertical} from '@fortawesome/free-solid-svg-icons'
 import { faWeightScale} from '@fortawesome/free-solid-svg-icons'
 import { faTemperatureLow} from '@fortawesome/free-solid-svg-icons'
+import { faHeartPulse} from '@fortawesome/free-solid-svg-icons'
+import { faPlus} from '@fortawesome/free-solid-svg-icons'
 
 const Dashboard = () => {
     const [patient, setPatient] = useState({
@@ -33,6 +35,7 @@ const Dashboard = () => {
         heartRate: '80 bpm',
         bloodPressure: '120/80 mmHg',
         files: ['archivo1.pdf', 'archivo2.jpg', 'archivo3.pdf', 'archivo4.pdf', 'archivo5.pdf'],
+
         appointments: [
             {
                 date: '01/06/2023',
@@ -139,33 +142,49 @@ const Dashboard = () => {
                     <div className='titulo1'>
                         <h3 className='histmedtit'>Signos Vitales</h3>
                     </div>
-                    <p style={{ color: '#75BD89' }} className="altura">
+                    <p style={{ color: '#75BD89'}} className="altura">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px',  marginRight:'22px'}} />
-                            Altura: 
+                            <span style={{ marginRight: '250px'}}>
+                                Altura 
+                            </span>
                         </span> 
                         <span className="vitals-value">{patient.height}</span>
                     </p>
                     <p style={{ color: '#54648D' }} className="peso">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px',  marginRight:'10px'}} />
-                            Peso:
+                            <span style={{ marginRight: '280px'}}>
+                                Peso
+                            </span>
                         </span> 
                         <span className="vitals-value">{patient.weight}</span>
                     </p>
                     <p style={{ color: '#916A9E' }} className="temperatura">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px',  marginRight:'10px'}} />
-                            Temperatura:
+                            <span style={{ marginRight: '190px'}}>
+                                Temperatura
+                            </span>
                         </span>
                         <span className="vitals-value">{patient.temperature}</span>
                     </p>
                     <p style={{ color: '#AB2525' }} className="ritmo">
-                        <span className="vitals-label">Ritmo Cardiaco:</span> 
+                        <span className="vitals-label">
+                            <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px',  marginRight:'10px'}} />
+                            <span style={{ marginRight: '170px'}}>
+                                Ritmo Cardiaco
+                            </span>
+                        </span> 
                         <span className="vitals-value">{patient.heartRate}</span>
                     </p>
                     <p style={{ color: '#AB2525' }} className="presion">
-                        <span className="vitals-label">Presión Arterial:</span>
+                        <span className="vitals-label">
+                            <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px',  marginRight:'10px'}} />
+                            <span style={{ marginRight: '116px'}}>
+                                Presión Arterial
+                            </span>
+                        </span>
                         <span className="vitals-value">{patient.bloodPressure}</span>
                     </p>
                 </div>
@@ -182,7 +201,12 @@ const Dashboard = () => {
                         ))}
                     </ul>
                     <div className='upload'>
-                        <button className="upload-button">Subir Archivo</button>
+                        <button className="upload-button">
+                            <span>
+                            <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px',  marginRight:'20px'}} />
+                            Subir Archivo
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
