@@ -16,6 +16,7 @@ import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
 import AddExpedientes from "./Modules/Expedientes/AddExpedientes";
 import EditExpedientes from "./Modules/Expedientes/EditExpedientes";
+import Dashboard from "./Modules/Expedientes/Dashboard";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
           <Route path="/expedientes/:expedienteId" element={<EditExpedientes/>}/>
+          <Route path="/dashboard" element={<Dashboard/>}/>
           
         </Routes>
       </BrowserRouter>

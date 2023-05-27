@@ -1,0 +1,926 @@
+.infoGeneral {
+    /* Personal Info */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 20px 20px 10px;
+    gap: 20px;
+    width: 410px;
+    height: 150px;
+    margin-top: 20px;
+    background: #F8F8F8;
+    border-radius: 10px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.about {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+
+    width: 450px;
+    height: 800px;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.contenido {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 100px;
+    gap: 20px;
+    position: relative;
+    width: 86%;
+    height: 880px;
+    left: 0px;
+    top: 0px;
+    background: #E4EBF9;
+    overflow: hidden;
+}
+
+
+.topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 70px;
+    left: 0px;
+    top: 0px;
+    background: #F8F8F8;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+.medical-history {
+    /* Med History */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 20px;
+    margin-top: 20px;
+    width: 400px;
+    height: 453px;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.medHis {
+    /* Med History */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 10px;
+    width: 400px;
+    height: 294px;
+    background: #F8F8F8;
+    border-radius: 10px;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.medicamentos {
+    /* Medications */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 10px;
+    width: 400px;
+    height: 139px;
+    background: #F8F8F8;
+    border-radius: 10px;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.vitals {
+    /* Vital Signs */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+
+    width: 400px;
+    height: 390px;
+
+    background: #F8F8F8;
+    border-radius: 10px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.alergias {
+    /* Allergies */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px 0px;
+    gap: 5px;
+    width: 400px;
+    height: 92px;
+    border-bottom: 1px solid #464646;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.enfermedades {
+    /* Base Sickness */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px 0px;
+    gap: 5px;
+
+    width: 400px;
+    height: 92px;
+
+    border-bottom: 1px solid #464646;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.histmedtit {
+    /* Historial médico */
+    position: relative;
+    width: 400px;
+    height: 40px;
+    left: 0px;
+    top: -30px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: flex-end;
+    text-transform: uppercase;
+
+    color: #464646;
+}
+
+.titulo3 {
+    /* Frame 1 */
+
+
+    box-sizing: border-box;
+
+    width: 400px;
+    height: 50px;
+
+    border-bottom: 1px solid #000000;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.titulo1 {
+    /* Frame 1 */
+    box-sizing: border-box;
+    width: 400px;
+    height: 50px;
+    border-bottom: 1px solid #000000;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.titulo2 {
+    box-sizing: border-box;
+    width: 400px;
+    height: 50px;
+
+    border-bottom: 1px solid #000000;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.titulo4 {
+    /* Frame 1 */
+    box-sizing: border-box;
+    width: 400px;
+    height: 50px;
+    border-bottom: 1px solid #000000;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.perfil {
+    height: 100%;
+    width: 30%;
+    border-radius: 10px;
+}
+
+.files {
+    /* Files */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+    gap: 20px;
+
+    width: 400px;
+    height: 230px;
+
+    background: #F8F8F8;
+    border-radius: 10px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.archivostit {
+    /* Archivos */
+    width: 400px;
+    height: 40px;
+    left: 0px;
+    top: 0px;
+    margin: 0px;
+
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: flex-end;
+    text-transform: uppercase;
+
+    color: #464646;
+}
+
+.sidebar {
+    /* Sidebar */
+    position: absolute;
+    width: 70px;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    background: #F8F8F8;
+}
+
+.section-label {
+    /* enfermedades base */
+    width: 100%;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    color: #1560F2;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.altura {
+    /* Height */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    width: 400px;
+    height: 40px;
+    margin: 0px;
+    border-bottom: 1px solid #464646;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.peso {
+    /* Height */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    width: 400px;
+    height: 40px;
+    margin: 0px;
+    border-bottom: 1px solid #464646;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 2;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.temperatura {
+    /* Height */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    margin: 0px;
+    width: 400px;
+    height: 40px;
+
+    border-bottom: 1px solid #464646;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 3;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.ritmo {
+    /* Height */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    margin: 0px;
+    width: 400px;
+    height: 40px;
+
+    border-bottom: 1px solid #464646;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 4;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.presion {
+    /* Height */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    margin: 0px;
+    width: 400px;
+    height: 40px;
+
+    border-bottom: 1px solid #464646;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 5;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.vitals-label {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.vitals-value {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+
+    color: #737373;
+}
+
+.file-list {
+    /* archivo */
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: auto;
+    /* Change to "auto" */
+    scrollbar-width: thin;
+    /* Add scrollbar width */
+    padding: 0px;
+    width: 400px;
+    height: 100px;
+    border-bottom: 1px solid #464646;
+    margin: 0px;
+}
+
+.file-list::-webkit-scrollbar {
+    width: 8px;
+    /* Set the width of the scrollbar */
+}
+
+.file-list::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Set the color of the scrollbar thumb */
+    border-radius: 4px;
+    /* Add border radius to the scrollbar thumb */
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Set the color of the scrollbar thumb on hover */
+}
+
+
+.upload-button {
+    /* Upload File */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #FFFFFF;
+    width: 400px;
+    height: 40px;
+    border: 0px;
+    background: #198C5C;
+    border-radius: 5px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 3;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.perfil {
+    /* Image */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+
+    width: 100px;
+    height: 100px;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.nombreC {
+    position: relative;
+    top: -20px;
+    width: 300px;
+    height: 60px;
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.nombre {
+    width: 300px;
+    height: 78px;
+    left: 0px;
+    top: 0px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 39px;
+    display: flex;
+    align-items: center;
+    color: #464646;
+}
+
+.smallText {
+    width: 185px;
+    height: 20px;
+    left: 0px;
+    top: 0px;
+    margin: 0px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+
+    color: #737373;
+}
+
+.necon {
+    /* DOB */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0px;
+    width: 300px;
+    height: 20px;
+    /* Inside auto layout */
+    flex: none;
+    order: 3;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.oecon {
+    /* DOB */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    width: 300px;
+    height: 20px;
+    /* Inside auto layout */
+    flex: none;
+    order: 4;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.correo {
+    width: 300px;
+    height: 20px;
+    margin: 0px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.numid {
+    /* Frame 15 */
+    width: 300px;
+    height: 20px;
+    margin: 0px;
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+}
+
+.nacio {
+    /* Frame 16 */
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 0px;
+    width: 100px;
+    height: 20px;
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.edad {
+    width: 75px;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+
+    color: #737373;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.ocupacion {
+    /* Frame 19 */
+    /* Auto layout */
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px;
+    left: 40px;
+    width: 20px;
+    height: 20px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 1;
+    flex-grow: 1;
+}
+
+.estado {
+    /* Frame 20 */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    width: 80px;
+    height: 20px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.direccion {
+    /* Frame 17 */
+
+
+    width: 300px;
+    height: 20px;
+    margin: 0px;
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 5;
+    align-self: stretch;
+    flex-grow: 0;
+}
+
+.ccon {
+    /* Email */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 180px;
+    height: 20px;
+    left: 0px;
+    top: 0px;
+
+    background: #C8DAFF;
+    border-radius: 20px;
+}
+
+.correoText {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 22px;
+    /* identical to box height */
+
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-left: -5px;
+    color: #1560F2;
+}
+
+.section-label {
+    margin: 0px;
+}
+
+.divider {
+    border-bottom: 1px solid #464646;
+    width: 380px;
+}
+
+.medtit {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: flex-end;
+    text-transform: uppercase;
+
+    color: #464646;
+}
+
+.botones {
+    /* SideButtons */
+
+
+    /* Auto layout */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+    gap: 10px;
+
+    position: absolute;
+    width: 70px;
+    height: 470px;
+    left: 0px;
+    top: 78px;
+}
+
+.sidebarBtn {
+    width: 70px;
+    height: 70px;
+    background-color: #FFFFFF;
+    border: none;
+}
+
+.sidebarBtn:focus {
+    background-color: #ECECEC;
+    border-right: 3px solid #1560F2;
+    outline: none;
+    /* Optional: remove the default focus outline */
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70px;
+    height: 70px;
+    background-color: #F8F8F8;
+
+}
+
+.doc {
+    width: 200px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+
+    color: #464646;
+}
+
+.line {
+    border-right: 2px solid #464646;
+    height: 50%;
+}
+
+.foto {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nomCli {
+    width: 300px;
+    height: 24px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+
+    color: #464646;
+}
+.lifile{
+    font-family: 'Inter';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 24px;
+display: flex;
+align-items: center;
+
+color: #000000;
+}
