@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button } from '@mui/material'
 import { DataGrid, esES, GridActionsCellItem } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { GridToolbarContainer, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import { PersonAdd, Edit, Delete, Person, Person2 } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 
@@ -85,7 +85,7 @@ const Expedientes = () => {
       return (
          <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', height: '30px', marginTop: '15px', marginBottom: '10px' }}>
             <div>
-               {/* <GridToolbarColumnsButton /> */}
+               <GridToolbarColumnsButton />
                <GridToolbarFilterButton />
                <GridToolbarDensitySelector />
                <GridToolbarExport />
@@ -124,7 +124,7 @@ const Expedientes = () => {
 
    const handleModalFieldChange = (e) => {
       setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
-      
+
    }
 
    const calculateAge = (dob) => {
@@ -133,18 +133,15 @@ const Expedientes = () => {
       let age = today.getFullYear() - birthDate.getFullYear();
       const monthDiff = today.getMonth() - birthDate.getMonth();
       if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
+         age--;
       }
       return age;
-    };
+   };
    const handleDateChange = (date) => {
 
       setFechaNacimiento(date);
-
       const formattedDate = date ? date.toISOString().slice(0, 10) : '';
-    
       setExpediente((prevState) => ({ ...prevState, fecha_nacimiento: formattedDate }))
-     
 
    };
    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
@@ -153,9 +150,9 @@ const Expedientes = () => {
       e.preventDefault();
       const age = fecha_nacimiento ? calculateAge(fecha_nacimiento) : '';
       setExpediente((prevState) => ({ ...prevState, edad: age }))
-      
+
       setIsSubmitting(true);
-     
+
 
       if (validations()) {
          try {
@@ -200,7 +197,7 @@ const Expedientes = () => {
       }
       return true
    }
-   
+
    useEffect(() => {
       //validación login
       if (!isLoggedIn) {
@@ -252,7 +249,7 @@ const Expedientes = () => {
                         ),
                      },
                      { field: 'edad', headerName: 'Edad', flex: 1, headerClassName: 'column-header' },
-                     //{ field: 'fecha_nacimiento', headerName: 'Fecha de Nacimiento', flex: 1 , headerClassName: 'column-header'},
+                     { field: 'fecha_nacimiento', headerName: 'Fecha de Nacimiento', flex: 3, headerClassName: 'column-header' },
                      { field: 'sexo', headerName: 'Sexo', flex: 1, headerClassName: 'column-header' },
                      {
                         field: 'correo',
@@ -273,9 +270,9 @@ const Expedientes = () => {
                      },
                      { field: 'telefono', headerName: 'Telefono Celular', flex: 3, headerClassName: 'column-header' },
                      { field: 'numid', headerName: 'Num. Identidad', flex: 4, headerClassName: 'column-header' },
-                     //{ field: 'estado_civil', headerName: 'Estado Civil', flex: 1 },
-                     //{ field: 'padecimientos', headerName: 'Padecimientos', flex: 1 },
-                     //{ field: 'ocupacion', headerName: 'Ocupacion', flex: 1 },
+                     { field: 'estado_civil', headerName: 'Estado Civil', flex: 4 },
+                     { field: 'padecimientos', headerName: 'Padecimientos', flex: 4 },
+                     { field: 'ocupacion', headerName: 'Ocupacion', flex: 3 },
 
                      {
                         field: 'actions',
@@ -304,13 +301,14 @@ const Expedientes = () => {
             </ThemeProvider>
             <Modal open={isModalOpen} onClose={toggleModal}>
                <div className='modalContainer'>
-                  <h2 className="modalHeader">Agregar Expediente</h2>
+                  <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
                   <Box
                      component="form"
                      sx={{
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '10px',
+                        width: '100%', // Added width property
                      }}
                      noValidate
                      autoComplete="off"
@@ -323,10 +321,12 @@ const Expedientes = () => {
                            </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                           <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" id='sexo' onChange={handleModalFieldChange} name="sexo" >
-                              <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                              <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                           </RadioGroup>
+                           <div className='radioGroupContainer'>
+                              <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" >
+                                 <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                                 <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                              </RadioGroup>
+                           </div>
                         </Grid>
                      </Grid>
                      <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
@@ -340,7 +340,7 @@ const Expedientes = () => {
                      </Grid>
                      <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                           <TextField id="numid" label="Número de Identidad" variant="outlined" type='number' onChange={handleModalFieldChange} name='numid' />
+                           <TextField id="numid" label="Número de Identidad" variant="outlined" onChange={handleModalFieldChange} name='numid' />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                            <Autocomplete
@@ -349,16 +349,19 @@ const Expedientes = () => {
                               options={listaEstadoCivil}
                               onChange={(event, newValue) =>
                                  setExpediente({
-                                   ...expediente,
-                                   estado_civil: newValue
+                                    ...expediente,
+                                    estado_civil: newValue
                                  })
-                               }
+                              }
                               renderInput={(params) => <TextField {...params} label="Estado Civil" />}
 
                            />
                         </Grid>
                      </Grid>
-                     <Button onClick={handleModalSubmit} variant="contained" style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+                     <Button onClick={handleModalSubmit} variant="contained" style={{
+                        backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                        paddingLeft: '10px', paddingRight: '10px', width: '300px', fontSize: '18px', alignSelf: 'center'
+                     }}>
                         Agregar Expediente
                      </Button>
                   </Box>

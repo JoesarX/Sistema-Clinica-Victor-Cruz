@@ -34,6 +34,7 @@
     border-radius: 16px;
     background-color: #FFFFFF;
     color: rgb(71, 71, 71);
+
 }
 
 .MuiDataGrid-row:last-child {
@@ -87,9 +88,10 @@
     cursor: pointer;
 } */
 .modalContainer {
-    background-color: white;
-    width: 65%;
-    height: 90vh;
+    background-color: rgb(227, 235, 248);
+    width: 50%;
+    height: 80vh;
+
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -100,29 +102,63 @@
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 30px;
-  }
-  
-  .modalHeader {
+    border-radius: 30px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.modalHeader {
     text-align: center;
-  }
-  
-  form {
+}
+
+form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     width: 100%;
-  }
-  
-  .formRow {
+}
+
+.modalContainer .modalHeader {
+    margin-bottom: 20px;
+}
+
+.modalContainer form {
     display: flex;
-    gap: 20px;
-  }
-  
-  .formRow > * {
-    flex-grow: 1;
-  }
-  
-  button[type="submit"] {
-    margin-top: 20px;
-  }
-  
+    flex-direction: column;
+    gap: 4vh;
+}
+
+.modalContainer form .MuiFormControl-root {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.modalContainer form .radioGroupContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.labelFocused {
+    font-size: 20px;
+}
+
+@media (max-height: 800px) {
+    .modalContainer form {
+        gap: 2vh;
+    }
+}
+
+@media (max-width: 600px) {
+    .modalContainer {
+        width: 90%;
+        height: 100vh;
+    }
+
+    .modalContainer form {
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+    }
+}
+
