@@ -1,10 +1,7 @@
 import React from 'react';
 import '../HojaDeEstilos/Acercade.css';
 import { useNavigate } from 'react-router-dom';
-import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
-import ReactDOM from 'react-dom';
-import { useState } from 'react';
 import doctor from '../Imagenes/doctor.jpg';
 import hospital from '../Imagenes/hospital.jpeg';
 import Topbar from './Topbar';
@@ -20,6 +17,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 
 const Acercade = () => {
+
   return (
     <div className="scrollable-page">
       <Topbar/>
@@ -59,24 +57,33 @@ const Acercade = () => {
 
         <div className="company-description">
           <div className="image-container">
-            <img src={hospital} />
+            <img src={hospital} alt="hospital"/>
           </div>
           <div className="text-container">
             <span>
-              <h2  style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Company Description</h2>
-              <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px' }}>Our company is a leading provider of cutting-edge technology solutions. We specialize in developing software applications and providing consulting services to clients across various industries. With a focus on delivering exceptional value and driving digital transformation, we help businesses achieve their goals and stay ahead in today's competitive market.</p>
+              <h2  style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Descripcion de la Empresa</h2>
+              <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px' }}>
+              La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, 
+              bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado 
+              vespertino y matutino para brindar un mejor servicio a la población en general.
+                </p>
             </span>
           </div>
         </div>
 
         <div className="person-container">
           <div className="person-image">
-            <img src={doctor} />
+            <img src={doctor} alt="doctor" />
           </div>
           <div className="person-description">
             <span>
-              <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px', left: '300px'}}> Dr. Victor Cruz</h2>
-              <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px' }}>John Doe is the founder and CEO of our company. With over 20 years of experience in the technology sector, he has led our organization to numerous successes. John is passionate about driving innovation and creating a positive impact through technology.</p>
+              <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px', left: '400px', marginBottom: '30px'}}> Dr. Victor Cruz</h2>
+              <p style={{ position: 'relative', top: -20, color: 'white', marginRight: '80px', fontSize: '18px',  left: '70px' }}>
+              El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica
+              , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. 
+              También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. 
+              Además, obtuvo una certificación de auditor interno de dicha norma.
+              </p>
             </span>
           </div>
         </div>
@@ -85,8 +92,11 @@ const Acercade = () => {
           <FontAwesomeIcon icon={faPeopleGroup} style={{ color: 'rgb(255, 255, 255)', fontSize: '110px',  position: 'relative', top: 5,left:'-8px' }} />
 
           <span>
-            <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Our Team</h2>
-            <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px'}}>We have a team of dedicated professionals who are experts in their respective fields. From software engineers to designers and project managers, our team works collaboratively to deliver outstanding results for our clients. With a shared commitment to excellence, we constantly strive to exceed expectations and push the boundaries of what's possible.</p>
+            <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Nuestro Equipo</h2>
+            <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px'}}>
+            Contamos con un equipo de colaboradores con alta experiencia 
+            en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.
+            </p>
           </span>
           
         </div>
