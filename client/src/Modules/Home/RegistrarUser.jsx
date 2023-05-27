@@ -3,10 +3,6 @@ import '../HojaDeEstilos/RegistrarUser.css';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { faPhone } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 
 const RegistrarUser = () => {
@@ -79,11 +75,13 @@ const RegistrarUser = () => {
   return (
 
     <div className="scrollable-page">
-      <header className="headerT">
+      {/* <header className="headerT">
         <nav>
           <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>Volver a Inicio</button>
         </nav>
-      </header>
+  </header> */}
+
+      <Topbar />
 
 
       <div className="register-form">

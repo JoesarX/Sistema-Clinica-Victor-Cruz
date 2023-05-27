@@ -3,6 +3,11 @@ import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
+
+
+import Topbar from './Topbar';
+import Footer from './Footer';
+
 import doctor_slide from '../Imagenes/doctor_slide.jpeg';
 import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
 import saludOcupacional from '../Imagenes/saludOcupacional.webp';
@@ -11,10 +16,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 
 const Home = () => {
 
@@ -143,9 +146,12 @@ const Home = () => {
                     </div>
                 </Slide>
             </div>
-            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff' }}>
+
+            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff', marginBottom: '40px'}}>
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
+
+
             <div className="container">
                 <div className="container1">
                     <div className="iconContainer">
@@ -199,9 +205,9 @@ const Home = () => {
                 <div className="linea">
                 </div>
 
-                <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', right: '140px', top: '85px', fontSize: '100px' }} />
-                <h1 className="agendar" style={{ position: 'relative', left: '70px', top: '-50px' }}>Agenda una cita</h1>
-                <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-60px' }}>Revisa nuestra disponibilidad</button>
+                <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', right: '140px', top: '85px', fontSize: '110px' }} />
+                <h1 className="agendar" style={{ position: 'relative', left: '70px', top: '-30px' }}>Agenda una cita</h1>
+                <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-75px' }}>Revisa nuestra disponibilidad</button>
             </div>
             <footer className="footer">
                 <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faLocationDot} /> Col.Kennedy, Tegucigalpa</p>

@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const IniciarSesion = () => {
@@ -29,16 +27,16 @@ const IniciarSesion = () => {
         console.log("Este es el email: " + email);
         console.log("Esta es la clave: " + password);
 
-       
-        if(await UsuariosService.loginUsuarios(email,password)){
-         localStorage.setItem("isLoggedIn", true);
-         alert("Bienvenido!");
-         navigate("/expedientes"); 
-        }else if(await UsuariosService.loginAdmin(email,password)){
+
+        if (await UsuariosService.loginUsuarios(email, password)) {
+            localStorage.setItem("isLoggedIn", true);
+            alert("Bienvenido!");
+            navigate("/expedientes");
+        } else if (await UsuariosService.loginAdmin(email, password)) {
             alert("Bienvenido admin!");
             localStorage.setItem("AdminLoggedIn", true);
-            navigate("/"); 
-        }else{
+            navigate("/");
+        } else {
             alert("Email o contraseña incorrecta!");
         }
 
@@ -47,13 +45,16 @@ const IniciarSesion = () => {
     return (
 
         <div className="scrollable-page">
-            <header className="headerT">
+
+            {/* <header className="headerT">
                 <nav>
                     <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>Volver a Inicio</button>
                     <button className="bt" style={{ fontSize: '18px' }} onClick={handleRegisternClick}> <FontAwesomeIcon icon={faUser} />Registrarse</button>
 
                 </nav>
-            </header>
+    </header> */}
+
+            <Topbar />
 
 
             <div></div>
