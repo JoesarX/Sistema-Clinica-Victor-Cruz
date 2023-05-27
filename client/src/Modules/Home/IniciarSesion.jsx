@@ -25,15 +25,20 @@ const IniciarSesion = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         console.log("Este es el email: " + email);
         console.log("Esta es la clave: " + password);
 
-        if (await UsuariosService.loginUsuarios(email, password)) {
-            const user = email;
-            localStorage.setItem("isLoggedIn", true);
-            alert("Bienvenido!");
-            navigate("/expedientes");
-        } else {
+       
+        if(await UsuariosService.loginUsuarios(email,password)){
+         localStorage.setItem("isLoggedIn", true);
+         alert("Bienvenido!");
+         navigate("/expedientes"); 
+        }else if(await UsuariosService.loginAdmin(email,password)){
+            alert("Bienvenido admin!");
+            localStorage.setItem("AdminLoggedIn", true);
+            navigate("/"); 
+        }else{
             alert("Email o contraseña incorrecta!");
         }
 
