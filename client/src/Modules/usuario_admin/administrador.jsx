@@ -9,6 +9,7 @@ import { GridToolbarContainer, GridToolbarFilterButton, GridToolbarDensitySelect
 import { PersonAdd, Edit, Delete, Person, Person2 } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import Popup from '../usuario_admin/Fichas_Admin';
+import PopupAgregar from '../usuario_admin/PopupAgregar';
 
 import AdministradoresService from '../../Services/AdministradoresService';
 import './administradorStyle.css';
@@ -17,53 +18,39 @@ const Administradores = () => {
    const [usuarios_admin, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
+   const [openPopupAgregar, setOpenPopupAgregar] = useState(false);
    let [nombre, setNombre] = useState('5');
    let [rol, setRol] = useState('');
    let [id, setId] = useState('');
    let [email, setEmail] = useState('');
    let [telefono, setTelefono] = useState('');
+   let [sexo, setSexo] = useState('');
    const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
 
    const navigate = useNavigate();
    const isLoggedIn = localStorage.getItem("isLoggedIn");
 
-
-   const handleEditAdministradoresClick = (id) => {
-      navigate(`/usuarios_admin/${id}`);
-
+   const handleEditAdministradoresClick = () => {
+      
    };
+
    //para el Popup
    const handleSelectedAdministradoresClick = (row) => {
-
-
       setOpenPopup(true);
       setNombre(row.nombre);
       setRol(row.rol);
       setId(row.id);
       setEmail(row.correo);
-      
       setSelectedAdministradorId(row.id);
    }
 
    const handleDeleteAdministradoresClick = (id) => {
-
       const deleteAdministrador = async () => {
          await AdministradoresService.deleteAdministradores(id);
-
       };
       deleteAdministrador();
       window.location.reload();
    };
-
-   const theme = createTheme(
-      {
-         palette: {
-            primary: { main: '#1976d2' },
-         },
-      },
-      esES,
-   );
-
 
    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
       nombre: true,
@@ -74,7 +61,8 @@ const Administradores = () => {
 
    function CustomToolbar() {
       const handleAgregarAdministradorClick = () => {
-         //navigate('/administrador/crear');
+         setOpenPopupAgregar(true);
+         
       };
 
       return (
@@ -86,19 +74,23 @@ const Administradores = () => {
                <GridToolbarExport />
             </div>
             <div>
-               <Button onClick={handleAgregarAdministradorClick} startIcon={<PersonAdd />} style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+               <Button onClick={handleAgregarAdministradorClick} style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
                   Agregar Administrador
                </Button>
             </div>
-            {handleAgregarAdministradorClick && (
-            <Popup2
-               openPopup={openPopup}
-            />
-            )}
          </GridToolbarContainer>
          
       );
    }
+
+   const theme = createTheme(
+      {
+         palette: {
+            primary: { main: '#1976d2' },
+         },
+      },
+      esES,
+   );
 
    useEffect(() => {
       //validación login
