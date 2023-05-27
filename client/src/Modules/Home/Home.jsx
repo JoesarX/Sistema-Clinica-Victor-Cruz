@@ -87,6 +87,7 @@ const Home = () => {
     const handleCitaClick = () => {
         navigate('/citas');
     };
+    
     const handleLabClick = () => {
         navigate('/laboratorio');
     };
