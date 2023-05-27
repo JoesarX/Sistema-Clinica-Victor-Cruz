@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import '../HojaDeEstilos/Dashboard.css';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faGear, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons'
+import { faDollarSign } from '@fortawesome/free-solid-svg-icons'
+import { faAddressCard} from '@fortawesome/free-solid-svg-icons'
+import { faTable} from '@fortawesome/free-solid-svg-icons'
+import { faRulerVertical} from '@fortawesome/free-solid-svg-icons'
+import { faWeightScale} from '@fortawesome/free-solid-svg-icons'
+import { faTemperatureLow} from '@fortawesome/free-solid-svg-icons'
 
 const Dashboard = () => {
     const [patient, setPatient] = useState({
@@ -49,29 +58,49 @@ const Dashboard = () => {
         <div className='contenido'>
             <div className='sidebar'>
                 <div className='botones'>
-                    <button className='sidebarBtn'>Icon1</button>
-                    <button className='sidebarBtn'>Icon 2</button>
-                    <button className='sidebarBtn'>Icon 3</button>
-                    <button className='sidebarBtn'>Icon 4</button>
-                    <button className='sidebarBtn'>Icon 5</button>
-                    <button className='sidebarBtn'>Icon 6</button>
+                    <button className='sidebarBtn'> 
+                        <FontAwesomeIcon icon={faCalendarDays} style={{ color: '#CCCCCC', fontSize: '28px' }} />
+                    </button>
+                    <button className='sidebarBtn'>
+                        <FontAwesomeIcon icon={faDollarSign} style={{ color: '#CCCCCC', fontSize: '32px' }} />
+                    </button>
+                    <button className='sidebarBtn'>
+                        <FontAwesomeIcon icon={faUser} style={{ color: '#CCCCCC', fontSize: '28px' }} />
+                    </button>
+                    <button className='sidebarBtn'>
+                        <FontAwesomeIcon icon={faAddressCard} style={{ color: '#CCCCCC', fontSize: '28px' }} />
+                    </button>
+                    <button className='sidebarBtn'>
+                        <FontAwesomeIcon icon={faTable} style={{ color: '#CCCCCC', fontSize: '30px' }} />
+                    </button>
+                    <button className='sidebarBtn'>
+                        <FontAwesomeIcon icon={faGear} style={{ color: '#CCCCCC', fontSize: '30px' }} />
+                    </button>
                 </div>
             </div>
             <div className='topbar'>
-                <div className='logo'>logo</div>
+                <div className='logo'></div>
                 <div className='nomCli'>Clinica Victor Cruz</div>
-                <div style={{width: '800px'}}></div>
-                <div className='line'></div>
-                <div className='foto'>foto</div>
-                <div className='doc'>Dr. Pedro Mendoza</div>
-                <div className='icono'>icono</div>
+                <div style={{width: '680px'}}></div>
+                <div className='line' style={{ marginRight: '18px'}}></div>
+                <div className='foto' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '42px', height: '36px', display: 'flex', justifyContent: 'center', alignItems: 'center',marginRight: '10px', top: '10px' }}>
+                    <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '30px' }} />
+                </div>
+                <div className='doc' style={{ marginLeft: '6px'}}>Dr. Pedro Mendoza</div>
+                <div className='icono'>
+                    <FontAwesomeIcon icon={faCaretDown} style={{ color: '#B8B8B8', fontSize: '24px',  marginLeft:'150px'}} />
+                </div>
             </div>
             <div className='about'>
                 <div className="infoGeneral">
-                    <div className='perfil'>
-                        <img src={patient.profilePicture} alt="Foto de perfil" />
-                        <button>Editar</button>
+                    
+                <span>
+                    <div className='perfil' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '62px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
+                        <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '55px' }} /> 
                     </div>
+                    <button style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
+                </span> 
+
                     <div className='textoInfo'>
                         <div className='nombreC'>
                             <h2 className="nombre">{patient.fullName}</h2>
@@ -110,11 +139,35 @@ const Dashboard = () => {
                     <div className='titulo1'>
                         <h3 className='histmedtit'>Signos Vitales</h3>
                     </div>
-                    <p style={{ color: '#75BD89' }} className="altura"><span className="vitals-label">Altura:</span> <span className="vitals-value">{patient.height}</span></p>
-                    <p style={{ color: '#54648D' }} className="peso"><span className="vitals-label">Peso:</span> <span className="vitals-value">{patient.weight}</span></p>
-                    <p style={{ color: '#916A9E' }} className="temperatura"><span className="vitals-label">Temperatura:</span> <span className="vitals-value">{patient.temperature}</span></p>
-                    <p style={{ color: '#AB2525' }} className="ritmo"><span className="vitals-label">Ritmo Cardiaco:</span> <span className="vitals-value">{patient.heartRate}</span></p>
-                    <p style={{ color: '#AB2525' }} className="presion"><span className="vitals-label">Presión Arterial:</span> <span className="vitals-value">{patient.bloodPressure}</span></p>
+                    <p style={{ color: '#75BD89' }} className="altura">
+                        <span className="vitals-label">
+                            <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px',  marginRight:'22px'}} />
+                            Altura: 
+                        </span> 
+                        <span className="vitals-value">{patient.height}</span>
+                    </p>
+                    <p style={{ color: '#54648D' }} className="peso">
+                        <span className="vitals-label">
+                            <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px',  marginRight:'10px'}} />
+                            Peso:
+                        </span> 
+                        <span className="vitals-value">{patient.weight}</span>
+                    </p>
+                    <p style={{ color: '#916A9E' }} className="temperatura">
+                        <span className="vitals-label">
+                            <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px',  marginRight:'10px'}} />
+                            Temperatura:
+                        </span>
+                        <span className="vitals-value">{patient.temperature}</span>
+                    </p>
+                    <p style={{ color: '#AB2525' }} className="ritmo">
+                        <span className="vitals-label">Ritmo Cardiaco:</span> 
+                        <span className="vitals-value">{patient.heartRate}</span>
+                    </p>
+                    <p style={{ color: '#AB2525' }} className="presion">
+                        <span className="vitals-label">Presión Arterial:</span>
+                        <span className="vitals-value">{patient.bloodPressure}</span>
+                    </p>
                 </div>
                 <div className="files">
                     <div className='titulo3'>
