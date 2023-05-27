@@ -1,10 +1,7 @@
 import React from 'react';
 import '../HojaDeEstilos/Acercade.css';
 import { useNavigate } from 'react-router-dom';
-import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
-import ReactDOM from 'react-dom';
-import { useState } from 'react';
 import doctor from '../Imagenes/doctor.jpg';
 import hospital from '../Imagenes/hospital.jpeg';
 
@@ -19,8 +16,6 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Acercade = () => {
 
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const handleReturnClick = () => {
     navigate('/');
@@ -28,13 +23,12 @@ const Acercade = () => {
   const handleIniciarClick = () => {
     navigate('/iniciarsesion');
   };
-  const handleCitaClick = () => {
+  /*const handleCitaClick = () => {
     navigate('/citas');
   };
   const handleLabClick = () => {
     navigate('/laboratorio');
-  };
-
+  };*/
 
   const handleServicios = () => {
     navigate('/servicios');
@@ -99,24 +93,6 @@ const Acercade = () => {
     botonPrincipal2.addEventListener('mouseleave', ocultarBotones2);
   };
 
-
-  const properties = {
-    duration: 3000,
-    transitionDuration: 500,
-    infinite: true,
-    indicators: true,
-    arrows: true
-  };
-
-
-
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
-
-
   return (
     <div className="scrollable-page">
       <header className="headerT">
@@ -179,7 +155,7 @@ const Acercade = () => {
 
         <div className="company-description">
           <div className="image-container">
-            <img src={hospital} />
+            <img src={hospital} alt="hospital"/>
           </div>
           <div className="text-container">
             <span>
@@ -195,7 +171,7 @@ const Acercade = () => {
 
         <div className="person-container">
           <div className="person-image">
-            <img src={doctor} />
+            <img src={doctor} alt="doctor" />
           </div>
           <div className="person-description">
             <span>
