@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 import doctor_slide from '../Imagenes/doctor_slide.jpeg';
 import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
+import saludOcupacional from '../Imagenes/saludOcupacional.webp';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
@@ -152,7 +153,7 @@ const Home = () => {
                         <img src={doctor_slide1} />
                     </div>
                     <div className="each-slide">
-                        <img src={doctor_slide1} />
+                        <img src={saludOcupacional} />
                     </div>
                 </Slide>
             </div>
