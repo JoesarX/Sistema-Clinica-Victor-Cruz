@@ -3,9 +3,6 @@ import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
-import ReactDOM from 'react-dom';
-import { useState } from 'react';
-
 import doctor_slide from '../Imagenes/doctor_slide.jpeg';
 import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
 import saludOcupacional from '../Imagenes/saludOcupacional.webp';
@@ -76,8 +73,6 @@ const Home = () => {
         botonPrincipal2.addEventListener('mouseleave', ocultarBotones2);
     };
 
-
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
     const handleReturnClick = () => {
         navigate('/');
@@ -89,10 +84,10 @@ const Home = () => {
         navigate('/citas');
     };
     
-    const handleLabClick = () => {
+    /*const handleLabClick = () => {
         navigate('/laboratorio');
     };
-
+    */
 
     const handleServicios = () => {
         navigate('/servicios');
@@ -102,21 +97,12 @@ const Home = () => {
         navigate('/acerca-de');
     };
 
-
-
     const properties = {
         duration: 3000,
         transitionDuration: 500,
         infinite: true,
         indicators: true,
         arrows: true
-    };
-
-
-
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
     };
 
     return (
@@ -147,13 +133,13 @@ const Home = () => {
             <div className="imagenes">
                 <Slide {...properties}>
                     <div className="each-slide">
-                        <img src={doctor_slide} />
+                        <img src={doctor_slide} alt="imagen 1"/>
                     </div>
                     <div className="each-slide">
-                        <img src={doctor_slide1} />
+                        <img src={doctor_slide1} alt="imagen 2"/>
                     </div>
                     <div className="each-slide">
-                        <img src={saludOcupacional} />
+                        <img src={saludOcupacional} alt="imagen 3"/>
                     </div>
                 </Slide>
             </div>
