@@ -3,6 +3,11 @@ import '../HojaDeEstilos/RegistrarUser.css';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 
 const RegistrarUser = () => {
   const validations = () => {
@@ -20,7 +25,7 @@ const RegistrarUser = () => {
       return false
     }
 
-    
+
     if (pregunta === null || pregunta === '') {
       alert('La pregunta es requerido')
       return false
@@ -74,13 +79,9 @@ const RegistrarUser = () => {
   return (
 
     <div className="scrollable-page">
-      <header className="header">
-        <div className="logo">Logo</div>
+      <header className="headerT">
         <nav>
-          <div className="buttons">
-            <button onClick={handleReturnClick}>Volver a Inicio</button>
-
-          </div>
+          <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>Volver a Inicio</button>
         </nav>
       </header>
 
@@ -152,6 +153,14 @@ const RegistrarUser = () => {
           <button type="submit" onClick={handleSubmit} >Registrar Usuario: </button>
         </form>
       </div>
+
+      <footer className="footer">
+        <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faLocationDot} /> Col.Kennedy, Tegucigalpa</p>
+        <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faPhone} /> (504) 2230-3901</p>
+        <button className='botonCon' >
+          Contactanos para responder tus dudas
+        </button>
+      </footer>
 
     </div>
 
