@@ -1,0 +1,163 @@
+.infoGeneral {
+    height: 200px;
+    width: 450px;
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    position: absolute;
+    left: 85px;
+    top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.medical-history {
+    height: 200px;
+    width: 450px;
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    position: absolute;
+    left: 550px;
+    top: 20px;
+}
+
+.medical-history .history-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.medical-history .section-label {
+    flex: 0 0 200px;
+    font-weight: bold;
+}
+
+.medical-history .section-value {
+    flex: 1;
+}
+
+.medical-history .divider {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+
+.medications {
+    height: 200px;
+    width: 450px;
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    position: absolute;
+    left: 550px;
+    top: 235px;
+}
+
+.vitals {
+    height: 250px;
+    width: 450px;
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    position: absolute;
+    left: 85px;
+    top: 235px;
+}
+
+
+.citas {
+    height: 630px;
+    width: 440px;
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    position: absolute;
+    left: 1015px;
+    top: 20px;
+}
+
+.perfil {
+    height: 100%;
+    width: 30%;
+    background-color: grey;
+    border-radius: 10px;
+}
+
+.textoInfo {
+    height: 100%;
+    width: 80%px;
+    background-color: grey;
+    flex: 1;
+    border-radius: 10px;
+}
+
+.back {
+  background-color: #E4EAF8;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+
+.vitals-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 2px;
+}
+
+.vitals-label {
+    font-weight: bold;
+    text-align: left;
+}
+
+.vitals-value {
+    margin-left: 10px;
+    text-align: right;
+}
+
+.files {
+    height: 150px;
+    width: 450px;
+    background-color: #F7F7F7;
+    border-radius: 10px;
+    position: absolute;
+    left: 85px;
+    top: 500px;
+}
+
+.files h3 {
+    font-weight: bold;
+}
+
+.files .divider {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+}
+
+.file-list div {
+    margin-bottom: 10px;
+}
+
+.file-list .divider {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.side{
+    position: absolute;
+}
+.head{
+    position: absolute;
+}
