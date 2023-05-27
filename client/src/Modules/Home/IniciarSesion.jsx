@@ -3,6 +3,7 @@ import '../HojaDeEstilos/IniciarSesion.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
+import Footer from './Footer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
@@ -85,13 +86,7 @@ const IniciarSesion = () => {
                 </form>
             </div>
 
-            <footer className="footer">
-                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faLocationDot} /> Col.Kennedy, Tegucigalpa</p>
-                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faPhone} /> (504) 2230-3901</p>
-                <button className='botonCon' >
-                    Contactanos para responder tus dudas
-                </button>
-            </footer>
+            <Footer />
 
         </div>
 

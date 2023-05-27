@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+
+
+.container {
+    font-family: 'Inter';
+    color: white;
+    transition: all 0.3 ease;
+}
+
+.custom-footer {
+    font-family: 'Inter';
+    color: white;
+    transition: all 0.3 ease;
+    align-content: center;
+    box-shadow: -0.2em -0.2em 0.5em rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.footer-info {
+    font-family: 'Inter';
+    width: 100%;
+}
+
+.custom-colors {
+    background-color: #1E60A6;
+    color: white !important;
+}
+
+.spacing {
+    padding-bottom: 5px;
+}
+
+.smalltext-copyright {
+    font-size: small;
+}
