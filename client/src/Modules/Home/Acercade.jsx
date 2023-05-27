@@ -145,9 +145,12 @@ const Acercade = () => {
         </button>
       </header>
 
-      <div className="about-us-container">
-        <h1>About Us</h1>
+      <div className="info header">
+        SOBRE NOSOTROS
+      </div>
 
+      <div className="about-us-container">
+        
         <div className="mission-vision-container">
           <div className="mission">
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', fontSize: '40px'}}>
