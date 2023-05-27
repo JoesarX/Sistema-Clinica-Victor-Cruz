@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom';
 //GRID
 import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
-//import { GridActionsCellItem } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Person, Person2, Visibility  } from '@mui/icons-material'
+import { PersonAdd, Delete, Person, Person2, Visibility } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 //ADD EXPEDIENTES MODAL
 import Modal from '@mui/material/Modal';
@@ -20,10 +21,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-// import FormControl from '@mui/material/FormControl';
-// import FormLabel from '@mui/material/FormLabel';
 import Autocomplete from '@mui/material/Autocomplete';
-// import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 
 
@@ -41,6 +39,7 @@ const Expedientes = () => {
    //EXPEDIENTES GRID DATA
    const navigate = useNavigate();
    const [expedientes, setExpedientes] = useState([]);
+
 
    // const handleAddExpedientesClick = () => {
    //    navigate('/expedientes/crear');
@@ -83,19 +82,54 @@ const Expedientes = () => {
    });
 
    const CustomToolbar = () => {
+      const theme = useTheme();
+      const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
       return (
-         <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', height: '30px', marginTop: '15px', marginBottom: '10px' }}>
+         <GridToolbarContainer
+            sx={{
+               display: 'flex',
+               flexDirection: isMobile ? 'column' : 'row',
+               justifyContent: 'space-between',
+               alignItems: isMobile ? 'stretch' : 'center',
+               marginTop: '15px',
+               marginBottom: '10px',
+               gap: '10px',
+            }}
+         >
             <div>
-               <GridToolbarColumnsButton />
-               <GridToolbarFilterButton />
-               <GridToolbarDensitySelector />
-               <GridToolbarExport />
+               {isMobile ? (
+                  <>
+                     <GridToolbarColumnsButton />
+                     <GridToolbarFilterButton />
+                     <GridToolbarDensitySelector />
+                  </>
+               ) : (
+                  <>
+                     <GridToolbarColumnsButton />
+                     <GridToolbarFilterButton />
+                     <GridToolbarDensitySelector />
+                     <GridToolbarExport />
+                  </>
+               )}
             </div>
-            <div>
-               <Button onClick={toggleModal} startIcon={<PersonAdd />} style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
-                  Agregar Expediente
-               </Button>
-            </div>
+            {isMobile && (
+               <div>
+                  <Button
+                     onClick={toggleModal}
+                     startIcon={<PersonAdd />}
+                     style={{
+                        backgroundColor: 'rgb(27, 96, 241)',
+                        color: 'white',
+                        borderRadius: '10px',
+                        paddingLeft: '10px',
+                        paddingRight: '10px',
+                     }}
+                  >
+                     Agregar Expediente
+                  </Button>
+               </div>
+            )}
          </GridToolbarContainer>
       );
    };
@@ -167,7 +201,7 @@ const Expedientes = () => {
          }
       }
    };
-   
+
    const validations = () => {
       const { nombre, fecha_nacimiento, sexo, estado_civil } = expediente
       if (nombre === null || nombre === '') {
@@ -200,11 +234,12 @@ const Expedientes = () => {
    }
 
    useEffect(() => {
-      //validación login
+      // Validación login
       if (!isLoggedIn) {
          // Redirigir si no se cumple la verificación
          navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
       }
+
       const fetchAllExpedientes = async () => {
          try {
             const expedientesData = await ExpedientesService.getAllExpedientes();
@@ -215,14 +250,42 @@ const Expedientes = () => {
             setExpedientes(expedientesWithId);
          } catch (error) {
             // Handle error if any
-            console.log('Error fetching expedientes:', error);
+            console.log("Error fetching expedientes:", error);
          }
       };
+
+      // Update tabla
       fetchAllExpedientes();
       if (isSubmitting) {
          fetchAllExpedientes();
       }
-   },  [isLoggedIn, navigate,isSubmitting]);
+
+      const handleResize = () => {
+         const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
+
+         // Update the column visibility based on the screen width
+         setColumnVisibilityModel((prevVisibility) => ({
+            ...prevVisibility,
+            nombre: true,
+            edad: isMobile ? false : true,
+            sexo: isMobile ? false : true,
+            correo: isMobile ? false : true,
+            telefono: isMobile ? false : true,
+            numid: isMobile ? false : true,
+
+         }));
+      };
+
+      // Call the handleResize function initially and on window resize
+      handleResize();
+      window.addEventListener("resize", handleResize);
+
+      // Clean up the event listener on component unmount
+      return () => {
+         window.removeEventListener("resize", handleResize);
+      };
+   }, [isLoggedIn, navigate, isSubmitting]);
+
 
    return (
       <div className='expedientesGrid'>
@@ -318,7 +381,7 @@ const Expedientes = () => {
                      <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                            <LocalizationProvider dateAdapter={AdapterDayjs} required>
-                              <DatePicker id="fecha_nacimiento" label="Fecha de Nacimiento *" value={fecha_nacimiento || null} onChange={handleDateChange} name='fecha_nacimiento' required/>
+                              <DatePicker id="fecha_nacimiento" label="Fecha de Nacimiento *" value={fecha_nacimiento || null} onChange={handleDateChange} name='fecha_nacimiento' required />
                            </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -330,7 +393,7 @@ const Expedientes = () => {
                            </div>
                         </Grid>
                      </Grid>
-                     <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' required/>
+                     <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' required />
                      <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                            <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
@@ -355,14 +418,14 @@ const Expedientes = () => {
                                     estado_civil: newValue
                                  })
                               }
-                              renderInput={(params) => <TextField {...params} label="Estado Civil" required/>}
+                              renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
 
                            />
                         </Grid>
                      </Grid>
                      <Button onClick={handleModalSubmit} variant="contained" style={{
                         backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                        paddingLeft: '10px', paddingRight: '10px', width: '300px', fontSize: '18px', alignSelf: 'center'
+                        paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
                      }}>
                         Agregar Expediente
                      </Button>
