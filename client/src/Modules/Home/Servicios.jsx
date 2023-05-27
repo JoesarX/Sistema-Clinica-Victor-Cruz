@@ -162,8 +162,8 @@ function mostrarBotones1() {
     <div className="scrollable-page">
       <header className="headerT">
         <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>INICIO</button>
-        <button className="bt" style={{ fontSize: '18px' }} onClick={handleLabClick}>LABORATORIO</button>
-        <button className="bt" style={{ fontSize: '18px' }} onClick={handleIniciarClick}> <FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</button>
+        {/*<button className="bt" style={{ fontSize: '18px' }} onClick={handleLabClick}>LABORATORIO</button> */}
+         <button className="bt" style={{ fontSize: '18px' }} onClick={handleIniciarClick}> <FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</button>
         <button className="bt1" style={{ fontSize: '18px' }} id="btp1" onMouseEnter={mostrarBotones1}
           onMouseLeave={ocultarBotones1}>ACERCA DE
           <div className="menu_desplegable" id='m1'>

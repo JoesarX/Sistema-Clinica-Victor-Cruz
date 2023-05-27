@@ -121,7 +121,7 @@ const Home = () => {
         <div className="scrollable-page">
             <header className="headerT">
                 <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>INICIO</button>
-                <button className="bt" style={{ fontSize: '18px' }} onClick={handleLabClick}>LABORATORIO</button>
+               {/* <button className="bt" style={{ fontSize: '18px' }} onClick={handleLabClick}>LABORATORIO</button> */}
                 <button className="bt" style={{ fontSize: '18px' }} onClick={handleIniciarClick}> <FontAwesomeIcon icon={faUser} />INICIAR SESIÓN</button>
                 <button className="bt1" style={{ fontSize: '18px' }} id="btp1" onMouseEnter={mostrarBotones1}
                     onMouseLeave={ocultarBotones1}>ACERCA DE
@@ -217,7 +217,7 @@ const Home = () => {
             </div>
             <footer className="footer">
                 <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faLocationDot} /> Col.Kennedy, Tegucigalpa</p>
-                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faPhone} /> (504) 2228-3233</p>
+                <p style={{ color: '#fff' }}>  <FontAwesomeIcon icon={faPhone} /> (504) 2230-3901</p>
                 <button className='botonCon' >
                     Contactanos para responder tus dudas
                 </button>
