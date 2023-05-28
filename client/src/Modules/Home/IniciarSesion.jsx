@@ -12,7 +12,8 @@ const IniciarSesion = () => {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
-
+    const Master='vcruza23@yahoo.com';
+    const Mpassword='clinic-master@vc@2023';
     const handleReturnClick = () => {
         navigate('/');
     };
@@ -27,16 +28,16 @@ const IniciarSesion = () => {
         console.log("Este es el email: " + email);
         console.log("Esta es la clave: " + password);
 
-
-        if (await UsuariosService.loginUsuarios(email, password)) {
-            localStorage.setItem("isLoggedIn", true);
-            alert("Bienvenido!");
-            navigate("/expedientes");
-        } else if (await UsuariosService.loginAdmin(email, password)) {
-            alert("Bienvenido admin!");
+       
+        if(await UsuariosService.loginUsuarios(email,password)){
+         localStorage.setItem("isLoggedIn", true);
+         alert("Bienvenido!");
+         navigate("/expedientes"); 
+        }else if(email==Master && Mpassword==password){
+            alert("Bienvenido Doctor!");
             localStorage.setItem("AdminLoggedIn", true);
-            navigate("/");
-        } else {
+            navigate("/Administrador"); 
+        }else{
             alert("Email o contraseña incorrecta!");
         }
 

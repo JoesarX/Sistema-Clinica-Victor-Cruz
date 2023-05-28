@@ -43,7 +43,9 @@ const Expedientes = () => {
    //EXPEDIENTES GRID DATA
    const navigate = useNavigate();
    const [expedientes, setExpedientes] = useState([]);
-
+   //esto es para el popup
+   const [openPopup, setOpenPopup] = useState(false);
+   const [selectedExpedienteId, setSelectedExpedienteId] = useState(null);
 
    // const handleAddExpedientesClick = () => {
    //    navigate('/expedientes/crear');
@@ -51,7 +53,13 @@ const Expedientes = () => {
 
    const handleEditExpedientesClick = (id) => {
       navigate(`/expedientes/${id}`);
+      
    };
+   //para el Popup
+   const handleSelectedExpedientesClick= (id)=>{
+      setSelectedExpedienteId(id);
+      setOpenPopup(true);
+   }
 
    const handleDeleteExpedientesClick = (id) => {
       const deleteExpediente = async () => {
