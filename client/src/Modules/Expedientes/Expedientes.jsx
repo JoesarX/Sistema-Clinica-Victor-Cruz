@@ -113,23 +113,23 @@ const Expedientes = () => {
                   </>
                )}
             </div>
-            {isMobile && (
-               <div>
-                  <Button
-                     onClick={toggleModal}
-                     startIcon={<PersonAdd />}
-                     style={{
-                        backgroundColor: 'rgb(27, 96, 241)',
-                        color: 'white',
-                        borderRadius: '10px',
-                        paddingLeft: '10px',
-                        paddingRight: '10px',
-                     }}
-                  >
-                     Agregar Expediente
-                  </Button>
-               </div>
-            )}
+
+            <div>
+               <Button
+                  onClick={toggleModal}
+                  startIcon={<PersonAdd />}
+                  style={{
+                     backgroundColor: 'rgb(27, 96, 241)',
+                     color: 'white',
+                     borderRadius: '10px',
+                     paddingLeft: '10px',
+                     paddingRight: '10px',
+                  }}
+               >
+                  Agregar Expediente
+               </Button>
+            </div>
+
          </GridToolbarContainer>
       );
    };
