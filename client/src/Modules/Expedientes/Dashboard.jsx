@@ -181,7 +181,7 @@ const Dashboard = () => {
                     <p style={{ color: '#AB2525' }} className="presion">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px',  marginRight:'10px'}} />
-                            <span style={{ marginRight: '116px'}}>
+                            <span style={{ width: '300px',marginRight: '10px'}}>
                                 Presión Arterial
                             </span>
                         </span>
