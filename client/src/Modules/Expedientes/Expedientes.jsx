@@ -9,6 +9,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import { PersonAdd, Edit, Delete, Person, Person2 } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
+import moment from 'moment';
+
 
 //ADD EXPEDIENTES MODAL
 import Modal from '@mui/material/Modal';
@@ -24,6 +26,9 @@ import FormLabel from '@mui/material/FormLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+
+
 
 
 //STYLES
@@ -137,19 +142,33 @@ const Expedientes = () => {
       }
       return age;
    };
+
    const handleDateChange = (date) => {
 
+      console.log(date)
       setFechaNacimiento(date);
       const formattedDate = date ? date.toISOString().slice(0, 10) : '';
+      console.log(formattedDate)
       setExpediente((prevState) => ({ ...prevState, fecha_nacimiento: formattedDate }))
+      console.log(fecha_nacimiento)
+      const age = formattedDate ? calculateAge(formattedDate) : '';
+      console.log(age)
+      setExpediente((prevState) => ({ ...prevState, edad: age }))
 
    };
+
    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
+   const handleTextChange = (e) => {
+      console.log(":)")
+      setExpediente((prevState) => ({ ...prevState, fecha_nacimiento: e.target.value }))
+      // Perform any validation or parsing logic if needed
+      // Update the selectedDate state accordingly
+   };
 
    const handleModalSubmit = async (e) => {
       e.preventDefault();
-      const age = fecha_nacimiento ? calculateAge(fecha_nacimiento) : '';
-      setExpediente((prevState) => ({ ...prevState, edad: age }))
+      console.log(expediente.edad)
+      console.log(expediente.fecha_nacimiento)
 
       setIsSubmitting(true);
 
@@ -166,6 +185,7 @@ const Expedientes = () => {
          }
       }
    };
+
    const [estado_civil, setSelectedOption] = useState(null);
    const validations = () => {
       const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } = expediente
@@ -174,6 +194,7 @@ const Expedientes = () => {
          return false
       }
       if (edad === null || edad === '' || edad < 0) {
+         console.log(edad)
          alert('Una edad valida es requerida')
          return false
       }
@@ -222,7 +243,10 @@ const Expedientes = () => {
          fetchAllExpedientes();
       }
    }, [isSubmitting]);
-
+   const [selectedDate, setSelectedDate] = useState(null);
+   const handleInputFocus = (event) => {
+      event.target.blur(); // Remove focus from the input field
+   };
    return (
       <div className='expedientesGrid'>
          <div className='expedientesGridBox'>
@@ -316,9 +340,22 @@ const Expedientes = () => {
                      <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' />
                      <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker id="fecha_nacimiento" label="Fecha de Nacimiento" value={fecha_nacimiento || null} onChange={handleDateChange} name='fecha_nacimiento' />
-                           </LocalizationProvider>
+                          {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                              <DatePicker id="fecha_nacimiento" diabled label="Fecha de Nacimiento"  value={fecha_nacimiento || null} renderInput={(params) => <TextField {...params} disabled/>} onChange={handleDateChange} name='fecha_nacimiento' />
+
+                           </LocalizationProvider>*/}
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              
+                              <MobileDatePicker
+                                 id="fecha_nacimiento"
+                                 value={fecha_nacimiento || null}
+                                 onChange={handleDateChange}
+                                 renderInput={(params) => <TextField {...params}  />}
+                                 name='fecha_nacimiento'
+                              />
+               </LocalizationProvider>
+
                         </Grid>
                         <Grid item xs={12} sm={6}>
                            <div className='radioGroupContainer'>
