@@ -8,7 +8,8 @@ const expedientesRouter = (pool) => {
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM expedientes ";
+            // const sqlSelect = "SELECT * FROM expedientes ";
+            const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion FROM expedientes"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);

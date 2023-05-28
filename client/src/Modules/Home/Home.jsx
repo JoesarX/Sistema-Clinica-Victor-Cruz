@@ -3,42 +3,32 @@ import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
+
 import ReactDOM from 'react-dom';
 import { useState } from 'react';
+import Topbar from './Topbar';
+import Footer from './Footer';
 
 import doctor_slide from '../Imagenes/doctor_slide.jpeg';
 import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
+import saludOcupacional from '../Imagenes/saludOcupacional.webp';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-
+import { faFlask } from '@fortawesome/free-solid-svg-icons';
+import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
+import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
+import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faPhone } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
 
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
-    const handleReturnClick = () => {
-        navigate('/');
-    };
-    const handleIniciarClick = () => {
-        navigate('/iniciarsesion');
-    };
+
     const handleCitaClick = () => {
         navigate('/citas');
     };
-    const handleLabClick = () => {
-        navigate('/laboratorio');
-    };
-
-    
-    const handleServicios = () => {
-        navigate('/servicios');
-    };
-
-    const handleAcercade = () => {
-        navigate('/acerca-de');
-    };
-
 
 
     const properties = {
@@ -49,54 +39,19 @@ const Home = () => {
         arrows: true
     };
 
-
-
-
-    const toggleDropdown = () => {
-        setIsDropdownOpen(!isDropdownOpen);
-    };
-
     return (
         <div className="scrollable-page">
-            <header className="headerT">
-                <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>INICIO</button>
-                <button className="bt" style={{ fontSize: '18px' }} onClick={handleLabClick}>LABORATORIO</button>
-                <button className="bt" style={{ fontSize: '18px' }} onClick={handleIniciarClick}>INICIAR SESIÓN</button>
-                <button className="bt1" style={{ fontSize: '18px' }} onClick={toggleDropdown}>ACERCA DE
-                </button>
-                {isDropdownOpen && (
-                    <ul className="dropdown-menu">
-                        <li>
-                            <button className="dropdown-item" onClick={handleAcercade}>Sobre nosotros</button>
-                        </li>
-                        <li>
-                            <button className="dropdown-item" onClick={handleAcercade}>Contactanos</button>
-                        </li>
-                    </ul>
-                )}
-                <button className="bt2" style={{ fontSize: '18px' }} onClick={toggleDropdown}>SERVICIOS</button>
-                {isDropdownOpen && (
-                    <ul className="dropdown-menu">
-                        <li>
-                            <button className="dropdown-item" onClick={handleServicios}>Servicios</button>
-                        </li>
-                        <li>
-                            <button className="dropdown-item" onClick={handleServicios}>Otros Servicios</button>
-                        </li>
-                    </ul>
-                )}
-
-            </header>
+            <Topbar />
             <div className="imagenes">
                 <Slide {...properties}>
                     <div className="each-slide">
-                        <img src={doctor_slide} />
+                        <img src={doctor_slide} alt="imagen 1"/>
                     </div>
                     <div className="each-slide">
-                        <img src={doctor_slide1} />
+                        <img src={doctor_slide1} alt="imagen 2"/>
                     </div>
                     <div className="each-slide">
-                        <img src={doctor_slide1} />
+                        <img src={saludOcupacional} alt="imagen 3"/>
                     </div>
                 </Slide>
             </div>
@@ -106,7 +61,9 @@ const Home = () => {
             <div className="container">
                 <div className="container1">
                     <div className="iconContainer">
-                        <FontAwesomeIcon icon={faHeart} />
+                        <div style={{ position: 'relative', left: '70px', top: '80px' }}>
+                            <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
                     </div>
                     <h1 className="head1">Clinica</h1>
                     <div className="textoC">
@@ -115,6 +72,10 @@ const Home = () => {
                 </div>
                 <div className="container1">
                     <div className="iconContainer">
+                        <div style={{ position: 'relative', left: '85px', top: '70px' }}>
+                            <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
+
                     </div>
                     <h1 className="head1">Salud ocupacional</h1>
                     <div className="textoS">
@@ -122,14 +83,20 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="container1">
-                    <div className="iconContainer">
+                    <div className="iconContainer" >
+                        <div style={{ position: 'relative', left: '83px', top: '70px' }}>
+                            <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
+
                     </div>
+
                     <h1 className="head1">Laboratorio</h1>
                     <div className="textoL">
                         Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.
                     </div>
                 </div>
             </div>
+
             <div className="container2">
                 <h1 className="ruta">Estamos ubicados en:</h1>
                 <iframe
@@ -143,21 +110,12 @@ const Home = () => {
                 ></iframe>
                 <div className="linea">
                 </div>
-                <h1 className="agendar">Agenda una cita</h1>
-                <button className="btnA" onClick={handleCitaClick}>Revisa nuestra disponibilidad</button>
-                <button className='botonA'>
-                    ∧
-                </button>
+
+                <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', right: '140px', top: '85px', fontSize: '100px' }} />
+                <h1 className="agendar" style={{ position: 'relative', left: '70px', top: '-50px' }}>Agenda una cita</h1>
+                <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-60px' }}>Revisa nuestra disponibilidad</button>
             </div>
-            <footer className="footer">
-                <p style={{ color: '#fff' }}>Col.Kennedy, Tegucigalpa</p>
-                <p style={{ color: '#fff' }}>(504) 2228-3233</p>
-                <button // onClick={handleClick} 
-                    className='botonCon'
-                >
-                    Contactanos para responder tus dudas
-                </button>
-            </footer>
+            <Footer />
         </div>
     );
 };
