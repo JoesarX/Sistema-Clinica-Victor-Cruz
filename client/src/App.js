@@ -17,6 +17,7 @@ import Expedientes from "./Modules/Expedientes/Expedientes";
 import AddExpedientes from "./Modules/Expedientes/AddExpedientes";
 import EditExpedientes from "./Modules/Expedientes/EditExpedientes";
 import Dashboard from "./Modules/Expedientes/Dashboard";
+import Contactanos from "./Modules/Home/Contactanos";
 
 
 function App() {
@@ -24,21 +25,21 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/iniciarsesion" element={<IniciarSesion/>}/>
-          <Route path="/acerca-de" element={<Acercade/>}/>
-          <Route path="/servicios" element={<Servicios/>}/>
-          <Route path="/laboratorio" element={<Laboratorio/>}/>
-          <Route path="/registrar-user" element={<RegistrarUser/>}/>
-          <Route path="/citas" element={<Citas/>}/>
-          <Route path="/expedientes" element={<Expedientes/>}/>
-          <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
-          <Route path="/expedientes/:expedienteId" element={<EditExpedientes/>}/>
-          <Route path="/dashboard" element={<Dashboard/>}/>
-          
+          <Route path="/" element={<Home />} />
+          <Route path="/iniciarsesion" element={<IniciarSesion />} />
+          <Route path="/acerca-de" element={<Acercade />} />
+          <Route path="/servicios" element={<Servicios />} />
+          <Route path="/laboratorio" element={<Laboratorio />} />
+          <Route path="/registrar-user" element={<RegistrarUser />} />
+          <Route path="/citas" element={<Citas />} />
+          <Route path="/expedientes" element={<Expedientes />} />
+          <Route path="/expedientes/crear" element={<AddExpedientes />} />
+          <Route path="/expedientes/:expedienteId" element={<EditExpedientes />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/contactanos" element={<Contactanos />} />
         </Routes>
       </BrowserRouter>
-      
+
     </div>
   );
 }
