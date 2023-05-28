@@ -47,7 +47,7 @@ const Topbar = () => {
                     </div>
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto text-center">
                         <FontAwesomeIcon icon={faPhone} />
-                        <div class="spacing" />
+                        <div class="spacing"/>
                         +504 2230-3901
                     </div>
                 </div>
