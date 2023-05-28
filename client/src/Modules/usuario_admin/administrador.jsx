@@ -2,13 +2,15 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button } from '@mui/material'
+import { Box, Button,Typography } from '@mui/material'
 import { DataGrid, esES, GridActionsCellItem } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import { PersonAdd, Edit, Delete, Person, Person2 } from '@mui/icons-material'
+import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
 import Popup from '../usuario_admin/Fichas_Admin';
+import EditAdmins from './EditAdmins';
 import PopupAgregar from '../usuario_admin/PopupAgregar';
 
 import AdministradoresService from '../../Services/AdministradoresService';
@@ -18,7 +20,7 @@ const Administradores = () => {
    const [usuarios_admin, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
-   const [openAddAdmin, setAddAdmin] = useState(false);
+   let [openAddAdmin, setAddAdmin] = useState(false);
    let [nombre, setNombre] = useState('5');
    let [rol, setRol] = useState('');
    let [id, setId] = useState('');
@@ -26,13 +28,22 @@ const Administradores = () => {
    let [cel, setCel] = useState('');
    let [sexo, setSexo] = useState('');
    let [contraseña, setPassword] = useState('');
-   const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
+   let [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
+   let [openEditAdmin, setEditAdmin] = useState(false);
 
    const navigate = useNavigate();
    const isLoggedIn = localStorage.getItem("AdminLoggedIn");
 
-   const handleEditAdministradoresClick = () => {
-      
+   const handleEditAdministradoresClick = (row) => {
+
+      setEditAdmin(true);
+      setNombre(row.nombre);
+      setRol(row.rol);
+      setId(row.id);
+      setEmail(row.correo);
+      setCel(row.telefono);
+      setSexo(row.sexo);
+      setPassword(row.password);
    };
 
    //para el Popup
@@ -45,21 +56,18 @@ const Administradores = () => {
       setCel(row.telefono);
       setSexo(row.sexo);
       setPassword(row.password);
-      console.log("Esto es el correo: "+row.correo);
-      console.log("Esto es el tel: "+row.telefono);
-      console.log("Esto es el sexo: "+row.sexo);
-      console.log("Esto es el pw: "+row.password);
+     
       setSelectedAdministradorId(row.id);
    }
 
    const handleDeleteAdministradoresClick = (id) => {
-      
+
       const deleteAdministrador = async () => {
          await AdministradoresService.deleteAdministradores(id);
       };
       deleteAdministrador();
       window.location.reload();
-      
+
    };
 
    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
@@ -72,6 +80,7 @@ const Administradores = () => {
    function CustomToolbar() {
       const handleAgregarAdministradorClick = () => {
          setAddAdmin(true);
+         setEditAdmin = { setEditAdmin }
          setNombre('');
          setRol('');
          setId('');
@@ -83,20 +92,33 @@ const Administradores = () => {
       };
 
       return (
+        
+         
+      
          <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', height: '30px', marginTop: '15px', marginBottom: '10px' }}>
+            
             <div>
+            
+         <Typography variant='h6' component='h2' style={{ textAlign: 'right', marginBottom: '-10px', marginLeft:'500px' }}>
+          Lista de colaboradores
+        </Typography>
+       
+            
                {/* <GridToolbarColumnsButton /> */}
                <GridToolbarFilterButton />
                <GridToolbarDensitySelector />
                <GridToolbarExport />
             </div>
             <div>
+            
                <Button onClick={handleAgregarAdministradorClick} style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
                   Agregar Administrador
                </Button>
             </div>
+            
          </GridToolbarContainer>
          
+
       );
    }
 
@@ -132,14 +154,22 @@ const Administradores = () => {
    }, []);
 
    return (
+      
+
+      
       <div className='administradoresGrid'>
+         
          <div className='administradoresGridBox'>
+         
             <ThemeProvider theme={theme}>
-               <DataGrid onRowClick={(params) => handleSelectedAdministradoresClick(params.row)}
+            
+               <DataGrid
+               
                   rows={usuarios_admin}
                   getRowId={(row) => row.adminId}
                   columns={[
                      {
+                        
                         field: 'nombre',
                         headerName: 'Nombre',
                         flex: 5,
@@ -163,6 +193,7 @@ const Administradores = () => {
                         headerName: 'Correo Electronico',
                         flex: 5,
                         headerClassName: 'column-header',
+
                         renderCell: (params) => (
                            <div style={{ display: 'flex', alignItems: 'center' }}>
                               {params.value && params.value.includes('@') ? (
@@ -187,11 +218,16 @@ const Administradores = () => {
                         flex: 2,
                         renderCell: (params) => (
                            <div>
-                              <IconButton onClick={() => handleEditAdministradoresClick(params.id)}>
+                              <IconButton onClick={() => handleEditAdministradoresClick(params.row)}>
                                  <Edit />
                               </IconButton>
                               <IconButton onClick={() => handleDeleteAdministradoresClick(params.id)}>
                                  <Delete />
+
+
+                              </IconButton>
+                              <IconButton onClick={() => handleSelectedAdministradoresClick(params.row)}>
+                                 <InfoIcon />
                               </IconButton>
                            </div>
                         ),
@@ -211,30 +247,43 @@ const Administradores = () => {
          </div>
          {selectedAdministradorId && (
             <Popup
-            openPopup={openPopup}
-            setOpenPopup={setOpenPopup}
-            setNombre={nombre}
-            setRol={rol}
-            setId={id}
-            setCorreo={email}
-            setTelefono={cel}
-            setSexo={sexo}
-            setPassword={contraseña}
+               openPopup={openPopup}
+               setOpenPopup={setOpenPopup}
+               setNombre={nombre}
+               setRol={rol}
+               setId={id}
+               setCorreo={email}
+               setTelefono={cel}
+               setSexo={sexo}
+               setPassword={contraseña}
             />
          )}
          {openAddAdmin && (
             <PopupAgregar
-            openAddAdmin={openAddAdmin}
-            setAddAdmin={setAddAdmin}
-            setNombre={''}
-            setRol={''}
-            setId={''}
-            setCorreo={''}
-            setTelefono={''}
-            setPassword={''}
+               openAddAdmin={openAddAdmin}
+               setAddAdmin={setAddAdmin}
+               setNombre={''}
+               setRol={''}
+               setId={''}
+               setCorreo={''}
+               setTelefono={''}
+               setPassword={''}
             />
-      
+
          )}
+         {openEditAdmin && (
+            <EditAdmins
+               openEditAdmin={openEditAdmin}
+               setEditAdmin={setEditAdmin}
+               setNombre={nombre}
+               setRol={rol}
+               setId={id}
+               setCorreo={email}
+               setTelefono={cel}
+               setPassword={contraseña}
+               setSexo={sexo}
+            />)}
+
       </div>
    );
 

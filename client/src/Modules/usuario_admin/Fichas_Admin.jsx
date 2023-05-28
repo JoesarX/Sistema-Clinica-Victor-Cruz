@@ -3,7 +3,7 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle, Box, Typography } from '@mui/material';
 import { useState } from 'react';
 import { Person2, Person, CenterFocusStrong } from '@mui/icons-material';
-import EditAdmins from './EditAdmins';
+
 
 const Popup = (props) => {
   let { setNombre, setRol, setId, setCorreo, setTelefono, setSexo,setPassword, openPopup, setOpenPopup } = props;
@@ -38,7 +38,6 @@ const Popup = (props) => {
               <IconoComponent style={{ color: '#fff', backgroundColor: color, borderRadius: '50%', fontSize: '800%' }} />
             )}
 
-            <Typography onClick={handleEditClick} variant="body2" color="primary" sx={{ mt: 2 }}>Editar</Typography>
           </Box>
 
           <Box sx={{ bgcolor: 'white', flex: 1 }} p={0}>
@@ -51,20 +50,6 @@ const Popup = (props) => {
           </Box>
         </Box>
       </DialogContent>
-      {openEditAdmin && (
-    <EditAdmins
-    openEditAdmin={openEditAdmin}
-    setEditAdmin={setEditAdmin}
-    setNombre={setNombre}
-    setRol={setRol}
-    setId={setId}
-    setCorreo={setCorreo}
-    setTelefono={setTelefono}
-    setPassword={setPassword}
-    setSexo={setSexo}
-    />
-    
-  )}
       
     </Dialog>
     
