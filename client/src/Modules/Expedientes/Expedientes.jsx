@@ -1,13 +1,14 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import EditExpedientesModal from './EditExpedientesModal';
 
 //GRID
 import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Person, Person2, Visibility } from '@mui/icons-material'
+import { PersonAdd, Delete, Person, Person2, Visibility, Edit } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -51,10 +52,19 @@ const Expedientes = () => {
    //    navigate('/expedientes/crear');
    // };
 
-   const handleEditExpedientesClick = (id) => {
+   /*const handleEditExpedientesClick = (id) => {
       navigate(`/expedientes/${id}`);
       
-   };
+   };*/
+
+   const [isModalOpen1, setIsModalOpen1] = useState(false);
+
+const handleEditExpedientesClick = () => {
+   setIsModalOpen1(true);
+   <EditExpedientesModal/>
+};
+
+
    //para el Popup
    const handleSelectedExpedientesClick= (id)=>{
       setSelectedExpedienteId(id);
@@ -375,9 +385,10 @@ const Expedientes = () => {
                         flex: 2,
                         renderCell: (params) => (
                            <div>
-                              <IconButton onClick={() => handleEditExpedientesClick(params.id)}>
-                                 <Visibility />
+                              <IconButton onClick={handleEditExpedientesClick}> 
+                                 <Edit/>
                               </IconButton>
+                              
                               <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                  <Delete />
                               </IconButton>
