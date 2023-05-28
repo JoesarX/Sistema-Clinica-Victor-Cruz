@@ -221,7 +221,7 @@ const Expedientes = () => {
    };
 
    const validations = () => {
-      const { nombre, fecha_nacimiento, sexo, estado_civil } = expediente
+      const { nombre, edad, fecha_nacimiento, sexo, estado_civil } = expediente
       if (nombre === null || nombre === '') {
          alert('Nombre Completo es requerido')
          return false
