@@ -4,6 +4,7 @@ import cors from "cors";
 import expedientesRouter from "./routes/expedientes.js"
 
 import usuariosRouter from "./routes/usuarios.js"
+import adminRouter from "./routes/usuarios_admin.js"
 
 const app = express();
 
@@ -44,3 +45,4 @@ app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a p
 
 
 app.use("/usuarios", usuariosRouter(pool)); // Pass the pool object as a parameter
+app.use("/usuarios_admin", adminRouter(pool)); // Pass the pool object as a parameter
