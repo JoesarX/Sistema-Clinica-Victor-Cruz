@@ -37,14 +37,15 @@ const adminRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `usuarios_admin` (`nombre`, `correo`, `rol`, `password`, `telefono`, `sexo`) VALUES (?)";
+                "INSERT INTO `usuarios_admin` (`nombre`, `correo`, `rol`, `password`, `telefono`, `sexo`,  `id`) VALUES (?)";
             const values = [
                 req.body.nombre,
                 req.body.correo,
                 req.body.rol,
                 req.body.password,
                 req.body.telefono,
-                req.body.sexo
+                req.body.sexo,
+                req.body.id
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -61,24 +62,24 @@ const adminRouter = (pool) => {
             const connection = await pool.getConnection();
             const { id } = req.params;
             const {
-                rol,
                 nombre,
                 correo,
+                rol,
                 password,
-                sexo,
-                telefono
+                telefono,
+                sexo
             } = req.body;
 
             const q =
-                "UPDATE usuarios_admin SET rol = ?, nombre = ?, correo = ?, password = ?, rol = ?, sexo = ?, telefono = ? WHERE id = ?";
+                "UPDATE usuarios_admin SET nombre = ?, correo = ?, rol = ?, password = ?, telefono = ?, sexo = ? WHERE id = ?";
 
             const values = [
-                rol,
                 nombre,
                 correo,
+                rol,
                 password,
-                sexo,
                 telefono,
+                sexo,
                 id
             ];
 
@@ -95,7 +96,7 @@ const adminRouter = (pool) => {
     router.delete("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM usuarios_admin where id = " + req.params.id;
+            const sqlSelect = "delete FROM usuarios_admin where id = '" + req.params.id+"'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);

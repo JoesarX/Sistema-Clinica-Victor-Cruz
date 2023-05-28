@@ -18,18 +18,18 @@ const Administradores = () => {
    const [usuarios_admin, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
-   const [openPopupAgregar, setOpenPopupAgregar] = useState(false);
+   const [openAddAdmin, setAddAdmin] = useState(false);
    let [nombre, setNombre] = useState('5');
    let [rol, setRol] = useState('');
    let [id, setId] = useState('');
    let [email, setEmail] = useState('');
    let [cel, setCel] = useState('');
    let [sexo, setSexo] = useState('');
-   let [contraseña, setContraseña] = useState('');
+   let [contraseña, setPassword] = useState('');
    const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
 
    const navigate = useNavigate();
-   const isLoggedIn = localStorage.getItem("isLoggedIn");
+   const isLoggedIn = localStorage.getItem("AdminLoggedIn");
 
    const handleEditAdministradoresClick = () => {
       
@@ -44,7 +44,7 @@ const Administradores = () => {
       setEmail(row.correo);
       setCel(row.telefono);
       setSexo(row.sexo);
-      setContraseña(row.password);
+      setPassword(row.password);
       console.log("Esto es el correo: "+row.correo);
       console.log("Esto es el tel: "+row.telefono);
       console.log("Esto es el sexo: "+row.sexo);
@@ -53,11 +53,13 @@ const Administradores = () => {
    }
 
    const handleDeleteAdministradoresClick = (id) => {
+      
       const deleteAdministrador = async () => {
          await AdministradoresService.deleteAdministradores(id);
       };
       deleteAdministrador();
       window.location.reload();
+      
    };
 
    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
@@ -69,8 +71,15 @@ const Administradores = () => {
 
    function CustomToolbar() {
       const handleAgregarAdministradorClick = () => {
-         setOpenPopupAgregar(true);
-         
+         setAddAdmin(true);
+         setNombre('');
+         setRol('');
+         setId('');
+         setEmail('');
+         setCel('');
+         setSexo('');
+         setPassword('');
+         console.log("test boton agregar");
       };
 
       return (
@@ -130,7 +139,6 @@ const Administradores = () => {
                   rows={usuarios_admin}
                   getRowId={(row) => row.adminId}
                   columns={[
-                     //{ field: 'idpaciente', headerName: 'ID', flex: 1 , headerClassName: 'column-header'},
                      {
                         field: 'nombre',
                         headerName: 'Nombre',
@@ -168,6 +176,7 @@ const Administradores = () => {
                         ),
                      },
                      { field: 'rol', headerName: 'Rol', flex: 3, headerClassName: 'column-header' },
+                     { field: 'id', headerName: 'Num. ID', flex: 3, headerClassName: 'column-header' },
                      //{ field: 'estado_civil', headerName: 'Estado Civil', flex: 1 },
                      //{ field: 'padecimientos', headerName: 'Padecimientos', flex: 1 },
                      //{ field: 'ocupacion', headerName: 'Ocupacion', flex: 1 },
@@ -208,10 +217,23 @@ const Administradores = () => {
             setRol={rol}
             setId={id}
             setCorreo={email}
-            setCelular={cel}
+            setTelefono={cel}
             setSexo={sexo}
-            setContraseña={contraseña}
+            setPassword={contraseña}
             />
+         )}
+         {openAddAdmin && (
+            <PopupAgregar
+            openAddAdmin={openAddAdmin}
+            setAddAdmin={setAddAdmin}
+            setNombre={''}
+            setRol={''}
+            setId={''}
+            setCorreo={''}
+            setTelefono={''}
+            setPassword={''}
+            />
+      
          )}
       </div>
    );

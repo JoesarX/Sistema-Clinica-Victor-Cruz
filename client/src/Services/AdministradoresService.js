@@ -23,6 +23,7 @@ export const getOneAdministrador = async (id) => {
 };
 
 export const postAdministradores = async (administrador) => {
+    console.log(administrador)
     try {
         const res = await axios.post(`${API_URL}/usuarios_admin`, administrador);
         return res.data;

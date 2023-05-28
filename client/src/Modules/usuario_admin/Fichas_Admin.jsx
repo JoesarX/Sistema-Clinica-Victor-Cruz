@@ -6,7 +6,7 @@ import { Person2, Person, CenterFocusStrong } from '@mui/icons-material';
 import EditAdmins from './EditAdmins';
 
 const Popup = (props) => {
-  let { setNombre, setRol, setId, setCorreo, setCelular, setSexo,setContraseña, openPopup, setOpenPopup } = props;
+  let { setNombre, setRol, setId, setCorreo, setTelefono, setSexo,setPassword, openPopup, setOpenPopup } = props;
   const [openEditAdmin, setEditAdmin] = useState(false);
   console.log(props);
   let IconoComponent = null;
@@ -46,7 +46,7 @@ const Popup = (props) => {
             <h2>{setRol}</h2>
             <h2>{setId}</h2>
             <h2>{setCorreo}</h2>
-            <h2>{setCelular}</h2>
+            <h2>{setTelefono}</h2>
 
           </Box>
         </Box>
@@ -59,9 +59,9 @@ const Popup = (props) => {
     setRol={setRol}
     setId={setId}
     setCorreo={setCorreo}
-    setCelular={setCelular}
-    setContraseña={setContraseña}
-
+    setTelefono={setTelefono}
+    setPassword={setPassword}
+    setSexo={setSexo}
     />
     
   )}
