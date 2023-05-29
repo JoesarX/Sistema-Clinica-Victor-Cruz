@@ -52,7 +52,7 @@ const Home = () => {
                     </div>
                 </Slide>
             </div>
-            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff' }}>
+            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff' , marginBottom: '35px'}}>
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
             <div className="container">
@@ -108,9 +108,9 @@ const Home = () => {
                 <div className="linea">
                 </div>
 
-                <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', right: '140px', top: '85px', fontSize: '100px' }} />
-                <h1 className="agendar" style={{ position: 'relative', left: '70px', top: '-50px' }}>Agenda una cita</h1>
-                <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-60px' }}>Revisa nuestra disponibilidad</button>
+                <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', right: '140px', top: '85px', fontSize: '110px' }} />
+                <h1 className="agendar" style={{ position: 'relative', left: '70px', top: '-30px' }}>Agenda una cita</h1>
+                <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-75px' }}>Revisa nuestra disponibilidad</button>
             </div>
             <Footer />
         </div>
