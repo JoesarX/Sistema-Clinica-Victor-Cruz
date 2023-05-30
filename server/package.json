@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Server for Clinica Victor Cruz",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "JoesarX",
   "license": "ISC",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
@@ -20,5 +20,6 @@
     "mysql": "^2.18.1",
     "mysql2": "^3.3.1",
     "nodemon": "^2.0.22"
-  }
+  },
+  "devDependencies": {}
 }
