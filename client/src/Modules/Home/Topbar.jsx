@@ -29,6 +29,10 @@ const Topbar = () => {
         navigate('/servicios');
     };
 
+    const handleContactanos = () => {
+        navigate('/contactanos');
+    };
+
     const handleAcercade = () => {
         navigate('/acerca-de');
     };
@@ -50,7 +54,7 @@ const Topbar = () => {
                         </a>
                         <div class="dropdown-menu custom-colors">
                             <a class="dropdown-item" onClick={handleAcercade}>SOBRE NOSOTROS</a>
-                            <a class="dropdown-item" >CONTÁCTANOS</a>
+                            <a class="dropdown-item" onClick={handleContactanos}>CONTÁCTANOS</a>
                         </div>
                     </li>
                     <li class="nav-item text" onClick={handleServicios}>
@@ -59,7 +63,7 @@ const Topbar = () => {
                 </ul>
                 <ul class="navbar-nav custom-colors mr-0">
                     <li class="nav-item text">
-                        <a class="nav-link" onClick={handleIniciarClick}><FontAwesomeIcon icon={faUser}/> INICIAR SESIÓN</a>
+                        <a class="nav-link" onClick={handleIniciarClick}><FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</a>
                     </li>
                 </ul>
             </div>
