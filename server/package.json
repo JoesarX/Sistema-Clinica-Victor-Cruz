@@ -12,9 +12,6 @@
   "author": "JoesarX",
   "license": "ISC",
   "dependencies": {
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
-    "@mui/lab": "^5.0.0-alpha.131",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "mysql": "^2.18.1",
