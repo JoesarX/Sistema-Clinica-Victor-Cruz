@@ -38,7 +38,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello this is the backend!");
+  res.send("Hello this is the backend! HOSTED ON AZURE");
 });
 
 app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a parameter

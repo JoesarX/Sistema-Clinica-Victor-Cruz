@@ -1,5 +1,7 @@
 {
     "github.copilot.advanced": {
         
-    }
+    },
+    "appService.defaultWebAppToDeploy": "/subscriptions/897847ff-b9e3-4402-8aa9-2c5683a7647a/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/serverClinicaVictorCruz",
+    "appService.deploySubpath": "server"
 }
