@@ -1,19 +1,17 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import EditExpedientesModal from './EditExpedientesModal';
 
 //GRID
 import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Person, Person2, Visibility, Edit } from '@mui/icons-material'
+import { PersonAdd, Delete, Person, Person2, Visibility } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import moment from 'moment';
-import dayjs from 'dayjs';
 
 //ADD EXPEDIENTES MODAL
 import Modal from '@mui/material/Modal';
@@ -45,32 +43,15 @@ const Expedientes = () => {
    //EXPEDIENTES GRID DATA
    const navigate = useNavigate();
    const [expedientes, setExpedientes] = useState([]);
-   //esto es para el popup
-   const [openPopup, setOpenPopup] = useState(false);
-   const [selectedExpedienteId, setSelectedExpedienteId] = useState(null);
+
 
    // const handleAddExpedientesClick = () => {
    //    navigate('/expedientes/crear');
    // };
 
-   /*const handleEditExpedientesClick = (id) => {
+   const handleEditExpedientesClick = (id) => {
       navigate(`/expedientes/${id}`);
-      
-   };*/
-
-   const [isModalOpen1, setIsModalOpen1] = useState(false);
-
-   const handleEditExpedientesClick = () => {
-      setIsModalOpen1(true);
-      <EditExpedientesModal />
    };
-
-
-   //para el Popup
-   const handleSelectedExpedientesClick = (id) => {
-      setSelectedExpedienteId(id);
-      setOpenPopup(true);
-   }
 
    const handleDeleteExpedientesClick = (id) => {
       const deleteExpediente = async () => {
@@ -173,36 +154,11 @@ const Expedientes = () => {
       ocupacion: ''
    })
    const [isSubmitting, setIsSubmitting] = useState(false);
-   const [isSubmitting2, setIsSubmitting2] = useState(false);
    const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a']
 
    const toggleModal = () => {
       setIsModalOpen(!isModalOpen);
       setIsSubmitting(false);
-   };
-
-   const toggleModal2 = async (id) => {
-      setID(id)
-      console.log(id)
-      try {
-         const expedienteData = await ExpedientesService.getOneExpediente(id);
-         console.log(expedienteData)
-         setExpedientess([expedienteData]);
-         setExpediente(expedienteData);
-         console.log(expedienteData)
-      } catch (error) {
-         console.log(error);
-      }
-
-      setIsModalOpen1(!isModalOpen1);
-      setIsSubmitting2(false);
-   };
-
-   const toggleModal22 = () => {
-
-
-      setIsModalOpen1(!isModalOpen1);
-      setIsSubmitting2(false);
    };
 
    const handleModalFieldChange = (e) => {
@@ -236,7 +192,6 @@ const Expedientes = () => {
    };
 
    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
-   const [id, setID] = useState(null);
    const handleTextChange = (e) => {
       console.log(":)")
       setExpediente((prevState) => ({ ...prevState, fecha_nacimiento: e.target.value }))
@@ -265,19 +220,6 @@ const Expedientes = () => {
       }
    };
 
-   const EditHandler = () => {
-
-      const editExpediente = async () => {
-        await ExpedientesService.editExpedientes(id, expediente);
-        alert('Expediente Editado');
-        toggleModal22();
-      };
-      console.log(expediente)
-      editExpediente();
-      
-      navigate('/expedientes')
-      window.location.reload();
-    };
    const validations = () => {
       const { nombre, edad, fecha_nacimiento, sexo, estado_civil } = expediente
       if (nombre === null || nombre === '') {
@@ -309,24 +251,6 @@ const Expedientes = () => {
       }
       return true
    }
-   const [expedienteData, setExpedientess] = useState([]);
-
-   const fetchExpediente = async (id) => {
-      console.log(id)
-      try {
-         const expedienteData = await ExpedientesService.getOneExpediente(id);
-         console.log(expedienteData)
-         setExpedientess([expedienteData]);
-         //setExpediente(expedienteData);
-         console.log(expedienteData)
-      } catch (error) {
-         console.log(error);
-      }
-   };
-
-   const defaultValue = expediente.sexo;
-   const selectedValue2 = expediente.estado_civil;
-
 
    useEffect(() => {
       // Validación login
@@ -443,10 +367,9 @@ const Expedientes = () => {
                         flex: 2,
                         renderCell: (params) => (
                            <div>
-                              <IconButton onClick={() => toggleModal2(params.id)}  >
-                                 <Edit />
+                              <IconButton onClick={() => handleEditExpedientesClick(params.id)}>
+                                 <Visibility />
                               </IconButton>
-
                               <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                  <Delete />
                               </IconButton>
@@ -473,7 +396,6 @@ const Expedientes = () => {
                         flexDirection: 'column',
                         gap: '10px',
                         width: '100%', // Added width property
-
                      }}
                      noValidate
                      autoComplete="off"
@@ -481,21 +403,21 @@ const Expedientes = () => {
                      <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                      <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                           {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                               <DatePicker id="fecha_nacimiento" diabled label="Fecha de Nacimiento"  value={fecha_nacimiento || null} renderInput={(params) => <TextField {...params} disabled/>} onChange={handleDateChange} name='fecha_nacimiento' />
 
                            </LocalizationProvider>*/}
-                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              
                               <MobileDatePicker
                                  id="fecha_nacimiento"
                                  value={fecha_nacimiento || null}
                                  onChange={handleDateChange}
-                                 renderInput={(params) => <TextField {...params} />}
+                                 renderInput={(params) => <TextField {...params}  />}
                                  name='fecha_nacimiento'
                               />
-                           </LocalizationProvider>
+               </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                            <div className='radioGroupContainer'>
@@ -543,92 +465,6 @@ const Expedientes = () => {
                         Agregar Expediente
                      </Button>
                   </Box>
-               </div>
-            </Modal>
-
-            <Modal open={isModalOpen1} onClose={toggleModal22}>
-
-               <div className='modalContainer'>
-                  {expedienteData.map((expediente) => (
-                     <div className='expedienteCard' key={expediente.idpaciente}>
-
-                        <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
-
-                        <Box
-                           component="form"//edit modal
-                           sx={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              gap: '10px',
-                              width: '100%', // Added width property
-                           }}
-                           noValidate
-                           autoComplete="off"
-                        >
-                           <TextField id="nombre" label="Nombre Completo" defaultValue={expediente.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                           <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-
-                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    
-                                    <MobileDatePicker
-                                       id="fecha_nacimiento"
-                                       defaultValue={dayjs(expediente.fecha_nacimiento)}
-                                       onChange={handleDateChange}
-                                       renderInput={(params) => <TextField {...params} />}
-                                       name='fecha_nacimiento'
-                                    />
-                                 </LocalizationProvider>
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                 <div className='radioGroupContainer'>
-                                    <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" value={defaultValue} className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
-                                       <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                                       <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                                    </RadioGroup>
-                                 </div>
-                              </Grid>
-                           </Grid>
-                           <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={expediente.ocupacion} onChange={handleModalFieldChange} name='ocupacion' required />
-                           <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-                                 <TextField id="correo" label="Correo Electrónico" defaultValue={expediente.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                 <TextField id="telefono" label="Teléfono" variant="outlined" defaultValue={expediente.telefono} onChange={handleModalFieldChange} name='telefono' />
-                              </Grid>
-                           </Grid>
-                           <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-                                 <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={expediente.numid} onChange={handleModalFieldChange} name='numid' />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                 <Autocomplete
-                                 value={selectedValue2}
-                                    disablePortal
-                                    id="estado_civil"
-                                    required
-                                    options={listaEstadoCivil}
-                                    onChange={(event, newValue) =>
-                                       setExpediente({
-                                          ...expediente,
-                                          estado_civil: newValue
-                                       })
-                                    }
-                                    renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
-
-                                 />
-                              </Grid>
-                           </Grid>
-                           <Button onClick={EditHandler} variant="contained" style={{
-                              backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                              paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                           }}>
-                              Editar Expediente
-                           </Button>
-                        </Box>
-                     </div>
-                  ))}
                </div>
             </Modal>
 
