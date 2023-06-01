@@ -15,6 +15,7 @@ export const getAllusuarios = async () => {
 
 
 
+
 export const postUsuarios = async (usuario) => {
     try {
         const res = await axios.post(`${API_URL}/usuarios`, usuario);

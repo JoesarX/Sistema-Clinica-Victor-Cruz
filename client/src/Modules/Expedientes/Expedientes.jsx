@@ -252,6 +252,14 @@ const Expedientes = () => {
       return true
    }
 
+   // function ValidateEmail(mail) {
+   //    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddr.value)) {
+   //       return (true)
+   //    }
+   //    alert("You have entered an invalid email address!")
+   //    return (false)
+   // }
+
    useEffect(() => {
       // Validación login
       if (!isLoggedIn) {
@@ -403,21 +411,21 @@ const Expedientes = () => {
                      <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                      <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                          {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
+                           {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                               <DatePicker id="fecha_nacimiento" diabled label="Fecha de Nacimiento"  value={fecha_nacimiento || null} renderInput={(params) => <TextField {...params} disabled/>} onChange={handleDateChange} name='fecha_nacimiento' />
 
                            </LocalizationProvider>*/}
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              
+                           <LocalizationProvider dateAdapter={AdapterDayjs}>
+
                               <MobileDatePicker
                                  id="fecha_nacimiento"
                                  value={fecha_nacimiento || null}
                                  onChange={handleDateChange}
-                                 renderInput={(params) => <TextField {...params}  />}
+                                 renderInput={(params) => <TextField {...params} />}
                                  name='fecha_nacimiento'
                               />
-               </LocalizationProvider>
+                           </LocalizationProvider>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                            <div className='radioGroupContainer'>
