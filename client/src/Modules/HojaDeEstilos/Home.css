@@ -247,13 +247,20 @@
 }
 
 .imagenes {
+  position: relative;
   width: 100%;
   height: auto;
+  max-width: 2000px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .each-slide img {
   width: 100%;
-  height: auto;
+  height: 70vh;
+  max-height: 800px;
+  max-width: 2000px;
+  object-fit: cover;
 }
 
 
