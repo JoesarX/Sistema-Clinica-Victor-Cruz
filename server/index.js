@@ -39,7 +39,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Hello this is the backend!");
+  res.send("Hello this is the backend! Trying Azure from main!");
 });
 
 app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a parameter
