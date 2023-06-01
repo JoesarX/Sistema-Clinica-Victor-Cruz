@@ -21,16 +21,17 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build server
-        run: npm run build --prefix server
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run build --if-present
+          npm run test --if-present
 
       - name: Create zip package
         run: |
           cd server
           zip -r ../server.zip .
+    
 
   deploy:
     runs-on: ubuntu-latest
