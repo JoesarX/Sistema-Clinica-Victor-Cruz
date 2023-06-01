@@ -53,4 +53,5 @@ jobs:
           app-name: 'serverClinicaVictorCruz'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8863F0E8FDAE4AF39445DE4AEA2577FF }}
-          package: .
+          package: ${{ github.workspace }}/server/node-app
+
