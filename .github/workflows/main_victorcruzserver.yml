@@ -19,9 +19,10 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: '18.x'
+          node-version: '14.x' # Change the Node.js version if needed
 
       - name: npm install, build, and test
+        working-directory: ./server # Specify the server folder as the working directory
         run: |
           npm install
           npm run build --if-present
@@ -31,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: ./server # Specify the server folder path as the artifact path
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,4 +54,4 @@ jobs:
           app-name: 'VictorCruzServer'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C707CB151174CF88486A1F8AECB2061 }}
-          package: .
+          package: ./server # Specify the server folder as the deployment package path
