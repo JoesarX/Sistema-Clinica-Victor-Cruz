@@ -30,7 +30,8 @@ jobs:
       - name: Create zip package
         run: |
           cd server
-          zip -r ../server.zip .
+          Compress-Archive -Path * -DestinationPath ../server.zip
+
     
 
   deploy:
