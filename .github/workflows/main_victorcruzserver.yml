@@ -21,16 +21,16 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: npm install, build, and test
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build server
+        run: npm run build --prefix server
+
+      - name: Create zip package
         run: |
-          npm install
-          npm run build --if-present
-      
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: node-app
-          path: ./server # Specify the path to the server directory
+          cd server
+          zip -r ../server.zip .
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,9 +47,8 @@ jobs:
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
         with:
           app-name: 'VictorCruzServer'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C707CB151174CF88486A1F8AECB2061 }}
-          package: ./server # Specify the path to the server directory
+          package: ./server.zip
