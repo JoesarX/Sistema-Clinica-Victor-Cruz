@@ -14,6 +14,7 @@ export const getAllExpedientes = async () => {
 };
 
 export const getOneExpediente = async (id) => {
+    console.log(id);
     try {
         const res = await axios.get(`${API_URL}/expedientes/${id}`);
         return res.data;
