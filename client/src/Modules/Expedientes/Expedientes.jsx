@@ -258,6 +258,17 @@ const Expedientes = () => {
             await ExpedientesService.postExpedientes(expediente);
             alert('Expediente Agregado');
             toggleModal();
+            expediente.nombre = null;
+            expediente.edad = null;
+            expediente.fecha_nacimiento = null;
+            expediente.sexo = null;
+            expediente.correo = null;
+            expediente.telefono = null;
+            expediente.numid = null;
+            expediente.estado_civil = null;
+            expediente.padecimientos = null;
+            expediente.ocupacion = null;
+
          } catch (error) {
             // Handle error if any
             console.log('Error submitting expediente:', error);
@@ -267,28 +278,30 @@ const Expedientes = () => {
 
    const EditHandler = () => {
 
-      const editExpediente = async () => {
-        await ExpedientesService.editExpedientes(id, expediente);
-        alert('Expediente Editado');
-        toggleModal22();
-      };
-      console.log(expediente)
-      editExpediente();
-      
-      navigate('/expedientes')
-      window.location.reload();
-    };
+      if (validations()) {
+         const editExpediente = async () => {
+            await ExpedientesService.editExpedientes(id, expediente);
+            alert('Expediente Editado');
+            toggleModal22();
+         };
+         console.log(expediente)
+         editExpediente();
+
+         navigate('/expedientes')
+         window.location.reload();
+      }
+   };
    const validations = () => {
-      const { nombre, edad, fecha_nacimiento, sexo, estado_civil } = expediente
+      const { nombre, edad, fecha_nacimiento, sexo, correo, estado_civil } = expediente
       if (nombre === null || nombre === '') {
          alert('Nombre Completo es requerido')
          return false
       }
-      if (edad === null || edad === '' || edad < 0) {
-         console.log(edad)
-         alert('Una edad valida es requerida')
-         return false
-      }
+      // if (edad === null || edad === '' || edad < 0) {
+      //    console.log(edad)
+      //    alert('Una edad valida es requerida')
+      //    return false
+      // }
       const selectedDate = new Date(fecha_nacimiento);
       const currentDate = new Date();
       if (isNaN(selectedDate.getTime())) {
@@ -303,10 +316,18 @@ const Expedientes = () => {
          alert('Sexo es requerido')
          return false
       }
+      console.log(correo);
+      if (!(correo == null || correo == '') &&(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(correo) == false)) {
+         console.log("entro");
+         alert("Debe ingresar un correo electronico valido.")
+         return false
+      }
+      console.log("salio");
       if (estado_civil === null || estado_civil === '') {
          alert('Estado Civil es requerido')
          return false
       }
+
       return true
    }
    const [expedienteData, setExpedientess] = useState([]);
@@ -506,7 +527,7 @@ const Expedientes = () => {
                            </div>
                         </Grid>
                      </Grid>
-                     <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' required />
+                     <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
                      <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                            <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
@@ -570,7 +591,7 @@ const Expedientes = () => {
                               <Grid item xs={12} sm={6}>
 
                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    
+
                                     <MobileDatePicker
                                        id="fecha_nacimiento"
                                        defaultValue={dayjs(expediente.fecha_nacimiento)}
@@ -589,7 +610,7 @@ const Expedientes = () => {
                                  </div>
                               </Grid>
                            </Grid>
-                           <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={expediente.ocupacion} onChange={handleModalFieldChange} name='ocupacion' required />
+                           <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={expediente.ocupacion} onChange={handleModalFieldChange} name='ocupacion'  />
                            <Grid container spacing={2}>
                               <Grid item xs={12} sm={6}>
                                  <TextField id="correo" label="Correo Electrónico" defaultValue={expediente.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
@@ -604,7 +625,7 @@ const Expedientes = () => {
                               </Grid>
                               <Grid item xs={12} sm={6}>
                                  <Autocomplete
-                                 value={selectedValue2}
+                                    value={selectedValue2}
                                     disablePortal
                                     id="estado_civil"
                                     required
