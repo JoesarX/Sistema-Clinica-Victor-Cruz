@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/usuarios';
+// const API_URL = 'http://localhost:8000/usuarios';
+const API_URL = 'https://serverclinicavictorcruz.azurewebsites.net/usuarios';
 
 export const getAllusuarios = async () => {
     try {
@@ -11,6 +12,7 @@ export const getAllusuarios = async () => {
         throw new Error('Failed to fetch usuarios');
     }
 };
+
 
 
 

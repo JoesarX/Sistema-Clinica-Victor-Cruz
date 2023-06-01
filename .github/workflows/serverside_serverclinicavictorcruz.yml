@@ -1,17 +1,17 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - VictorCruzServer
+name: Build and deploy Node.js app to Azure Web App - serverClinicaVictorCruz
 
 on:
   push:
     branches:
-      - main
+      - serverside
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -19,20 +19,19 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x' # Change the Node.js version if needed
+          node-version: '18.x'
 
       - name: npm install, build, and test
-        working-directory: ./server # Specify the server folder as the working directory
         run: |
           npm install
           npm run build --if-present
           npm run test --if-present
-      
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: ./server # Specify the server folder path as the artifact path
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,10 +47,10 @@ jobs:
           name: node-app
 
       - name: 'Deploy to Azure Web App'
-        uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
         with:
-          app-name: 'VictorCruzServer'
+          app-name: 'serverClinicaVictorCruz'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C707CB151174CF88486A1F8AECB2061 }}
-          package: ./server # Specify the server folder as the deployment package path
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7B0EE82BC29545A9A6815092136A3DD8 }}
+          package: .
