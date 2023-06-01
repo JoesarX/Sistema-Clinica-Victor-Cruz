@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy Node.js app to Azure Web App - serverClinicaVictorCruz
+name: Build and deploy Node.js app to Azure Web App - ServerClinicaVictorCruz
 
 on:
   push:
@@ -19,19 +16,21 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v1
         with:
-          node-version: '18.x'
+          node-version: '14.x'
 
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+      - name: Install dependencies
+        working-directory: ./server
+        run: npm install
+
+      - name: Build
+        working-directory: ./server
+        run: npm run build --if-present
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: ./server
 
   deploy:
     runs-on: ubuntu-latest
@@ -41,17 +40,21 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: node-app
 
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
         with:
-          app-name: 'serverClinicaVictorCruz'
+          app-name: 'ServerClinicaVictorCruz'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8863F0E8FDAE4AF39445DE4AEA2577FF }}
-          package: ${{ github.workspace }}/server/node-app
-
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C707CB151174CF88486A1F8AECB2061 }}
+          package: ./server
