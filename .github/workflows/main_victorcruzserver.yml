@@ -1,5 +1,6 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
+
 name: Build and deploy Node.js app to Azure Web App - VictorCruzServer
 
 on:
@@ -22,7 +23,6 @@ jobs:
 
       - name: npm install, build, and test
         run: |
-          cd server           # Change directory to the server folder
           npm install
           npm run build --if-present
           npm run test --if-present
@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: server        # Upload the contents of the server folder
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,5 +53,4 @@ jobs:
           app-name: 'VictorCruzServer'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7C707CB151174CF88486A1F8AECB2061 }}
-          package: ./server   # Specify the deployment package path as the server folder
-
+          package: .
