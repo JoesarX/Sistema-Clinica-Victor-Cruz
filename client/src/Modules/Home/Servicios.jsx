@@ -49,79 +49,64 @@ const Servicios = () => {
 
   const ServiceComponent = ({ service }) => {
     const [isDescriptionVisible, setDescriptionVisible] = useState(false);
-  
+    const [isTitleVisible, setTitleVisible] = useState(false);
+
     const handleMouseEnter = () => {
       setDescriptionVisible(true);
+      
     };
-  
+
     const handleMouseLeave = () => {
       setDescriptionVisible(false);
+      
+
     };
-  
+
     return (
+    
       <div
+        className='services'
         id={service.hooverComponent}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <img src={service.imageSrc} alt={service.title} />
-        <h3>{service.title}</h3>
-        {isDescriptionVisible && <p>{service.description}</p>}
+        <div className="overlay">
+          <h2>{service.title}</h2>
+          {isDescriptionVisible && <p>{service.description}</p>}
+        </div>
+
       </div>
+      
     );
   };
-  
-  const ServiceList = ({ serviceData }) => {
-    return (
-      <div>
-        {serviceData.map((service) => (
-          <ServiceComponent key={service.id} service={service} />
-        ))}
-      </div>
-    );
-  };
-  
 
 
 
 
   return (
-    <div className="scrollable-page">
+    <div className='scrollable-page'>
+      <Topbar />
 
-      <Topbar/>
-
-      <div className="info header">
+      <div className='header'>
         NUESTROS SERVICIOS
       </div>
 
-      <div className="info">
+      <div className='info'>
         Los servicios que la clínica Víctor Cruz tiene a disposición para los clientes son varios, incluyendo:
       </div>
 
-      {/*<div className='services'>
-        {serviceData.map((service) => (
-          <div
-            id={`service-${service.id}`}
-            key={service.id}
-            className="service background-img"
-            onClick={() => toggleText(service.id)}
-            style={{
-              backgroundImage: `url(${service.imageSrc})`,
-              backgroundSize: 'cover',
-            }}
-          >
-            <div className="text">{service.title}</div>
-            <div className="additional-text">{service.description}</div>
-          </div>
-          ))}
-        
-          </div>*/}
-          
-      <div>
 
+      <div>
+        {serviceData.map((service) => (
+          <ServiceComponent key={service.id} service={service} />
+        ))}
       </div>
-      <ServiceList serviceData={serviceData} />;
-      <Footer/>
+
+
+
+
+      <Footer />
     </div>
   );
 };
