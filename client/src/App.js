@@ -17,7 +17,7 @@ import Expedientes from "./Modules/Expedientes/Expedientes";
 import AddExpedientes from "./Modules/Expedientes/AddExpedientes";
 import EditExpedientes from "./Modules/Expedientes/EditExpedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
-import Dashboard from "./Modules/Expedientes/Dashboard";
+import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
 
 

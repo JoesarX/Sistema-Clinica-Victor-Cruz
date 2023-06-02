@@ -75,7 +75,7 @@ export const loginAdmin= async(uEmail, uPassword)=>{
         console.log( Adminuser.data)
      
         console.log("Este es el Email DB: "+Admininfo.id+" Este es el PW DB: "+Admininfo.password)
-        const emailEncontrado= Admininfo.find(Adminuser => Adminuser.correo === uEmail && Adminuser.password === uPassword);
+        const emailEncontrado= Admininfo.find(Admininfo.rol==='Administrador'&&  Adminuser.correo === uEmail && Adminuser.password === uPassword );
         if(emailEncontrado){
             return true;
     
