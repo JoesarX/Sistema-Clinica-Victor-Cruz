@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000';
+// const API_URL = 'https://serverclinicavictorcruz.azurewebsites.net';
 
 export const getAllExpedientes = async () => {
     try {
@@ -13,6 +14,7 @@ export const getAllExpedientes = async () => {
 };
 
 export const getOneExpediente = async (id) => {
+    console.log(id);
     try {
         const res = await axios.get(`${API_URL}/expedientes/${id}`);
         return res.data;

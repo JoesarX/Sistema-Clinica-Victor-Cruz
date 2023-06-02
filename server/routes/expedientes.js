@@ -3,6 +3,7 @@ import express from "express";
 const router = express.Router();
 
 const expedientesRouter = (pool) => {
+    
     //Get all patients
     router.get("/", async (req, res) => {
         try {
@@ -49,7 +50,9 @@ const expedientesRouter = (pool) => {
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM expedientes WHERE idpaciente =" + req.params.id;
+           
+            const sqlSelect = "SELECT * FROM expedientes WHERE idpaciente = " + req.params.id;
+          
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])

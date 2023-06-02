@@ -3,8 +3,7 @@ import '../HojaDeEstilos/RegistrarUser.css';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 import Footer from './Footer';
-
-
+import Topbar from './Topbar';
 
 const RegistrarUser = () => {
   const validations = () => {
@@ -71,66 +70,54 @@ const RegistrarUser = () => {
 
   };
 
-
-
   return (
 
     <div className="scrollable-page">
-      {/* <header className="headerT">
-        <nav>
-          <button className="bt" style={{ fontSize: '18px' }} onClick={handleReturnClick}>Volver a Inicio</button>
-        </nav>
-  </header> */}
-
       <Topbar />
-
-
+      <div></div>
       <div className="register-form">
-        <h2>Registrar Usuario </h2>
-        <form>
+        <h2>Registrar usuario</h2>
+        <form class='register-details'>
           <div className="form-group">
-            <label htmlFor="correo">Correo: </label>
+            <label htmlFor="correo">Correo*</label>
             <input
               type="text"
-
-
               onChange={handleChange}
               name="correouser"
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="firstName">Nombre Completo:</label>
+            <label htmlFor="firstName">Nombre Completo*</label>
             <input type="text" onChange={handleChange} name='nombre' />
           </div>
           <div className="form-group">
-            <label htmlFor="lastName">Edad:</label>
+            <label htmlFor="edad">Edad*</label>
             <input
               type="number"
               id="edad"
-
               onChange={handleChange}
               name='edad'
               required
             />
           </div>
           <div className="form-group">
-            <label htmlFor="pregunta">Pregunta:</label>
+            <label htmlFor="pregunta">Pregunta de Seguridad*</label>
             <select
+              className='select select-normal-height'
               type="text"
               id="pregunta"
-
               onChange={handleChange}
               name='pregunta'
               required
             >
-              <option value='Primera Mascota'>Nombre Primera Mascota</option>
-              <option value='Nombre Madre'>Nombre de madre</option>
-              <option value='Nombre Padre'>Nombre de padre</option>
+              <option value='Nombre Madre' className='select-normal-height option'>¿Cuál es el nombre de tu madre?</option>
+              <option value='Nombre Padre' className='select-normal-height option'>¿Cuál es el nombre de tu padre?</option>
+              <option value='Primera Mascota' className='select-normal-height option'>¿Cuál es el nombre de tu primera mascota?</option>
             </select>
           </div>
           <div className="form-group">
-            <label htmlFor="respuesta">Respuesta: </label>
+            <label htmlFor="respuesta">Respuesta* </label>
             <input
               type="text"
               id="respuesta"
@@ -140,7 +127,7 @@ const RegistrarUser = () => {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Constraseña: </label>
+            <label htmlFor="password">Contraseña*</label>
             <input
               type="password"
               id="password"
@@ -149,17 +136,12 @@ const RegistrarUser = () => {
               required
             />
           </div>
-          <button type="submit" onClick={handleSubmit} >Registrar Usuario: </button>
+          <button type="submit" onClick={handleSubmit} >Registrarse</button>
         </form>
       </div>
-
       <Footer />
-
     </div>
-
-
   )
-
 }
 
 export default RegistrarUser

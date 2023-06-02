@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
-import ReactDOM from 'react-dom';
-import { useState } from 'react';
+
 import Topbar from './Topbar';
 import Footer from './Footer';
 
@@ -58,8 +57,7 @@ const Home = () => {
                     </div>
                 </Slide>
             </div>
-
-            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff', marginBottom: '40px'}}>
+            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff' , marginBottom: '35px'}}>
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
 
