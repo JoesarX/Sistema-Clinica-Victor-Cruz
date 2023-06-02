@@ -21,13 +21,13 @@ const Servicios = () => {
       id: 1,
       imageSrc: 'https://www.medigreen.com.ec/wp-content/uploads/2021/08/95368dbecc661caf7efebdb9c43364817e936d45.jpg',
       title: 'Salud Ocupacional',
-      description: 'Vigilancia de las condiciones y medio ambiente de trabajo. Asesoramiento, capacitación, información y difusión en materia de salud y seguridad en el trabajo.'
+      description: 'Se enfoca en prevenir enfermedades y lesiones laborales, mejorar las condiciones de trabajo y promover el bienestar general de los empleados.'
     },
     {
       id: 2,
       imageSrc: 'https://static.emol.cl/emol50/Fotos/2020/03/24/file_20200324095443.jpg',
       title: 'Salubrista',
-      description: 'Profesional que se dedica a mejorar la salud de la población, por medio de la sinergia de diferentes disciplinas y actores'
+      description: ' profesional que se dedica a mejorar la salud de las personas a través de diversas acciones y colaboraciones interdisciplinarias. '
     },
     {
       id: 3,
@@ -37,16 +37,10 @@ const Servicios = () => {
     },
     {
       id: 4,
-      imageSrc: 'https://centromedicoabc.com/wp-content/uploads/2022/08/medicina-interna.jpg',
-      title: 'Medicina Interna',
-      description: 'Rama de la medicina que se especializa en la prevención, el diagnóstico y el tratamiento de enfermedades en adultos, sin utilizar cirugías.'
-    },
-    {
-      id: 5,
       imageSrc: 'https://www.clinicapremium.com/wp-content/uploads/2022/09/medicina-general-en-clinica-premium-marbella.jpg',
-      title: 'Medicina General',
-      description: 'La medicina general constituye el primer nivel de atención médica y es imprescindible para la prevención, detección,' +
-                    ' tratamiento y seguimiento de las enfermedades crónicas estabilizadas, responsabilizándose del paciente en su conjunto.'
+      title: 'Atencion Primaria',
+      description: ' Se centra en la prevención, el diagnóstico y el tratamiento de enfermedades comunes, así como en promover la salud general de las personas.'
+          
     },
   ];
 

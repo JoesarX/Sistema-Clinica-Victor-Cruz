@@ -5,12 +5,7 @@ import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
 
-import Topbar from './Topbar';
-import Footer from './Footer';
-
-
-
-import Topbar from './Topbar';
+import Topbar from './TopbarHome';
 import Footer from './Footer';
 
 import doctor_slide from '../Imagenes/doctor_slide.jpeg';
@@ -47,17 +42,17 @@ const Home = () => {
             <div className="imagenes">
                 <Slide {...properties}>
                     <div className="each-slide">
-                        <img src={doctor_slide} alt="imagen 1"/>
+                        <img src={doctor_slide} alt="imagen 1" />
                     </div>
                     <div className="each-slide">
-                        <img src={doctor_slide1} alt="imagen 2"/>
+                        <img src={doctor_slide1} alt="imagen 2" />
                     </div>
                     <div className="each-slide">
-                        <img src={saludOcupacional} alt="imagen 3"/>
+                        <img src={saludOcupacional} alt="imagen 3" />
                     </div>
                 </Slide>
             </div>
-            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff' , marginBottom: '35px'}}>
+            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff', marginBottom: '35px' }}>
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
 
@@ -115,9 +110,30 @@ const Home = () => {
                 <div className="linea">
                 </div>
 
-                <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', right: '140px', top: '85px', fontSize: '110px' }} />
-                <h1 className="agendar" style={{ position: 'relative', left: '70px', top: '-30px' }}>Agenda una cita</h1>
-                <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-75px' }}>Revisa nuestra disponibilidad</button>
+
+                {/*<div>
+                    <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', left: '50px', top: '85px', fontSize: '110px' }} />
+                    <h1 className="agendar" style={{ position: 'relative', left: '140px', top: '-30px' }}>Agenda una cita</h1>
+                    <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-75px' }}>Agenda ya!</button>
+    </div> */}
+
+
+                <section className="contact">
+                    <div className="component">
+                        <div className="icon-wrapper">
+                            <FontAwesomeIcon icon={faCalendarDays} className="icon" />
+                        </div>
+                        <div className="text-wrapper">
+                            <h1 className="agendar">Revisa Nuestra Diponibilidad</h1>
+                            <button className="btnA" onClick={handleCitaClick}>Agenda ya!</button>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+
             </div>
             <Footer />
         </div>
