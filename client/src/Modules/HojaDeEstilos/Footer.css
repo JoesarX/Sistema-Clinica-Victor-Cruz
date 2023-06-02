@@ -19,6 +19,8 @@
 .footer-info {
     font-family: 'Inter';
     width: 100%;
+    justify-content: center;
+    justify-items: center;
 }
 
 .custom-colors {
