@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/Dashboard.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGear, faUser } from '@fortawesome/free-solid-svg-icons'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons'
-import { faDollarSign } from '@fortawesome/free-solid-svg-icons'
-import { faAddressCard} from '@fortawesome/free-solid-svg-icons'
-import { faTable} from '@fortawesome/free-solid-svg-icons'
-import { faRulerVertical} from '@fortawesome/free-solid-svg-icons'
-import { faWeightScale} from '@fortawesome/free-solid-svg-icons'
-import { faTemperatureLow} from '@fortawesome/free-solid-svg-icons'
-import { faHeartPulse} from '@fortawesome/free-solid-svg-icons'
-import { faPlus} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGear, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
+import { faAddressCard } from '@fortawesome/free-solid-svg-icons';
+import { faTable } from '@fortawesome/free-solid-svg-icons';
+import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
+import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
+import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
+import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 const Dashboard = () => {
+    const isLoggedIn = localStorage.getItem("AdminLoggedIn");
+    const navigate = useNavigate();
     const [patient, setPatient] = useState({
         fullName: 'Pedro Daniel Mendoza Amador',
         numid: '0801-2000-26004',
@@ -49,8 +53,19 @@ const Dashboard = () => {
             },
         ],
     });
-    
-    
+
+    function Signout(){
+                localStorage.clear();
+                navigate('/');
+        }
+        
+        useEffect(() => {
+            //validación login
+            if (!isLoggedIn) {
+               // Redirigir si no se cumple la verificación
+               navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+            }})
+
     const handleUploadFile = (event) => {
         const file = event.target.files[0];
         // Lógica para subir el archivo al servidor y actualizar el estado
@@ -61,7 +76,7 @@ const Dashboard = () => {
         <div className='contenido'>
             <div className='sidebar'>
                 <div className='botones'>
-                    <button className='sidebarBtn'> 
+                    <button className='sidebarBtn'>
                         <FontAwesomeIcon icon={faCalendarDays} style={{ color: '#CCCCCC', fontSize: '28px' }} />
                     </button>
                     <button className='sidebarBtn'>
@@ -76,33 +91,45 @@ const Dashboard = () => {
                     <button className='sidebarBtn'>
                         <FontAwesomeIcon icon={faTable} style={{ color: '#CCCCCC', fontSize: '30px' }} />
                     </button>
-                    <button className='sidebarBtn'>
-                        <FontAwesomeIcon icon={faGear} style={{ color: '#CCCCCC', fontSize: '30px' }} />
-                    </button>
+                   
+                        <button class="sidebarBtn">
+                            <FontAwesomeIcon icon={faGear} style={{ color: '#CCCCCC', fontSize: '30px' }} />
+                        </button>
+                        
                 </div>
+
             </div>
             <div className='topbar'>
                 <div className='logo'></div>
                 <div className='nomCli'>Clinica Victor Cruz</div>
-                <div style={{width: '680px'}}></div>
-                <div className='line' style={{ marginRight: '18px'}}></div>
-                <div className='foto' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '42px', height: '36px', display: 'flex', justifyContent: 'center', alignItems: 'center',marginRight: '10px', top: '10px' }}>
+                <div style={{ width: '680px' }}></div>
+                <div className='line' style={{ marginRight: '18px' }}></div>
+                <div className='foto' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '42px', height: '36px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginRight: '10px', top: '10px' }}>
                     <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '30px' }} />
                 </div>
-                <div className='doc' style={{ marginLeft: '6px'}}>Dr. Pedro Mendoza</div>
+                <div className='doc' style={{ marginLeft: '6px' }}>Dr. Pedro Mendoza</div>
                 <div className='icono'>
-                    <FontAwesomeIcon icon={faCaretDown} style={{ color: '#B8B8B8', fontSize: '24px',  marginLeft:'150px'}} />
+                <div class="dropwdown">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                     
+
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" onClick={Signout}>Cerrar Sesión</a></li>
+
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div className='about'>
                 <div className="infoGeneral">
-                    
-                <span>
-                    <div className='perfil' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '62px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
-                        <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '55px' }} /> 
-                    </div>
-                    <button style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
-                </span> 
+
+                    <span>
+                        <div className='perfil' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '62px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
+                            <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '55px' }} />
+                        </div>
+                        <button style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
+                    </span>
 
                     <div className='textoInfo'>
                         <div className='nombreC'>
@@ -142,28 +169,28 @@ const Dashboard = () => {
                     <div className='titulo1'>
                         <h3 className='histmedtit'>Signos Vitales</h3>
                     </div>
-                    <p style={{ color: '#75BD89'}} className="altura">
+                    <p style={{ color: '#75BD89' }} className="altura">
                         <span className="vitals-label">
-                            <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px',  marginRight:'22px'}} />
-                            <span style={{ marginRight: '250px'}}>
-                                Altura 
+                            <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
+                            <span style={{ marginRight: '250px' }}>
+                                Altura
                             </span>
-                        </span> 
+                        </span>
                         <span className="vitals-value">{patient.height}</span>
                     </p>
                     <p style={{ color: '#54648D' }} className="peso">
                         <span className="vitals-label">
-                            <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px',  marginRight:'10px'}} />
-                            <span style={{ marginRight: '280px'}}>
+                            <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
+                            <span style={{ marginRight: '280px' }}>
                                 Peso
                             </span>
-                        </span> 
+                        </span>
                         <span className="vitals-value">{patient.weight}</span>
                     </p>
                     <p style={{ color: '#916A9E' }} className="temperatura">
                         <span className="vitals-label">
-                            <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px',  marginRight:'10px'}} />
-                            <span style={{ marginRight: '190px'}}>
+                            <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
+                            <span style={{ marginRight: '190px' }}>
                                 Temperatura
                             </span>
                         </span>
@@ -171,17 +198,17 @@ const Dashboard = () => {
                     </p>
                     <p style={{ color: '#AB2525' }} className="ritmo">
                         <span className="vitals-label">
-                            <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px',  marginRight:'10px'}} />
-                            <span style={{ marginRight: '170px'}}>
+                            <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
+                            <span style={{ marginRight: '170px' }}>
                                 Ritmo Cardiaco
                             </span>
-                        </span> 
+                        </span>
                         <span className="vitals-value">{patient.heartRate}</span>
                     </p>
                     <p style={{ color: '#AB2525' }} className="presion">
                         <span className="vitals-label">
-                            <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px',  marginRight:'10px'}} />
-                            <span style={{ width: '300px',marginRight: '10px'}}>
+                            <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
+                            <span style={{ width: '300px', marginRight: '10px' }}>
                                 Presión Arterial
                             </span>
                         </span>
@@ -203,15 +230,15 @@ const Dashboard = () => {
                     <div className='upload'>
                         <button className="upload-button">
                             <span>
-                            <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px',  marginRight:'20px'}} />
-                            Subir Archivo
+                                <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
+                                Subir Archivo
                             </span>
                         </button>
                     </div>
                 </div>
             </div>
             <div className="medical-history">
-            
+
                 <div className='medHis'>
                     <div className='titulo2'>
                         <h3 className='histmedtit'>Historial Médico</h3>
@@ -246,7 +273,11 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
+
+
+
         </div >
+
     );
 };
 

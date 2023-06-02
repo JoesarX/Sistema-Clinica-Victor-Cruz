@@ -69,7 +69,7 @@ p {
 }
 
 .register-form {
-  max-width: 45vw;
+  max-width: 40vw;
   min-width: 400px;
   text-align: center;
   height: 20em;
@@ -116,6 +116,7 @@ p {
   align-items: center;
   font-weight: 400;
   font-size: medium;
+  transition: color 0.3s ease;
 }
 
 .pw-item .icon{
