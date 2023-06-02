@@ -14,6 +14,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import moment from 'moment';
 import dayjs from 'dayjs';
+import swal from 'sweetalert';
 
 //ADD EXPEDIENTES MODAL
 import Modal from '@mui/material/Modal';
@@ -73,12 +74,30 @@ const Expedientes = () => {
    }
 
    const handleDeleteExpedientesClick = (id) => {
-      const deleteExpediente = async () => {
-         await ExpedientesService.deleteExpedientes(id);
+      swal({
+         title: "¿Estas seguro?",
+         text: "Una vez borrado, no podrás recuperar este expediente.",
+         icon: "warning",
+         buttons: true,
+         dangerMode: true,
+       })
+       .then((willDelete) => {
+         if (willDelete)  {
+            const deleteExpediente = async () => {
+               await ExpedientesService.deleteExpedientes(id);
+      
+            };
+            deleteExpediente();
 
-      };
-      deleteExpediente();
-      window.location.reload();
+           swal("¡Expediente eliminado exitosamente!", {
+             icon: "success",
+           });
+           window.location.reload();
+         } else {
+           swal("¡Tu expediente no se ha borrado!");
+         }
+       });
+
    };
 
    const theme = createTheme(
