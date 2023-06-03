@@ -1,0 +1,111 @@
+.modalHeader {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.modalForm {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modalForm input, .modalForm select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+.modalForm button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(27, 96, 241);
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+
+
+.modalContainer {
+    background-color: rgb(227, 235, 248);
+    width: 60%;
+    height: 80vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px;
+    border-radius: 30px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.modalHeader {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.modalContainer .modalHeader {
+    margin-bottom: 20px;
+}
+
+.modalContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+}
+
+.modalContainer form .MuiFormControl-root {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.modalContainer form .radioGroupContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.labelFocused {
+    font-size: 20px;
+}
+
+@media (max-height: 800px) {
+    .modalContainer form {
+        gap: 2vh;
+    }
+}
+
+@media (max-width: 600px) {
+    .modalContainer {
+        width: 85%;
+        height: 98vh;
+    }
+
+    .modalContainer form {
+        display: flex;
+        flex-direction: column;
+        gap: 1vh;
+    }
+    .modalHeader {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+}
+
