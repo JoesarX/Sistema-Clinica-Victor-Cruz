@@ -17,12 +17,12 @@ import { Box, Button } from '@mui/material'
 
 //STYLES
 
-import './ModalStyle.css';
+import './ExpedientesStyle.css';
 
 
-const EditExpedientesModal = ({ isLoggedIn, setExpedientes, onClose }) => {
-
+const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [expediente, setExpediente] = useState({
         nombre: '',
         edad: '',
@@ -38,6 +38,10 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes, onClose }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a'];
 
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen);
+        setIsSubmitting(false);
+    };
 
     const handleModalFieldChange = (e) => {
         setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -74,7 +78,7 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes, onClose }) => {
                 // Perform the form submission logic
                 await ExpedientesService.postExpedientes(expediente);
                 alert('Expediente Agregado');
-                onClose();
+                toggleModal();
             } catch (error) {
                 // Handle error if any
                 console.log('Error submitting expediente:', error);
@@ -116,7 +120,11 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes, onClose }) => {
     };
 
     useEffect(() => {
-
+        // Validation login
+        if (!isLoggedIn) {
+            // Redirect if verification fails
+            navigate("/iniciarsesion"); // Redirect to login page
+        }
         const fetchAllExpedientes = async () => {
             try {
                 const expedientesData = await ExpedientesService.getAllExpedientes();
@@ -137,7 +145,7 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes, onClose }) => {
     }, [isSubmitting]);
 
     return (
-        <Modal open={true} onClose={onClose}>
+        <Modal open={isModalOpen} onClose={toggleModal}>
             <div className='modalContainer'>
                 <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
                 <Box
