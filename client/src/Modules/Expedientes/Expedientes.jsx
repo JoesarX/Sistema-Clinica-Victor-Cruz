@@ -427,8 +427,8 @@ const Expedientes = () => {
    };
 
    return (
-      <div className='expedientesGrid'>
-         <div className='expedientesGridBox'>
+      <div className='crudGrid'>
+         <div className='dataGridBox'>
             <ThemeProvider theme={theme}>
                <DataGrid
                   rows={expedientes}
@@ -630,6 +630,7 @@ const Expedientes = () => {
                               </Grid>
                            </Grid>
                            <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={expediente.ocupacion} onChange={handleModalFieldChange} name='ocupacion'  />
+
                            <Grid container spacing={2}>
                               <Grid item xs={12} sm={6}>
                                  <TextField id="correo" label="Correo Electrónico" defaultValue={expediente.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
