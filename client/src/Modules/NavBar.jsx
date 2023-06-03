@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import { Menu, Logout, People, Home, Inventory, Domain, LocalShipping } from '@mui/icons-material';
+import { Menu, Logout, People, Home, Inventory, Domain, LocalShipping, Medication, Contacts } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {
@@ -47,7 +47,7 @@ const NavBar = () => {
                         <Link to="/expedientes" style={{ textDecoration: 'none', color: "white" }}>
                             <ListItem disablePadding>
                                 <ListItemButton>
-                                    <ListItemIcon sx={{ color: "white" }}><Inventory /></ListItemIcon>
+                                    <ListItemIcon sx={{ color: "white" }}><Contacts /></ListItemIcon>
                                     <ListItemText primary={"Expedientes"} />
                                 </ListItemButton>
                             </ListItem>
@@ -55,7 +55,7 @@ const NavBar = () => {
                         <Link to="/medicamentos" style={{ textDecoration: 'none', color: "white" }}>
                             <ListItem disablePadding>
                                 <ListItemButton>
-                                    <ListItemIcon sx={{ color: "white" }}><Domain /></ListItemIcon>
+                                    <ListItemIcon sx={{ color: "white" }}><Medication /></ListItemIcon>
                                     <ListItemText primary={"Inventario Medicamentos"} />
                                 </ListItemButton>
                             </ListItem>

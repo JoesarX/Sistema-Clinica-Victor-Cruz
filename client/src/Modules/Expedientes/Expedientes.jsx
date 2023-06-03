@@ -34,7 +34,8 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 //STYLES
 import ExpedientesService from '../../Services/ExpedientesService';
-import './ExpedientesStyle.css';
+import '../HojaDeEstilos/CrudStyles.css';
+import NavBar from '../NavBar';
 
 
 const Expedientes = () => {
@@ -80,23 +81,23 @@ const Expedientes = () => {
          icon: "warning",
          buttons: true,
          dangerMode: true,
-       })
-       .then((willDelete) => {
-         if (willDelete)  {
-            const deleteExpediente = async () => {
-               await ExpedientesService.deleteExpedientes(id);
-      
-            };
-            deleteExpediente();
+      })
+         .then((willDelete) => {
+            if (willDelete) {
+               const deleteExpediente = async () => {
+                  await ExpedientesService.deleteExpedientes(id);
 
-           swal("¡Expediente eliminado exitosamente!", {
-             icon: "success",
-           });
-           window.location.reload();
-         } else {
-           swal("¡Tu expediente no se ha borrado!");
-         }
-       });
+               };
+               deleteExpediente();
+
+               swal("¡Expediente eliminado exitosamente!", {
+                  icon: "success",
+               });
+               window.location.reload();
+            } else {
+               swal("¡Tu expediente no se ha borrado!");
+            }
+         });
 
    };
 
@@ -336,7 +337,7 @@ const Expedientes = () => {
          return false
       }
       console.log(correo);
-      if (!(correo == null || correo == '') &&(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(correo) == false)) {
+      if (!(correo == null || correo == '') && (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(correo) == false)) {
          console.log("entro");
          alert("Debe ingresar un correo electronico valido.")
          return false
@@ -428,251 +429,256 @@ const Expedientes = () => {
 
    return (
       <div className='crudGrid'>
-         <div className='dataGridBox'>
-            <ThemeProvider theme={theme}>
-               <DataGrid
-                  rows={expedientes}
-                  getRowId={(row) => row.pacienteId}
-                  columns={[
-                     //{ field: 'idpaciente', headerName: 'ID', flex: 1 , headerClassName: 'column-header'},
-                     {
-                        field: 'nombre',
-                        headerName: 'Nombre',
-                        flex: 5,
-                        headerClassName: 'column-header',
-                        renderCell: (params) => (
-                           <div style={{ display: 'flex', alignItems: 'center', color: params.field === 'nombre' ? 'black' : 'rgb(121,121,121)' }}>
-                              {params.row.sexo === 'M' ? (
-                                 <Person style={{ color: '#fff', backgroundColor: 'rgb(26,94,235)', borderRadius: '50%', marginRight: '5px', fontSize: '200%' }} />
-                              ) : (
-                                 <Person2 style={{ color: '#fff', backgroundColor: 'rgb(236,43,254)', borderRadius: '50%', marginRight: '5px', fontSize: '200%' }} />
-                              )}
-                              {params.value}
-                           </div>
-                        ),
-                     },
-                     { field: 'edad', headerName: 'Edad', flex: 1, headerClassName: 'column-header' },
-                     { field: 'fecha_nacimiento', headerName: 'Fecha de Nacimiento', flex: 3, headerClassName: 'column-header' },
-                     { field: 'sexo', headerName: 'Sexo', flex: 1, headerClassName: 'column-header' },
-                     {
-                        field: 'correo',
-                        headerName: 'Correo Electronico',
-                        flex: 5,
-                        headerClassName: 'column-header',
-                        renderCell: (params) => (
-                           <div style={{ display: 'flex', alignItems: 'center' }}>
-                              {params.value && params.value.includes('@') ? (
-                                 <div style={{ backgroundColor: 'rgb(200,213,255)', color: 'rgb(38,104,242)', padding: '4px 8px', borderRadius: '20px', marginRight: '5px' }}>
-                                    {params.value}
-                                 </div>
-                              ) : (
-                                 params.value
-                              )}
-                           </div>
-                        ),
-                     },
-                     { field: 'telefono', headerName: 'Telefono Celular', flex: 3, headerClassName: 'column-header' },
-                     { field: 'numid', headerName: 'Num. Identidad', flex: 4, headerClassName: 'column-header' },
-                     { field: 'estado_civil', headerName: 'Estado Civil', flex: 4 },
-                     { field: 'padecimientos', headerName: 'Padecimientos', flex: 4 },
-                     { field: 'ocupacion', headerName: 'Ocupacion', flex: 3 },
+         <NavBar />
+         <div style={{ height: '100vh' }}>
+            <div className='headerDiv'>
+               <h1>Expedientes</h1>
+            </div>
+            <div className='dataGridBox'>
+               <ThemeProvider theme={theme}>
+                  <DataGrid
+                     rows={expedientes}
+                     getRowId={(row) => row.pacienteId}
+                     columns={[
+                        //{ field: 'idpaciente', headerName: 'ID', flex: 1 , headerClassName: 'column-header'},
+                        {
+                           field: 'nombre',
+                           headerName: 'Nombre',
+                           flex: 5,
+                           headerClassName: 'column-header',
+                           renderCell: (params) => (
+                              <div style={{ display: 'flex', alignItems: 'center', color: params.field === 'nombre' ? 'black' : 'rgb(121,121,121)' }}>
+                                 {params.row.sexo === 'M' ? (
+                                    <Person style={{ color: '#fff', backgroundColor: 'rgb(26,94,235)', borderRadius: '50%', marginRight: '5px', fontSize: '200%' }} />
+                                 ) : (
+                                    <Person2 style={{ color: '#fff', backgroundColor: 'rgb(236,43,254)', borderRadius: '50%', marginRight: '5px', fontSize: '200%' }} />
+                                 )}
+                                 {params.value}
+                              </div>
+                           ),
+                        },
+                        { field: 'edad', headerName: 'Edad', flex: 1, headerClassName: 'column-header' },
+                        { field: 'fecha_nacimiento', headerName: 'Fecha de Nacimiento', flex: 3, headerClassName: 'column-header' },
+                        { field: 'sexo', headerName: 'Sexo', flex: 1, headerClassName: 'column-header' },
+                        {
+                           field: 'correo',
+                           headerName: 'Correo Electronico',
+                           flex: 5,
+                           headerClassName: 'column-header',
+                           renderCell: (params) => (
+                              <div style={{ display: 'flex', alignItems: 'center' }}>
+                                 {params.value && params.value.includes('@') ? (
+                                    <div style={{ backgroundColor: 'rgb(200,213,255)', color: 'rgb(38,104,242)', padding: '4px 8px', borderRadius: '20px', marginRight: '5px' }}>
+                                       {params.value}
+                                    </div>
+                                 ) : (
+                                    params.value
+                                 )}
+                              </div>
+                           ),
+                        },
+                        { field: 'telefono', headerName: 'Telefono Celular', flex: 3, headerClassName: 'column-header' },
+                        { field: 'numid', headerName: 'Num. Identidad', flex: 4, headerClassName: 'column-header' },
+                        { field: 'estado_civil', headerName: 'Estado Civil', flex: 4 },
+                        { field: 'padecimientos', headerName: 'Padecimientos', flex: 4 },
+                        { field: 'ocupacion', headerName: 'Ocupacion', flex: 3 },
 
-                     {
-                        field: 'actions',
-                        headerName: '',
-                        flex: 2,
-                        renderCell: (params) => (
-                           <div>
-                              <IconButton onClick={() => toggleModal2(params.id)}  >
-                                 <Edit />
-                              </IconButton>
+                        {
+                           field: 'actions',
+                           headerName: '',
+                           flex: 2,
+                           renderCell: (params) => (
+                              <div>
+                                 <IconButton onClick={() => toggleModal2(params.id)}  >
+                                    <Edit />
+                                 </IconButton>
 
-                              <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
-                                 <Delete />
-                              </IconButton>
-                           </div>
-                        ),
-                     },
+                                 <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
+                                    <Delete />
+                                 </IconButton>
+                              </div>
+                           ),
+                        },
 
-                  ]}
-                  components={{
-                     Toolbar: CustomToolbar,
-                  }}
-
-                  columnVisibilityModel={columnVisibilityModel}
-                  onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-               />
-            </ThemeProvider>
-            <Modal open={isModalOpen} onClose={toggleModal}>
-               <div className='modalContainer'>
-                  <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
-                  <Box
-                     component="form"
-                     sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px',
-                        width: '100%', // Added width property
-
+                     ]}
+                     components={{
+                        Toolbar: CustomToolbar,
                      }}
-                     noValidate
-                     autoComplete="off"
-                  >
-                     <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                           {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                     columnVisibilityModel={columnVisibilityModel}
+                     onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                  />
+               </ThemeProvider>
+               <Modal open={isModalOpen} onClose={toggleModal}>
+                  <div className='modalContainer'>
+                     <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
+                     <Box
+                        component="form"
+                        sx={{
+                           display: 'flex',
+                           flexDirection: 'column',
+                           gap: '10px',
+                           width: '100%', // Added width property
+
+                        }}
+                        noValidate
+                        autoComplete="off"
+                     >
+                        <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                        <Grid container spacing={2}>
+                           <Grid item xs={12} sm={6}>
+                              {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                               <DatePicker id="fecha_nacimiento" diabled label="Fecha de Nacimiento"  value={fecha_nacimiento || null} renderInput={(params) => <TextField {...params} disabled/>} onChange={handleDateChange} name='fecha_nacimiento' />
 
                            </LocalizationProvider>*/}
-                           <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                              <MobileDatePicker
-                                 id="fecha_nacimiento"
-                                 value={fecha_nacimiento || null}
-                                 onChange={handleDateChange}
-                                 renderInput={(params) => <TextField {...params} />}
-                                 name='fecha_nacimiento'
-                              />
-                           </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                           <div className='radioGroupContainer'>
-                              <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
-                                 <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                                 <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                              </RadioGroup>
-                           </div>
-                        </Grid>
-                     </Grid>
-                     <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
-                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                           <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                           <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name='telefono' />
-                        </Grid>
-                     </Grid>
-                     <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                           <TextField id="numid" label="Número de Identidad" variant="outlined" onChange={handleModalFieldChange} name='numid' />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                           <Autocomplete
-                              disablePortal
-                              id="estado_civil"
-                              required
-                              options={listaEstadoCivil}
-                              onChange={(event, newValue) =>
-                                 setExpediente({
-                                    ...expediente,
-                                    estado_civil: newValue
-                                 })
-                              }
-                              renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
-
-                           />
-                        </Grid>
-                     </Grid>
-                     <Button onClick={handleModalSubmit} variant="contained" style={{
-                        backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                        paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                     }}>
-                        Agregar Expediente
-                     </Button>
-                  </Box>
-               </div>
-            </Modal>
-
-            <Modal open={isModalOpen1} onClose={toggleModal22}>
-
-               <div className='modalContainer'>
-                  {expedienteData.map((expediente) => (
-                     <div className='expedienteCard' key={expediente.idpaciente}>
-
-                        <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
-
-                        <Box
-                           component="form"//edit modal
-                           sx={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              gap: '10px',
-                              width: '100%', // Added width property
-                           }}
-                           noValidate
-                           autoComplete="off"
-                        >
-                           <TextField id="nombre" label="Nombre Completo" defaultValue={expediente.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                           <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-
-                                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                    <MobileDatePicker
-                                       id="fecha_nacimiento"
-                                       defaultValue={dayjs(expediente.fecha_nacimiento)}
-                                       onChange={handleDateChange}
-                                       renderInput={(params) => <TextField {...params} />}
-                                       name='fecha_nacimiento'
-                                    />
-                                 </LocalizationProvider>
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                 <div className='radioGroupContainer'>
-                                    <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" value={defaultValue} className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
-                                       <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                                       <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                                    </RadioGroup>
-                                 </div>
-                              </Grid>
-                           </Grid>
-                           <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={expediente.ocupacion} onChange={handleModalFieldChange} name='ocupacion'  />
-
-                           <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-                                 <TextField id="correo" label="Correo Electrónico" defaultValue={expediente.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                 <TextField id="telefono" label="Teléfono" variant="outlined" defaultValue={expediente.telefono} onChange={handleModalFieldChange} name='telefono' />
-                              </Grid>
-                           </Grid>
-                           <Grid container spacing={2}>
-                              <Grid item xs={12} sm={6}>
-                                 <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={expediente.numid} onChange={handleModalFieldChange} name='numid' />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
-                                 <Autocomplete
-                                    value={selectedValue2}
-                                    disablePortal
-                                    id="estado_civil"
-                                    required
-                                    options={listaEstadoCivil}
-                                    onChange={(event, newValue) =>
-                                       setExpediente({
-                                          ...expediente,
-                                          estado_civil: newValue
-                                       })
-                                    }
-                                    renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
-
+                                 <MobileDatePicker
+                                    id="fecha_nacimiento"
+                                    value={fecha_nacimiento || null}
+                                    onChange={handleDateChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    name='fecha_nacimiento'
                                  />
-                              </Grid>
+                              </LocalizationProvider>
                            </Grid>
-                           <Button onClick={EditHandler} variant="contained" style={{
-                              backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                              paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                           }}>
-                              Editar Expediente
-                           </Button>
-                        </Box>
-                     </div>
-                  ))}
-               </div>
-            </Modal>
+                           <Grid item xs={12} sm={6}>
+                              <div className='radioGroupContainer'>
+                                 <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
+                                    <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                                    <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                                 </RadioGroup>
+                              </div>
+                           </Grid>
+                        </Grid>
+                        <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
+                        <Grid container spacing={2}>
+                           <Grid item xs={12} sm={6}>
+                              <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
+                           </Grid>
+                           <Grid item xs={12} sm={6}>
+                              <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name='telefono' />
+                           </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                           <Grid item xs={12} sm={6}>
+                              <TextField id="numid" label="Número de Identidad" variant="outlined" onChange={handleModalFieldChange} name='numid' />
+                           </Grid>
+                           <Grid item xs={12} sm={6}>
+                              <Autocomplete
+                                 disablePortal
+                                 id="estado_civil"
+                                 required
+                                 options={listaEstadoCivil}
+                                 onChange={(event, newValue) =>
+                                    setExpediente({
+                                       ...expediente,
+                                       estado_civil: newValue
+                                    })
+                                 }
+                                 renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
 
+                              />
+                           </Grid>
+                        </Grid>
+                        <Button onClick={handleModalSubmit} variant="contained" style={{
+                           backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                           paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                        }}>
+                           Agregar Expediente
+                        </Button>
+                     </Box>
+                  </div>
+               </Modal>
+
+               <Modal open={isModalOpen1} onClose={toggleModal22}>
+
+                  <div className='modalContainer'>
+                     {expedienteData.map((expediente) => (
+                        <div className='expedienteCard' key={expediente.idpaciente}>
+
+                           <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
+
+                           <Box
+                              component="form"//edit modal
+                              sx={{
+                                 display: 'flex',
+                                 flexDirection: 'column',
+                                 gap: '10px',
+                                 width: '100%', // Added width property
+                              }}
+                              noValidate
+                              autoComplete="off"
+                           >
+                              <TextField id="nombre" label="Nombre Completo" defaultValue={expediente.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                              <Grid container spacing={2}>
+                                 <Grid item xs={12} sm={6}>
+
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                       <MobileDatePicker
+                                          id="fecha_nacimiento"
+                                          defaultValue={dayjs(expediente.fecha_nacimiento)}
+                                          onChange={handleDateChange}
+                                          renderInput={(params) => <TextField {...params} />}
+                                          name='fecha_nacimiento'
+                                       />
+                                    </LocalizationProvider>
+                                 </Grid>
+                                 <Grid item xs={12} sm={6}>
+                                    <div className='radioGroupContainer'>
+                                       <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" value={defaultValue} className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
+                                          <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                                          <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                                       </RadioGroup>
+                                    </div>
+                                 </Grid>
+                              </Grid>
+                              <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={expediente.ocupacion} onChange={handleModalFieldChange} name='ocupacion' />
+
+                              <Grid container spacing={2}>
+                                 <Grid item xs={12} sm={6}>
+                                    <TextField id="correo" label="Correo Electrónico" defaultValue={expediente.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
+                                 </Grid>
+                                 <Grid item xs={12} sm={6}>
+                                    <TextField id="telefono" label="Teléfono" variant="outlined" defaultValue={expediente.telefono} onChange={handleModalFieldChange} name='telefono' />
+                                 </Grid>
+                              </Grid>
+                              <Grid container spacing={2}>
+                                 <Grid item xs={12} sm={6}>
+                                    <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={expediente.numid} onChange={handleModalFieldChange} name='numid' />
+                                 </Grid>
+                                 <Grid item xs={12} sm={6}>
+                                    <Autocomplete
+                                       value={selectedValue2}
+                                       disablePortal
+                                       id="estado_civil"
+                                       required
+                                       options={listaEstadoCivil}
+                                       onChange={(event, newValue) =>
+                                          setExpediente({
+                                             ...expediente,
+                                             estado_civil: newValue
+                                          })
+                                       }
+                                       renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
+
+                                    />
+                                 </Grid>
+                              </Grid>
+                              <Button onClick={EditHandler} variant="contained" style={{
+                                 backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                 paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                              }}>
+                                 Editar Expediente
+                              </Button>
+                           </Box>
+                        </div>
+                     ))}
+                  </div>
+               </Modal>
+            </div>
          </div>
       </div>
    );

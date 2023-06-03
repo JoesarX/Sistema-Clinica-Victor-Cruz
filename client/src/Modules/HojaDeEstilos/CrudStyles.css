@@ -8,15 +8,23 @@
     padding: 0%;
 }
 
+.headerDiv{
+    height: 50px;
+    padding-left: 5%;
+    padding-top: 1vh;
+}
+
 .dataGridBox {
     display: flex;
     justify-content: center;
     border: none;
-    width: 94%;
-    margin-left: 3%;
-    margin-right: 3%;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
     height: 83vh;
 }
+
+
 
 .MuiDataGrid-root {
     border: none !important;

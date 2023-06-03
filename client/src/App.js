@@ -17,7 +17,7 @@ import Expedientes from "./Modules/Expedientes/Expedientes";
 import AddExpedientes from "./Modules/Expedientes/AddExpedientes";
 import EditExpedientes from "./Modules/Expedientes/EditExpedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
-import Medicamentos from "./Modules/Medicamentos/medicamentos";
+import Medicamentos from "./Modules/Medicamentos/Medicamentos";
 
 import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
@@ -56,6 +56,8 @@ function App() {
           <Route path="/medicamentos" element={<Medicamentos/>}/>
 
           <Route path="/dashboard" element={<Dashboard/>}/>
+
+          <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
 
         </Routes>
       </BrowserRouter>

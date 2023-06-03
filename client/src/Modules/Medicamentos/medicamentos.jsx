@@ -426,8 +426,8 @@ const Medicamentos = () => {
 
         <div className='crudGrid'>
             <NavBar />
-            <div style={{ height: '100vh'}}>
-                <div style={{ height: '50px' , paddingLeft:'3%', paddingTop:'1vh'}}>
+            <div style={{ height: '100vh' }}>
+                <div className='headerDiv'>
                     <h1>Medicamentos</h1>
                 </div>
                 <div className='dataGridBox'>
