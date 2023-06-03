@@ -12,6 +12,7 @@ import { IconButton } from '@mui/material';
 import Popup from '../usuario_admin/Fichas_Admin';
 import EditAdmins from './EditAdmins';
 import PopupAgregar from '../usuario_admin/PopupAgregar';
+import swal from 'sweetalert';
 
 import AdministradoresService from '../../Services/AdministradoresService';
 import './administradorStyle.css';
@@ -61,12 +62,30 @@ const Administradores = () => {
    }
 
    const handleDeleteAdministradoresClick = (id) => {
+     
+      swal({
+         title: "¿Estas seguro?",
+         text: "Una vez borrado, no podrás recuperar esta información.",
+         icon: "warning",
+         buttons: true,
+         dangerMode: true,
+       })
+       .then((willDelete) => {
+         if (willDelete)  {
+            const deleteAdministrador = async () => {
+               await AdministradoresService.deleteAdministradores(id);
+      
+            };
+            deleteAdministrador();
 
-      const deleteAdministrador = async () => {
-         await AdministradoresService.deleteAdministradores(id);
-      };
-      deleteAdministrador();
-      window.location.reload();
+           swal("Colaborador eliminado exitosamente!", {
+             icon: "success",
+           });
+           window.location.reload();
+         } else {
+           swal("¡Tu información no se ha borrado!");
+         }
+       });
 
    };
 
