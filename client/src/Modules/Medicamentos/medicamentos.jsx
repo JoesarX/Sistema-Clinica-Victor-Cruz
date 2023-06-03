@@ -32,6 +32,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 //STYLES
 import MedicamentosService from '../../Services/MedicamentosService';
 import '../HojaDeEstilos/CrudStyles.css';
+import NavBar from '../NavBar';
 
 
 const Medicamentos = () => {
@@ -422,215 +423,222 @@ const Medicamentos = () => {
     };
 
     return (
+
         <div className='crudGrid'>
-            <div className='dataGridBox'>
-                <ThemeProvider theme={theme}>
-                    <DataGrid
-                        rows={medicamentos}
-                        getRowId={(row) => row.medId}
-                        columns={[
-                            {field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header'},
-                            {field: 'id_categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header'},
-                            {field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header'},
-                            {field: 'precio_unitario', headerName: 'Precio Unitario', flex: 2, headerClassName: 'column-header'},
-                            {field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header'},
-                            {field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header'},
-                            {
-                                field: 'actions',
-                                headerName: '',
-                                flex: 2,
-                                renderCell: (params) => (
-                                    <div>
-                                        <IconButton onClick={() => toggleModal2(params.id)}  >
-                                            <Edit />
-                                        </IconButton>
+            <NavBar />
+            <div style={{ height: '100vh'}}>
+                <div style={{ height: '50px' , paddingLeft:'3%', paddingTop:'1vh'}}>
+                    <h1>Medicamentos</h1>
+                </div>
+                <div className='dataGridBox'>
+                    <ThemeProvider theme={theme}>
+                        <DataGrid
+                            rows={medicamentos}
+                            getRowId={(row) => row.medId}
+                            columns={[
+                                { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
+                                { field: 'id_categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
+                                { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
+                                { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 2, headerClassName: 'column-header' },
+                                { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
+                                { field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header' },
+                                {
+                                    field: 'actions',
+                                    headerName: '',
+                                    flex: 2,
+                                    renderCell: (params) => (
+                                        <div>
+                                            <IconButton onClick={() => toggleModal2(params.id)}  >
+                                                <Edit />
+                                            </IconButton>
 
-                                        <IconButton onClick={() => handleDeleteMedicamentosClick(params.id)}>
-                                            <Delete />
-                                        </IconButton>
-                                    </div>
-                                ),
-                            },
+                                            <IconButton onClick={() => handleDeleteMedicamentosClick(params.id)}>
+                                                <Delete />
+                                            </IconButton>
+                                        </div>
+                                    ),
+                                },
 
-                        ]}
-                        components={{
-                            Toolbar: CustomToolbar,
-                        }}
-
-                        columnVisibilityModel={columnVisibilityModel}
-                        onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-                    />
-                </ThemeProvider>
-                <Modal open={isModalOpen} onClose={toggleModal}>
-                    <div className='modalContainer'>
-                        <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
-                        <Box
-                            component="form"
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                width: '100%', // Added width property
-
+                            ]}
+                            components={{
+                                Toolbar: CustomToolbar,
                             }}
-                            noValidate
-                            autoComplete="off"
-                        >
-                            <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                            columnVisibilityModel={columnVisibilityModel}
+                            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                        />
+                    </ThemeProvider>
+                    <Modal open={isModalOpen} onClose={toggleModal}>
+                        <div className='modalContainer'>
+                            <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
+                            <Box
+                                component="form"
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '10px',
+                                    width: '100%', // Added width property
+
+                                }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
 
                               <DatePicker id="fecha_nacimiento" diabled label="Fecha de Nacimiento"  value={fecha_nacimiento || null} renderInput={(params) => <TextField {...params} disabled/>} onChange={handleDateChange} name='fecha_nacimiento' />
 
                            </LocalizationProvider>*/}
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-                                        <MobileDatePicker
-                                            id="fecha_nacimiento"
-                                            value={fecha_nacimiento || null}
-                                            onChange={handleDateChange}
-                                            renderInput={(params) => <TextField {...params} />}
-                                            name='fecha_nacimiento'
-                                        />
-                                    </LocalizationProvider>
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <div className='radioGroupContainer'>
-                                        <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
-                                            <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                                            <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                                        </RadioGroup>
-                                    </div>
-                                </Grid>
-                            </Grid>
-                            <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name='telefono' />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField id="numid" label="Número de Identidad" variant="outlined" onChange={handleModalFieldChange} name='numid' />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <Autocomplete
-                                        disablePortal
-                                        id="estado_civil"
-                                        required
-                                        options={listaEstadoCivil}
-                                        onChange={(event, newValue) =>
-                                            setMedicamento({
-                                                ...medicamento,
-                                                estado_civil: newValue
-                                            })
-                                        }
-                                        renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
-
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Button onClick={handleModalSubmit} variant="contained" style={{
-                                backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                            }}>
-                                Agregar Medicamento
-                            </Button>
-                        </Box>
-                    </div>
-                </Modal>
-
-                <Modal open={isModalOpen1} onClose={toggleModal22}>
-
-                    <div className='modalContainer'>
-                        {medicamentoData.map((medicamento) => (
-                            <div className='medicamentoCard' key={medicamento.idpaciente}>
-
-                                <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
-
-                                <Box
-                                    component="form"//edit modal
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '10px',
-                                        width: '100%', // Added width property
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <TextField id="nombre" label="Nombre Completo" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                <MobileDatePicker
-                                                    id="fecha_nacimiento"
-                                                    defaultValue={dayjs(medicamento.fecha_nacimiento)}
-                                                    onChange={handleDateChange}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                    name='fecha_nacimiento'
-                                                />
-                                            </LocalizationProvider>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <div className='radioGroupContainer'>
-                                                <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" value={defaultValue} className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
-                                                    <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                                                    <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                                                </RadioGroup>
-                                            </div>
-                                        </Grid>
-                                    </Grid>
-                                    <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={medicamento.ocupacion} onChange={handleModalFieldChange} name='ocupacion' />
-
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField id="correo" label="Correo Electrónico" defaultValue={medicamento.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField id="telefono" label="Teléfono" variant="outlined" defaultValue={medicamento.telefono} onChange={handleModalFieldChange} name='telefono' />
-                                        </Grid>
-                                    </Grid>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={medicamento.numid} onChange={handleModalFieldChange} name='numid' />
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <Autocomplete
-                                                value={selectedValue2}
-                                                disablePortal
-                                                id="estado_civil"
-                                                required
-                                                options={listaEstadoCivil}
-                                                onChange={(event, newValue) =>
-                                                    setMedicamento({
-                                                        ...medicamento,
-                                                        estado_civil: newValue
-                                                    })
-                                                }
-                                                renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
-
+                                            <MobileDatePicker
+                                                id="fecha_nacimiento"
+                                                value={fecha_nacimiento || null}
+                                                onChange={handleDateChange}
+                                                renderInput={(params) => <TextField {...params} />}
+                                                name='fecha_nacimiento'
                                             />
-                                        </Grid>
+                                        </LocalizationProvider>
                                     </Grid>
-                                    <Button onClick={EditHandler} variant="contained" style={{
-                                        backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                        paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                                    }}>
-                                        Editar Medicamento
-                                    </Button>
-                                </Box>
-                            </div>
-                        ))}
-                    </div>
-                </Modal>
+                                    <Grid item xs={12} sm={6}>
+                                        <div className='radioGroupContainer'>
+                                            <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
+                                                <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                                                <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                                            </RadioGroup>
+                                        </div>
+                                    </Grid>
+                                </Grid>
+                                <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name='telefono' />
+                                    </Grid>
+                                </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField id="numid" label="Número de Identidad" variant="outlined" onChange={handleModalFieldChange} name='numid' />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <Autocomplete
+                                            disablePortal
+                                            id="estado_civil"
+                                            required
+                                            options={listaEstadoCivil}
+                                            onChange={(event, newValue) =>
+                                                setMedicamento({
+                                                    ...medicamento,
+                                                    estado_civil: newValue
+                                                })
+                                            }
+                                            renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
 
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Button onClick={handleModalSubmit} variant="contained" style={{
+                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                }}>
+                                    Agregar Medicamento
+                                </Button>
+                            </Box>
+                        </div>
+                    </Modal>
+
+                    <Modal open={isModalOpen1} onClose={toggleModal22}>
+
+                        <div className='modalContainer'>
+                            {medicamentoData.map((medicamento) => (
+                                <div className='medicamentoCard' key={medicamento.idpaciente}>
+
+                                    <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
+
+                                    <Box
+                                        component="form"//edit modal
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '10px',
+                                            width: '100%', // Added width property
+                                        }}
+                                        noValidate
+                                        autoComplete="off"
+                                    >
+                                        <TextField id="nombre" label="Nombre Completo" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+
+                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                                    <MobileDatePicker
+                                                        id="fecha_nacimiento"
+                                                        defaultValue={dayjs(medicamento.fecha_nacimiento)}
+                                                        onChange={handleDateChange}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                        name='fecha_nacimiento'
+                                                    />
+                                                </LocalizationProvider>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <div className='radioGroupContainer'>
+                                                    <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" value={defaultValue} className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
+                                                        <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                                                        <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                                                    </RadioGroup>
+                                                </div>
+                                            </Grid>
+                                        </Grid>
+                                        <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={medicamento.ocupacion} onChange={handleModalFieldChange} name='ocupacion' />
+
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+                                                <TextField id="correo" label="Correo Electrónico" defaultValue={medicamento.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <TextField id="telefono" label="Teléfono" variant="outlined" defaultValue={medicamento.telefono} onChange={handleModalFieldChange} name='telefono' />
+                                            </Grid>
+                                        </Grid>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+                                                <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={medicamento.numid} onChange={handleModalFieldChange} name='numid' />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <Autocomplete
+                                                    value={selectedValue2}
+                                                    disablePortal
+                                                    id="estado_civil"
+                                                    required
+                                                    options={listaEstadoCivil}
+                                                    onChange={(event, newValue) =>
+                                                        setMedicamento({
+                                                            ...medicamento,
+                                                            estado_civil: newValue
+                                                        })
+                                                    }
+                                                    renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
+
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                        <Button onClick={EditHandler} variant="contained" style={{
+                                            backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                            paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                        }}>
+                                            Editar Medicamento
+                                        </Button>
+                                    </Box>
+                                </div>
+                            ))}
+                        </div>
+                    </Modal>
+
+                </div>
             </div>
         </div>
     );

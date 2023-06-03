@@ -1,19 +1,21 @@
 .crudGrid {
-    background-color: rgb(227, 235, 248);
+    /* background-color: rgb(227, 235, 248); */
     height: 100vh;
-    width: 100%;
     display: flex;
     justify-content: center;
     border: none;
+    flex-direction: column;
+    padding: 0%;
 }
 
 .dataGridBox {
     display: flex;
     justify-content: center;
     border: none;
-    width: 100%;
-    margin-left: 15px;
-    margin-right: 15px;
+    width: 94%;
+    margin-left: 3%;
+    margin-right: 3%;
+    height: 83vh;
 }
 
 .MuiDataGrid-root {
