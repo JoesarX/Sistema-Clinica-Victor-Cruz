@@ -317,11 +317,7 @@ const Expedientes = () => {
          alert('Nombre Completo es requerido')
          return false
       }
-      // if (edad === null || edad === '' || edad < 0) {
-      //    console.log(edad)
-      //    alert('Una edad valida es requerida')
-      //    return false
-      // }
+
       const selectedDate = new Date(fecha_nacimiento);
       const currentDate = new Date();
       if (isNaN(selectedDate.getTime())) {
