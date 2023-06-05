@@ -49,7 +49,7 @@ function App() {
           <Route path="/laboratorio" element={<Laboratorio/>}/>
           <Route path="/registrar-user" element={<RegistrarUser/>}/>
           <Route path="/citas" element={<Citas/>}/>
-          <Route path ="/Administrador" element={<Administrador/>}/>
+          <Route path ="/administrador" element={<Administrador/>}/>
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
           <Route path="/expedientes/:expedienteId" element={<EditExpedientes/>}/>
