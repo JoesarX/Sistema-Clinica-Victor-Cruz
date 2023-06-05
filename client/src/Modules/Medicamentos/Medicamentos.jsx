@@ -244,16 +244,12 @@ const Medicamentos = () => {
                 alert('Medicamento Agregado');
                 toggleModal();
                 medicamento.nombre = null;
-                medicamento.edad = null;
-                medicamento.fecha_nacimiento = null;
-                medicamento.sexo = null;
-                medicamento.correo = null;
-                medicamento.telefono = null;
-                medicamento.numid = null;
-                medicamento.estado_civil = null;
-                medicamento.padecimientos = null;
-                medicamento.ocupacion = null;
-
+                medicamento.stock=null;
+                medicamento.precio_unitario=null;
+                medicamento.via=null;
+                medicamento.dosis=null;
+              
+                
             } catch (error) {
                 // Handle error if any
                 console.log('Error submitting medicamento:', error);
@@ -263,7 +259,7 @@ const Medicamentos = () => {
 
     const EditHandler = () => {
 
-
+        if(validations()){
         const editMedicamento = async () => {
             await MedicamentosService.editMedicamentos(id, medicamento);
             alert('Medicamento Editado');
@@ -274,45 +270,38 @@ const Medicamentos = () => {
 
         navigate('/medicamentos')
         window.location.reload();
+    }
 
     };
     const validations = () => {
-        const { nombre, edad, fecha_nacimiento, sexo, correo, estado_civil } = medicamento
-        if (nombre === null || nombre === '') {
-            alert('Nombre Completo es requerido')
+        const { nombre, stock, precio_unitario, via, dosis } = medicamento
+        if (nombre === null || nombre === '' || nombre === ' ') {
+            alert('Debe agregarle un nombre al medicamento')
             return false
         }
-        // if (edad === null || edad === '' || edad < 0) {
-        //    console.log(edad)
-        //    alert('Una edad valida es requerida')
-        //    return false
-        // }
-        const selectedDate = new Date(fecha_nacimiento);
-        const currentDate = new Date();
-        if (isNaN(selectedDate.getTime())) {
-            alert('Una Fecha valida de Nacimiento es requerida');
+        if (stock === null || stock === '') {
+            alert('Debe agregarle la cantidad de unidades al medicamento');
+            return false;
+        } else if (!(/^\d+$/.test(stock))) {
+            alert("Ingrese una unidad numerica valida");
             return false;
         }
-        if (selectedDate > currentDate) {
-            alert('La Fecha de Nacimiento no puede ser mayor a la fecha actual');
+        if (precio_unitario === null || precio_unitario === '') {
+            alert('Debe agregarle un precio unitario al medicamento');
+            return false;
+        } else if (!(/^[0-9,.]*$/.test(parseFloat(precio_unitario)))) {
+            alert("Ingrese un precio valido");
             return false;
         }
-        if (sexo === null || sexo === '') {
-            alert('Sexo es requerido')
+        if (via === null || via === '') {
+            alert('Ingrese una via para el medicamento');
             return false
         }
-        console.log(correo);
-        if (!(correo == null || correo == '') && (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(correo) == false)) {
-            console.log("entro");
-            alert("Debe ingresar un correo electronico valido.")
+        if (dosis === null || dosis === '' || dosis === ' ') {
+            alert('Debe agregarle una dosis al medicamento')
             return false
         }
-        console.log("salio");
-        if (estado_civil === null || estado_civil === '') {
-            alert('Estado Civil es requerido')
-            return false
-        }
-
+        
         return true
     }
     const [medicamentoData, setMedicamentoss] = useState([]);
@@ -481,10 +470,10 @@ const Medicamentos = () => {
                                 noValidate
                                 autoComplete="off"
                             >
-                                <TextField id="nombre" label="Nombre"  variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='unidades' />
+                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
                                         <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' />
@@ -496,7 +485,7 @@ const Medicamentos = () => {
                                         <TextField id="via" label="Via" variant="outlined" onChange={handleModalFieldChange} name='via' />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="dosis" label="Dosis" variant="outlined"  onChange={handleModalFieldChange} name='dosis' />
+                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' />
                                     </Grid>
                                 </Grid>
 
@@ -535,7 +524,7 @@ const Medicamentos = () => {
                                         <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='unidades' />
+                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
                                                 <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' />
