@@ -351,6 +351,10 @@
     flex-grow: 0;
 }
 
+.section-value li {
+    margin-bottom: 10px;
+  }
+
 .altura {
     /* Height */
     display: flex;
@@ -822,7 +826,7 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 24px;
     display: flex;
     align-items: flex-end;

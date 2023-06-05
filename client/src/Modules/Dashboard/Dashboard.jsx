@@ -54,6 +54,11 @@ const Dashboard = () => {
         ],
     });
 
+
+    const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2']);
+    const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2']);
+    const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2']);
+
     function Signout() {
         localStorage.clear();
         navigate('/');
@@ -81,10 +86,55 @@ const Dashboard = () => {
     {/* Editar Button  */ }
 
     const [isEditingLabel, setIsEditingLabel] = useState(false);
+    const [isChangesSaved, setIsChangesSaved] = useState(false);
+
+    const [isEditingLabel2, setIsEditingLabel2] = useState(false);
+    const [isChangesSaved2, setIsChangesSaved2] = useState(false);
+
+    const [isEditingLabel3, setIsEditingLabel3] = useState(false);
+    const [isChangesSaved3, setIsChangesSaved3] = useState(false);
+
 
     const handleLabelEdit = () => {
         setIsEditingLabel(true);
+        setIsChangesSaved(false);
     };
+
+
+    const handleLabelEdit2 = () => {
+        setIsEditingLabel2(true);
+        setIsChangesSaved2(false);
+    };
+
+    const handleLabelEdit3 = () => {
+        setIsEditingLabel3(true);
+        setIsChangesSaved3(false);
+    };
+
+
+
+    const handleSaveChanges = () => {
+
+        setIsEditingLabel(false);
+        setIsChangesSaved(true);
+    };
+
+    const handleSaveChanges2 = () => {
+
+        setIsEditingLabel2(false);
+        setIsChangesSaved2(true);
+    };
+
+    const handleSaveChanges3 = () => {
+        setIsEditingLabel3(false);
+        setIsChangesSaved3(true);
+    };
+
+
+    const handleModalEdit = () => {
+        setIsEditingLabel(true);
+    };
+
 
     const handleLabelChange = (e) => {
         const { name, value } = e.target;
@@ -93,6 +143,28 @@ const Dashboard = () => {
             [name]: value,
         }));
     };
+
+    const handleMedicationChange = (index, newValue) => {
+        const updatedMedications = [...medications];
+        updatedMedications[index] = newValue;
+        setMedications(updatedMedications);
+    };
+
+
+
+    const handleAlergiasChange = (index, newValue) => {
+        const updatedAlergias = [...alergias];
+        updatedAlergias[index] = newValue;
+        setAlergias(updatedAlergias);
+    };
+
+    const handleEnfermedadesChange = (index, newValue) => {
+        const updatedEnfermedades = [...enfermedades];
+        updatedEnfermedades[index] = newValue;
+        setEnfermadades(updatedEnfermedades);
+    };
+
+
 
 
     const handleSubmit = (e) => {
@@ -155,59 +227,20 @@ const Dashboard = () => {
                         <div className='perfil' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '62px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
                             <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '55px' }} />
                         </div>
-                        <button onClick={handleLabelEdit} style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
+                        <button onClick={handleModalEdit} style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
                     </span>
 
                     <div className='textoInfo'>
                         <div className='nombreC'>
-                            <h2 className="nombre">
-                                {isEditingLabel ? (
-                                    <div className="inputContainer">
-                                        <input
-                                            type="text"
-                                            name="fullName"
-                                            value={patient.fullName}
-                                            onChange={handleLabelChange}
-                                        />
-                                    </div>
-                                ) : (
-                                    <p className="nombre">{patient.fullName}</p>
-                                )}
-                            </h2>
+                            <h2 className="nombre"> {patient.fullName}</h2>
                         </div>
                         <div className='correo'>
                             <div className='ccon'>
-                                <p className="correoText">
-                                    {isEditingLabel ? (
-                                        <div className="inputContainer1">
-                                            <input
-                                                type="text"
-                                                name="email"
-                                                value={patient.email}
-                                                onChange={handleLabelChange}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <p className="correoText">{patient.email}</p>
-                                    )}
-                                </p>
+                                <p className="correoText">{patient.email}</p>
                             </div>
                         </div>
                         <div className='numid'>
-                            <p className="smallText">
-                                {isEditingLabel ? (
-                                    <div className="inputContainer2">
-                                        <input
-                                            type="text"
-                                            name="numid"
-                                            value={patient.numid}
-                                            onChange={handleLabelChange}
-                                        />
-                                    </div>
-                                ) : (
-                                    <p className="smallText">{patient.numid}</p>
-                                )}
-                            </p>
+                            <p className="smallText">{patient.numid}</p>
                         </div>
                         <div className='necon'>
                             <div className='nacio'>
@@ -231,9 +264,26 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
+
                 <div className="vitals">
                     <div className='titulo1'>
-                        <h3 className='histmedtit'>Signos Vitales</h3>
+                        <h3 className='histmedtit'>Signos Vitales
+                            <span>
+                                {isEditingLabel ? (<>
+                                    <button onClick={handleSaveChanges} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Guardar cambios
+                                    </button>
+                                    <button onClick={() => setIsEditingLabel(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Cancelar
+                                    </button>
+                                </>
+                                ) : (
+                                    <button onClick={handleLabelEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Editar
+                                    </button>
+                                )}
+                            </span>
+                        </h3>
                     </div>
                     <p style={{ color: '#75BD89' }} className="altura">
                         <span className="vitals-label">
@@ -379,32 +429,95 @@ const Dashboard = () => {
 
                 <div className='medHis'>
                     <div className='titulo2'>
-                        <h3 className='histmedtit'>Historial Médico</h3>
+                        <h3 className='histmedtit'>Historial Médico
+                            <span>
+                                {isEditingLabel2 ? (<>
+                                    <button onClick={handleSaveChanges2} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Guardar cambios
+                                    </button>
+                                    <button onClick={() => setIsEditingLabel2(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Cancelar
+                                    </button>
+                                </>
+                                ) : (
+                                    <button onClick={handleLabelEdit2} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Editar
+                                    </button>
+                                )}
+                            </span>
+                        </h3>
                     </div>
                     <div className="alergias">
                         <p className="section-label">Alergias:</p>
                         <ul className="section-value">
-                            {patient.medicalHistory.allergies.map((allergy, index) => (
-                                <li key={index}>{allergy}</li>
+                            {alergias.map((alergias, index) => (
+                                <li key={index}>
+                                    {isEditingLabel2 ? (
+                                        <input
+                                            type="text"
+                                            value={alergias}
+                                            onChange={(e) => handleAlergiasChange(index, e.target.value)}
+                                        />
+                                    ) : (
+                                        alergias
+                                    )}
+                                </li>
                             ))}
                         </ul>
                     </div>
                     <div className="enfermedades">
                         <p className="section-label">Enfermedades Base:</p>
                         <ul className="section-value">
-                            {patient.medicalHistory.basicConditions.map((condition, index) => (
-                                <li key={index}>{condition}</li>
+                        {enfermedades.map((enfermedades, index) => (
+                                <li key={index}>
+                                    {isEditingLabel2 ? (
+                                        <input
+                                            type="text"
+                                            value={enfermedades}
+                                            onChange={(e) => handleEnfermedadesChange(index, e.target.value)}
+                                        />
+                                    ) : (
+                                        enfermedades
+                                    )}
+                                </li>
                             ))}
                         </ul>
                     </div>
 
                 </div>
+
                 <div className='medicamentos'>
                     <div className='titulo4'>
-                        <h3 className='medtit'>Medicamentos actuales</h3>
+                        <h3 className='medtit'>Medicamentos
+                            <span>
+                                {isEditingLabel3 ? (<>
+                                    <button onClick={handleSaveChanges3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Guardar cambios
+                                    </button>
+                                    <button onClick={() => setIsEditingLabel3(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Cancelar
+                                    </button>
+                                </>
+                                ) : (
+                                    <button onClick={handleLabelEdit3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        Editar
+                                    </button>
+                                )}
+                            </span>
+                        </h3>
                         <ul className="section-value">
-                            {['Medicamento 1', 'Medicamento 2'].map((medication, index) => (
-                                <li key={index}>{medication}</li>
+                            {medications.map((medication, index) => (
+                                <li key={index}>
+                                    {isEditingLabel3 ? (
+                                        <input
+                                            type="text"
+                                            value={medication}
+                                            onChange={(e) => handleMedicationChange(index, e.target.value)}
+                                        />
+                                    ) : (
+                                        medication
+                                    )}
+                                </li>
                             ))}
                         </ul>
 
