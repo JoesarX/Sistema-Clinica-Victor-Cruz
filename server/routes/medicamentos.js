@@ -19,7 +19,7 @@ const medicamentosRouter = (pool) => {
         }
     });
 
-    //Add a new patient
+    //Add a new medicamento
     router.post("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
@@ -42,12 +42,12 @@ const medicamentosRouter = (pool) => {
         }
     });
 
-    //Get a patient by id
+    //Get a medicamento by id
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
            
-            const sqlSelect = "SELECT * FROM medicamentos WHERE idpaciente = " + req.params.id;
+            const sqlSelect = "SELECT * FROM medicamentos WHERE idmed = " + req.params.id;
           
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
@@ -62,7 +62,7 @@ const medicamentosRouter = (pool) => {
     router.delete("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM medicamentos where idpaciente = " + req.params.id;
+            const sqlSelect = "delete FROM medicamentos where idmed = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -79,31 +79,23 @@ const medicamentosRouter = (pool) => {
             const { id } = req.params;
             const {
                 nombre,
-                edad,
-                fecha_nacimiento,
-                sexo,
-                correo,
-                telefono,
-                numid,
-                estado_civil,
-                padecimientos,
-                ocupacion
+                id_categoria,
+                stock,
+                precio_unitario,
+                via,
+                dosis
             } = req.body;
 
             const q =
-                "UPDATE medicamentos SET nombre = ?, edad = ?, fecha_nacimiento = ?, sexo = ?, correo = ?,  telefono = ?, numid = ?, estado_civil = ?, padecimientos = ?, ocupacion = ? WHERE idpaciente = ?";
+                "UPDATE medicamentos SET nombre = ?, id_categoria = ?, stock = ?, precio_unitario = ?, via = ?, dosis = ? WHERE idmed = ?";
 
             const values = [
                 nombre,
-                edad,
-                fecha_nacimiento,
-                sexo,
-                correo,
-                telefono,
-                numid,
-                estado_civil,
-                padecimientos,
-                ocupacion,
+                id_categoria,
+                stock,
+                precio_unitario,
+                via,
+                dosis,
                 id
             ];
 

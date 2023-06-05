@@ -1,6 +1,10 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import './Medicamentos.css';
+import EditMedicamentosModal from './EditMedicamentosModal.jsx';
+
+
 
 //GRID
 import { Box, Button } from '@mui/material'
@@ -176,15 +180,10 @@ const Medicamentos = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [medicamento, setMedicamento] = React.useState({
         nombre: '',
-        edad: '',
-        fecha_nacimiento: '',
-        sexo: '',
-        correo: '',
-        telefono: '',
-        numid: null,
-        estado_civil: '',
-        padecimientos: '',
-        ocupacion: ''
+        stock: '',
+        precio_unitario: '',
+        via: '',
+        dosis: ''
     })
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -194,7 +193,7 @@ const Medicamentos = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
     };
-
+    const [id, setID] = useState(null);
     const toggleModal2 = async (id) => {
         setID(id)
         console.log(id)
@@ -224,39 +223,11 @@ const Medicamentos = () => {
 
     }
 
-    const calculateAge = (dob) => {
-        const birthDate = new Date(dob);
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    };
 
-    const handleDateChange = (date) => {
 
-        console.log(date)
-        setFechaNacimiento(date);
-        const formattedDate = date ? date.toISOString().slice(0, 10) : '';
-        console.log(formattedDate)
-        setMedicamento((prevState) => ({ ...prevState, fecha_nacimiento: formattedDate }))
-        console.log(fecha_nacimiento)
-        const age = formattedDate ? calculateAge(formattedDate) : '';
-        console.log(age)
-        setMedicamento((prevState) => ({ ...prevState, edad: age }))
 
-    };
 
-    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
-    const [id, setID] = useState(null);
-    const handleTextChange = (e) => {
-        console.log(":)")
-        setMedicamento((prevState) => ({ ...prevState, fecha_nacimiento: e.target.value }))
-        // Perform any validation or parsing logic if needed
-        // Update the selectedDate state accordingly
-    };
+
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
@@ -292,18 +263,18 @@ const Medicamentos = () => {
 
     const EditHandler = () => {
 
-        if (validations()) {
-            const editMedicamento = async () => {
-                await MedicamentosService.editMedicamentos(id, medicamento);
-                alert('Medicamento Editado');
-                toggleModal22();
-            };
-            console.log(medicamento)
-            editMedicamento();
 
-            navigate('/medicamentos')
-            window.location.reload();
-        }
+        const editMedicamento = async () => {
+            await MedicamentosService.editMedicamentos(id, medicamento);
+            alert('Medicamento Editado');
+            toggleModal22();
+        };
+        console.log(medicamento)
+        editMedicamento();
+
+        navigate('/medicamentos')
+        window.location.reload();
+
     };
     const validations = () => {
         const { nombre, edad, fecha_nacimiento, sexo, correo, estado_civil } = medicamento
@@ -421,6 +392,26 @@ const Medicamentos = () => {
     const handleInputFocus = (event) => {
         event.target.blur(); // Remove focus from the input field
     };
+    const [selectedMedicamento, setSelectedMedicamento] = useState(null);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+    const handleOpenEditModal = (medicamento) => {
+        setSelectedMedicamento(medicamento);
+        setIsEditModalOpen(true);
+    };
+    const handleCloseEditModal = () => {
+        setSelectedMedicamento(null);
+        setIsEditModalOpen(false);
+    };
+
+
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
 
@@ -448,9 +439,10 @@ const Medicamentos = () => {
                                     flex: 2,
                                     renderCell: (params) => (
                                         <div>
-                                            <IconButton onClick={() => toggleModal2(params.id)}  >
+                                            <IconButton onClick={() => toggleModal2(params.id)} >
                                                 <Edit />
                                             </IconButton>
+
 
                                             <IconButton onClick={() => handleDeleteMedicamentosClick(params.id)}>
                                                 <Delete />
@@ -468,79 +460,46 @@ const Medicamentos = () => {
                             onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
                         />
                     </ThemeProvider>
-                    <Modal open={isModalOpen} onClose={toggleModal}>
+
+                    <Modal open={isModalOpen} onClose={toggleModal} className='customModal' >
+
+
                         <div className='modalContainer'>
-                            <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
+
+
+
+                            <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
+
                             <Box
-                                component="form"
+                                component="form"//edit modal
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
                                     gap: '10px',
                                     width: '100%', // Added width property
-
                                 }}
                                 noValidate
                                 autoComplete="off"
                             >
-                                <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                <TextField id="nombre" label="Nombre"  variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        {/*} <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                              <DatePicker id="fecha_nacimiento" diabled label="Fecha de Nacimiento"  value={fecha_nacimiento || null} renderInput={(params) => <TextField {...params} disabled/>} onChange={handleDateChange} name='fecha_nacimiento' />
-
-                           </LocalizationProvider>*/}
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                            <MobileDatePicker
-                                                id="fecha_nacimiento"
-                                                value={fecha_nacimiento || null}
-                                                onChange={handleDateChange}
-                                                renderInput={(params) => <TextField {...params} />}
-                                                name='fecha_nacimiento'
-                                            />
-                                        </LocalizationProvider>
+                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='unidades' />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <div className='radioGroupContainer'>
-                                            <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
-                                                <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                                                <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                                            </RadioGroup>
-                                        </div>
+                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' />
                                     </Grid>
                                 </Grid>
-                                <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
+
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
+                                        <TextField id="via" label="Via" variant="outlined" onChange={handleModalFieldChange} name='via' />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name='telefono' />
+                                        <TextField id="dosis" label="Dosis" variant="outlined"  onChange={handleModalFieldChange} name='dosis' />
                                     </Grid>
                                 </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField id="numid" label="Número de Identidad" variant="outlined" onChange={handleModalFieldChange} name='numid' />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <Autocomplete
-                                            disablePortal
-                                            id="estado_civil"
-                                            required
-                                            options={listaEstadoCivil}
-                                            onChange={(event, newValue) =>
-                                                setMedicamento({
-                                                    ...medicamento,
-                                                    estado_civil: newValue
-                                                })
-                                            }
-                                            renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
 
-                                        />
-                                    </Grid>
-                                </Grid>
                                 <Button onClick={handleModalSubmit} variant="contained" style={{
                                     backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
                                     paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
@@ -549,15 +508,18 @@ const Medicamentos = () => {
                                 </Button>
                             </Box>
                         </div>
+
+
                     </Modal>
 
-                    <Modal open={isModalOpen1} onClose={toggleModal22}>
+                    <Modal open={isModalOpen1} onClose={toggleModal22} className='customModal' >
+
 
                         <div className='modalContainer'>
                             {medicamentoData.map((medicamento) => (
-                                <div className='medicamentoCard' key={medicamento.idpaciente}>
+                                <div className='medicamentoCard' key={medicamento.idmed}>
 
-                                    <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
+                                    <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
 
                                     <Box
                                         component="form"//edit modal
@@ -570,62 +532,25 @@ const Medicamentos = () => {
                                         noValidate
                                         autoComplete="off"
                                     >
-                                        <TextField id="nombre" label="Nombre Completo" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                        <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
-
-                                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-
-                                                    <MobileDatePicker
-                                                        id="fecha_nacimiento"
-                                                        defaultValue={dayjs(medicamento.fecha_nacimiento)}
-                                                        onChange={handleDateChange}
-                                                        renderInput={(params) => <TextField {...params} />}
-                                                        name='fecha_nacimiento'
-                                                    />
-                                                </LocalizationProvider>
+                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='unidades' />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
-                                                <div className='radioGroupContainer'>
-                                                    <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" value={defaultValue} className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
-                                                        <FormControlLabel value="M" control={<Radio />} label="Masculino" />
-                                                        <FormControlLabel value="F" control={<Radio />} label="Femenino" />
-                                                    </RadioGroup>
-                                                </div>
+                                                <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' />
                                             </Grid>
                                         </Grid>
-                                        <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={medicamento.ocupacion} onChange={handleModalFieldChange} name='ocupacion' />
 
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField id="correo" label="Correo Electrónico" defaultValue={medicamento.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
+                                                <TextField id="via" label="Via" variant="outlined" defaultValue={medicamento.via} onChange={handleModalFieldChange} name='via' />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField id="telefono" label="Teléfono" variant="outlined" defaultValue={medicamento.telefono} onChange={handleModalFieldChange} name='telefono' />
+                                                <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
                                             </Grid>
                                         </Grid>
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={medicamento.numid} onChange={handleModalFieldChange} name='numid' />
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <Autocomplete
-                                                    value={selectedValue2}
-                                                    disablePortal
-                                                    id="estado_civil"
-                                                    required
-                                                    options={listaEstadoCivil}
-                                                    onChange={(event, newValue) =>
-                                                        setMedicamento({
-                                                            ...medicamento,
-                                                            estado_civil: newValue
-                                                        })
-                                                    }
-                                                    renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
 
-                                                />
-                                            </Grid>
-                                        </Grid>
                                         <Button onClick={EditHandler} variant="contained" style={{
                                             backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
                                             paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
@@ -638,7 +563,9 @@ const Medicamentos = () => {
                         </div>
                     </Modal>
 
+
                 </div>
+
             </div>
         </div>
     );

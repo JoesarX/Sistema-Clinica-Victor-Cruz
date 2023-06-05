@@ -1,0 +1,14 @@
+.customModal {
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.customModal .modalContainer {
+  
+    width: 600px;
+   
+    height: 400px;
+   
+}
