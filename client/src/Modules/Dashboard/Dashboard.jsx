@@ -59,6 +59,11 @@ const Dashboard = () => {
         navigate('/');
     }
 
+
+    function enviar_A_Crud() {
+        navigate('/administrador');
+    }
+
     useEffect(() => {
         //validación login
         if (!isLoggedIn) {
@@ -113,7 +118,7 @@ const Dashboard = () => {
                     <button className='sidebarBtn'>
                         <FontAwesomeIcon icon={faAddressCard} style={{ color: '#CCCCCC', fontSize: '28px' }} />
                     </button>
-                    <button className='sidebarBtn'>
+                    <button className='sidebarBtn' title="Gestionar Colaborades" onClick={enviar_A_Crud}>
                         <FontAwesomeIcon icon={faTable} style={{ color: '#CCCCCC', fontSize: '30px' }} />
                     </button>
 
@@ -243,7 +248,7 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="height"
-                                        style={{ width: '55px', display: 'inline-block'}}
+                                        style={{ width: '55px', display: 'inline-block' }}
                                         value={patient.height}
                                         onChange={handleLabelChange}
                                     />
@@ -266,7 +271,7 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="weight"
-                                        style={{ width: '50px', display: 'inline-block'}}
+                                        style={{ width: '50px', display: 'inline-block' }}
                                         value={patient.weight}
                                         onChange={handleLabelChange}
                                     />
@@ -289,7 +294,7 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="temperature"
-                                        style={{ width: '55px', display: 'inline-block'}}
+                                        style={{ width: '55px', display: 'inline-block' }}
                                         value={patient.temperature}
                                         onChange={handleLabelChange}
                                     />
@@ -312,7 +317,7 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="heartRate"
-                                        style={{ width: '50px', display: 'inline-block'}}
+                                        style={{ width: '50px', display: 'inline-block' }}
                                         value={patient.heartRate}
                                         onChange={handleLabelChange}
                                     />
@@ -335,7 +340,7 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="bloodPressure"
-                                        style={{ width: '75px', display: 'inline-block'}}
+                                        style={{ width: '75px', display: 'inline-block' }}
                                         value={patient.bloodPressure}
                                         onChange={handleLabelChange}
                                     />
