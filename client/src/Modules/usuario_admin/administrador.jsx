@@ -62,33 +62,32 @@ const Administradores = () => {
    }
 
    const handleDeleteAdministradoresClick = (id) => {
-     
       swal({
-         title: "¿Estas seguro?",
-         text: "Una vez borrado, no podrás recuperar esta información.",
-         icon: "warning",
-         buttons: true,
-         dangerMode: true,
-       })
-       .then((willDelete) => {
-         if (willDelete)  {
-            const deleteAdministrador = async () => {
-               await AdministradoresService.deleteAdministradores(id);
-      
-            };
-            deleteAdministrador();
-
-           swal("Colaborador eliminado exitosamente!", {
-             icon: "success",
-           });
-           window.location.reload();
-         } else {
-           swal("¡Tu información no se ha borrado!");
-         }
-       });
-
-   };
-
+        title: "¿Estás seguro?",
+        text: "Una vez borrado, no podrás recuperar esta información.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then(async (willDelete) => {
+        if (willDelete) {
+          try {
+            await AdministradoresService.deleteAdministradores(id);
+            swal("Colaborador eliminado exitosamente!", {
+              icon: "success",
+            });
+            window.location.reload();
+          } catch (error) {
+            swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+              icon: "error",
+            });
+          }
+        } else {
+          swal("¡Tu información no se ha borrado!");
+        }
+      });
+    };
+    
    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
       nombre: true,
       correo: true,
