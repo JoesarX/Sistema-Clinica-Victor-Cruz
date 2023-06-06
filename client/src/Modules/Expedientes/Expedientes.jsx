@@ -592,7 +592,7 @@ const Expedientes = () => {
 
                   <div className='modalContainer'>
                      {expedienteData.map((expediente) => (
-                        <div className='expedienteCard' key={expediente.idpaciente}>
+                        <div className='innerCard' key={expediente.idpaciente}>
 
                            <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
 

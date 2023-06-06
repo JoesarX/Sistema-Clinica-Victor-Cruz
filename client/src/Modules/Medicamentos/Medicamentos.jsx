@@ -115,7 +115,7 @@ const Medicamentos = () => {
     const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
         idmed: false,
         nombre: true,
-        id_categoria: true,
+        categoria: true,
         stock: true,
         precio_unitario: true,
         via: true,
@@ -187,11 +187,12 @@ const Medicamentos = () => {
     })
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
-    const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a']
+    const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
 
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
+        cleanExpediente();
     };
     const [id, setID] = useState(null);
     const toggleModal2 = async (id) => {
@@ -216,6 +217,7 @@ const Medicamentos = () => {
 
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
+        cleanExpediente();
     };
 
     const handleModalFieldChange = (e) => {
@@ -225,17 +227,23 @@ const Medicamentos = () => {
 
 
 
-
+    const cleanExpediente = () => {
+        medicamento.nombre = null;
+        medicamento.stock = null;
+        medicamento.categoria = null;
+        medicamento.precio_unitario = null;
+        medicamento.via = null;
+        medicamento.dosis = null;
+    };
 
 
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
-        console.log(medicamento.edad)
-        console.log(medicamento.fecha_nacimiento)
 
         setIsSubmitting(true);
 
+        console.log(medicamento)
 
         if (validations()) {
             try {
@@ -243,13 +251,9 @@ const Medicamentos = () => {
                 await MedicamentosService.postMedicamentos(medicamento);
                 alert('Medicamento Agregado');
                 toggleModal();
-                medicamento.nombre = null;
-                medicamento.stock=null;
-                medicamento.precio_unitario=null;
-                medicamento.via=null;
-                medicamento.dosis=null;
-              
-                
+
+
+
             } catch (error) {
                 // Handle error if any
                 console.log('Error submitting medicamento:', error);
@@ -259,25 +263,30 @@ const Medicamentos = () => {
 
     const EditHandler = () => {
 
-        if(validations()){
-        const editMedicamento = async () => {
-            await MedicamentosService.editMedicamentos(id, medicamento);
-            alert('Medicamento Editado');
-            toggleModal22();
-        };
-        console.log(medicamento)
-        editMedicamento();
+        if (validations()) {
+            const editMedicamento = async () => {
+                await MedicamentosService.editMedicamentos(id, medicamento);
+                alert('Medicamento Editado');
+                toggleModal22();
+                cleanExpediente();
+            };
+            console.log(medicamento)
+            editMedicamento();
 
-        navigate('/medicamentos')
-        window.location.reload();
-    }
+            navigate('/medicamentos')
+            window.location.reload();
+        }
 
     };
     const validations = () => {
-        const { nombre, stock, precio_unitario, via, dosis } = medicamento
+        const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
         if (nombre === null || nombre === '' || nombre === ' ') {
             alert('Debe agregarle un nombre al medicamento')
             return false
+        }
+        if (categoria === null || categoria === '') {
+            alert('Debe agregar una categoria valida.');
+            return false;
         }
         if (stock === null || stock === '') {
             alert('Debe agregarle la cantidad de unidades al medicamento');
@@ -301,7 +310,7 @@ const Medicamentos = () => {
             alert('Debe agregarle una dosis al medicamento')
             return false
         }
-        
+
         return true
     }
     const [medicamentoData, setMedicamentoss] = useState([]);
@@ -358,7 +367,7 @@ const Medicamentos = () => {
                 ...prevVisibility,
                 idmed: false,
                 nombre: true,
-                id_categoria: isMobile ? false : true,
+                categoria: isMobile ? false : true,
                 stock: true,
                 precio_unitario: isMobile ? false : true,
                 via: isMobile ? false : true,
@@ -417,7 +426,7 @@ const Medicamentos = () => {
                             getRowId={(row) => row.medId}
                             columns={[
                                 { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
-                                { field: 'id_categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
+                                { field: 'categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
                                 { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
                                 { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 2, headerClassName: 'column-header' },
                                 { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
@@ -450,12 +459,9 @@ const Medicamentos = () => {
                         />
                     </ThemeProvider>
 
-                    <Modal open={isModalOpen} onClose={toggleModal} className='customModal' >
+                    <Modal open={isModalOpen} onClose={toggleModal} >
 
-
-                        <div className='modalContainer'>
-
-
+                        <div className='modalContainer modalMedicamentos'>
 
                             <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
 
@@ -471,6 +477,21 @@ const Medicamentos = () => {
                                 autoComplete="off"
                             >
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                <Autocomplete
+                                    disablePortal
+                                    id="categoria"
+
+                                    required
+                                    options={listaCategoriaMedicamentos}
+                                    onChange={(event, newValue) =>
+                                        setMedicamento({
+                                            ...medicamento,
+                                            categoria: newValue
+                                        })
+
+                                    }
+                                    renderInput={(params) => <TextField {...params} label="Categoria" required />}
+                                />
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' />
@@ -501,12 +522,12 @@ const Medicamentos = () => {
 
                     </Modal>
 
-                    <Modal open={isModalOpen1} onClose={toggleModal22} className='customModal' >
+                    <Modal open={isModalOpen1} onClose={toggleModal22}  >
 
 
-                        <div className='modalContainer'>
+                        <div className='modalContainer modalMedicamentos'>
                             {medicamentoData.map((medicamento) => (
-                                <div className='medicamentoCard' key={medicamento.idmed}>
+                                <div className='innerCard' key={medicamento.idmed}>
 
                                     <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
 
@@ -522,6 +543,21 @@ const Medicamentos = () => {
                                         autoComplete="off"
                                     >
                                         <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                        <Autocomplete
+                                            disablePortal
+                                            id="categoria"
+
+                                            required
+                                            options={listaCategoriaMedicamentos}
+                                            onChange={(event, newValue) =>
+                                                setMedicamento({
+                                                    ...medicamento,
+                                                    categoria: newValue
+                                                })
+
+                                            }
+                                            renderInput={(params) => <TextField {...params} label="Categoria" required />}
+                                        />
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
                                                 <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' />
