@@ -312,6 +312,7 @@ const Expedientes = () => {
                               <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                  <Delete />
                               </IconButton>
+                              
                            </div>
                         ),
                      },
