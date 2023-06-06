@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Medicamentos.css';
 import EditMedicamentosModal from './EditMedicamentosModal.jsx';
-
-
+import InfoIcon from '@mui/icons-material/Info';
+import FichaMedicamentos from './FichaMedicamentos';
 
 //GRID
 import { Box, Button } from '@mui/material'
@@ -101,6 +101,10 @@ const Medicamentos = () => {
             });
 
     };
+
+    const handleSelectedAdministradoresClick = (row) => {
+
+    }
 
     const theme = createTheme(
         {
@@ -224,6 +228,28 @@ const Medicamentos = () => {
         setMedicamento((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
     }
+    //----------FichaMedicamentos Modal-------------------------------------------------------
+
+    const [nombre, setNombre] = useState(false);
+    const [categoria, setCategoria] = useState(false);
+    const [stock, setStock] = useState(false);
+    const [precioUnitario, setPrecioUnitario] = useState(false);
+    const [openFicha, setOpenFicha] = useState(false);
+    const [imagen, setImagen] = useState(false);
+    const [via, setVia] = useState(false);
+    let [selectedRow, setSelectedRow] = useState(null);
+
+    const handleSelectedFicha = (row) => {
+        setOpenFicha(true);
+        setNombre(row.nombre);
+        setCategoria(row.categoria);
+        setStock(row.stock);
+        setPrecioUnitario(row.precio_unitario);
+        setSelectedRow(true);
+        setVia(row.via);
+        setImagen('https://thumbs.dreamstime.com/b/comprimido-35700453.jpg');
+    }
+
 
 
 
@@ -436,7 +462,9 @@ const Medicamentos = () => {
                                     headerName: '',
                                     flex: 2,
                                     renderCell: (params) => (
+
                                         <div>
+
                                             <IconButton onClick={() => toggleModal2(params.id)} >
                                                 <Edit />
                                             </IconButton>
@@ -444,6 +472,10 @@ const Medicamentos = () => {
 
                                             <IconButton onClick={() => handleDeleteMedicamentosClick(params.id)}>
                                                 <Delete />
+                                            </IconButton>
+                                            <IconButton onClick={() => handleSelectedFicha(params.row)}>
+
+                                                <InfoIcon />
                                             </IconButton>
                                         </div>
                                     ),
@@ -592,6 +624,18 @@ const Medicamentos = () => {
                 </div>
 
             </div>
+            {selectedRow && (
+               <FichaMedicamentos
+                  open={openFicha}
+                  setOpenPopup={setOpenFicha}
+                  setNombreF={nombre}
+                  setCategoriaF={categoria}
+                  setPrecioUnitarioF={precioUnitario}
+                  setStockF={stock}
+                  setImagenF={imagen}
+                  setViaF={via}
+               />
+            )}
         </div>
     );
 
