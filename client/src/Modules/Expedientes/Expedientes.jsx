@@ -42,6 +42,11 @@ const Expedientes = () => {
       },
       esES,
    );
+   
+   const modifiedExpediente = {
+      selectedExpediente,
+      id: '1' // Replace 'unique-id' with a unique identifier for the expediente
+    };
 
    // Function to open the add modal
 
@@ -254,9 +259,10 @@ const Expedientes = () => {
                               </IconButton>
                               {isEditModalOpen && (
                                  <EditExpedientesModal
-                                    expediente={selectedExpediente}
-                                    onClose={handleCloseEditModal}
-                                 />
+                                 setExpedientes={setExpedientes}
+                                 onClose={handleCloseEditModal}
+                                 expedienteData={modifiedExpediente} 
+                               />
                               )}
                               <IconButton >
                                  <Delete />
