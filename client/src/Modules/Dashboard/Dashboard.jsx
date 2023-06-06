@@ -58,6 +58,10 @@ const Dashboard = () => {
                 localStorage.clear();
                 navigate('/');
         }
+
+        function enviar_A_Crud(){
+            navigate('/administrador');
+    }
         
         useEffect(() => {
             //validación login
@@ -88,7 +92,7 @@ const Dashboard = () => {
                     <button className='sidebarBtn'>
                         <FontAwesomeIcon icon={faAddressCard} style={{ color: '#CCCCCC', fontSize: '28px' }} />
                     </button>
-                    <button className='sidebarBtn'>
+                    <button className='sidebarBtn' title="Gestionar Colaborades"onClick={enviar_A_Crud}>
                         <FontAwesomeIcon icon={faTable} style={{ color: '#CCCCCC', fontSize: '30px' }} />
                     </button>
                    

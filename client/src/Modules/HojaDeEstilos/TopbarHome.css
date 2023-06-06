@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+
+.custom-navbar {
+    height: 75px;
+    box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+    z-index: 5;
+}
+
+.navbar-brand {
+    font-family: 'Montserrat';
+    padding: 10px 20px;
+    user-select: none;
+}
+
+.nav-item a {
+    font-family: 'Montserrat';
+    color: white;
+    transition: all 0.3 ease;
+    font-weight: 500;
+}
+
+.navbar-toggler span {
+    color: white !important;
+}
+
+.nav-item:hover {
+    cursor: pointer;
+}
+
+.navbar-toggler {
+    color: white !important;
+    border: none;
+}
+
+.nav-item:hover {
+    cursor: pointer;
+    color: #00008B !important;
+}
+
+.custom-colors {
+    background-color: #1E60A6;
+    color: white !important;
+}
+
+.nav-item {
+    padding-left: 20px;
+    padding-right: 20px;
+    font-weight: bold;
+    transition: all 0.3 ease;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='white' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar-toggler {
+    border: 1px solid white;
+}
