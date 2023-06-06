@@ -63,21 +63,23 @@ const AddExpedientesModal = ({ onClose }) => {
     e.preventDefault();
     const age = fecha_nacimiento ? calculateAge(fecha_nacimiento) : '';
     setExpediente((prevState) => ({ ...prevState, edad: age }));
-
+  
     setIsSubmitting(true);
-
+  
     if (validations()) {
       try {
         // Perform the form submission logic
         await ExpedientesService.postExpedientes(expediente);
         alert('Expediente Agregado');
         onClose();
+        window.location.reload(); // Reload the page
       } catch (error) {
         // Handle error if any
         console.log('Error submitting expediente:', error);
       }
     }
   };
+  
 
   const validations = () => {
     const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
