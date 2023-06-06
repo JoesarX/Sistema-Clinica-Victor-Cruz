@@ -19,6 +19,7 @@
   background-color: #1E60A6;
   transition: all 0.3 ease;
   font-family: 'Montserrat';
+  box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
 }
 
 .iconContainer {
@@ -50,6 +51,11 @@
   box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
   padding-left: 10px;
   padding-right: 10px;
+  transition: transform 0.3s ease-in;
+}
+
+.service-container:hover {
+  transform: scale(1.05);
 }
 
 .service-container .service-text {
@@ -178,10 +184,6 @@
   border-radius: 20px;
   box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
 }
-
-
-
-
 
 .linea {
   margin: 50px;

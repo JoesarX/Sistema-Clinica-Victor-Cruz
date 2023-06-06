@@ -17,9 +17,9 @@ const Topbar = () => {
         navigate('/iniciarsesion');
     };
 
-    // const handleCitaClick = () => {
-    //     navigate('/citas');
-    // };
+    const handleCitaClick = () => {
+        navigate('/citas');
+    };
 
     // const handleLabClick = () => {
     //     navigate('/laboratorio');
@@ -59,6 +59,9 @@ const Topbar = () => {
                     </li>
                     <li class="nav-item text" onClick={handleServicios}>
                         <a class="nav-link" >SERVICIOS</a>
+                    </li>
+                    <li class="nav-item text" onClick={handleCitaClick}>
+                        <a class="nav-link" >AGENDA TU CITA</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav custom-colors mr-0">

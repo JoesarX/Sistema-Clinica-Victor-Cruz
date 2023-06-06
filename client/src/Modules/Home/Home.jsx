@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
-
-import Topbar from './TopbarHome';
+import Topbar from './Topbar';
 import Footer from './Footer';
 
 import doctor_slide from '../Imagenes/doctor_slide.jpeg';
@@ -25,6 +24,10 @@ const Home = () => {
 
     const handleCitaClick = () => {
         navigate('/citas');
+    };
+
+    const handleServicesClick = () => {
+        navigate('/servicios');
     };
 
     const properties = {
@@ -90,7 +93,7 @@ const Home = () => {
                 </div>
             </div>
             <div class="button-container">
-                <button class="see-more-services-button">Ver más...</button>
+                <button class="see-more-services-button" onClick={handleServicesClick}>Ver más...</button>
             </div>
 
             <div className="container2">
