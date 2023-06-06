@@ -63,9 +63,9 @@
   position: relative;
   bottom: 30px;
   /* TEMPORAL */
-  background-color: rgb(0, 255, 0, 0.3);
+  /* background-color: rgb(0, 255, 0, 0.3);
   background-size: 10px 10px;
-  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px);
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .services-container {
@@ -77,12 +77,12 @@
   justify-content: center;
   gap: 5vw;
   transition: all 0.3 ease;
-  margin: 70px auto 20px auto;
+  margin: 100px auto 20px auto;
   padding: 20px 50px;
   /* temporal */
-  background-color: rgb(255, 0, 0, 0.3);
+  /* background-color: rgb(255, 0, 0, 0.3);
   background-size: 10px 10px;
-  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px);
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .button-container {
@@ -97,9 +97,9 @@
   margin: 10px auto;
   padding: 0px 50px;
   /* temporal */
-  background-color: rgb(255, 0, 0, 0.3);
+  /* background-color: rgb(255, 0, 0, 0.3);
   background-size: 10px 10px;
-  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px);
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .see-more-services-button {
@@ -152,10 +152,10 @@
   padding-top: 10px;
   margin-bottom: -10px;
   height: 100px;
-  /* TEMPORAL */
+  /* TEMPORAL
   background-color: rgb(0, 255, 0, 0.3);
   background-size: 10px 10px;
-  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px);
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .ruta {
@@ -237,7 +237,66 @@
   object-fit: cover;
 }
 
-@media only screen and (max-width: 1260px) {
+/* GOTTA USE THAT SPACE PROPERLY! */
+@media only screen and (min-width: 850px) and (max-width: 1260px) {
+  .services-container {
+    margin: 0px auto 20px auto;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    flex-direction: column;
+    align-content: flex-start;
+    height: auto;
+    padding-top: 60px;
+    padding-bottom: 20px;
+    gap: 40px;
+  }
+
+  .service-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    justify-items: center;
+    height: 100%;
+    padding: 20px 10px;
+    gap: 20px;
+  }
+
+  .service-text-elements {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: left;
+  }
+
+  .service-header {
+    position: static;
+    height: fit-content;
+    padding: 0;
+    margin-bottom: 5px;
+  }
+
+  .service-container .service-text {
+    position: static;
+    align-self: center;
+  }
+
+  .iconContainer {
+    position: static;
+    width: 2vw;
+    aspect-ratio: 1 / 1;
+  }
+
+  .google-map-frame {
+    width: 80%
+  }
+
+}
+
+/* SMALL DEVICES */
+@media only screen and (max-width: 850px) {
   .services-container {
     flex-direction: column;
     align-content: flex-start;

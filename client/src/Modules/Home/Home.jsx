@@ -57,27 +57,33 @@ const Home = () => {
                     <div className="iconContainer">
                         <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
                     </div>
-                    <h1 className="service-header">Clínica</h1>
-                    <div className="service-text">
-                        Dedicada a brindar servicios de salud de alta calidad y atención médica integral.
+                    <div className="service-text-elements">
+                        <h1 className="service-header">Clínica</h1>
+                        <div className="service-text">
+                            Dedicada a brindar servicios de salud de alta calidad y atención médica integral.
+                        </div>
                     </div>
                 </div>
                 <div className="service-container">
                     <div className="iconContainer">
                         <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
                     </div>
-                    <h1 className="service-header">Salud Ocupacional</h1>
-                    <div className="service-text">
-                        Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.
+                    <div className="service-text-elements">
+                        <h1 className="service-header">Salud Ocupacional</h1>
+                        <div className="service-text">
+                            Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.
+                        </div>
                     </div>
                 </div>
                 <div className="service-container">
                     <div className="iconContainer">
                         <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
                     </div>
-                    <h1 className="service-header">Laboratorio</h1>
-                    <div className="service-text">
-                        Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.
+                    <div className="service-text-elements">
+                        <h1 className="service-header">Laboratorio</h1>
+                        <div className="service-text">
+                            Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.
+                        </div>
                     </div>
                 </div>
             </div>
