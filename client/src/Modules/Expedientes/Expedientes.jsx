@@ -53,6 +53,19 @@ const Expedientes = () => {
    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
    const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a'];
+   const theme = createTheme(
+      {
+         palette: {
+            primary: { main: '#1976d2' },
+         },
+      },
+      esES,
+   );
+   
+   const modifiedExpediente = {
+      selectedExpediente,
+      id: '1' // Replace 'unique-id' with a unique identifier for the expediente
+    };
 
    // Function to open the add modal
 
@@ -103,15 +116,6 @@ const Expedientes = () => {
          });
 
    };
-
-   const theme = createTheme(
-      {
-         palette: {
-            primary: { main: '#1976d2' },
-         },
-      },
-      esES,
-   );
 
    //Grid Column Visibility
    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
@@ -300,9 +304,10 @@ const Expedientes = () => {
                               </IconButton>
                               {isEditModalOpen && (
                                  <EditExpedientesModal
-                                    expediente={selectedExpediente}
-                                    onClose={handleCloseEditModal}
-                                 />
+                                 setExpedientes={setExpedientes}
+                                 onClose={handleCloseEditModal}
+                                 expedienteData={modifiedExpediente} 
+                               />
                               )}
                               <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                  <Delete />
