@@ -1,3 +1,5 @@
+
+
 .expedientesGrid {
     background-color: rgb(227, 235, 248);
     height: 100vh;
@@ -30,7 +32,7 @@
 }
 
 .MuiDataGrid-row {
-    margin-bottom: 8px;
+    margin-bottom: 20px;
     border-radius: 16px;
     background-color: #FFFFFF;
     color: rgb(71, 71, 71);

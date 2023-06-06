@@ -63,21 +63,23 @@ const AddExpedientesModal = ({ onClose }) => {
     e.preventDefault();
     const age = fecha_nacimiento ? calculateAge(fecha_nacimiento) : '';
     setExpediente((prevState) => ({ ...prevState, edad: age }));
-
+  
     setIsSubmitting(true);
-
+  
     if (validations()) {
       try {
         // Perform the form submission logic
         await ExpedientesService.postExpedientes(expediente);
         alert('Expediente Agregado');
         onClose();
+        window.location.reload(); // Reload the page
       } catch (error) {
         // Handle error if any
         console.log('Error submitting expediente:', error);
       }
     }
   };
+  
 
   const validations = () => {
     const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
@@ -143,8 +145,9 @@ const AddExpedientesModal = ({ onClose }) => {
           noValidate
           autoComplete="off"
         >
-          <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name="nombre" />
-          <Grid container spacing={2}>
+          <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name="nombre" className="inputField" />
+          <Box mt={.5}></Box>
+          <Grid container spacing={4}>
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -153,9 +156,11 @@ const AddExpedientesModal = ({ onClose }) => {
                   value={fecha_nacimiento || null}
                   onChange={handleDateChange}
                   name="fecha_nacimiento"
+                  className="inputField"
                 />
               </LocalizationProvider>
             </Grid>
+            <Box mt={.5}></Box>
             <Grid item xs={12} sm={6}>
               <div className="radioGroupContainer">
                 <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className="sexoRadioGroup" id="sexo" onChange={handleModalFieldChange} name="sexo">
@@ -165,18 +170,21 @@ const AddExpedientesModal = ({ onClose }) => {
               </div>
             </Grid>
           </Grid>
-          <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name="ocupacion" />
+          <Box mt={.5}></Box>
+          <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name="ocupacion" className="inputField" />
+          <Box mt={.5}></Box>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField id="correo" label="Correo Electrónico" variant="outlined" type="email" onChange={handleModalFieldChange} name="correo" />
+              <TextField id="correo" label="Correo Electrónico" variant="outlined" type="email" onChange={handleModalFieldChange} name="correo" className="inputField" />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name="telefono" />
+              <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name="telefono" className="inputField" />
             </Grid>
           </Grid>
+          <Box mt={.5}></Box>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <TextField id="numid" label="Número de Identificación" variant="outlined" onChange={handleModalFieldChange} name="numid" />
+              <TextField id="numid" label="Número de Identificación" variant="outlined" onChange={handleModalFieldChange} name="numid" className="inputField" />
             </Grid>
             <Grid item xs={12} sm={6}>
               <Autocomplete
@@ -193,15 +201,15 @@ const AddExpedientesModal = ({ onClose }) => {
               />
             </Grid>
           </Grid>
-          <TextField id="padecimientos" label="Padecimientos" variant="outlined" onChange={handleModalFieldChange} name="padecimientos" />
+          <Box mt={.5}></Box>
+          <TextField id="padecimientos" label="Padecimientos" variant="outlined" onChange={handleModalFieldChange} name="padecimientos"  className="inputField"/>
           <Button
             variant="contained"
             className="modalButton"
             type="submit"
             onClick={handleModalSubmit}
-            disabled={isSubmitting}
           >
-            {isSubmitting ? 'Enviando...' : 'Guardar Expediente'}
+            Guardar Expediente
           </Button>
         </Box>
       </div>
