@@ -47,60 +47,6 @@ const Expedientes = () => {
    //EXPEDIENTES GRID DATA
    const navigate = useNavigate();
    const [expedientes, setExpedientes] = useState([]);
-   //esto es para el popup
-   const [openPopup, setOpenPopup] = useState(false);
-   const [selectedExpedienteId, setSelectedExpedienteId] = useState(null);
-
-   // const handleAddExpedientesClick = () => {
-   //    navigate('/expedientes/crear');
-   // };
-
-   /*const handleEditExpedientesClick = (id) => {
-      navigate(`/expedientes/${id}`);
-      
-   };*/
-
-   const [isModalOpen1, setIsModalOpen1] = useState(false);
-
-   const handleEditExpedientesClick = () => {
-      setIsModalOpen1(true);
-      <EditExpedientesModal />
-   };
-
-
-   //para el Popup
-   const handleSelectedExpedientesClick = (id) => {
-      setSelectedExpedienteId(id);
-      setOpenPopup(true);
-   }
-
-   const handleDeleteExpedientesClick = (id) => {
-      swal({
-        title: "¿Estás seguro?",
-        text: "Una vez borrado, no podrás recuperar esta información.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then(async (willDelete) => {
-        if (willDelete) {
-          try {
-            await ExpedientesService.deleteExpedientes(id);
-            swal("Colaborador eliminado exitosamente!", {
-              icon: "success",
-            });
-            window.location.reload();
-          } catch (error) {
-            swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
-              icon: "error",
-            });
-          }
-        } else {
-          swal("¡Tu información no se ha borrado!");
-        }
-      });
-    };
-
    const [selectedExpediente, setSelectedExpediente] = useState(null);
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [isSubmitting2, setIsSubmitting2] = useState(false);
