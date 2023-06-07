@@ -17,9 +17,9 @@ const Topbar = () => {
         navigate('/iniciarsesion');
     };
 
-    // const handleCitaClick = () => {
-    //     navigate('/citas');
-    // };
+    const handleCitaClick = () => {
+        navigate('/citas');
+    };
 
     // const handleLabClick = () => {
     //     navigate('/laboratorio');
@@ -38,7 +38,7 @@ const Topbar = () => {
     };
 
     return (
-        <nav class="navbar navbar-expand-md custom-colors custom-navbar">
+        <nav class="navbar navbar-expand-lg custom-colors custom-navbar">
             <a class="navbar-brand custom-colors">LOGO</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuInfo" aria-controls="menuInfo" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -59,6 +59,9 @@ const Topbar = () => {
                     </li>
                     <li class="nav-item text" onClick={handleServicios}>
                         <a class="nav-link" >SERVICIOS</a>
+                    </li>
+                    <li class="nav-item text" onClick={handleCitaClick}>
+                        <a class="nav-link" >AGENDA TU CITA</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav custom-colors mr-0">
