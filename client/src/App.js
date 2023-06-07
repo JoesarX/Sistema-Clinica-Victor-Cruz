@@ -17,8 +17,6 @@ import Expedientes from "./Modules/Expedientes/Expedientes";
 import AddExpedientes from "./Modules/Expedientes/AddExpedientes";
 import EditExpedientes from "./Modules/Expedientes/EditExpedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
-import Medicamentos from "./Modules/Medicamentos/Medicamentos";
-
 import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
 
@@ -49,15 +47,11 @@ function App() {
           <Route path="/laboratorio" element={<Laboratorio/>}/>
           <Route path="/registrar-user" element={<RegistrarUser/>}/>
           <Route path="/citas" element={<Citas/>}/>
-          <Route path ="/administrador" element={<Administrador/>}/>
+          <Route path ="/Administrador" element={<Administrador/>}/>
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
           <Route path="/expedientes/:expedienteId" element={<EditExpedientes/>}/>
-          <Route path="/medicamentos" element={<Medicamentos/>}/>
-
           <Route path="/dashboard" element={<Dashboard/>}/>
-
-          <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
 
         </Routes>
       </BrowserRouter>
