@@ -13,12 +13,16 @@ import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
 import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
 
 
 
 
 const Dashboard = () => {
     const isLoggedIn = localStorage.getItem("AdminLoggedIn");
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [expedientes, setExpedientes] = useState([]);
+   const [selectedExpediente, setSelectedExpediente] = useState(null);
     const navigate = useNavigate();
     const [patient, setPatient] = useState({
         fullName: 'Pedro Daniel Mendoza Amador',
@@ -57,9 +61,9 @@ const Dashboard = () => {
     });
 
 
-    const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2']);
-    const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2']);
-    const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2']);
+    const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2']);
+    const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2','Alergia 3', 'Alergia 4','Alergia 5', 'Alergia 6','Alergia 7', 'Alergia 8','Alergia 9', 'Alergia 10','Alergia 11', 'Alergia 12','Alergia 13', 'Alergia 14']);
+    const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2']);
 
     function Signout() {
         localStorage.clear();
@@ -133,11 +137,6 @@ const Dashboard = () => {
     };
 
 
-    const handleModalEdit = () => {
-        
-    };
-
-
     const handleLabelChange = (e) => {
         const { name, value } = e.target;
         setPatient((prevPatient) => ({
@@ -175,7 +174,15 @@ const Dashboard = () => {
 
     };
 
-
+    const handleOpenEditModal = (expediente) => {
+        setSelectedExpediente(expediente);
+        setIsEditModalOpen(true);
+     };
+  
+     const handleCloseEditModal = () => {
+        setSelectedExpediente(null);
+        setIsEditModalOpen(false);
+     };
     return (
         <div className='contenido'>
             <div className='sidebar'>
@@ -229,7 +236,12 @@ const Dashboard = () => {
                         <div className='perfil' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '62px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
                             <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '55px' }} />
                         </div>
-                        <button onClick={handleModalEdit} style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
+                        <button onClick={handleOpenEditModal} style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
+                        {isEditModalOpen && (
+                                 <EditExpedienteDashboardModal
+                                 onClose={handleCloseEditModal}
+                               />
+                              )}
                     </span>
 
                     <div className='textoInfo'>
@@ -290,76 +302,84 @@ const Dashboard = () => {
                     <p style={{ color: '#75BD89' }} className="altura">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
-                            <span style={{ marginRight: '250px' }}>
+                            <span 
+                            // style={{ marginRight: '220px' }}
+                            >
                                 Altura
                             </span>
                         </span>
                         <span className="vitals-value">
                             {isEditingLabel ? (
-                                <div>
+                                <div >
                                     <input
                                         type="text"
                                         name="height"
-                                        style={{ width: '55px', display: 'inline-block' }}
+                                        style={{width:'50px',position: 'absolute',left:'435px',top:'397px'}}
                                         value={patient.height}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value">{patient.height}</span>
+                                <span className="vitals-value" style={{position: 'absolute',left:'460px',top:'417px'}}>{patient.height}</span>
                             )}
-                        </span> <span className="vitals-value">CM</span>
+                        </span> <span className="vitals-value" style={{position: 'absolute',left:'490px',top:'417px'}}>CM</span>
                     </p>
                     <p style={{ color: '#54648D' }} className="peso">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
-                            <span style={{ marginRight: '280px' }}>
+                            <span 
+                            // style={{ marginRight: '280px' }}
+                            >
                                 Peso
                             </span>
                         </span>
                         <span className="vitals-value">
                             {isEditingLabel ? (
-                                <div>
+                                <div >
                                     <input
                                         type="text"
                                         name="weight"
-                                        style={{ width: '50px', display: 'inline-block' }}
+                                        style={{width:'50px',position: 'absolute',left:'435px',top:'457px'}}
                                         value={patient.weight}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value">{patient.weight}</span>
+                                <span className="vitals-value" style={{position: 'absolute',left:'465px',top:'477px'}}>{patient.weight}</span>
                             )}
-                        </span> <span className="vitals-value">KG</span>
+                        </span> <span className="vitals-value" style={{position: 'absolute',left:'490px',top:'477px'}}>KG</span>
                     </p>
                     <p style={{ color: '#916A9E' }} className="temperatura">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
-                            <span style={{ marginRight: '190px' }}>
+                            <span 
+                            // style={{ marginRight: '150px' }}
+                            >
                                 Temperatura
                             </span>
                         </span>
                         <span className="vitals-value">
                             {isEditingLabel ? (
-                                <div>
+                                <div > 
                                     <input
                                         type="text"
                                         name="temperature"
-                                        style={{ width: '55px', display: 'inline-block' }}
+                                        style={{width:'60px',position: 'absolute',left:'425px',top:'517px'}}
                                         value={patient.temperature}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value">{patient.temperature}</span>
+                                <span className="vitals-value" style={{position: 'absolute',left:'455px',top:'537px'}}>{patient.temperature}</span>
                             )}
-                        </span> <span className="vitals-value">°C</span>
+                        </span> <span className="vitals-value" style={{position: 'absolute',left:'490px',top:'537px'}}>°C</span>
                     </p>
                     <p style={{ color: '#AB2525' }} className="ritmo">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                            <span style={{ marginRight: '170px' }}>
+                            <span 
+                            // style={{ marginRight: '170px' }}
+                            >
                                 Ritmo Cardiaco
                             </span>
                         </span>
@@ -369,38 +389,40 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="heartRate"
-                                        style={{ width: '50px', display: 'inline-block' }}
+                                        style={{width:'60px',position: 'absolute',left:'420px',top:'577px'}}
                                         value={patient.heartRate}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value">{patient.heartRate}</span>
+                                <span className="vitals-value" style={{position: 'absolute',left:'460px',top:'597px'}}>{patient.heartRate}</span>
                             )}
-                        </span> <span className="vitals-value">bpm</span>
+                        </span> <span className="vitals-value"style={{position: 'absolute',left:'485px',top:'597px'}}>bpm</span>
                     </p>
                     <p style={{ color: '#AB2525' }} className="presion">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                            <span style={{ width: '300px', marginRight: '10px' }}>
+                            <span 
+                            // style={{ width: '300px', marginRight: '10px' }}
+                            >
                                 Presión Arterial
                             </span>
                         </span>
                         <span className="vitals-value">
                             {isEditingLabel ? (
-                                <div>
+                                <div >
                                     <input
                                         type="text"
                                         name="bloodPressure"
-                                        style={{ width: '75px', display: 'inline-block' }}
+                                        style={{width:'75px',position: 'absolute',left:'395px',top:'637px'}}
                                         value={patient.bloodPressure}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value">{patient.bloodPressure}</span>
+                                <span className="vitals-value" style={{position: 'absolute',left:'420px',top:'657px'}}>{patient.bloodPressure}</span>
                             )}
-                        </span> <span className="vitals-value">mmHg</span>
+                        </span> <span className="vitals-value" style={{position: 'absolute',left:'475px',top:'657px'}}>mmHg</span>
                     </p>
                 </div>
 
@@ -458,6 +480,7 @@ const Dashboard = () => {
                                         <input
                                             type="text"
                                             value={alergias}
+                                            style={{width: '98%'}}
                                             onChange={(e) => handleAlergiasChange(index, e.target.value)}
                                         />
                                     ) : (
@@ -476,6 +499,7 @@ const Dashboard = () => {
                                         <input
                                             type="text"
                                             value={enfermedades}
+                                            style={{width: '98%'}}
                                             onChange={(e) => handleEnfermedadesChange(index, e.target.value)}
                                         />
                                     ) : (
@@ -514,6 +538,7 @@ const Dashboard = () => {
                                         <input
                                             type="text"
                                             value={medication}
+                                            style={{width: '99%'}}
                                             onChange={(e) => handleMedicationChange(index, e.target.value)}
                                         />
                                     ) : (

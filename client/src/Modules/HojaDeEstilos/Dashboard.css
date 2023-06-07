@@ -97,7 +97,7 @@
     padding: 20px;
     gap: 10px;
     width: 100%;
-    height: 294px;
+    height: 504px;
     background: #F8F8F8;
     border-radius: 10px;
     /* Inside auto layout */
@@ -116,7 +116,7 @@
     padding: 20px;
     gap: 10px;
     width: 100%;
-    height: 139px;
+    height: 315px;
     background: #F8F8F8;
     border-radius: 10px;
     /* Inside auto layout */
@@ -153,12 +153,11 @@
     /* Auto layout */
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: flex-start;
     padding: 10px 0px;
     gap: 5px;
     width: 400px;
-    height: 92px;
+    height: 200px;
     border-bottom: 1px solid #464646;
 
     /* Inside auto layout */
@@ -168,7 +167,22 @@
     align-self: stretch;
     flex-grow: 0;
 }
+.section-value::-webkit-scrollbar {
+    width: 8px;
+    /* Set the width of the scrollbar */
+}
 
+.section-value::-webkit-scrollbar-thumb {
+    background-color: #888;
+    /* Set the color of the scrollbar thumb */
+    border-radius: 4px;
+    /* Add border radius to the scrollbar thumb */
+}
+
+.section-value::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+    /* Set the color of the scrollbar thumb on hover */
+}
 .enfermedades {
     /* Base Sickness */
 
@@ -183,7 +197,7 @@
     gap: 5px;
 
     width: 400px;
-    height: 92px;
+    height: 192px;
 
     border-bottom: 1px solid #464646;
 
@@ -354,7 +368,11 @@
 .section-value li {
     margin-bottom: 10px;
   }
-
+.section-value{
+    overflow-y: scroll;
+    max-height: 200px;
+    width: 100%;
+}
 .altura {
     /* Height */
     display: flex;
@@ -488,7 +506,6 @@
     line-height: 24px;
     display: flex;
     align-items: center;
-
     color: #737373;
 }
 
@@ -940,3 +957,8 @@
     background-color: transparent;
     width: 300px;
 }
+.editLabelVitals{
+    display: inline-block;
+    width: 60px;
+}
+
