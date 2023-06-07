@@ -13,22 +13,7 @@ import { PersonAdd, Delete, Person, Person2, Visibility, Edit } from '@mui/icons
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import moment from 'moment';
-import dayjs from 'dayjs';
 import swal from 'sweetalert';
-
-//ADD EXPEDIENTES MODAL
-import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Autocomplete from '@mui/material/Autocomplete';
-import Grid from '@mui/material/Grid';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 
 
@@ -49,10 +34,9 @@ const Expedientes = () => {
    const [expedientes, setExpedientes] = useState([]);
    const [selectedExpediente, setSelectedExpediente] = useState(null);
    const [isSubmitting, setIsSubmitting] = useState(false);
-   const [isSubmitting2, setIsSubmitting2] = useState(false);
    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-   const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a'];
+
    const theme = createTheme(
       {
          palette: {
@@ -78,6 +62,8 @@ const Expedientes = () => {
    const closeAddModal = () => {
       setIsAddModalOpen(false);
    };
+
+   
    // Funcion para cerrar el edit modal
    const handleOpenEditModal = (expediente) => {
       setSelectedExpediente(expediente);
