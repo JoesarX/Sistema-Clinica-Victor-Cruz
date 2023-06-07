@@ -46,11 +46,11 @@ const Expedientes = () => {
       },
       esES,
    );
-   
+
    const modifiedExpediente = {
       selectedExpediente,
       id: '1' // Replace 'unique-id' with a unique identifier for the expediente
-    };
+   };
 
    // Function to open the add modal
 
@@ -64,7 +64,7 @@ const Expedientes = () => {
       setIsAddModalOpen(false);
    };
 
-   
+
    // Funcion para cerrar el edit modal
    const handleOpenEditModal = (expediente) => {
       setSelectedExpediente(expediente);
@@ -292,15 +292,15 @@ const Expedientes = () => {
                               </IconButton>
                               {isEditModalOpen && (
                                  <EditExpedientesModal
-                                 setExpedientes={setExpedientes}
-                                 onClose={handleCloseEditModal}
-                                 expedienteData={modifiedExpediente} 
-                               />
+                                    setExpedientes={setExpedientes}
+                                    onClose={handleCloseEditModal}
+                                    expedienteData={modifiedExpediente}
+                                 />
                               )}
                               <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                  <Delete />
                               </IconButton>
-                              
+
                            </div>
                         ),
                      },
@@ -316,23 +316,9 @@ const Expedientes = () => {
             </ThemeProvider>
 
 
-                                    />
-                                 </Grid>
-                              </Grid>
-                              <Button onClick={EditHandler} variant="contained" style={{
-                                 backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                 paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                              }}>
-                                 Editar Expediente
-                              </Button>
-                           </Box>
-                        </div>
-                     ))}
-                  </div>
-               </Modal>
-            </div>
-         </div>
-      </div>
+         </div >
+      </div >
+
    );
 
 
