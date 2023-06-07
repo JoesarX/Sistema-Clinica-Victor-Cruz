@@ -395,7 +395,7 @@ const Dashboard = () => {
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value" style={{position: 'absolute',left:'460px',top:'597px'}}>{patient.heartRate}</span>
+                                <span className="vitals-value" style={{position: 'absolute',left:'455px',top:'597px'}}>{patient.heartRate}</span>
                             )}
                         </span> <span className="vitals-value"style={{position: 'absolute',left:'485px',top:'597px'}}>bpm</span>
                     </p>
