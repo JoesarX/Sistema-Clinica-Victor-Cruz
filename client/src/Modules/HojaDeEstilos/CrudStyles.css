@@ -1,21 +1,36 @@
-
 .crudGrid {
-    background-color: rgb(227, 235, 248);
+    /* background-color: rgb(227, 235, 248); */
     height: 100vh;
-    width: 100%;
     display: flex;
     justify-content: center;
     border: none;
+    flex-direction: column;
+    padding: 0%;
+}
+
+.headerDiv {
+    height: 50px;
+    padding-left: 5%;
+    padding-top: 1vh;
 }
 
 .dataGridBox {
     display: flex;
     justify-content: center;
     border: none;
-    width: 100%;
-    margin-left: 15px;
-    margin-right: 15px;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 83vh;
 }
+
+.innerCard {
+    margin: 0;
+    padding: 0;
+    border: none;
+    width: 100%;
+}
+
 
 .MuiDataGrid-root {
     border: none !important;
@@ -31,7 +46,7 @@
 }
 
 .MuiDataGrid-row {
-    margin-bottom: 20px;
+    margin-bottom: 8px;
     border-radius: 16px;
     background-color: #FFFFFF;
     color: rgb(71, 71, 71);
@@ -54,11 +69,13 @@
     color: rgb(71, 71, 71);
     font-size: 17px;
 }
+
+
 .modalContainer {
     background-color: rgb(227, 235, 248);
-    width: 50%;
-    height: 80vh;
-
+    width: 600px;
+    height: 500px;
+    border: none;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -71,7 +88,7 @@
     padding: 30px;
     border-radius: 30px;
     box-sizing: border-box;
-    overflow: auto;
+    overflow: hidden;
 }
 
 .modalHeader {
@@ -81,8 +98,9 @@
 form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 20px;
     width: 100%;
+
 }
 
 .modalContainer .modalHeader {
@@ -92,29 +110,34 @@ form {
 .modalContainer form {
     display: flex;
     flex-direction: column;
-    gap: 4vh;
+    gap: 20px;
+
 }
 
 .modalContainer form .MuiFormControl-root {
     width: 100%;
     background-color: white;
     border-radius: 5px;
+
 }
+
 
 .modalContainer form .radioGroupContainer {
     display: flex;
     justify-content: center;
+
+
 }
+
+input[type='password'] {
+    border: none !important ;
+  }
 
 .labelFocused {
     font-size: 20px;
 }
 
-@media (max-height: 800px) {
-    .modalContainer form {
-        gap: 2vh;
-    }
-}
+
 
 @media (max-width: 600px) {
     .modalContainer {
@@ -125,11 +148,11 @@ form {
     .modalContainer form {
         display: flex;
         flex-direction: column;
-        gap: 1vh;
+        gap: 12px;
     }
+
     .modalHeader {
         font-size: 24px;
         margin-bottom: 10px;
     }
 }
-
