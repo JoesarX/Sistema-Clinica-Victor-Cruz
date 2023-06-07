@@ -100,7 +100,7 @@ const Home = () => {
                 <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
             </div>
             <div className="content-header-banner">
-                SOBRE NOSOTROS
+                SOBRE <span style={{ color: '#223240', marginLeft: '10px' }}>NOSOTROS</span>
             </div>
             <div className="home-about-us-container">
                 <div className='about-us-content'>
