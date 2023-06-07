@@ -17,31 +17,27 @@ import { Box, Button } from '@mui/material'
 
 //STYLES
 
-import './ExpedientesStyle.css';
+import './ModalStyle.css';
 
 
-const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
+const EditExpedientesModal = ({setExpedientes, onClose, expedienteData }) => {
+
     const navigate = useNavigate();
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [expediente, setExpediente] = useState({
-        nombre: '',
-        edad: '',
-        fecha_nacimiento: '',
-        sexo: 'Masculino',
-        correo: '',
-        telefono: '',
-        numid: null,
-        estado_civil: '',
-        padecimientos: '',
-        ocupacion: ''
-    });
+        nombre: expedienteData.nombre || '',
+        edad: expedienteData.edad || '',
+        fecha_nacimiento: expedienteData.fecha_nacimiento || '',
+        sexo: expedienteData.sexo || 'Masculino',
+        correo: expedienteData.correo || '',
+        telefono: expedienteData.telefono || '',
+        numid: expedienteData.numid || null,
+        estado_civil: expedienteData.estado_civil || '',
+        padecimientos: expedienteData.padecimientos || '',
+        ocupacion: expedienteData.ocupacion || ''
+      });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a'];
 
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen);
-        setIsSubmitting(false);
-    };
 
     const handleModalFieldChange = (e) => {
         setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }));
@@ -70,21 +66,22 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
         e.preventDefault();
         const age = fecha_nacimiento ? calculateAge(fecha_nacimiento) : '';
         setExpediente((prevState) => ({ ...prevState, edad: age }));
-
+      
         setIsSubmitting(true);
-
+      
         if (validations()) {
-            try {
-                // Perform the form submission logic
-                await ExpedientesService.postExpedientes(expediente);
-                alert('Expediente Agregado');
-                toggleModal();
-            } catch (error) {
-                // Handle error if any
-                console.log('Error submitting expediente:', error);
-            }
+          try {
+            await ExpedientesService.updateExpediente({
+              ...expedienteData, // Include existing expediente data
+              ...expediente // Include updated expediente data
+            });
+            alert('Expediente Modificado');
+            onClose();
+          } catch (error) {
+            console.log('Error updating expediente:', error);
+          }
         }
-    };
+      };
 
     const [estado_civil, setSelectedOption] = useState(null);
 
@@ -94,10 +91,10 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
             alert('Nombre Completo es requerido');
             return false;
         }
-        if (edad === null || edad === '' || edad < 0) {
-            alert('Una edad valida es requerida');
-            return false;
-        }
+        // if (edad === null || edad === '' || edad < 0) {
+        //     alert('Una edad valida es requerida');
+        //     return false;
+        // }
         const selectedDate = new Date(fecha_nacimiento);
         const currentDate = new Date();
         if (isNaN(selectedDate.getTime())) {
@@ -120,11 +117,7 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
     };
 
     useEffect(() => {
-        // Validation login
-        if (!isLoggedIn) {
-            // Redirect if verification fails
-            navigate("/iniciarsesion"); // Redirect to login page
-        }
+
         const fetchAllExpedientes = async () => {
             try {
                 const expedientesData = await ExpedientesService.getAllExpedientes();
@@ -145,7 +138,7 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
     }, [isSubmitting]);
 
     return (
-        <Modal open={isModalOpen} onClose={toggleModal}>
+        <Modal open={true} onClose={onClose}>
             <div className='modalContainer'>
                 <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
                 <Box
@@ -158,7 +151,8 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
                     noValidate
                     autoComplete="off"
                 >
-                    <TextField id="nombre" label="Nombre Completo" variant="outlined" onChange={handleModalFieldChange} name='nombre' />
+                    <TextField id="nombre" label="Nombre Completo" variant="outlined" value={expediente.nombre} onChange={handleModalFieldChange} name='nombre' />
+                    <Box mt={.5}></Box>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -174,7 +168,9 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
                             </div>
                         </Grid>
                     </Grid>
+                    <Box mt={.5}></Box>
                     <TextField id="ocupacion" label="Ocupación" variant="outlined" onChange={handleModalFieldChange} name='ocupacion' />
+                    <Box mt={.5}></Box>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField id="correo" label="Correo Electrónico" variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
@@ -183,6 +179,7 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
                             <TextField id="telefono" label="Teléfono" variant="outlined" onChange={handleModalFieldChange} name='telefono' />
                         </Grid>
                     </Grid>
+                    <Box mt={.5}></Box>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField id="numid" label="Número de Identidad" variant="outlined" onChange={handleModalFieldChange} name='numid' />
@@ -203,7 +200,7 @@ const EditExpedientesModal = ({ isLoggedIn, setExpedientes }) => {
                         </Grid>
                     </Grid>
                     <Button onClick={handleModalSubmit} variant="contained" style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px', width: '300px', fontSize: '18px', alignSelf: 'center' }}>
-                        Agregar Expediente
+                        Editar Expediente
                     </Button>
                 </Box>
             </div>
