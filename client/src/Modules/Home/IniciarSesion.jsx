@@ -35,7 +35,7 @@ const IniciarSesion = () => {
            }else if(UsuariosService.loginAdmin(email,password)){
                alert("Bienvenido Doctor!");
                localStorage.setItem("AdminLoggedIn", true);
-               navigate("/dashboard"); 
+               navigate("/Administrador"); 
            }else{
                alert("Email o contraseña incorrecta!");
            }

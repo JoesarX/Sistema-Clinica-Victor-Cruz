@@ -8,17 +8,41 @@ const Topbar = () => {
 
     const navigate = useNavigate();
 
+    const handleReturnClick = () => {
+        navigate('/');
+    };
+
+    const handleIniciarClick = () => {
+        navigate('/iniciarsesion');
+    };
+
+    // const handleCitaClick = () => {
+    //     navigate('/citas');
+    // };
+
+    // const handleLabClick = () => {
+    //     navigate('/laboratorio');
+    // };
+
+    const handleServicios = () => {
+        navigate('/servicios');
+    };
+
+    const handleAcercade = () => {
+        navigate('/acerca-de');
+    };
+
     return (
         <footer class="text-center text-lg-start custom-colors custom-footer">
             <section class="d-flex justify-content-between py-2 px-0 border-bottom footer-info">
                 <div class="row justify-content-md-center footer-info mb-2">
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto text-center">
                         <FontAwesomeIcon icon={faHome} />
-                        <div class="spacing"/>
+                        <div class="spacing" />
                         Colonia Kennedy, Tegucigalpa, M.D.C, Honduras</div>
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto text-center">
                         <FontAwesomeIcon icon={faEnvelope} />
-                        <div class="spacing"/>
+                        <div class="spacing" />
                         clinica.drvictorcruz@gmail.com
                     </div>
                     <div class="col-md-3 col-lg-4 col-xl-3 mx-auto text-center">

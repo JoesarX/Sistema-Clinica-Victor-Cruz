@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
-import Topbar from './Topbar';
+
+import Topbar from './TopbarHome';
 import Footer from './Footer';
 
 import doctor_slide from '../Imagenes/doctor_slide.jpeg';
@@ -26,13 +27,6 @@ const Home = () => {
         navigate('/citas');
     };
 
-    const handleServicesClick = () => {
-        navigate('/servicios');
-    };
-
-    const handleAboutUsClick = () => {
-        navigate('acerca-de');
-    };
 
     const properties = {
         duration: 3000,
@@ -58,77 +52,88 @@ const Home = () => {
                     </div>
                 </Slide>
             </div>
-            <div className="content-header-banner">
+            <div className="servicios" style={{ display: 'flex', justifyContent: 'center', fontSize: '50px', color: '#ffff', marginBottom: '35px' }}>
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
-            <div className="services-container">
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Clínica</h1>
-                        <div className="service-text">
-                            Dedicada a brindar servicios de salud de alta calidad y atención médica integral.
+
+
+            <div className="container">
+                <div className="container1">
+                    <div className="iconContainer">
+                        <div style={{ position: 'relative', left: '70px', top: '80px' }}>
+                            <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
                         </div>
                     </div>
-                </div>
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                    <h1 className="head1">Clinica</h1>
+                    <div className="textoC">
+                        Dedicada a brindar servicios de salud de alta calidad y atención médica integral
                     </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Salud Ocupacional</h1>
-                        <div className="service-text">
-                            Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.
+                </div>
+                <div className="container1">
+                    <div className="iconContainer">
+                        <div style={{ position: 'relative', left: '85px', top: '70px' }}>
+                            <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
+
+                    </div>
+                    <h1 className="head1">Salud ocupacional</h1>
+                    <div className="textoS">
+                        Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.
+                    </div>
+                </div>
+                <div className="container1">
+                    <div className="iconContainer" >
+                        <div style={{ position: 'relative', left: '83px', top: '70px' }}>
+                            <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                        </div>
+
+                    </div>
+
+                    <h1 className="head1">Laboratorio</h1>
+                    <div className="textoL">
+                        Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.
+                    </div>
+                </div>
+            </div>
+
+            <div className="container2">
+                <h1 className="ruta">Estamos ubicados en:</h1>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn"
+                    width="400"
+                    height="300"
+                    style={{ border: "0" }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    className='frame'
+                ></iframe>
+                <div className="linea">
+                </div>
+
+
+                {/*<div>
+                    <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', left: '50px', top: '85px', fontSize: '110px' }} />
+                    <h1 className="agendar" style={{ position: 'relative', left: '140px', top: '-30px' }}>Agenda una cita</h1>
+                    <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-75px' }}>Agenda ya!</button>
+    </div> */}
+
+
+                <section className="contact">
+                    <div className="component">
+                        <div className="icon-wrapper">
+                            <FontAwesomeIcon icon={faCalendarDays} className="icon" />
+                        </div>
+                        <div className="text-wrapper">
+                            <h1 className="agendar">Revisa Nuestra Diponibilidad</h1>
+                            <button className="btnA" onClick={handleCitaClick}>Agenda ya!</button>
                         </div>
                     </div>
-                </div>
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Laboratorio</h1>
-                        <div className="service-text">
-                            Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="button-container">
-                <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
-            </div>
-            <div className="content-header-banner">
-                SOBRE <span style={{ color: '#223240', marginLeft: '10px' }}>NOSOTROS</span>
-            </div>
-            <div className="home-about-us-container">
-                <div className='about-us-content'>
-                    <div className='content-header align-left'>Misión</div>
-                    <div className='about-us-text'>
-                        Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
-                        <br /><br />Estamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.
-                    </div>
-                    <button class="see-more-button about-us" onClick={handleAboutUsClick}>Más Información</button>
-                </div>
-                <div className='about-us-content'>
-                    <div className="content-header align-left small-text">Estamos ubicados en:</div>
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn"
-                        allowFullScreen=""
-                        loading="lazy"
-                        className='google-map-frame'
-                    >
-                    </iframe>
-                </div>
-            </div>
-            <div className="smooth-line" />
-            <div className="home-schedule-container">
-                <FontAwesomeIcon icon={faCalendarDays} className="content-header white-text schedule-calendar-icon" />
-                <div className="text-wrapper">
-                    <div className="content-header white-text smaller-text">Recuerda ver los horarios disponibles para poder agendar tu cita.</div>
-                </div>
-                <button className="see-more-button schedule-appointment" onClick={handleCitaClick}>Agenda ya!</button>
+                </section>
+
+
+
+
+
             </div>
             <Footer />
         </div>

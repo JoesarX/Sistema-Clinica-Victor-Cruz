@@ -4,11 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 import Footer from './Footer';
 import Topbar from './Topbar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 const RegistrarUser = () => {
-
   const validations = () => {
     const { correouser, nombre, edad, pregunta, respuesta, password } = user
     if (correouser === null || correouser === '') {
@@ -24,6 +21,7 @@ const RegistrarUser = () => {
       return false
     }
 
+
     if (pregunta === null || pregunta === '') {
       alert('La pregunta es requerido')
       return false
@@ -36,31 +34,8 @@ const RegistrarUser = () => {
       alert('La password es requerida')
       return false
     }
-    if (!validateCapital && !validateLength && !validateSpecial && !validateNumber) {
-      return false;
-    }
-
     return true
   }
-
-  const validateLength = (password) => {
-    return password.length >= 8;
-  };
-
-  // MAGIA DE REGEX WOWWWWWW
-  const validateCapital = (password) => {
-    return /[A-Z]/.test(password);
-  };
-
-  const validateNumber = (password) => {
-    return /\d/.test(password);
-  };
-
-  const validateSpecial = (password) => {
-    return /[!@#$%^&*_;':"|,.<>/?]/.test(password);
-  };
-  // FIN DE MAGIA DE REGEX WOWWW
-
   const [user, setUser] = React.useState({
     correouser: '',
     nombre: '',
@@ -69,7 +44,6 @@ const RegistrarUser = () => {
     respuesta: '',
     password: ''
   });
-
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -87,17 +61,25 @@ const RegistrarUser = () => {
       alert('User Agregado')
       navigate('/iniciarsesion');
     }
+
+
   }
+
+  const handleReturnClick = () => {
+    navigate('/');
+
+  };
 
   return (
 
     <div className="scrollable-page">
       <Topbar />
+      <div></div>
       <div className="register-form">
         <h2>Registrar usuario</h2>
         <form class='register-details'>
           <div className="form-group">
-            <label htmlFor="correo">Correo Electrónico*</label>
+            <label htmlFor="correo">Correo*</label>
             <input
               type="text"
               onChange={handleChange}
@@ -154,36 +136,6 @@ const RegistrarUser = () => {
               required
             />
           </div>
-
-          {/* FUNKY COSAS DE CONTRASEÑAS */}
-          <div className="pw-validation-area">
-            <div className="pw-item">
-              <FontAwesomeIcon icon={validateLength(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateLength(user.password) ? 'valid' : ''}`} />
-              <div className="spacing" />
-              Ocho (8) carácteres mínimo
-            </div>
-            <div className="pw-item">
-              <FontAwesomeIcon icon={validateCapital(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateCapital(user.password) ? 'valid' : ''}`} />
-              <div className="spacing" />
-              Una (1) MAYÚSCULA mínimo
-            </div>
-            <div className="pw-item">
-              <FontAwesomeIcon icon={validateNumber(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateNumber(user.password) ? 'valid' : ''}`} />
-              <div className="spacing" />
-              Un (1) carácter numérico mínimo
-            </div>
-            <div className="pw-item">
-              <FontAwesomeIcon icon={validateSpecial(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateSpecial(user.password) ? 'valid' : ''}`} />
-              <div className="spacing" />
-              Un (1) carácter especial (!, @, #, $, etc.)
-            </div>
-          </div>
-          {/* FIN FUNKY COSAS DE CONTRASEÑAS */}
-
           <button type="submit" onClick={handleSubmit} >Registrarse</button>
         </form>
       </div>
