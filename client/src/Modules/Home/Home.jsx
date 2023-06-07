@@ -104,15 +104,15 @@ const Home = () => {
             </div>
             <div className="home-about-us-container">
                 <div className='about-us-content'>
-                    <div className='content-header'>Misión</div>
+                    <div className='content-header align-left'>Misión</div>
                     <div className='about-us-text'>
-                        Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades. 
-                        <br/><br/>Estamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.
+                        Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
+                        <br /><br />Estamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.
                     </div>
                     <button class="see-more-button about-us" onClick={handleAboutUsClick}>Más Información</button>
                 </div>
                 <div className='about-us-content'>
-                    <div className="content-header">Estamos ubicados en:</div>
+                    <div className="content-header align-left small-text">Estamos ubicados en:</div>
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn"
                         allowFullScreen=""
@@ -123,17 +123,13 @@ const Home = () => {
                 </div>
             </div>
             <div className="smooth-line" />
-            <section className="contact">
-                <div className="component">
-                    <div className="icon-wrapper">
-                        <FontAwesomeIcon icon={faCalendarDays} className="icon" />
-                    </div>
-                    <div className="text-wrapper">
-                        <h1 className="agendar">Revisa Nuestra Diponibilidad</h1>
-                        <button className="btnA" onClick={handleCitaClick}>Agenda ya!</button>
-                    </div>
+            <div className="home-schedule-container">
+                <FontAwesomeIcon icon={faCalendarDays} className="content-header white-text schedule-calendar-icon" />
+                <div className="text-wrapper">
+                    <div className="content-header white-text smaller-text">Recuerda ver los horarios disponibles para poder agendar tu cita.</div>
                 </div>
-            </section>
+                <button className="see-more-button schedule-appointment" onClick={handleCitaClick}>Agenda ya!</button>
+            </div>
             <Footer />
         </div>
     );
