@@ -6,7 +6,7 @@
   background-color: #E4EBF9;
 }
 
-.content-header {
+.content-header-banner {
   display: flex;
   justify-content: center;
   font-size: 50px;
@@ -22,7 +22,49 @@
   box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
 }
 
-.iconContainer {
+.about-us-content {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 15px;
+  justify-items: center;
+  align-items: center;
+}
+
+.about-us-text {
+  padding: 0px 20px;
+  font-size: 20px;
+  color: #000000;
+  word-wrap: break-word;
+  align-self: flex-start;
+  font-family: 'Inter';
+  margin-bottom: 20px;
+  /* TEMPORAL */
+  /* background-color: rgb(0, 0, 255, 0.9);
+  background-size: 10px 10px;
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
+.content-header {
+  display: flex;
+  justify-content: center;
+  font-size: 50px;
+  color: #1E60A6;
+  height: fit-content;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  transition: all 0.3 ease;
+  font-family: 'Montserrat';
+  text-align: center;
+  /* TEMPORALLL */
+  /* background-color: rgb(255, 0, 0, 0.7);
+  background-size: 10px 10px;
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
+.service-icon-container {
   width: 260px;
   height: 260px;
   min-height: 260px;
@@ -100,7 +142,7 @@
   justify-content: center;
   gap: 5vw;
   transition: all 0.3 ease;
-  margin: 10px auto;
+  margin: 20px auto;
   padding: 0px 50px;
   /* temporal */
   /* background-color: rgb(255, 0, 0, 0.3);
@@ -108,8 +150,7 @@
   background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
-.see-more-services-button {
-  width: 500px;
+.see-more-button {
   height: 50px;
   padding: 14px;
   min-width: 370px;
@@ -123,29 +164,41 @@
   font-size: large;
 }
 
-.see-more-services-button:hover {
+.see-more-button .services {
+  width: 500px;
+}
+
+.see-more-button .about-us {
+  width: 50%;
+  margin-top: 20px;
+}
+
+.see-more-button:hover {
   background-color: #3b597e;
 }
 
-.container2 {
-  height: 1000px;
-  width: 100%;
+.home-about-us-container {
+  width: 90vw;
+  max-width: 2000px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
+  padding: 50px;
+  margin: 50px auto 20px auto;
+  gap: 20px;
   /* TEMPORAL */
-  background-color: rgb(0, 255, 0, 0.3);
+  /* background-color: rgb(0, 255, 0, 0.3);
   background-size: 10px 10px;
-  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px);
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
-.footer {
-  height: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #1E60A6;
-  padding: 35px;
+.home-about-us-container > .content-header{
+  margin: 10px auto 10px auto;
+  /* TEMPORAL */
+  /* background-color: rgb(255, 0, 255, 0.9);
+  background-size: 10px 10px;
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .service-header {
@@ -158,27 +211,16 @@
   padding-top: 10px;
   margin-bottom: -10px;
   height: 100px;
-  /* TEMPORAL
-  background-color: rgb(0, 255, 0, 0.3);
+  /* TEMPORAL */
+  /* background-color: rgb(0, 255, 0, 0.3);
   background-size: 10px 10px;
   background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
-.ruta {
-  width: 420px;
-  height: 50px;
-  text-align: center;
-  font-size: 40px;
-  background-color: #346A78;
-  border-radius: 10px;
-  font-weight: normal;
-  color: #ffff;
-  margin: 100px;
-}
-
 .google-map-frame {
-  height: 1000px;
-  width: 50%;
+  height: 500px;
+  width: 100%;
+  margin-top: 0px;
   min-width: 400px;
   max-width: 1500px;
   border-radius: 20px;
@@ -190,6 +232,16 @@
   background-color: #346A78;
   height: 4px;
   width: 1000px;
+}
+
+.smooth-line {
+  justify-self: center;
+  align-self: center;
+  background-color: #346A78;
+  margin: 50px auto 20px auto;
+  height: 4px;
+  width: 75%;
+  max-width: 2000px;
 }
 
 .botonA {
@@ -225,7 +277,7 @@
 }
 
 /* GOTTA USE THAT SPACE PROPERLY! */
-@media only screen and (min-width: 850px) and (max-width: 1260px) {
+@media only screen and (min-width: 780px) and (max-width: 1260px) {
   .services-container {
     margin: 0px auto 20px auto;
     padding-top: 0px;
@@ -241,7 +293,7 @@
   .service-container {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 110%;
     align-items: center;
     align-content: center;
     justify-content: center;
@@ -270,39 +322,73 @@
     align-self: center;
   }
 
-  .iconContainer {
+  .service-icon-container {
     position: static;
     width: 2vw;
     aspect-ratio: 1 / 1;
   }
 
   .google-map-frame {
-    width: 80%
+    width: 80%;
   }
 
 }
 
+@media only screen and  (max-width: 900px) {
+  .home-about-us-container {
+    flex-direction: column;
+  }
+
+  .about-us-content {
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* SMALL DEVICES */
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 780px) {
   .services-container {
     flex-direction: column;
     align-content: flex-start;
     height: auto;
     padding-top: 60px;
     padding-bottom: 20px;
-    gap: 70px;
+    margin-top: 20px;
+    gap: 80px;
+  }
+
+  .home-about-us-container {
+    flex-direction: column;
+  }
+
+  .about-us-content {
+    width: 100%;
   }
 
   .service-container {
     width: 20vw;
+    height: fit-content;
+    gap: 0 !important;
   }
 
-  .iconContainer {
+  .service-header {
+    height: fit-content;
+    padding: 0;
+    align-items: center;
+  }
+
+  .service-icon-container {
     margin-top: 20px;
   }
 
+  .service-container .service-text {
+    margin-top: 5px;
+  }
+
   .google-map-frame {
-    width: 80%
+    width: 80%;
+    height: auto;
+    aspect-ratio: 1 / 1;
   }
 
   .component {
@@ -334,22 +420,6 @@
     font-size: 32px;
   }
 
-  .btnA {
-    padding: 10px 20px;
-    font-size: 24px;
-    background-color: #337ab7;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-    margin-bottom: 45px;
-    margin-top: 1px;
-  }
-
-  .btnA:hover {
-    background-color: #23527c;
-  }
-
 }
 
 @media (max-width: 768px) {
@@ -367,7 +437,12 @@
 }
 
 @media only screen and (max-width: 600px) {
+  .content-header-banner {
+    flex-direction: column;
+    text-align: center;
+  }
   .content-header {
     flex-direction: column;
+    text-align: center;
   }
 }

@@ -30,6 +30,10 @@ const Home = () => {
         navigate('/servicios');
     };
 
+    const handleAboutUsClick = () => {
+        navigate('acerca-de');
+    };
+
     const properties = {
         duration: 3000,
         transitionDuration: 500,
@@ -54,12 +58,12 @@ const Home = () => {
                     </div>
                 </Slide>
             </div>
-            <div className="content-header">
+            <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
             <div className="services-container">
                 <div className="service-container">
-                    <div className="iconContainer">
+                    <div className="service-icon-container">
                         <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
                     </div>
                     <div className="service-text-elements">
@@ -70,7 +74,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="service-container">
-                    <div className="iconContainer">
+                    <div className="service-icon-container">
                         <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
                     </div>
                     <div className="service-text-elements">
@@ -81,7 +85,7 @@ const Home = () => {
                     </div>
                 </div>
                 <div className="service-container">
-                    <div className="iconContainer">
+                    <div className="service-icon-container">
                         <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
                     </div>
                     <div className="service-text-elements">
@@ -93,45 +97,43 @@ const Home = () => {
                 </div>
             </div>
             <div class="button-container">
-                <button class="see-more-services-button" onClick={handleServicesClick}>Ver más...</button>
+                <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
             </div>
-
-            <div className="container2">
-                <h1 className="ruta">Estamos ubicados en:</h1>
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn"
-                    allowFullScreen=""
-                    loading="lazy"
-                    className='google-map-frame'
-                ></iframe>
-                <div className="linea">
-                </div>
-
-
-                {/*<div>
-                    <FontAwesomeIcon icon={faCalendarDays} style={{ position: 'relative', left: '50px', top: '85px', fontSize: '110px' }} />
-                    <h1 className="agendar" style={{ position: 'relative', left: '140px', top: '-30px' }}>Agenda una cita</h1>
-                    <button className="btnA" onClick={handleCitaClick} style={{ position: 'relative', top: '-75px' }}>Agenda ya!</button>
-    </div> */}
-
-
-                <section className="contact">
-                    <div className="component">
-                        <div className="icon-wrapper">
-                            <FontAwesomeIcon icon={faCalendarDays} className="icon" />
-                        </div>
-                        <div className="text-wrapper">
-                            <h1 className="agendar">Revisa Nuestra Diponibilidad</h1>
-                            <button className="btnA" onClick={handleCitaClick}>Agenda ya!</button>
-                        </div>
+            <div className="content-header-banner">
+                SOBRE <span style={{ color: '#223240', marginLeft: '10px' }}>NOSOTROS</span>
+            </div>
+            <div className="home-about-us-container">
+                <div className='about-us-content'>
+                    <div className='content-header'>Misión</div>
+                    <div className='about-us-text'>
+                        Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades. 
+                        <br/><br/>Estamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.
                     </div>
-                </section>
-
-
-
-
-
+                    <button class="see-more-button about-us" onClick={handleAboutUsClick}>Más Información</button>
+                </div>
+                <div className='about-us-content'>
+                    <div className="content-header">Estamos ubicados en:</div>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn"
+                        allowFullScreen=""
+                        loading="lazy"
+                        className='google-map-frame'
+                    >
+                    </iframe>
+                </div>
             </div>
+            <div className="smooth-line" />
+            <section className="contact">
+                <div className="component">
+                    <div className="icon-wrapper">
+                        <FontAwesomeIcon icon={faCalendarDays} className="icon" />
+                    </div>
+                    <div className="text-wrapper">
+                        <h1 className="agendar">Revisa Nuestra Diponibilidad</h1>
+                        <button className="btnA" onClick={handleCitaClick}>Agenda ya!</button>
+                    </div>
+                </div>
+            </section>
             <Footer />
         </div>
     );

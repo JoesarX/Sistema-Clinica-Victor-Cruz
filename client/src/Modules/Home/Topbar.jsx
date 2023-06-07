@@ -38,7 +38,7 @@ const Topbar = () => {
     };
 
     return (
-        <nav class="navbar navbar-expand-md custom-colors custom-navbar">
+        <nav class="navbar navbar-expand-lg custom-colors custom-navbar">
             <a class="navbar-brand custom-colors">LOGO</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuInfo" aria-controls="menuInfo" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
