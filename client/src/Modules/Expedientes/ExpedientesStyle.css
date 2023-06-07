@@ -1,5 +1,6 @@
 
-.crudGrid {
+
+.expedientesGrid {
     background-color: rgb(227, 235, 248);
     height: 100vh;
     width: 100%;
@@ -8,7 +9,7 @@
     border: none;
 }
 
-.dataGridBox {
+.expedientesGridBox {
     display: flex;
     justify-content: center;
     border: none;
@@ -54,82 +55,3 @@
     color: rgb(71, 71, 71);
     font-size: 17px;
 }
-.modalContainer {
-    background-color: rgb(227, 235, 248);
-    width: 50%;
-    height: 80vh;
-
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 30px;
-    border-radius: 30px;
-    box-sizing: border-box;
-    overflow: auto;
-}
-
-.modalHeader {
-    text-align: center;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
-.modalContainer .modalHeader {
-    margin-bottom: 20px;
-}
-
-.modalContainer form {
-    display: flex;
-    flex-direction: column;
-    gap: 4vh;
-}
-
-.modalContainer form .MuiFormControl-root {
-    width: 100%;
-    background-color: white;
-    border-radius: 5px;
-}
-
-.modalContainer form .radioGroupContainer {
-    display: flex;
-    justify-content: center;
-}
-
-.labelFocused {
-    font-size: 20px;
-}
-
-@media (max-height: 800px) {
-    .modalContainer form {
-        gap: 2vh;
-    }
-}
-
-@media (max-width: 600px) {
-    .modalContainer {
-        width: 85%;
-        height: 98vh;
-    }
-
-    .modalContainer form {
-        display: flex;
-        flex-direction: column;
-        gap: 1vh;
-    }
-    .modalHeader {
-        font-size: 24px;
-        margin-bottom: 10px;
-    }
-}
-

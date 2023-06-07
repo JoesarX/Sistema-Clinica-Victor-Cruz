@@ -20,8 +20,7 @@ import swal from 'sweetalert';
 
 //STYLES
 import ExpedientesService from '../../Services/ExpedientesService';
-import '../HojaDeEstilos/CrudStyles.css';
-import NavBar from '../NavBar';
+import './ExpedientesStyle.css';
 
 
 const Expedientes = () => {
@@ -175,7 +174,6 @@ const Expedientes = () => {
    //==================================================================================================================================================================================
 
 
-
    useEffect(() => {
       // Validación login
       if (!isLoggedIn) {
@@ -314,23 +312,8 @@ const Expedientes = () => {
                   onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
                />
             </ThemeProvider>
+            
 
-
-                                    />
-                                 </Grid>
-                              </Grid>
-                              <Button onClick={EditHandler} variant="contained" style={{
-                                 backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                 paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                              }}>
-                                 Editar Expediente
-                              </Button>
-                           </Box>
-                        </div>
-                     ))}
-                  </div>
-               </Modal>
-            </div>
          </div>
       </div>
    );
