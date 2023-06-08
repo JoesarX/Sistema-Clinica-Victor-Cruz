@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Stack, Dialog, DialogContent, DialogTitle, Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { Link } from "react-router-dom"
+import { TextField, Button, Stack, Dialog, DialogContent, DialogTitle, Box, FormControl, Select, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AdministradoresService from '../../Services/AdministradoresService';
 
@@ -149,10 +148,10 @@ const EditAdmins = (props) => {
                             </Stack>
                             <Stack spacing={20} direction="row" sx={{ marginBottom: 0 }}>
                                 <div>
-                                    <h3  ><u>Identidad</u></h3>
+                                    <h3><u>Identidad</u></h3>
                                 </div>
                                 <div>
-                                    <h3 ><u>Correo Electrónico</u></h3>
+                                    <h3><u>Correo Electrónico</u></h3>
                                 </div>
                             </Stack>
                             <Stack spacing={2} direction="row" sx={{ marginBottom: 0 }}>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import { Menu, Logout, People, Home, Inventory, Domain, LocalShipping, Medication, Contacts } from '@mui/icons-material';
+import { Menu, Logout, People, Home, Medication, Contacts } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {

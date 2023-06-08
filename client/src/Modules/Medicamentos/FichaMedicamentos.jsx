@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Dialog } from '@mui/material';
 import './Ficha.css'
 const FichaMedicamentos = (props) => {
     const { open, setOpenPopup, setNombreF, setCategoriaF, setPrecioUnitarioF, setStockF, setImagenF,setViaF } = props;
