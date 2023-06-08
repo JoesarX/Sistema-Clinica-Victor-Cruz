@@ -235,8 +235,7 @@ const Medicamentos = () => {
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
         setVia(row.via);
-        setImagen('https://thumbs.dreamstime.com/b/comprimido-35700453.jpg');
-    }
+        setImagen('https://d1cft8rz0k7w99.cloudfront.net/n/8/f/c/0/8fc026cdc36fe20694f1990b809ba97e91a73f81_Overthecountermedication_104918_01.png');     }
 
 
 
