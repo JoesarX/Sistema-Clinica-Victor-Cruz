@@ -5,6 +5,16 @@ import './Medicamentos.css';
 import EditMedicamentosModal from './EditMedicamentosModal.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
+import { storage } from '../../firebase';
+//import { storage } from "./firebase";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  list,
+} from "firebase/storage";
+import { v4 } from "uuid";
 
 //GRID
 import { Box, Button } from '@mui/material'
@@ -188,7 +198,8 @@ const Medicamentos = () => {
         stock: '',
         precio_unitario: '',
         via: '',
-        dosis: ''
+        dosis: '',
+        urlfoto: ''
     })
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -248,7 +259,7 @@ const Medicamentos = () => {
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
         setVia(row.via);
-        setImagen('https://thumbs.dreamstime.com/b/comprimido-35700453.jpg');
+        setImagen(imageUrl);
     }
 
 
@@ -261,9 +272,22 @@ const Medicamentos = () => {
         medicamento.precio_unitario = null;
         medicamento.via = null;
         medicamento.dosis = null;
+        medicamento.urlfoto = null;
     };
 
-
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
+    const imagesListRef = ref(storage, "images/");
+    const uploadFile = () => {
+        if (imageUpload == null) return;
+        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+        uploadBytes(imageRef, imageUpload).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+                setImageUrl(url); // Update the state with the URL
+                console.log(url);
+              });
+        });
+    };
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
@@ -277,10 +301,9 @@ const Medicamentos = () => {
                 // Perform the form submission logic
                 await MedicamentosService.postMedicamentos(medicamento);
                 alert('Medicamento Agregado');
+                uploadFile();
                 toggleModal();
-
-
-
+                
             } catch (error) {
                 // Handle error if any
                 console.log('Error submitting medicamento:', error);
@@ -437,7 +460,7 @@ const Medicamentos = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-
+    
     return (
 
         <div className='crudGrid'>
@@ -542,15 +565,17 @@ const Medicamentos = () => {
                                         <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' />
                                     </Grid>
                                 </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={3} sm={1}>
-                                        <IconButton >
-                                            <UploadIcon />
-                                        </IconButton>
+                                <Grid container spacing={2} >
+                                    <Grid item xs={3} sm={1} >
+                                        <input
+                                            type="file"
+                                            onChange={(event) => {
+                                                setImageUpload(event.target.files[0]);
+                                            }}
+                                            
+                                        />
                                     </Grid>
-                                    <Grid item xs={3} sm={11}>
-                                        <TextField id="picURL" variant="outlined" name='dosis' disabled ='true'/>
-                                    </Grid>
+                                    
                                 </Grid>
 
                                 <Button onClick={handleModalSubmit} variant="contained" style={{
