@@ -77,6 +77,10 @@ const Expedientes = () => {
       setIsEditModalOpen(false);
    };
 
+   const handleViewExpedientesClick = (id) => {
+      navigate(`/expedientes/dashboard/${id}`);
+   };
+
    const handleDeleteExpedientesClick = (id) => {
       swal({
          title: "¿Estas seguro?",
@@ -172,6 +176,8 @@ const Expedientes = () => {
          </GridToolbarContainer>
       );
    };
+
+
    //==================================================================================================================================================================================
 
 
@@ -292,7 +298,10 @@ const Expedientes = () => {
                            flex: 2,
                            renderCell: (params) => (
                               <div>
-                                 <IconButton onClick={() => handleOpenEditModal(params.row)}>
+                                 <IconButton onClick={() => handleViewExpedientesClick(params.id)}>
+                                    <Visibility />
+                                 </IconButton>
+                                 <IconButton onClick={() => handleOpenEditModal(params.id)}>
                                     <Edit />
                                  </IconButton>
                                  {isEditModalOpen && (
@@ -305,7 +314,6 @@ const Expedientes = () => {
                                  <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                     <Delete />
                                  </IconButton>
-
                               </div>
                            ),
                         },
