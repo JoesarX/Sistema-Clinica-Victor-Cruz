@@ -14,25 +14,32 @@ import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
 
-
+import ExpedientesService from '../../Services/ExpedientesService';
 
 
 const Dashboard = () => {
     const isLoggedIn = localStorage.getItem("AdminLoggedIn");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [expedientes, setExpedientes] = useState([]);
-   const [selectedExpediente, setSelectedExpediente] = useState(null);
+    const [selectedExpediente, setSelectedExpediente] = useState(null);
     const navigate = useNavigate();
+
+    const url = window.location.href;
+    const id = url.substring(url.lastIndexOf('/') + 1);
+
     const [patient, setPatient] = useState({
-        fullName: 'Pedro Daniel Mendoza Amador',
-        numid: '0801-2000-26004',
-        profilePicture: 'ruta-de-la-imagen.jpg',
-        email: 'pedromendoza@gmail.com',
-        dateOfBirth: '01/01/1990',
-        age: '33 años',
-        occupation: 'Ocupación del Paciente',
+        nombre: '',
+        edad: '',
+        fecha_nacimiento: '',
+        sexo: 'Masculino',
+        correo: '',
+        telefono: '',
+        numid: '',
+        estado_civil: '',
+        padecimientos: '',
+        ocupacion: '',
         address: 'Dirección del Paciente',
-        maritalStatus: 'Estado Civil',
+
         medicalHistory: {
             allergies: ['Alergia 1', 'Alergia 2'],
             basicConditions: ['Enfermedad 1', 'Enfermedad 2'],
@@ -60,9 +67,9 @@ const Dashboard = () => {
     });
 
 
-    const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2','Medicamento 1', 'Medicamento 2']);
-    const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2','Alergia 3', 'Alergia 4','Alergia 5', 'Alergia 6','Alergia 7', 'Alergia 8','Alergia 9', 'Alergia 10','Alergia 11', 'Alergia 12','Alergia 13', 'Alergia 14']);
-    const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2','Enfermedad 1', 'Enfermedad 2']);
+    const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2']);
+    const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2', 'Alergia 3', 'Alergia 4', 'Alergia 5', 'Alergia 6', 'Alergia 7', 'Alergia 8', 'Alergia 9', 'Alergia 10', 'Alergia 11', 'Alergia 12', 'Alergia 13', 'Alergia 14']);
+    const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2']);
 
     function Signout() {
         localStorage.clear();
@@ -80,7 +87,32 @@ const Dashboard = () => {
             // Redirigir si no se cumple la verificación
             navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
         }
-    })
+
+        const fetchExpediente = async () => {
+            try {
+                const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
+                console.log(expedienteData);
+
+                setPatient(prevPatient => ({
+                    ...prevPatient,
+                    nombre: expedienteData.nombre,
+                    edad: expedienteData.edad,
+                    fecha_nacimiento: expedienteData.fecha_nacimiento,
+                    sexo: expedienteData.sexo,
+                    correo: expedienteData.correo,
+                    telefono: expedienteData.telefono,
+                    numid: expedienteData.numid,
+                    estado_civil: expedienteData.estado_civil,
+                    padecimientos: expedienteData.padecimientos,
+                    ocupacion: expedienteData.ocupacion
+                }));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        fetchExpediente();
+    }, [id]);
 
     const handleUploadFile = (event) => {
         const file = event.target.files[0];
@@ -167,6 +199,7 @@ const Dashboard = () => {
 
 
 
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsEditingLabel(false);
@@ -176,12 +209,12 @@ const Dashboard = () => {
     const handleOpenEditModal = (expediente) => {
         setSelectedExpediente(expediente);
         setIsEditModalOpen(true);
-     };
-  
-     const handleCloseEditModal = () => {
+    };
+
+    const handleCloseEditModal = () => {
         setSelectedExpediente(null);
         setIsEditModalOpen(false);
-     };
+    };
     return (
         <div className='contenido'>
             <div className='sidebar'>
@@ -237,19 +270,19 @@ const Dashboard = () => {
                         </div>
                         <button onClick={handleOpenEditModal} style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
                         {isEditModalOpen && (
-                                 <EditExpedienteDashboardModal
-                                 onClose={handleCloseEditModal}
-                               />
-                              )}
+                            <EditExpedienteDashboardModal
+                                onClose={handleCloseEditModal}
+                            />
+                        )}
                     </span>
 
                     <div className='textoInfo'>
                         <div className='nombreC'>
-                            <h2 className="nombre"> {patient.fullName}</h2>
+                            <h2 className="nombre"> {patient.nombre}</h2>
                         </div>
                         <div className='correo'>
                             <div className='ccon'>
-                                <p className="correoText">{patient.email}</p>
+                                <p className="correoText">{patient.correo}</p>
                             </div>
                         </div>
                         <div className='numid'>
@@ -257,18 +290,18 @@ const Dashboard = () => {
                         </div>
                         <div className='necon'>
                             <div className='nacio'>
-                                <p className="smallText">{patient.dateOfBirth}</p>
+                                <p className="smallText">{patient.fecha_nacimiento}</p>
                             </div>
                             <div className='edad'>
-                                <p className="smallText">{patient.age}</p>
+                                <p className="smallText">{patient.edad} años</p>
                             </div>
                         </div>
                         <div className='oecon'>
                             <div className='estado'>
-                                <p className="smallText">{patient.maritalStatus}</p>
+                                <p className="smallText">{patient.estado_civil}</p>
                             </div>
                             <div className='ocupacion'>
-                                <p className="smallText">{patient.occupation}</p>
+                                <p className="smallText">{patient.ocupacion}</p>
                             </div>
 
                         </div>
@@ -301,7 +334,7 @@ const Dashboard = () => {
                     <p style={{ color: '#75BD89' }} className="altura">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
-                            <span 
+                            <span
                             // style={{ marginRight: '220px' }}
                             >
                                 Altura
@@ -313,20 +346,20 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="height"
-                                        style={{width:'50px',position: 'absolute',left:'435px',top:'397px'}}
+                                        style={{ width: '50px', position: 'absolute', left: '435px', top: '397px' }}
                                         value={patient.height}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value" style={{position: 'absolute',left:'460px',top:'417px'}}>{patient.height}</span>
+                                <span className="vitals-value" style={{ position: 'absolute', left: '460px', top: '417px' }}>{patient.height}</span>
                             )}
-                        </span> <span className="vitals-value" style={{position: 'absolute',left:'490px',top:'417px'}}>CM</span>
+                        </span> <span className="vitals-value" style={{ position: 'absolute', left: '490px', top: '417px' }}>CM</span>
                     </p>
                     <p style={{ color: '#54648D' }} className="peso">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
-                            <span 
+                            <span
                             // style={{ marginRight: '280px' }}
                             >
                                 Peso
@@ -338,20 +371,20 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="weight"
-                                        style={{width:'50px',position: 'absolute',left:'435px',top:'457px'}}
+                                        style={{ width: '50px', position: 'absolute', left: '435px', top: '457px' }}
                                         value={patient.weight}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value" style={{position: 'absolute',left:'465px',top:'477px'}}>{patient.weight}</span>
+                                <span className="vitals-value" style={{ position: 'absolute', left: '465px', top: '477px' }}>{patient.weight}</span>
                             )}
-                        </span> <span className="vitals-value" style={{position: 'absolute',left:'490px',top:'477px'}}>KG</span>
+                        </span> <span className="vitals-value" style={{ position: 'absolute', left: '490px', top: '477px' }}>KG</span>
                     </p>
                     <p style={{ color: '#916A9E' }} className="temperatura">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
-                            <span 
+                            <span
                             // style={{ marginRight: '150px' }}
                             >
                                 Temperatura
@@ -359,24 +392,24 @@ const Dashboard = () => {
                         </span>
                         <span className="vitals-value">
                             {isEditingLabel ? (
-                                <div > 
+                                <div >
                                     <input
                                         type="text"
                                         name="temperature"
-                                        style={{width:'60px',position: 'absolute',left:'425px',top:'517px'}}
+                                        style={{ width: '60px', position: 'absolute', left: '425px', top: '517px' }}
                                         value={patient.temperature}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value" style={{position: 'absolute',left:'455px',top:'537px'}}>{patient.temperature}</span>
+                                <span className="vitals-value" style={{ position: 'absolute', left: '455px', top: '537px' }}>{patient.temperature}</span>
                             )}
-                        </span> <span className="vitals-value" style={{position: 'absolute',left:'490px',top:'537px'}}>°C</span>
+                        </span> <span className="vitals-value" style={{ position: 'absolute', left: '490px', top: '537px' }}>°C</span>
                     </p>
                     <p style={{ color: '#AB2525' }} className="ritmo">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                            <span 
+                            <span
                             // style={{ marginRight: '170px' }}
                             >
                                 Ritmo Cardiaco
@@ -388,20 +421,20 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="heartRate"
-                                        style={{width:'60px',position: 'absolute',left:'420px',top:'577px'}}
+                                        style={{ width: '60px', position: 'absolute', left: '420px', top: '577px' }}
                                         value={patient.heartRate}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value" style={{position: 'absolute',left:'455px',top:'597px'}}>{patient.heartRate}</span>
+                                <span className="vitals-value" style={{ position: 'absolute', left: '455px', top: '597px' }}>{patient.heartRate}</span>
                             )}
-                        </span> <span className="vitals-value"style={{position: 'absolute',left:'485px',top:'597px'}}>bpm</span>
+                        </span> <span className="vitals-value" style={{ position: 'absolute', left: '485px', top: '597px' }}>bpm</span>
                     </p>
                     <p style={{ color: '#AB2525' }} className="presion">
                         <span className="vitals-label">
                             <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                            <span 
+                            <span
                             // style={{ width: '300px', marginRight: '10px' }}
                             >
                                 Presión Arterial
@@ -413,15 +446,15 @@ const Dashboard = () => {
                                     <input
                                         type="text"
                                         name="bloodPressure"
-                                        style={{width:'75px',position: 'absolute',left:'395px',top:'637px'}}
+                                        style={{ width: '75px', position: 'absolute', left: '395px', top: '637px' }}
                                         value={patient.bloodPressure}
                                         onChange={handleLabelChange}
                                     />
                                 </div>
                             ) : (
-                                <span className="vitals-value" style={{position: 'absolute',left:'420px',top:'657px'}}>{patient.bloodPressure}</span>
+                                <span className="vitals-value" style={{ position: 'absolute', left: '420px', top: '657px' }}>{patient.bloodPressure}</span>
                             )}
-                        </span> <span className="vitals-value" style={{position: 'absolute',left:'475px',top:'657px'}}>mmHg</span>
+                        </span> <span className="vitals-value" style={{ position: 'absolute', left: '475px', top: '657px' }}>mmHg</span>
                     </p>
                 </div>
 
@@ -479,7 +512,7 @@ const Dashboard = () => {
                                         <input
                                             type="text"
                                             value={alergias}
-                                            style={{width: '98%'}}
+                                            style={{ width: '98%' }}
                                             onChange={(e) => handleAlergiasChange(index, e.target.value)}
                                         />
                                     ) : (
@@ -492,13 +525,13 @@ const Dashboard = () => {
                     <div className="enfermedades">
                         <p className="section-label">Enfermedades Base:</p>
                         <ul className="section-value">
-                        {enfermedades.map((enfermedades, index) => (
+                            {enfermedades.map((enfermedades, index) => (
                                 <li key={index}>
                                     {isEditingLabel2 ? (
                                         <input
                                             type="text"
                                             value={enfermedades}
-                                            style={{width: '98%'}}
+                                            style={{ width: '98%' }}
                                             onChange={(e) => handleEnfermedadesChange(index, e.target.value)}
                                         />
                                     ) : (
@@ -537,7 +570,7 @@ const Dashboard = () => {
                                         <input
                                             type="text"
                                             value={medication}
-                                            style={{width: '99%'}}
+                                            style={{ width: '99%' }}
                                             onChange={(e) => handleMedicationChange(index, e.target.value)}
                                         />
                                     ) : (

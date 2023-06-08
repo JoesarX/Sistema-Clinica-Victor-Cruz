@@ -9,7 +9,7 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             // const sqlSelect = "SELECT * FROM expedientes ";
-            const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion FROM expedientes"
+            const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion FROM expedientes"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -52,6 +52,22 @@ const expedientesRouter = (pool) => {
             const connection = await pool.getConnection();
            
             const sqlSelect = "SELECT * FROM expedientes WHERE idpaciente = " + req.params.id;
+          
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            res.json(rows[0])
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    //Get a patient by id for details
+    router.get("/dashboard/:id", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+           
+            const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion FROM expedientes  WHERE idpaciente = " + req.params.id;
           
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();

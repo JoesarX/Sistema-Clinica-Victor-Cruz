@@ -28,20 +28,6 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-
-          <Route path="/" element={<Home />} />
-          <Route path="/iniciarsesion" element={<IniciarSesion />} />
-          <Route path="/acerca-de" element={<Acercade />} />
-          <Route path="/servicios" element={<Servicios />} />
-          <Route path="/laboratorio" element={<Laboratorio />} />
-          <Route path="/registrar-user" element={<RegistrarUser />} />
-          <Route path="/citas" element={<Citas />} />
-          <Route path="/expedientes" element={<Expedientes />} />
-          <Route path="/expedientes/crear" element={<AddExpedientes />} />
-          <Route path="/expedientes/:expedienteId" element={<EditExpedientes />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/contactanos" element={<Contactanos />} />
-
           <Route path="/" element={<Home/>}/>
           <Route path="/iniciarsesion" element={<IniciarSesion/>}/>
           <Route path="/acerca-de" element={<Acercade/>}/>
@@ -52,10 +38,12 @@ function App() {
           <Route path ="/administrador" element={<Administrador/>}/>
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
-          <Route path="/expedientes/:expedienteId" element={<EditExpedientes/>}/>
+          <Route path="/expedientes/dashboard/:expedienteId" element={<Dashboard/>}/>
           <Route path="/medicamentos" element={<Medicamentos/>}/>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/contactanos" element={<Contactanos />} />
 
-          <Route path="/dashboard" element={<Dashboard/>}/>
+          {/* <Route path="/dashboard" element={<Dashboard/>}/> */}
 
           <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
 
