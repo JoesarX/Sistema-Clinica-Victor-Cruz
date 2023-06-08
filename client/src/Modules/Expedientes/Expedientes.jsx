@@ -92,29 +92,29 @@ const Expedientes = () => {
 
    const handleDeleteExpedientesClick = (id) => {
       swal({
-         title: "¿Estas seguro?",
-         text: "Una vez borrado, no podrás recuperar este expediente.",
+         title: "¿Estás seguro?",
+         text: "Una vez borrado, no podrás recuperar esta información.",
          icon: "warning",
          buttons: true,
          dangerMode: true,
-      })
-         .then((willDelete) => {
-            if (willDelete) {
-               const deleteExpediente = async () => {
-                  await ExpedientesService.deleteExpedientes(id);
-
-               };
-               deleteExpediente();
-
-               swal("¡Expediente eliminado exitosamente!", {
-                  icon: "success",
-               });
-               window.location.reload();
-            } else {
-               swal("¡Tu expediente no se ha borrado!");
-            }
-         });
-
+       })
+       .then(async (willDelete) => {
+         if (willDelete) {
+           try {
+             await ExpedientesService.deleteExpedientes(id);
+             swal("Colaborador eliminado exitosamente!", {
+               icon: "success",
+             });
+             window.location.reload();
+           } catch (error) {
+             swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+               icon: "error",
+             });
+           }
+         } else {
+           swal("¡Tu información no se ha borrado!");
+         }
+       });
    };
 
    //Grid Column Visibility
