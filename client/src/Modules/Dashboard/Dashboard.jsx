@@ -294,7 +294,7 @@ const Dashboard = () => {
                                 <p className="smallText">{patient.fecha_nacimiento}</p>
                             </div>
                             <div className='edad'>
-                                <p className="smallText">{patient.edad}</p>
+                                <p className="smallText">{patient.edad} años</p>
                             </div>
                         </div>
                         <div className='oecon'>
