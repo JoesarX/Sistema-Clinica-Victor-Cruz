@@ -31,6 +31,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import UploadIcon from '@mui/icons-material/Upload';
 
 
 //STYLES
@@ -541,6 +542,16 @@ const Medicamentos = () => {
                                         <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' />
                                     </Grid>
                                 </Grid>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={3} sm={1}>
+                                        <IconButton >
+                                            <UploadIcon />
+                                        </IconButton>
+                                    </Grid>
+                                    <Grid item xs={3} sm={11}>
+                                        <TextField id="picURL" variant="outlined" name='dosis' disabled ='true'/>
+                                    </Grid>
+                                </Grid>
 
                                 <Button onClick={handleModalSubmit} variant="contained" style={{
                                     backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
@@ -606,6 +617,7 @@ const Medicamentos = () => {
                                             <Grid item xs={12} sm={6}>
                                                 <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
                                             </Grid>
+
                                         </Grid>
 
                                         <Button onClick={EditHandler} variant="contained" style={{
@@ -625,16 +637,16 @@ const Medicamentos = () => {
 
             </div>
             {selectedRow && (
-               <FichaMedicamentos
-                  open={openFicha}
-                  setOpenPopup={setOpenFicha}
-                  setNombreF={nombre}
-                  setCategoriaF={categoria}
-                  setPrecioUnitarioF={precioUnitario}
-                  setStockF={stock}
-                  setImagenF={imagen}
-                  setViaF={via}
-               />
+                <FichaMedicamentos
+                    open={openFicha}
+                    setOpenPopup={setOpenFicha}
+                    setNombreF={nombre}
+                    setCategoriaF={categoria}
+                    setPrecioUnitarioF={precioUnitario}
+                    setStockF={stock}
+                    setImagenF={imagen}
+                    setViaF={via}
+                />
             )}
         </div>
     );
