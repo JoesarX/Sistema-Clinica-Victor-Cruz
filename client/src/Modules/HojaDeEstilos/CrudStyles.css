@@ -1,5 +1,5 @@
 .crudGrid {
-    /* background-color: rgb(227, 235, 248); */
+    background-color: rgb(227, 235, 248);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -110,7 +110,7 @@ form {
 .modalContainer form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 5px;
 
 }
 
