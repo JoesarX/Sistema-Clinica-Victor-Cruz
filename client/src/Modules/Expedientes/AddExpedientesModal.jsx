@@ -27,8 +27,8 @@ const AddExpedientesModal = ({ onClose }) => {
   const [expediente, setExpediente] = useState({
     nombre: '',
     edad: '',
-    fecha_nacimiento: '',
-    sexo: 'Masculino',
+    fecha_nacimiento: null,
+    sexo: null,
     correo: '',
     telefono: '',
     numid: null,
@@ -92,7 +92,7 @@ const AddExpedientesModal = ({ onClose }) => {
     //   alert('Una edad valida es requerida');
     //   return false;
     // }
-    if (isNaN(selectedDate.getTime())) {
+    if (isNaN(selectedDate.getTime()) || fecha_nacimiento === null || fecha_nacimiento === '') {
       alert('Una Fecha valida de Nacimiento es requerida');
       return false;
     }

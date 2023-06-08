@@ -24,6 +24,17 @@ export const getOneExpediente = async (id) => {
     }
 };
 
+export const getOneExpedienteDashboard = async (id) => {
+    console.log(id);
+    try {
+        const res = await axios.get(`${API_URL}/expedientes/dashboard/${id}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch expediente');
+    }
+};
+
 export const postExpedientes = async (expediente) => {
     try {
         const res = await axios.post(`${API_URL}/expedientes`, expediente);
@@ -58,6 +69,7 @@ const Services ={
     getAllExpedientes,
     postExpedientes,
     getOneExpediente,
+    getOneExpedienteDashboard,
     deleteExpedientes,
     editExpedientes
     // Other functions
