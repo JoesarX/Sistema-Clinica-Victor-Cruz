@@ -1,90 +1,178 @@
-@import url('https://fonts.googleapis.com/css?family=Inter&display=swap'); 
-.contenido {
-    margin-left: 5%;
-    margin-right: 5%;
-}
+@import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
 
 .Modal {
-    width: 600px;
-    height: 450px;
-    overflow: hidden;
+    background-color: rgb(227, 235, 248);
+    width: 55%;
+    height: 60vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 30px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.Contenido {
+    width: 550px;
 }
 
 .Principal {
     display: flex;
     justify-content: center;
+    margin-right: 2%;
+    margin-top: 1.5%;
 }
 
 .Imagen {
     margin-Right: 16;
     width: 100;
     height: 100;
+    border: 2px solid gray;
+    border-radius: 5px;
 }
-.Contenido{
-    margin-left: 20px;
-}
-.contenido-labels{
-    margin-bottom: 20px;
-     font-family: 'inter';
-}
-.NombreMed{
+
+.NombreMed {
     text-align: center;
 }
-.Titulo{
-    margin-top: 10%;
+
+.Titulo {
+    font-family: 'Inter', sans-serif;
+    color: black;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.5rem;
 }
-.div-titulo{
+
+.div-titulo {
     justify-content: center;
+    margin-bottom: -4%;
 }
+
+.Div-imagen {
+    margin-top: 3%;
+}
+
+
+.tablaMed {
+    border-collapse: separate;
+    width: 100%;
+    border: 2px solid gray;
+    border-radius: 10px;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid gray;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
+}
+
+th {
+    background-color: #DADADA;
+}
+
+td {
+    background-color: #ffffff;
+    color: black;
+}
+
+td:nth-child(2) {
+    width: 65%;
+}
+
+.topLeft {
+    border-top-left-radius: 10px;
+}
+
+.bottomLeft {
+    border-bottom-left-radius: 10px;
+}
+
+.topRight {
+    border-top-right-radius: 10px;
+}
+
+.bottomRight {
+    border-bottom-right-radius: 10px;
+}
+
 @media (max-height: 414px) {
-    .Titulo{
-        margin-top:2%;
+    .Titulo {
+        margin-top: 2%;
     }
 }
+
 @media (max-height: 390px) {
-    .Titulo{
-        margin-top:2%;
+    .Titulo {
+        margin-top: 2%;
         margin-bottom: 0%;
     }
-    .div-titulo{
+
+    .div-titulo {
         max-width: 40px;
-       margin-left: 50%;
+        margin-left: 50%;
     }
-    .Principal{
-        margin-top:40px;
+
+    .Principal {
+        margin-top: 40px;
     }
 }
 
 @media (max-width: 600px) {
-    .Modal{
+    .Modal {
         width: 100%;
     }
-    img.Imagen{
-       max-width:100px;
-        max-height:100px;
+
+    img.Imagen {
+        max-width: 100px;
+        max-height: 100px;
     }
-    .Div-imagen{
+
+    .Div-imagen {
         margin-left: 20%;
-        
+        margin-bottom: 8%;
+
     }
-    .NombreMed{
+
+    .NombreMed {
         text-align: left;
         margin-left: 24%;
     }
-    .div-titulo{
+
+    .div-titulo {
         justify-content: left;
-        margin-top: 0;
-        margin-bottom: -50px;
+        margin-top: 2%;
+        margin-bottom: -60px;
     }
+
     .modal {
         width: 85%;
         height: 85vh;
     }
-    .Titulo{
+
+    .Titulo {
         margin-top: 0%;
         margin-left: 1%;
-        font-size:150%;
+        font-size: 150%;
         font-family: 'inter';
+    }
+
+    th,
+    td {
+        display: block;
+        width: 100%;
+    }
+
+    th {
+        text-align: center;
     }
 
     .Principal {
@@ -93,24 +181,27 @@
     }
 
     @media (max-height: 414px) {
-        .Titulo{
-            margin-top:2%;
-             font-family: 'inter';
+        .Titulo {
+            margin-top: 2%;
+            font-family: 'inter';
         }
     }
+
     @media (max-height: 390px) {
-        .Titulo{
-            margin-top:2%;
-             font-family: 'inter';
-           
+        .Titulo {
+            margin-top: 2%;
+            font-family: 'inter';
+
         }
-        .div-titulo{
+
+        .div-titulo {
             max-width: 40px;
-           margin-left: 17%;
+            margin-left: 17%;
         }
-        .Principal{
-            margin-top:40px;
+
+        .Principal {
+            margin-top: 40px;
         }
     }
-    
+
 }
