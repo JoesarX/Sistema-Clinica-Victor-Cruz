@@ -2,13 +2,11 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material'
-import { DataGrid, esES, GridActionsCellItem } from '@mui/x-data-grid';
+import {Button, Typography } from '@mui/material'
+import { DataGrid, esES} from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-import { PersonAdd, Edit, Delete, Person, Person2 } from '@mui/icons-material'
+import { GridToolbarContainer, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
+import { Edit, Delete, Person, Person2 } from '@mui/icons-material'
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
 import Popup from '../usuario_admin/Fichas_Admin';
