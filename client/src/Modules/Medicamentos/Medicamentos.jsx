@@ -6,13 +6,14 @@ import EditMedicamentosModal from './EditMedicamentosModal.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
 import { storage } from '../../firebase';
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 //import { storage } from "./firebase";
 import {
     ref,
     uploadBytes,
     getDownloadURL,
+    deleteObject,
+    getStorage,
     listAll,
     list,
 } from "firebase/storage";
@@ -102,15 +103,14 @@ const Medicamentos = () => {
         }
     };
     */
-    const deleteFromFirebase = async (url) => {
-        try {
-          const imageRef = storage.refFromURL(url);
-          await imageRef.delete();
-          console.log('Picture is deleted successfully!');
-        } catch (error) {
-          console.error('Error deleting picture:', error);
+        const storage = getStorage(); 
+        const deleteImg = (refUrl) => { 
+        const imageRef = ref(storage, refUrl)
+            deleteObject(imageRef)
+            .catch((error) => {
+                console.log("Failed to delete image: ", error)
+            })
         }
-    };
 
     
 
@@ -131,7 +131,7 @@ const Medicamentos = () => {
 
                     };
                     deleteMedicamento();
-                    deleteFromFirebase(url);
+                    deleteImg(url);
                     swal("¡Medicamento eliminado exitosamente!", {
 
                         icon: "success",
