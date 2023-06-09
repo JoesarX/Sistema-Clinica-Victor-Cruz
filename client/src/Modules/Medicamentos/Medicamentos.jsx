@@ -8,11 +8,11 @@ import FichaMedicamentos from './FichaMedicamentos';
 import { storage } from '../../firebase';
 //import { storage } from "./firebase";
 import {
-  ref,
-  uploadBytes,
-  getDownloadURL,
-  listAll,
-  list,
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    listAll,
+    list,
 } from "firebase/storage";
 import { v4 } from "uuid";
 
@@ -193,14 +193,14 @@ const Medicamentos = () => {
 
     //ADD MEDICAMENTOS MODAL
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [medicamento, setMedicamento] = React.useState({
+    const [medicamento, setMedicamento] = useState({
         nombre: '',
         stock: '',
         precio_unitario: '',
         via: '',
         dosis: '',
-        urlfoto: ''
-    })
+        urlfoto: '',
+    });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
@@ -263,7 +263,7 @@ const Medicamentos = () => {
     }
 
 
-
+   
 
     const cleanExpediente = () => {
         medicamento.nombre = null;
@@ -278,38 +278,68 @@ const Medicamentos = () => {
     const [imageUpload, setImageUpload] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const imagesListRef = ref(storage, "images/");
-    const uploadFile = () => {
-        if (imageUpload == null) return;
-        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-        uploadBytes(imageRef, imageUpload).then((snapshot) => {
-            getDownloadURL(snapshot.ref).then((url) => {
-                setImageUrl(url); // Update the state with the URL
-                console.log(url);
-              });
+    async function  uploadFile ()   {
+        
+        return new Promise((resolve, reject) => {
+            // Your file upload logic here
+            // Call resolve with the imageUrl when the upload is complete
+            // Call reject with an error if there's an issue with the upload
+            // For example:
+            if (imageUpload == null) {
+                reject(new Error('No file selected for upload'));
+                return;
+            }
+            
+            const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+            uploadBytes(imageRef, imageUpload)
+                .then((snapshot) => getDownloadURL(snapshot.ref))
+                .then((url) => {
+                    resolve(url);
+                    console.log(url);
+                    
+                    console.log(medicamento);
+                })
+                .catch((error) => reject(error));
         });
     };
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
-
-        setIsSubmitting(true);
-
-        console.log(medicamento)
-
-        if (validations()) {
-            try {
-                // Perform the form submission logic
-                await MedicamentosService.postMedicamentos(medicamento);
-                alert('Medicamento Agregado');
-                uploadFile();
-                toggleModal();
-                
-            } catch (error) {
-                // Handle error if any
-                console.log('Error submitting medicamento:', error);
-            }
+      
+        try {
+          const imageUrll = await uploadFile();
+      
+          setMedicamento((prevState) => ({
+            ...prevState,
+            urlfoto: imageUrll,
+          }));
+      
+          setIsSubmitting(true);
+        } catch (error) {
+          // Handle error if any
+          console.log('Error submitting medicamento:', error);
         }
-    };
+      };
+      
+      useEffect(() => {
+        if (isSubmitting) {
+          submitMedicamento();
+        }
+      }, [isSubmitting]);
+      
+      const submitMedicamento = async () => {
+        if (validations()) {
+          try {
+            await MedicamentosService.postMedicamentos(medicamento);
+            alert('Medicamento Agregado');
+            toggleModal();
+          } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+          }
+        }
+      };
+      
 
     const EditHandler = () => {
 
@@ -460,7 +490,7 @@ const Medicamentos = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
-    
+
     return (
 
         <div className='crudGrid'>
@@ -571,11 +601,16 @@ const Medicamentos = () => {
                                             type="file"
                                             onChange={(event) => {
                                                 setImageUpload(event.target.files[0]);
+                                                
                                             }}
                                             
+                                            name='urlfoto'
+                                            id="urlfoto"
+
+
                                         />
                                     </Grid>
-                                    
+
                                 </Grid>
 
                                 <Button onClick={handleModalSubmit} variant="contained" style={{
