@@ -184,6 +184,7 @@ const Medicamentos = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [medicamento, setMedicamento] = React.useState({
         nombre: '',
+        categoria: '',
         stock: '',
         precio_unitario: '',
         via: '',
@@ -427,6 +428,7 @@ const Medicamentos = () => {
         setSelectedMedicamento(null);
         setIsEditModalOpen(false);
     };
+    console.log(medicamento)    
 
 
     const handleOpenModal = () => {
@@ -436,6 +438,8 @@ const Medicamentos = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+    const selectedValue3 = medicamento.categoria;
+
 
     return (
 
@@ -510,6 +514,7 @@ const Medicamentos = () => {
                             >
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Autocomplete
+                                
                                     disablePortal
                                     id="categoria"
 
@@ -576,10 +581,11 @@ const Medicamentos = () => {
                                     >
                                         <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                         <Autocomplete
+                                        value={selectedValue3}
                                             disablePortal
                                             id="categoria"
 
-                                            required
+                                            
                                             options={listaCategoriaMedicamentos}
                                             onChange={(event, newValue) =>
                                                 setMedicamento({
