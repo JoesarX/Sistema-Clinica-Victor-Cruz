@@ -35,50 +35,11 @@ const AddAdmin = (props) => {
         setAdmin((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
         console.log(admin)
     }
-    const handleSelectChange = (event) => {
-        const selectedValue = event.target.value;
-        setSelectedOption(selectedValue);
-        switch (selectedValue) {
-            case "Option 1":
-                setAdmin((prevState) => ({
-                    ...prevState,
-                    rol: 'Medico/a',
-                }));
-                break;
-            case "Option 2":
-                setAdmin((prevState) => ({
-                    ...prevState,
-                    rol: 'Secretario/a',
-                }));
-                break;
-            default:
-                setAdmin((prevState) => ({
-                    ...prevState,
-                    rol: 'Servicio General',
-                }));
-                break;
-        }
-    };
 
     React.useEffect(() => {
         console.log(admin);
     }, [admin]);
-    const handleSelectChange2 = (event) => {
-        const selectedValue = event.target.value;
-        setSelectedOption2(selectedValue);
-        if (selectedValue === "Option 1") {
-            setAdmin((prevState) => ({
-                ...prevState,
-                sexo: 'M',
-            }));
-        }
-        else {
-            setAdmin((prevState) => ({
-                ...prevState,
-                sexo: 'F',
-            }));
-        }
-    };
+
     const handleSubmit = async e => {
         console.log(admin.id)
 
@@ -132,7 +93,7 @@ const AddAdmin = (props) => {
             alert('Sexo es requerido')
             return false
         }
-        
+
         return true
     }
 
@@ -231,14 +192,21 @@ const AddAdmin = (props) => {
                                     id="rol"
                                     className='dropDown'
                                     value={selectedOption}
-                                    onChange={handleSelectChange}
+                                    onChange={(event) => {
+                                        const newValue = event.target.value;
+                                        setSelectedOption(newValue);
+                                        setAdmin((prevAdmin) => ({
+                                            ...prevAdmin,
+                                            rol: newValue
+                                        }));
+                                    }}
                                     label="Rol que desempeña"
                                     required
-                                    sx={{ height: '47px' }} 
+                                    sx={{ height: '47px' }}
                                 >
-                                    <MenuItem value="Option 1">Medico/a</MenuItem>
-                                    <MenuItem value="Option 2">Secretario/a</MenuItem>
-                                    <MenuItem value="Option 3">Servicio General</MenuItem>
+                                    <MenuItem value="Medico/a">Medico/a</MenuItem>
+                                    <MenuItem value="Secretario/a">Secretario/a</MenuItem>
+                                    <MenuItem value="Servicio General">Servicio General</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -249,12 +217,19 @@ const AddAdmin = (props) => {
                                     required
                                     labelId="sexo-label"
                                     id="sexo"
-                                    value={selectedOption2}
-                                    onChange={handleSelectChange2}
+                                    onChange={(event) => {
+                                        const newValue = event.target.value;
+                                        setSelectedOption(newValue);
+                                        setAdmin((prevAdmin) => ({
+                                            ...prevAdmin,
+                                            sexo: newValue
+                                        }));
+                                    }}
                                     label="Sexo"
+                                    sx={{ height: '47px' }}
                                 >
-                                    <MenuItem value="Option 1">Masculino</MenuItem>
-                                    <MenuItem value="Option 2">Femenino</MenuItem>
+                                    <MenuItem value="M">Masculino</MenuItem>
+                                    <MenuItem value="F">Femenino</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

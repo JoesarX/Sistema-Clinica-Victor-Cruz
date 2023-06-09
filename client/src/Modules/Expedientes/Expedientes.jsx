@@ -20,7 +20,9 @@ import swal from 'sweetalert';
 
 //STYLES
 import ExpedientesService from '../../Services/ExpedientesService';
+import './ExpedientesStyle.css';
 import '../HojaDeEstilos/CrudStyles.css';
+
 import NavBar from '../NavBar';
 
 
@@ -295,7 +297,7 @@ const Expedientes = () => {
                         {
                            field: 'actions',
                            headerName: '',
-                           flex: 2,
+                           flex: 3,
                            renderCell: (params) => (
                               <div>
                                  <IconButton onClick={() => handleViewExpedientesClick(params.id)}>

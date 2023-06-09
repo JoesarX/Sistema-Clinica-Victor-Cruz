@@ -395,7 +395,7 @@ const Medicamentos = () => {
                 idmed: false,
                 nombre: true,
                 categoria: isMobile ? false : true,
-                stock: true,
+                stock: isMobile ? false : true,
                 precio_unitario: isMobile ? false : true,
                 via: isMobile ? false : true,
                 dosis: isMobile ? false : true,
@@ -547,10 +547,12 @@ const Medicamentos = () => {
                                     </Grid>
                                 </Grid>
 
-                                <Button onClick={handleModalSubmit} variant="contained" style={{
-                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                                }}>
+                                <Button
+                                    onClick={handleModalSubmit}
+                                    variant="contained"
+                                    className="modalButton"
+                                    type="submit"
+                                    id='crudButton'>
                                     Agregar Medicamento
                                 </Button>
                             </Box>
@@ -592,7 +594,6 @@ const Medicamentos = () => {
                                                     ...medicamento,
                                                     categoria: newValue
                                                 })
-
                                             }
                                             renderInput={(params) => <TextField {...params} label="Categoria" required />}
                                         />

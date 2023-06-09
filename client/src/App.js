@@ -14,8 +14,6 @@ import Acercade from "./Modules/Home/Acercade";
 import Laboratorio from "./Modules/Home/Laboratorio";
 import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
-import AddExpedientes from "./Modules/Expedientes/AddExpedientes";
-import EditExpedientes from "./Modules/Expedientes/EditExpedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
 import Medicamentos from "./Modules/Medicamentos/Medicamentos";
 
@@ -37,7 +35,6 @@ function App() {
           <Route path="/citas" element={<Citas/>}/>
           <Route path ="/administrador" element={<Administrador/>}/>
           <Route path="/expedientes" element={<Expedientes/>}/>
-          <Route path="/expedientes/crear" element={<AddExpedientes/>}/>
           <Route path="/expedientes/dashboard/:expedienteId" element={<Dashboard/>}/>
           <Route path="/medicamentos" element={<Medicamentos/>}/>
           <Route path="/dashboard" element={<Dashboard />} />
