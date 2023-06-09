@@ -6,6 +6,8 @@ import EditMedicamentosModal from './EditMedicamentosModal.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
 import { storage } from '../../firebase';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
 //import { storage } from "./firebase";
 import {
     ref,
@@ -86,7 +88,33 @@ const Medicamentos = () => {
         setOpenPopup(true);
     }
 
-    const handleDeleteMedicamentosClick = (id) => {
+    /*
+    const deleteImageByUrl = async (url) => {
+        try {
+          const storageRef = app.storage().refFromURL(url);
+      
+          // Delete the image
+          await storageRef.delete();
+      
+          console.log('Image deleted successfully');
+        } catch (error) {
+          console.error('Error deleting image:', error);
+        }
+    };
+    */
+    const deleteFromFirebase = async (url) => {
+        try {
+          const imageRef = storage.refFromURL(url);
+          await imageRef.delete();
+          console.log('Picture is deleted successfully!');
+        } catch (error) {
+          console.error('Error deleting picture:', error);
+        }
+    };
+
+    
+
+    const handleDeleteMedicamentosClick = (row, id) => {
         swal({
             title: "¿Estas seguro?",
             text: "Una vez borrado, no podrás recuperar este medicamento.",
@@ -96,16 +124,19 @@ const Medicamentos = () => {
         })
             .then((willDelete) => {
                 if (willDelete) {
+                    const url = row.urlfoto;
                     const deleteMedicamento = async () => {
+                        console.log("HOLA DELETE ID: "+id);
                         await MedicamentosService.deleteMedicamentos(id);
 
                     };
                     deleteMedicamento();
-
+                    deleteFromFirebase(url);
                     swal("¡Medicamento eliminado exitosamente!", {
+
                         icon: "success",
                     });
-                    window.location.reload();
+                    //window.location.reload();
                 } else {
                     swal("¡Tu medicamento no se ha borrado!");
                 }
@@ -259,7 +290,7 @@ const Medicamentos = () => {
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
         setVia(row.via);
-        setImagen(imageUrl);
+        setImagen(row.urlfoto);
     }
 
 
@@ -524,7 +555,7 @@ const Medicamentos = () => {
                                             </IconButton>
 
 
-                                            <IconButton onClick={() => handleDeleteMedicamentosClick(params.id)}>
+                                            <IconButton onClick={() => handleDeleteMedicamentosClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
                                             <IconButton onClick={() => handleSelectedFicha(params.row)}>
