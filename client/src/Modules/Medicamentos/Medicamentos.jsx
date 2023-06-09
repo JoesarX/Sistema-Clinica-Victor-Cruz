@@ -5,7 +5,6 @@ import './Medicamentos.css';
 import EditMedicamentosModal from './EditMedicamentosModal.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
-import { storage } from '../../firebase';
 import 'firebase/compat/storage';
 //import { storage } from "./firebase";
 import {
@@ -66,43 +65,12 @@ const Medicamentos = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
 
-    // const handleAddMedicamentosClick = () => {
-    //    navigate('/medicamentos/crear');
-    // };
-
-    /*const handleEditMedicamentosClick = (id) => {
-       navigate(`/medicamentos/${id}`);
-       
-    };*/
-
     const [isModalOpen1, setIsModalOpen1] = useState(false);
-
-    // const handleEditMedicamentosClick = () => {
-    //     setIsModalOpen1(true);
-    //     <EditMedicamentosModal />
-    // };
-
-
 
     const handleSelectedMedicamentosClick = (id) => {
         setSelectedMedicamentoId(id);
         setOpenPopup(true);
     }
-
-    /*
-    const deleteImageByUrl = async (url) => {
-        try {
-          const storageRef = app.storage().refFromURL(url);
-      
-          // Delete the image
-          await storageRef.delete();
-      
-          console.log('Image deleted successfully');
-        } catch (error) {
-          console.error('Error deleting image:', error);
-        }
-    };
-    */
         const storage = getStorage(); 
         const deleteImg = (refUrl) => { 
         const imageRef = ref(storage, refUrl)
@@ -263,6 +231,7 @@ const Medicamentos = () => {
 
 
         setIsModalOpen1(!isModalOpen1);
+        setImageUpload = null;
         setIsSubmitting2(false);
         cleanExpediente();
     };
@@ -378,6 +347,10 @@ const Medicamentos = () => {
             const editMedicamento = async () => {
                 await MedicamentosService.editMedicamentos(id, medicamento);
                 alert('Medicamento Editado');
+                if (setImageUpload != null) {
+                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+medicamento.urlfoto)
+                    deleteImg(medicamento.urlfoto);
+                }
                 toggleModal22();
                 cleanExpediente();
             };
@@ -632,16 +605,11 @@ const Medicamentos = () => {
                                             type="file"
                                             onChange={(event) => {
                                                 setImageUpload(event.target.files[0]);
-                                                
                                             }}
-                                            
                                             name='urlfoto'
                                             id="urlfoto"
-
-
                                         />
                                     </Grid>
-
                                 </Grid>
 
                                 <Button onClick={handleModalSubmit} variant="contained" style={{
@@ -708,7 +676,18 @@ const Medicamentos = () => {
                                             <Grid item xs={12} sm={6}>
                                                 <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
                                             </Grid>
-
+                                        </Grid>
+                                        <Grid container spacing={2} >
+                                            <Grid item xs={3} sm={1} >
+                                                <input
+                                                    type="file"
+                                                    onChange={(event) => {
+                                                        setImageUpload(event.target.files[0]);
+                                                    }}
+                                                    name='urlfoto'
+                                                    id="urlfoto"
+                                                />
+                                            </Grid>
                                         </Grid>
 
                                         <Button onClick={EditHandler} variant="contained" style={{
