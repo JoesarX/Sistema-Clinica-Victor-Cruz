@@ -56,7 +56,7 @@ const NavBar = () => {
                             <ListItem disablePadding>
                                 <ListItemButton>
                                     <ListItemIcon sx={{ color: "white" }}><Medication /></ListItemIcon>
-                                    <ListItemText primary={"Inventario Medicamentos"} />
+                                    <ListItemText primary={"Medicamentos"} />
                                 </ListItemButton>
                             </ListItem>
                         </Link>

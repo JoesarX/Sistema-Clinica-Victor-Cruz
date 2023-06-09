@@ -184,6 +184,7 @@ const Medicamentos = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [medicamento, setMedicamento] = React.useState({
         nombre: '',
+        categoria: '',
         stock: '',
         precio_unitario: '',
         via: '',
@@ -394,7 +395,7 @@ const Medicamentos = () => {
                 idmed: false,
                 nombre: true,
                 categoria: isMobile ? false : true,
-                stock: true,
+                stock: isMobile ? false : true,
                 precio_unitario: isMobile ? false : true,
                 via: isMobile ? false : true,
                 dosis: isMobile ? false : true,
@@ -427,6 +428,7 @@ const Medicamentos = () => {
         setSelectedMedicamento(null);
         setIsEditModalOpen(false);
     };
+    console.log(medicamento)    
 
 
     const handleOpenModal = () => {
@@ -436,6 +438,8 @@ const Medicamentos = () => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+    const selectedValue3 = medicamento.categoria;
+
 
     return (
 
@@ -510,6 +514,7 @@ const Medicamentos = () => {
                             >
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Autocomplete
+                                
                                     disablePortal
                                     id="categoria"
 
@@ -542,10 +547,12 @@ const Medicamentos = () => {
                                     </Grid>
                                 </Grid>
 
-                                <Button onClick={handleModalSubmit} variant="contained" style={{
-                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                                }}>
+                                <Button
+                                    onClick={handleModalSubmit}
+                                    variant="contained"
+                                    className="modalButton"
+                                    type="submit"
+                                    id='crudButton'>
                                     Agregar Medicamento
                                 </Button>
                             </Box>
@@ -576,17 +583,17 @@ const Medicamentos = () => {
                                     >
                                         <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                         <Autocomplete
+                                        value={selectedValue3}
                                             disablePortal
                                             id="categoria"
 
-                                            required
+                                            
                                             options={listaCategoriaMedicamentos}
                                             onChange={(event, newValue) =>
                                                 setMedicamento({
                                                     ...medicamento,
                                                     categoria: newValue
                                                 })
-
                                             }
                                             renderInput={(params) => <TextField {...params} label="Categoria" required />}
                                         />

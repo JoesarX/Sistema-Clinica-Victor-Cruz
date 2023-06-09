@@ -121,21 +121,33 @@ form {
 
 }
 
-
 .modalContainer form .radioGroupContainer {
     display: flex;
     justify-content: center;
 
-
 }
 
 input[type='password'] {
-    border: none !important ;
-  }
+    border: none !important;
+}
 
 .labelFocused {
     font-size: 20px;
 }
+
+#crudButton {
+    margin-top: 15px !important;
+    background-color: rgb(27, 96, 241) !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    width: 270px !important;
+    font-size: 16px !important;
+    align-self: center !important;
+    height: 45px !important;
+}
+
 
 
 
@@ -146,10 +158,10 @@ input[type='password'] {
     }
 
     .modalContainer form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
+        gap: 1px;
+        padding-top: 5px;
     }
+
 
     .modalHeader {
         font-size: 24px;
