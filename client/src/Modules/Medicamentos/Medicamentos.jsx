@@ -445,7 +445,7 @@ const Medicamentos = () => {
                                 { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
                                 { field: 'categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
                                 { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
-                                { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 2, headerClassName: 'column-header' },
+                                { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
                                 { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
                                 { field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header' },
                                 {
