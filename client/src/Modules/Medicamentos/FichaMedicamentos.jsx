@@ -7,10 +7,11 @@ const FichaMedicamentos = (props) => {
     return (
         <Dialog open={open} onClose={() => setOpenPopup(false)}>
             <div className='Modal'>
-                <div className="div-titulo" style={{ display: 'flex' }}>
+            
                     <h1 className='Titulo' style={{ textAlign: 'center' }}>Descripción del Medicamento</h1>
-                </div>
+               
                 <div className='Principal'>
+                
                     <div className='Div-imagen'>
                         <img className='Imagen' src={setImagenF} alt={setNombreF} style={{ marginLeft: 16, marginRight: 16, width: 200, height: 200 }} />
                     </div>
@@ -22,15 +23,15 @@ const FichaMedicamentos = (props) => {
                             </tr>
                             <tr>
                                 <th>Categoría</th>
-                                <td>{setCategoriaF}</td>
+                                <td className='camposT'>{setCategoriaF}</td>
                             </tr>
                             <tr>
                                 <th>Precio Unitario</th>
-                                <td>{setPrecioUnitarioF}</td>
+                                <td className='camposT'>{setPrecioUnitarioF}</td>
                             </tr>
                             <tr>
                                 <th>Cantidad de stock</th>
-                                <td>{setStockF}</td>
+                                <td className='camposT'>{setStockF}</td>
                             </tr>
                             <tr>
                                 <th className='bottomLeft'>Vía</th>
