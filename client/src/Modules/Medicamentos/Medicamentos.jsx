@@ -231,7 +231,7 @@ const Medicamentos = () => {
 
 
         setIsModalOpen1(!isModalOpen1);
-        setImageUpload = null;
+        //setImageUpload(null);
         setIsSubmitting2(false);
         cleanExpediente();
     };
@@ -340,28 +340,43 @@ const Medicamentos = () => {
         }
       };
       
+      const EditHandler = async (e) => {
+        e.preventDefault();
+        try {
+          setIsSubmitting2(true);
+        } catch (error) {
+          // Handle error if any
+          console.log('Error submitting medicamento:', error);
+        }
+    };
 
-    const EditHandler = () => {
+    useEffect(() => {
+        if (isSubmitting2) {
+          submitEditMedicamento();
+        }
+      }, [isSubmitting2]);
 
+    const submitEditMedicamento = async () => {
         if (validations()) {
-            const editMedicamento = async () => {
+            if (imageUpload != null) {
+                deleteImg(medicamento.urlfoto);
+                const imageUrll = await uploadFile();
+                setMedicamento((prevState) => ({
+                    ...prevState,
+                    urlfoto: imageUrll,
+                  }));
                 await MedicamentosService.editMedicamentos(id, medicamento);
                 alert('Medicamento Editado');
-                if (setImageUpload != null) {
-                    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"+medicamento.urlfoto)
-                    deleteImg(medicamento.urlfoto);
-                }
-                toggleModal22();
-                cleanExpediente();
-            };
-            console.log(medicamento)
-            editMedicamento();
-
-            navigate('/medicamentos')
-            window.location.reload();
+            }
+            else {
+                await MedicamentosService.editMedicamentos(id, medicamento);
+                alert('Medicamento Editado');
+            }
+            toggleModal22();
+            cleanExpediente();
         }
-
     };
+
     const validations = () => {
         const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
         if (nombre === null || nombre === '' || nombre === ' ') {
