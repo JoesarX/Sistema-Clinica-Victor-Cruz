@@ -5,6 +5,7 @@ import './Medicamentos.css';
 import EditMedicamentosModal from './EditMedicamentosModal.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
+import { storage } from '../../firebase';
 import 'firebase/compat/storage';
 //import { storage } from "./firebase";
 import {
@@ -101,7 +102,6 @@ const Medicamentos = () => {
                     deleteMedicamento();
                     deleteImg(url);
                     swal("¡Medicamento eliminado exitosamente!", {
-
                         icon: "success",
                     });
                     //window.location.reload();
