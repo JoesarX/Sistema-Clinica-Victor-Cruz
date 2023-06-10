@@ -67,8 +67,7 @@ const Dashboard = () => {
         ],
     });
 
-
-    const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2', 'Medicamento 1', 'Medicamento 2']);
+    const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2', 'Medicamento 3', 'Medicamento 4', 'Medicamento 5', 'Medicamento 6', 'Medicamento 7', 'Medicamento 8', 'Medicamento 9', 'Medicamento 10', 'Medicamento 11', 'Medicamento 12']);
     const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2', 'Alergia 3', 'Alergia 4', 'Alergia 5', 'Alergia 6', 'Alergia 7', 'Alergia 8', 'Alergia 9', 'Alergia 10', 'Alergia 11', 'Alergia 12', 'Alergia 13', 'Alergia 14']);
     const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2']);
 
@@ -76,7 +75,6 @@ const Dashboard = () => {
         localStorage.clear();
         navigate('/');
     }
-
 
     function enviar_A_Crud() {
         navigate('/administrador');
@@ -138,7 +136,6 @@ const Dashboard = () => {
         setIsChangesSaved(false);
     };
 
-
     const handleLabelEdit2 = () => {
         setIsEditingLabel2(true);
         setIsChangesSaved2(false);
@@ -149,16 +146,12 @@ const Dashboard = () => {
         setIsChangesSaved3(false);
     };
 
-
-
     const handleSaveChanges = () => {
-
         setIsEditingLabel(false);
         setIsChangesSaved(true);
     };
 
     const handleSaveChanges2 = () => {
-
         setIsEditingLabel2(false);
         setIsChangesSaved2(true);
     };
@@ -167,7 +160,6 @@ const Dashboard = () => {
         setIsEditingLabel3(false);
         setIsChangesSaved3(true);
     };
-
 
     const handleLabelChange = (e) => {
         const { name, value } = e.target;
@@ -183,8 +175,6 @@ const Dashboard = () => {
         setMedications(updatedMedications);
     };
 
-
-
     const handleAlergiasChange = (index, newValue) => {
         const updatedAlergias = [...alergias];
         updatedAlergias[index] = newValue;
@@ -197,14 +187,9 @@ const Dashboard = () => {
         setEnfermadades(updatedEnfermedades);
     };
 
-
-
-
-
     const handleSubmit = (e) => {
         e.preventDefault();
         setIsEditingLabel(false);
-
     };
 
     const handleOpenEditModal = (expediente) => {
@@ -216,11 +201,13 @@ const Dashboard = () => {
         setSelectedExpediente(null);
         setIsEditModalOpen(false);
     };
+
     return (
         <div className='scrollable-page'>
             <NavBar />
             <div className='contenido'>
                 <div className='patient-section'>
+
                     <div className="infoGeneral">
                         <span>
                             <div className='perfil' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '62px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
@@ -274,15 +261,15 @@ const Dashboard = () => {
                             <h3 className='histmedtit'>Signos Vitales
                                 <span>
                                     {isEditingLabel ? (<>
-                                        <button onClick={handleSaveChanges} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        <button onClick={handleSaveChanges} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Guardar cambios
                                         </button>
-                                        <button onClick={() => setIsEditingLabel(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        <button onClick={() => setIsEditingLabel(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Cancelar
                                         </button>
                                     </>
                                     ) : (
-                                        <button onClick={handleLabelEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        <button onClick={handleLabelEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Editar
                                         </button>
                                     )}
@@ -304,8 +291,9 @@ const Dashboard = () => {
                                         <div >
                                             <input
                                                 type="text"
+                                                className="edit-text-box"
                                                 name="height"
-                                                style={{ width: '60px', height: '100%', position: 'relative', top: '-18.5px' }}
+                                                style={{ width: '65px' }}
                                                 value={patient.height}
                                                 onChange={handleLabelChange}
                                             />
@@ -332,8 +320,9 @@ const Dashboard = () => {
                                         <div >
                                             <input
                                                 type="text"
+                                                className="edit-text-box"
                                                 name="weight"
-                                                style={{ width: '50px', height: '100%', position: 'relative', top: '-18.5px' }}
+                                                style={{ width: '55px' }}
                                                 value={patient.weight}
                                                 onChange={handleLabelChange}
                                             />
@@ -360,8 +349,9 @@ const Dashboard = () => {
                                         <div >
                                             <input
                                                 type="text"
+                                                className="edit-text-box"
                                                 name="temperature"
-                                                style={{ width: '60px', height: '100%', position: 'relative', top: '-18.5px' }}
+                                                style={{ width: '65px' }}
                                                 value={patient.temperature}
                                                 onChange={handleLabelChange}
                                             />
@@ -387,9 +377,10 @@ const Dashboard = () => {
                                     {isEditingLabel ? (
                                         <div >
                                             <input
+                                                className="edit-text-box"
                                                 type="text"
                                                 name="heartRate"
-                                                style={{ width: '50px', height: '100%', position: 'relative', top: '-18.5px' }}
+                                                style={{ width: '60px' }}
                                                 value={patient.heartRate}
                                                 onChange={handleLabelChange}
                                             />
@@ -413,11 +404,12 @@ const Dashboard = () => {
                             <span className='vital-sign-value-align'>
                                 <span className="vitals-value">
                                     {isEditingLabel ? (
-                                        <div >
+                                        <div>
                                             <input
                                                 type="text"
+                                                className="edit-text-box"
                                                 name="bloodPressure"
-                                                style={{ width: '80px', height: '100%', position: 'relative', top: '-18.5px' }}
+                                                style={{ width: '80px' }}
                                                 value={patient.bloodPressure}
                                                 onChange={handleLabelChange}
                                             />
@@ -430,31 +422,33 @@ const Dashboard = () => {
                             </span>
                         </p>
                     </div>
+
                     <div className="files">
                         <div className='box-title'>
                             <h3 className='archivostit'>Archivos</h3>
                         </div>
                         <ul className="file-list">
                             {patient.files.map((file, index) => (
-                                <div key={index}>
+                                <div key={index} className='file-item-line'>
                                     <li className='lifile'>{file}</li>
                                     {index !== patient.files.length - 1 && <hr className='divider'></hr>}
                                 </div>
                             ))}
                         </ul>
-                        <div className='upload'>
-                            <button className="upload-button">
-                                <span>
-                                    <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
-                                    Subir Archivo
-                                </span>
-                            </button>
-                        </div>
+                        <button className="upload-button">
+                            <span>
+                                <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
+                                Subir Archivo
+                            </span>
+                        </button>
                     </div>
+
                 </div>
 
                 <div className="patient-section">
+
                     <div className='medHis'>
+                        
                         <div className='box-title'>
                             <h3 className='histmedtit'>Historial Médico
                                 <span>
@@ -474,6 +468,7 @@ const Dashboard = () => {
                                 </span>
                             </h3>
                         </div>
+
                         <div className="alergias">
                             <p className="section-label">Alergias:</p>
                             <ul className="section-value">
@@ -481,6 +476,7 @@ const Dashboard = () => {
                                     <li key={index}>
                                         {isEditingLabel2 ? (
                                             <input
+                                                className="edit-text-box small"
                                                 type="text"
                                                 value={alergias}
                                                 style={{ width: '98%' }}
@@ -493,6 +489,7 @@ const Dashboard = () => {
                                 ))}
                             </ul>
                         </div>
+
                         <div className="enfermedades">
                             <p className="section-label">Enfermedades Base:</p>
                             <ul className="section-value">
@@ -500,6 +497,7 @@ const Dashboard = () => {
                                     <li key={index}>
                                         {isEditingLabel2 ? (
                                             <input
+                                                className="edit-text-box small"
                                                 type="text"
                                                 value={enfermedades}
                                                 style={{ width: '98%' }}
@@ -540,9 +538,10 @@ const Dashboard = () => {
                                 <li key={index}>
                                     {isEditingLabel3 ? (
                                         <input
+                                            className="edit-text-box small"
                                             type="text"
                                             value={medication}
-                                            style={{ width: '99%' }}
+                                            style={{ width: '98%' }}
                                             onChange={(e) => handleMedicationChange(index, e.target.value)}
                                         />
                                     ) : (
@@ -551,9 +550,10 @@ const Dashboard = () => {
                                 </li>
                             ))}
                         </ul>
-
                     </div>
+
                 </div>
+
             </div >
         </div>
 

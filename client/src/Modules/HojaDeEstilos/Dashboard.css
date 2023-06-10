@@ -36,14 +36,17 @@
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-evenly;
+
     left: 50%;
     width: 95%;
     height: 91%;
     gap: 20px;
+
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
+
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20px;
@@ -54,6 +57,13 @@
     background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
+.edit-text-box {
+    height: 38px;
+}
+
+.edit-text-box.small {
+    height: 30px;
+}
 
 .topbar {
     display: flex;
@@ -84,8 +94,12 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px;
-    gap: 10px;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
@@ -96,8 +110,13 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px;
-    gap: 20px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    gap: 0px;
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
@@ -105,32 +124,17 @@
 }
 
 .alergias {
-    /* Allergies */
-    /* Auto layout */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 10px 0px;
-    gap: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     width: 100%;
     border-bottom: 1px solid #464646;
-}
-
-.section-value::-webkit-scrollbar {
-    width: 8px;
-    /* Set the width of the scrollbar */
-}
-
-.section-value::-webkit-scrollbar-thumb {
-    background-color: #888;
-    /* Set the color of the scrollbar thumb */
-    border-radius: 4px;
-    /* Add border radius to the scrollbar thumb */
-}
-
-.section-value::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    /* Set the color of the scrollbar thumb on hover */
+    /* TEMPORALLL */
+    /* background-color: rgb(0, 255, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .enfermedades {
@@ -138,10 +142,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 10px 0px;
-    gap: 5px;
+
+    padding-top: 0px;
+    padding-bottom: 0px;
+
     width: 100%;
+    
     border-bottom: 1px solid #464646;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .histmedtit {
@@ -167,6 +178,7 @@
     border-bottom: 1px solid #000000;
     padding-top: 0px;
     padding-bottom: 0px;
+    font-family: 'Inter';
     /* background-color: rgb(255, 0, 0, 0.7);
     background-size: 10px 10px;
     background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
@@ -186,8 +198,12 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 20px;
-    gap: 20px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
     width: 100%;
     height: 300px;
     background: #F8F8F8;
@@ -202,6 +218,10 @@
     align-items: flex-end;
     text-transform: uppercase;
     color: #464646;
+    /* TEMPORALLL */
+    /* background-color: rgb(0, 0, 255, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .sidebar {
@@ -216,22 +236,27 @@
 
 .section-label {
     width: 100%;
-    height: 24px;
+    height: 15px;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 20px;
-    line-height: 24px;
+    font-size: 16px;
     display: flex;
     align-items: center;
     text-transform: uppercase;
     color: #1560F2;
+    margin: 0px;
+    /* TEMPORALLL */
+    /* background-color: rgb(0, 0, 255, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .section-value li {
-    margin-bottom: 10px;
-    max-width: 100%;
-    word-wrap: break-word;
+    margin-bottom: 4px;
+    max-width: 99%;
+    word-wrap: normal;
+    font-family: 'Inter';
 }
 
 .section-value {
@@ -240,21 +265,26 @@
     width: 100%;
     margin-bottom: 10px;
     margin-top: 10px;
+    scrollbar-width: thin;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .medicamentos .section-value {
     overflow-y: scroll;
-    height: 220px;
+    height: 310px;
     width: 100%;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    /* margin-bottom: 5px;
+    margin-top: 5px; */
 }
 
 .vital-sign-value-align {
     display: flex;
     flex-direction: row;
     gap: 10px;
-    align-items: start;
+    align-items: center;
     height: 100%;
 }
 
@@ -267,13 +297,17 @@
 .vital-sign-content {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     padding: 0px;
     width: 100%;
-    height: 30px;
+    height: 46.5px;
     margin: 0px;
     border-bottom: 1px solid #464646;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .vitals-label {
@@ -291,62 +325,59 @@
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
-    line-height: 24px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     color: #737373;
 }
 
 .file-list {
-    /* archivo */
-    /* Auto layout */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     overflow-y: auto;
     overflow-x: hidden;
-    /* Change to "auto" */
     scrollbar-width: thin;
-    /* Add scrollbar width */
-    padding: 0px;
+
     width: 100%;
     border-bottom: 1px solid #464646;
-    margin: 0px;
-}
 
-.file-list::-webkit-scrollbar {
-    width: 8px;
-    /* Set the width of the scrollbar */
-}
+    padding-top: 10px;
+    padding-bottom: 25px;
+    padding-left: 0px;
+    padding-right: 5px;
 
-.file-list::-webkit-scrollbar-thumb {
-    background-color: #888;
-    /* Set the color of the scrollbar thumb */
-    border-radius: 4px;
-    /* Add border radius to the scrollbar thumb */
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
-
-.file-list::-webkit-scrollbar-thumb:hover {
-    background-color: #555;
-    /* Set the color of the scrollbar thumb on hover */
-}
-
 
 .upload-button {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    justify-self: center;
+    align-self: center;
     align-items: center;
+
+    margin-top: 10px;
+    margin-bottom: 0px;
+
     padding: 0px 15px;
+
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
-    line-height: 24px;
+
     text-align: center;
     color: #FFFFFF;
-    width: 100%;
+    width: 50%;
     height: 40px;
     border: 0px;
     background: #198C5C;
@@ -506,7 +537,6 @@
 
     color: #737373;
 
-
     /* Inside auto layout */
 
     flex: none;
@@ -515,8 +545,6 @@
 }
 
 .ocupacion {
-    /* Frame 19 */
-    /* Auto layout */
     position: relative;
     display: flex;
     flex-direction: row;
@@ -535,11 +563,6 @@
 }
 
 .estado {
-    /* Frame 20 */
-
-
-    /* Auto layout */
-
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -555,8 +578,6 @@
 }
 
 .direccion {
-    /* Frame 17 */
-
 
     width: 300px;
     height: 20px;
@@ -571,11 +592,6 @@
 }
 
 .ccon {
-    /* Email */
-
-
-    /* Auto layout */
-
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -602,10 +618,6 @@
     text-align: center;
     margin-left: -5px;
     color: #1560F2;
-}
-
-.section-label {
-    margin: 0px;
 }
 
 .divider {
@@ -700,6 +712,14 @@
     color: #464646;
 }
 
+.file-item-line {
+    width: 98%;
+    /* TEMPORALLL */
+    /* background-color: rgb(0, 255, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
 .lifile {
     font-family: 'Inter';
     font-style: normal;
@@ -721,18 +741,29 @@
     width: 300px;
 }
 
-.editLabelVitals {
-    display: inline-block;
-    width: 60px;
+::-webkit-scrollbar {
+    width: 8px;
 }
 
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
 
-@media only screen and (max-width: 800px) {
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+@media only screen and (max-width: 820px) {
     .contenido {
         height: fit-content;
         gap: 20px;
         align-items: center;
         flex-direction: column;
         margin-bottom: 40px;
+    }
+
+    .upload-button {
+        width: 80%;
     }
 }
