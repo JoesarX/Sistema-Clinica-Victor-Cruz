@@ -1,12 +1,11 @@
-
 import React from 'react';
-import { Dialog, DialogContent, DialogTitle, Box, Typography } from '@mui/material';
+import { Dialog } from '@mui/material';
 import { useState } from 'react';
-import { Person2, Person, CenterFocusStrong } from '@mui/icons-material';
-
+import { Person2, Person } from '@mui/icons-material';
+import "./FichaColab.css"
 
 const Popup = (props) => {
-  let { setNombre, setRol, setId, setCorreo, setTelefono, setSexo,setPassword, openPopup, setOpenPopup } = props;
+  const { open, setOpenPopup, setNombre, setRol, setId, setCorreo, setTelefono, setSexo } = props;
   const [openEditAdmin, setEditAdmin] = useState(false);
   console.log(props);
   let IconoComponent = null;
@@ -25,36 +24,47 @@ const Popup = (props) => {
     console.log("Estoy entrando a edit");
     console.log(openEditAdmin);
   };
-  
+
   return (
-
-    <Dialog open={openPopup} onClose={() => setOpenPopup(false)} maxWidth="md" >
-      <DialogTitle sx={{ bgcolor: 'rgb(184,184,184)' }}>Información del colaborador</DialogTitle>
-      <DialogContent sx={{ bgcolor: 'rgb(184,184,184)' }} style={{ display: 'flex', alignItems: 'center' }}>
-
-        <Box style={{ display: 'flex', alignItems: 'center' }} bgcolor="white" p={7}>
-          <Box sx={{ bgcolor: 'white', width: '200px', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+    <Dialog open={open} onClose={() => setOpenPopup(false)}>
+      <div className='Modal'>
+        <div className="div-titulo" style={{ display: 'flex' }}>
+          <h1 className='Titulo' style={{ textAlign: 'center' }}>Información Personal del Colaborador</h1>
+        </div>
+        <div className='Principal'>
+          <div className='Div-imagen'>
             {IconoComponent && (
-              <IconoComponent style={{ color: '#fff', backgroundColor: color, borderRadius: '50%', fontSize: '800%' }} />
+              <IconoComponent className='Imagen' style={{ color: '#fff', backgroundColor: color, borderRadius: '50%', fontSize: '800%' }} />
             )}
-
-          </Box>
-
-          <Box sx={{ bgcolor: 'white', flex: 1 }} p={0}>
-            <h2>{setNombre}</h2>
-            <h2>{setRol}</h2>
-            <h2>{setId}</h2>
-            <h2>{setCorreo}</h2>
-            <h2>{setTelefono}</h2>
-
-          </Box>
-        </Box>
-      </DialogContent>
-      
+          </div>
+          <div className='Contenido'>
+            <table className='tablaColab'>
+              <tr>
+                <th className='topLeft'>Nombre</th>
+                <td className='topRight'>{setNombre}</td>
+              </tr>
+              <tr>
+                <th>Rol</th>
+                <td className='camposT'>{setRol}</td>
+              </tr>
+              <tr>
+                <th>ID</th>
+                <td className='camposT'>{setId}</td>
+              </tr>
+              <tr>
+                <th>Correo</th>
+                <td className='camposT'>{setCorreo}</td>
+              </tr>
+              <tr>
+                <th className='bottomLeft'>Teléfono</th>
+                <td className='bottomRight'>{setTelefono}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
     </Dialog>
-    
   );
-  
 };
 
 export default Popup;
