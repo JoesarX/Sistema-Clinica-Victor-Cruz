@@ -23,16 +23,16 @@ const Administradores = () => {
    const [usuarios_admin, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
-   const [openAddAdmin, setAddAdmin] = useState(false);
-   const [nombre, setNombre] = useState('5');
-   const [rol, setRol] = useState('');
-   const [id, setId] = useState('');
-   const [email, setEmail] = useState('');
-   const [cel, setCel] = useState('');
-   const [sexo, setSexo] = useState('');
-   const [contraseña, setPassword] = useState('');
-   const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
-   const [openEditAdmin, setEditAdmin] = useState(false);
+   let [openAddAdmin, setAddAdmin] = useState(false);
+   let [nombre, setNombre] = useState('5');
+   let [rol, setRol] = useState('');
+   let [id, setId] = useState('');
+   let [email, setEmail] = useState('');
+   let [cel, setCel] = useState('');
+   let [sexo, setSexo] = useState('');
+   let [contraseña, setPassword] = useState('');
+   let [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
+   let [openEditAdmin, setEditAdmin] = useState(false);
 
    const navigate = useNavigate();
    const isLoggedIn = localStorage.getItem("AdminLoggedIn");
@@ -58,47 +58,45 @@ const Administradores = () => {
       setEmail(row.correo);
       setCel(row.telefono);
       setSexo(row.sexo);
+      setPassword(row.password);
+
       setSelectedAdministradorId(row.id);
    }
 
    const handleDeleteAdministradoresClick = (id) => {
       swal({
-         title: "¿Estás seguro?",
-         text: "Una vez borrado, no podrás recuperar esta información.",
-         icon: "warning",
-         buttons: true,
-         dangerMode: true,
+        title: "¿Estás seguro?",
+        text: "Una vez borrado, no podrás recuperar esta información.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
       })
-         .then(async (willDelete) => {
-            if (willDelete) {
-               try {
-                  await AdministradoresService.deleteAdministradores(id);
-                  swal("Colaborador eliminado exitosamente!", {
-                     icon: "success",
-                  });
-                  window.location.reload();
-               } catch (error) {
-                  swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
-                     icon: "error",
-                  });
-               }
-            } else {
-               swal("¡Tu información no se ha borrado!");
-            }
-         });
-   };
+      .then(async (willDelete) => {
+        if (willDelete) {
+          try {
+            await AdministradoresService.deleteAdministradores(id);
+            swal("Colaborador eliminado exitosamente!", {
+              icon: "success",
+            });
+            window.location.reload();
+          } catch (error) {
+            swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+              icon: "error",
+            });
+          }
+        } else {
+          swal("¡Tu información no se ha borrado!");
+        }
+      });
+    };
    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
       nombre: true,
       correo: true,
       rol: true,
-      password: false,
-      id: true,
+      password: false
    });
 
-   const CustomToolbar = () => {
-      const theme = useTheme();
-      const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+   function CustomToolbar() {
       const handleAgregarAdministradorClick = () => {
          setAddAdmin(true);
          setEditAdmin = { setEditAdmin }
@@ -114,53 +112,34 @@ const Administradores = () => {
 
       return (
 
-         <GridToolbarContainer
-            sx={{
-               display: 'flex',
-               flexDirection: isMobile ? 'column' : 'row',
-               justifyContent: 'space-between',
-               alignItems: isMobile ? 'stretch' : 'center',
-               marginTop: '15px',
-               marginBottom: '10px',
-               gap: '10px',
-            }}
-         >
-            <div>
-               {isMobile ? (
-                  <>
-                     <GridToolbarColumnsButton />
-                     <GridToolbarFilterButton />
-                     <GridToolbarDensitySelector />
-                  </>
-               ) : (
-                  <>
-                     <GridToolbarColumnsButton />
-                     <GridToolbarFilterButton />
-                     <GridToolbarDensitySelector />
-                     <GridToolbarExport />
-                  </>
-               )}
-            </div>
+
+
+         <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', height: '30px', marginTop: '15px', marginBottom: '10px' }}>
 
             <div>
-               <Button
-                  onClick={handleAgregarAdministradorClick}
-                  startIcon={<PersonAdd />}
-                  style={{
-                     backgroundColor: 'rgb(27, 96, 241)',
-                     color: 'white',
-                     borderRadius: '10px',
-                     paddingLeft: '10px',
-                     paddingRight: '10px',
-                  }}
-               >
-                  Agregar Colaborador
+
+               <Typography variant='h6' component='h2' style={{ textAlign: 'right', marginBottom: '-10px', marginLeft: '500px' }}>
+                  Lista de colaboradores
+               </Typography>
+
+
+               {/* <GridToolbarColumnsButton /> */}
+               <GridToolbarFilterButton />
+               <GridToolbarDensitySelector />
+               <GridToolbarExport />
+            </div>
+            <div>
+
+               <Button onClick={handleAgregarAdministradorClick} style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+                  Agregar Administrador
                </Button>
             </div>
 
          </GridToolbarContainer>
+
+
       );
-   };
+   }
 
    const theme = createTheme(
       {
@@ -191,34 +170,7 @@ const Administradores = () => {
          }
       };
       fetchAllAdministradores();
-
-      const handleResize = () => {
-         const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
-
-         // Update the column visibility based on the screen width
-         setColumnVisibilityModel((prevVisibility) => ({
-            ...prevVisibility,
-
-            nombre: true,
-            correo: isMobile ? false : true,
-            rol: isMobile ? false : true,
-            password: false,
-            id: isMobile ? false : true,
-
-         }));
-      };
-
-      // Call the handleResize function initially and on window resize
-      handleResize();
-      window.addEventListener("resize", handleResize);
-
-      // Clean up the event listener on component unmount
-      return () => {
-         window.removeEventListener("resize", handleResize);
-      };
    }, []);
-
-
 
    return (
 
@@ -286,7 +238,7 @@ const Administradores = () => {
                         {
                            field: 'actions',
                            headerName: '',
-                           flex: 3,
+                           flex: 2,
                            renderCell: (params) => (
                               <div>
                                  <IconButton onClick={() => handleEditAdministradoresClick(params.row)}>
@@ -318,7 +270,7 @@ const Administradores = () => {
             </div>
             {selectedAdministradorId && (
                <Popup
-                  open={openPopup}
+                  openPopup={openPopup}
                   setOpenPopup={setOpenPopup}
                   setNombre={nombre}
                   setRol={rol}
@@ -326,6 +278,7 @@ const Administradores = () => {
                   setCorreo={email}
                   setTelefono={cel}
                   setSexo={sexo}
+                  setPassword={contraseña}
                />
             )}
             {openAddAdmin && (
@@ -361,5 +314,3 @@ const Administradores = () => {
 
 
 }
-
-export default Administradores;

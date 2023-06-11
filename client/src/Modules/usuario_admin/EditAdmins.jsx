@@ -1,31 +1,24 @@
 import React, { useState } from 'react';
-import { TextField, Button, Stack, Dialog, DialogContent, DialogTitle, Box, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
+import { TextField, Button, Stack, Dialog, DialogContent, DialogTitle, Box, FormControl, Select, MenuItem } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AdministradoresService from '../../Services/AdministradoresService';
-
-import Modal from '@mui/material/Modal';
-import Grid from '@mui/material/Grid';
-
-import '../HojaDeEstilos/CrudStyles.css';
 
 const EditAdmins = (props) => {
     let { setNombre, setRol, setId, setCorreo, setTelefono, setSexo, openEditAdmin, setEditAdmin, setPassword } = props;
     const [selectedOption, setSelectedOption] = useState(setRol);
     const [selectedOption2, setSelectedOption2] = useState(setSexo);
-
     const navigate = useNavigate();
     const [id, setId2] = useState(setId);
     const [inputValue, setInputValue] = useState(setPassword);
     const [admin, setAdmin] = React.useState({
         nombre: setNombre,
         correo: setCorreo,
-        rol: setRol,
-        password: setPassword,
+        rol : setRol,
+        password : setPassword,
         telefono: setTelefono,
         sexo: setSexo,
-        id: setId,
     })
-
+    
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
         console.log(inputValue)
@@ -35,48 +28,83 @@ const EditAdmins = (props) => {
         setAdmin((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
         console.log(admin)
     }
-    React.useEffect(() => {
+    const handleSelectChange = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedOption(selectedValue);
+        switch (selectedValue) {
+          case "Medico/a":
+            setAdmin((prevState) => ({
+              ...prevState,
+              rol: 'Medico/a',
+            }));
+            break;
+          case "Secretario/a":
+            setAdmin((prevState) => ({
+              ...prevState,
+              rol: 'Secretario/a',
+            }));
+            break;
+          default:
+            setAdmin((prevState) => ({
+              ...prevState,
+              rol: 'Servicio General',
+            }));
+            break;
+        }
+      };
+      
+      React.useEffect(() => {
         console.log(admin);
-    }, [admin]);
-
+      }, [admin]);
+    const handleSelectChange2 = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedOption2(selectedValue);
+        if (selectedValue === "M") {
+            setAdmin((prevState) => ({
+                ...prevState,
+                sexo: 'M',
+            }));
+        }
+        else {
+            setAdmin((prevState) => ({
+                ...prevState,
+                sexo: 'F',
+            }));
+        }
+    };
     const handleSubmit = async e => {
-        e.preventDefault();
         console.log(admin.id)
         if (validations()) {
-
+            e.preventDefault();
+            
             const editExpediente = async () => {
                 await AdministradoresService.editAdministradores(id, admin);
             };
             console.log(admin)
             editExpediente();
             alert('Admin Modificado')
-            // navigate('/Administrador')
-            window.location.reload();
-        }
-
+            navigate('/Administrador')
+        }   
+        
     }
     const validations = () => {
-        const { nombre, correo, rol, password, telefono, sexo, id } = admin
+        const {  nombre,  correo, rol, password, telefono, sexo, id  } = admin
         if (nombre === null || nombre === '') {
             alert('Nombre Completo es requerido')
             return false
         }
-        if (id === null || id === '') {
-            alert('Un numero de Identidad es requerido')
-            return false
-        }
-        if (correo === null || correo === '') {
+        if(correo === null || correo === ''){
             alert('Correo es requerido')
             return false
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (emailRegex.test(correo) != true) {
+        if(emailRegex.test(correo) != true){
             alert('El correo ingresado no tiene un formato válido.')
             return false
         }
 
         if (password === null || password === '') {
-            alert('Contraseña es requerida')
+            alert('Password es requerido')
             return false
         }
         if (password !== inputValue) {
@@ -84,18 +112,13 @@ const EditAdmins = (props) => {
             return false
         }
         if (telefono === null || telefono === '') {
-            alert('Numero de celular es requerido')
+            alert('Telefono es requerido')
             return false
         }
-        if (rol === null || rol === '') {
-            alert('Rol es requerido')
+        if (id === null || id === '') {
+            alert('Identidad es requerido')
             return false
         }
-        if (sexo === null || sexo === '') {
-            alert('Sexo es requerido')
-            return false
-        }
-
         return true
     }
 
