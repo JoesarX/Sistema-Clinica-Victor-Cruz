@@ -1,24 +1,16 @@
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import ExpedientesService from '../../Services/ExpedientesService';
 import { Box, Button } from '@mui/material'
 
 //STYLES
 import MedicamentosService from '../../Services/MedicamentosService';
 import '../HojaDeEstilos/CrudStyles.css';
-import NavBar from '../NavBar';
+
 
 import './Medicamentos.css';
 

@@ -1,12 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import { Menu, Logout, People, Home, Inventory, Domain, LocalShipping, Medication, Contacts } from '@mui/icons-material';
+import { Menu, Logout, People, Home, Medication, Contacts } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {
     const [open, setOpen] = useState(false);
     const [userFullName, setUserFullName] = useState("");
     const [userShortName, setUserShortName] = useState("NA");
+
+    const loggedUser = localStorage.getItem("loggedInUserName");
+
+    useEffect(() => {
+        if (loggedUser) {
+            setUserFullName(loggedUser);
+            setUserShortName(loggedUser.charAt(0).toUpperCase());
+        }
+    }, [loggedUser]);
 
     const toggleDrawer = () => {
         setOpen(!open);
@@ -31,7 +40,7 @@ const NavBar = () => {
                 <Box sx={{ width: 250, bgcolor: "#002366", color: "white", height: "100vh" }} onClick={toggleDrawer} onKeyDown={toggleDrawer}>
                     <Box width="100%" sx={{ display: "flex", flexDirection: "column", alignItems: "center", pt: 3, pb: 1 }}>
                         <Avatar sx={{ bgcolor: "white", color: "#002366", mb: 1, textTransform: 'capitalize' }}>{userShortName}</Avatar>
-                        <Typography variant="body1" sx={{ textTransform: "capitalize" }}>
+                        <Typography variant="body1" sx={{ textTransform: "capitalize", wordBreak: 'break-word', textAlign: 'center', maxWidth: '100%', padding: '0 10px' }}>
                             {userFullName}
                         </Typography>
                     </Box>
@@ -56,7 +65,7 @@ const NavBar = () => {
                             <ListItem disablePadding>
                                 <ListItemButton>
                                     <ListItemIcon sx={{ color: "white" }}><Medication /></ListItemIcon>
-                                    <ListItemText primary={"Inventario Medicamentos"} />
+                                    <ListItemText primary={"Medicamentos"} />
                                 </ListItemButton>
                             </ListItem>
                         </Link>

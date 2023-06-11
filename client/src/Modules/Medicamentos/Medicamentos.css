@@ -1,18 +1,24 @@
+.modalMedicamentos {
 
-
- .modalMedicamentos {
-  
     width: 600px;
-   
+
     height: 450px;
     overflow: hidden;
-   
-}
-.modalMedicamentos  form {
 
-    gap: 18px;
 }
 
+.modalMedicamentos form {
+
+    gap: 16px;
+}
+
+#categoria {
+    height: 15px;
+}
+
+#categoria .MuiAutocomplete-paper {
+    max-height: 20px;
+}
 
 @media (max-width: 600px) {
     .modalMedicamentos {
@@ -20,10 +26,11 @@
         height: 85vh;
     }
 
-    .modalMedicamentos  form {
+    .modalMedicamentos form {
         display: flex;
         flex-direction: column;
     }
+
     .modalHeader {
         font-size: 24px;
         margin-bottom: 10px;

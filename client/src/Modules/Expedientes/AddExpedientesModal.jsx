@@ -15,7 +15,7 @@ import ExpedientesService from '../../Services/ExpedientesService';
 import { Box, Button } from '@mui/material';
 
 // STYLES
-import './ModalStyle.css';
+
 
 const AddExpedientesModal = ({ onClose }) => {
   const navigate = useNavigate();
@@ -208,9 +208,11 @@ const AddExpedientesModal = ({ onClose }) => {
             className="modalButton"
             type="submit"
             onClick={handleModalSubmit}
+            id='crudButton'
           >
             Guardar Expediente
           </Button>
+          
         </Box>
       </div>
     </Modal>
