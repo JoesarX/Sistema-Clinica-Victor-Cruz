@@ -68,26 +68,27 @@ const Medicamentos = () => {
 
     const handleDeleteMedicamentosClick = (id) => {
         swal({
-            title: "¿Estas seguro?",
-            text: "Una vez borrado, no podrás recuperar este medicamento.",
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta información.",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         })
-            .then((willDelete) => {
+            .then(async (willDelete) => {
                 if (willDelete) {
-                    const deleteMedicamento = async () => {
+                    try {
                         await MedicamentosService.deleteMedicamentos(id);
-
-                    };
-                    deleteMedicamento();
-
-                    swal("¡Medicamento eliminado exitosamente!", {
-                        icon: "success",
-                    });
-                    window.location.reload();
+                        swal("Colaborador eliminado exitosamente!", {
+                            icon: "success",
+                        });
+                        window.location.reload();
+                    } catch (error) {
+                        swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+                            icon: "error",
+                        });
+                    }
                 } else {
-                    swal("¡Tu medicamento no se ha borrado!");
+                    swal("¡Tu información no se ha borrado!");
                 }
             });
 
