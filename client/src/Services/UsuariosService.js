@@ -54,6 +54,8 @@ export const loginUsuarios= async(uEmail, uPassword)=>{
         const passwordInfo=PW.data
         const emailEncontrado= userInfo.find(user => user.correouser === uEmail && user.password === uPassword);
         if(emailEncontrado){
+            console.log(emailEncontrado.nombre)
+            localStorage.setItem("loggedInUserName", emailEncontrado.nombre);
             return true;
     
         }else{
