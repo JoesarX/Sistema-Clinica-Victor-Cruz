@@ -311,3 +311,5 @@ const Administradores = () => {
 
 
 }
+
+export default Administradores;
