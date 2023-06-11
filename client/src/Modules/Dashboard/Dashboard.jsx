@@ -19,7 +19,7 @@ import ExpedientesService from '../../Services/ExpedientesService';
 
 
 const Dashboard = () => {
-    const isLoggedIn = localStorage.getItem("AdminLoggedIn");
+    const isLoggedIn = localStorage.getItem("400");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [expedientes, setExpedientes] = useState([]);
     const [selectedExpediente, setSelectedExpediente] = useState(null);

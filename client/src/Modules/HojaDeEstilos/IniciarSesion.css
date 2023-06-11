@@ -71,13 +71,24 @@
   text-align: left;
 }
 
-input[type='email'],
-input[type='password'] {
+
+
+#password{
   width: 100%;
   padding: 12px;
-  /* border: 1px solid #000 !important; */
+  border: 1px solid #000 !important;
   border-radius: 4px !important;
+  
 }
+
+#email{
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #000 !important;
+  border-radius: 4px !important;
+
+}
+
 
 button[type='submit'] {
   width: 100%;

@@ -77,7 +77,7 @@ const IniciarSesion = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Contraseña</label>
+                        <label  htmlFor="password">Contraseña</label>
                         <input
                             type="password"
                             id="password"
