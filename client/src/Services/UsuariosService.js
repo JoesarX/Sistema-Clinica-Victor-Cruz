@@ -76,12 +76,15 @@ export const loginAdmin= async(uEmail, uPassword)=>{
         const Admininfo= Adminuser.data
         console.log( Adminuser.data)
      
-        console.log("Este es el Email DB: "+Admininfo.id+" Este es el PW DB: "+Admininfo.password)
-        const emailEncontrado= Admininfo.find(Admininfo.rol==='Administrador'&&  Adminuser.correo === uEmail && Adminuser.password === uPassword );
-        if(emailEncontrado){
+        console.log("Este es el Email DB: "+Admininfo.correo+" Este es el PW DB: "+Admininfo.password)
+        const emailEncontrado2= Admininfo.find(Adminuser=> Adminuser.rol==='Administrador' &&  Adminuser.correo === uEmail && Adminuser.password === uPassword );
+        if(emailEncontrado2){
+            console.log("Estoy en caso que si aceptó la credencial: ");
             return true;
+            
     
         }else{
+            console.log("Estoy en caso que no aceptó la credencial: ");
             return false;
         }
        

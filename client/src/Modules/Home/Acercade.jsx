@@ -33,7 +33,7 @@ const Acercade = () => {
               <FontAwesomeIcon icon={faCircleDot} style={{ color: '#D3B938', fontSize: '50px' }}/>
             </div>
             <span>
-            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px'}}>Mission</h2>
+            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px'}}>Misión</h2>
             <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es
               proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en
               la prevención, el diagnóstico y el tratamiento de enfermedades. Estamos dedicados
@@ -47,7 +47,7 @@ const Acercade = () => {
               <FontAwesomeIcon icon={faStar} style={{ color: '#D3B938', fontSize: '50px' }} />
             </div>
             <span>
-              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px'}}>Vision</h2>
+              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px'}}>Visión</h2>
               <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>Ser conocido como la clínica médica y laboratorio de análisis clínicos que garantice
                 su excelencia en el servicio al paciente, la precisión de sus diagnósticos y la
                 atención personalizada de su personal de expertos altamente calificados.</p>

@@ -2,8 +2,8 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Typography } from '@mui/material'
-import { DataGrid, esES, GridActionsCellItem } from '@mui/x-data-grid';
+import {Button, Typography } from '@mui/material'
+import { DataGrid, esES} from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -25,16 +25,16 @@ const Administradores = () => {
    const [usuarios_admin, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
-   let [openAddAdmin, setAddAdmin] = useState(false);
-   let [nombre, setNombre] = useState('5');
-   let [rol, setRol] = useState('');
-   let [id, setId] = useState('');
-   let [email, setEmail] = useState('');
-   let [cel, setCel] = useState('');
-   let [sexo, setSexo] = useState('');
-   let [contraseña, setPassword] = useState('');
-   let [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
-   let [openEditAdmin, setEditAdmin] = useState(false);
+   const [openAddAdmin, setAddAdmin] = useState(false);
+   const [nombre, setNombre] = useState('5');
+   const [rol, setRol] = useState('');
+   const [id, setId] = useState('');
+   const [email, setEmail] = useState('');
+   const [cel, setCel] = useState('');
+   const [sexo, setSexo] = useState('');
+   const [contraseña, setPassword] = useState('');
+   const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
+   const [openEditAdmin, setEditAdmin] = useState(false);
 
    const navigate = useNavigate();
    const isLoggedIn = localStorage.getItem("AdminLoggedIn");
@@ -60,8 +60,6 @@ const Administradores = () => {
       setEmail(row.correo);
       setCel(row.telefono);
       setSexo(row.sexo);
-      setPassword(row.password);
-
       setSelectedAdministradorId(row.id);
    }
 
@@ -322,7 +320,7 @@ const Administradores = () => {
             </div>
             {selectedAdministradorId && (
                <Popup
-                  openPopup={openPopup}
+                  open={openPopup}
                   setOpenPopup={setOpenPopup}
                   setNombre={nombre}
                   setRol={rol}
@@ -330,7 +328,6 @@ const Administradores = () => {
                   setCorreo={email}
                   setTelefono={cel}
                   setSexo={sexo}
-                  setPassword={contraseña}
                />
             )}
             {openAddAdmin && (

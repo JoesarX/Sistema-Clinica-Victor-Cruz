@@ -67,26 +67,27 @@ const Medicamentos = () => {
 
     const handleDeleteMedicamentosClick = (id) => {
         swal({
-            title: "¿Estas seguro?",
-            text: "Una vez borrado, no podrás recuperar este medicamento.",
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta información.",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         })
-            .then((willDelete) => {
+            .then(async (willDelete) => {
                 if (willDelete) {
-                    const deleteMedicamento = async () => {
+                    try {
                         await MedicamentosService.deleteMedicamentos(id);
-
-                    };
-                    deleteMedicamento();
-
-                    swal("¡Medicamento eliminado exitosamente!", {
-                        icon: "success",
-                    });
-                    window.location.reload();
+                        swal("Colaborador eliminado exitosamente!", {
+                            icon: "success",
+                        });
+                        window.location.reload();
+                    } catch (error) {
+                        swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+                            icon: "error",
+                        });
+                    }
                 } else {
-                    swal("¡Tu medicamento no se ha borrado!");
+                    swal("¡Tu información no se ha borrado!");
                 }
             });
 
@@ -235,8 +236,7 @@ const Medicamentos = () => {
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
         setVia(row.via);
-        setImagen('https://thumbs.dreamstime.com/b/comprimido-35700453.jpg');
-    }
+        setImagen('https://d1cft8rz0k7w99.cloudfront.net/n/8/f/c/0/8fc026cdc36fe20694f1990b809ba97e91a73f81_Overthecountermedication_104918_01.png');     }
 
 
 

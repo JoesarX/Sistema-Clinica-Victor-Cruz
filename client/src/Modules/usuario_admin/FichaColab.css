@@ -2,8 +2,8 @@
 
 .Modal {
     background-color: rgb(227, 235, 248);
-    width: 55%;
-    height: 70%;
+    width: 50%;
+    height: 60vh;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -19,7 +19,7 @@
 }
 
 .Contenido {
-    width: 550px;
+    width: 300px;
 }
 
 .Principal {
@@ -27,21 +27,6 @@
     justify-content: center;
     margin-right: 2%;
     margin-top: 1.5%;
-}
-
-.Imagen {
-    display: flex;
-    align-self: center;
-    margin-Right: 16;
-    width: 100;
-    height: 100;
-    border: 2px solid gray;
-    border-radius: 5px;
-
-}
-
-.NombreMed {
-    text-align: center;
 }
 
 .Titulo {
@@ -54,18 +39,20 @@
 }
 
 .div-titulo {
-    margin-top: 3%;
     justify-content: center;
     margin-bottom: -4%;
 }
 
 .Div-imagen {
-    margin-top: 5%;
-    display: flex;
+    padding: 5px;
+    padding-top: 6%;
+    height: 19vh;
+    margin-top: 10%;
+    margin-right: 5%;
 }
 
 
-.tablaMed {
+.tablaColab {
     border-collapse: separate;
     width: 100%;
     border: 2px solid gray;
@@ -74,17 +61,15 @@
 
 th,
 td {
-    padding: 2%;
-    width: 40%;
+    padding: 12px;
     border: 1px solid gray;
     text-align: left;
     font-family: 'Inter', sans-serif;
-
+    font-size: 2.5vh;
 }
 
 th {
     background-color: #DADADA;
-
 }
 
 td {
@@ -93,7 +78,7 @@ td {
 }
 
 td:nth-child(2) {
-    width: 100%;
+    width: 80%;
 }
 
 .topLeft {
@@ -112,17 +97,13 @@ td:nth-child(2) {
     border-bottom-right-radius: 10px;
 }
 
-
-
-
-
 @media screen and (max-width: 920px) {
     .Modal {
         width: 70%;
         height: 80%;
     }
 
-    img.Imagen {
+    .Imagen {
         max-width: 100px;
         max-height: 100px;
     }
@@ -135,7 +116,7 @@ td:nth-child(2) {
 
     }
 
-    .tablaMed {
+    .tablaColab {
         border-collapse: separate;
         width: 80%;
         height: 80%;
@@ -153,14 +134,9 @@ td:nth-child(2) {
             align-self: center;
 
         }
-        .Contenido{
-            margin-top: 5%;
-        }
 
         @media(max-height:450px) {
-            .Div-imagen{
-                width: 100%;
-            }
+
             .Titulo {
                 display: flex;
                 font-size: 10px;
@@ -170,7 +146,7 @@ td:nth-child(2) {
             }
         }
 
-        .TableMed {
+        .tablaColab {
             height: 20%;
         }
 
@@ -227,8 +203,6 @@ td:nth-child(2) {
             font-size: smaller;
             margin-top: 20%;
             align-self: center;
-
-
         }
 
         .Imagen {
@@ -252,7 +226,7 @@ td:nth-child(2) {
 
         }
 
-        .tablaMed {
+        .tablaColab {
             align-self: center;
             margin-top: -15%;
             width: 100%;
@@ -287,7 +261,7 @@ td:nth-child(2) {
     }
 
     @media (max-width:760px) {
-        .tablaMed {
+        .tablaColab {
             align-self: center;
             width: 60%;
             height: 60%;
@@ -313,11 +287,6 @@ td:nth-child(2) {
         }
     }
 
-    .NombreMed {
-        text-align: left;
-        margin-left: 24%;
-    }
-
     .div-titulo {
         justify-content: center;
         margin-top: 5%;
@@ -331,7 +300,6 @@ td:nth-child(2) {
     }
 
     .Titulo {
-        /* margin-top: 20%; */
         margin-left: 1%;
         font-size: 150%;
         font-family: 'inter';
