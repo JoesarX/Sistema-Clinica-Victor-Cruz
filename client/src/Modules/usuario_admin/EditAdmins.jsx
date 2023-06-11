@@ -210,6 +210,7 @@ const EditAdmins = (props) => {
                                     <MenuItem value="Medico/a">Medico/a</MenuItem>
                                     <MenuItem value="Secretario/a">Secretario/a</MenuItem>
                                     <MenuItem value="Servicio General">Servicio General</MenuItem>
+                                    <MenuItem value="Administrador">Servicio General</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

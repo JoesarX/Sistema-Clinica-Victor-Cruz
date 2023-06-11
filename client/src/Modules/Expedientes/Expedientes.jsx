@@ -29,7 +29,10 @@ import NavBar from '../NavBar';
 const Expedientes = () => {
    //========================================================================================================================================================================================================================
    //LOGIN VALIDATION
-   const isLoggedIn = localStorage.getItem("AdminLoggedIn");
+   const AdminIsLoggedIng = localStorage.getItem("300");
+   const UserIsLoggedIng = localStorage.getItem("100");
+   const MasterIsLoggedIng = localStorage.getItem("400");
+   const isLoggedIn = useState('');
 
    //========================================================================================================================================================================================================================
    //EXPEDIENTES GRID DATA
@@ -183,12 +186,14 @@ const Expedientes = () => {
    //==================================================================================================================================================================================
 
 
-
+   
    useEffect(() => {
       // Validación login
-      if (!isLoggedIn) {
+      if (!AdminIsLoggedIng && !UserIsLoggedIng && !MasterIsLoggedIng ) {
          // Redirigir si no se cumple la verificación
          navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+      }else{
+         
       }
 
       const fetchAllExpedientes = async () => {

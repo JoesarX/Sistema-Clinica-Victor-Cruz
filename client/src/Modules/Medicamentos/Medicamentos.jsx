@@ -32,8 +32,8 @@ import NavBar from '../NavBar';
 const Medicamentos = () => {
     //========================================================================================================================================================================================================================
     //LOGIN VALIDATION
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
+    const isLoggedIn = localStorage.getItem("400");
+    let cont =0;
     //========================================================================================================================================================================================================================
     //MEDICAMENTOS GRID DATA
     const navigate = useNavigate();
@@ -350,7 +350,14 @@ const Medicamentos = () => {
         // Validación login
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
-            navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+            if(cont==0){
+             alert("No Cuenta con el permiso de entrar a este apartado")
+            navigate("/expedientes"); // Redirige a la página de inicio de sesión
+            cont++;
+            }
+            
+            
+            
         }
 
         const fetchAllMedicamentos = async () => {
