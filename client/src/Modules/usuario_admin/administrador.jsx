@@ -172,11 +172,13 @@ const Administradores = () => {
       },
       esES,
    );
-
+let buscaError=0;
    useEffect(() => {
       //validación login
+      console.log("Este es el error en A: "+(buscaError++));
       if (!isLoggedIn) {
          // Redirigir si no se cumple la verificación
+
          if(cont==0){
             alert("No Cuenta con el permiso de entrar a este apartado")
             navigate("/expedientes"); // Redirige a la página de inicio de sesiónc

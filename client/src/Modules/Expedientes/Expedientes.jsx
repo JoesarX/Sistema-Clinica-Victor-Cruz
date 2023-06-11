@@ -32,7 +32,7 @@ const Expedientes = () => {
    const AdminIsLoggedIng = localStorage.getItem("300");
    const UserIsLoggedIng = localStorage.getItem("100");
    const MasterIsLoggedIng = localStorage.getItem("400");
-   const isLoggedIn = useState('');
+   let isLoggedIn = false;
 
    //========================================================================================================================================================================================================================
    //EXPEDIENTES GRID DATA
@@ -185,15 +185,16 @@ const Expedientes = () => {
 
    //==================================================================================================================================================================================
 
-
+let buscaError=0;
    
    useEffect(() => {
       // Validación login
+      console.log("Este es el error: "+(buscaError++));
       if (!AdminIsLoggedIng && !UserIsLoggedIng && !MasterIsLoggedIng ) {
-         // Redirigir si no se cumple la verificación
-         navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
-      }else{
          
+         navigate("/iniciarsesion"); 
+      }else{
+         isLoggedIn=true;
       }
 
       const fetchAllExpedientes = async () => {

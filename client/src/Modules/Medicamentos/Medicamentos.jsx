@@ -345,9 +345,10 @@ const Medicamentos = () => {
     // const defaultValue = medicamento.sexo;
     // const selectedValue2 = medicamento.estado_civil;
 
-
+let buscaError=0;
     useEffect(() => {
         // Validación login
+        console.log("Este es el error en Med: "+(buscaError++));
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if(cont==0){
