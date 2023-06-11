@@ -27,18 +27,19 @@ const IniciarSesion = () => {
         console.log("Este es el email: " + email);
         console.log("Esta es la clave: " + password);
 
-       
-        if(await UsuariosService.loginUsuarios(email,password)){
-            localStorage.setItem("isLoggedIn", true);
-            alert("Bienvenido!");
-            navigate("/expedientes"); 
-           }else if(UsuariosService.loginAdmin(email,password)){
-               alert("Bienvenido Doctor!");
-               localStorage.setItem("AdminLoggedIn", true);
-               navigate("/dashboard"); 
-           }else{
-               alert("Email o contraseña incorrecta!");
-           }
+        if (email === "" || password === "") {
+            alert("Debe Llenar todos los campos");
+        } else if (await UsuariosService.loginUsuarios(email, password)) {
+                localStorage.setItem("isLoggedIn", true);
+                alert("Bienvenido!");
+                navigate("/expedientes");
+            } else if (await UsuariosService.loginAdmin(email, password)===true) {
+                alert("Bienvenido Doctor!");
+                localStorage.setItem("AdminLoggedIn", true);
+                navigate("/expedientes");
+            } else {
+                alert("Email o contraseña incorrecta!");
+            }
 
     };
 
