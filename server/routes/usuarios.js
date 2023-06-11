@@ -21,7 +21,7 @@ const usuariosRouter = (pool) => {
    router.get("/usuarios_admin/", async (req, res) => {
     try {
         const connection = await pool.getConnection();
-        const sqlSelect = "SELECT * FROM usuarios_admin ";
+        const sqlSelect = "SELECT * FROM usuarios_admin WHERE correo= `"+{req}+"`";
         const [rows, fields] = await connection.query(sqlSelect);
         connection.release();
         res.json(rows);

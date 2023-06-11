@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { Menu, Logout, People, Home, Medication, Contacts } from '@mui/icons-material';
-import { Link } from 'react-router-dom';
+import { Link , useNavigate} from 'react-router-dom';
 
 const NavBar = () => {
     const [open, setOpen] = useState(false);
     const [userFullName, setUserFullName] = useState("");
     const [userShortName, setUserShortName] = useState("NA");
-
+    const navigate = useNavigate();
     const loggedUser = localStorage.getItem("loggedInUserName");
+
+    function Signout() {
+        localStorage.clear();
+        navigate('/');
+    }
 
     useEffect(() => {
         if (loggedUser) {
@@ -78,7 +83,7 @@ const NavBar = () => {
                             </ListItem>
                         </Link>
                         <ListItem disablePadding>
-                            <ListItemButton>
+                            <ListItemButton onClick={Signout}>
                                 <ListItemIcon sx={{ color: "white" }}><Logout /></ListItemIcon>
                                 <ListItemText primary={"Cerrar Sesión"} />
                             </ListItemButton>
