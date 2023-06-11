@@ -32,14 +32,14 @@ const Dashboard = () => {
         nombre: '',
         edad: '',
         fecha_nacimiento: '',
-        sexo: 'Masculino',
+        sexo: '',
         correo: '',
         telefono: '',
         numid: '',
         estado_civil: '',
         padecimientos: '',
         ocupacion: '',
-        address: 'Dirección del Paciente',
+        address: '',
 
         medicalHistory: {
             allergies: ['Alergia 1', 'Alergia 2'],
@@ -103,7 +103,8 @@ const Dashboard = () => {
                     numid: expedienteData.numid,
                     estado_civil: expedienteData.estado_civil,
                     padecimientos: expedienteData.padecimientos,
-                    ocupacion: expedienteData.ocupacion
+                    ocupacion: expedienteData.ocupacion,
+                    direccion: expedienteData.direccion
                 }));
             } catch (error) {
                 console.log(error);

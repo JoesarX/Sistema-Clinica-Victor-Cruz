@@ -635,20 +635,6 @@
     color: #464646;
 }
 
-.botones {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0px;
-    gap: 10px;
-
-    position: absolute;
-    width: 70px;
-    height: 470px;
-    left: 0px;
-    top: 78px;
-}
-
 .sidebarBtn {
     width: 70px;
     height: 70px;
@@ -661,55 +647,6 @@
     border-right: 3px solid #1560F2;
     outline: none;
     /* Optional: remove the default focus outline */
-}
-
-.logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 70px;
-    height: 70px;
-    background-color: #F8F8F8;
-}
-
-.doc {
-    width: 200px;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 24px;
-    display: flex;
-    align-items: center;
-
-    color: #464646;
-}
-
-.line {
-    border-right: 2px solid #464646;
-    height: 50%;
-}
-
-.foto {
-    width: 60px;
-    height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.nomCli {
-    width: 300px;
-    height: 24px;
-    font-family: 'Inter';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 24px;
-    display: flex;
-    align-items: center;
-
-    color: #464646;
 }
 
 .file-item-line {
