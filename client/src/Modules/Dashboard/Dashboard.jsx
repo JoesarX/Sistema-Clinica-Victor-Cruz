@@ -28,6 +28,20 @@ const Dashboard = () => {
     const url = window.location.href;
     const id = url.substring(url.lastIndexOf('/') + 1);
 
+    const [expediente, setExpediente] = React.useState({
+        nombre: '',
+        edad: '',
+        fecha_nacimiento: '',
+        sexo: '',
+        correo: '',
+        telefono: '',
+        numid: null,
+        estado_civil: '',
+        padecimientos: '',
+        ocupacion: ''
+    })
+
+
     const [patient, setPatient] = useState({
         nombre: '',
         edad: '',
@@ -79,8 +93,9 @@ const Dashboard = () => {
     function enviar_A_Crud() {
         navigate('/administrador');
     }
-
+    const [expedienteDatas, setExpedientess] = useState([]);
     useEffect(() => {
+        
         //validación login
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
@@ -91,6 +106,8 @@ const Dashboard = () => {
             try {
                 const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
                 console.log(expedienteData);
+                setExpediente(expedienteData);
+               
 
                 setPatient(prevPatient => ({
                     ...prevPatient,
@@ -192,8 +209,10 @@ const Dashboard = () => {
         setIsEditingLabel(false);
     };
 
-    const handleOpenEditModal = (expediente) => {
+    const handleOpenEditModal = () => {
         setSelectedExpediente(expediente);
+        console.log(expediente)
+        
         setIsEditModalOpen(true);
     };
 
@@ -216,6 +235,7 @@ const Dashboard = () => {
                             <button onClick={handleOpenEditModal} style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
                             {isEditModalOpen && (
                                 <EditExpedienteDashboardModal
+                                    expedientess={expediente}
                                     onClose={handleCloseEditModal}
                                 />
                             )}

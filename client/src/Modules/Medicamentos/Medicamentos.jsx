@@ -56,8 +56,8 @@ const Medicamentos = () => {
     const navigate = useNavigate();
     const [medicamentos, setMedicamentos] = useState([]);
     //esto es para el popup
-    // const [openPopup, setOpenPopup] = useState(false);
-    // const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
+     const [openPopup, setOpenPopup] = useState(false);
+     const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
 
     const [isModalOpen1, setIsModalOpen1] = useState(false);
 

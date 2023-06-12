@@ -423,6 +423,9 @@ let buscaError=0;
                            flex: 3,
                            renderCell: (params) => (
                               <div>
+                                 <IconButton onClick={() => handleViewExpedientesClick(params.id)}>
+                                    <Visibility />
+                                 </IconButton>
 
                                  <IconButton onClick={() => toggleModal2(params.id)}  >
                                  <Edit />
