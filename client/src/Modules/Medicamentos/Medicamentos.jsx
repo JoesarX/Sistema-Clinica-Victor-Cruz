@@ -227,15 +227,6 @@ const Medicamentos = () => {
         setIsSubmitting2(false);
     };
 
-    const toggleModal22 = () => {
-
-
-        setIsModalOpen1(!isModalOpen1);
-        //setImageUpload(null);
-        setIsSubmitting2(false);
-        cleanExpediente();
-    };
-
     const handleModalFieldChange = (e) => {
         setMedicamento((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
@@ -295,8 +286,6 @@ const Medicamentos = () => {
                 .then((snapshot) => getDownloadURL(snapshot.ref))
                 .then((url) => {
                     resolve(url);
-                    console.log(url);
-                    
                     console.log(medicamento);
                 })
                 .catch((error) => reject(error));
@@ -359,12 +348,15 @@ const Medicamentos = () => {
     const submitEditMedicamento = async () => {
         if (validations()) {
             if (imageUpload != null) {
-                deleteImg(medicamento.urlfoto);
+                if (medicamento.urlfoto != null) {
+                    deleteImg(medicamento.urlfoto);
+                }
                 const imageUrll = await uploadFile();
                 setMedicamento((prevState) => ({
                     ...prevState,
                     urlfoto: imageUrll,
                   }));
+                  console.log("TESTING AAAAAAAAAAAAAAA"+imageUrll);
                 await MedicamentosService.editMedicamentos(id, medicamento);
                 alert('Medicamento Editado');
             }
@@ -375,6 +367,13 @@ const Medicamentos = () => {
             toggleModal22();
             cleanExpediente();
         }
+    };
+
+    const toggleModal22 = () => {
+        setIsModalOpen1(!isModalOpen1);
+        //setImageUpload(null);
+        setIsSubmitting2(false);
+        cleanExpediente();
     };
 
     const validations = () => {
@@ -620,6 +619,7 @@ const Medicamentos = () => {
                                             type="file"
                                             onChange={(event) => {
                                                 setImageUpload(event.target.files[0]);
+                                                console.log(imageUpload);
                                             }}
                                             name='urlfoto'
                                             id="urlfoto"
