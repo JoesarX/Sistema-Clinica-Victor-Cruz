@@ -43,20 +43,29 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
 
     const [estado_civil, setSelectedOption] = useState(null);
     const [expedienteData, setExpedientess] = useState([]);
-    
-    
+
+
     useEffect(() => {
-        
+
         setExpedientess([expedientess]);
-       
-    });
+
+    }, [expedientess]);
 
     const handleModalFieldChange = (e) => {
-        setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
-        console.log(expediente)
-        
-     }
-     const [expediente, setExpediente] = React.useState({
+        if (e.target.name === "sexo") {
+            setExpediente((prevState) => ({
+                ...prevState,
+                sexo: e.target.value
+            }));
+        } else {
+            setExpediente((prevState) => ({
+                ...prevState,
+                [e.target.name]: e.target.value
+            }));
+        }
+
+    }
+    const [expediente, setExpediente] = React.useState({
         nombre: expedientess.nombre,
         edad: expedientess.edad,
         fecha_nacimiento: expedientess.fecha_nacimiento,
@@ -67,9 +76,9 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
         estado_civil: expedientess.estado_civil,
         padecimientos: '',
         ocupacion: ''
-     })
+    })
 
-     const handleDateChange = (date) => {
+    const handleDateChange = (date) => {
 
         console.log(date)
         setFechaNacimiento(date);
@@ -80,38 +89,78 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
         const age = formattedDate ? calculateAge(formattedDate) : '';
         console.log(age)
         setExpediente((prevState) => ({ ...prevState, edad: age }))
-  
-     };
-     const [fecha_nacimiento, setFechaNacimiento] = useState(null);
-     const calculateAge = (dob) => {
+
+    };
+    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
+    const calculateAge = (dob) => {
         const birthDate = new Date(dob);
         const today = new Date();
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDiff = today.getMonth() - birthDate.getMonth();
         if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-           age--;
+            age--;
         }
         return age;
+    };
+
+    const validations = () => {
+        const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
+           expediente;
+        if (nombre === null || nombre === '') {
+           alert('Nombre Completo es requerido');
+           return false;
+        }
+         if (edad === null || edad === '' || edad < 0) {
+           alert('Una edad valida es requerida');
+           return false;
+         }
+       
+        if (sexo === null || sexo === '') {
+           alert('Sexo es requerido');
+           return false;
+        }
+        if (estado_civil === null || estado_civil === '') {
+           alert('Estado Civil es requerido');
+           return false;
+        }
+        if (correo === null || correo === '') {
+           alert('Correo es requerido');
+           return false;
+        }
+        if (telefono === null || telefono === '') {
+           alert('Telefono es requerido');
+           return false;
+        }
+        if (numid === null || numid === '') {
+           alert('Numero de Identidad es requerido');
+           return false;
+        }
+  
+        return true;
      };
 
-     const EditHandler = () => {
+    const EditHandler = () => {
         console.log(expedientess.idpaciente)
         console.log(expediente)
         const editExpediente = async () => {
-        console.log(':)')
-          await ExpedientesService.editExpedientes(expedientess.idpaciente, expediente);
-          alert('Expediente Editado');
-          
+            if(validations()){
+                console.log(':)')
+                await ExpedientesService.editExpedientes(expedientess.idpaciente, expediente);
+                alert('Expediente Editado');
+                onClose();
+            }
+            
+           
         };
         console.log(expediente)
         editExpediente();
-        
-       
-      
-      };
-      const defaulttValue = expedientess.sexo;
-      const defaultValue2 = expedientess.estado_civil;
-     
+
+
+
+    };
+    const defaulttValue = expediente.sexo;
+    const defaultValue2 = expediente.estado_civil;
+    console.log(':)')
     return (
         <Modal open={true} onClose={onClose}>
             <div className='modalContainer'>
@@ -130,25 +179,25 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
                         >
                             <TextField id="nombre" defaultValue={expediente.nombre} label="Nombre Completo" variant="outlined" className="inputField"
                                 // value={expediente.nombre} 
-                                 onChange={handleModalFieldChange} 
+                                onChange={handleModalFieldChange}
                                 name='nombre' />
                             <Box mt={.5}></Box>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <MobileDatePicker
-                                          id="fecha_nacimiento"
-                                          defaultValue={dayjs(expediente.fecha_nacimiento)}
-                                          onChange={handleDateChange}
-                                          renderInput={(params) => <TextField {...params} />}
-                                          name='fecha_nacimiento'
-                                       />
+                                        <MobileDatePicker
+                                            id="fecha_nacimiento"
+                                            defaultValue={dayjs(expediente.fecha_nacimiento)}
+                                            onChange={handleDateChange}
+                                            renderInput={(params) => <TextField {...params} />}
+                                            name='fecha_nacimiento'
+                                        />
                                     </LocalizationProvider>
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <div className='radioGroupContainer'>
                                         <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" className='sexoRadioGroup' id='sexo'
-                                            onChange={handleModalFieldChange} 
+                                            onChange={handleModalFieldChange}
                                             name="sexo"
                                             value={defaulttValue}
                                         >
@@ -160,18 +209,18 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
                             </Grid>
                             <Box mt={.5}></Box>
                             <TextField id="ocupacion" label="Ocupación" defaultValue={expediente.ocupacion} variant="outlined" className="inputField"
-                                 onChange={handleModalFieldChange} 
+                                onChange={handleModalFieldChange}
                                 name='ocupacion' />
                             <Box mt={.5}></Box>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField id="correo" label="Correo Electrónico" variant="outlined" defaultValue={expediente.correo} type='email' className="inputField"
-                                         onChange={handleModalFieldChange} 
+                                        onChange={handleModalFieldChange}
                                         name='correo' />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField id="telefono" label="Teléfono" defaultValue={expediente.telefono}  variant="outlined" className="inputField"
-                                         onChange={handleModalFieldChange} 
+                                    <TextField id="telefono" label="Teléfono" defaultValue={expediente.telefono} variant="outlined" className="inputField"
+                                        onChange={handleModalFieldChange}
                                         name='telefono' />
                                 </Grid>
                             </Grid>
@@ -179,7 +228,7 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
                             <Grid container spacing={2}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={expediente.numid} className="inputField"
-                                         onChange={handleModalFieldChange} 
+                                        onChange={handleModalFieldChange}
                                         name='numid' />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
@@ -187,20 +236,20 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
                                         disablePortal
                                         value={defaultValue2}
                                         id="estado_civil"
-                                        
+
                                         options={listaEstadoCivil}
-                                         onChange={(event, newValue) =>
-                                             setExpediente({
-                                                 ...expediente,
-                                                 estado_civil: newValue
-                                             })
-                                         }
+                                        onChange={(event, newValue) =>
+                                            setExpediente({
+                                                ...expediente,
+                                                estado_civil: newValue
+                                            })
+                                        }
                                         renderInput={(params) => <TextField {...params} label="Estado Civil" />}
                                     />
                                 </Grid>
                             </Grid>
                             <Box mt={.5}></Box>
-                           {/* <TextField id="direccion" label="Dirección" variant="outlined" className="inputField"
+                            {/* <TextField id="direccion" label="Dirección" variant="outlined" className="inputField"
                                 // onChange={handleModalFieldChange} 
                         name='direccion' />*/}
                             <Button

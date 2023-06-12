@@ -122,24 +122,24 @@ const Expedientes = () => {
          icon: "warning",
          buttons: true,
          dangerMode: true,
-       })
-       .then(async (willDelete) => {
-         if (willDelete) {
-           try {
-             await ExpedientesService.deleteExpedientes(id);
-             swal("Colaborador eliminado exitosamente!", {
-               icon: "success",
-             });
-             window.location.reload();
-           } catch (error) {
-             swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
-               icon: "error",
-             });
-           }
-         } else {
-           swal("¡Tu información no se ha borrado!");
-         }
-       });
+      })
+         .then(async (willDelete) => {
+            if (willDelete) {
+               try {
+                  await ExpedientesService.deleteExpedientes(id);
+                  swal("Colaborador eliminado exitosamente!", {
+                     icon: "success",
+                  });
+                  window.location.reload();
+               } catch (error) {
+                  swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+                     icon: "error",
+                  });
+               }
+            } else {
+               swal("¡Tu información no se ha borrado!");
+            }
+         });
    };
 
    //Grid Column Visibility
@@ -206,21 +206,78 @@ const Expedientes = () => {
 
    const defaultValue = expediente.sexo;
    const selectedValue2 = expediente.estado_civil;
+
    const [id, setID] = useState(null);
+
+   const fetchAllExpedientes2 = async () => {
+      try {
+         const expedientesData = await ExpedientesService.getAllExpedientes();
+         const expedientesWithId = expedientesData.map((expediente) => ({
+            ...expediente,
+            pacienteId: expediente.idpaciente,
+         }));
+         setExpedientes(expedientesWithId);
+      } catch (error) {
+         // Handle error if any
+         console.log("Error fetching expedientes:", error);
+      }
+   };
+   const validations = () => {
+      const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
+         expediente;
+      if (nombre === null || nombre === '') {
+         alert('Nombre Completo es requerido');
+         return false;
+      }
+       if (edad === null || edad === '' || edad < 0) {
+         alert('Una edad valida es requerida');
+         return false;
+       }
+     
+      if (sexo === null || sexo === '') {
+         alert('Sexo es requerido');
+         return false;
+      }
+      if (estado_civil === null || estado_civil === '') {
+         alert('Estado Civil es requerido');
+         return false;
+      }
+      if (correo === null || correo === '') {
+         alert('Correo es requerido');
+         return false;
+      }
+      if (telefono === null || telefono === '') {
+         alert('Telefono es requerido');
+         return false;
+      }
+      if (numid === null || numid === '') {
+         alert('Numero de Identidad es requerido');
+         return false;
+      }
+
+      return true;
+   };
    const EditHandler = () => {
+      
 
       const editExpediente = async () => {
-         console.log(':)')
-        await ExpedientesService.editExpedientes(id, expediente);
-        alert('Expediente Editado');
-        toggleModal22();
+         if (validations()) {
+            console.log(':)')
+            await ExpedientesService.editExpedientes(id, expediente);
+            alert('Expediente Editado');
+            toggleModal22();
+            window.location.reload();
+         }
+         
       };
       console.log(expediente)
       editExpediente();
-      
+
+
       navigate('/expedientes')
-      window.location.reload();
-    };
+      fetchAllExpedientes2();
+      // window.location.reload();
+   };
 
 
    const CustomToolbar = () => {
@@ -300,16 +357,17 @@ const Expedientes = () => {
 
    //==================================================================================================================================================================================
 
-let buscaError=0;
-   
+   let buscaError = 0;
+
    useEffect(() => {
       // Validación login
-      console.log("Este es el error: "+(buscaError++));
-      if (!AdminIsLoggedIng && !UserIsLoggedIng && !MasterIsLoggedIng ) {
-         
-         navigate("/iniciarsesion"); 
-      }else{
-         isLoggedIn=true;
+      console.log("Este es el error: " + (buscaError++));
+      if (!AdminIsLoggedIng && !UserIsLoggedIng && !MasterIsLoggedIng) {
+
+         navigate("/iniciarsesion");
+      } else {
+         isLoggedIn = true;
+         console.log(':)')
       }
 
       const fetchAllExpedientes = async () => {
@@ -348,7 +406,7 @@ let buscaError=0;
          }));
       };
 
-      
+
 
       // Call the handleResize function initially and on window resize
       handleResize();
@@ -428,8 +486,8 @@ let buscaError=0;
                                  </IconButton>
 
                                  <IconButton onClick={() => toggleModal2(params.id)}  >
-                                 <Edit />
-                              </IconButton>
+                                    <Edit />
+                                 </IconButton>
 
                                  <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                     <Delete />
@@ -466,7 +524,7 @@ let buscaError=0;
                               noValidate
                               autoComplete="off"
                            >
-                              
+
                               <TextField id="nombre" label="Nombre Completo" defaultValue={expediente.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                               <Box mt={.5}></Box>
                               <Grid container spacing={2}>

@@ -94,6 +94,31 @@ const Dashboard = () => {
         navigate('/administrador');
     }
     const [expedienteDatas, setExpedientess] = useState([]);
+
+    const fetchExpediente2 = async () => {
+        try {
+            const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
+            console.log(expedienteData);
+            setExpediente(expedienteData);
+           
+
+            setPatient(prevPatient => ({
+                ...prevPatient,
+                nombre: expedienteData.nombre,
+                edad: expedienteData.edad,
+                fecha_nacimiento: expedienteData.fecha_nacimiento,
+                sexo: expedienteData.sexo,
+                correo: expedienteData.correo,
+                telefono: expedienteData.telefono,
+                numid: expedienteData.numid,
+                estado_civil: expedienteData.estado_civil,
+                padecimientos: expedienteData.padecimientos,
+                ocupacion: expedienteData.ocupacion
+            }));
+        } catch (error) {
+            console.log(error);
+        }
+    }; 
     useEffect(() => {
         
         //validación login
@@ -219,6 +244,7 @@ const Dashboard = () => {
     const handleCloseEditModal = () => {
         setSelectedExpediente(null);
         setIsEditModalOpen(false);
+        fetchExpediente2();
     };
 
     return (
