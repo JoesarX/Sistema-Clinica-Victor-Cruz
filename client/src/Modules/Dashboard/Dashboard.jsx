@@ -96,8 +96,8 @@ const Dashboard = () => {
                     ...prevPatient,
                     nombre: expedienteData.nombre,
                     edad: expedienteData.edad,
-                    fecha_nacimiento: expedienteData.fecha_nacimiento,
-                    sexo: expedienteData.sexo === 'M' ? 'Masculino' : 'Femenino',
+                    fecha_nacimiento: formatDate(expedienteData.fecha_nacimiento),
+                    sexo: (expedienteData.sexo === "M") ? 'Masculino' : 'Femenino',
                     correo: expedienteData.correo,
                     telefono: expedienteData.telefono,
                     numid: expedienteData.numid,
@@ -113,6 +113,11 @@ const Dashboard = () => {
 
         fetchExpediente();
     }, [id]);
+
+    const formatDate = (date) => {
+        var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(date).toLocaleDateString("es-HN", datePrefs);
+    }
 
     const handleUploadFile = (event) => {
         const file = event.target.files[0];
@@ -210,7 +215,7 @@ const Dashboard = () => {
                 <div className='patient-section'>
 
                     <div className="infoGeneral">
-                        <span>
+                        <div className='profile-picture-and-edit'>
                             <div className='perfil'>
                                 <FontAwesomeIcon icon={faUser} className='iconoUser' />
                             </div>
@@ -220,40 +225,24 @@ const Dashboard = () => {
                                     onClose={handleCloseEditModal}
                                 />
                             )}
-                        </span>
+                        </div>
 
-                        <div className='textoInfo'>
-                            <div className='nombreC'>
-                                <h2 className="nombre"> {patient.nombre}</h2>
+                        <div className='patient-info-vert-align'>
+                            <h2 className="nombre"> {patient.nombre}</h2>
+                            <div className='patient-email-container'>
+                                {patient.correo}
                             </div>
-                            <div className='correo'>
-                                <div className='ccon'>
-                                    <p className="correoText"> {patient.correo}</p>
-                                </div>
+                            <p className="smallText">{patient.numid}</p>
+                            <p className="smallText">{patient.sexo}</p>
+                            <div className='space-between-text'>
+                                <p className="smallText">{patient.fecha_nacimiento}</p>
+                                <p className="smallText">{patient.edad} años</p>
                             </div>
-                            <div className='numid'>
-                                <p className="smallText">{patient.numid}</p>
+                            <div className='space-between-text'>
+                                <p className="smallText">{patient.estado_civil}</p>
+                                <p className="smallText">{patient.ocupacion}</p>
                             </div>
-                            <div className='necon'>
-                                <div className='nacio'>
-                                    <p className="smallText">{patient.fecha_nacimiento}</p>
-                                </div>
-                                <div className='edad'>
-                                    <p className="smallText">{patient.edad} años</p>
-                                </div>
-                            </div>
-                            <div className='oecon'>
-                                <div className='estado'>
-                                    <p className="smallText">{patient.estado_civil}</p>
-                                </div>
-                                <div className='ocupacion'>
-                                    <p className="smallText">{patient.ocupacion}</p>
-                                </div>
-
-                            </div>
-                            <div className='direccion'>
-                                <p className="smallText">{patient.address}</p>
-                            </div>
+                            <p className="smallText">{patient.address}</p>
                         </div>
                     </div>
 
@@ -277,7 +266,7 @@ const Dashboard = () => {
                                 </span>
                             </h3>
                         </div>
-                        <p style={{ color: '#75BD89' }} className="vital-sign-content">
+                        <div style={{ color: '#75BD89' }} className="vital-sign-content">
                             <span className="vitals-label">
                                 <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
                                 <span
@@ -305,8 +294,8 @@ const Dashboard = () => {
                                 </span>
                                 <span className="vitals-value">CM</span>
                             </span>
-                        </p>
-                        <p style={{ color: '#54648D' }} className="vital-sign-content">
+                        </div>
+                        <div style={{ color: '#54648D' }} className="vital-sign-content">
                             <span className="vitals-label">
                                 <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
                                 <span
@@ -334,8 +323,8 @@ const Dashboard = () => {
                                 </span>
                                 <span className="vitals-value">KG</span>
                             </span>
-                        </p>
-                        <p style={{ color: '#916A9E' }} className="vital-sign-content">
+                        </div>
+                        <div style={{ color: '#916A9E' }} className="vital-sign-content">
                             <span className="vitals-label">
                                 <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
                                 <span
@@ -363,8 +352,8 @@ const Dashboard = () => {
                                 </span>
                                 <span className="vitals-value">ºC</span>
                             </span>
-                        </p>
-                        <p style={{ color: '#AB2525' }} className="vital-sign-content">
+                        </div>
+                        <div style={{ color: '#AB2525' }} className="vital-sign-content">
                             <span className="vitals-label">
                                 <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
                                 <span
@@ -392,8 +381,8 @@ const Dashboard = () => {
                                 </span>
                                 <span className="vitals-value">ppm</span>
                             </span>
-                        </p>
-                        <p style={{ color: '#AB2525' }} className="vital-sign-content">
+                        </div>
+                        <div style={{ color: '#AB2525' }} className="vital-sign-content">
                             <span className="vitals-label">
                                 <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
                                 <span
@@ -421,7 +410,7 @@ const Dashboard = () => {
                                 </span>
                                 <span className="vitals-value">mmHg</span>
                             </span>
-                        </p>
+                        </div>
                     </div>
 
                     <div className="files">
