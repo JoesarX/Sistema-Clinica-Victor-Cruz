@@ -2,7 +2,6 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Medicamentos.css';
-import EditMedicamentosModal from './EditMedicamentosModal.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
 import { storage } from '../../firebase';
@@ -24,27 +23,21 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Person, Person2, Visibility, Edit } from '@mui/icons-material'
+import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import moment from 'moment';
-import dayjs from 'dayjs';
 import swal from 'sweetalert';
 
 //ADD MEDICAMENTOS MODAL
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
+
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import UploadIcon from '@mui/icons-material/Upload';
+
 
 
 //STYLES
@@ -56,17 +49,18 @@ import NavBar from '../NavBar';
 const Medicamentos = () => {
     //========================================================================================================================================================================================================================
     //LOGIN VALIDATION
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
+    const isLoggedIn = localStorage.getItem("400");
+    let cont =0;
     //========================================================================================================================================================================================================================
     //MEDICAMENTOS GRID DATA
     const navigate = useNavigate();
     const [medicamentos, setMedicamentos] = useState([]);
     //esto es para el popup
-    const [openPopup, setOpenPopup] = useState(false);
-    const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
+    // const [openPopup, setOpenPopup] = useState(false);
+    // const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
 
     const [isModalOpen1, setIsModalOpen1] = useState(false);
+
 
     const handleSelectedMedicamentosClick = (id) => {
         setSelectedMedicamentoId(id);
@@ -81,41 +75,37 @@ const Medicamentos = () => {
             })
         }
 
+
     
 
-    const handleDeleteMedicamentosClick = (row, id) => {
+    const handleDeleteMedicamentosClick = (id) => {
         swal({
-            title: "¿Estas seguro?",
-            text: "Una vez borrado, no podrás recuperar este medicamento.",
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta información.",
             icon: "warning",
             buttons: true,
             dangerMode: true,
         })
-            .then((willDelete) => {
+            .then(async (willDelete) => {
                 if (willDelete) {
-                    const url = row.urlfoto;
-                    const deleteMedicamento = async () => {
-                        console.log("HOLA DELETE ID: "+id);
+                    try {
                         await MedicamentosService.deleteMedicamentos(id);
-
-                    };
-                    deleteMedicamento();
-                    deleteImg(url);
-                    swal("¡Medicamento eliminado exitosamente!", {
-                        icon: "success",
-                    });
-                    //window.location.reload();
+                        swal("Colaborador eliminado exitosamente!", {
+                            icon: "success",
+                        });
+                        window.location.reload();
+                    } catch (error) {
+                        swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+                            icon: "error",
+                        });
+                    }
                 } else {
-                    swal("¡Tu medicamento no se ha borrado!");
+                    swal("¡Tu información no se ha borrado!");
                 }
             });
 
     };
-
-    const handleSelectedAdministradoresClick = (row) => {
-
-    }
-
+  
     const theme = createTheme(
         {
             palette: {
@@ -172,7 +162,7 @@ const Medicamentos = () => {
                 <div>
                     <Button
                         onClick={toggleModal}
-                        startIcon={<PersonAdd />}
+                        startIcon={<Medication />}
                         style={{
                             backgroundColor: 'rgb(27, 96, 241)',
                             color: 'white',
@@ -194,6 +184,7 @@ const Medicamentos = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [medicamento, setMedicamento] = useState({
         nombre: '',
+        categoria: '',
         stock: '',
         precio_unitario: '',
         via: '',
@@ -204,6 +195,7 @@ const Medicamentos = () => {
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
 
+    console.log(isSubmitting2)
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
@@ -250,8 +242,10 @@ const Medicamentos = () => {
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
         setVia(row.via);
+
         setImagen(row.urlfoto);
     }
+
 
 
    
@@ -413,28 +407,36 @@ const Medicamentos = () => {
     }
     const [medicamentoData, setMedicamentoss] = useState([]);
 
-    const fetchMedicamento = async (id) => {
-        console.log(id)
-        try {
-            const medicamentoData = await MedicamentosService.getOneMedicamento(id);
-            console.log(medicamentoData)
-            setMedicamentoss([medicamentoData]);
-            //setMedicamento(medicamentoData);
-            console.log(medicamentoData)
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    // const fetchMedicamento = async (id) => {
+    //     console.log(id)
+    //     try {
+    //         const medicamentoData = await MedicamentosService.getOneMedicamento(id);
+    //         console.log(medicamentoData)
+    //         setMedicamentoss([medicamentoData]);
+    //         //setMedicamento(medicamentoData);
+    //         console.log(medicamentoData)
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
 
-    const defaultValue = medicamento.sexo;
-    const selectedValue2 = medicamento.estado_civil;
+    // const defaultValue = medicamento.sexo;
+    // const selectedValue2 = medicamento.estado_civil;
 
-
+let buscaError=0;
     useEffect(() => {
         // Validación login
+        console.log("Este es el error en Med: "+(buscaError++));
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
-            navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+            if(cont==0){
+             alert("No Cuenta con el permiso de entrar a este apartado")
+            navigate("/expedientes"); // Redirige a la página de inicio de sesión
+            cont++;
+            }
+            
+            
+            
         }
 
         const fetchAllMedicamentos = async () => {
@@ -466,7 +468,7 @@ const Medicamentos = () => {
                 idmed: false,
                 nombre: true,
                 categoria: isMobile ? false : true,
-                stock: true,
+                stock: isMobile ? false : true,
                 precio_unitario: isMobile ? false : true,
                 via: isMobile ? false : true,
                 dosis: isMobile ? false : true,
@@ -484,30 +486,33 @@ const Medicamentos = () => {
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
-    const [selectedDate, setSelectedDate] = useState(null);
-    const handleInputFocus = (event) => {
-        event.target.blur(); // Remove focus from the input field
-    };
-    const [selectedMedicamento, setSelectedMedicamento] = useState(null);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    // const [selectedDate, setSelectedDate] = useState(null);
+    // const handleInputFocus = (event) => {
+    //     event.target.blur(); // Remove focus from the input field
+    // };
+    // const [selectedMedicamento, setSelectedMedicamento] = useState(null);
+    // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-    const handleOpenEditModal = (medicamento) => {
-        setSelectedMedicamento(medicamento);
-        setIsEditModalOpen(true);
-    };
-    const handleCloseEditModal = () => {
-        setSelectedMedicamento(null);
-        setIsEditModalOpen(false);
-    };
+    // const handleOpenEditModal = (medicamento) => {
+    //     setSelectedMedicamento(medicamento);
+    //     setIsEditModalOpen(true);
+    // };
+    // const handleCloseEditModal = () => {
+    //     setSelectedMedicamento(null);
+    //     setIsEditModalOpen(false);
+    // };
+    console.log(medicamento)    
 
 
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-    };
+    // const handleOpenModal = () => {
+    //     setIsModalOpen(true);
+    // };
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
+    // const handleCloseModal = () => {
+    //     setIsModalOpen(false);
+    // };
+    const selectedValue3 = medicamento.categoria;
+
 
     return (
 
@@ -526,7 +531,7 @@ const Medicamentos = () => {
                                 { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
                                 { field: 'categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
                                 { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
-                                { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 2, headerClassName: 'column-header' },
+                                { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
                                 { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
                                 { field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header' },
                                 {
@@ -582,6 +587,7 @@ const Medicamentos = () => {
                             >
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Autocomplete
+                                
                                     disablePortal
                                     id="categoria"
 
@@ -627,10 +633,12 @@ const Medicamentos = () => {
                                     </Grid>
                                 </Grid>
 
-                                <Button onClick={handleModalSubmit} variant="contained" style={{
-                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                                }}>
+                                <Button
+                                    onClick={handleModalSubmit}
+                                    variant="contained"
+                                    className="modalButton"
+                                    type="submit"
+                                    id='crudButton'>
                                     Agregar Medicamento
                                 </Button>
                             </Box>
@@ -661,17 +669,17 @@ const Medicamentos = () => {
                                     >
                                         <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                         <Autocomplete
+                                        value={selectedValue3}
                                             disablePortal
                                             id="categoria"
 
-                                            required
+                                            
                                             options={listaCategoriaMedicamentos}
                                             onChange={(event, newValue) =>
                                                 setMedicamento({
                                                     ...medicamento,
                                                     categoria: newValue
                                                 })
-
                                             }
                                             renderInput={(params) => <TextField {...params} label="Categoria" required />}
                                         />

@@ -10,9 +10,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 
 import React from 'react'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import ExpedientesService from '../../Services/ExpedientesService';
+import { useState } from 'react'
 import { Box, Button } from '@mui/material'
 
 //STYLES

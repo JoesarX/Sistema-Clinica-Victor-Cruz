@@ -1,6 +1,6 @@
 import React from 'react'
 import '../HojaDeEstilos/IniciarSesion.css';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 
@@ -8,7 +8,7 @@ import Footer from './Footer';
 import Topbar from './Topbar'
 
 const IniciarSesion = () => {
-
+    const yaEsta = localStorage.getItem("400");
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -20,25 +20,42 @@ const IniciarSesion = () => {
     const handleRegisternClick = () => {
         navigate('/registrar-user');
     };
-
+    useEffect(() => {
+        // Validación login
+        if (yaEsta) {
+           // Redirigir si no se cumple la verificación
+           navigate("/expedientes"); // Redirige a la página de inicio de sesión
+        }
+     } );
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         console.log("Este es el email: " + email);
         console.log("Esta es la clave: " + password);
-
-       
-        if(await UsuariosService.loginUsuarios(email,password)){
-            localStorage.setItem("isLoggedIn", true);
-            alert("Bienvenido!");
-            navigate("/expedientes"); 
-           }else if(UsuariosService.loginAdmin(email,password)){
-               alert("Bienvenido Doctor!");
-               localStorage.setItem("AdminLoggedIn", true);
-               navigate("/dashboard"); 
-           }else{
-               alert("Email o contraseña incorrecta!");
-           }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(email) != true) {
+            alert('El correo ingresado no tiene un formato válido.')
+            
+        }else{
+            if (email === "" || password === "") {
+                alert("Debe Llenar todos los campos");
+            } else if (await UsuariosService.loginUsuarios(email, password)) {
+                    localStorage.setItem("100", true);
+                    alert("Bienvenido!");
+                    navigate("/expedientes");
+                } else if (await UsuariosService.loginMaster(email, password)===true) {
+                    alert("Bienvenido Doctor!");
+                    localStorage.setItem("400", true);
+                    navigate("/expedientes");
+                } else if (await UsuariosService.loginAdmin(email, password)===true){
+                    alert("Bienvenido");
+                    localStorage.setItem("300", true);
+                    navigate("/expedientes");
+                }else {
+                    alert("Email o contraseña incorrecta!");
+                }
+        }
+        
 
     };
 
@@ -60,7 +77,7 @@ const IniciarSesion = () => {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Contraseña</label>
+                        <label  htmlFor="password">Contraseña</label>
                         <input
                             type="password"
                             id="password"

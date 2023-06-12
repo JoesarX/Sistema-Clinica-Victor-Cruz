@@ -1,33 +1,45 @@
 import React from 'react';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Dialog } from '@mui/material';
 import './Ficha.css'
 const FichaMedicamentos = (props) => {
-    const { open, setOpenPopup, setNombreF, setCategoriaF, setPrecioUnitarioF, setStockF, setImagenF,setViaF } = props;
+    const { open, setOpenPopup, setNombreF, setCategoriaF, setPrecioUnitarioF, setStockF, setImagenF, setViaF } = props;
 
     return (
         <Dialog open={open} onClose={() => setOpenPopup(false)}>
-            <div className='Modal' style={{ backgroundColor: '#f2f2f2' }}>
-                <div className="div-titulo"style={{ display: 'flex' }}>
+            <div className='Modal'>
+            
                     <h1 className='Titulo' style={{ textAlign: 'center' }}>Descripción del Medicamento</h1>
-                </div>
+               
                 <div className='Principal'>
+                
                     <div className='Div-imagen'>
-                        <img class='Imagen'src={setImagenF} alt={setNombreF} style={{marginLeft: 16, marginRight: 16, width: 200, height: 200 }} />
-
+                        <img className='Imagen' src={setImagenF} alt={setNombreF} style={{ marginLeft: 16, marginRight: 16, width: 200, height: 200 }} />
                     </div>
                     <div className='Contenido'>
-                            <h4 className='NombreMed'>{setNombreF}</h4>
-                            <h5 className='contenido-labels'>Categoría: {setCategoriaF}</h5>
-                            <h5 className='contenido-labels'>Precio Unitario: {setPrecioUnitarioF}</h5>
-                            <h5 className='contenido-labels'>Cantidad de stock: {setStockF}</h5>
-                            <h5 className='contenido-labels'>Via: {setViaF}</h5>
-                       
+                        <table className='tablaMed'>
+                            <tr>
+                                <th className='topLeft'>Nombre</th>
+                                <td className='topRight'>{setNombreF}</td>
+                            </tr>
+                            <tr>
+                                <th>Categoría</th>
+                                <td className='camposT'>{setCategoriaF}</td>
+                            </tr>
+                            <tr>
+                                <th>Precio Unitario</th>
+                                <td className='camposT'>{setPrecioUnitarioF}</td>
+                            </tr>
+                            <tr>
+                                <th>Cantidad de stock</th>
+                                <td className='camposT'>{setStockF}</td>
+                            </tr>
+                            <tr>
+                                <th className='bottomLeft'>Vía</th>
+                                <td className='bottomRight'>{setViaF}</td>
+                            </tr>
+                        </table>
                     </div>
-
-
                 </div>
-
-
             </div>
         </Dialog>
     );

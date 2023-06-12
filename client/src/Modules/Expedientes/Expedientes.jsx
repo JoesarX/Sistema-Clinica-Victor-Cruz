@@ -35,14 +35,19 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 //STYLES
 import ExpedientesService from '../../Services/ExpedientesService';
+import './ExpedientesStyle.css';
 import '../HojaDeEstilos/CrudStyles.css';
+
 import NavBar from '../NavBar';
 
 
 const Expedientes = () => {
    //========================================================================================================================================================================================================================
    //LOGIN VALIDATION
-   const isLoggedIn = localStorage.getItem("isLoggedIn");
+   const AdminIsLoggedIng = localStorage.getItem("300");
+   const UserIsLoggedIng = localStorage.getItem("100");
+   const MasterIsLoggedIng = localStorage.getItem("400");
+   let isLoggedIn = false;
 
    //========================================================================================================================================================================================================================
    //EXPEDIENTES GRID DATA
@@ -106,31 +111,35 @@ const Expedientes = () => {
       setIsEditModalOpen(false);
    };
 
+   const handleViewExpedientesClick = (id) => {
+      navigate(`/expedientes/dashboard/${id}`);
+   };
+
    const handleDeleteExpedientesClick = (id) => {
       swal({
-         title: "¿Estas seguro?",
-         text: "Una vez borrado, no podrás recuperar este expediente.",
+         title: "¿Estás seguro?",
+         text: "Una vez borrado, no podrás recuperar esta información.",
          icon: "warning",
          buttons: true,
          dangerMode: true,
-      })
-         .then((willDelete) => {
-            if (willDelete) {
-               const deleteExpediente = async () => {
-                  await ExpedientesService.deleteExpedientes(id);
-
-               };
-               deleteExpediente();
-
-               swal("¡Expediente eliminado exitosamente!", {
-                  icon: "success",
-               });
-               window.location.reload();
-            } else {
-               swal("¡Tu expediente no se ha borrado!");
-            }
-         });
-
+       })
+       .then(async (willDelete) => {
+         if (willDelete) {
+           try {
+             await ExpedientesService.deleteExpedientes(id);
+             swal("Colaborador eliminado exitosamente!", {
+               icon: "success",
+             });
+             window.location.reload();
+           } catch (error) {
+             swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+               icon: "error",
+             });
+           }
+         } else {
+           swal("¡Tu información no se ha borrado!");
+         }
+       });
    };
 
    //Grid Column Visibility
@@ -268,6 +277,7 @@ const Expedientes = () => {
          </GridToolbarContainer>
       );
    };
+
    const toggleModal2 = async (id) => {
       setID(id)
       console.log(id)
@@ -288,11 +298,18 @@ const Expedientes = () => {
 
 
 
+   //==================================================================================================================================================================================
+
+let buscaError=0;
+   
    useEffect(() => {
       // Validación login
-      if (!isLoggedIn) {
-         // Redirigir si no se cumple la verificación
-         navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+      console.log("Este es el error: "+(buscaError++));
+      if (!AdminIsLoggedIng && !UserIsLoggedIng && !MasterIsLoggedIng ) {
+         
+         navigate("/iniciarsesion"); 
+      }else{
+         isLoggedIn=true;
       }
 
       const fetchAllExpedientes = async () => {
@@ -403,16 +420,17 @@ const Expedientes = () => {
                         {
                            field: 'actions',
                            headerName: '',
-                           flex: 2,
+                           flex: 3,
                            renderCell: (params) => (
                               <div>
+
                                  <IconButton onClick={() => toggleModal2(params.id)}  >
                                  <Edit />
                               </IconButton>
+
                                  <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                     <Delete />
                                  </IconButton>
-
                               </div>
                            ),
                         },
