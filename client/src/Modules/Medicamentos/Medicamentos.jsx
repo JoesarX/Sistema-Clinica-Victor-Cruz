@@ -365,6 +365,9 @@ const Medicamentos = () => {
                     ...prevState,
                     urlfoto: imageUrll,
                   }));
+                  console.log(imageUrll);
+                  console.log(urlfoto);
+                  
                 await MedicamentosService.editMedicamentos(id, medicamento);
                 alert('Medicamento Editado');
             }
