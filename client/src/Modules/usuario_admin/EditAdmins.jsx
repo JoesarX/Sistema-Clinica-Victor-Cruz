@@ -104,7 +104,7 @@ const EditAdmins = (props) => {
         <Modal open={openEditAdmin} onClose={() => setEditAdmin(false)}>
             <div className="modalContainer">
                 <h2 className="modalHeader">
-                    AGREGAR COLABORADOR
+                    EDITAR COLABORADOR
                 </h2>
                 <form onSubmit={handleSubmit} className="modalForm">
                     <Grid container spacing={2}>
@@ -210,7 +210,7 @@ const EditAdmins = (props) => {
                                     <MenuItem value="Medico/a">Medico/a</MenuItem>
                                     <MenuItem value="Secretario/a">Secretario/a</MenuItem>
                                     <MenuItem value="Servicio General">Servicio General</MenuItem>
-                                    <MenuItem value="Administrador">Servicio General</MenuItem>
+                                    <MenuItem value="Administrador">Administrador</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -224,7 +224,7 @@ const EditAdmins = (props) => {
                                     value={selectedOption2}
                                     onChange={(event) => {
                                         const newValue = event.target.value;
-                                        setSelectedOption(newValue);
+                                        setSelectedOption2(newValue);
                                         setAdmin((prevAdmin) => ({
                                             ...prevAdmin,
                                             sexo: newValue
