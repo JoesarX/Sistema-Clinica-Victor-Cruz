@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faUser } from '@fortawesome/free-solid-svg-icons';
-import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import { faDollarSign } from '@fortawesome/free-solid-svg-icons';
-import { faAddressCard } from '@fortawesome/free-solid-svg-icons';
-import { faTable } from '@fortawesome/free-solid-svg-icons';
+import {  faUser } from '@fortawesome/free-solid-svg-icons';
 import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
 import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
@@ -68,8 +64,8 @@ const Dashboard = () => {
     });
 
     const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2', 'Medicamento 3', 'Medicamento 4', 'Medicamento 5', 'Medicamento 6', 'Medicamento 7', 'Medicamento 8', 'Medicamento 9', 'Medicamento 10', 'Medicamento 11', 'Medicamento 12']);
-    const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2', 'Alergia 3', 'Alergia 4', 'Alergia 5', 'Alergia 6', 'Alergia 7', 'Alergia 8', 'Alergia 9', 'Alergia 10', 'Alergia 11', 'Alergia 12', 'Alergia 13', 'Alergia 14']);
-    const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2', 'Enfermedad 1', 'Enfermedad 2']);
+    const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2', 'Alergia 3', 'Alergia 4']);
+    const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 3', 'Enfermedad 4']);
 
     function Signout() {
         localStorage.clear();
