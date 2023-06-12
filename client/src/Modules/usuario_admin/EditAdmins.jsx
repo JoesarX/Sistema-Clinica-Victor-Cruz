@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Stack, Dialog, DialogContent, DialogTitle, Box, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
+import { TextField, Button, Stack, Dialog, DialogContent, DialogTitle, Grid, Modal, Box, FormControl, Select, MenuItem, InputLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AdministradoresService from '../../Services/AdministradoresService';
 
@@ -128,35 +128,158 @@ const EditAdmins = (props) => {
     };
 
     return (
-        <Dialog open={openEditAdmin} onClose={() => setEditAdmin(false)}>
-            <DialogTitle>Editar Administrador</DialogTitle>
-            <DialogContent>
-                <Box sx={{ width: 400 }}>
-                    <Stack spacing={2}>
-                        <TextField label="Nombre Completo" name="nombre" value={admin.nombre} onChange={handleChange} />
-                        <TextField label="Correo Electrónico" name="correo" value={admin.correo} onChange={handleChange} />
-                        <FormControl>
-                            <InputLabel>Rol</InputLabel>
-                            <Select value={selectedOption} onChange={handleSelectChange} label="Rol" name="rol">
+    
+    <Modal open={openEditAdmin} onClose={() => setEditAdmin(false)}>
+        <div className="modalContainer">
+            <h2 className="modalHeader">
+                EDITAR COLABORADOR
+            </h2>
+            <form onSubmit={handleSubmit} className="modalForm">
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            type="text"
+                            variant="outlined"
+                            color="secondary"
+                            value={admin.nombre}
+                            fullWidth
+                            required
+                            onChange={handleChange}
+                            name="nombre"
+                            label="Nombre Completo"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            type="text"
+                            variant="outlined"
+                            color="secondary"
+                            value={admin.id}
+                            fullWidth
+                            onChange={handleChange}
+                            name="id"
+                            label="Identidad"
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            type="email"
+                            variant="outlined"
+                            color="secondary"
+                            value={admin.correo}
+                            required
+                            fullWidth
+                            onChange={handleChange}
+                            name="correo"
+                            label="Correo Electrónico"
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            type="password"
+                            variant="outlined"
+                            color="secondary"
+                            value={admin.password}
+                            fullWidth
+                            onChange={handleChange}
+                            name="password"
+                            label="Contraseña"
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            type="password"
+                            variant="outlined"
+                            color="secondary"
+                            value={inputValue}
+                            required
+                            fullWidth
+                            onChange={handleInputChange}
+                            name="verificarpass"
+                            label="Confirmar Contraseña"
+
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            type="text"
+                            variant="outlined"
+                            color="secondary"
+                            fullWidth
+                            value={admin.telefono}
+                            onChange={handleChange}
+                            name="telefono"
+                            label="Número de celular"
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel id="rol-label">Rol que desempeña *</InputLabel>
+                            <Select
+                                labelId="rol-label"
+                                id="rol"
+                                className='dropDown'
+                                value={selectedOption}
+                                onChange={(event) => {
+                                    const newValue = event.target.value;
+                                    setSelectedOption(newValue);
+                                    setAdmin((prevAdmin) => ({
+                                        ...prevAdmin,
+                                        rol: newValue
+                                    }));
+                                }}
+                                label="Rol que desempeña"
+                                required
+                                sx={{ height: '47px' }}
+                            >
                                 <MenuItem value="Medico/a">Medico/a</MenuItem>
                                 <MenuItem value="Secretario/a">Secretario/a</MenuItem>
                                 <MenuItem value="Servicio General">Servicio General</MenuItem>
+                                <MenuItem value="Administrador">Administrador</MenuItem>
                             </Select>
                         </FormControl>
-                        <TextField label="Contraseña" name="password" type="password" value={admin.password} onChange={handleInputChange} />
-                        <TextField label="Teléfono" name="telefono" value={admin.telefono} onChange={handleChange} />
-                        <FormControl>
-                            <InputLabel>Sexo</InputLabel>
-                            <Select value={selectedOption2} onChange={handleSelectChange2} label="Sexo" name="sexo">
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControl variant="outlined" fullWidth>
+                            <InputLabel id="sexo-label">Sexo *</InputLabel>
+                            <Select
+                                required
+                                labelId="sexo-label"
+                                id="sexo"
+                                value={selectedOption2}
+                                onChange={(event) => {
+                                    const newValue = event.target.value;
+                                    setSelectedOption2(newValue);
+                                    setAdmin((prevAdmin) => ({
+                                        ...prevAdmin,
+                                        sexo: newValue
+                                    }));
+                                }}
+                                label="Sexo"
+                                sx={{ height: '47px' }}
+                            >
                                 <MenuItem value="M">Masculino</MenuItem>
                                 <MenuItem value="F">Femenino</MenuItem>
                             </Select>
                         </FormControl>
-                        <Button variant="contained" onClick={handleSubmit}>Guardar Cambios</Button>
-                    </Stack>
-                </Box>
-            </DialogContent>
-        </Dialog>
+                    </Grid>
+                </Grid>
+                <Button
+                    variant="outlined"
+                    color="secondary"
+                    type="submit"
+                    onClick={handleSubmit}
+                    className="crudButton"
+                    id='crudButton'
+                >
+                    Editar Colaborador
+                </Button>
+            </form>
+        </div>
+    </Modal>
     );
 }
 
