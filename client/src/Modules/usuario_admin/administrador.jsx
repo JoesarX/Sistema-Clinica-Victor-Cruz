@@ -5,10 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {Button, Typography } from '@mui/material'
 import { DataGrid, esES} from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-import { PersonAdd, Edit, Delete, Person, Person2 } from '@mui/icons-material'
+import { GridToolbarContainer, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
+import { Edit, Delete, Person, Person2 } from '@mui/icons-material'
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
 import Popup from '../usuario_admin/Fichas_Admin';
@@ -65,42 +63,38 @@ const Administradores = () => {
 
    const handleDeleteAdministradoresClick = (id) => {
       swal({
-         title: "¿Estás seguro?",
-         text: "Una vez borrado, no podrás recuperar esta información.",
-         icon: "warning",
-         buttons: true,
-         dangerMode: true,
+        title: "¿Estás seguro?",
+        text: "Una vez borrado, no podrás recuperar esta información.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
       })
-         .then(async (willDelete) => {
-            if (willDelete) {
-               try {
-                  await AdministradoresService.deleteAdministradores(id);
-                  swal("Colaborador eliminado exitosamente!", {
-                     icon: "success",
-                  });
-                  window.location.reload();
-               } catch (error) {
-                  swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
-                     icon: "error",
-                  });
-               }
-            } else {
-               swal("¡Tu información no se ha borrado!");
-            }
-         });
-   };
+      .then(async (willDelete) => {
+        if (willDelete) {
+          try {
+            await AdministradoresService.deleteAdministradores(id);
+            swal("Colaborador eliminado exitosamente!", {
+              icon: "success",
+            });
+            window.location.reload();
+          } catch (error) {
+            swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+              icon: "error",
+            });
+          }
+        } else {
+          swal("¡Tu información no se ha borrado!");
+        }
+      });
+    };
    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
       nombre: true,
       correo: true,
       rol: true,
-      password: false,
-      id: true,
+      password: false
    });
 
-   const CustomToolbar = () => {
-      const theme = useTheme();
-      const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+   function CustomToolbar() {
       const handleAgregarAdministradorClick = () => {
          setAddAdmin(true);
          setEditAdmin = { setEditAdmin }
@@ -116,53 +110,34 @@ const Administradores = () => {
 
       return (
 
-         <GridToolbarContainer
-            sx={{
-               display: 'flex',
-               flexDirection: isMobile ? 'column' : 'row',
-               justifyContent: 'space-between',
-               alignItems: isMobile ? 'stretch' : 'center',
-               marginTop: '15px',
-               marginBottom: '10px',
-               gap: '10px',
-            }}
-         >
-            <div>
-               {isMobile ? (
-                  <>
-                     <GridToolbarColumnsButton />
-                     <GridToolbarFilterButton />
-                     <GridToolbarDensitySelector />
-                  </>
-               ) : (
-                  <>
-                     <GridToolbarColumnsButton />
-                     <GridToolbarFilterButton />
-                     <GridToolbarDensitySelector />
-                     <GridToolbarExport />
-                  </>
-               )}
-            </div>
+
+
+         <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', height: '30px', marginTop: '15px', marginBottom: '10px' }}>
 
             <div>
-               <Button
-                  onClick={handleAgregarAdministradorClick}
-                  startIcon={<PersonAdd />}
-                  style={{
-                     backgroundColor: 'rgb(27, 96, 241)',
-                     color: 'white',
-                     borderRadius: '10px',
-                     paddingLeft: '10px',
-                     paddingRight: '10px',
-                  }}
-               >
-                  Agregar Colaborador
+
+               <Typography variant='h6' component='h2' style={{ textAlign: 'right', marginBottom: '-10px', marginLeft: '500px' }}>
+                  Lista de colaboradores
+               </Typography>
+
+
+               {/* <GridToolbarColumnsButton /> */}
+               <GridToolbarFilterButton />
+               <GridToolbarDensitySelector />
+               <GridToolbarExport />
+            </div>
+            <div>
+
+               <Button onClick={handleAgregarAdministradorClick} style={{ backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px', paddingLeft: '10px', paddingRight: '10px' }}>
+                  Agregar Administrador
                </Button>
             </div>
 
          </GridToolbarContainer>
+
+
       );
-   };
+   }
 
    const theme = createTheme(
       {
@@ -200,34 +175,7 @@ let buscaError=0;
          }
       };
       fetchAllAdministradores();
-
-      const handleResize = () => {
-         const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
-
-         // Update the column visibility based on the screen width
-         setColumnVisibilityModel((prevVisibility) => ({
-            ...prevVisibility,
-
-            nombre: true,
-            correo: isMobile ? false : true,
-            rol: isMobile ? false : true,
-            password: false,
-            id: isMobile ? false : true,
-
-         }));
-      };
-
-      // Call the handleResize function initially and on window resize
-      handleResize();
-      window.addEventListener("resize", handleResize);
-
-      // Clean up the event listener on component unmount
-      return () => {
-         window.removeEventListener("resize", handleResize);
-      };
    }, []);
-
-
 
    return (
 
@@ -295,7 +243,7 @@ let buscaError=0;
                         {
                            field: 'actions',
                            headerName: '',
-                           flex: 3,
+                           flex: 2,
                            renderCell: (params) => (
                               <div>
                                  <IconButton onClick={() => handleEditAdministradoresClick(params.row)}>
