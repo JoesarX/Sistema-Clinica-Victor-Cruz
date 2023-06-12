@@ -141,6 +141,7 @@ const EditAdmins = (props) => {
                                 <MenuItem value="Medico/a">Medico/a</MenuItem>
                                 <MenuItem value="Secretario/a">Secretario/a</MenuItem>
                                 <MenuItem value="Servicio General">Servicio General</MenuItem>
+                                <MenuItem value="Administrador">Administrador</MenuItem>
                             </Select>
                         </FormControl>
                         <TextField label="Contraseña" name="password" type="password" value={admin.password} onChange={handleInputChange} />

@@ -206,7 +206,7 @@ const AddAdmin = (props) => {
                                     <MenuItem value="Medico/a">Medico/a</MenuItem>
                                     <MenuItem value="Secretario/a">Secretario/a</MenuItem>
                                     <MenuItem value="Servicio General">Servicio General</MenuItem>
-                                    <MenuItem value="Administrador">Servicio General</MenuItem>
+                                    <MenuItem value="Administrador">Administrador</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
