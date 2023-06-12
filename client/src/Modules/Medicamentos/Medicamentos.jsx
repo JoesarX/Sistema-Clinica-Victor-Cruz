@@ -57,7 +57,7 @@ const Medicamentos = () => {
     const [medicamentos, setMedicamentos] = useState([]);
     //esto es para el popup
      const [openPopup, setOpenPopup] = useState(false);
-     const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
+    const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
 
     const [isModalOpen1, setIsModalOpen1] = useState(false);
 

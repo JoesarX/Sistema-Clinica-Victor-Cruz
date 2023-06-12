@@ -20,7 +20,7 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "dayjs": "^1.11.7",
-    "firebase": "^9.22.1",
+    "firebase": "^9.22.2",
     "framer-motion": "^10.12.12",
     "moment": "^2.29.4",
     "react": "^18.2.0",

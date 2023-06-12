@@ -103,7 +103,6 @@ const Administradores = () => {
 
       const handleAgregarAdministradorClick = () => {
          setAddAdmin(true);
-         setEditAdmin = { setEditAdmin }
          setNombre('');
          setRol('');
          setId('');
