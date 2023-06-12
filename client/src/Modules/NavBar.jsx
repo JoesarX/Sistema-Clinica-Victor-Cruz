@@ -9,7 +9,9 @@ const NavBar = () => {
     const [userShortName, setUserShortName] = useState("NA");
     const navigate = useNavigate();
     const loggedUser = localStorage.getItem("loggedInUserName");
-
+    const Master = localStorage.getItem("400");
+    const Admin = localStorage.getItem("300");
+    const User = localStorage.getItem("100");
     function Signout() {
         localStorage.clear();
         navigate('/');
@@ -20,6 +22,7 @@ const NavBar = () => {
             setUserFullName(loggedUser);
             setUserShortName(loggedUser.charAt(0).toUpperCase());
         }
+        
     }, [loggedUser]);
 
     const toggleDrawer = () => {
@@ -66,7 +69,7 @@ const NavBar = () => {
                                 </ListItemButton>
                             </ListItem>
                         </Link>
-                        <Link to="/medicamentos" style={{ textDecoration: 'none', color: "white" }}>
+                        <Link to="/Medicamentos" style={{ textDecoration: 'none', color: "white" }}>
                             <ListItem disablePadding>
                                 <ListItemButton>
                                     <ListItemIcon sx={{ color: "white" }}><Medication /></ListItemIcon>

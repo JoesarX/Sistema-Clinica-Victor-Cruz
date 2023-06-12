@@ -33,10 +33,10 @@ const Administradores = () => {
    const [contraseña, setPassword] = useState('');
    const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
    const [openEditAdmin, setEditAdmin] = useState(false);
-
+  
    const navigate = useNavigate();
-   const isLoggedIn = localStorage.getItem("AdminLoggedIn");
-
+   const isLoggedIn = localStorage.getItem("400");
+   let cont =0;
    const handleEditAdministradoresClick = (row) => {
 
       setEditAdmin(true);
@@ -147,12 +147,19 @@ const Administradores = () => {
       },
       esES,
    );
-
+let buscaError=0;
    useEffect(() => {
       //validación login
+      console.log("Este es el error en A: "+(buscaError++));
       if (!isLoggedIn) {
          // Redirigir si no se cumple la verificación
-         navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+
+         if(cont==0){
+            alert("No Cuenta con el permiso de entrar a este apartado")
+            navigate("/expedientes"); // Redirige a la página de inicio de sesiónc
+            cont++;
+         }
+         
       }
       const fetchAllAdministradores = async () => {
          try {

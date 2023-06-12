@@ -4,6 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import './Medicamentos.css';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
+import { storage } from '../../firebase';
+import 'firebase/compat/storage';
+//import { storage } from "./firebase";
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject,
+    getStorage,
+    listAll,
+    list,
+} from "firebase/storage";
+import { v4 } from "uuid";
 
 //GRID
 import { Box, Button } from '@mui/material'
@@ -22,6 +35,10 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+import UploadIcon from '@mui/icons-material/Upload';
+
+
 
 //STYLES
 import MedicamentosService from '../../Services/MedicamentosService';
@@ -32,8 +49,8 @@ import NavBar from '../NavBar';
 const Medicamentos = () => {
     //========================================================================================================================================================================================================================
     //LOGIN VALIDATION
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
+    const isLoggedIn = localStorage.getItem("400");
+    let cont =0;
     //========================================================================================================================================================================================================================
     //MEDICAMENTOS GRID DATA
     const navigate = useNavigate();
@@ -42,28 +59,24 @@ const Medicamentos = () => {
     // const [openPopup, setOpenPopup] = useState(false);
     // const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
 
-    // const handleAddMedicamentosClick = () => {
-    //    navigate('/medicamentos/crear');
-    // };
-
-    /*const handleEditMedicamentosClick = (id) => {
-       navigate(`/medicamentos/${id}`);
-       
-    };*/
-
     const [isModalOpen1, setIsModalOpen1] = useState(false);
 
-    // const handleEditMedicamentosClick = () => {
-    //     setIsModalOpen1(true);
-    //     <EditMedicamentosModal />
-    // };
+
+    const handleSelectedMedicamentosClick = (id) => {
+        setSelectedMedicamentoId(id);
+        setOpenPopup(true);
+    }
+        const storage = getStorage(); 
+        const deleteImg = (refUrl) => { 
+        const imageRef = ref(storage, refUrl)
+            deleteObject(imageRef)
+            .catch((error) => {
+                console.log("Failed to delete image: ", error)
+            })
+        }
 
 
-
-    // const handleSelectedMedicamentosClick = (id) => {
-    //     setSelectedMedicamentoId(id);
-    //     setOpenPopup(true);
-    // }
+    
 
     const handleDeleteMedicamentosClick = (id) => {
         swal({
@@ -92,7 +105,7 @@ const Medicamentos = () => {
             });
 
     };
-
+  
     const theme = createTheme(
         {
             palette: {
@@ -169,14 +182,15 @@ const Medicamentos = () => {
 
     //ADD MEDICAMENTOS MODAL
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [medicamento, setMedicamento] = React.useState({
+    const [medicamento, setMedicamento] = useState({
         nombre: '',
         categoria: '',
         stock: '',
         precio_unitario: '',
         via: '',
-        dosis: ''
-    })
+        dosis: '',
+        urlfoto: '',
+    });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
@@ -205,14 +219,6 @@ const Medicamentos = () => {
         setIsSubmitting2(false);
     };
 
-    const toggleModal22 = () => {
-
-
-        setIsModalOpen1(!isModalOpen1);
-        setIsSubmitting2(false);
-        cleanExpediente();
-    };
-
     const handleModalFieldChange = (e) => {
         setMedicamento((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
@@ -236,10 +242,13 @@ const Medicamentos = () => {
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
         setVia(row.via);
-        setImagen('https://d1cft8rz0k7w99.cloudfront.net/n/8/f/c/0/8fc026cdc36fe20694f1990b809ba97e91a73f81_Overthecountermedication_104918_01.png');     }
+
+        setImagen(row.urlfoto);
+    }
 
 
 
+   
 
     const cleanExpediente = () => {
         medicamento.nombre = null;
@@ -248,50 +257,119 @@ const Medicamentos = () => {
         medicamento.precio_unitario = null;
         medicamento.via = null;
         medicamento.dosis = null;
+        medicamento.urlfoto = null;
     };
 
-
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imageUrl, setImageUrl] = useState(null);
+    const imagesListRef = ref(storage, "images/");
+    async function  uploadFile ()   {
+        
+        return new Promise((resolve, reject) => {
+            // Your file upload logic here
+            // Call resolve with the imageUrl when the upload is complete
+            // Call reject with an error if there's an issue with the upload
+            // For example:
+            if (imageUpload == null) {
+                reject(new Error('No file selected for upload'));
+                return;
+            }
+            
+            const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+            uploadBytes(imageRef, imageUpload)
+                .then((snapshot) => getDownloadURL(snapshot.ref))
+                .then((url) => {
+                    resolve(url);
+                    console.log(medicamento);
+                })
+                .catch((error) => reject(error));
+        });
+    };
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
-
-        setIsSubmitting(true);
-
-        console.log(medicamento)
-
+      
+        try {
+          const imageUrll = await uploadFile();
+      
+          setMedicamento((prevState) => ({
+            ...prevState,
+            urlfoto: imageUrll,
+          }));
+      
+          setIsSubmitting(true);
+        } catch (error) {
+          // Handle error if any
+          console.log('Error submitting medicamento:', error);
+        }
+      };
+      
+      useEffect(() => {
+        if (isSubmitting) {
+          submitMedicamento();
+        }
+      }, [isSubmitting]);
+      
+      const submitMedicamento = async () => {
         if (validations()) {
-            try {
-                // Perform the form submission logic
-                await MedicamentosService.postMedicamentos(medicamento);
-                alert('Medicamento Agregado');
-                toggleModal();
-
-
-
-            } catch (error) {
-                // Handle error if any
-                console.log('Error submitting medicamento:', error);
-            }
+          try {
+            await MedicamentosService.postMedicamentos(medicamento);
+            alert('Medicamento Agregado');
+            toggleModal();
+          } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+          }
+        }
+      };
+      
+      const EditHandler = async (e) => {
+        e.preventDefault();
+        try {
+          setIsSubmitting2(true);
+        } catch (error) {
+          // Handle error if any
+          console.log('Error submitting medicamento:', error);
         }
     };
 
-    const EditHandler = () => {
+    useEffect(() => {
+        if (isSubmitting2) {
+          submitEditMedicamento();
+        }
+      }, [isSubmitting2]);
 
+    const submitEditMedicamento = async () => {
         if (validations()) {
-            const editMedicamento = async () => {
+            if (imageUpload != null) {
+                if (medicamento.urlfoto != null) {
+                    deleteImg(medicamento.urlfoto);
+                }
+                const imageUrll = await uploadFile();
+                setMedicamento((prevState) => ({
+                    ...prevState,
+                    urlfoto: imageUrll,
+                  }));
+                  console.log("TESTING AAAAAAAAAAAAAAA"+imageUrll);
                 await MedicamentosService.editMedicamentos(id, medicamento);
                 alert('Medicamento Editado');
-                toggleModal22();
-                cleanExpediente();
-            };
-            console.log(medicamento)
-            editMedicamento();
-
-            navigate('/medicamentos')
-            window.location.reload();
+            }
+            else {
+                await MedicamentosService.editMedicamentos(id, medicamento);
+                alert('Medicamento Editado');
+            }
+            toggleModal22();
+            cleanExpediente();
         }
-
     };
+
+    const toggleModal22 = () => {
+        setIsModalOpen1(!isModalOpen1);
+        //setImageUpload(null);
+        setIsSubmitting2(false);
+        cleanExpediente();
+    };
+
     const validations = () => {
         const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
         if (nombre === null || nombre === '' || nombre === ' ') {
@@ -345,12 +423,20 @@ const Medicamentos = () => {
     // const defaultValue = medicamento.sexo;
     // const selectedValue2 = medicamento.estado_civil;
 
-
+let buscaError=0;
     useEffect(() => {
         // Validación login
+        console.log("Este es el error en Med: "+(buscaError++));
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
-            navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+            if(cont==0){
+             alert("No Cuenta con el permiso de entrar a este apartado")
+            navigate("/expedientes"); // Redirige a la página de inicio de sesión
+            cont++;
+            }
+            
+            
+            
         }
 
         const fetchAllMedicamentos = async () => {
@@ -461,7 +547,7 @@ const Medicamentos = () => {
                                             </IconButton>
 
 
-                                            <IconButton onClick={() => handleDeleteMedicamentosClick(params.id)}>
+                                            <IconButton onClick={() => handleDeleteMedicamentosClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
                                             <IconButton onClick={() => handleSelectedFicha(params.row)}>
@@ -533,6 +619,19 @@ const Medicamentos = () => {
                                         <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' />
                                     </Grid>
                                 </Grid>
+                                <Grid container spacing={2} >
+                                    <Grid item xs={3} sm={1} >
+                                        <input
+                                            type="file"
+                                            onChange={(event) => {
+                                                setImageUpload(event.target.files[0]);
+                                                console.log(imageUpload);
+                                            }}
+                                            name='urlfoto'
+                                            id="urlfoto"
+                                        />
+                                    </Grid>
+                                </Grid>
 
                                 <Button
                                     onClick={handleModalSubmit}
@@ -601,6 +700,18 @@ const Medicamentos = () => {
                                                 <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
                                             </Grid>
                                         </Grid>
+                                        <Grid container spacing={2} >
+                                            <Grid item xs={3} sm={1} >
+                                                <input
+                                                    type="file"
+                                                    onChange={(event) => {
+                                                        setImageUpload(event.target.files[0]);
+                                                    }}
+                                                    name='urlfoto'
+                                                    id="urlfoto"
+                                                />
+                                            </Grid>
+                                        </Grid>
 
                                         <Button onClick={EditHandler} variant="contained" style={{
                                             backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
@@ -619,16 +730,16 @@ const Medicamentos = () => {
 
             </div>
             {selectedRow && (
-               <FichaMedicamentos
-                  open={openFicha}
-                  setOpenPopup={setOpenFicha}
-                  setNombreF={nombre}
-                  setCategoriaF={categoria}
-                  setPrecioUnitarioF={precioUnitario}
-                  setStockF={stock}
-                  setImagenF={imagen}
-                  setViaF={via}
-               />
+                <FichaMedicamentos
+                    open={openFicha}
+                    setOpenPopup={setOpenFicha}
+                    setNombreF={nombre}
+                    setCategoriaF={categoria}
+                    setPrecioUnitarioF={precioUnitario}
+                    setStockF={stock}
+                    setImagenF={imagen}
+                    setViaF={via}
+                />
             )}
         </div>
     );

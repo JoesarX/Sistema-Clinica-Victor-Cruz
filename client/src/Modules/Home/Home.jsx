@@ -19,7 +19,6 @@ import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 
 
 const Home = () => {
-
     const navigate = useNavigate();
 
     const handleCitaClick = () => {
