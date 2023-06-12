@@ -211,10 +211,10 @@ const Dashboard = () => {
 
                     <div className="infoGeneral">
                         <span>
-                            <div className='perfil' style={{ backgroundColor: '#1560F2', borderRadius: '60%', width: '62px', height: '60px', display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '-25px' }}>
-                                <FontAwesomeIcon icon={faUser} style={{ color: '#F8F8F8', fontSize: '55px' }} />
+                            <div className='perfil'>
+                                <FontAwesomeIcon icon={faUser} className='iconoUser' />
                             </div>
-                            <button onClick={handleOpenEditModal} style={{ marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>Editar</button>
+                            <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
                             {isEditModalOpen && (
                                 <EditExpedienteDashboardModal
                                     onClose={handleCloseEditModal}
@@ -228,7 +228,7 @@ const Dashboard = () => {
                             </div>
                             <div className='correo'>
                                 <div className='ccon'>
-                                    <p className="correoText">{patient.correo}</p>
+                                    <p className="correoText"> {patient.correo}</p>
                                 </div>
                             </div>
                             <div className='numid'>
@@ -449,7 +449,7 @@ const Dashboard = () => {
                 <div className="patient-section">
 
                     <div className='medHis'>
-                        
+
                         <div className='box-title'>
                             <h3 className='histmedtit'>Historial Médico
                                 <span>

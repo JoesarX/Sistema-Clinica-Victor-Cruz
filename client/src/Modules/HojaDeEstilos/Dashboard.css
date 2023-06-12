@@ -150,7 +150,7 @@
     padding-bottom: 0px;
 
     width: 100%;
-    
+
     border-bottom: 1px solid #464646;
     /* TEMPORALLL */
     /* background-color: rgb(255, 0, 0, 0.3);
@@ -194,7 +194,39 @@
 .perfil {
     height: 100%;
     width: 30%;
-    border-radius: 10px;
+    background-color: #1560F2;
+    border-radius: 60%;
+    width: 62px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* margin-top: -25px*/
+    padding: 10%;
+    margin-left: 25%;
+}
+
+.iconoUser {
+    color: #F8F8F8;
+    font-size: 55px;
+}
+
+.editButton {
+    margin-left: 13px;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    color: #1560F2;
+    font-weight: bold;
+    margin-left: 52%;
+    margin-top: 12%;
+}
+
+.textoInfo {
+    justify-content: left;
+    align-items: left;
+    margin-left: 5%;
 }
 
 .files {
@@ -411,29 +443,19 @@
 }
 
 .nombreC {
-    position: relative;
-
     width: 300px;
     height: 60px;
-    /* Inside auto layout */
-    flex: none;
-    order: 0;
-    flex-grow: 0;
 }
 
 .nombre {
     width: 350px;
     height: 55px;
-    margin-left: 5px;
-    top: 0px;
+    margin-top: 5%;
     font-family: 'Inter';
     font-style: normal;
+    font-size: 3vh;
     font-weight: 700;
-    font-size: 18px;
-    line-height: 20px;
     display: flex;
-    align-items: center;
-    align-content: center;
     color: #464646;
 }
 
@@ -446,11 +468,10 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 12px;
+    font-size: 2vh;
     line-height: 24px;
     display: flex;
     align-items: center;
-
     color: #737373;
 }
 
@@ -464,6 +485,7 @@
     padding: 0px;
     width: 300px;
     height: 20px;
+    margin-bottom: 3%;
     /* Inside auto layout */
     flex: none;
     order: 3;
@@ -490,21 +512,19 @@
 .correo {
     width: 300px;
     height: 20px;
-    margin: 0px;
-
-    /* Inside auto layout */
-
-    flex: none;
+    margin-top: -8%;
+    margin-bottom: 5%;
+    /*flex: none;
     order: 1;
     align-self: stretch;
-    flex-grow: 0;
+    flex-grow: 0;*/
 }
 
 .numid {
     /* Frame 15 */
     width: 300px;
     height: 20px;
-    margin: 0px;
+    margin-bottom: 3%;
     /* Inside auto layout */
     flex: none;
     order: 2;
@@ -557,7 +577,7 @@
     left: 40px;
     width: 20px;
     height: 20px;
-
+    margin-left: 35%;
     /* Inside auto layout */
 
     flex: none;
@@ -598,12 +618,9 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
-    width: 180px;
-    height: 20px;
-    left: 0px;
-    top: 0px;
-
+    align-items: left;
+    width: 230px;
+    height: 25px;
     background: #C8DAFF;
     border-radius: 20px;
 }
@@ -612,15 +629,15 @@
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
-    font-size: 12px;
-    line-height: 22px;
-    /* identical to box height */
+    font-size: 2vh;
+    color: #1560F2;
+    margin-left: -5%;
+    /* identical to box height 
     margin: 0px;
     display: flex;
     align-items: center;
     text-align: center;
-    margin-left: -5px;
-    color: #1560F2;
+    CHIVA CON ESTO DE CHATGPT @PEDRO*/
 }
 
 .divider {
