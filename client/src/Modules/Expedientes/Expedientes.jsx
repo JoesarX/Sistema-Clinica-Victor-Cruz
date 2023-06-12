@@ -14,7 +14,22 @@ import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
+import moment from 'moment';
+import dayjs from 'dayjs';
 
+
+//modal
+import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Autocomplete from '@mui/material/Autocomplete';
+import Grid from '@mui/material/Grid';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
 
 
@@ -42,6 +57,20 @@ const Expedientes = () => {
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+
+   const [isModalOpen1, setIsModalOpen1] = useState(false);
+
+   const toggleModal22 = () => {
+
+
+      setIsModalOpen1(!isModalOpen1);
+      setIsSubmitting2(false);
+   };
+
+   const [expedienteData, setExpedientess] = useState([]);
+
+
 
    const theme = createTheme(
       {
@@ -126,6 +155,73 @@ const Expedientes = () => {
       padecimientos: false,
       ocupacion: false,
    });
+   const handleModalFieldChange = (e) => {
+      setExpediente((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
+
+   }
+   const [isSubmitting2, setIsSubmitting2] = useState(false);
+   const handleDateChange = (date) => {
+
+      console.log(date)
+      setFechaNacimiento(date);
+      const formattedDate = date ? date.toISOString().slice(0, 10) : '';
+      console.log(formattedDate)
+      setExpediente((prevState) => ({ ...prevState, fecha_nacimiento: formattedDate }))
+      console.log(fecha_nacimiento)
+      const age = formattedDate ? calculateAge(formattedDate) : '';
+      console.log(age)
+      setExpediente((prevState) => ({ ...prevState, edad: age }))
+
+   };
+
+   const [expediente, setExpediente] = React.useState({
+      nombre: '',
+      edad: '',
+      fecha_nacimiento: '',
+      sexo: '',
+      correo: '',
+      telefono: '',
+      numid: null,
+      estado_civil: '',
+      padecimientos: '',
+      ocupacion: ''
+   })
+
+   const calculateAge = (dob) => {
+      const birthDate = new Date(dob);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+         age--;
+      }
+      return age;
+   };
+
+   const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a']
+
+
+
+   const [fecha_nacimiento, setFechaNacimiento] = useState(null);
+
+   const defaultValue = expediente.sexo;
+   const selectedValue2 = expediente.estado_civil;
+   const [id, setID] = useState(null);
+   const EditHandler = () => {
+
+      const editExpediente = async () => {
+         console.log(':)')
+        await ExpedientesService.editExpedientes(id, expediente);
+        alert('Expediente Editado');
+        toggleModal22();
+      };
+      console.log(expediente)
+      editExpediente();
+      
+      navigate('/expedientes')
+      window.location.reload();
+    };
+
 
    const CustomToolbar = () => {
       const theme = useTheme();
@@ -182,6 +278,25 @@ const Expedientes = () => {
       );
    };
 
+   const toggleModal2 = async (id) => {
+      setID(id)
+      console.log(id)
+      try {
+         const expedienteData = await ExpedientesService.getOneExpediente(id);
+         console.log(expedienteData)
+         setExpedientess([expedienteData]);
+         setExpediente(expedienteData);
+         console.log(expedienteData)
+      } catch (error) {
+         console.log(error);
+      }
+
+      setIsModalOpen1(!isModalOpen1);
+      setIsSubmitting2(false);
+   };
+   //==================================================================================================================================================================================
+
+
 
    //==================================================================================================================================================================================
 
@@ -232,6 +347,8 @@ let buscaError=0;
 
          }));
       };
+
+      
 
       // Call the handleResize function initially and on window resize
       handleResize();
@@ -306,19 +423,11 @@ let buscaError=0;
                            flex: 3,
                            renderCell: (params) => (
                               <div>
-                                 <IconButton onClick={() => handleViewExpedientesClick(params.id)}>
-                                    <Visibility />
-                                 </IconButton>
-                                 <IconButton onClick={() => handleOpenEditModal(params.id)}>
-                                    <Edit />
-                                 </IconButton>
-                                 {isEditModalOpen && (
-                                    <EditExpedientesModal
-                                       setExpedientes={setExpedientes}
-                                       onClose={handleCloseEditModal}
-                                       expedienteData={modifiedExpediente}
-                                    />
-                                 )}
+
+                                 <IconButton onClick={() => toggleModal2(params.id)}  >
+                                 <Edit />
+                              </IconButton>
+
                                  <IconButton onClick={() => handleDeleteExpedientesClick(params.id)}>
                                     <Delete />
                                  </IconButton>
@@ -335,7 +444,96 @@ let buscaError=0;
                      onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
                   />
                </ThemeProvider>
+               <Modal open={isModalOpen1} onClose={toggleModal22}>
 
+                  <div className='modalContainer'>
+                     {expedienteData.map((expediente) => (
+                        <div className='expedienteCard' key={expediente.idpaciente}>
+
+                           <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
+
+                           <Box
+                              component="form"//edit modal
+                              sx={{
+                                 display: 'flex',
+                                 flexDirection: 'column',
+                                 gap: '10px',
+                                 width: '100%', // Added width property
+                              }}
+                              noValidate
+                              autoComplete="off"
+                           >
+                              
+                              <TextField id="nombre" label="Nombre Completo" defaultValue={expediente.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                              <Box mt={.5}></Box>
+                              <Grid container spacing={2}>
+                                 <Grid item xs={12} sm={6}>
+
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+                                       <MobileDatePicker
+                                          id="fecha_nacimiento"
+                                          defaultValue={dayjs(expediente.fecha_nacimiento)}
+                                          onChange={handleDateChange}
+                                          renderInput={(params) => <TextField {...params} />}
+                                          name='fecha_nacimiento'
+                                       />
+                                    </LocalizationProvider>
+                                 </Grid>
+                                 <Grid item xs={12} sm={6}>
+                                    <div className='radioGroupContainer'>
+                                       <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" value={defaultValue} className='sexoRadioGroup' id='sexo' onChange={handleModalFieldChange} name="sexo" required>
+                                          <FormControlLabel value="M" control={<Radio />} label="Masculino" />
+                                          <FormControlLabel value="F" control={<Radio />} label="Femenino" />
+                                       </RadioGroup>
+                                    </div>
+                                 </Grid>
+                              </Grid>
+                              <Box mt={.5}></Box>
+                              <TextField id="ocupacion" label="Ocupación" variant="outlined" defaultValue={expediente.ocupacion} onChange={handleModalFieldChange} name='ocupacion' required />
+                              <Box mt={.5}></Box>
+                              <Grid container spacing={2}>
+                                 <Grid item xs={12} sm={6}>
+                                    <TextField id="correo" label="Correo Electrónico" defaultValue={expediente.correo} variant="outlined" type='email' onChange={handleModalFieldChange} name='correo' />
+                                 </Grid>
+                                 <Grid item xs={12} sm={6}>
+                                    <TextField id="telefono" label="Teléfono" variant="outlined" defaultValue={expediente.telefono} onChange={handleModalFieldChange} name='telefono' />
+                                 </Grid>
+                              </Grid>
+                              <Box mt={.5}></Box>
+                              <Grid container spacing={2}>
+                                 <Grid item xs={12} sm={6}>
+                                    <TextField id="numid" label="Número de Identidad" variant="outlined" defaultValue={expediente.numid} onChange={handleModalFieldChange} name='numid' />
+                                 </Grid>
+                                 <Grid item xs={12} sm={6}>
+                                    <Autocomplete
+                                       value={selectedValue2}
+                                       disablePortal
+                                       id="estado_civil"
+                                       required
+                                       options={listaEstadoCivil}
+                                       onChange={(event, newValue) =>
+                                          setExpediente({
+                                             ...expediente,
+                                             estado_civil: newValue
+                                          })
+                                       }
+                                       renderInput={(params) => <TextField {...params} label="Estado Civil" required />}
+
+                                    />
+                                 </Grid>
+                              </Grid>
+                              <Button onClick={EditHandler} variant="contained" style={{
+                                 backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                 paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                              }}>
+                                 Editar Expediente
+                              </Button>
+                           </Box>
+                        </div>
+                     ))}
+                  </div>
+               </Modal>
 
             </div >
          </div >

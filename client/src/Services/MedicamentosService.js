@@ -31,8 +31,8 @@ export const postMedicamentos = async (medicamento) => {
         const res = await axios.post(`${API_URL}/medicamentos`, medicamento);
         return res.data;
     } catch (error) {
-        console.log(error);
-        throw new Error('Failed to post medicamento');
+        console.log('Error posting medicamento:', error);
+        throw error; // Rethrow the original error instead of throwing a new one
     }
 };
 

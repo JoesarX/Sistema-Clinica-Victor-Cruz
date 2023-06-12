@@ -24,14 +24,15 @@ const medicamentosRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `medicamentos` (`nombre`, `categoria`, `stock`, `precio_unitario`, `via`, `dosis`)  VALUES (?)";
+                "INSERT INTO `medicamentos` (`nombre`, `categoria`, `stock`, `precio_unitario`, `via`, `dosis`, `urlfoto`)  VALUES (?)";
             const values = [
                 req.body.nombre,
                 req.body.categoria,
                 req.body.stock,
                 req.body.precio_unitario,
                 req.body.via,
-                req.body.dosis
+                req.body.dosis,
+                req.body.urlfoto
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -83,11 +84,12 @@ const medicamentosRouter = (pool) => {
                 stock,
                 precio_unitario,
                 via,
-                dosis
+                dosis,
+                urlfoto,
             } = req.body;
 
             const q =
-                "UPDATE medicamentos SET nombre = ?, categoria = ?, stock = ?, precio_unitario = ?, via = ?, dosis = ? WHERE idmed = ?";
+                "UPDATE medicamentos SET nombre = ?, categoria = ?, stock = ?, precio_unitario = ?, via = ?, dosis = ?, urlfoto = ? WHERE idmed = ?";
 
             const values = [
                 nombre,
@@ -96,6 +98,7 @@ const medicamentosRouter = (pool) => {
                 precio_unitario,
                 via,
                 dosis,
+                urlfoto,
                 id
             ];
 
