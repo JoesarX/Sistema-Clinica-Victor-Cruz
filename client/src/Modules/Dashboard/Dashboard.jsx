@@ -108,8 +108,8 @@ const Dashboard = () => {
                 idpaciente: expedienteData.idpaciente,
                 nombre: expedienteData.nombre,
                 edad: expedienteData.edad,
-                fecha_nacimiento: expedienteData.fecha_nacimiento,
-                sexo: expedienteData.sexo,
+                fecha_nacimiento: formatDate(expedienteData.fecha_nacimiento),
+                sexo: (expedienteData.sexo === "M") ? 'Masculino' : 'Femenino',
                 correo: expedienteData.correo,
                 telefono: expedienteData.telefono,
                 numid: expedienteData.numid,
@@ -210,10 +210,6 @@ const Dashboard = () => {
     };
 
     const validacionesSignos = () => {
-        if (patient.altura === '') {
-            alert('Ingrese la altura del paciente');
-            return false;
-        }
         return true;
     }
 
@@ -222,7 +218,7 @@ const Dashboard = () => {
         setIsEditingLabel(false);
         setIsChangesSaved(true);
         const editExpediente = async () => {
-            if(validacionesSignos()){
+            if (validacionesSignos()) {
                 console.log(patient)
                 await ExpedientesService.editExpedientesDashboard(patient.idpaciente, patient);
                 alert('Expediente Editado');
@@ -242,12 +238,51 @@ const Dashboard = () => {
         setIsChangesSaved3(true);
     };
 
-    const handleLabelChange = (e) => {
+    const hanldeSignosLabelChange = (e) => {
         const { name, value } = e.target;
-        setPatient((prevPatient) => ({
-            ...prevPatient,
-            [name]: value,
-        }));
+        const wholeNumberRegex = /^\d*$/
+        const decimalRegex = /^\d*\.?\d*$/
+        const fractionRegex = /(?:[1-9][0-9]*|0)\/[1-9][0-9]*/g
+        // setPatient((prevPatient) => ({
+        //     ...prevPatient,
+        //     [name]: value,
+        // }));
+        if (name === 'altura') {
+            if (decimalRegex.test(value)) {
+                setPatient((prevPatient) => ({
+                    ...prevPatient,
+                    [name]: value,
+                }));
+            }
+        } else if (name === 'peso') {
+            if (decimalRegex.test(value)) {
+                setPatient((prevPatient) => ({
+                    ...prevPatient,
+                    [name]: value,
+                }));
+            }
+        } else if (name === 'temperatura') {
+            if (decimalRegex.test(value)) {
+                setPatient((prevPatient) => ({
+                    ...prevPatient,
+                    [name]: value,
+                }));
+            }
+        } else if (name === 'ritmo_cardiaco') {
+            if (wholeNumberRegex.test(value)) {
+                setPatient((prevPatient) => ({
+                    ...prevPatient,
+                    [name]: value,
+                }));
+            }
+        } else if (name === 'presion') {
+            if (wholeNumberRegex.test(value)) {
+                setPatient((prevPatient) => ({
+                    ...prevPatient,
+                    [name]: value,
+                }));
+            }
+        }
     };
 
     const handleMedicationChange = (index, newValue) => {
@@ -369,7 +404,7 @@ const Dashboard = () => {
                                                 name="altura"
                                                 style={{ width: '65px' }}
                                                 value={patient.altura}
-                                                onChange={handleLabelChange}
+                                                onChange={hanldeSignosLabelChange}
                                             />
                                         </div>
                                     ) : (
@@ -398,7 +433,7 @@ const Dashboard = () => {
                                                 name="peso"
                                                 style={{ width: '55px' }}
                                                 value={patient.peso}
-                                                onChange={handleLabelChange}
+                                                onChange={hanldeSignosLabelChange}
                                             />
                                         </div>
                                     ) : (
@@ -427,7 +462,7 @@ const Dashboard = () => {
                                                 name="temperatura"
                                                 style={{ width: '65px' }}
                                                 value={patient.temperatura}
-                                                onChange={handleLabelChange}
+                                                onChange={hanldeSignosLabelChange}
                                             />
                                         </div>
                                     ) : (
@@ -456,7 +491,7 @@ const Dashboard = () => {
                                                 name="ritmo_cardiaco"
                                                 style={{ width: '60px' }}
                                                 value={patient.ritmo_cardiaco}
-                                                onChange={handleLabelChange}
+                                                onChange={hanldeSignosLabelChange}
                                             />
                                         </div>
                                     ) : (
@@ -485,7 +520,7 @@ const Dashboard = () => {
                                                 name="presion"
                                                 style={{ width: '80px' }}
                                                 value={patient.presion}
-                                                onChange={handleLabelChange}
+                                                onChange={hanldeSignosLabelChange}
                                             />
                                         </div>
                                     ) : (
