@@ -61,8 +61,8 @@ const Acercade = () => {
           </div>
           <div className="text-container">
             <span>
-              <h2  style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Descripcion de la Empresa</h2>
-              <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px' }}>
+              <h2  style={{  position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center'}}>Descripcion de la Empresa</h2>
+              <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px'}}>
               La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, 
               bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado 
               vespertino y matutino para brindar un mejor servicio a la población en general.
@@ -77,8 +77,8 @@ const Acercade = () => {
           </div>
           <div className="person-description">
             <span>
-              <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px', left: '400px', marginBottom: '30px'}}> Dr. Victor Cruz</h2>
-              <p style={{ position: 'relative', top: -20, color: 'white', marginRight: '80px', fontSize: '18px',  left: '70px' }}>
+              <h2 style={{  position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center'}}> Dr. Victor Cruz</h2>
+              <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
               El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica
               , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. 
               También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. 
@@ -92,8 +92,8 @@ const Acercade = () => {
           <FontAwesomeIcon icon={faPeopleGroup} style={{ color: 'rgb(255, 255, 255)', fontSize: '110px',  position: 'relative', top: 5,left:'-8px' }} />
 
           <span>
-            <h2 style={{ position: 'relative', top: -30, color: '#8FC1B5', fontSize: '40px'}}>Nuestro Equipo</h2>
-            <p style={{ position: 'relative', top: -25, color: 'white', marginRight: '30px', fontSize: '18px'}}>
+            <h2 style={{  position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center'}}>Nuestro Equipo</h2>
+            <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px'}}>
             Contamos con un equipo de colaboradores con alta experiencia 
             en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.
             </p>
