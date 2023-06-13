@@ -116,7 +116,7 @@ const expedientesRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-    return router;
+  
 
     
 

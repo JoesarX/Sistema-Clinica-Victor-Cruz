@@ -47,7 +47,7 @@ const AddAdmin = (props) => {
             e.preventDefault()
             await AdministradoresService.postAdministradores(admin);
             alert('Admin Agregado')
-            navigate('/Administrador')
+            navigate('/administrador')
             window.location.reload();
         }
 

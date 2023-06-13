@@ -96,7 +96,7 @@ const adminRouter = (pool) => {
     router.delete("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM usuarios_admin where id = '" + req.params.id+"'";
+            const sqlSelect = "delete FROM usuarios_admin where id = '" + req.params.id + "'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -105,19 +105,19 @@ const adminRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-     //Para login de admin
- router.get("/usuarios_admin/", async (req, res) => {
-    try {
-        const connection = await pool.getConnection();
-        const sqlSelect = "SELECT * FROM usuarios_admin WHERE correo= `"+{req}+"`";
-        const [rows, fields] = await connection.query(sqlSelect);
-        connection.release();
-        res.json(rows);
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
+    //Para login de admin
+    router.get("/usuarios_admin/", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const sqlSelect = "SELECT * FROM usuarios_admin WHERE correo= `" + { req } + "`";
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            res.json(rows);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
     return router;
 };
 

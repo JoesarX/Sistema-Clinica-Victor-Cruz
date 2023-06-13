@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// const API_URL = 'http://localhost:8000';
+//const API_URL = 'http://localhost:8000';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllExpedientes = async () => {
@@ -73,7 +73,7 @@ export const editExpedientes = async (id,expediente) => {
 
 export const deleteExpedientes = async (id) => {
     try {
-         await axios.delete(`${API_URL}/expedientes/${id}`);
+        await axios.delete(`${API_URL}/expedientes/${id}`);
         
     } catch (error) {
         console.log(error);

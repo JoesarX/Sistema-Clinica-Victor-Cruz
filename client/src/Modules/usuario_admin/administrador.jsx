@@ -350,7 +350,7 @@ let buscaError=0;
 
             )}
             {openEditAdmin && (
-               <EditAdmins
+               <EditAdmins 
                   openEditAdmin={openEditAdmin}
                   setEditAdmin={setEditAdmin}
                   setNombre={nombre}
@@ -360,7 +360,8 @@ let buscaError=0;
                   setTelefono={cel}
                   setPassword={contraseña}
                   setSexo={sexo}
-               />)}
+                  
+               />) }
 
          </div>
 
