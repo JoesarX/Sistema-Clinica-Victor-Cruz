@@ -79,14 +79,16 @@ const Medicamentos = () => {
                     if (willDelete) {
                         try {
                             const url = row.urlfoto
-                            await MedicamentosService.deleteMedicamentos(id, url);
-                            deleteImg(url);
+                            await MedicamentosService.deleteMedicamentos(id);
+                            if (url != null) {
+                                deleteImg(url);
+                            }
                             swal("Medicamento eliminado exitosamente!", {
                                 icon: "success",
                             });
                             window.location.reload();
                         } catch (error) {
-                            swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+                            swal("Error al eliminar el medicamento. Por favor, inténtalo de nuevo más tarde.", {
                                 icon: "error",
                             });
                         }
@@ -269,8 +271,8 @@ const Medicamentos = () => {
             // Call reject with an error if there's an issue with the upload
             // For example:
             if (imageUpload == null) {
-                reject(new Error('No file selected for upload'));
-                return;
+                //reject(new Error('No file selected for upload'));
+                return null;
             }
             
             const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
@@ -288,14 +290,18 @@ const Medicamentos = () => {
         e.preventDefault();
       
         try {
+        if (imageUpload != null) {
           const imageUrll = await uploadFile();
-      
-          setMedicamento((prevState) => ({
-            ...prevState,
-            urlfoto: imageUrll,
-          }));
-      
+            console.log(imageUrll);
+            setMedicamento((prevState) => ({
+                ...prevState,
+                urlfoto: imageUrll,
+            }));
+            medicamento.urlfoto = imageUrll;
+            console.log(medicamento.urlfoto);
           setIsSubmitting(true);
+        }
+        setIsSubmitting(true);
         } catch (error) {
           // Handle error if any
           console.log('Error submitting medicamento:', error);
@@ -338,32 +344,39 @@ const Medicamentos = () => {
       }, [isSubmitting2]);
 
     const submitEditMedicamento = async () => {
-        if (validations()) {
-            if (imageUpload != null) {
-                if (medicamento.urlfoto != null) {
-                    deleteImg(medicamento.urlfoto);
+        try {
+                if (validations()) {
+                    if (imageUpload != null) {
+                        if (medicamento.urlfoto != null) {
+                            deleteImg(medicamento.urlfoto);
+                        }
+                        const imageUrll = await uploadFile();
+                        setMedicamento((prevState) => ({
+                            ...prevState,
+                            urlfoto: imageUrll,
+                        }));
+                        medicamento.urlfoto = imageUrll;
+                        console.log("TESTING AAAAAAAAAAAAAAA"+medicamento.urlfoto);
+                        console.log("TESTING BBBBBBBBBBBBBBB"+imageUrll);
+                        
+                        await MedicamentosService.editMedicamentos(id, medicamento);
+                        alert('Medicamento Editado');
+                    }
+                    else {
+                        await MedicamentosService.editMedicamentos(id, medicamento);
+                        alert('Medicamento Editado');
+                    }
+                    toggleModal22();
+                    cleanExpediente();
                 }
-                const imageUrll = await uploadFile();
-                setMedicamento((prevState) => ({
-                    ...prevState,
-                    urlfoto: imageUrll,
-                  }));
-                  console.log("TESTING AAAAAAAAAAAAAAA"+imageUrll);
-                await MedicamentosService.editMedicamentos(id, medicamento);
-                alert('Medicamento Editado');
-            }
-            else {
-                await MedicamentosService.editMedicamentos(id, medicamento);
-                alert('Medicamento Editado');
-            }
-            toggleModal22();
-            cleanExpediente();
-        }
+          } catch (error) {
+            console.log('Error submitting medicamento:', error);
+          }
     };
 
     const toggleModal22 = () => {
         setIsModalOpen1(!isModalOpen1);
-        //setImageUpload(null);
+        setImageUpload(null);
         setIsSubmitting2(false);
         cleanExpediente();
     };
