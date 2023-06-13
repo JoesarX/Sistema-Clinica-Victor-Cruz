@@ -649,7 +649,6 @@ let buscaError=0;
 
                     <Modal open={isModalOpen1} onClose={toggleModal22}  >
 
-
                         <div className='modalContainer modalMedicamentos'>
                             {medicamentoData.map((medicamento) => (
                                 <div className='innerCard' key={medicamento.idmed}>

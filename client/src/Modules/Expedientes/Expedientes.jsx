@@ -505,11 +505,11 @@ const Expedientes = () => {
                      onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
                   />
                </ThemeProvider>
-               <Modal open={isModalOpen1} onClose={toggleModal22}>
+               <Modal open={isModalOpen1} onClose={toggleModal22} className='customModal'>
 
                   <div className='modalContainer'>
                      {expedienteData.map((expediente) => (
-                        <div className='expedienteCard' key={expediente.idpaciente}>
+                        <div className='innerCard' key={expediente.idpaciente}>
 
                            <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
 
