@@ -2,8 +2,8 @@ import React from 'react';
 import '../HojaDeEstilos/Acercade.css';
 import { useNavigate } from 'react-router-dom';
 import 'react-slideshow-image/dist/styles.css';
-import doctor from '../Imagenes/doctor.jpg';
 import hospital from '../Imagenes/hospital.jpeg';
+import doctor from '../Imagenes/victor_cruz.jpeg';
 import Topbar from './Topbar';
 import Footer from './Footer';
 
