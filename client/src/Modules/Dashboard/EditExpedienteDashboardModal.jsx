@@ -149,8 +149,6 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
                 alert('Expediente Editado');
                 onClose();
             }
-            
-           
         };
         console.log(expediente)
         editExpediente();

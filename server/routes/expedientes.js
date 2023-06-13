@@ -13,6 +13,7 @@ const expedientesRouter = (pool) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
+            console.log("Get all Expedientes call successful");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
@@ -39,6 +40,7 @@ const expedientesRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
+            console.log("Post call successful");
             res.json("Expediente añadido exitosamente!");
         } catch (err) {
             console.log(err);
@@ -56,6 +58,7 @@ const expedientesRouter = (pool) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])
+            console.log("Get One call successful");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
@@ -67,16 +70,19 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
            
-            const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion FROM expedientes  WHERE idpaciente = " + req.params.id;
+            const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion, altura, peso, temperatura, ritmo_cardiaco, presion FROM expedientes  WHERE idpaciente = " + req.params.id;
           
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])
+            console.log("Get One Dashboard call successful");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+
+    
 
     //Delete a patient by id
     router.delete("/:id", async (req, res) => {
@@ -86,6 +92,7 @@ const expedientesRouter = (pool) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
+            console.log("Delete call successful");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
@@ -97,6 +104,7 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const { id } = req.params;
+            console.log(req.params);
             const {
                 nombre,
                 edad,
@@ -107,11 +115,16 @@ const expedientesRouter = (pool) => {
                 numid,
                 estado_civil,
                 padecimientos,
-                ocupacion
+                ocupacion,
+                altura, 
+                peso, 
+                temperatura, 
+                ritmo_cardiaco, 
+                presion
             } = req.body;
 
             const q =
-                "UPDATE expedientes SET nombre = ?, edad = ?, fecha_nacimiento = ?, sexo = ?, correo = ?,  telefono = ?, numid = ?, estado_civil = ?, padecimientos = ?, ocupacion = ? WHERE idpaciente = ?";
+                "UPDATE expedientes SET nombre = ?, edad = ?, fecha_nacimiento = ?, sexo = ?, correo = ?,  telefono = ?, numid = ?, estado_civil = ?, padecimientos = ?, ocupacion = ?,  altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ? WHERE idpaciente = ?";
 
             const values = [
                 nombre,
@@ -124,11 +137,17 @@ const expedientesRouter = (pool) => {
                 estado_civil,
                 padecimientos,
                 ocupacion,
+                altura, 
+                peso, 
+                temperatura, 
+                ritmo_cardiaco, 
+                presion,
                 id
             ];
-
+            console.log(values);
             await connection.query(q, values);
             connection.release();
+            console.log("Update call successful");
             res.json("Expediente actualizado exitosamente!");
         } catch (err) {
             console.log(err);

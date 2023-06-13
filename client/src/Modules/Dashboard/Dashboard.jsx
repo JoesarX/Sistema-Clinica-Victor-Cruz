@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {  faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
 import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +25,7 @@ const Dashboard = () => {
     const id = url.substring(url.lastIndexOf('/') + 1);
 
     const [expediente, setExpediente] = React.useState({
+        idpaciente: '',
         nombre: '',
         edad: '',
         fecha_nacimiento: '',
@@ -34,11 +35,17 @@ const Dashboard = () => {
         numid: null,
         estado_civil: '',
         padecimientos: '',
-        ocupacion: ''
+        ocupacion: '',
+        altura: '',
+        peso: '',
+        temperatura: '',
+        ritmo_cardiaco: '',
+        presion: '',
     })
 
 
     const [patient, setPatient] = useState({
+        idpaciente: '',
         nombre: '',
         edad: '',
         fecha_nacimiento: '',
@@ -50,17 +57,17 @@ const Dashboard = () => {
         padecimientos: '',
         ocupacion: '',
         address: '',
+        altura: '',
+        peso: '',
+        temperatura: '',
+        ritmo_cardiaco: '',
+        presion: '',
 
         medicalHistory: {
             allergies: ['Alergia 1', 'Alergia 2'],
             basicConditions: ['Enfermedad 1', 'Enfermedad 2'],
         },
         medications: ['Medicamento 1', 'Medicamento 2'],
-        height: '170',
-        weight: '70',
-        temperature: '37.5',
-        heartRate: '80',
-        bloodPressure: '120/80',
         files: ['archivo1.pdf', 'archivo2.jpg', 'archivo3.pdf', 'archivo4.pdf', 'archivo5.pdf'],
 
         appointments: [
@@ -96,10 +103,9 @@ const Dashboard = () => {
             const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
             console.log(expedienteData);
             setExpediente(expedienteData);
-           
-
             setPatient(prevPatient => ({
                 ...prevPatient,
+                idpaciente: expedienteData.idpaciente,
                 nombre: expedienteData.nombre,
                 edad: expedienteData.edad,
                 fecha_nacimiento: expedienteData.fecha_nacimiento,
@@ -109,14 +115,21 @@ const Dashboard = () => {
                 numid: expedienteData.numid,
                 estado_civil: expedienteData.estado_civil,
                 padecimientos: expedienteData.padecimientos,
-                ocupacion: expedienteData.ocupacion
+                ocupacion: expedienteData.ocupacion,
+                altura: expedienteData.altura,
+                peso: expedienteData.peso,
+                temperatura: expedienteData.temperatura,
+                ritmo_cardiaco: expedienteData.ritmo_cardiaco,
+                presion: expedienteData.presion,
             }));
         } catch (error) {
             console.log(error);
         }
-    }; 
+    };
+
+
     useEffect(() => {
-        
+
         //validación login
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
@@ -128,10 +141,11 @@ const Dashboard = () => {
                 const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
                 console.log(expedienteData);
                 setExpediente(expedienteData);
-               
+
 
                 setPatient(prevPatient => ({
                     ...prevPatient,
+                    idpaciente: expedienteData.idpaciente,
                     nombre: expedienteData.nombre,
                     edad: expedienteData.edad,
                     fecha_nacimiento: formatDate(expedienteData.fecha_nacimiento),
@@ -142,7 +156,12 @@ const Dashboard = () => {
                     estado_civil: expedienteData.estado_civil,
                     padecimientos: expedienteData.padecimientos,
                     ocupacion: expedienteData.ocupacion,
-                    direccion: expedienteData.direccion
+                    direccion: expedienteData.direccion,
+                    altura: expedienteData.altura,
+                    peso: expedienteData.peso,
+                    temperatura: expedienteData.temperatura,
+                    ritmo_cardiaco: expedienteData.ritmo_cardiaco,
+                    presion: expedienteData.presion,
                 }));
             } catch (error) {
                 console.log(error);
@@ -190,9 +209,27 @@ const Dashboard = () => {
         setIsChangesSaved3(false);
     };
 
-    const handleSaveChanges = () => {
+    const validacionesSignos = () => {
+        if (patient.altura === '') {
+            alert('Ingrese la altura del paciente');
+            return false;
+        }
+        return true;
+    }
+
+    const handleSaveChangesSignos = () => {
+        console.log(patient.idpaciente)
         setIsEditingLabel(false);
         setIsChangesSaved(true);
+        const editExpediente = async () => {
+            if(validacionesSignos()){
+                console.log(patient)
+                await ExpedientesService.editExpedientes(patient.idpaciente, patient);
+                alert('Expediente Editado');
+            }
+        };
+        console.log(patient)
+        editExpediente();
     };
 
     const handleSaveChanges2 = () => {
@@ -239,13 +276,18 @@ const Dashboard = () => {
     const handleOpenEditModal = () => {
         setSelectedExpediente(expediente);
         console.log(expediente)
-        
+
         setIsEditModalOpen(true);
     };
 
     const handleCloseEditModal = () => {
         setSelectedExpediente(null);
         setIsEditModalOpen(false);
+        fetchExpediente2();
+    };
+
+    const handleCancelarEditSignos = () => {
+        setIsEditingLabel(false);
         fetchExpediente2();
     };
 
@@ -293,10 +335,10 @@ const Dashboard = () => {
                             <h3 className='histmedtit'>Signos Vitales
                                 <span>
                                     {isEditingLabel ? (<>
-                                        <button onClick={handleSaveChanges} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                        <button onClick={handleSaveChangesSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Guardar cambios
                                         </button>
-                                        <button onClick={() => setIsEditingLabel(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                        <button onClick={handleCancelarEditSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Cancelar
                                         </button>
                                     </>
@@ -324,14 +366,14 @@ const Dashboard = () => {
                                             <input
                                                 type="text"
                                                 className="edit-text-box"
-                                                name="height"
+                                                name="altura"
                                                 style={{ width: '65px' }}
-                                                value={patient.height}
+                                                value={patient.altura}
                                                 onChange={handleLabelChange}
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.height}</span>
+                                        <span className="vitals-value">{patient.altura}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">CM</span>
@@ -353,14 +395,14 @@ const Dashboard = () => {
                                             <input
                                                 type="text"
                                                 className="edit-text-box"
-                                                name="weight"
+                                                name="peso"
                                                 style={{ width: '55px' }}
-                                                value={patient.weight}
+                                                value={patient.peso}
                                                 onChange={handleLabelChange}
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.weight}</span>
+                                        <span className="vitals-value">{patient.peso}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">KG</span>
@@ -382,14 +424,14 @@ const Dashboard = () => {
                                             <input
                                                 type="text"
                                                 className="edit-text-box"
-                                                name="temperature"
+                                                name="temperatura"
                                                 style={{ width: '65px' }}
-                                                value={patient.temperature}
+                                                value={patient.temperatura}
                                                 onChange={handleLabelChange}
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.temperature}</span>
+                                        <span className="vitals-value">{patient.temperatura}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">ºC</span>
@@ -411,14 +453,14 @@ const Dashboard = () => {
                                             <input
                                                 className="edit-text-box"
                                                 type="text"
-                                                name="heartRate"
+                                                name="ritmo_cardiaco"
                                                 style={{ width: '60px' }}
-                                                value={patient.heartRate}
+                                                value={patient.ritmo_cardiaco}
                                                 onChange={handleLabelChange}
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.heartRate}</span>
+                                        <span className="vitals-value">{patient.ritmo_cardiaco}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">ppm</span>
@@ -440,14 +482,14 @@ const Dashboard = () => {
                                             <input
                                                 type="text"
                                                 className="edit-text-box"
-                                                name="bloodPressure"
+                                                name="presion"
                                                 style={{ width: '80px' }}
-                                                value={patient.bloodPressure}
+                                                value={patient.presion}
                                                 onChange={handleLabelChange}
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.bloodPressure}</span>
+                                        <span className="vitals-value">{patient.presion}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">mmHg</span>
