@@ -190,7 +190,7 @@ const AddExpedientesModal = ({ onClose }) => {
               <Autocomplete
                 id="estado_civil"
                 options={listaEstadoCivil}
-                renderInput={(params) => <TextField {...params} label="Estado Civil" variant="outlined" />}
+                renderInput={(params) => <TextField {...params} label="Estado Civil" variant="outlined"  required/>}
                 onChange={(e, value) =>
                   setExpediente((prevState) => ({
                     ...prevState,

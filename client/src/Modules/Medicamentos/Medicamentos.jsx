@@ -648,19 +648,19 @@ let buscaError=0;
                                 />
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' />
+                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock'  required/>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' />
+                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario'  required />
                                     </Grid>
                                 </Grid>
 
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="via" label="Via" variant="outlined" onChange={handleModalFieldChange} name='via' />
+                                        <TextField id="via" label="Via" variant="outlined" onChange={handleModalFieldChange} name='via'  required />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' />
+                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis'  required/>
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2} >
