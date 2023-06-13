@@ -79,14 +79,19 @@ const Medicamentos = () => {
                     if (willDelete) {
                         try {
                             const url = row.urlfoto
+                            console.log("DELETE THIS URL: "+url);
                             await MedicamentosService.deleteMedicamentos(id);
                             if (url != null) {
+                                console.log("DELETE THIS URL no es null: "+url);
                                 deleteImg(url);
+                            }
+                            else {
+                                window.location.reload();
+
                             }
                             swal("Medicamento eliminado exitosamente!", {
                                 icon: "success",
                             });
-                            window.location.reload();
                         } catch (error) {
                             swal("Error al eliminar el medicamento. Por favor, inténtalo de nuevo más tarde.", {
                                 icon: "error",
@@ -104,6 +109,7 @@ const Medicamentos = () => {
                 .catch((error) => {
                     console.log("Failed to delete image: ", error)
                 })
+                window.location.reload();
             }
   
     const theme = createTheme(
@@ -246,10 +252,6 @@ const Medicamentos = () => {
         setImagen(row.urlfoto);
     }
 
-
-
-   
-
     const cleanExpediente = () => {
         medicamento.nombre = null;
         medicamento.stock = null;
@@ -288,20 +290,9 @@ const Medicamentos = () => {
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
-      
         try {
-        if (imageUpload != null) {
-          const imageUrll = await uploadFile();
-            console.log(imageUrll);
-            setMedicamento((prevState) => ({
-                ...prevState,
-                urlfoto: imageUrll,
-            }));
-            medicamento.urlfoto = imageUrll;
-            console.log(medicamento.urlfoto);
-          setIsSubmitting(true);
-        }
-        setIsSubmitting(true);
+            console.log("test");
+        submitMedicamento();
         } catch (error) {
           // Handle error if any
           console.log('Error submitting medicamento:', error);
@@ -310,16 +301,29 @@ const Medicamentos = () => {
       
       useEffect(() => {
         if (isSubmitting) {
+            console.log("test");
           submitMedicamento();
         }
       }, [isSubmitting]);
       
       const submitMedicamento = async () => {
         if (validations()) {
+            console.log("Entra a agregar despues de validaciones");
           try {
+            if (imageUpload != null) {
+                const imageUrll = await uploadFile();
+                  console.log(imageUrll);
+                  setMedicamento((prevState) => ({
+                      ...prevState,
+                      urlfoto: imageUrll,
+                  }));
+                  medicamento.urlfoto = imageUrll;
+                  console.log(medicamento.urlfoto);
+              }
             await MedicamentosService.postMedicamentos(medicamento);
             alert('Medicamento Agregado');
             toggleModal();
+            window.location.reload();
           } catch (error) {
             // Handle error if any
             console.log('Error submitting medicamento:', error);
@@ -330,7 +334,7 @@ const Medicamentos = () => {
       const EditHandler = async (e) => {
         e.preventDefault();
         try {
-          setIsSubmitting2(true);
+          submitEditMedicamento();
         } catch (error) {
           // Handle error if any
           console.log('Error submitting medicamento:', error);
@@ -346,6 +350,7 @@ const Medicamentos = () => {
     const submitEditMedicamento = async () => {
         try {
                 if (validations()) {
+                    console.log("Entra a edit despues de validaciones");
                     if (imageUpload != null) {
                         if (medicamento.urlfoto != null) {
                             deleteImg(medicamento.urlfoto);
@@ -367,6 +372,7 @@ const Medicamentos = () => {
                         alert('Medicamento Editado');
                     }
                     toggleModal22();
+                    window.location.reload();
                     cleanExpediente();
                 }
           } catch (error) {
@@ -378,7 +384,7 @@ const Medicamentos = () => {
         setIsModalOpen1(!isModalOpen1);
         setImageUpload(null);
         setIsSubmitting2(false);
-        window.location.reload();
+        //window.location.reload();
         cleanExpediente();
     };
 
@@ -408,15 +414,41 @@ const Medicamentos = () => {
         }
         if (via === null || via === '') {
             alert('Ingrese una via para el medicamento');
-            return false
+            return false;
         }
         if (dosis === null || dosis === '' || dosis === ' ') {
             alert('Debe agregarle una dosis al medicamento')
-            return false
+            return false;
         }
-
-        return true
+        if (imageUpload != null) {
+            const file = imageUpload;
+            if (validateImageFormat(file) == false) {
+                alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+                return false;
+            }
+        }
+        console.log("END DE VALIDACINES");
+        return true;
     }
+
+    const validateImageFormat = (file) => {
+        const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+        const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+      
+        if (!allowedFormats.includes(file.type)) {
+          console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+          return false;
+        }
+      
+        if (file.size > maxSizeInBytes) {
+          console.log('La imagen no debe superar los 5MB de tamaño');
+          return false;
+        }
+      
+        // Continue with further logic or actions if the image passes the format and size checks
+        return true;
+      };
+
     const [medicamentoData, setMedicamentoss] = useState([]);
 
     // const fetchMedicamento = async (id) => {
