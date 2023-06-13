@@ -108,8 +108,8 @@ const Dashboard = () => {
                 idpaciente: expedienteData.idpaciente,
                 nombre: expedienteData.nombre,
                 edad: expedienteData.edad,
-                fecha_nacimiento: expedienteData.fecha_nacimiento,
-                sexo: expedienteData.sexo,
+                fecha_nacimiento: formatDate(expedienteData.fecha_nacimiento),
+                sexo: (expedienteData.sexo === "M") ? 'Masculino' : 'Femenino',
                 correo: expedienteData.correo,
                 telefono: expedienteData.telefono,
                 numid: expedienteData.numid,
@@ -242,6 +242,7 @@ const Dashboard = () => {
         const { name, value } = e.target;
         const wholeNumberRegex = /^\d*$/
         const decimalRegex = /^\d*\.?\d*$/
+        const fractionRegex = /(?:[1-9][0-9]*|0)\/[1-9][0-9]*/g
         // setPatient((prevPatient) => ({
         //     ...prevPatient,
         //     [name]: value,
@@ -275,10 +276,12 @@ const Dashboard = () => {
                 }));
             }
         } else if (name === 'presion') {
-            setPatient((prevPatient) => ({
-                ...prevPatient,
-                [name]: value,
-            }));
+            if (wholeNumberRegex.test(value)) {
+                setPatient((prevPatient) => ({
+                    ...prevPatient,
+                    [name]: value,
+                }));
+            }
         }
     };
 
