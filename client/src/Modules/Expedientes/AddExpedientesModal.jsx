@@ -202,7 +202,7 @@ const AddExpedientesModal = ({ onClose }) => {
             </Grid>
           </Grid>
           <Box mt={.5}></Box>
-          <TextField id="padecimientos" label="Padecimientos" variant="outlined" onChange={handleModalFieldChange} name="padecimientos"  className="inputField"/>
+          {/* <TextField id="padecimientos" label="Padecimientos" variant="outlined" onChange={handleModalFieldChange} name="padecimientos"  className="inputField"/> */}
           <Button
             variant="contained"
             className="modalButton"

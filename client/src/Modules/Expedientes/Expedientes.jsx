@@ -586,7 +586,7 @@ const Expedientes = () => {
                               </Grid>
                               <Button onClick={EditHandler} variant="contained" style={{
                                  backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                 paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                 paddingLeft: '10px', paddingRight: '10px', marginTop: '14px', width: '270px', fontSize: '18px', alignSelf: 'center'
                               }}>
                                  Editar Expediente
                               </Button>
