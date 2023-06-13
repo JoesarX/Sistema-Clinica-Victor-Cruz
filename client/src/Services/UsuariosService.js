@@ -48,8 +48,11 @@ export const deleteusuarios = async (id) => {
 //Para iniciar sesión
 export const loginUsuarios= async(uEmail, uPassword)=>{
     try{
+        
+
         const user = await axios.get(`${API_URL}/usuarios/`,uEmail);
-        const PW = await axios.get(`${API_URL}/usuarios/`,uPassword);
+        
+        const PW = await axios.get(`${API_URL}/usuarios/`, uPassword);
         const userInfo= user.data
         const passwordInfo=PW.data
         const emailEncontrado= userInfo.find(user => user.correouser === uEmail && user.password === uPassword);

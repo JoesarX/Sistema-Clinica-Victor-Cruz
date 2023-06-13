@@ -72,7 +72,7 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
         sexo: expedientess.sexo,
         correo: expedientess.correo,
         telefono: expedientess.telefono,
-        numid: null,
+        numid: expedientess.numid,
         estado_civil: expedientess.estado_civil,
         padecimientos: '',
         ocupacion: ''
@@ -160,7 +160,9 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
     };
     const defaulttValue = expediente.sexo;
     const defaultValue2 = expediente.estado_civil;
-    console.log(':)')
+    console.log(expedienteData)
+    console.log(expediente)
+    console.log(expedientess)
     return (
         <Modal open={true} onClose={onClose}>
             <div className='modalContainer'>
