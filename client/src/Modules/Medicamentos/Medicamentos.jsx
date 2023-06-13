@@ -66,45 +66,43 @@ const Medicamentos = () => {
         setSelectedMedicamentoId(id);
         setOpenPopup(true);
     }
-        const storage = getStorage(); 
-        const deleteImg = (refUrl) => { 
-        const imageRef = ref(storage, refUrl)
-            deleteObject(imageRef)
-            .catch((error) => {
-                console.log("Failed to delete image: ", error)
+
+        const handleDeleteMedicamentosClick = (row, id) => {
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez borrado, no podrás recuperar esta información.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
             })
-        }
-
-
-    
-
-    const handleDeleteMedicamentosClick = (id) => {
-        swal({
-            title: "¿Estás seguro?",
-            text: "Una vez borrado, no podrás recuperar esta información.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then(async (willDelete) => {
-                if (willDelete) {
-                    try {
-                        await MedicamentosService.deleteMedicamentos(id);
-                        swal("Colaborador eliminado exitosamente!", {
-                            icon: "success",
-                        });
-                        window.location.reload();
-                    } catch (error) {
-                        swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
-                            icon: "error",
-                        });
+                .then(async (willDelete) => {
+                    if (willDelete) {
+                        try {
+                            const url = row.urlfoto
+                            await MedicamentosService.deleteMedicamentos(id, url);
+                            deleteImg(url);
+                            swal("Medicamento eliminado exitosamente!", {
+                                icon: "success",
+                            });
+                            window.location.reload();
+                        } catch (error) {
+                            swal("Error al eliminar el colaborador. Por favor, inténtalo de nuevo más tarde.", {
+                                icon: "error",
+                            });
+                        }
+                    } else {
+                        swal("¡Tu información no se ha borrado!");
                     }
-                } else {
-                    swal("¡Tu información no se ha borrado!");
-                }
-            });
-
-    };
+                });
+        };
+            const storage = getStorage(); 
+            const deleteImg = (refUrl) => { 
+            const imageRef = ref(storage, refUrl)
+                deleteObject(imageRef)
+                .catch((error) => {
+                    console.log("Failed to delete image: ", error)
+                })
+            }
   
     const theme = createTheme(
         {
