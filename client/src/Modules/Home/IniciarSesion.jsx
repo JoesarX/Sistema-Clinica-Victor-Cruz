@@ -3,6 +3,7 @@ import '../HojaDeEstilos/IniciarSesion.css';
 import { useState ,useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
+import { loginAdmin,loginMaster } from '../../Services/AdministradoresService';
 
 import Footer from './Footer';
 import Topbar from './Topbar'
@@ -43,11 +44,11 @@ const IniciarSesion = () => {
                     localStorage.setItem("100", true);
                     alert("Bienvenido!");
                     navigate("/expedientes");
-                } else if (await UsuariosService.loginMaster(email, password)===true) {
+                } else if (await loginMaster(email, password)===true) {
                     alert("Bienvenido Doctor!");
                     localStorage.setItem("400", true);
                     navigate("/expedientes");
-                } else if (await UsuariosService.loginAdmin(email, password)===true){
+                } else if (await loginAdmin(email, password)===true){
                     alert("Bienvenido");
                     localStorage.setItem("300", true);
                     navigate("/expedientes");
