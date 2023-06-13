@@ -246,10 +246,6 @@ const Medicamentos = () => {
         setImagen(row.urlfoto);
     }
 
-
-
-   
-
     const cleanExpediente = () => {
         medicamento.nombre = null;
         medicamento.stock = null;
@@ -288,19 +284,7 @@ const Medicamentos = () => {
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
-      
         try {
-        if (imageUpload != null) {
-          const imageUrll = await uploadFile();
-            console.log(imageUrll);
-            setMedicamento((prevState) => ({
-                ...prevState,
-                urlfoto: imageUrll,
-            }));
-            medicamento.urlfoto = imageUrll;
-            console.log(medicamento.urlfoto);
-          setIsSubmitting(true);
-        }
         setIsSubmitting(true);
         } catch (error) {
           // Handle error if any
@@ -317,6 +301,16 @@ const Medicamentos = () => {
       const submitMedicamento = async () => {
         if (validations()) {
           try {
+            if (imageUpload != null) {
+                const imageUrll = await uploadFile();
+                  console.log(imageUrll);
+                  setMedicamento((prevState) => ({
+                      ...prevState,
+                      urlfoto: imageUrll,
+                  }));
+                  medicamento.urlfoto = imageUrll;
+                  console.log(medicamento.urlfoto);
+              }
             await MedicamentosService.postMedicamentos(medicamento);
             alert('Medicamento Agregado');
             toggleModal();
@@ -408,15 +402,32 @@ const Medicamentos = () => {
         }
         if (via === null || via === '') {
             alert('Ingrese una via para el medicamento');
-            return false
+            return false;
         }
         if (dosis === null || dosis === '' || dosis === ' ') {
             alert('Debe agregarle una dosis al medicamento')
-            return false
+            return false;
         }
-
-        return true
+        if (imageUpload != null) {
+            const file = imageUpload;
+            if (validateImageFormat(file) == false) {
+                alert('La imagen debe estar en formato JPG')
+                return false;
+            }
+        }
+        return true;
     }
+
+    const validateImageFormat = (file) => {
+        const allowedFormats = ['image/jpeg', 'image/jpg'];
+    
+        if (!allowedFormats.includes(file.type)) {
+          console.log('La imagen debe estar en formato JPG');
+          return false;
+          // Realiza la lógica necesaria si la imagen no cumple con el formato requerido
+        }
+      };
+
     const [medicamentoData, setMedicamentoss] = useState([]);
 
     // const fetchMedicamento = async (id) => {
