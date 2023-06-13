@@ -1,3 +1,87 @@
+@media (max-width: 768px) {
+  /* Styles for smaller screens */
+  .about-us-container,
+  .mission-vision-container,
+  .company-description,
+  .person-container,
+  .employee-description {
+    padding: 20px;
+  }
+
+  .company-description,
+  .person-container,
+  .employee-description {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .company-description .image-container,
+  .person-container .person-image {
+    margin-right: 0;
+  }
+
+  .company-description .text-container,
+  .person-container .person-description {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .image-container img {
+    width: 200px;
+    height: 200px;
+  }
+  .person-image img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+  }
+}
+
+@media (max-width: 540px) {
+  /* Styles for mobile screens */
+  .mission-vision-container {
+    flex-direction: column;
+  }
+
+  .mission,
+  .vision {
+    flex-basis: 100%;
+    margin-right: 0;
+    margin-bottom: 20px;
+    padding-right: 0;
+  }
+
+  .mission h2,
+  .vision h2 {
+    text-align: center;
+  }
+
+  .mission p,
+  .vision p {
+    text-align: center;
+  }
+
+  /* Rest of the CSS code */
+
+  .image-container img {
+    width: 10px;
+    height: 10px;
+  }
+
+  .person-image img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+  }
+}
+
+
 .bt {
   color: #fff;
   background-color: #1E60A6;
@@ -90,7 +174,7 @@
 
 .scrollable-page {
   height: 100vh;
-  overflow-y: auto;
+  
   background-color: #E4EBF9;
 }
 
@@ -125,7 +209,6 @@
 }
 
 .about-us-container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 40px;
   margin-bottom: 60px;
@@ -208,13 +291,15 @@ h2 {
 .image-container {
   flex-shrink: 0;
   margin-right: 20px;
+  height: 100%;
+  width: 25%;
 }
 
 
 
 .image-container img {
-  width: 350px;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -275,8 +360,8 @@ h2 {
 }
 
 .person-image img {
-  width: 250%;
-  height: 250%;
+  width: 200px;
+  height: 250px;
   object-fit: cover;
   border-radius: 50%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
