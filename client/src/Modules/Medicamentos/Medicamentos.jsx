@@ -378,6 +378,7 @@ const Medicamentos = () => {
         setIsModalOpen1(!isModalOpen1);
         setImageUpload(null);
         setIsSubmitting2(false);
+        window.location.reload();
         cleanExpediente();
     };
 
