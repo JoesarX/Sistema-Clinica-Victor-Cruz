@@ -35,6 +35,19 @@ export const getOneExpedienteDashboard = async (id) => {
     }
 };
 
+export const editExpedientesDashboard = async (id,expediente) => {
+    try {
+        console.log("editExpedientes Service");
+        console.log(id);
+        console.log(expediente);
+        await axios.put(`${API_URL}/expedientes/dashboard/${id}`,expediente);
+       
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to edit expediente');
+    }
+};
+
 export const postExpedientes = async (expediente) => {
     try {
         const res = await axios.post(`${API_URL}/expedientes`, expediente);
@@ -74,7 +87,8 @@ const Services ={
     getOneExpediente,
     getOneExpedienteDashboard,
     deleteExpedientes,
-    editExpedientes
+    editExpedientes,
+    editExpedientesDashboard
     // Other functions
 };
 

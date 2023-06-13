@@ -82,6 +82,42 @@ const expedientesRouter = (pool) => {
         }
     });
 
+    //pUT a patient by id for Dashboard
+    router.put("/dashboard/:id", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const { id } = req.params;
+            console.log(req.params);
+            const {
+                altura, 
+                peso, 
+                temperatura, 
+                ritmo_cardiaco, 
+                presion
+            } = req.body;
+
+            const q = "UPDATE expedientes SET altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ? WHERE idpaciente = ?";
+
+            const values = [
+                altura, 
+                peso, 
+                temperatura, 
+                ritmo_cardiaco, 
+                presion,
+                id
+            ];
+            console.log(values);
+            await connection.query(q, values);
+            connection.release();
+            console.log("Update Signos Dashboard call successful");
+            res.json("Expediente actualizado exitosamente!");
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+    return router;
+
     
 
     //Delete a patient by id
@@ -116,15 +152,10 @@ const expedientesRouter = (pool) => {
                 estado_civil,
                 padecimientos,
                 ocupacion,
-                altura, 
-                peso, 
-                temperatura, 
-                ritmo_cardiaco, 
-                presion
             } = req.body;
 
             const q =
-                "UPDATE expedientes SET nombre = ?, edad = ?, fecha_nacimiento = ?, sexo = ?, correo = ?,  telefono = ?, numid = ?, estado_civil = ?, padecimientos = ?, ocupacion = ?,  altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ? WHERE idpaciente = ?";
+                "UPDATE expedientes SET nombre = ?, edad = ?, fecha_nacimiento = ?, sexo = ?, correo = ?,  telefono = ?, numid = ?, estado_civil = ?, padecimientos = ?, ocupacion = ? WHERE idpaciente = ?";
 
             const values = [
                 nombre,
@@ -137,11 +168,6 @@ const expedientesRouter = (pool) => {
                 estado_civil,
                 padecimientos,
                 ocupacion,
-                altura, 
-                peso, 
-                temperatura, 
-                ritmo_cardiaco, 
-                presion,
                 id
             ];
             console.log(values);

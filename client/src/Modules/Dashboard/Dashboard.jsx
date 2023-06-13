@@ -224,7 +224,7 @@ const Dashboard = () => {
         const editExpediente = async () => {
             if(validacionesSignos()){
                 console.log(patient)
-                await ExpedientesService.editExpedientes(patient.idpaciente, patient);
+                await ExpedientesService.editExpedientesDashboard(patient.idpaciente, patient);
                 alert('Expediente Editado');
             }
         };
