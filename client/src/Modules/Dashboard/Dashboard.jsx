@@ -8,6 +8,7 @@ import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
 import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
 import NavBar from '../NavBar';
 
@@ -87,6 +88,56 @@ const Dashboard = () => {
     const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2', 'Medicamento 3', 'Medicamento 4', 'Medicamento 5', 'Medicamento 6', 'Medicamento 7', 'Medicamento 8', 'Medicamento 9', 'Medicamento 10', 'Medicamento 11', 'Medicamento 12']);
     const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2', 'Alergia 3', 'Alergia 4']);
     const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 3', 'Enfermedad 4']);
+    const [schAppointments, setSchAppointments] = useState([{
+        date: '2023-06-17',
+        time: '10:00 AM',
+        description: 'Dolor de cabeza',
+    },
+    {
+        date: '2023-06-20',
+        time: '10:00 AM',
+        description: 'Migraña',
+    },
+    {
+        date: '2023-06-20',
+        time: '10:00 AM',
+        description: 'Migraña',
+    },
+    {
+        date: '2023-06-20',
+        time: '10:00 AM',
+        description: 'Migraña',
+    }
+    ]);
+    const [prevAppointments, setPrevAppointments] = useState([{
+        date: '2023-05-17',
+        time: '10:00 AM',
+        description: 'Dolor de estomago',
+        medicine: 'Acetaminofén',
+        medicalExplanation: 'Lumbalgia'
+    },
+    {
+        date: '2023-05-20',
+        time: '10:00 AM',
+        description: 'Fiebre',
+        medicine: 'Acetaminofén',
+        medicalExplanation: 'Lumbalgia'
+    },
+    {
+        date: '2023-05-20',
+        time: '10:00 AM',
+        description: 'Fiebre',
+        medicine: 'Acetaminofén',
+        medicalExplanation: 'Lumbalgia'
+    },
+    {
+        date: '2023-05-20',
+        time: '10:00 AM',
+        description: 'Fiebre',
+        medicine: 'Acetaminofén',
+        medicalExplanation: 'Lumbalgia'
+    }
+    ]);
 
     function Signout() {
         localStorage.clear();
@@ -174,6 +225,11 @@ const Dashboard = () => {
     const formatDate = (date) => {
         var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(date).toLocaleDateString("es-HN", datePrefs);
+    }
+
+    const formatAppointmentDate = (date) => {
+        var datePrefs = { month: 'short', day: 'numeric' };
+        return new Date(date).toLocaleDateString("es-HN", datePrefs).toLocaleUpperCase();
     }
 
     const handleUploadFile = (event) => {
@@ -544,7 +600,7 @@ const Dashboard = () => {
                                 </div>
                             ))}
                         </ul>
-                        <button className="upload-button">
+                        <button className="large-button">
                             <span>
                                 <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
                                 Subir Archivo
@@ -659,6 +715,50 @@ const Dashboard = () => {
                                 </li>
                             ))}
                         </ul>
+                    </div>
+
+                </div>
+
+                <div className="patient-section">
+
+                    <button className='large-button schedule-date'>
+                        <FontAwesomeIcon icon={faCalendarPlus} />
+                        Agendar Cita
+                    </button>
+
+                    <div className='appointments-container'>
+
+                        <div className='box-title appointments-title'>Citas Agendadas</div>
+                        <div className='appointments'>
+                            {schAppointments.map((appointment, index) => (
+                                <div key={index} className='appointment'>
+                                    <div className='appointment-date'>
+                                        {formatAppointmentDate(appointment.date)}
+                                    </div>
+                                    <div className='appointment-details'>
+                                        <span>{appointment.description}</span>
+                                        <span className='appointment-light-text'>{appointment.time}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div className='box-title appointments-title'>Citas Previas</div>
+                        <div className='appointments'>
+                            {prevAppointments.map((appointment, index) => (
+                                <div key={index} className='appointment prev-appointment'>
+                                    <div className='appointment-date'>
+                                        {formatAppointmentDate(appointment.date)}
+                                    </div>
+                                    <div className='appointment-details'>
+                                        <span>{appointment.description}</span>
+                                        <span className='appointment-light-text'>{appointment.time}</span>
+                                        <span className='appointment-light-text'>{appointment.medicalExplanation}</span>
+                                        <span className='appointment-light-text'>{appointment.medicine}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
                     </div>
 
                 </div>
