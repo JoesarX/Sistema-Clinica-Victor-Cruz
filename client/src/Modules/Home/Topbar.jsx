@@ -1,11 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../HojaDeEstilos/Topbar.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-
+import { AuthContext } from '../AuthContext.js';
+import React, { useContext } from 'react';
 
 const Topbar = () => {
+    const { isLoggedIn, handleSignIn } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -65,9 +67,11 @@ const Topbar = () => {
                     </li>
                 </ul>
                 <ul class="navbar-nav custom-colors mr-0">
-                    <li class="nav-item text">
-                        <a class="nav-link" onClick={handleIniciarClick}><FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</a>
-                    </li>
+                    {!isLoggedIn && (
+                        <li className="nav-item text">
+                            <a class="nav-link" onClick={handleIniciarClick}><FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</a>
+                        </li>
+                    )}
                 </ul>
             </div>
         </nav>
