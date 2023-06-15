@@ -92,6 +92,7 @@ const Medicamentos = () => {
                             swal("Medicamento eliminado exitosamente!", {
                                 icon: "success",
                             });
+                            window.location.reload();
                         } catch (error) {
                             swal("Error al eliminar el medicamento. Por favor, inténtalo de nuevo más tarde.", {
                                 icon: "error",
@@ -109,7 +110,7 @@ const Medicamentos = () => {
                 .catch((error) => {
                     console.log("Failed to delete image: ", error)
                 })
-                window.location.reload();
+                //window.location.reload();
             }
   
     const theme = createTheme(
@@ -360,9 +361,9 @@ const Medicamentos = () => {
                             ...prevState,
                             urlfoto: imageUrll,
                         }));
+                        console.log("TESTING BBBBBBBBBBBBBBB"+imageUrll);
                         medicamento.urlfoto = imageUrll;
                         console.log("TESTING AAAAAAAAAAAAAAA"+medicamento.urlfoto);
-                        console.log("TESTING BBBBBBBBBBBBBBB"+imageUrll);
                         
                         await MedicamentosService.editMedicamentos(id, medicamento);
                         alert('Medicamento Editado');
