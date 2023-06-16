@@ -12,8 +12,8 @@
     gap: 16px;
 }
 
-#categoria {
-    height: 15px;
+#categoria, #via{
+    height: 14px;
 }
 
 #categoria .MuiAutocomplete-paper {
@@ -23,7 +23,7 @@
 @media (max-width: 600px) {
     .modalMedicamentos {
         width: 85%;
-        height: 85vh;
+        height: 90vh;
     }
 
     .modalMedicamentos form {

@@ -42,6 +42,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 
 //STYLES
 import MedicamentosService from '../../Services/MedicamentosService';
+import './Medicamentos.css';
 import '../HojaDeEstilos/CrudStyles.css';
 import NavBar from '../NavBar';
 
@@ -50,13 +51,13 @@ const Medicamentos = () => {
     //========================================================================================================================================================================================================================
     //LOGIN VALIDATION
     const isLoggedIn = localStorage.getItem("400");
-    let cont =0;
+    let cont = 0;
     //========================================================================================================================================================================================================================
     //MEDICAMENTOS GRID DATA
     const navigate = useNavigate();
     const [medicamentos, setMedicamentos] = useState([]);
     //esto es para el popup
-     const [openPopup, setOpenPopup] = useState(false);
+    const [openPopup, setOpenPopup] = useState(false);
     const [selectedMedicamentoId, setSelectedMedicamentoId] = useState(null);
 
     const [isModalOpen1, setIsModalOpen1] = useState(false);
@@ -67,51 +68,51 @@ const Medicamentos = () => {
         setOpenPopup(true);
     }
 
-        const handleDeleteMedicamentosClick = (row, id) => {
-            swal({
-                title: "¿Estás seguro?",
-                text: "Una vez borrado, no podrás recuperar esta información.",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then(async (willDelete) => {
-                    if (willDelete) {
-                        try {
-                            const url = row.urlfoto
-                            console.log("DELETE THIS URL: "+url);
-                            await MedicamentosService.deleteMedicamentos(id);
-                            if (url != null) {
-                                console.log("DELETE THIS URL no es null: "+url);
-                                deleteImg(url);
-                            }
-                            else {
-                                window.location.reload();
-
-                            }
-                            swal("Medicamento eliminado exitosamente!", {
-                                icon: "success",
-                            });
-                        } catch (error) {
-                            swal("Error al eliminar el medicamento. Por favor, inténtalo de nuevo más tarde.", {
-                                icon: "error",
-                            });
+    const handleDeleteMedicamentosClick = (row, id) => {
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta información.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    try {
+                        const url = row.urlfoto
+                        console.log("DELETE THIS URL: " + url);
+                        await MedicamentosService.deleteMedicamentos(id);
+                        if (url != null) {
+                            console.log("DELETE THIS URL no es null: " + url);
+                            deleteImg(url);
                         }
-                    } else {
-                        swal("¡Tu información no se ha borrado!");
+                        else {
+                            window.location.reload();
+
+                        }
+                        swal("Medicamento eliminado exitosamente!", {
+                            icon: "success",
+                        });
+                    } catch (error) {
+                        swal("Error al eliminar el medicamento. Por favor, inténtalo de nuevo más tarde.", {
+                            icon: "error",
+                        });
                     }
-                });
-        };
-            const storage = getStorage(); 
-            const deleteImg = (refUrl) => { 
-            const imageRef = ref(storage, refUrl)
-                deleteObject(imageRef)
-                .catch((error) => {
-                    console.log("Failed to delete image: ", error)
-                })
-                window.location.reload();
-            }
-  
+                } else {
+                    swal("¡Tu información no se ha borrado!");
+                }
+            });
+    };
+    const storage = getStorage();
+    const deleteImg = (refUrl) => {
+        const imageRef = ref(storage, refUrl)
+        deleteObject(imageRef)
+            .catch((error) => {
+                console.log("Failed to delete image: ", error)
+            })
+        window.location.reload();
+    }
+
     const theme = createTheme(
         {
             palette: {
@@ -200,6 +201,7 @@ const Medicamentos = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
+    const listaVias = ['Oral', 'Subcutánea', 'Intramuscular ', 'Intravenosa']
 
     console.log(isSubmitting2)
     const toggleModal = () => {
@@ -265,8 +267,8 @@ const Medicamentos = () => {
     const [imageUpload, setImageUpload] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const imagesListRef = ref(storage, "images/");
-    async function  uploadFile ()   {
-        
+    async function uploadFile() {
+
         return new Promise((resolve, reject) => {
             // Your file upload logic here
             // Call resolve with the imageUrl when the upload is complete
@@ -276,7 +278,7 @@ const Medicamentos = () => {
                 //reject(new Error('No file selected for upload'));
                 return null;
             }
-            
+
             const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
             uploadBytes(imageRef, imageUpload)
                 .then((snapshot) => getDownloadURL(snapshot.ref))
@@ -292,92 +294,92 @@ const Medicamentos = () => {
         e.preventDefault();
         try {
             console.log("test");
-        submitMedicamento();
+            submitMedicamento();
         } catch (error) {
-          // Handle error if any
-          console.log('Error submitting medicamento:', error);
-        }
-      };
-      
-      useEffect(() => {
-        if (isSubmitting) {
-            console.log("test");
-          submitMedicamento();
-        }
-      }, [isSubmitting]);
-      
-      const submitMedicamento = async () => {
-        if (validations()) {
-            console.log("Entra a agregar despues de validaciones");
-          try {
-            if (imageUpload != null) {
-                const imageUrll = await uploadFile();
-                  console.log(imageUrll);
-                  setMedicamento((prevState) => ({
-                      ...prevState,
-                      urlfoto: imageUrll,
-                  }));
-                  medicamento.urlfoto = imageUrll;
-                  console.log(medicamento.urlfoto);
-              }
-            await MedicamentosService.postMedicamentos(medicamento);
-            alert('Medicamento Agregado');
-            toggleModal();
-            window.location.reload();
-          } catch (error) {
             // Handle error if any
             console.log('Error submitting medicamento:', error);
-          }
         }
-      };
-      
-      const EditHandler = async (e) => {
+    };
+
+    useEffect(() => {
+        if (isSubmitting) {
+            console.log("test");
+            submitMedicamento();
+        }
+    }, [isSubmitting]);
+
+    const submitMedicamento = async () => {
+        if (validations()) {
+            console.log("Entra a agregar despues de validaciones");
+            try {
+                if (imageUpload != null) {
+                    const imageUrll = await uploadFile();
+                    console.log(imageUrll);
+                    setMedicamento((prevState) => ({
+                        ...prevState,
+                        urlfoto: imageUrll,
+                    }));
+                    medicamento.urlfoto = imageUrll;
+                    console.log(medicamento.urlfoto);
+                }
+                await MedicamentosService.postMedicamentos(medicamento);
+                alert('Medicamento Agregado');
+                toggleModal();
+                window.location.reload();
+            } catch (error) {
+                // Handle error if any
+                console.log('Error submitting medicamento:', error);
+            }
+        }
+    };
+
+    const EditHandler = async (e) => {
         e.preventDefault();
         try {
-          submitEditMedicamento();
+            submitEditMedicamento();
         } catch (error) {
-          // Handle error if any
-          console.log('Error submitting medicamento:', error);
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
         }
     };
 
     useEffect(() => {
         if (isSubmitting2) {
-          submitEditMedicamento();
+            submitEditMedicamento();
         }
-      }, [isSubmitting2]);
+    }, [isSubmitting2]);
 
     const submitEditMedicamento = async () => {
         try {
-                if (validations()) {
-                    console.log("Entra a edit despues de validaciones");
-                    if (imageUpload != null) {
-                        if (medicamento.urlfoto != null) {
-                            deleteImg(medicamento.urlfoto);
-                        }
-                        const imageUrll = await uploadFile();
-                        setMedicamento((prevState) => ({
-                            ...prevState,
-                            urlfoto: imageUrll,
-                        }));
-                        medicamento.urlfoto = imageUrll;
-                        console.log("TESTING AAAAAAAAAAAAAAA"+medicamento.urlfoto);
-                        console.log("TESTING BBBBBBBBBBBBBBB"+imageUrll);
-                        
-                        await MedicamentosService.editMedicamentos(id, medicamento);
-                        alert('Medicamento Editado');
+            if (validations()) {
+                console.log("Entra a edit despues de validaciones");
+                if (imageUpload != null) {
+                    if (medicamento.urlfoto != null) {
+                        deleteImg(medicamento.urlfoto);
                     }
-                    else {
-                        await MedicamentosService.editMedicamentos(id, medicamento);
-                        alert('Medicamento Editado');
-                    }
-                    toggleModal22();
-                    window.location.reload();
-                    cleanExpediente();
+                    const imageUrll = await uploadFile();
+                    setMedicamento((prevState) => ({
+                        ...prevState,
+                        urlfoto: imageUrll,
+                    }));
+                    medicamento.urlfoto = imageUrll;
+                    console.log("TESTING AAAAAAAAAAAAAAA" + medicamento.urlfoto);
+                    console.log("TESTING BBBBBBBBBBBBBBB" + imageUrll);
+
+                    await MedicamentosService.editMedicamentos(id, medicamento);
+                    alert('Medicamento Editado');
                 }
-          } catch (error) {
+                else {
+                    await MedicamentosService.editMedicamentos(id, medicamento);
+                    alert('Medicamento Editado');
+                }
+                toggleModal22();
+                window.location.reload();
+                cleanExpediente();
+            }
+        } catch (error) {
             console.log('Error submitting medicamento:', error);
-          }
+        }
     };
 
     const toggleModal22 = () => {
@@ -390,21 +392,34 @@ const Medicamentos = () => {
 
     const validations = () => {
         const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
-        if (nombre === null || nombre === '' || nombre === ' ') {
+        //Nombre validations
+        if (nombre === null || nombre === '') {
             alert('Debe agregarle un nombre al medicamento')
             return false
+        } else if (!nombre.replace(/\s/g, '').length) {
+            alert('El nombre no puede contener solo espacios.');
+            return false
+        } else if (nombre.charAt(0) === ' ') {
+            alert('El nombre no puede iniciar con un espacio.');
+            return false
+        } else if (nombre.charAt(nombre.length - 1) === ' ') {
+            alert('El nombre no puede terminar con un espacio.');
+            return false
         }
+        //Categoria validations
         if (categoria === null || categoria === '') {
             alert('Debe agregar una categoria valida.');
             return false;
         }
+        //Stock validations
         if (stock === null || stock === '') {
             alert('Debe agregarle la cantidad de unidades al medicamento');
             return false;
         } else if (!(/^\d+$/.test(stock))) {
-            alert("Ingrese una unidad numerica valida");
+            alert("Las unidades deben ser un numero entero.");
             return false;
         }
+        //Precio validations
         if (precio_unitario === null || precio_unitario === '') {
             alert('Debe agregarle un precio unitario al medicamento');
             return false;
@@ -412,14 +427,26 @@ const Medicamentos = () => {
             alert("Ingrese un precio valido");
             return false;
         }
+        //Via validations
         if (via === null || via === '') {
             alert('Ingrese una via para el medicamento');
             return false;
         }
-        if (dosis === null || dosis === '' || dosis === ' ') {
+        //Dosis validations
+        if (dosis === null || dosis === '') {
             alert('Debe agregarle una dosis al medicamento')
             return false;
+        }else if (!dosis.replace(/\s/g, '').length) {
+            alert('La dosis no puede contener solo espacios.');
+            return false
+        } else if (dosis.charAt(0) === ' ') {
+            alert('La dosis no puede iniciar con un espacio.');
+            return false
+        } else if (dosis.charAt(nombre.length - 1) === ' ') {
+            alert('La dosis no puede terminar con un espacio.');
+            return false
         }
+        
         if (imageUpload != null) {
             const file = imageUpload;
             if (validateImageFormat(file) == false) {
@@ -434,53 +461,37 @@ const Medicamentos = () => {
     const validateImageFormat = (file) => {
         const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
         const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-      
+
         if (!allowedFormats.includes(file.type)) {
-          console.log('La imagen debe estar en formato JPG, JPEG o PNG');
-          return false;
+            console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+            return false;
         }
-      
+
         if (file.size > maxSizeInBytes) {
-          console.log('La imagen no debe superar los 5MB de tamaño');
-          return false;
+            console.log('La imagen no debe superar los 5MB de tamaño');
+            return false;
         }
-      
+
         // Continue with further logic or actions if the image passes the format and size checks
         return true;
-      };
+    };
 
     const [medicamentoData, setMedicamentoss] = useState([]);
 
-    // const fetchMedicamento = async (id) => {
-    //     console.log(id)
-    //     try {
-    //         const medicamentoData = await MedicamentosService.getOneMedicamento(id);
-    //         console.log(medicamentoData)
-    //         setMedicamentoss([medicamentoData]);
-    //         //setMedicamento(medicamentoData);
-    //         console.log(medicamentoData)
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // };
-
-    // const defaultValue = medicamento.sexo;
-    // const selectedValue2 = medicamento.estado_civil;
-
-let buscaError=0;
+    let buscaError = 0;
     useEffect(() => {
         // Validación login
-        console.log("Este es el error en Med: "+(buscaError++));
+        console.log("Este es el error en Med: " + (buscaError++));
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
-            if(cont==0){
-             alert("No Cuenta con el permiso de entrar a este apartado")
-            navigate("/expedientes"); // Redirige a la página de inicio de sesión
-            cont++;
+            if (cont == 0) {
+                alert("No Cuenta con el permiso de entrar a este apartado")
+                navigate("/expedientes"); // Redirige a la página de inicio de sesión
+                cont++;
             }
-            
-            
-            
+
+
+
         }
 
         const fetchAllMedicamentos = async () => {
@@ -530,32 +541,8 @@ let buscaError=0;
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
-    // const [selectedDate, setSelectedDate] = useState(null);
-    // const handleInputFocus = (event) => {
-    //     event.target.blur(); // Remove focus from the input field
-    // };
-    // const [selectedMedicamento, setSelectedMedicamento] = useState(null);
-    // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-    // const handleOpenEditModal = (medicamento) => {
-    //     setSelectedMedicamento(medicamento);
-    //     setIsEditModalOpen(true);
-    // };
-    // const handleCloseEditModal = () => {
-    //     setSelectedMedicamento(null);
-    //     setIsEditModalOpen(false);
-    // };
-    console.log(medicamento)    
-
-
-    // const handleOpenModal = () => {
-    //     setIsModalOpen(true);
-    // };
-
-    // const handleCloseModal = () => {
-    //     setIsModalOpen(false);
-    // };
-    const selectedValue3 = medicamento.categoria;
+    const categoriaSelected = medicamento.categoria;
+    const viaSelected = medicamento.via;
 
 
     return (
@@ -631,10 +618,8 @@ let buscaError=0;
                             >
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Autocomplete
-                                
                                     disablePortal
                                     id="categoria"
-
                                     required
                                     options={listaCategoriaMedicamentos}
                                     onChange={(event, newValue) =>
@@ -648,19 +633,32 @@ let buscaError=0;
                                 />
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock'  required/>
+                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario'  required />
+                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required />
                                     </Grid>
                                 </Grid>
 
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="via" label="Via" variant="outlined" onChange={handleModalFieldChange} name='via'  required />
+                                        <Autocomplete
+                                            disablePortal
+                                            id="via"
+                                            required
+                                            options={listaVias}
+                                            onChange={(event, newValue) =>
+                                                setMedicamento({
+                                                    ...medicamento,
+                                                    via: newValue
+                                                })
+
+                                            }
+                                            renderInput={(params) => <TextField {...params} label="Via" required />}
+                                        />
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis'  required/>
+                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2} >
@@ -712,11 +710,11 @@ let buscaError=0;
                                     >
                                         <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                         <Autocomplete
-                                        value={selectedValue3}
+                                            value={categoriaSelected}
                                             disablePortal
                                             id="categoria"
 
-                                            
+
                                             options={listaCategoriaMedicamentos}
                                             onChange={(event, newValue) =>
                                                 setMedicamento({
@@ -737,7 +735,21 @@ let buscaError=0;
 
                                         <Grid container spacing={2}>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField id="via" label="Via" variant="outlined" defaultValue={medicamento.via} onChange={handleModalFieldChange} name='via' />
+                                                <Autocomplete
+                                                    value={viaSelected}
+                                                    disablePortal
+                                                    id="via"
+                                                    required
+                                                    options={listaVias}
+                                                    onChange={(event, newValue) =>
+                                                        setMedicamento({
+                                                            ...medicamento,
+                                                            via: newValue
+                                                        })
+
+                                                    }
+                                                    renderInput={(params) => <TextField {...params} label="Via" required />}
+                                                />
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
                                                 <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
