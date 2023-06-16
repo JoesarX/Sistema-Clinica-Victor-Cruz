@@ -68,23 +68,36 @@ const Medicamentos = () => {
         setOpenPopup(true);
     }
 
-    const handleDeleteMedicamentosClick = (row, id) => {
-        swal({
-            title: "¿Estás seguro?",
-            text: "Una vez borrado, no podrás recuperar esta información.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then(async (willDelete) => {
-                if (willDelete) {
-                    try {
-                        const url = row.urlfoto
-                        console.log("DELETE THIS URL: " + url);
-                        await MedicamentosService.deleteMedicamentos(id);
-                        if (url != null) {
-                            console.log("DELETE THIS URL no es null: " + url);
-                            deleteImg(url);
+        const handleDeleteMedicamentosClick = (row, id) => {
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez borrado, no podrás recuperar esta información.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then(async (willDelete) => {
+                    if (willDelete) {
+                        try {
+                            const url = row.urlfoto
+                            console.log("DELETE THIS URL: "+url);
+                            await MedicamentosService.deleteMedicamentos(id);
+                            if (url != null) {
+                                console.log("DELETE THIS URL no es null: "+url);
+                                deleteImg(url);
+                            }
+                            else {
+                                window.location.reload();
+
+                            }
+                            swal("Medicamento eliminado exitosamente!", {
+                                icon: "success",
+                            });
+                            window.location.reload();
+                        } catch (error) {
+                            swal("Error al eliminar el medicamento. Por favor, inténtalo de nuevo más tarde.", {
+                                icon: "error",
+                            });
                         }
                         else {
                             window.location.reload();
@@ -98,21 +111,18 @@ const Medicamentos = () => {
                             icon: "error",
                         });
                     }
-                } else {
-                    swal("¡Tu información no se ha borrado!");
-                }
-            });
-    };
-    const storage = getStorage();
-    const deleteImg = (refUrl) => {
-        const imageRef = ref(storage, refUrl)
-        deleteObject(imageRef)
-            .catch((error) => {
-                console.log("Failed to delete image: ", error)
-            })
-        window.location.reload();
-    }
-
+                });
+        };
+            const storage = getStorage(); 
+            const deleteImg = (refUrl) => { 
+            const imageRef = ref(storage, refUrl)
+                deleteObject(imageRef)
+                .catch((error) => {
+                    console.log("Failed to delete image: ", error)
+                })
+                //window.location.reload();
+            }
+ 
     const theme = createTheme(
         {
             palette: {
@@ -351,11 +361,23 @@ const Medicamentos = () => {
 
     const submitEditMedicamento = async () => {
         try {
-            if (validations()) {
-                console.log("Entra a edit despues de validaciones");
-                if (imageUpload != null) {
-                    if (medicamento.urlfoto != null) {
-                        deleteImg(medicamento.urlfoto);
+                if (validations()) {
+                    console.log("Entra a edit despues de validaciones");
+                    if (imageUpload != null) {
+                        if (medicamento.urlfoto != null) {
+                            deleteImg(medicamento.urlfoto);
+                        }
+                        const imageUrll = await uploadFile();
+                        setMedicamento((prevState) => ({
+                            ...prevState,
+                            urlfoto: imageUrll,
+                        }));
+                        console.log("TESTING BBBBBBBBBBBBBBB"+imageUrll);
+                        medicamento.urlfoto = imageUrll;
+                        console.log("TESTING AAAAAAAAAAAAAAA"+medicamento.urlfoto);
+                        
+                        await MedicamentosService.editMedicamentos(id, medicamento);
+                        alert('Medicamento Editado');
                     }
                     const imageUrll = await uploadFile();
                     setMedicamento((prevState) => ({
