@@ -46,17 +46,17 @@ const IniciarSesion = () => {
                     localStorage.setItem("100", true);
                     alert("Bienvenido!");
                     navigate("/expedientes");
-                    handleSignIn();
+                    handleSignIn('normal');
                 } else if (await loginMaster(email, password)===true) {
                     alert("Bienvenido Doctor!");
                     localStorage.setItem("400", true);
                     navigate("/expedientes");
-                    handleSignIn();
+                    handleSignIn('master');
                 } else if (await loginAdmin(email, password)===true){
                     alert("Bienvenido");
                     localStorage.setItem("300", true);
                     navigate("/expedientes");
-                    handleSignIn();
+                    handleSignIn('administrador');
                 }else {
                     alert("Email o contraseña incorrecta!");
                 }

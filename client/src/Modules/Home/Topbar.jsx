@@ -4,10 +4,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../AuthContext.js';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 
 const Topbar = () => {
-    const { isLoggedIn, handleSignIn } = useContext(AuthContext);
+    const { isLoggedIn, userType, handleSignOut } = useContext(AuthContext);
 
     const navigate = useNavigate();
 
@@ -38,7 +38,28 @@ const Topbar = () => {
     const handleAcercade = () => {
         navigate('/acerca-de');
     };
-
+//====Funciones para los dropdown menus ===============================================================
+    const handleSignOutClick = () => {
+        handleSignOut();
+    }
+    const handleMedicamentos = () => {
+        // navigate('/medicamentos');
+    };
+    const handleExpedientes = () => {
+        // navigate('/expedientes');
+    };
+    const handleColaboradores = () => {
+        // navigate('/colaboradores');
+    };
+    const handleAgendarCita = () => {
+        // navigate('/citas');
+    };
+    const handlePerfil = () => {
+        // navigate('/dashboard');
+    };
+    const handleVerDashboard = () => {
+        // navigate('/dashboard');
+    };
     return (
         <nav class="navbar navbar-expand-lg custom-colors custom-navbar">
             <a class="navbar-brand custom-colors">LOGO</a>
@@ -71,6 +92,55 @@ const Topbar = () => {
                         <li className="nav-item text">
                             <a class="nav-link" onClick={handleIniciarClick}><FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</a>
                         </li>
+                    )}
+                    {isLoggedIn && (
+                        <div>
+                            {userType === 'normal' && (
+                                // Content for normal user dropdown menu
+                                <li className="nav-item dropdown" style={{ width: '160px' }}>
+                                    <div className="d-flex justify-content-end">
+                                        <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        </a>
+                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
+                                            <a className="dropdown-item" onClick={handlePerfil}>VER PERFIL</a>
+                                            <a className="dropdown-item" onClick={handleAgendarCita}>AGENDAR CITA</a>
+                                            <a className="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</a>
+                                        </div>
+                                    </div>
+                                </li>
+
+
+                            )}
+
+                            {userType === 'administrator' && (
+                                // Content for administrator dropdown menu
+                                <li className="nav-item dropdown" style={{ width: '160px' }}>
+                                    <div className="d-flex justify-content-end">
+                                        <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        </a>
+                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
+                                            <a class="dropdown-item" onClick={handleVerDashboard}>VER DASHBOARD</a>
+                                            <a class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            )}
+                            {userType === 'master' && (
+                                // Content for master user dropdown menu
+                                <li className="nav-item dropdown" style={{ width: '160px' }}>
+                                    <div className="d-flex justify-content-end">
+                                        <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        </a>
+                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
+                                            <a class="dropdown-item" onClick={handleMedicamentos}>MEDICAMENTOS</a>
+                                            <a class="dropdown-item" onClick={handleExpedientes}>EXPEDIENTES</a>
+                                            <a class="dropdown-item" onClick={handleColaboradores}>COLABORADORES</a>
+                                            <a class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            )}
+                        </div>
                     )}
                 </ul>
             </div>
