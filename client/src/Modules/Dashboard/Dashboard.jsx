@@ -719,7 +719,7 @@ const Dashboard = () => {
 
                 </div>
 
-                <div className="patient-section">
+                <div className="patient-section appointments-section">
 
                     <button className='large-button schedule-date'>
                         <FontAwesomeIcon icon={faCalendarPlus} />
