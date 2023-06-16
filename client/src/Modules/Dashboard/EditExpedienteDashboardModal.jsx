@@ -18,8 +18,8 @@ import { Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 //STYLES
-
-import '../Expedientes/ModalStyle.css';
+import '../Expedientes/ExpedientesStyle.css';
+import '../HojaDeEstilos/CrudStyles.css';
 
 import ExpedientesService from '../../Services/ExpedientesService';
 
