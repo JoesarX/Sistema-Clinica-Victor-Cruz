@@ -264,6 +264,7 @@ const Medicamentos = () => {
     };
 
     const [imageUpload, setImageUpload] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const imagesListRef = ref(storage, "images/");
     async function  uploadFile ()   {
@@ -283,7 +284,7 @@ const Medicamentos = () => {
                 .then((snapshot) => getDownloadURL(snapshot.ref))
                 .then((url) => {
                     resolve(url);
-                    console.log(medicamento);
+                    //console.log(medicamento);
                 })
                 .catch((error) => reject(error));
         });
@@ -618,7 +619,7 @@ let buscaError=0;
                         <div className='modalContainer modalMedicamentos'>
 
                             <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
-
+                            
                             <Box
                                 component="form"//edit modal
                                 sx={{
@@ -630,6 +631,7 @@ let buscaError=0;
                                 noValidate
                                 autoComplete="off"
                             >
+                                    
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Autocomplete
                                 
@@ -665,19 +667,26 @@ let buscaError=0;
                                     </Grid>
                                 </Grid>
                                 <Grid container spacing={2} >
-                                    <Grid item xs={3} sm={1} >
+                                    <Grid item xs={12} sm={6} >
+                                    <div className='Div-imagen'>
+                                            <img className='Imagen' src={imagePreview} alt={"imgPreview"} style={{ marginLeft: 0, marginRight: 0, width: 100, height: 100 }} />
+                                        </div>
                                         <input
                                             type="file"
                                             onChange={(event) => {
                                                 setImageUpload(event.target.files[0]);
+                                                setImagePreview(URL.createObjectURL(event.target.files[0]));
                                                 console.log(imageUpload);
+                                                console.log(imagePreview);
                                             }}
                                             name='urlfoto'
                                             id="urlfoto"
                                         />
+                                        
                                     </Grid>
+                                    
                                 </Grid>
-
+                                
                                 <Button
                                     onClick={handleModalSubmit}
                                     variant="contained"

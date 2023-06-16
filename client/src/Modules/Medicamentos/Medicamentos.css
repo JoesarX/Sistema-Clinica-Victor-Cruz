@@ -7,6 +7,15 @@
 
 }
 
+.Div-imagen {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0;
+    margin-top: 0;
+    justify-content: center;
+
+}
+
 .modalMedicamentos form {
 
     gap: 16px;
