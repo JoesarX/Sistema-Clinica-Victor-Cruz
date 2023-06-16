@@ -1,14 +1,10 @@
 .modalMedicamentos {
-
     width: 600px;
-
     height: 450px;
     overflow: hidden;
-
 }
 
 .modalMedicamentos form {
-
     gap: 16px;
 }
 

@@ -976,3 +976,56 @@
         text-align: center;
     }
 }
+
+@media only screen and (max-height: 768px) {
+
+    .patient-section {
+        gap: 10px;
+        height: 92%;
+    }
+
+    .patient-email-container {
+        font-size: 14px;
+    }
+
+    .nombre {
+        font-size: 22px;
+    }
+
+    .smallText {
+        font-size: 14px;
+    }
+
+    .infoGeneral {
+        height: 180px;
+    }
+
+    .alergias, .enfermedades {
+        height: 140px;
+    }
+
+    .medHis {
+        height: 350px;
+    }
+
+    .medicamentos {
+        height: 300px;
+    }
+
+    .vitals {
+        height: 280px;
+    }
+
+    .files {
+        height: 180px;
+    }
+
+    .vitals-label {
+        font-size: 14px;
+    }
+
+    .patient-info-vert-align {
+        gap: 0px;
+    }
+
+}
