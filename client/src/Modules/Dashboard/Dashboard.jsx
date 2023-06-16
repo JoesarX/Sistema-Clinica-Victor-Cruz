@@ -266,18 +266,40 @@ const Dashboard = () => {
     };
 
     const validacionesSignos = () => {
+        if (patient.altura > 280) {
+            alert("La altura ingresada no es valida");
+            return false;
+        }
+        if (patient.peso > 250) {
+            alert("el peso ingresado no es valido");
+        }
+        if (patient.temperatura > 43) {
+            alert("La temperatura ingresada es invalida");
+        }
+    
+     const regexFinal=/\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
+   
+        if (!regexFinal.test(patient.presion)) {
+            alert("El ritmo cardiaco ingresado es invalido");
+            return false;
+        }
+        if(patient.presion)
+
         return true;
+
     }
 
     const handleSaveChangesSignos = () => {
         console.log(patient.idpaciente)
-        setIsEditingLabel(false);
-        setIsChangesSaved(true);
+
+
         const editExpediente = async () => {
             if (validacionesSignos()) {
                 console.log(patient)
                 await ExpedientesService.editExpedientesDashboard(patient.idpaciente, patient);
                 alert('Expediente Editado');
+                setIsEditingLabel(false);
+                setIsChangesSaved(true);
             }
         };
         console.log(patient)
@@ -332,7 +354,7 @@ const Dashboard = () => {
                 }));
             }
         } else if (name === 'presion') {
-            if (wholeNumberRegex.test(value)) {
+            if (true) {
                 setPatient((prevPatient) => ({
                     ...prevPatient,
                     [name]: value,
