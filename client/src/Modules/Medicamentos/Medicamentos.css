@@ -1,10 +1,7 @@
 .modalMedicamentos {
-
     width: 600px;
-
     height: 450px;
     overflow: hidden;
-
 }
 
 .Div-imagen {
@@ -17,22 +14,60 @@
 }
 
 .modalMedicamentos form {
-
     gap: 16px;
 }
 
-#categoria {
-    height: 15px;
+#categoria, #via{
+    height: 14px;
 }
 
 #categoria .MuiAutocomplete-paper {
     max-height: 20px;
 }
 
+
+
+
+.cancelButton {
+    position: absolute;
+    top: 10px;
+    font-size: 15px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .cancelButton:hover {
+    background-color: #b84f4f;
+    color: #fff;
+  }
+  
+  .cancelButton::before,
+  .cancelButton::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 18px;
+    height: 2px;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+  
+  .cancelButton::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
 @media (max-width: 600px) {
     .modalMedicamentos {
         width: 85%;
-        height: 85vh;
+        height: 90vh;
     }
 
     .modalMedicamentos form {

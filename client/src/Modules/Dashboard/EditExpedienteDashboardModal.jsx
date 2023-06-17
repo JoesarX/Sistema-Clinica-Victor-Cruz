@@ -2,7 +2,6 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -12,14 +11,17 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 import React from 'react'
 
 import { Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
 
 //STYLES
-
-import '../Expedientes/ModalStyle.css';
+import '../Expedientes/ExpedientesStyle.css';
+import '../HojaDeEstilos/CrudStyles.css';
 
 import ExpedientesService from '../../Services/ExpedientesService';
 
@@ -105,45 +107,45 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
 
     const validations = () => {
         const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
-           expediente;
+            expediente;
         if (nombre === null || nombre === '') {
-           alert('Nombre Completo es requerido');
-           return false;
+            alert('Nombre Completo es requerido');
+            return false;
         }
-         if (edad === null || edad === '' || edad < 0) {
-           alert('Una edad valida es requerida');
-           return false;
-         }
-       
+        if (edad === null || edad === '' || edad < 0) {
+            alert('Una edad valida es requerida');
+            return false;
+        }
+
         if (sexo === null || sexo === '') {
-           alert('Sexo es requerido');
-           return false;
+            alert('Sexo es requerido');
+            return false;
         }
         if (estado_civil === null || estado_civil === '') {
-           alert('Estado Civil es requerido');
-           return false;
+            alert('Estado Civil es requerido');
+            return false;
         }
         if (correo === null || correo === '') {
-           alert('Correo es requerido');
-           return false;
+            alert('Correo es requerido');
+            return false;
         }
         if (telefono === null || telefono === '') {
-           alert('Telefono es requerido');
-           return false;
+            alert('Telefono es requerido');
+            return false;
         }
         if (numid === null || numid === '') {
-           alert('Numero de Identidad es requerido');
-           return false;
+            alert('Numero de Identidad es requerido');
+            return false;
         }
-  
+
         return true;
-     };
+    };
 
     const EditHandler = () => {
         console.log(expedientess.idpaciente)
         console.log(expediente)
         const editExpediente = async () => {
-            if(validations()){
+            if (validations()) {
                 console.log(':)')
                 await ExpedientesService.editExpedientes(expedientess.idpaciente, expediente);
                 alert('Expediente Editado');
@@ -162,11 +164,14 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
     console.log(expediente)
     console.log(expedientess)
     return (
-        <Modal open={true} onClose={onClose}>
-            <div className='modalContainer'>
+        <Modal open={true} onClose={onClose} closeAfterTransition BackdropProps={{ onClick: () => {} }}>
+            <div className='modalContainer' >
                 {expedienteData.map((expediente) => (
-                    <div className='expedienteCard' key={expediente.idpaciente}>
+                    <div className='expedienteCard' key={expediente.idpaciente} onClick={(e) => e.stopPropagation()}>
                         <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
+                        <button className="cancelButton" onClick={onClose}>
+                        <FontAwesomeIcon icon={faTimes} size="2x" />
+                        </button>
                         <Box
                             component="form"
                             sx={{

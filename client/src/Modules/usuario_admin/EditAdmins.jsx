@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import AdministradoresService from '../../Services/AdministradoresService';
 import { WindowSharp } from '@mui/icons-material';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 const EditAdmins = (props) => {
     let { setNombre, setRol, setId, setCorreo, setTelefono, setSexo, openEditAdmin, setEditAdmin, setPassword } = props;
     const [selectedOption, setSelectedOption] = useState(setRol);
@@ -12,6 +15,7 @@ const EditAdmins = (props) => {
     const [id, setId2] = useState(setId);
     const [inputValue, setInputValue] = useState(setPassword);
     const [admin, setAdmin] = React.useState({
+        id: setId,
         nombre: setNombre,
         correo: setCorreo,
         rol: setRol,
@@ -76,6 +80,7 @@ const EditAdmins = (props) => {
 
     const handleSubmit = async (e) => {
         console.log(admin.id)
+        e.preventDefault();
         if (validations()) {
             e.preventDefault();
 
@@ -95,50 +100,119 @@ const EditAdmins = (props) => {
     };
 
     const validations = () => {
-        const { nombre, correo, rol, password, telefono, sexo, id } = admin;
+        const { nombre, correo, rol, password, telefono, sexo, id } = admin
+        //Validaciones Nombre
         if (nombre === null || nombre === '') {
-            alert('Nombre Completo es requerido');
-            return false;
+            alert('Nombre Completo es requerido')
+            return false
+        } else if (!nombre.replace(/\s/g, '').length) {
+            alert('El nombre no puede contener solo espacios.');
+            return false
+        } else if (nombre.charAt(0) === ' ') {
+            alert('El nombre no puede iniciar con un espacio.');
+            return false
+        } else if (nombre.charAt(nombre.length - 1) === ' ') {
+            alert('El nombre no puede terminar con un espacio.');
+            return false
         }
-        if (correo === null || correo === '') {
-            alert('Correo es requerido');
-            return false;
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (emailRegex.test(correo) !== true) {
-            alert('Correo inválido');
-            return false;
-        }
-        if (rol === null || rol === '') {
-            alert('Rol es requerido');
-            return false;
-        }
-        if (password === null || password === '') {
-            alert('Contraseña es requerida');
-            return false;
-        }
-        if (telefono === null || telefono === '') {
-            alert('Teléfono es requerido');
-            return false;
-        }
-        if (sexo === null || sexo === '') {
-            alert('Sexo es requerido');
-            return false;
-        }
+        //Validaciones Identidad
+        console.log(id)
         if (id === null || id === '') {
-            alert('ID es requerido');
-            return false;
+            alert('Un numero de Identidad es requerido')
+            return false
+        } else if (!id.replace(/\s/g, '').length) {
+            alert('El numero de identidad no puede contener solo espacios.');
+            return false
+        } else if (id.charAt(0) === ' ') {
+            alert('El numero de identidad no puede iniciar con un espacio.');
+            return false
+        } else if (id.charAt(id.length - 1) === ' ') {
+            alert('El numero de identidad no puede terminar con un espacio.');
+            return false
         }
-        return true;
-    };
+        //Validaciones Correo
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (correo === null || correo === '') {
+            alert('Correo es requerido')
+            return false
+        } else if (emailRegex.test(correo) != true) {
+            alert('El correo ingresado no tiene un formato válido.')
+            return false
+        } else if (!nombre.replace(/\s/g, '').length) {
+            alert('El nombre no puede contener solo espacios.');
+            return false
+        } else if (nombre.charAt(0) === ' ') {
+            alert('El nombre no puede iniciar con un espacio.');
+            return false
+        } else if (nombre.charAt(nombre.length - 1) === ' ') {
+            alert('El nombre no puede terminar con un espacio.');
+            return false
+        }
+        //Validaciones Contraseña
+        if (password === null || password === '') {
+            alert('Contraseña es requerida')
+            return false
+        } else if (password.charAt(0) === ' ') {
+            alert('La contraseña no puede iniciar con un espacio.');
+            return false
+        } else if (password.charAt(password.length - 1) === ' ') {
+            alert('La contraseña no puede terminar con un espacio.');
+            return false
+        }else if (password.length < 8) {
+            alert('La contraseña debe tener al menos 8 caracteres.')
+            return false
+        } else if (!/[A-Z]/.test(password)) {
+            alert('La contraseña debe tener al menos una letra mayúscula.')
+            return false
+        } else if (!/\d/.test(password)) {
+            alert('La contraseña debe tener al menos un número.')
+            return false
+        } else if (!/[!@#$%^&*_;':"|,.<>/?]/.test(password)) {
+            alert('La contraseña debe tener al menos un caracter especial.')
+            return false
+        }
+        //Validaciones Confirmar Contraseña
+        if (password !== inputValue) {
+            alert('Contraseñas deben coincidir')
+            return false
+        }
+        //Validaciones Telefono
+        if (telefono === null || telefono === '') {
+            alert('Numero de celular es requerido')
+            return false
+        } else if (!telefono.replace(/\s/g, '').length) {
+            alert('El numero de telefono no puede contener solo espacios.');
+            return false
+        } else if (telefono.charAt(0) === ' ') {
+            alert('El numero de telefono no puede iniciar con un espacio.');
+            return false
+        } else if (telefono.charAt(telefono.length - 1) === ' ') {
+            alert('El numero de telefono no puede terminar con un espacio.');
+            return false
+        }
+        //Validaciones Rol
+        if (rol === null || rol === '') {
+            alert('Rol es requerido')
+            return false
+        }
+        //Validaciones Sexo
+        if (sexo === null || sexo === '') {
+            alert('Sexo es requerido')
+            return false
+        }
+        return true
+    }
 
     return (
 
-        <Modal open={openEditAdmin} onClose={() => setEditAdmin(false)}>
+        <Modal open={openEditAdmin} onClose={() => setEditAdmin(false)} closeAfterTransition BackdropProps={{ onClick: () => {} }}>
             <div className="modalContainer">
                 <h2 className="modalHeader">
                     EDITAR COLABORADOR
                 </h2>
+                <button className="cancelButton"  onClick={() => setEditAdmin(false)}>
+                <FontAwesomeIcon icon={faTimes} size="2x" />
+                </button>
                 <form onSubmit={handleSubmit} className="modalForm">
                     <Grid container spacing={2}>
                         <Grid item xs={12}>

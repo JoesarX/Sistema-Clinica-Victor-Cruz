@@ -14,6 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import ExpedientesService from '../../Services/ExpedientesService';
 import { Box, Button } from '@mui/material';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 // STYLES
 
 
@@ -63,9 +66,9 @@ const AddExpedientesModal = ({ onClose }) => {
     e.preventDefault();
     const age = fecha_nacimiento ? calculateAge(fecha_nacimiento) : '';
     setExpediente((prevState) => ({ ...prevState, edad: age }));
-  
+
     setIsSubmitting(true);
-  
+
     if (validations()) {
       try {
         // Perform the form submission logic
@@ -79,19 +82,26 @@ const AddExpedientesModal = ({ onClose }) => {
       }
     }
   };
-  
+
 
   const validations = () => {
-    const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
+    const { nombre, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
       expediente;
+    //Nombre validation
     if (nombre === null || nombre === '') {
       alert('Nombre Completo es requerido');
       return false;
+    } else if (!nombre.replace(/\s/g, '').length) {
+      alert('El nombre no puede contener solo espacios.');
+      return false
+    } else if (nombre.charAt(0) === ' ') {
+      alert('El nombre no puede iniciar con un espacio.');
+      return false
+    } else if (nombre.charAt(nombre.length - 1) === ' ') {
+      alert('El nombre no puede terminar con un espacio.');
+      return false
     }
-    // if (edad === null || edad === '' || edad < 0) {
-    //   alert('Una edad valida es requerida');
-    //   return false;
-    // }
+    //Fecha de Nacimiento validation
     if (isNaN(selectedDate.getTime()) || fecha_nacimiento === null || fecha_nacimiento === '') {
       alert('Una Fecha valida de Nacimiento es requerida');
       return false;
@@ -100,10 +110,68 @@ const AddExpedientesModal = ({ onClose }) => {
       alert('La Fecha de Nacimiento no puede ser mayor a la fecha actual');
       return false;
     }
+    //Sexo validation
     if (sexo === null || sexo === '') {
       alert('Sexo es requerido');
       return false;
     }
+    //Ocupacion validation
+    if (!(ocupacion === null || ocupacion === '')) {
+      if (!ocupacion.replace(/\s/g, '').length) {
+        alert('La ocupación no puede contener solo espacios.');
+        return false
+      } else if (ocupacion.charAt(0) === ' ') {
+        alert('La ocupación no puede iniciar con un espacio.');
+        return false
+      } else if (ocupacion.charAt(ocupacion.length - 1) === ' ') {
+        alert('La ocupación no puede terminar con un espacio.');
+        return false
+      }
+    }
+    //Correo validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!(correo === null || correo === '')) {
+      if (!correo.replace(/\s/g, '').length) {
+        alert('El correo no puede contener solo espacios.');
+        return false
+      } else if (emailRegex.test(correo) != true) {
+        alert('El correo ingresado no tiene un formato válido.')
+        return false
+      } else if (correo.charAt(0) === ' ') {
+        alert('El correo no puede iniciar con un espacio.');
+        return false
+      } else if (correo.charAt(correo.length - 1) === ' ') {
+        alert('El correo no puede terminar con un espacio.');
+        return false
+      }
+    }
+    //Telefono validation
+    if (!(telefono === null || telefono === '')) {
+      if (!telefono.replace(/\s/g, '').length) {
+        alert('El numero de Telefono no puede contener solo espacios.');
+        return false
+      } else if (telefono.charAt(0) === ' ') {
+        alert('El numero de Telefono no puede iniciar con un espacio.');
+        return false
+      } else if (telefono.charAt(telefono.length - 1) === ' ') {
+        alert('El numero de Telefono no puede terminar con un espacio.');
+        return false
+      }
+    }
+    //Numid validation
+    if (!(numid === null || numid === '')) {
+      if (!numid.replace(/\s/g, '').length) {
+        alert('El numero de Identidad no puede contener solo espacios.');
+        return false
+      } else if (numid.charAt(0) === ' ') {
+        alert('El numero de Identidad no puede iniciar con un espacio.');
+        return false
+      } else if (numid.charAt(numid.length - 1) === ' ') {
+        alert('El numero de Identidad no puede terminar con un espacio.');
+        return false
+      }
+    }
+    //Estado Civil validation
     if (estado_civil === null || estado_civil === '') {
       alert('Estado Civil es requerido');
       return false;
@@ -132,9 +200,12 @@ const AddExpedientesModal = ({ onClose }) => {
   }, [isSubmitting]);
 
   return (
-    <Modal open={true} onClose={onClose}>
+    <Modal open={true} onClose={onClose} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
       <div className="modalContainer">
         <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
+        <button className="cancelButton" onClick={onClose}>
+          <FontAwesomeIcon icon={faTimes} size="2x" />
+        </button>
         <Box
           component="form"
           sx={{
@@ -190,7 +261,7 @@ const AddExpedientesModal = ({ onClose }) => {
               <Autocomplete
                 id="estado_civil"
                 options={listaEstadoCivil}
-                renderInput={(params) => <TextField {...params} label="Estado Civil" variant="outlined"  required/>}
+                renderInput={(params) => <TextField {...params} label="Estado Civil" variant="outlined" required />}
                 onChange={(e, value) =>
                   setExpediente((prevState) => ({
                     ...prevState,
@@ -212,7 +283,7 @@ const AddExpedientesModal = ({ onClose }) => {
           >
             Guardar Expediente
           </Button>
-          
+
         </Box>
       </div>
     </Modal>
