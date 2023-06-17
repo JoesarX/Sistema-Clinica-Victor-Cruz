@@ -606,26 +606,51 @@ const Medicamentos = () => {
                         />
                     </ThemeProvider>
 
-                    <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }} >
-
+                    <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
                         <div className='modalContainer modalMedicamentos'>
-
-                            <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
-                            <button className="cancelButton" onClick={toggleModal}>
-                            <FontAwesomeIcon icon={faTimes} size="2x" />
-                            </button>
+                            <div style={{ marginTop: '20px' }}>
+                                <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
+                                <button className="cancelButton" onClick={toggleModal}>
+                                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                                </button>
+                            </div>
                             <Box
-                                component="form"//edit modal
+                                component="form" //edit modal
                                 sx={{
                                     display: 'flex',
                                     flexDirection: 'column',
                                     gap: '10px',
                                     width: '100%', // Added width property
+                                    marginBottom: '20px', // Added margin bottom for spacing
                                 }}
                                 noValidate
                                 autoComplete="off"
                             >
-                                    
+                                <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+                                    <Grid item xs={12} sm={6}>
+                                        <div className='Div-imagen'>
+                                            <div className='ImagenWrapper'>
+                                                <img className='Imagen' src={imagePreview} alt="imgPreview" />
+                                            </div>
+                                        </div>
+                                        <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+                                        <input
+                                            type="file"
+                                            onChange={(event) => {
+                                                setImageUpload(event.target.files[0]);
+                                                setImagePreview(URL.createObjectURL(event.target.files[0]));
+                                                console.log(imageUpload);
+                                                console.log(imagePreview);
+                                            }}
+                                            name='urlfoto'
+                                            id="urlfoto"
+                                            className="customFileInput"
+                                        />
+                                    </Grid>
+                                </Grid>
+
+
+
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Autocomplete
                                     disablePortal
@@ -637,7 +662,6 @@ const Medicamentos = () => {
                                             ...medicamento,
                                             categoria: newValue
                                         })
-
                                     }
                                     renderInput={(params) => <TextField {...params} label="Categoria" required />}
                                 />
@@ -649,7 +673,6 @@ const Medicamentos = () => {
                                         <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required />
                                     </Grid>
                                 </Grid>
-
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
                                         <Autocomplete
@@ -662,7 +685,6 @@ const Medicamentos = () => {
                                                     ...medicamento,
                                                     via: newValue
                                                 })
-
                                             }
                                             renderInput={(params) => <TextField {...params} label="Via" required />}
                                         />
@@ -671,40 +693,26 @@ const Medicamentos = () => {
                                         <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
                                     </Grid>
                                 </Grid>
-                                <Grid container spacing={2} >
-                                    <Grid item xs={12} sm={6} >
-                                    <div className='Div-imagen'>
-                                            <img className='Imagen' src={imagePreview} alt={"imgPreview"} style={{ marginLeft: 0, marginRight: 0, width: 100, height: 100 }} />
-                                        </div>
-                                        <input
-                                            type="file"
-                                            onChange={(event) => {
-                                                setImageUpload(event.target.files[0]);
-                                                setImagePreview(URL.createObjectURL(event.target.files[0]));
-                                                console.log(imageUpload);
-                                                console.log(imagePreview);
-                                            }}
-                                            name='urlfoto'
-                                            id="urlfoto"
-                                        />
-                                        
+
+
+                                <Grid container spacing={2} alignItems="center" justifyContent="center">
+
+                                    <Grid item xs={12} sm={6}>
+                                        <Button
+                                            onClick={handleModalSubmit}
+                                            variant="contained"
+                                            className="modalButton"
+                                            type="submit"
+                                            id='crudButton'
+                                        >
+                                            Agregar Medicamento
+                                        </Button>
                                     </Grid>
-                                    
                                 </Grid>
-                                
-                                <Button
-                                    onClick={handleModalSubmit}
-                                    variant="contained"
-                                    className="modalButton"
-                                    type="submit"
-                                    id='crudButton'>
-                                    Agregar Medicamento
-                                </Button>
                             </Box>
                         </div>
-
-
                     </Modal>
+
 
                     <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
@@ -714,7 +722,7 @@ const Medicamentos = () => {
 
                                     <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
                                     <button className="cancelButton" onClick={toggleModal22}>
-                                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                                        <FontAwesomeIcon icon={faTimes} size="2x" />
                                     </button>
                                     <Box
                                         component="form"//edit modal

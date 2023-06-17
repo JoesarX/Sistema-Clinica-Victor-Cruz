@@ -1,32 +1,124 @@
 .modalMedicamentos {
     width: 600px;
-    height: 450px;
+    height: 500px;
+    /* Aumentado el tamaño para que sea un poco más grande */
     overflow: hidden;
 }
 
-.Div-imagen {
+.modalContainer {
     display: flex;
-    flex-direction: row;
-    margin-bottom: 0;
-    margin-top: 0;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-
+    max-height: 80vh;
+    overflow-y: auto;
 }
+
+
+.modalHeader {
+    margin-top: 30px;
+    /* Aumenta el margen superior para bajar el label */
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 24px;
+}
+
+
+.modalButton {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the content horizontally */
+    width: 100px; /* Adjust the width to make it more square */
+    height: 100px; /* Adjust the height to make it more square */
+    margin: 20px auto; /* Center the button horizontally and adjust the vertical margin */
+    border-radius: 5px; /* Adjust the border radius */
+  }
+  
+
+.Div-imagen {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; /* Center the content horizontally */
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.ImagenWrapper {
+  margin-top: 35px;
+  width: 145px;
+  height: 140px;
+  display: flex;
+  margin-left: 10px;
+  align-items: center;
+  justify-content: center; /* Center the image horizontally and vertically */
+}
+
+.ImagenFrame {
+    width: 100%;
+    margin-top: 20px;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Imagen {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+    object-fit: cover;
+}
+
+
+.customFileInput {
+    display: none;
+    /* Hide the default file input */
+}
+
+.customFileLabel {
+    display: inline-block;
+    width: 150px; /* Increase the width to make it larger */
+    height: 45px;
+    font-size: 15px;
+    margin-top: 35px;
+    background-color: #626262df;
+    color: #fff;
+    border-radius: 8px;
+    border: none;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  
+.customFileLabel:hover {
+    background-color: #999;
+}
+
+.customFileLabel:active {
+    background-color: #777;
+}
+
+
 
 .modalMedicamentos form {
     gap: 16px;
 }
 
-#categoria, #via{
-    height: 14px;
-}
 
 #categoria .MuiAutocomplete-paper {
-    max-height: 20px;
+    max-height: 200px;
+    /* Aumentado el tamaño del panel desplegable para que se puedan ver más opciones */
 }
-
-
-
 
 .cancelButton {
     position: absolute;
@@ -43,15 +135,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  
-  .cancelButton:hover {
+}
+
+.cancelButton:hover {
     background-color: #b84f4f;
     color: #fff;
-  }
-  
-  .cancelButton::before,
-  .cancelButton::after {
+}
+
+.cancelButton::before,
+.cancelButton::after {
     content: '';
     position: absolute;
     top: 50%;
@@ -59,11 +151,13 @@
     width: 18px;
     height: 2px;
     transform: translate(-50%, -50%) rotate(45deg);
-  }
-  
-  .cancelButton::after {
+}
+
+.cancelButton::after {
     transform: translate(-50%, -50%) rotate(-45deg);
-  }
+}
+
+
 @media (max-width: 600px) {
     .modalMedicamentos {
         width: 85%;
