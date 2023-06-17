@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import AdministradoresService from '../../Services/AdministradoresService';
 import { WindowSharp } from '@mui/icons-material';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 const EditAdmins = (props) => {
     let { setNombre, setRol, setId, setCorreo, setTelefono, setSexo, openEditAdmin, setEditAdmin, setPassword } = props;
     const [selectedOption, setSelectedOption] = useState(setRol);
@@ -202,11 +205,14 @@ const EditAdmins = (props) => {
 
     return (
 
-        <Modal open={openEditAdmin} onClose={() => setEditAdmin(false)}>
+        <Modal open={openEditAdmin} onClose={() => setEditAdmin(false)} closeAfterTransition BackdropProps={{ onClick: () => {} }}>
             <div className="modalContainer">
                 <h2 className="modalHeader">
                     EDITAR COLABORADOR
                 </h2>
+                <button className="cancelButton"  onClick={() => setEditAdmin(false)}>
+                <FontAwesomeIcon icon={faTimes} size="2x" />
+                </button>
                 <form onSubmit={handleSubmit} className="modalForm">
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
