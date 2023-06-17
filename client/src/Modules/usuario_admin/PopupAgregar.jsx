@@ -3,6 +3,9 @@ import { TextField, Button, Stack, Dialog, DialogContent, DialogTitle, Box, Form
 import { useNavigate } from 'react-router-dom';
 import AdministradoresService from '../../Services/AdministradoresService';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 import Modal from '@mui/material/Modal';
 import Grid from '@mui/material/Grid';
 
@@ -110,7 +113,7 @@ const AddAdmin = (props) => {
         } else if (password.charAt(password.length - 1) === ' ') {
             alert('La contraseña no puede terminar con un espacio.');
             return false
-        }else if (password.length < 8) {
+        } else if (password.length < 8) {
             alert('La contraseña debe tener al menos 8 caracteres.')
             return false
         } else if (!/[A-Z]/.test(password)) {
@@ -156,11 +159,14 @@ const AddAdmin = (props) => {
     }
 
     return (
-        <Modal open={openAddAdmin} onClose={() => setAddAdmin(false)}>
+        <Modal open={openAddAdmin} onClose={() => setAddAdmin(false)} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
             <div className="modalContainer">
                 <h2 className="modalHeader">
                     AGREGAR COLABORADOR
                 </h2>
+                <button className="cancelButton" onClick={() => setAddAdmin(false)}>
+                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                </button>
                 <form onSubmit={handleSubmit} className="modalForm">
                     <Grid container spacing={2}>
                         <Grid item xs={12}>

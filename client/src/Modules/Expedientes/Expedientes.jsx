@@ -30,6 +30,10 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+
 
 
 //STYLES
@@ -223,100 +227,100 @@ const Expedientes = () => {
    };
    const validations = () => {
       const { nombre, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion } =
-        expediente;
+         expediente;
       //Nombre validation
       if (nombre === null || nombre === '') {
-        alert('Nombre Completo es requerido');
-        return false;
+         alert('Nombre Completo es requerido');
+         return false;
       } else if (!nombre.replace(/\s/g, '').length) {
-        alert('El nombre no puede contener solo espacios.');
-        return false
+         alert('El nombre no puede contener solo espacios.');
+         return false
       } else if (nombre.charAt(0) === ' ') {
-        alert('El nombre no puede iniciar con un espacio.');
-        return false
+         alert('El nombre no puede iniciar con un espacio.');
+         return false
       } else if (nombre.charAt(nombre.length - 1) === ' ') {
-        alert('El nombre no puede terminar con un espacio.');
-        return false
+         alert('El nombre no puede terminar con un espacio.');
+         return false
       }
       //Fecha de Nacimiento validation
       const selectedDate = new Date(fecha_nacimiento);
       const currentDate = new Date();
       if (isNaN(selectedDate.getTime()) || fecha_nacimiento === null || fecha_nacimiento === '') {
-        alert('Una Fecha valida de Nacimiento es requerida');
-        return false;
+         alert('Una Fecha valida de Nacimiento es requerida');
+         return false;
       }
       if (selectedDate > currentDate) {
-        alert('La Fecha de Nacimiento no puede ser mayor a la fecha actual');
-        return false;
+         alert('La Fecha de Nacimiento no puede ser mayor a la fecha actual');
+         return false;
       }
       //Sexo validation
       if (sexo === null || sexo === '') {
-        alert('Sexo es requerido');
-        return false;
+         alert('Sexo es requerido');
+         return false;
       }
       //Ocupacion validation
       if (!(ocupacion === null || ocupacion === '')) {
-        if (!ocupacion.replace(/\s/g, '').length) {
-          alert('La ocupación no puede contener solo espacios.');
-          return false
-        } else if (ocupacion.charAt(0) === ' ') {
-          alert('La ocupación no puede iniciar con un espacio.');
-          return false
-        } else if (ocupacion.charAt(ocupacion.length - 1) === ' ') {
-          alert('La ocupación no puede terminar con un espacio.');
-          return false
-        }
+         if (!ocupacion.replace(/\s/g, '').length) {
+            alert('La ocupación no puede contener solo espacios.');
+            return false
+         } else if (ocupacion.charAt(0) === ' ') {
+            alert('La ocupación no puede iniciar con un espacio.');
+            return false
+         } else if (ocupacion.charAt(ocupacion.length - 1) === ' ') {
+            alert('La ocupación no puede terminar con un espacio.');
+            return false
+         }
       }
       //Correo validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!(correo === null || correo === '')) {
-        if (!correo.replace(/\s/g, '').length) {
-          alert('El correo no puede contener solo espacios.');
-          return false
-        } else if (emailRegex.test(correo) != true) {
-          alert('El correo ingresado no tiene un formato válido.')
-          return false
-        } else if (correo.charAt(0) === ' ') {
-          alert('El correo no puede iniciar con un espacio.');
-          return false
-        } else if (correo.charAt(correo.length - 1) === ' ') {
-          alert('El correo no puede terminar con un espacio.');
-          return false
-        }
+         if (!correo.replace(/\s/g, '').length) {
+            alert('El correo no puede contener solo espacios.');
+            return false
+         } else if (emailRegex.test(correo) != true) {
+            alert('El correo ingresado no tiene un formato válido.')
+            return false
+         } else if (correo.charAt(0) === ' ') {
+            alert('El correo no puede iniciar con un espacio.');
+            return false
+         } else if (correo.charAt(correo.length - 1) === ' ') {
+            alert('El correo no puede terminar con un espacio.');
+            return false
+         }
       }
       //Telefono validation
       if (!(telefono === null || telefono === '')) {
-        if (!telefono.replace(/\s/g, '').length) {
-          alert('El numero de Telefono no puede contener solo espacios.');
-          return false
-        } else if (telefono.charAt(0) === ' ') {
-          alert('El numero de Telefono no puede iniciar con un espacio.');
-          return false
-        } else if (telefono.charAt(telefono.length - 1) === ' ') {
-          alert('El numero de Telefono no puede terminar con un espacio.');
-          return false
-        }
+         if (!telefono.replace(/\s/g, '').length) {
+            alert('El numero de Telefono no puede contener solo espacios.');
+            return false
+         } else if (telefono.charAt(0) === ' ') {
+            alert('El numero de Telefono no puede iniciar con un espacio.');
+            return false
+         } else if (telefono.charAt(telefono.length - 1) === ' ') {
+            alert('El numero de Telefono no puede terminar con un espacio.');
+            return false
+         }
       }
       //Numid validation
       if (!(numid === null || numid === '')) {
-        if (!numid.replace(/\s/g, '').length) {
-          alert('El numero de Identidad no puede contener solo espacios.');
-          return false
-        } else if (numid.charAt(0) === ' ') {
-          alert('El numero de Identidad no puede iniciar con un espacio.');
-          return false
-        } else if (numid.charAt(numid.length - 1) === ' ') {
-          alert('El numero de Identidad no puede terminar con un espacio.');
-          return false
-        }
+         if (!numid.replace(/\s/g, '').length) {
+            alert('El numero de Identidad no puede contener solo espacios.');
+            return false
+         } else if (numid.charAt(0) === ' ') {
+            alert('El numero de Identidad no puede iniciar con un espacio.');
+            return false
+         } else if (numid.charAt(numid.length - 1) === ' ') {
+            alert('El numero de Identidad no puede terminar con un espacio.');
+            return false
+         }
       }
       //Estado Civil validation
       if (estado_civil === null || estado_civil === '') {
-        alert('Estado Civil es requerido');
-        return false;
+         alert('Estado Civil es requerido');
+         return false;
       }
       return true;
-    };
+   };
 
    const EditHandler = () => {
       const editExpediente = async () => {
@@ -564,14 +568,16 @@ const Expedientes = () => {
                      onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
                   />
                </ThemeProvider>
-               <Modal open={isModalOpen1} onClose={toggleModal22} className='customModal'>
+               <Modal open={isModalOpen1} onClose={toggleModal22} className='customModal' closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
                   <div className='modalContainer'>
                      {expedienteData.map((expediente) => (
-                        <div className='innerCard' key={expediente.idpaciente}>
+                        <div className='innerCard' key={expediente.idpaciente} onClick={(e) => e.stopPropagation()}>
 
                            <h2 className="modalHeader">EDITAR EXPEDIENTE</h2>
-
+                           <button className="cancelButton" onClick={toggleModal22}>
+                              <FontAwesomeIcon icon={faTimes} size="2x" />
+                           </button>
                            <Box
                               component="form"//edit modal
                               sx={{
