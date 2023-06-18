@@ -43,16 +43,13 @@ const Topbar = () => {
         handleSignOut();
     }
     const handleMedicamentos = () => {
-        // navigate('/medicamentos');
+        navigate('/medicamentos');
     };
     const handleExpedientes = () => {
-        // navigate('/expedientes');
+        navigate('/expedientes');
     };
     const handleColaboradores = () => {
-        // navigate('/colaboradores');
-    };
-    const handleAgendarCita = () => {
-        // navigate('/citas');
+        navigate('/colaboradores');
     };
     const handlePerfil = () => {
         // navigate('/dashboard');
@@ -103,7 +100,6 @@ const Topbar = () => {
                                         </a>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <a className="dropdown-item" onClick={handlePerfil}>VER PERFIL</a>
-                                            <a className="dropdown-item" onClick={handleAgendarCita}>AGENDAR CITA</a>
                                             <a className="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</a>
                                         </div>
                                     </div>
@@ -112,7 +108,7 @@ const Topbar = () => {
 
                             )}
 
-                            {userType === 'administrator' && (
+                            {userType === 'administrador' && (
                                 // Content for administrator dropdown menu
                                 <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
