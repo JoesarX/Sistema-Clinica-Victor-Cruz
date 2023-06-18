@@ -14,6 +14,9 @@ import { useNavigate } from 'react-router-dom';
 import ExpedientesService from '../../Services/ExpedientesService';
 import { Box, Button } from '@mui/material';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
 // STYLES
 
 
@@ -197,9 +200,12 @@ const AddExpedientesModal = ({ onClose }) => {
   }, [isSubmitting]);
 
   return (
-    <Modal open={true} onClose={onClose}>
+    <Modal open={true} onClose={onClose} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
       <div className="modalContainer">
         <h2 className="modalHeader">NUEVO EXPEDIENTE</h2>
+        <button className="cancelButton" onClick={onClose}>
+          <FontAwesomeIcon icon={faTimes} size="2x" />
+        </button>
         <Box
           component="form"
           sx={{

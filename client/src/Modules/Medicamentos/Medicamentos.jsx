@@ -7,6 +7,11 @@ import FichaMedicamentos from './FichaMedicamentos';
 import { storage } from '../../firebase';
 import 'firebase/compat/storage';
 //import { storage } from "./firebase";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+
 import {
     ref,
     uploadBytes,
@@ -352,453 +357,457 @@ const Medicamentos = () => {
 
     const submitEditMedicamento = async () => {
         try {
-                if (validations()) {
-                    console.log("Entra a edit despues de validaciones");
-                    if (imageUpload != null) {
-                        if (medicamento.urlfoto != null) {
-                            deleteImg(medicamento.urlfoto);
-                        }
-                        const imageUrll = await uploadFile();
-                        setMedicamento((prevState) => ({
-                            ...prevState,
-                            urlfoto: imageUrll,
-                        }));
-                        console.log("TESTING BBBBBBBBBBBBBBB"+imageUrll);
-                        medicamento.urlfoto = imageUrll;
-                        console.log("TESTING AAAAAAAAAAAAAAA"+medicamento.urlfoto);
-                        
-                        await MedicamentosService.editMedicamentos(id, medicamento);
-                        alert('Medicamento Editado');
+            if (validations()) {
+                console.log("Entra a edit despues de validaciones");
+                if (imageUpload != null) {
+                    if (medicamento.urlfoto != null) {
+                        deleteImg(medicamento.urlfoto);
                     }
-                    else {
-                        await MedicamentosService.editMedicamentos(id, medicamento);
-                        alert('Medicamento Editado');
-                    }
-                    toggleModal22();
-                    window.location.reload();
-                    cleanExpediente();
+                    const imageUrll = await uploadFile();
+                    setMedicamento((prevState) => ({
+                        ...prevState,
+                        urlfoto: imageUrll,
+                    }));
+                    console.log("TESTING BBBBBBBBBBBBBBB" + imageUrll);
+                    medicamento.urlfoto = imageUrll;
+                    console.log("TESTING AAAAAAAAAAAAAAA" + medicamento.urlfoto);
+
+                    await MedicamentosService.editMedicamentos(id, medicamento);
+                    alert('Medicamento Editado');
                 }
-          } catch (error) {
+                else {
+                    await MedicamentosService.editMedicamentos(id, medicamento);
+                    alert('Medicamento Editado');
+                }
+                toggleModal22();
+                window.location.reload();
+                cleanExpediente();
+            }
+        } catch (error) {
             console.log('Error submitting medicamento:', error);
-          }
+        }
     };
 
-const toggleModal22 = () => {
-    setIsModalOpen1(!isModalOpen1);
-    setImageUpload(null);
-    setIsSubmitting2(false);
-    //window.location.reload();
-    cleanExpediente();
-};
+    const toggleModal22 = () => {
+        setIsModalOpen1(!isModalOpen1);
+        setImageUpload(null);
+        setIsSubmitting2(false);
+        //window.location.reload();
+        cleanExpediente();
+    };
 
-const validations = () => {
-    const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
-    //Nombre validations
-    if (nombre === null || nombre === '') {
-        alert('Debe agregarle un nombre al medicamento')
-        return false
-    } else if (!nombre.replace(/\s/g, '').length) {
-        alert('El nombre no puede contener solo espacios.');
-        return false
-    } else if (nombre.charAt(0) === ' ') {
-        alert('El nombre no puede iniciar con un espacio.');
-        return false
-    } else if (nombre.charAt(nombre.length - 1) === ' ') {
-        alert('El nombre no puede terminar con un espacio.');
-        return false
-    }
-    //Categoria validations
-    if (categoria === null || categoria === '') {
-        alert('Debe agregar una categoria valida.');
-        return false;
-    }
-    //Stock validations
-    if (stock === null || stock === '') {
-        alert('Debe agregarle la cantidad de unidades al medicamento');
-        return false;
-    } else if (!(/^\d+$/.test(stock))) {
-        alert("Las unidades deben ser un numero entero.");
-        return false;
-    }
-    //Precio validations
-    if (precio_unitario === null || precio_unitario === '') {
-        alert('Debe agregarle un precio unitario al medicamento');
-        return false;
-    } else if (!(/^[0-9,.]*$/.test(parseFloat(precio_unitario)))) {
-        alert("Ingrese un precio valido");
-        return false;
-    }
-    //Via validations
-    if (via === null || via === '') {
-        alert('Ingrese una via para el medicamento');
-        return false;
-    }
-    //Dosis validations
-    if (dosis === null || dosis === '') {
-        alert('Debe agregarle una dosis al medicamento')
-        return false;
-    } else if (!dosis.replace(/\s/g, '').length) {
-        alert('La dosis no puede contener solo espacios.');
-        return false
-    } else if (dosis.charAt(0) === ' ') {
-        alert('La dosis no puede iniciar con un espacio.');
-        return false
-    } else if (dosis.charAt(nombre.length - 1) === ' ') {
-        alert('La dosis no puede terminar con un espacio.');
-        return false
-    }
-
-    if (imageUpload != null) {
-        const file = imageUpload;
-        if (validateImageFormat(file) == false) {
-            alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+    const validations = () => {
+        const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
+        //Nombre validations
+        if (nombre === null || nombre === '') {
+            alert('Debe agregarle un nombre al medicamento')
+            return false
+        } else if (!nombre.replace(/\s/g, '').length) {
+            alert('El nombre no puede contener solo espacios.');
+            return false
+        } else if (nombre.charAt(0) === ' ') {
+            alert('El nombre no puede iniciar con un espacio.');
+            return false
+        } else if (nombre.charAt(nombre.length - 1) === ' ') {
+            alert('El nombre no puede terminar con un espacio.');
+            return false
+        }
+        //Categoria validations
+        if (categoria === null || categoria === '') {
+            alert('Debe agregar una categoria valida.');
             return false;
         }
-    }
-    console.log("END DE VALIDACINES");
-    return true;
-}
-
-const validateImageFormat = (file) => {
-    const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
-    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-
-    if (!allowedFormats.includes(file.type)) {
-        console.log('La imagen debe estar en formato JPG, JPEG o PNG');
-        return false;
-    }
-
-    if (file.size > maxSizeInBytes) {
-        console.log('La imagen no debe superar los 5MB de tamaño');
-        return false;
-    }
-
-    // Continue with further logic or actions if the image passes the format and size checks
-    return true;
-};
-
-const [medicamentoData, setMedicamentoss] = useState([]);
-
-let buscaError = 0;
-useEffect(() => {
-    // Validación login
-    console.log("Este es el error en Med: " + (buscaError++));
-    if (!isLoggedIn) {
-        // Redirigir si no se cumple la verificación
-        if (cont == 0) {
-            alert("No Cuenta con el permiso de entrar a este apartado")
-            navigate("/expedientes"); // Redirige a la página de inicio de sesión
-            cont++;
+        //Stock validations
+        if (stock === null || stock === '') {
+            alert('Debe agregarle la cantidad de unidades al medicamento');
+            return false;
+        } else if (!(/^\d+$/.test(stock))) {
+            alert("Las unidades deben ser un numero entero.");
+            return false;
+        }
+        //Precio validations
+        if (precio_unitario === null || precio_unitario === '') {
+            alert('Debe agregarle un precio unitario al medicamento');
+            return false;
+        } else if (!(/^[0-9,.]*$/.test(parseFloat(precio_unitario)))) {
+            alert("Ingrese un precio valido");
+            return false;
+        }
+        //Via validations
+        if (via === null || via === '') {
+            alert('Ingrese una via para el medicamento');
+            return false;
+        }
+        //Dosis validations
+        if (dosis === null || dosis === '') {
+            alert('Debe agregarle una dosis al medicamento')
+            return false;
+        } else if (!dosis.replace(/\s/g, '').length) {
+            alert('La dosis no puede contener solo espacios.');
+            return false
+        } else if (dosis.charAt(0) === ' ') {
+            alert('La dosis no puede iniciar con un espacio.');
+            return false
+        } else if (dosis.charAt(nombre.length - 1) === ' ') {
+            alert('La dosis no puede terminar con un espacio.');
+            return false
         }
 
-
-
+        if (imageUpload != null) {
+            const file = imageUpload;
+            if (validateImageFormat(file) == false) {
+                alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+                return false;
+            }
+        }
+        console.log("END DE VALIDACINES");
+        return true;
     }
 
-    const fetchAllMedicamentos = async () => {
-        try {
-            const medicamentosData = await MedicamentosService.getAllMedicamentos();
-            const medicamentosWithId = medicamentosData.map((medicamento) => ({
-                ...medicamento,
-                medId: medicamento.idmed,
-            }));
-            setMedicamentos(medicamentosWithId);
-        } catch (error) {
-            // Handle error if any
-            console.log("Error fetching medicamentos:", error);
+    const validateImageFormat = (file) => {
+        const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+        const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
+        if (!allowedFormats.includes(file.type)) {
+            console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+            return false;
         }
+
+        if (file.size > maxSizeInBytes) {
+            console.log('La imagen no debe superar los 5MB de tamaño');
+            return false;
+        }
+
+        // Continue with further logic or actions if the image passes the format and size checks
+        return true;
     };
 
-    // Update tabla
-    fetchAllMedicamentos();
-    if (isSubmitting) {
+    const [medicamentoData, setMedicamentoss] = useState([]);
+
+    let buscaError = 0;
+    useEffect(() => {
+        // Validación login
+        console.log("Este es el error en Med: " + (buscaError++));
+        if (!isLoggedIn) {
+            // Redirigir si no se cumple la verificación
+            if (cont == 0) {
+                alert("No Cuenta con el permiso de entrar a este apartado")
+                navigate("/expedientes"); // Redirige a la página de inicio de sesión
+                cont++;
+            }
+
+
+
+        }
+
+        const fetchAllMedicamentos = async () => {
+            try {
+                const medicamentosData = await MedicamentosService.getAllMedicamentos();
+                const medicamentosWithId = medicamentosData.map((medicamento) => ({
+                    ...medicamento,
+                    medId: medicamento.idmed,
+                }));
+                setMedicamentos(medicamentosWithId);
+            } catch (error) {
+                // Handle error if any
+                console.log("Error fetching medicamentos:", error);
+            }
+        };
+
+        // Update tabla
         fetchAllMedicamentos();
-    }
+        if (isSubmitting) {
+            fetchAllMedicamentos();
+        }
 
-    const handleResize = () => {
-        const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
+        const handleResize = () => {
+            const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
 
-        // Update the column visibility based on the screen width
-        setColumnVisibilityModel((prevVisibility) => ({
-            ...prevVisibility,
-            idmed: false,
-            nombre: true,
-            categoria: isMobile ? false : true,
-            stock: isMobile ? false : true,
-            precio_unitario: isMobile ? false : true,
-            via: isMobile ? false : true,
-            dosis: isMobile ? false : true,
+            // Update the column visibility based on the screen width
+            setColumnVisibilityModel((prevVisibility) => ({
+                ...prevVisibility,
+                idmed: false,
+                nombre: true,
+                categoria: isMobile ? false : true,
+                stock: isMobile ? false : true,
+                precio_unitario: isMobile ? false : true,
+                via: isMobile ? false : true,
+                dosis: isMobile ? false : true,
 
-        }));
-    };
+            }));
+        };
 
-    // Call the handleResize function initially and on window resize
-    handleResize();
-    window.addEventListener("resize", handleResize);
+        // Call the handleResize function initially and on window resize
+        handleResize();
+        window.addEventListener("resize", handleResize);
 
-    // Clean up the event listener on component unmount
-    return () => {
-        window.removeEventListener("resize", handleResize);
-    };
-}, [isLoggedIn, navigate, isSubmitting]);
+        // Clean up the event listener on component unmount
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [isLoggedIn, navigate, isSubmitting]);
 
-const categoriaSelected = medicamento.categoria;
-const viaSelected = medicamento.via;
-
-
-return (
-
-    <div className='crudGrid'>
-        <NavBar />
-        <div style={{ height: '100vh' }}>
-            <div className='headerDiv'>
-                <h1>Medicamentos</h1>
-            </div>
-            <div className='dataGridBox'>
-                <ThemeProvider theme={theme}>
-                    <DataGrid
-                        rows={medicamentos}
-                        getRowId={(row) => row.medId}
-                        columns={[
-                            { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
-                            { field: 'categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
-                            { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
-                            { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
-                            { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
-                            { field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header' },
-                            {
-                                field: 'actions',
-                                headerName: '',
-                                flex: 2,
-                                renderCell: (params) => (
-
-                                    <div>
-
-                                        <IconButton onClick={() => toggleModal2(params.id)} >
-                                            <Edit />
-                                        </IconButton>
+    const categoriaSelected = medicamento.categoria;
+    const viaSelected = medicamento.via;
 
 
-                                        <IconButton onClick={() => handleDeleteMedicamentosClick(params.row, params.id)}>
-                                            <Delete />
-                                        </IconButton>
-                                        <IconButton onClick={() => handleSelectedFicha(params.row)}>
+    return (
 
-                                            <InfoIcon />
-                                        </IconButton>
-                                    </div>
-                                ),
-                            },
+        <div className='crudGrid'>
+            <NavBar />
+            <div style={{ height: '100vh' }}>
+                <div className='headerDiv'>
+                    <h1>Medicamentos</h1>
+                </div>
+                <div className='dataGridBox'>
+                    <ThemeProvider theme={theme}>
+                        <DataGrid
+                            rows={medicamentos}
+                            getRowId={(row) => row.medId}
+                            columns={[
+                                { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
+                                { field: 'categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
+                                { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
+                                { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
+                                { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
+                                { field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header' },
+                                {
+                                    field: 'actions',
+                                    headerName: '',
+                                    flex: 2,
+                                    renderCell: (params) => (
 
-                        ]}
-                        components={{
-                            Toolbar: CustomToolbar,
-                        }}
+                                        <div>
 
-                        columnVisibilityModel={columnVisibilityModel}
-                        onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-                    />
-                </ThemeProvider>
+                                            <IconButton onClick={() => toggleModal2(params.id)} >
+                                                <Edit />
+                                            </IconButton>
 
-                <Modal open={isModalOpen} onClose={toggleModal} >
 
-                    <div className='modalContainer modalMedicamentos'>
+                                            <IconButton onClick={() => handleDeleteMedicamentosClick(params.row, params.id)}>
+                                                <Delete />
+                                            </IconButton>
+                                            <IconButton onClick={() => handleSelectedFicha(params.row)}>
 
-                        <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
+                                                <InfoIcon />
+                                            </IconButton>
+                                        </div>
+                                    ),
+                                },
 
-                        <Box
-                            component="form"//edit modal
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                width: '100%', // Added width property
+                            ]}
+                            components={{
+                                Toolbar: CustomToolbar,
                             }}
-                            noValidate
-                            autoComplete="off"
-                        >
-                            <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                            <Autocomplete
-                                disablePortal
-                                id="categoria"
-                                required
-                                options={listaCategoriaMedicamentos}
-                                onChange={(event, newValue) =>
-                                    setMedicamento({
-                                        ...medicamento,
-                                        categoria: newValue
-                                    })
 
-                                }
-                                renderInput={(params) => <TextField {...params} label="Categoria" required />}
-                            />
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required />
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required />
-                                </Grid>
-                            </Grid>
+                            columnVisibilityModel={columnVisibilityModel}
+                            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                        />
+                    </ThemeProvider>
 
-                            <Grid container spacing={2}>
-                                <Grid item xs={12} sm={6}>
-                                    <Autocomplete
-                                        disablePortal
-                                        id="via"
-                                        required
-                                        options={listaVias}
-                                        onChange={(event, newValue) =>
-                                            setMedicamento({
-                                                ...medicamento,
-                                                via: newValue
-                                            })
+                    <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }} >
 
-                                        }
-                                        renderInput={(params) => <TextField {...params} label="Via" required />}
-                                    />
+                        <div className='modalContainer modalMedicamentos'>
+
+                            <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
+                            <button className="cancelButton" onClick={toggleModal}>
+                            <FontAwesomeIcon icon={faTimes} size="2x" />
+                            </button>
+                            <Box
+                                component="form"//edit modal
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '10px',
+                                    width: '100%', // Added width property
+                                }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                <Autocomplete
+                                    disablePortal
+                                    id="categoria"
+                                    required
+                                    options={listaCategoriaMedicamentos}
+                                    onChange={(event, newValue) =>
+                                        setMedicamento({
+                                            ...medicamento,
+                                            categoria: newValue
+                                        })
+
+                                    }
+                                    renderInput={(params) => <TextField {...params} label="Categoria" required />}
+                                />
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} sm={6}>
-                                    <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
+
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <Autocomplete
+                                            disablePortal
+                                            id="via"
+                                            required
+                                            options={listaVias}
+                                            onChange={(event, newValue) =>
+                                                setMedicamento({
+                                                    ...medicamento,
+                                                    via: newValue
+                                                })
+
+                                            }
+                                            renderInput={(params) => <TextField {...params} label="Via" required />}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                            <Grid container spacing={2} >
-                                <Grid item xs={3} sm={1} >
-                                    <input
-                                        type="file"
-                                        onChange={(event) => {
-                                            setImageUpload(event.target.files[0]);
-                                            console.log(imageUpload);
+                                <Grid container spacing={2} >
+                                    <Grid item xs={3} sm={1} >
+                                        <input
+                                            type="file"
+                                            onChange={(event) => {
+                                                setImageUpload(event.target.files[0]);
+                                                console.log(imageUpload);
+                                            }}
+                                            name='urlfoto'
+                                            id="urlfoto"
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                                <Button
+                                    onClick={handleModalSubmit}
+                                    variant="contained"
+                                    className="modalButton"
+                                    type="submit"
+                                    id='crudButton'>
+                                    Agregar Medicamento
+                                </Button>
+                            </Box>
+                        </div>
+
+
+                    </Modal>
+
+                    <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+
+                        <div className='modalContainer modalMedicamentos'>
+                            {medicamentoData.map((medicamento) => (
+                                <div className='innerCard' key={medicamento.idmed}>
+
+                                    <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
+                                    <button className="cancelButton" onClick={toggleModal22}>
+                                    <FontAwesomeIcon icon={faTimes} size="2x" />
+                                    </button>
+                                    <Box
+                                        component="form"//edit modal
+                                        sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '10px',
+                                            width: '100%', // Added width property
                                         }}
-                                        name='urlfoto'
-                                        id="urlfoto"
-                                    />
-                                </Grid>
-                            </Grid>
-
-                            <Button
-                                onClick={handleModalSubmit}
-                                variant="contained"
-                                className="modalButton"
-                                type="submit"
-                                id='crudButton'>
-                                Agregar Medicamento
-                            </Button>
-                        </Box>
-                    </div>
+                                        noValidate
+                                        autoComplete="off"
+                                    >
+                                        <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
+                                        <Autocomplete
+                                            value={categoriaSelected}
+                                            disablePortal
+                                            id="categoria"
 
 
-                </Modal>
-
-                <Modal open={isModalOpen1} onClose={toggleModal22}  >
-
-                    <div className='modalContainer modalMedicamentos'>
-                        {medicamentoData.map((medicamento) => (
-                            <div className='innerCard' key={medicamento.idmed}>
-
-                                <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
-
-                                <Box
-                                    component="form"//edit modal
-                                    sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        gap: '10px',
-                                        width: '100%', // Added width property
-                                    }}
-                                    noValidate
-                                    autoComplete="off"
-                                >
-                                    <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                                    <Autocomplete
-                                        value={categoriaSelected}
-                                        disablePortal
-                                        id="categoria"
-
-
-                                        options={listaCategoriaMedicamentos}
-                                        onChange={(event, newValue) =>
-                                            setMedicamento({
-                                                ...medicamento,
-                                                categoria: newValue
-                                            })
-                                        }
-                                        renderInput={(params) => <TextField {...params} label="Categoria" required />}
-                                    />
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' />
+                                            options={listaCategoriaMedicamentos}
+                                            onChange={(event, newValue) =>
+                                                setMedicamento({
+                                                    ...medicamento,
+                                                    categoria: newValue
+                                                })
+                                            }
+                                            renderInput={(params) => <TextField {...params} label="Categoria" required />}
+                                        />
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' />
-                                        </Grid>
-                                    </Grid>
 
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-                                            <Autocomplete
-                                                value={viaSelected}
-                                                disablePortal
-                                                id="via"
-                                                required
-                                                options={listaVias}
-                                                onChange={(event, newValue) =>
-                                                    setMedicamento({
-                                                        ...medicamento,
-                                                        via: newValue
-                                                    })
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6}>
+                                                <Autocomplete
+                                                    value={viaSelected}
+                                                    disablePortal
+                                                    id="via"
+                                                    required
+                                                    options={listaVias}
+                                                    onChange={(event, newValue) =>
+                                                        setMedicamento({
+                                                            ...medicamento,
+                                                            via: newValue
+                                                        })
 
-                                                }
-                                                renderInput={(params) => <TextField {...params} label="Via" required />}
-                                            />
+                                                    }
+                                                    renderInput={(params) => <TextField {...params} label="Via" required />}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
+                                        <Grid container spacing={2} >
+                                            <Grid item xs={3} sm={1} >
+                                                <input
+                                                    type="file"
+                                                    onChange={(event) => {
+                                                        setImageUpload(event.target.files[0]);
+                                                    }}
+                                                    name='urlfoto'
+                                                    id="urlfoto"
+                                                />
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                    <Grid container spacing={2} >
-                                        <Grid item xs={3} sm={1} >
-                                            <input
-                                                type="file"
-                                                onChange={(event) => {
-                                                    setImageUpload(event.target.files[0]);
-                                                }}
-                                                name='urlfoto'
-                                                id="urlfoto"
-                                            />
-                                        </Grid>
-                                    </Grid>
 
-                                    <Button onClick={EditHandler} variant="contained" style={{
-                                        backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                        paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                                    }}>
-                                        Editar Medicamento
-                                    </Button>
-                                </Box>
-                            </div>
-                        ))}
-                    </div>
-                </Modal>
+                                        <Button onClick={EditHandler} variant="contained" style={{
+                                            backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                            paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                        }}>
+                                            Editar Medicamento
+                                        </Button>
+                                    </Box>
+                                </div>
+                            ))}
+                        </div>
+                    </Modal>
 
+
+                </div>
 
             </div>
-
+            {selectedRow && (
+                <FichaMedicamentos
+                    open={openFicha}
+                    setOpenPopup={setOpenFicha}
+                    setNombreF={nombre}
+                    setCategoriaF={categoria}
+                    setPrecioUnitarioF={precioUnitario}
+                    setStockF={stock}
+                    setImagenF={imagen}
+                    setViaF={via}
+                />
+            )}
         </div>
-        {selectedRow && (
-            <FichaMedicamentos
-                open={openFicha}
-                setOpenPopup={setOpenFicha}
-                setNombreF={nombre}
-                setCategoriaF={categoria}
-                setPrecioUnitarioF={precioUnitario}
-                setStockF={stock}
-                setImagenF={imagen}
-                setViaF={via}
-            />
-        )}
-    </div>
-);
+    );
 
 
 
