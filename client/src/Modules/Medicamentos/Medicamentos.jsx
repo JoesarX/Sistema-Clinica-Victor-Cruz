@@ -627,7 +627,7 @@ const Medicamentos = () => {
                                 autoComplete="off"
                             >
                                 <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={100}>
                                         <div className='Div-imagen'>
                                             <div className='ImagenWrapper'>
                                                 <img className='Imagen' src={imagePreview} alt="imgPreview" />

@@ -1,6 +1,6 @@
 .modalMedicamentos {
     width: 600px;
-    height: 500px;
+    height: 700px;
     /* Aumentado el tamaño para que sea un poco más grande */
     overflow: hidden;
 }
@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: center;
     max-height: 80vh;
-    overflow-y: auto;
+    overflow-y: clip;
 }
 
 
@@ -40,8 +40,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: center; /* Center the content horizontally */
-  margin-bottom: 10px;
-  margin-top: 10px;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 
 .ImagenWrapper {
