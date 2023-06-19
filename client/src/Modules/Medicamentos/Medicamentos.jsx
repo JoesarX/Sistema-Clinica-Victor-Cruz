@@ -607,7 +607,7 @@ const Medicamentos = () => {
                     </ThemeProvider>
 
                     <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
-                        <div className='modalContainer modalMedicamentos'>
+                        <div className='modalContainer modalMedicamentos' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
                             <div style={{ marginTop: '20px' }}>
                                 <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
                                 <button className="cancelButton" onClick={toggleModal}>
@@ -716,7 +716,7 @@ const Medicamentos = () => {
 
                     <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
-                        <div className='modalContainer modalMedicamentos'>
+                        <div className='modalContainer modalMedicamentos' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
                             {medicamentoData.map((medicamento) => (
                                 <div className='innerCard' key={medicamento.idmed}>
 
@@ -735,6 +735,28 @@ const Medicamentos = () => {
                                         noValidate
                                         autoComplete="off"
                                     >
+
+                                        <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+                                            <Grid item xs={12} sm={6}>
+                                                <div className='Div-imagen'>
+                                                    <div className='ImagenWrapper'>
+                                                        <img className='Imagen' src={imagePreview} alt="imgPreview" />
+                                                    </div>
+                                                </div>
+                                                <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+                                                <input
+                                                   type="file"
+                                                   onChange={(event) => {
+                                                       setImageUpload(event.target.files[0]);
+                                                   }}
+                                                    name='urlfoto'
+                                                    id="urlfoto"
+                                                    className="customFileInput"
+                                                />
+                                            </Grid>
+                                        </Grid>
+
+
                                         <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                         <Autocomplete
                                             value={categoriaSelected}
@@ -782,19 +804,6 @@ const Medicamentos = () => {
                                                 <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
                                             </Grid>
                                         </Grid>
-                                        <Grid container spacing={2} >
-                                            <Grid item xs={3} sm={1} >
-                                                <input
-                                                    type="file"
-                                                    onChange={(event) => {
-                                                        setImageUpload(event.target.files[0]);
-                                                    }}
-                                                    name='urlfoto'
-                                                    id="urlfoto"
-                                                />
-                                            </Grid>
-                                        </Grid>
-
                                         <Button onClick={EditHandler} variant="contained" style={{
                                             backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
                                             paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
