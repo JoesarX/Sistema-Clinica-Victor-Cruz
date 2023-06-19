@@ -1,16 +1,20 @@
 import React, { useRef } from 'react'
 import '../HojaDeEstilos/IniciarSesion.css';
-import { useState, useEffect } from 'react';
+
+import { useState, useEffect ,useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 import { loginAdmin, loginMaster } from '../../Services/AdministradoresService';
+import { AuthContext } from '../AuthContext.js';
 
 import Footer from './Footer';
 import Topbar from './Topbar'
 import bcrypt from 'bcryptjs';
 
+
 const IniciarSesion = () => {
     const yaEsta = localStorage.getItem("400");
+    const { isLoggedIn, handleSignIn } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const passie = useRef();
@@ -80,6 +84,7 @@ const IniciarSesion = () => {
         if (emailRegex.test(email) != true) {
             alert('El correo ingresado no tiene un formato válido.')
 
+
         } else {
             const passUser = await UsuariosService.loginUsuarios(email, password);
             console.log(passUser)
@@ -118,6 +123,7 @@ const IniciarSesion = () => {
                     navigate("/expedientes");
                 } else {
                     console.log("Entro al else")
+
                     alert("Email o contraseña incorrecta!");
                 }
             }
@@ -130,7 +136,7 @@ const IniciarSesion = () => {
     return (
 
         <div className="scrollable-page">
-            <Topbar />
+            <Topbar  />
             <div></div>
             <div className="login-form">
                 <h2>Iniciar Sesión</h2>
