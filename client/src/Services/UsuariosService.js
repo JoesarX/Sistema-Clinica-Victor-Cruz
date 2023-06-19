@@ -51,14 +51,16 @@ export const loginUsuarios= async(uEmail, uPassword)=>{
         
         const user = await axios.get(`${API_URL}/usuarios/`,uEmail);
         const PW = await axios.get(`${API_URL}/usuarios/`, uPassword);
-
+        console.log(user)
+        console.log(PW)
         const userInfo= user.data
         const passwordInfo=PW.data
-        const emailEncontrado= userInfo.find(user => user.correouser === uEmail && user.password === uPassword);
+        const emailEncontrado= userInfo.find(user => user.correouser === uEmail);
         if(emailEncontrado){
             console.log(emailEncontrado.nombre)
             localStorage.setItem("loggedInUserName", emailEncontrado.nombre);
-            return true;
+            console.log(emailEncontrado.password)
+            return emailEncontrado.password;
     
         }else{
             return false;
