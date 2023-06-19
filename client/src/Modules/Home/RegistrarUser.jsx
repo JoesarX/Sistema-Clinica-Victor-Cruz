@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import '../HojaDeEstilos/RegistrarUser.css';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
@@ -6,6 +6,7 @@ import Footer from './Footer';
 import Topbar from './Topbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import bcrypt from 'bcryptjs';
 
 const RegistrarUser = () => {
 
@@ -60,7 +61,7 @@ const RegistrarUser = () => {
     return /[!@#$%^&*_;':"|,.<>/?]/.test(password);
   };
   // FIN DE MAGIA DE REGEX WOWWW
-
+  const passie = useRef();
   const [user, setUser] = React.useState({
     correouser: '',
     nombre: '',
@@ -77,12 +78,23 @@ const RegistrarUser = () => {
     console.log(user)
   };
 
+  const handlePassword = (e) => {
+    e.preventDefault();
+    console.log(passie.current.value)
+    const password = passie.current.value;
+    const hashedPass = bcrypt.hashSync(password, 10);
+   
+    setUser((prevState) => ({ ...prevState, [e.target.name]: hashedPass }))
+    
+  };
+
   const handleSubmit = async e => {
     console.log(user)
 
     e.preventDefault();
     if (validations()) {
       e.preventDefault()
+      console.log(user)
       await UsuariosService.postUsuarios(user);
       alert('User Agregado')
       navigate('/iniciarsesion');
@@ -150,7 +162,8 @@ const RegistrarUser = () => {
               type="password"
               id="password"
               name='password'
-              onChange={handleChange}
+              ref={passie}
+              onChange={(e) => handlePassword(e)}
               required
             />
           </div>
@@ -158,26 +171,26 @@ const RegistrarUser = () => {
           {/* FUNKY COSAS DE CONTRASEÑAS */}
           <div className="pw-validation-area">
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateLength(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateLength(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateLength(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateLength(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Ocho (8) carácteres mínimo
             </div>
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateCapital(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateCapital(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateCapital(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateCapital(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Una (1) MAYÚSCULA mínimo
             </div>
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateNumber(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateNumber(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateNumber(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateNumber(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Un (1) carácter numérico mínimo
             </div>
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateSpecial(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateSpecial(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateSpecial(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateSpecial(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Un (1) carácter especial (!, @, #, $, etc.)
             </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
@@ -18,8 +18,35 @@ import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 
 
+import axios from 'axios'; // Import axios library
+
+
+
 const Home = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Make the initial request on component mount
+        wakeUpServer();
+
+        // Set up interval to make periodic requests
+        const interval = setInterval(() => {
+            wakeUpServer();
+        }, 300000); // Every 5 minutes (adjust as needed)
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(interval);
+    }, []);
+
+    const wakeUpServer = () => {
+        // Make a GET request to wake up the server
+        axios.get('https://clinicavictorcruzserver.azurewebsites.net')
+            .catch(error => {
+                // Handle any errors if necessary
+                console.error('Error waking up server:', error);
+            });
+        console.log('Server is awake!');
+    };
 
     const handleCitaClick = () => {
         navigate('/citas');
@@ -40,6 +67,7 @@ const Home = () => {
         indicators: true,
         arrows: true
     };
+
 
     return (
         <div className="scrollable-page">
