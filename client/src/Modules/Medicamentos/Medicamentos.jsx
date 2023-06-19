@@ -234,7 +234,7 @@ const Medicamentos = () => {
         } catch (error) {
             console.log(error);
         }
-
+        
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
     };
@@ -399,6 +399,7 @@ const Medicamentos = () => {
     const toggleModal22 = () => {
         setIsModalOpen1(!isModalOpen1);
         setImageUpload(null);
+        setImagePreview(null);
         setIsSubmitting2(false);
         //window.location.reload();
         cleanExpediente();
@@ -492,6 +493,14 @@ const Medicamentos = () => {
 
     const [medicamentoData, setMedicamentoss] = useState([]);
 
+    useEffect(() => {
+        if (isModalOpen1) {
+          // Run your code here when isModalOpen is true
+          setImagePreview(medicamento.urlfoto);
+          console.log('Modal is open!');
+        }
+    }, [isModalOpen1]);
+
     let buscaError = 0;
     useEffect(() => {
         // Validación login
@@ -544,6 +553,7 @@ const Medicamentos = () => {
 
             }));
         };
+
 
         // Call the handleResize function initially and on window resize
         handleResize();
@@ -747,6 +757,7 @@ const Medicamentos = () => {
                                             <Grid item xs={12} sm={6}>
                                                 <div className='Div-imagen'>
                                                     <div className='ImagenWrapper'>
+                                                        
                                                         <img className='Imagen' src={imagePreview} alt="imgPreview" />
                                                     </div>
                                                 </div>
@@ -755,6 +766,7 @@ const Medicamentos = () => {
                                                     type="file"
                                                     onChange={(event) => {
                                                         setImageUpload(event.target.files[0]);
+                                                        setImagePreview(URL.createObjectURL(event.target.files[0]));
                                                     }}
                                                     name='urlfoto'
                                                     id="urlfoto"
