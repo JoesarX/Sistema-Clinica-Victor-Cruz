@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../Modules/AuthContext.js';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { Menu, Logout, People, Home, Medication, Contacts } from '@mui/icons-material';
-import { Link , useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
+    const { isLoggedIn, handleSignOut } = useContext(AuthContext);
     const [open, setOpen] = useState(false);
     const [userFullName, setUserFullName] = useState("");
     const [userShortName, setUserShortName] = useState("NA");
@@ -12,17 +14,17 @@ const NavBar = () => {
     const Master = localStorage.getItem("400");
     const Admin = localStorage.getItem("300");
     const User = localStorage.getItem("100");
-    function Signout() {
+    const handleSignOutClick = () => {
         localStorage.clear();
+        handleSignOut();
         navigate('/');
-    }
-
+    };
     useEffect(() => {
         if (loggedUser) {
             setUserFullName(loggedUser);
             setUserShortName(loggedUser.charAt(0).toUpperCase());
         }
-        
+
     }, [loggedUser]);
 
     const toggleDrawer = () => {
@@ -30,8 +32,9 @@ const NavBar = () => {
     };
 
     return (
+
         <>
-            <Box sx={{ flexGrow: 1, backgroundColor: 'rgb(255,0,0)'}} >
+            <Box sx={{ flexGrow: 1, backgroundColor: 'rgb(255,0,0)' }} >
                 <AppBar position="static" sx={{ bgcolor: "#002366" }}>
                     <Toolbar>
                         <IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }} onClick={toggleDrawer}>
@@ -86,10 +89,10 @@ const NavBar = () => {
                             </ListItem>
                         </Link>
                         <ListItem disablePadding>
-                            <ListItemButton onClick={Signout}>
-                                <ListItemIcon sx={{ color: "white" }}><Logout /></ListItemIcon>
-                                <ListItemText primary={"Cerrar Sesión"} />
-                            </ListItemButton>
+                                <ListItemButton onClick={handleSignOutClick}>
+                                    <ListItemIcon sx={{ color: "white" }}><Logout /></ListItemIcon>
+                                    <ListItemText primary={"Cerrar Sesión"} />
+                                </ListItemButton>
                         </ListItem>
                     </List>
                 </Box>

@@ -1,15 +1,17 @@
 import React from 'react'
 import '../HojaDeEstilos/IniciarSesion.css';
-import { useState ,useEffect} from 'react';
+import { useState ,useEffect, useContext} from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 import { loginAdmin,loginMaster } from '../../Services/AdministradoresService';
+import { AuthContext } from '../AuthContext.js';
 
 import Footer from './Footer';
-import Topbar from './Topbar'
+import Topbar from './Topbar';
 
 const IniciarSesion = () => {
     const yaEsta = localStorage.getItem("400");
+    const { isLoggedIn, handleSignIn } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
@@ -44,14 +46,17 @@ const IniciarSesion = () => {
                     localStorage.setItem("100", true);
                     alert("Bienvenido!");
                     navigate("/expedientes");
+                    handleSignIn('normal');
                 } else if (await loginMaster(email, password)===true) {
                     alert("Bienvenido Doctor!");
                     localStorage.setItem("400", true);
                     navigate("/expedientes");
+                    handleSignIn('master');
                 } else if (await loginAdmin(email, password)===true){
                     alert("Bienvenido");
                     localStorage.setItem("300", true);
                     navigate("/expedientes");
+                    handleSignIn('administrador');
                 }else {
                     alert("Email o contraseña incorrecta!");
                 }
@@ -63,7 +68,7 @@ const IniciarSesion = () => {
     return (
 
         <div className="scrollable-page">
-            <Topbar />
+            <Topbar  />
             <div></div>
             <div className="login-form">
                 <h2>Iniciar Sesión</h2>
