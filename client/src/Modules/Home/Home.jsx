@@ -26,15 +26,10 @@ const Home = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Make the initial request on component mount
         wakeUpServer();
-
-        // Set up interval to make periodic requests
         const interval = setInterval(() => {
             wakeUpServer();
-        }, 300000); // Every 5 minutes (adjust as needed)
-
-        // Clean up the interval on component unmount
+        }, 300000); 
         return () => clearInterval(interval);
     }, []);
 
@@ -42,7 +37,6 @@ const Home = () => {
         // Make a GET request to wake up the server
         axios.get('https://clinicavictorcruzserver.azurewebsites.net')
             .catch(error => {
-                // Handle any errors if necessary
                 console.error('Error waking up server:', error);
             });
         console.log('Server is awake!');
