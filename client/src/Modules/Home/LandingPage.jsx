@@ -10,7 +10,7 @@ import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from '../Dashboard/EditExpedienteDashboardModal.jsx';
-import NavBar from '../NavBar';
+import TopBar from '../Home/Topbar.jsx';
 
 import ExpedientesService from '../../Services/ExpedientesService';
 
@@ -348,10 +348,10 @@ const Dashboard = () => {
 
     return (
         <div className='scrollable-page'>
-            <NavBar />
+            <TopBar/>
             <div className='contenido'>
                 <div className='patient-section'>
-                    <div className="infoGeneral">
+                    <div className="vitals">
                         <div className='profile-picture-and-edit'>
                             <div className='perfil'>
                                 <FontAwesomeIcon icon={faUser} className='iconoUser' />
@@ -381,8 +381,6 @@ const Dashboard = () => {
                             </div>
                             <p className="smallText">Direccion</p>
                         </div>
-                    </div>
-                    <div className="vitals">
                         <div className='box-title'>
                             <h3 className='histmedtit'>Signos Vitales
                                 <span>
@@ -552,9 +550,7 @@ const Dashboard = () => {
                         <FontAwesomeIcon icon={faCalendarPlus} />
                         Agendar Cita
                     </button>
-
                     <div className='appointments-container'>
-
                         <div className='box-title appointments-title'>Citas Agendadas</div>
                         <div className='appointments'>
                             {schAppointments.map((appointment, index) => (
