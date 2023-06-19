@@ -210,11 +210,17 @@ const Medicamentos = () => {
     const listaVias = ['Oral', 'Subcutánea', 'Intramuscular ', 'Intravenosa']
 
     console.log(isSubmitting2)
+
+
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
+       setImagePreview(null);
         cleanExpediente();
     };
+
+
+
     const [id, setID] = useState(null);
     const toggleModal2 = async (id) => {
         setID(id)
@@ -332,6 +338,7 @@ const Medicamentos = () => {
                 await MedicamentosService.postMedicamentos(medicamento);
                 alert('Medicamento Agregado');
                 toggleModal();
+                setImagePreview(null);
                 window.location.reload();
             } catch (error) {
                 // Handle error if any
@@ -745,10 +752,10 @@ const Medicamentos = () => {
                                                 </div>
                                                 <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
                                                 <input
-                                                   type="file"
-                                                   onChange={(event) => {
-                                                       setImageUpload(event.target.files[0]);
-                                                   }}
+                                                    type="file"
+                                                    onChange={(event) => {
+                                                        setImageUpload(event.target.files[0]);
+                                                    }}
                                                     name='urlfoto'
                                                     id="urlfoto"
                                                     className="customFileInput"
