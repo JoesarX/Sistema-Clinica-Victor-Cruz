@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useAsyncError, useNavigate } from 'react-router-dom';
 import './Medicamentos.css';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
@@ -10,7 +10,7 @@ import 'firebase/compat/storage';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
+import Ficha_Agregar_Categorias from './Ficha_Agregar_Categorias';
 
 import {
     ref,
@@ -28,7 +28,7 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
+import { PersonAdd, Delete, Edit, Medication,Category } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -171,7 +171,21 @@ const Medicamentos = () => {
                         </>
                     )}
                 </div>
-
+                <div>
+                    <Button
+                        onClick={toggleModalCategory}
+                        startIcon={<Category />}
+                        style={{
+                            backgroundColor: 'rgb(27, 96, 241)',
+                            color: 'white',
+                            borderRadius: '10px',
+                            paddingLeft: '10px',
+                            paddingRight: '10px',
+                        }}
+                    >
+                        Agregar Categoría
+                    </Button>
+                </div>
                 <div>
                     <Button
                         onClick={toggleModal}
@@ -232,6 +246,14 @@ const Medicamentos = () => {
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
     };
+    //-----------------Ficha Agregar Categoría---------//
+    const[openCategories,setOpenCategories]=useState(false);
+    let [selectedModal,setSelectedModal]= useState(null);
+
+    const toggleModalCategory = ()=>{
+        setOpenCategories(true);
+        setSelectedModal(true);
+    }
 
     const handleModalFieldChange = (e) => {
         setMedicamento((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
@@ -806,6 +828,12 @@ const Medicamentos = () => {
                     setViaF={via}
                 />
             )}
+            {selectedModal &&(
+            <Ficha_Agregar_Categorias
+                open={openCategories}
+                setOpenPopupC={setOpenCategories}
+                
+            />)}
         </div>
     );
 
@@ -813,4 +841,4 @@ const Medicamentos = () => {
 
 }
 
-export default Medicamentos 
+export default Medicamentos;

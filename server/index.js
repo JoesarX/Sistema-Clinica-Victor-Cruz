@@ -6,7 +6,7 @@ import expedientesRouter from "./routes/expedientes.js"
 import usuariosRouter from "./routes/usuarios.js"
 import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
-
+import categoriesRouter from "./routes/categories.js";
 
 
 const app = express();
@@ -51,4 +51,4 @@ app.use("/usuarios", usuariosRouter(pool)); // Pass the pool object as a paramet
 app.use("/usuarios_admin", adminRouter(pool)); // Pass the pool object as a parameter
 
 app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
-
+app.use("/categories", categoriesRouter(pool)); // Pass the pool object as a parameter
