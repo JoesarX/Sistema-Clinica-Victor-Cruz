@@ -7,8 +7,6 @@ import usuariosRouter from "./routes/usuarios.js"
 import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
 
-
-
 const app = express();
 const port = process.env.PORT || 8000;
 
