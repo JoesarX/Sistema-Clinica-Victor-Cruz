@@ -80,6 +80,7 @@ const RegistrarUser = () => {
 
   const handlePassword = (e) => {
     e.preventDefault();
+    console.log(passie.current.value)
     const password = passie.current.value;
     const hashedPass = bcrypt.hashSync(password, 10);
    
@@ -170,26 +171,26 @@ const RegistrarUser = () => {
           {/* FUNKY COSAS DE CONTRASEÑAS */}
           <div className="pw-validation-area">
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateLength(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateLength(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateLength(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateLength(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Ocho (8) carácteres mínimo
             </div>
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateCapital(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateCapital(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateCapital(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateCapital(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Una (1) MAYÚSCULA mínimo
             </div>
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateNumber(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateNumber(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateNumber(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateNumber(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Un (1) carácter numérico mínimo
             </div>
             <div className="pw-item">
-              <FontAwesomeIcon icon={validateSpecial(user.password) ? faCircleCheck : faCircleXmark}
-                className={`icon ${validateSpecial(user.password) ? 'valid' : ''}`} />
+              <FontAwesomeIcon icon={validateSpecial(passie.current.value) ? faCircleCheck : faCircleXmark}
+                className={`icon ${validateSpecial(passie.current.value) ? 'valid' : ''}`} />
               <div className="spacing" />
               Un (1) carácter especial (!, @, #, $, etc.)
             </div>
