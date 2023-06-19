@@ -49,7 +49,7 @@ const Topbar = () => {
         navigate('/expedientes');
     };
     const handleColaboradores = () => {
-        navigate('/colaboradores');
+        navigate('/administrador');
     };
     const handlePerfil = () => {
         // navigate('/dashboard');
