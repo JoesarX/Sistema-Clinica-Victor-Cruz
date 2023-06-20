@@ -35,6 +35,12 @@
     height: 90%;
     
   }
+
+/*para los slots de abajo*/
+  .event.fc-time-grid-event.fc-short .fc-time {
+    display: none !important;
+  }
+  
     
  /*para los elementos dentro de HeadertoolBar*/
   .fc-toolbar-center button {
