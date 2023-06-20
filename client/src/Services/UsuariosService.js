@@ -63,7 +63,7 @@ export const loginUsuarios= async(uEmail, uPassword)=>{
             return emailEncontrado.password;
     
         }else{
-            return false;
+            return "";
         }
        
     }catch (error){

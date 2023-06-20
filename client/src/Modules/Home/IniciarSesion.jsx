@@ -89,27 +89,38 @@ const IniciarSesion = () => {
             const passUser = await UsuariosService.loginUsuarios(email, password);
             console.log(passUser)
             var flag = false;
-            await new Promise((resolve, reject) => {
-                bcrypt.compare(password, passUser, function (err, isMatch) {
-                    console.log("deberia entrar")
-                    if (err) {
-                        throw err
-                    } else if (!isMatch) {
-                        alert("Contraseña incorrecta")
-                        
+            if(passUser === ""){
+                console.log("Not found!")
+                console.log(":()()()")
+                
+            }else{
+                await new Promise((resolve, reject) => {
+                    bcrypt.compare(password, passUser, function (err, isMatch) {
+                        console.log("deberia entrar")
+                      
     
-                    } else {
-                        flag = true;
-                        console.log(flag)
-                        localStorage.setItem("100", true);
-                        alert("Bienvenido!");
-                        navigate("/expedientes");
-                        
-                    }
-                })
-            });
+                         if (err) {
+                            throw err
+                        } else if (!isMatch) {
+                            alert("Contraseña incorrecta")
+                            console.log("Contraseña incorrecta")
+                        } else {
+                            flag = true;
+                            console.log(flag)
+                            localStorage.setItem("100", true);
+                            alert("Bienvenido!");
+                            navigate("/expedientes");
+                            resolve();
+                            
+                        }
+                    })
+                    console.log(":(")
+                });
+            }
+            
            
             console.log(flag)
+            console.log(":)")
             if(!flag){
                 if (email === "" || password === "") {
                     alert("Debe Llenar todos los campos");
@@ -122,7 +133,7 @@ const IniciarSesion = () => {
                     localStorage.setItem("300", true);
                     navigate("/expedientes");
                 } else {
-                    console.log("Entro al else")
+                   
 
                     alert("Email o contraseña incorrecta!");
                 }
