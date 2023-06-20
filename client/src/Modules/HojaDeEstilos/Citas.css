@@ -6,12 +6,47 @@
   h1 {
     margin-bottom: 20px;
   }
-  
-  .calendar {
+
+  .header {
+    font-size: 2rem !important;
+    color: #ffff !important;
+    background-color: #677a92;
+    box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    margin-top: 0 !important;
+    justify-items: center !important;
+    align-items: center !important;
+    justify-content: center !important;
     display: flex;
+    text-align: center !important;
+    font-weight: 700;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+   /*CSS del calendario como tal*/
+  .cal {
+    display: absolute;
     justify-content: center;
     align-items: center;
+    margin-top: 1.8%;
+    margin-left: 5%;
+    width: 90%;
+    height: 90%;
+    
   }
+    
+ /*para los elementos dentro de HeadertoolBar*/
+  .fc-toolbar-center button {
+    margin-right: 2%;
+  }
+
+ /*para el espacio del HeadertoolBar*/
+  .fc-toolbar {
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+  
   
   .time-slots {
     display: flex;
