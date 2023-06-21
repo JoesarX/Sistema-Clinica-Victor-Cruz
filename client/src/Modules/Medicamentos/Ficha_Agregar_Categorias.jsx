@@ -227,13 +227,16 @@ const Ficha_Agregar_Categorias = (props) => {
 
     const [editedData, setEditedData] = useState([]);
 
-    const handleEditCategoryName = async (newValue, id) => {
+    const handleEditCategoryName = async (newValue) => {
         console.log("Hola aquí estoy en el método");
-        console.log("Nombre nuevo de la categoria: " + newValue);
-        console.log("Este es el id: " + id);
-        await CategoriasService.editCategories(id, newValue);
-    };
 
+        console.log("Nombre nuevo de la categoria: "+newValue.Nombre_Categoria);
+        console.log("Este es el id: "+newValue.id);
+        
+        await CategoriasService.editCategories(newValue);
+        
+      };
+  
     return (
         <Dialog open={open} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 

@@ -5,7 +5,7 @@ import axios from 'axios';
 //traer todas las categorías
 export const getAllCategories = async () => {
     try {
-        const res = await axios.get(`${API_URL}/categories`);
+        const res = await axios.get(`${API_URL}/categorias`);
         console.log("Sirvo si señor");
         return res.data;
     } catch (error) {
@@ -18,7 +18,7 @@ export const getAllCategories = async () => {
 export const postCategories = async (categories) => {
     console.log(categories)
     try {
-        const res = await axios.post(`${API_URL}/categories`, categories);
+        const res = await axios.post(`${API_URL}/categorias`, categories);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -26,10 +26,15 @@ export const postCategories = async (categories) => {
     }
 };
 
-export const editCategories = async (id, categories) => {
+export const editCategories = async (value) => {
+
+    console.log("-------------------");
+    console.log("Este es el id: "+value.id);
+    console.log("Este es el nombre: "+value.Nombre_Categoria);
+    
     try {
-        await axios.put(`${API_URL}/categories/${id}`, categories);
-        console.log("hola mundo soy yo dio");
+       const res = await axios.put(`${API_URL}/categorias/${value.id}`, value);
+       return res.data;
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit categorias');
@@ -39,7 +44,7 @@ export const editCategories = async (id, categories) => {
 export const deleteCategories = async (id) => {
     try {
         console.log("Este es el id: "+id);
-        await axios.delete(`${API_URL}/categories/${id}`);
+        await axios.delete(`${API_URL}/categorias/${id}`);
 
     } catch (error) {
         console.log(error);

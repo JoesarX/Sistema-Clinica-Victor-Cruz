@@ -51,4 +51,4 @@ app.use("/usuarios", usuariosRouter(pool)); // Pass the pool object as a paramet
 app.use("/usuarios_admin", adminRouter(pool)); // Pass the pool object as a parameter
 
 app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
-app.use("/categories", categoriesRouter(pool)); // Pass the pool object as a parameter
+app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
