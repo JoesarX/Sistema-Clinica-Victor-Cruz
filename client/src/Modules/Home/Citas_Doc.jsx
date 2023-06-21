@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import moment from 'moment';
 import '../HojaDeEstilos/Citas.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
