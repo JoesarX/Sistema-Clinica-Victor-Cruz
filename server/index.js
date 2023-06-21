@@ -6,8 +6,7 @@ import expedientesRouter from "./routes/expedientes.js"
 import usuariosRouter from "./routes/usuarios.js"
 import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
-
-
+import citasRouter from "./routes/citas.js";
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -47,8 +46,11 @@ app.get("/", (req, res) => {
 
 app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a parameter
 
-app.use("/usuarios", usuariosRouter(pool)); // Pass the pool object as a parameter
-app.use("/usuarios_admin", adminRouter(pool)); // Pass the pool object as a parameter
+app.use("/usuarios", usuariosRouter(pool)); 
+app.use("/usuarios_admin", adminRouter(pool)); 
 
-app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
+app.use("/medicamentos", medicamentosRouter(pool)); 
+
+app.use("/citas", citasRouter(pool)); 
+
 
