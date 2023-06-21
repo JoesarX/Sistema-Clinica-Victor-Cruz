@@ -25,12 +25,8 @@ const Citas = () => {
 
   return (
     <div className="App">
-    <header>
-      <Topbar />
-      <h1 className="header">NUESTRA DISPONIBILIDAD</h1>
-    </header>
-
-    <main>
+      <h1 className="header">Calendario Para Citas</h1>
+      <main>
         <div className="cal-container">
           <div className="cal">
             <FullCalendar
@@ -52,10 +48,11 @@ const Citas = () => {
         </div>
       </main>
 
-    <footer>
-      <Footer />
-    </footer>
-  </div>
+      <footer>
+
+      </footer>
+    </div>
+
   );
 
 };
