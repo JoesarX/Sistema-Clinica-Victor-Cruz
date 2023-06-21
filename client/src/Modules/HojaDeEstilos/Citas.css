@@ -1,17 +1,30 @@
-.Citas {
-    text-align: center;
-    padding: 20px;
+
+   /*CSS del calendario como tal*/
+   .cal {
+    margin-top: 1.8%;
+    margin-left: 5%;
+    width: 90%;
+    height: calc(100% - 1.6% - 3rem); /* Adjust the height calculation as needed */
   }
   
-  h1 {
-    margin-bottom: 20px;
+  footer {
+    margin-top: 2rem; /* Adjust the margin as needed */
   }
   
-  .calendar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  
+    
+ /*para los elementos dentro de HeadertoolBar*/
+  .fc-toolbar-center button {
+    margin-right: 2%;
   }
+
+ /*para el espacio del HeadertoolBar*/
+  .fc-toolbar {
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+  
+
   
   .time-slots {
     display: flex;
@@ -42,5 +55,7 @@
   .appointment-form {
     margin-left: 20px;
   }
+  
+
   
   
