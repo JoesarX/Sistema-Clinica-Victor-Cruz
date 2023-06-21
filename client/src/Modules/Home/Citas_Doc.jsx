@@ -10,7 +10,7 @@ import NavBar from '../NavBar';
 
 
 
-const Citas = () => {
+const Citas_Doc = () => {
 
 
   const hiddenDays = [1, 7];
@@ -53,4 +53,4 @@ const Citas = () => {
 
 };
 
-export default Citas;
+export default Citas_Doc;
