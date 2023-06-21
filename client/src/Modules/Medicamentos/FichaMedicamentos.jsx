@@ -3,7 +3,7 @@ import { Dialog } from '@mui/material';
 import './Ficha.css'
 const FichaMedicamentos = (props) => {
     const { open, setOpenPopup, setNombreF, setCategoriaF, setPrecioUnitarioF, setStockF, setImagenF, setViaF } = props;
-
+   // console.log("HOLAAAAAAAAAAAAAAAAAAAAAA")
     return (
         <Dialog open={open} onClose={() => setOpenPopup(false)}>
             <div className='Modal'>

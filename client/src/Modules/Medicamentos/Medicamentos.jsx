@@ -223,7 +223,7 @@ const Medicamentos = () => {
     const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
     const listaVias = ['Oral', 'Subcutánea', 'Intramuscular ', 'Intravenosa']
 
-    console.log(isSubmitting2)
+    //console.log(isSubmitting2)
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);

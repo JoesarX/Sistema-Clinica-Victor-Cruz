@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog } from '@mui/material';
 import './Ficha_Categorias.css';
-import { useAsyncError, useNavigate } from 'react-router-dom';
+import { Await, useAsyncError, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,9 +37,9 @@ import { v4 } from "uuid";
 //comienzo del modal
 const Ficha_Agregar_Categorias = (props) => {
     const { open, setOpenPopupC } = props;
-    console.log("Entré");
+   /* console.log("Entré");
     console.log(open);
-    console.log(setOpenPopupC);
+    console.log(setOpenPopupC);*/
     const isLoggedIn = localStorage.getItem("400");
     let cont = 0;
     const [isModalOpen1, setIsModalOpen1] = useState(false);
@@ -169,7 +169,7 @@ const Ficha_Agregar_Categorias = (props) => {
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const listaVias = ['Oral', 'Subcutánea', 'Intramuscular ', 'Intravenosa']
 
-    console.log(isSubmitting2)
+    //console.log(isSubmitting2)
     const toggleModal = () => {
 
     };
@@ -270,7 +270,16 @@ const Ficha_Agregar_Categorias = (props) => {
             window.removeEventListener("resize", handleResize);
         };
     }, [isLoggedIn, navigate, isSubmitting]);
+    const [editedData, setEditedData] = useState([]);
 
+    const handleEditCategoryName = async (newValue, id) => {
+        console.log("Hola aquí estoy en el método");
+        console.log("Nombre nuevo de la categoria: "+newValue.Nombre_Categoria);
+        console.log("Este es el id: "+id);
+        
+        await CategoriasService.editCategories(id,newValue.Nombre_Categoria);
+        
+      };
   
     return (
         <Dialog open={open} onClose={() => setOpenPopupC(false)}>
@@ -292,8 +301,10 @@ const Ficha_Agregar_Categorias = (props) => {
                                         rows={categorias}
                                         getRowId={(row) => row.id}
                                         columns={[
-                                            { field: 'id', headerName: 'ID Categoría', flex: 3, headerClassName: 'column-header' },
-                                            { field: 'Nombre_Categoria', headerName: 'Categoría', flex: 2, headerClassName: 'column-header' },
+                                            { field: 'id', headerName: 'ID Categoría', flex: 3, headerClassName: 'column-header'},
+                                            { field: 'Nombre_Categoria', headerName: 'Categoría', flex: 2, headerClassName: 'column-header',editable:true 
+                                            
+                                        },
                                             
                                             {
                                                 field: 'actions',
@@ -303,7 +314,7 @@ const Ficha_Agregar_Categorias = (props) => {
 
                                                     <div>
 
-                                                        <IconButton onClick={() => toggleModal2(params.id)} >
+                                                        <IconButton onClick={() => handleEditCategoryName (params.row,params.id)} >
                                                             <Edit />
                                                         </IconButton>
 

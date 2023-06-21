@@ -29,7 +29,7 @@ export const postCategories = async (categories) => {
 export const editCategories = async (id, categories) => {
     try {
         await axios.put(`${API_URL}/categories/${id}`, categories);
-
+        console.log("hola mundo soy yo dio");
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit categorias');

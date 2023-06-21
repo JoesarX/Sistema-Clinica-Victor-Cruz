@@ -51,19 +51,20 @@ const categoriesRouter = (pool) => {
     //edit category 
     router.put("/:id", async (req, res) => {
         try {
+            
             const connection = await pool.getConnection();
             const { id } = req.params;
             const {
                 Nombre_Categoria
-              
+                
             } = req.body;
 
             const q =
-                "UPDATE categorias SET Nombre_Categoria = ?";
+                "UPDATE categorias SET Nombre_Categoria = ? WHERE ID = ?";
 
             const values = [
-                Nombre_Categoria,
-                
+                res.values.Nombre_Categoria,
+                id
             ];
 
             await connection.query(q, values);
