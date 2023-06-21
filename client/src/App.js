@@ -38,6 +38,7 @@ function App() {
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/dashboard/:expedienteId" element={<Dashboard/>}/>
           <Route path="/expedientes/dashboard/:expedienteId/cita_expediente" element={<Citas_Doc/>}/>
+          <Route path="/cita_expediente" element={<Citas_Doc/>}/>
           <Route path="/medicamentos" element={<Medicamentos/>}/>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contactanos" element={<Contactanos />} />

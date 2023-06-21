@@ -13,15 +13,7 @@ import Footer from './Footer';
 
 const Citas = () => {
 
-  const [showCreateAppointment, setShowCreateAppointment] = useState(false);
 
-  const handleCreateAppointment = () => {
-    // Logic to handle the creation of an appointment
-    console.log('Creating appointment...');
-    // Additional code to perform the necessary actions for appointment creation
-  };
-
-  const hiddenDays = [1, 7];
 
   return (
     <div className="App">
@@ -37,10 +29,10 @@ const Citas = () => {
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                right: 'timeGridWeek,timeGridDay',
               }}
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
+              initialView="timeGridWeek"
               weekends={true}
               selectable={true}
               selectMirror={true}

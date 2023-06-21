@@ -6,26 +6,23 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
+import NavBar from '../NavBar';
 
-import Topbar from './Topbar';
-import Footer from './Footer';
+
 
 
 const Citas = () => {
 
-  const [showCreateAppointment, setShowCreateAppointment] = useState(false);
-
-  const handleCreateAppointment = () => {
-    // Logic to handle the creation of an appointment
-    console.log('Creating appointment...');
-    // Additional code to perform the necessary actions for appointment creation
-  };
 
   const hiddenDays = [1, 7];
 
   return (
+
+
     <div className="App">
-      <h1 className="header">Calendario Para Citas</h1>
+
+      <NavBar />
+      <h1 className="header">Agendar Cita</h1>
       <main>
         <div className="cal-container">
           <div className="cal">
