@@ -10,10 +10,13 @@ import CategoriasService from "../../Services/CategoriasService";
 
 //GRID
 import { Box, Button } from '@mui/material'
-import { DataGrid, esES } from '@mui/x-data-grid';
+import {
+    DataGrid, esES, GridCellEditStopParams,
+    GridCellEditStopReasons, useGridApiRef
+} from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication, Category } from '@mui/icons-material';
+import { PersonAdd, Delete, Edit, Medication, Category, Save, ConstructionOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -36,6 +39,7 @@ import { v4 } from "uuid";
 
 //comienzo del modal
 const Ficha_Agregar_Categorias = (props) => {
+
     const { open, setOpenPopupC } = props;
     /* console.log("Entré");
      console.log(open);
@@ -71,6 +75,32 @@ const Ficha_Agregar_Categorias = (props) => {
                 }
             });
     };
+
+    const handleEditCategoryName = async (newValue) => {
+        console.log('editar')
+        console.log(newValue.Nombre_Categoria);
+        console.log(newValue.id);
+        try {
+            const res = await CategoriasService.editCategories(newValue);
+            console.log(res);
+            swal({
+                title: "Categoria editada",
+                text: "Categoria editada exitosamente",
+                icon: "success"
+            });
+            console.log('swal de exito ddespues')
+        } catch (error) {
+            swal({
+                title: "Error al editar categoría",
+                text: "Reportar este error: ".concat(error),
+                icon: "error",
+            });
+            console.log(error);
+        }
+    };
+
+    const apiRef = useGridApiRef();
+
     const storage = getStorage();
     const theme = createTheme(
         {
@@ -123,7 +153,7 @@ const Ficha_Agregar_Categorias = (props) => {
                 </div>
                 <div>
                     <Button
-                        onClick={toggleModal}
+                        // onClick={toggleModal}
                         startIcon={<Medication />}
                         style={{
                             backgroundColor: 'rgb(27, 96, 241)',
@@ -151,9 +181,6 @@ const Ficha_Agregar_Categorias = (props) => {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     //console.log(isSubmitting2)
-    const toggleModal = () => {
-
-    };
 
     //-----------------Ficha Agregar Categoría---------//
     const [openCategories, setOpenCategories] = useState(false);
@@ -167,11 +194,8 @@ const Ficha_Agregar_Categorias = (props) => {
     const handleModalFieldChange = (e) => {
         setCategoria((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
     }
-    //----------FichaMedicamentos Modal-------------------------------------------------------
+    //----------FichaMedicamentos Modal------------------------------------------------------
 
-    let [selectedRow, setSelectedRow] = useState(null);
-
-    let buscaError = 0;
     useEffect(() => {
 
         if (!isLoggedIn) {
@@ -227,22 +251,12 @@ const Ficha_Agregar_Categorias = (props) => {
 
     const [editedData, setEditedData] = useState([]);
 
-    const handleEditCategoryName = async (newValue) => {
-        console.log("Hola aquí estoy en el método");
-
-        console.log("Nombre nuevo de la categoria: "+newValue.Nombre_Categoria);
-        console.log("Este es el id: "+newValue.id);
-        
-        await CategoriasService.editCategories(newValue);
-        
-      };
-  
     return (
         <Dialog open={open} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
             <div className='Modal-FichaCategorias'>
                 <div className='crudGrid'>
-                    <div style={{ height: '90%' }}>
+                    <div style={{ height: '80vh' }}>
                         <div className='headerDiv'>
                             <h1>Categorías</h1>
                         </div>
@@ -254,10 +268,11 @@ const Ficha_Agregar_Categorias = (props) => {
                                 <DataGrid
                                     rows={categorias}
                                     getRowId={(row) => row.id}
+                                    // apiRef={apiRef}
                                     columns={[
-                                        { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
+                                        // { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
                                         {
-                                            field: 'Nombre_Categoria', headerName: 'Categoría', flex: 3, headerClassName: 'column-header', editable: true
+                                            field: 'Nombre_Categoria', headerName: 'Categoría', flex: 5, headerClassName: 'column-header', editable: true
                                         },
                                         {
                                             field: 'actions',
@@ -265,9 +280,9 @@ const Ficha_Agregar_Categorias = (props) => {
                                             flex: 1,
                                             renderCell: (params) => (
                                                 <div>
-                                                    {/* <IconButton onClick={() => handleEditCategoryName(params.row, params.id)} >
-                                                        <Edit />
-                                                    </IconButton> */}
+                                                    <IconButton onClick={() => handleEditCategoryName(params.row)}>
+                                                        <Save />
+                                                    </IconButton>
                                                     <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCategoriesClick(params.id)}>
                                                         <Delete />
                                                     </IconButton>
@@ -281,12 +296,19 @@ const Ficha_Agregar_Categorias = (props) => {
                                     columnVisibilityModel={columnVisibilityModel}
                                     onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
 
-                                    processRowUpdate={(updatedRow, originalRow) => {
-                                        // console.log(updatedRow);
-                                        if (originalRow.Nombre_Categoria !== updatedRow.Nombre_Categoria) {
-                                            handleEditCategoryName(updatedRow, updatedRow.id);
+                                    onCellEditStop={(params, event) => {
+                                        if (params.reason === GridCellEditStopReasons.cellFocusOut) {
+                                            event.defaultMuiPrevented = true;
                                         }
                                     }}
+
+                                // processRowUpdate={ (updatedRow, originalRow) => {
+                                //     if(originalRow.Nombre_Categoria !== updatedRow.Nombre_Categoria) {
+                                //         handleEditCategoryName(updatedRow)
+                                //     }
+                                // }}
+
+                                // onProcessRowUpdateError={handleProcessRowUpdateError}
 
                                 />
                             </ThemeProvider>

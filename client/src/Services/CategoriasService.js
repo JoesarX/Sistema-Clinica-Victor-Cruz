@@ -1,5 +1,5 @@
 import axios from 'axios';
- const API_URL = 'http://localhost:8000';
+const API_URL = 'http://localhost:8000';
 //const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 //traer todas las categorías
@@ -27,14 +27,9 @@ export const postCategories = async (categories) => {
 };
 
 export const editCategories = async (value) => {
-
-    console.log("-------------------");
-    console.log("Este es el id: "+value.id);
-    console.log("Este es el nombre: "+value.Nombre_Categoria);
-    
     try {
-       const res = await axios.put(`${API_URL}/categorias/${value.id}`, value);
-       return res.data;
+        const res = await axios.put(`${API_URL}/categorias/${value.id}`, value);
+        return res.data;
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit categorias');
@@ -43,7 +38,7 @@ export const editCategories = async (value) => {
 
 export const deleteCategories = async (id) => {
     try {
-        console.log("Este es el id: "+id);
+        console.log("Este es el id: " + id);
         await axios.delete(`${API_URL}/categorias/${id}`);
 
     } catch (error) {
@@ -51,7 +46,7 @@ export const deleteCategories = async (id) => {
         throw new Error('Failed to delete categorias');
     }
 };
-const Services ={
+const Services = {
     getAllCategories,
     postCategories,
     editCategories,
