@@ -272,12 +272,13 @@ const Ficha_Agregar_Categorias = (props) => {
     }, [isLoggedIn, navigate, isSubmitting]);
     const [editedData, setEditedData] = useState([]);
 
-    const handleEditCategoryName = async (newValue, id) => {
+    const handleEditCategoryName = async (newValue) => {
         console.log("Hola aquí estoy en el método");
+
         console.log("Nombre nuevo de la categoria: "+newValue.Nombre_Categoria);
-        console.log("Este es el id: "+id);
+        console.log("Este es el id: "+newValue.id);
         
-        await CategoriasService.editCategories(id,newValue.Nombre_Categoria);
+        await CategoriasService.editCategories(newValue);
         
       };
   
@@ -314,7 +315,7 @@ const Ficha_Agregar_Categorias = (props) => {
 
                                                     <div>
 
-                                                        <IconButton onClick={() => handleEditCategoryName (params.row,params.id)} >
+                                                        <IconButton onClick={() => handleEditCategoryName (params.row)} >
                                                             <Edit />
                                                         </IconButton>
 
