@@ -37,19 +37,19 @@ import { v4 } from "uuid";
 //comienzo del modal
 const Ficha_Agregar_Categorias = (props) => {
     const { open, setOpenPopupC } = props;
-   /* console.log("Entré");
-    console.log(open);
-    console.log(setOpenPopupC);*/
+    /* console.log("Entré");
+     console.log(open);
+     console.log(setOpenPopupC);*/
     const isLoggedIn = localStorage.getItem("400");
     let cont = 0;
-    const [isModalOpen1, setIsModalOpen1] = useState(false);
-    
+
     const navigate = useNavigate();
     const [categorias, setCategorias] = useState([]);
-    const handleDeleteCategoriesClick = (row, id) => {
+
+    const handleDeleteCategoriesClick = (id) => {
         swal({
             title: "¿Estás seguro?",
-            text: "Una vez borrado, no podrás recuperar esta información.",
+            text: "Una vez borrado, no podrás recuperar esta categoria.",
             icon: "warning",
             buttons: true,
             dangerMode: true,
@@ -57,15 +57,10 @@ const Ficha_Agregar_Categorias = (props) => {
             .then(async (willDelete) => {
                 if (willDelete) {
                     try {
-                        const url = row.urlfoto
-                        console.log("DELETE THIS URL: " + url);
                         await CategoriasService.deleteCategories(id);
-                       
-                        
-                        swal("Categoría eliminado exitosamente!", {
+                        swal("Categoría eliminada exitosamente!", {
                             icon: "success",
                         });
-                        window.location.reload();
                     } catch (error) {
                         swal("Error al eliminar la categoría. Por favor, inténtalo de nuevo más tarde.", {
                             icon: "error",
@@ -77,15 +72,6 @@ const Ficha_Agregar_Categorias = (props) => {
             });
     };
     const storage = getStorage();
-    const deleteImg = (refUrl) => {
-        const imageRef = ref(storage, refUrl)
-        deleteObject(imageRef)
-            .catch((error) => {
-                console.log("Failed to delete image: ", error)
-            })
-        //window.location.reload();
-    }
-
     const theme = createTheme(
         {
             palette: {
@@ -97,9 +83,8 @@ const Ficha_Agregar_Categorias = (props) => {
 
     //Grid Column Visibility
     const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
-        id: true,
+        id: false,
         Nombre_Categoria: true,
-        
     });
 
     const CustomToolbar = () => {
@@ -135,7 +120,6 @@ const Ficha_Agregar_Categorias = (props) => {
                     )}
                 </div>
                 <div>
-
                 </div>
                 <div>
                     <Button
@@ -152,7 +136,6 @@ const Ficha_Agregar_Categorias = (props) => {
                         Agregar Categoría
                     </Button>
                 </div>
-
             </GridToolbarContainer>
         );
     };
@@ -160,23 +143,18 @@ const Ficha_Agregar_Categorias = (props) => {
 
     //ADD MEDICAMENTOS MODAL
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [categoria1, setCategoria1] = useState({
+
+    const [categoria, setCategoria] = useState({
         id: '',
         Nombre_Categoria: ''
-       
     });
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSubmitting2, setIsSubmitting2] = useState(false);
-    const listaVias = ['Oral', 'Subcutánea', 'Intramuscular ', 'Intravenosa']
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
     //console.log(isSubmitting2)
     const toggleModal = () => {
 
     };
-    const [id, setID] = useState(null);
-    const toggleModal2 = async (id) => {
 
-    };
     //-----------------Ficha Agregar Categoría---------//
     const [openCategories, setOpenCategories] = useState(false);
     let [selectedModal, setSelectedModal] = useState(null);
@@ -187,31 +165,11 @@ const Ficha_Agregar_Categorias = (props) => {
     }
 
     const handleModalFieldChange = (e) => {
-        setCategoria1((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
-
+        setCategoria((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
     }
     //----------FichaMedicamentos Modal-------------------------------------------------------
 
-    
     let [selectedRow, setSelectedRow] = useState(null);
-
-   
-
-    const cleanExpediente = () => {
-       
-    };
-
-   
-
-    
-
-    const toggleModal22 = () => {
-
-    };
-
-   
-
-  
 
     let buscaError = 0;
     useEffect(() => {
@@ -223,17 +181,14 @@ const Ficha_Agregar_Categorias = (props) => {
                 navigate("/expedientes"); // Redirige a la página de inicio de sesión
                 cont++;
             }
-
-
-
         }
 
         const fetchAllCategories = async () => {
             try {
                 const categoriesData = await CategoriasService.getAllCategories();
-                const CategoriesWithId = categoriesData.map((categoria1) => ({
-                    ...categoria1,
-                    id: categoria1.id,
+                const CategoriesWithId = categoriesData.map((categoria) => ({
+                    ...categoria,
+                    id: categoria.id,
                 }));
                 setCategorias(CategoriesWithId);
             } catch (error) {
@@ -256,8 +211,6 @@ const Ficha_Agregar_Categorias = (props) => {
                 ...prevVisibility,
                 id: true,
                 Nombre_Categoria: true
-               
-
             }));
         };
 
@@ -269,85 +222,75 @@ const Ficha_Agregar_Categorias = (props) => {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
+
     }, [isLoggedIn, navigate, isSubmitting]);
+
     const [editedData, setEditedData] = useState([]);
 
     const handleEditCategoryName = async (newValue, id) => {
         console.log("Hola aquí estoy en el método");
-        console.log("Nombre nuevo de la categoria: "+newValue.Nombre_Categoria);
-        console.log("Este es el id: "+id);
-        
-        await CategoriasService.editCategories(id,newValue.Nombre_Categoria);
-        
-      };
-  
+        console.log("Nombre nuevo de la categoria: " + newValue);
+        console.log("Este es el id: " + id);
+        await CategoriasService.editCategories(id, newValue);
+    };
+
     return (
-        <Dialog open={open} onClose={() => setOpenPopupC(false)}>
+        <Dialog open={open} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
             <div className='Modal-FichaCategorias'>
-                <h1 className='Titulo-FichaCategorias'>Categorías de Medicamentos</h1>
-
-
-                
-                    <div className='crudGrid'>
-
-                        <div style={{ height: '100vh' }}>
-                            <div className='headerDiv'>
-                                <h1>Categorías</h1>
-                            </div>
-                            <div className='dataGridBox'>
-                                <ThemeProvider theme={theme}>
-                                    <DataGrid
-                                        rows={categorias}
-                                        getRowId={(row) => row.id}
-                                        columns={[
-                                            { field: 'id', headerName: 'ID Categoría', flex: 3, headerClassName: 'column-header'},
-                                            { field: 'Nombre_Categoria', headerName: 'Categoría', flex: 2, headerClassName: 'column-header',editable:true 
-                                            
-                                        },
-                                            
-                                            {
-                                                field: 'actions',
-                                                headerName: '',
-                                                flex: 2,
-                                                renderCell: (params) => (
-
-                                                    <div>
-
-                                                        <IconButton onClick={() => handleEditCategoryName (params.row,params.id)} >
-                                                            <Edit />
-                                                        </IconButton>
-
-
-                                                        <IconButton onClick={() => handleDeleteCategoriesClick(params.row, params.id)}>
-                                                            <Delete />
-                                                        </IconButton>
-                                                        
-                                                    </div>
-                                                ),
-                                            },
-
-                                        ]}
-                                        components={{
-                                            Toolbar: CustomToolbar,
-                                        }}
-
-                                        columnVisibilityModel={columnVisibilityModel}
-                                        onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-                                    />
-                                </ThemeProvider>
-
-                                
-
-
-                            </div>
-
+                <div className='crudGrid'>
+                    <div style={{ height: '90%' }}>
+                        <div className='headerDiv'>
+                            <h1>Categorías</h1>
                         </div>
+                        <button className="cancelButton" onClick={() => setOpenPopupC(false)}>
+                            <FontAwesomeIcon icon={faTimes} size="2x" />
+                        </button>
+                        <div className='dataGridBox'>
+                            <ThemeProvider theme={theme}>
+                                <DataGrid
+                                    rows={categorias}
+                                    getRowId={(row) => row.id}
+                                    columns={[
+                                        { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
+                                        {
+                                            field: 'Nombre_Categoria', headerName: 'Categoría', flex: 3, headerClassName: 'column-header', editable: true
+                                        },
+                                        {
+                                            field: 'actions',
+                                            headerName: '',
+                                            flex: 1,
+                                            renderCell: (params) => (
+                                                <div>
+                                                    {/* <IconButton onClick={() => handleEditCategoryName(params.row, params.id)} >
+                                                        <Edit />
+                                                    </IconButton> */}
+                                                    <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCategoriesClick(params.id)}>
+                                                        <Delete />
+                                                    </IconButton>
+                                                </div>
+                                            ),
+                                        },
+                                    ]}
+                                    components={{
+                                        Toolbar: CustomToolbar,
+                                    }}
+                                    columnVisibilityModel={columnVisibilityModel}
+                                    onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
 
+                                    processRowUpdate={(updatedRow, originalRow) => {
+                                        // console.log(updatedRow);
+                                        if (originalRow.Nombre_Categoria !== updatedRow.Nombre_Categoria) {
+                                            handleEditCategoryName(updatedRow, updatedRow.id);
+                                        }
+                                    }}
 
+                                />
+                            </ThemeProvider>
+                        </div>
                     </div>
+                </div>
             </div>
-
         </Dialog>
     );
 };

@@ -1,8 +1,8 @@
 .Modal-FichaCategorias {
     background-color: rgb(227, 235, 248);
     width: 90%;
-    height: 90%;
-    margin: 0 auto;
+    height: 80%;
+    margin: auto auto;
     display: flex;
     flex-direction: column;
     align-items: left;
@@ -14,7 +14,14 @@
     border-radius: 30px;
     box-sizing: border-box;
     overflow: auto;
+    padding-top: 50px;
+    scrollbar-width: none;
 }
+
+.Modal-FichaCategorias::-webkit-scrollbar{
+    display: none;
+}
+
 .Principal-FichaCategorias {
     display: flex;
     justify-content: center;

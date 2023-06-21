@@ -183,7 +183,7 @@ const Medicamentos = () => {
                             paddingRight: '10px',
                         }}
                     >
-                        Agregar Categoría
+                        Administración de Categorías
                     </Button>
                 </div>
                 <div>
