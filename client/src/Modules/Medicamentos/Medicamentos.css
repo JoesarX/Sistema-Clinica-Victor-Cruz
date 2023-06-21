@@ -1,6 +1,6 @@
 .modalMedicamentos {
-    width: 600px;
-    height: 700px;
+    width: 700px;
+    height: 525px;
     /* Aumentado el tamaño para que sea un poco más grande */
     overflow: hidden;
 }
@@ -16,7 +16,7 @@
 
 
 .modalHeader {
-    margin-top: 30px;
+    margin-top: 0px;
     /* Aumenta el margen superior para bajar el label */
     margin-bottom: 20px;
     text-align: center;
@@ -31,6 +31,7 @@
     width: 100px; /* Adjust the width to make it more square */
     height: 100px; /* Adjust the height to make it more square */
     margin: 20px auto; /* Center the button horizontally and adjust the vertical margin */
+    margin-bottom: 0px;
     border-radius: 5px; /* Adjust the border radius */
   }
   
@@ -40,14 +41,15 @@
   flex-direction: row;
   align-items: center;
   justify-content: center; /* Center the content horizontally */
-  margin-bottom: 0px;
-  margin-top: 0px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .ImagenWrapper {
   margin-top: 35px;
-  width: 145px;
-  height: 140px;
+  margin-bottom: 20px;
+  width: 225px;
+  height: 225px;
   display: flex;
   margin-left: 10px;
   align-items: center;
@@ -80,10 +82,10 @@
 
 .customFileLabel {
     display: inline-block;
-    width: 150px; /* Increase the width to make it larger */
-    height: 45px;
+    width: 225px; /* Increase the width to make it larger */
+    height: 35px;
     font-size: 15px;
-    margin-top: 35px;
+    margin-top: 70px;
     background-color: #626262df;
     color: #fff;
     border-radius: 8px;
@@ -94,9 +96,10 @@
     margin-left: auto;
     margin-right: auto;
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   
   

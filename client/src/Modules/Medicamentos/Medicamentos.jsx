@@ -371,14 +371,13 @@ const Medicamentos = () => {
                     if (medicamento.urlfoto != null) {
                         deleteImg(medicamento.urlfoto);
                     }
+
                     const imageUrll = await uploadFile();
                     setMedicamento((prevState) => ({
                         ...prevState,
                         urlfoto: imageUrll,
                     }));
-                    console.log("TESTING BBBBBBBBBBBBBBB" + imageUrll);
                     medicamento.urlfoto = imageUrll;
-                    console.log("TESTING AAAAAAAAAAAAAAA" + medicamento.urlfoto);
 
                     await MedicamentosService.editMedicamentos(id, medicamento);
                     alert('Medicamento Editado');
@@ -489,6 +488,41 @@ const Medicamentos = () => {
 
         // Continue with further logic or actions if the image passes the format and size checks
         return true;
+    };
+
+    const cancelarFotoA = () => {
+        setImageUpload(null);
+        setImagePreview(null);
+    };
+
+    const cancelarFotoE = async () => {
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta información.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    try {
+                        setImageUpload(null);
+                        setImagePreview(null);
+                        deleteImg(medicamento.urlfoto);
+                        medicamento.urlfoto = null;
+                        await MedicamentosService.editMedicamentos(id, medicamento);
+                        swal("Foto eliminada exitosamente!", {
+                            icon: "success",
+                        });
+                    } catch (error) {
+                        swal("Error al eliminar la foto. Por favor, inténtalo de nuevo más tarde.", {
+                            icon: "error",
+                        });
+                    }
+                } else {
+                    swal("¡La foto no se ha borrado!");
+                }
+            });
     };
 
     const [medicamentoData, setMedicamentoss] = useState([]);
@@ -643,11 +677,12 @@ const Medicamentos = () => {
                                 noValidate
                                 autoComplete="off"
                             >
-                                <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
-                                    <Grid item xs={12} sm={6}>
+                                <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+                                    <Grid item xs={12} sm={6} >
                                         <div className='Div-imagen'>
                                             <div className='ImagenWrapper'>
                                                 <img className='Imagen' src={imagePreview} alt="imgPreview" />
+                                                
                                             </div>
                                         </div>
                                         <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
@@ -663,35 +698,27 @@ const Medicamentos = () => {
                                             id="urlfoto"
                                             className="customFileInput"
                                         />
+                                        <label onClick={cancelarFotoA} className="customFileLabel"  style={{ marginTop: '0.45rem'}}>Eliminar archivo</label>
+                                        
                                     </Grid>
-                                </Grid>
-
-
-
-                                <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                                <Autocomplete
-                                    disablePortal
-                                    id="categoria"
-                                    required
-                                    options={listaCategoriaMedicamentos}
-                                    onChange={(event, newValue) =>
-                                        setMedicamento({
-                                            ...medicamento,
-                                            categoria: newValue
-                                        })
-                                    }
-                                    renderInput={(params) => <TextField {...params} label="Categoria" required />}
-                                />
-                                <Grid container spacing={2}>
+                                    
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required />
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={6}>
+                                        <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }}/>
+                                        <Autocomplete
+                                            disablePortal
+                                            id="categoria"
+                                            required
+                                            options={listaCategoriaMedicamentos}
+                                            onChange={(event, newValue) =>
+                                                setMedicamento({
+                                                    ...medicamento,
+                                                    categoria: newValue
+                                                })
+                                            }
+                                            renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }}/>}
+                                        />
+                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required style={{ marginBottom: '0.45rem' }}/>
+                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required style={{ marginBottom: '0.45rem' }}/>
                                         <Autocomplete
                                             disablePortal
                                             id="via"
@@ -703,14 +730,11 @@ const Medicamentos = () => {
                                                     via: newValue
                                                 })
                                             }
-                                            renderInput={(params) => <TextField {...params} label="Via" required />}
+                                            renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }}/>}
                                         />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
                                         <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
                                     </Grid>
                                 </Grid>
-
 
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
 
@@ -772,37 +796,27 @@ const Medicamentos = () => {
                                                     id="urlfoto"
                                                     className="customFileInput"
                                                 />
-                                            </Grid>
-                                        </Grid>
-
-
-                                        <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                                        <Autocomplete
-                                            value={categoriaSelected}
-                                            disablePortal
-                                            id="categoria"
-
-
-                                            options={listaCategoriaMedicamentos}
-                                            onChange={(event, newValue) =>
-                                                setMedicamento({
-                                                    ...medicamento,
-                                                    categoria: newValue
-                                                })
-                                            }
-                                            renderInput={(params) => <TextField {...params} label="Categoria" required />}
-                                        />
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' />
+                                                <label onClick={cancelarFotoE} className="customFileLabel"  style={{ marginTop: '0.45rem'}}>Eliminar archivo</label>
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' />
-                                            </Grid>
-                                        </Grid>
+                                                <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }}/>
+                                                <Autocomplete
+                                                    value={categoriaSelected}
+                                                    disablePortal
+                                                    id="categoria"
 
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
+
+                                                    options={listaCategoriaMedicamentos}
+                                                    onChange={(event, newValue) =>
+                                                        setMedicamento({
+                                                            ...medicamento,
+                                                            categoria: newValue
+                                                        })
+                                                    }
+                                                    renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }}/>}
+                                                />
+                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' style={{ marginBottom: '0.45rem' }}/>
+                                                <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' style={{ marginBottom: '0.45rem' }}/>
                                                 <Autocomplete
                                                     value={viaSelected}
                                                     disablePortal
@@ -816,13 +830,12 @@ const Medicamentos = () => {
                                                         })
 
                                                     }
-                                                    renderInput={(params) => <TextField {...params} label="Via" required />}
+                                                    renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }}/>}
                                                 />
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' />
+                                                <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' style={{ marginBottom: '0.45rem' }}/>
                                             </Grid>
                                         </Grid>
+
                                         <Button onClick={EditHandler} variant="contained" style={{
                                             backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
                                             paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
