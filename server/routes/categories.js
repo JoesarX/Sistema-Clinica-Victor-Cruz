@@ -18,20 +18,21 @@ const categoriesRouter = (pool) => {
 
 
     //Add a new category
-    router.post("/categorias", async (req, res) => {
+    router.post("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
+            console.log("req categoriaINput: "+req.body.categoriaValue);
+            console.log("Body: "+req.body[0]);
+            console.log("Sin Body: "+req);
             const q =
                 "INSERT INTO `categorias` (`Nombre_Categoria`) VALUES (?)";
-            const values = [
-                req.body.Nombre_Categoria
-            ];
-            await connection.query(q, [values]);
+           
+            await connection.query(q,req.body[0]);
             connection.release();
             res.json("Categoria añadida exitosamente!");
         } catch (err) {
             console.log(err);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ error: "Internal Server Error"});
         }
     });
     //delete Category

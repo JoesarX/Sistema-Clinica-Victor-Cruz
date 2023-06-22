@@ -76,6 +76,67 @@ const Ficha_Agregar_Categorias = (props) => {
             });
     };
 
+    const AgregarCateogia = async () => {
+        var trust = true;
+        try {
+            var categoriaInput = document.getElementById("categoriaInput");
+            var categoriaValue = categoriaInput.value;
+            console.log("Verificando string: "+categoriaValue);
+        
+            if ((categoriaValue == "" )  || (categoriaValue == " ") || (categoriaValue == "   ")) {
+                swal({
+                    title: "Error al agregar categoría",
+                    text: "No puede agregar una categoría Vacía",
+                    icon: "error"
+                });
+                trust = false;
+
+            }
+            var regex = /^[\sA-Za-záéíóúñÁÉÍÓÚÑüÜ]+$/u;
+
+            if (!regex.test(categoriaValue)) {
+                swal({
+                    title: "Error al agregar categoría",
+                    text: "La categoría no puede tener números",
+                    icon: "error"
+                });
+                trust = false;
+            }
+            const verificacion= await CategoriasService.getAllCategories();
+            console.log(verificacion.Nombre_Categoria);
+            const existe= verificacion.some((verificacion)=>verificacion.Nombre_Categoria === categoriaValue)
+            console.log(existe);
+            if(existe){
+                swal({
+                    title: "Error al agregar categoría",
+                    text: "La categoría escrita ya existe",
+                    icon: "error"
+                });
+                trust =false;
+            }
+            console.log(categoriaValue);
+            if (trust) {
+                var nuevaCategoria = [categoriaValue];
+                const res = await CategoriasService.postCategories(nuevaCategoria)
+
+                console.log(res);
+                swal({
+                    title: "Categoria Agregada",
+                    text: "Categoria Agregada exitosamente",
+                    icon: "success"
+                });
+                
+            }
+            } catch (error) {
+                swal({
+                    title: "Error al agregar categoría",
+                    text: "Reportar este error: ".concat(error),
+                    icon: "error",
+                });
+                console.log(error);
+            }
+        
+    }
     const handleEditCategoryName = async (newValue) => {
         console.log('editar')
         console.log(newValue.Nombre_Categoria);
@@ -88,7 +149,7 @@ const Ficha_Agregar_Categorias = (props) => {
                 text: "Categoria editada exitosamente",
                 icon: "success"
             });
-            console.log('swal de exito ddespues')
+
         } catch (error) {
             swal({
                 title: "Error al editar categoría",
@@ -152,8 +213,21 @@ const Ficha_Agregar_Categorias = (props) => {
                 <div>
                 </div>
                 <div>
+                    <TextField
+                        type="text"
+                        variant="outlined"
+                        color="secondary"
+                        //value={admin.nombre}
+                        fullWidth
+                        required
+                        //onChange={handleChange}
+                        name="Agregar_Categoria"
+                        id="categoriaInput"
+                        label="Ingrese nueva Categoría"
+                        style={{ width: '220px', marginRight: '10px', backgroundColor: "white" }}
+                    />
                     <Button
-                        // onClick={toggleModal}
+                        onClick={AgregarCateogia}
                         startIcon={<Medication />}
                         style={{
                             backgroundColor: 'rgb(27, 96, 241)',
