@@ -1,12 +1,12 @@
 import React, { useRef } from 'react'
 import '../HojaDeEstilos/IniciarSesion.css';
 
-import { useState, useEffect ,useContext} from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
 import { loginAdmin, loginMaster } from '../../Services/AdministradoresService';
 import { AuthContext } from '../AuthContext.js';
-
+import { loginUsuarios } from '../../Services/UsuariosService';
 import Footer from './Footer';
 import Topbar from './Topbar'
 import bcrypt from 'bcryptjs';
@@ -83,23 +83,21 @@ const IniciarSesion = () => {
         var flag = false;
         if (emailRegex.test(email) != true) {
             alert('El correo ingresado no tiene un formato válido.')
-
-
         } else {
-            const passUser = await UsuariosService.loginUsuarios(email, password);
+            const passUser = await loginUsuarios(email, password);
             console.log(passUser)
             var flag = false;
-            if(passUser === ""){
+            localStorage.setItem("100", true);
+            navigate("/userpage");
+            if (passUser === "") {
                 console.log("Not found!")
                 console.log(":()()()")
-                
-            }else{
+
+            } else {
                 await new Promise((resolve, reject) => {
                     bcrypt.compare(password, passUser, function (err, isMatch) {
                         console.log("deberia entrar")
-                      
-    
-                         if (err) {
+                        if (err) {
                             throw err
                         } else if (!isMatch) {
                             alert("Contraseña incorrecta")
@@ -107,24 +105,21 @@ const IniciarSesion = () => {
                         } else {
                             flag = true;
                             console.log(flag)
-                            localStorage.setItem("100", true);
+                            localStorage.setItem("300", true);
                             alert("Bienvenido!");
                             navigate("/expedientes");
                             resolve();
-                            
                         }
                     })
                     console.log(":(")
                 });
             }
-            
-           
             console.log(flag)
             console.log(":)")
-            if(!flag){
+            if (!flag) {
                 if (email === "" || password === "") {
                     alert("Debe Llenar todos los campos");
-                }  else if (await loginMaster(email, password) === true) {
+                } else if (await loginMaster(email, password) === true) {
                     alert("Bienvenido Doctor!");
                     localStorage.setItem("400", true);
                     navigate("/expedientes");
@@ -133,21 +128,14 @@ const IniciarSesion = () => {
                     localStorage.setItem("300", true);
                     navigate("/expedientes");
                 } else {
-                   
-
                     alert("Email o contraseña incorrecta!");
                 }
             }
-            
         }
-
-
     };
-
     return (
-
         <div className="scrollable-page">
-            <Topbar  />
+            <Topbar />
             <div></div>
             <div className="login-form">
                 <h2>Iniciar Sesión</h2>

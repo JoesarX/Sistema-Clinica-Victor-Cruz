@@ -1,6 +1,6 @@
 import axios from 'axios';
 
- //const API_URL = 'http://localhost:8000/usuarios';
+//const API_URL = 'http://localhost:8000/usuarios';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net/usuarios';
 
 export const getAllusuarios = async () => {
@@ -26,10 +26,10 @@ export const postUsuarios = async (usuario) => {
     }
 };
 
-export const editusuarios = async (id,usuario) => {
+export const editusuarios = async (id, usuario) => {
     try {
-        await axios.put(`${API_URL}/usuarios/${id}`,usuario);
-       
+        await axios.put(`${API_URL}/usuarios/${id}`, usuario);
+
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit usuario');
@@ -38,52 +38,47 @@ export const editusuarios = async (id,usuario) => {
 
 export const deleteusuarios = async (id) => {
     try {
-         await axios.delete(`${API_URL}/usuarios/${id}`);
-        
+        await axios.delete(`${API_URL}/usuarios/${id}`);
+
     } catch (error) {
         console.log(error);
         throw new Error('Failed to delete usuario');
     }
 };
 //Para iniciar sesión
-export const loginUsuarios= async(uEmail, uPassword)=>{
-    try{
-        
-        const user = await axios.get(`${API_URL}/usuarios/`,uEmail);
+export const loginUsuarios = async (uEmail, uPassword) => {
+    try {
+        const user = await axios.get(`${API_URL}/usuarios/`, uEmail);
         const PW = await axios.get(`${API_URL}/usuarios/`, uPassword);
         console.log(user)
         console.log(PW)
-        const userInfo= user.data
-        const passwordInfo=PW.data
-        const emailEncontrado= userInfo.find(user => user.correouser === uEmail);
-        if(emailEncontrado){
+        const userInfo = user.data
+        const passwordInfo = PW.data
+        const emailEncontrado = userInfo.find(user => user.correouser === uEmail);
+        if (emailEncontrado) {
             console.log(emailEncontrado.nombre)
             localStorage.setItem("loggedInUserName", emailEncontrado.nombre);
             console.log(emailEncontrado.password)
             return emailEncontrado.password;
-    
-        }else{
+        } else {
             return "";
         }
-       
-    }catch (error){
-       // console.log("Este es el Email: "+user+" Este es el PW: "+PW)
-       console.log("Esto da: "+error)
-    }
 
+    } catch (error) {
+        // console.log("Este es el Email: "+user+" Este es el PW: "+PW)
+        console.log("Esto da: " + error)
+    }
 };
 
-    
-
-const Services ={
+const Services = {
     getAllusuarios,
     postUsuarios,
-   
+
     deleteusuarios,
     editusuarios,
     // Other functions
     loginUsuarios
-    
+
 };
 
 export default Services;

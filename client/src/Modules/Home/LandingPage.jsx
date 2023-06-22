@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../HojaDeEstilos/Dashboard.css';
+import '../HojaDeEstilos/LandingPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
@@ -11,12 +11,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from '../Dashboard/EditExpedienteDashboardModal.jsx';
 import TopBar from '../Home/Topbar.jsx';
-
 import ExpedientesService from '../../Services/ExpedientesService';
 
 
-const Dashboard = () => {
-    const isLoggedIn = localStorage.getItem("400");
+const LandingPage = () => {
+    const isLoggedIn = localStorage.getItem("100");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [expedientes, setExpedientes] = useState([]);
     const [selectedExpediente, setSelectedExpediente] = useState(null);
@@ -236,16 +235,16 @@ const Dashboard = () => {
         if (patient.temperatura > 43) {
             alert("La temperatura ingresada es invalida");
         }
-    
-     const regexFinal=/\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
-   
+
+        const regexFinal = /\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
+
         if (!regexFinal.test(patient.presion)) {
             alert("El ritmo cardiaco ingresado es invalido");
             return false;
         }
-        if(patient.presion)
+        if (patient.presion)
 
-        return true;
+            return true;
 
     }
 
@@ -348,10 +347,10 @@ const Dashboard = () => {
 
     return (
         <div className='scrollable-page'>
-            <TopBar/>
+            <TopBar />
             <div className='contenido'>
                 <div className='patient-section'>
-                    <div className="vitals">
+                    <div className='userinfo'>
                         <div className='profile-picture-and-edit'>
                             <div className='perfil'>
                                 <FontAwesomeIcon icon={faUser} className='iconoUser' />
@@ -381,169 +380,9 @@ const Dashboard = () => {
                             </div>
                             <p className="smallText">Direccion</p>
                         </div>
-                        <div className='box-title'>
-                            <h3 className='histmedtit'>Signos Vitales
-                                <span>
-                                    {isEditingLabel ? (<>
-                                        <button onClick={handleSaveChangesSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                            Guardar cambios
-                                        </button>
-                                        <button onClick={handleCancelarEditSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                            Cancelar
-                                        </button>
-                                    </>
-                                    ) : (
-                                        <button onClick={handleLabelEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                            Editar
-                                        </button>
-                                    )}
-                                </span>
-                            </h3>
-                        </div>
-                        <div style={{ color: '#75BD89' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
-                                <span>
-                                    Altura
-                                </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div >
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="altura"
-                                                style={{ width: '65px' }}
-                                                value={altura}
-                                                onChange={hanldeSignosLabelChange}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <span className="vitals-value">altura</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">CM</span>
-                            </span>
-                        </div>
-                        <div style={{ color: '#54648D' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ marginRight: '280px' }}
-                                >
-                                    Peso
-                                </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div >
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="peso"
-                                                style={{ width: '55px' }}
-                                                value={patient.peso}
-                                                onChange={hanldeSignosLabelChange}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <span className="vitals-value">{patient.peso}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">KG</span>
-                            </span>
-                        </div>
-                        <div style={{ color: '#916A9E' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ marginRight: '150px' }}
-                                >
-                                    Temperatura
-                                </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div >
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="temperatura"
-                                                style={{ width: '65px' }}
-                                                value={patient.temperatura}
-                                                onChange={hanldeSignosLabelChange}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <span className="vitals-value">{patient.temperatura}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">ºC</span>
-                            </span>
-                        </div>
-                        <div style={{ color: '#AB2525' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ marginRight: '170px' }}
-                                >
-                                    Ritmo Cardiaco
-                                </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div >
-                                            <input
-                                                className="edit-text-box"
-                                                type="text"
-                                                name="ritmo_cardiaco"
-                                                style={{ width: '60px' }}
-                                                value={patient.ritmo_cardiaco}
-                                                onChange={hanldeSignosLabelChange}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <span className="vitals-value">{patient.ritmo_cardiaco}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">ppm</span>
-                            </span>
-                        </div>
-                        <div style={{ color: '#AB2525' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ width: '300px', marginRight: '10px' }}
-                                >
-                                    Presión Arterial
-                                </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div>
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="presion"
-                                                style={{ width: '80px' }}
-                                                value={patient.presion}
-                                                onChange={hanldeSignosLabelChange}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <span className="vitals-value">{patient.presion}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">mmHg</span>
-                            </span>
-                        </div>
                     </div>
+
+
                 </div>
                 <div className="patient-section appointments-section">
                     <button className='large-button schedule-date'>
@@ -581,15 +420,12 @@ const Dashboard = () => {
                                 </div>
                             ))}
                         </div>
-
                     </div>
-
                 </div>
-
             </div >
         </div>
 
     );
 };
 
-export default Dashboard;
+export default LandingPage;
