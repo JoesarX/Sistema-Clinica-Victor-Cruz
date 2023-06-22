@@ -7,19 +7,14 @@ import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import NavBar from '../NavBar';
 
-
+import Footer from './Footer';
 
 
 const Citas = () => {
-
-
   const hiddenDays = [1, 7];
 
   return (
-
-
     <div className="App">
-
       <NavBar />
       <h1 className="header">Agendar Cita</h1>
       <main>
@@ -33,24 +28,28 @@ const Citas = () => {
               }}
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              weekends={true}
-              selectable={true}
-              selectMirror={true}
-              editable={true}
-              dayMaxEvents={true}
               locale={esLocale}
+              hiddenDays={hiddenDays}
+              slotDuration="00:30:00"
+              slotLabelFormat={{
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              }}
+              eventTimeFormat={{
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              }}
+              slotMinTime="07:00:00"
+              slotMaxTime="17:00:00"
+              allDaySlot={false}
             />
           </div>
         </div>
       </main>
-
-      <footer>
-
-      </footer>
+      <Footer />
     </div>
-
   );
-
 };
-
 export default Citas;

@@ -13,16 +13,16 @@ import Footer from './Footer';
 
 const Citas = () => {
 
-
+  const hiddenDays = [0, 6, 5];
 
   return (
     <div className="App">
-    <header>
-      <Topbar />
-      <h1 className="header">NUESTRA DISPONIBILIDAD</h1>
-    </header>
+      <header>
+        <Topbar />
+        <h1 className="header">NUESTRA DISPONIBILIDAD</h1>
+      </header>
 
-    <main>
+      <main>
         <div className="cal-container">
           <div className="cal">
             <FullCalendar
@@ -31,23 +31,34 @@ const Citas = () => {
                 center: 'title',
                 right: 'timeGridWeek,timeGridDay',
               }}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              plugins={[timeGridPlugin, interactionPlugin]}
               initialView="timeGridWeek"
-              weekends={true}
-              selectable={true}
-              selectMirror={true}
-              editable={true}
-              dayMaxEvents={true}
               locale={esLocale}
+              hiddenDays={hiddenDays}
+              slotDuration="00:30:00"
+              slotLabelFormat={{
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              }}
+              eventTimeFormat={{
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true,
+              }}
+              slotMinTime="07:00:00"
+              slotMaxTime="17:00:00"
+              allDaySlot={false}
             />
           </div>
         </div>
       </main>
 
-    <footer>
-      <Footer />
-    </footer>
-  </div>
+
+      <footer>
+        <Footer />
+      </footer>
+    </div>
   );
 
 };
