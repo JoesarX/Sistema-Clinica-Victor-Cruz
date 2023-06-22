@@ -38,6 +38,7 @@ export const postCitas = async (cita) => {
 
 export const editCitas = async (id,cita) => {
     try {
+        console.log("In Service Edit");
         await axios.put(`${API_URL}/citas/${id}`,cita);
        
     } catch (error) {
