@@ -6,7 +6,6 @@ const API_URL = 'http://localhost:8000';
 export const getAllCategories = async () => {
     try {
         const res = await axios.get(`${API_URL}/categorias`);
-        console.log("Sirvo si señor");
         return res.data;
     } catch (error) {
         console.log(error);
@@ -28,11 +27,10 @@ export const postCategories = async (categories) => {
 
 export const editCategories = async (value) => {
     try {
-        const res = await axios.put(`${API_URL}/categorias/${value.id}`, value);
-        return res.data;
+        await axios.put(`${API_URL}/categorias/${value.id}`, value);
     } catch (error) {
-        console.log(error);
-        throw new Error('Failed to edit categorias');
+        console.error('editCategories', error);
+        throw new Error('Fallo al editar categorias');
     }
 };
 
@@ -40,7 +38,6 @@ export const deleteCategories = async (id) => {
     try {
         console.log("Este es el id: " + id);
         await axios.delete(`${API_URL}/categorias/${id}`);
-
     } catch (error) {
         console.log(error);
         throw new Error('Failed to delete categorias');

@@ -1,56 +1,40 @@
 import React from 'react';
 import { Dialog } from '@mui/material';
 import './Ficha_Categorias.css';
-import { Await, useAsyncError, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import CategoriasService from "../../Services/CategoriasService";
 
-//GRID
-import { Box, Button } from '@mui/material'
+import { Button } from '@mui/material'
 import {
-    DataGrid, esES, GridCellEditStopParams,
-    GridCellEditStopReasons, useGridApiRef
+    DataGrid, esES, GridCellEditStopReasons, useGridApiRef
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication, Category, Save, ConstructionOutlined } from '@mui/icons-material';
+import { Delete, Medication, SaveOutlined, CheckCircleOutline, ConstructionOutlined } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
 import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import Grid from '@mui/material/Grid';
-import InfoIcon from '@mui/icons-material/Info';
-import Modal from '@mui/material/Modal';
-import {
-    ref,
-    uploadBytes,
-    getDownloadURL,
-    deleteObject,
-    getStorage,
-    listAll,
-    list,
-} from "firebase/storage";
-import { v4 } from "uuid";
+import { useGridDensity } from '@mui/x-data-grid/internals';
 
-//comienzo del modal
 const Ficha_Agregar_Categorias = (props) => {
 
     const { open, setOpenPopupC } = props;
-    /* console.log("Entré");
-     console.log(open);
-     console.log(setOpenPopupC);*/
     const isLoggedIn = localStorage.getItem("400");
     let cont = 0;
 
     const navigate = useNavigate();
     const [categorias, setCategorias] = useState([]);
+    const [selectedRow, setSelectedRow] = useState();
+    
+    const apiRef = useGridApiRef();
 
-    const handleDeleteCategoriesClick = (id) => {
+    function handleDeleteCategoriesClick(id) {
         swal({
             title: "¿Estás seguro?",
             text: "Una vez borrado, no podrás recuperar esta categoria.",
@@ -65,6 +49,7 @@ const Ficha_Agregar_Categorias = (props) => {
                         swal("Categoría eliminada exitosamente!", {
                             icon: "success",
                         });
+                        fetchAllCategories();
                     } catch (error) {
                         swal("Error al eliminar la categoría. Por favor, inténtalo de nuevo más tarde.", {
                             icon: "error",
@@ -74,34 +59,40 @@ const Ficha_Agregar_Categorias = (props) => {
                     swal("¡Tu información no se ha borrado!");
                 }
             });
-    };
+    }
 
     const handleEditCategoryName = async (newValue) => {
-        console.log('editar')
-        console.log(newValue.Nombre_Categoria);
-        console.log(newValue.id);
+        console.log('handle eddit caterogyu', newValue)
         try {
-            const res = await CategoriasService.editCategories(newValue);
-            console.log(res);
+            await CategoriasService.editCategories(newValue);
             swal({
-                title: "Categoria editada",
-                text: "Categoria editada exitosamente",
-                icon: "success"
+                title: "Editado con éxito",
+                text: "Categoría editada exitosamente",
+                icon: "success",
             });
-            console.log('swal de exito ddespues')
+            fetchAllCategories();
         } catch (error) {
             swal({
                 title: "Error al editar categoría",
                 text: "Reportar este error: ".concat(error),
                 icon: "error",
             });
-            console.log(error);
         }
     };
 
-    const apiRef = useGridApiRef();
+    const fetchAllCategories = async () => {
+        try {
+            const categoriesData = await CategoriasService.getAllCategories();
+            const CategoriesWithId = categoriesData.map((categoria) => ({
+                ...categoria,
+                id: categoria.id,
+            }));
+            setCategorias(CategoriesWithId);
+        } catch (error) {
+            console.log("Error fetching Categorias:", error);
+        }
+    };
 
-    const storage = getStorage();
     const theme = createTheme(
         {
             palette: {
@@ -111,11 +102,35 @@ const Ficha_Agregar_Categorias = (props) => {
         esES,
     );
 
-    //Grid Column Visibility
     const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
         id: false,
         Nombre_Categoria: true,
     });
+
+    const dealWithUpdate = () => {
+        handleEditCategoryName(getRowById(categoryRow));
+    }
+
+    const handleModalClose = () => {
+        setOpenPopupC(false);
+        setCategorias([]);
+    };
+
+    const getRowId = (row) => {
+        return row.id;
+    };
+
+    const getRowById = (rowId) => {
+        if (apiRef.current) {
+            const row = apiRef.current.getRow(rowId);
+            if (row) {
+                console.log('row found', row);
+            } else {
+                console.log('Row not found');
+            }
+            return row;
+        }
+    };
 
     const CustomToolbar = () => {
         const theme = useTheme();
@@ -173,53 +188,48 @@ const Ficha_Agregar_Categorias = (props) => {
 
     //ADD MEDICAMENTOS MODAL
     const [isModalOpen, setIsModalOpen] = useState(false);
-
     const [categoria, setCategoria] = useState({
         id: '',
         Nombre_Categoria: ''
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    //console.log(isSubmitting2)
 
-    //-----------------Ficha Agregar Categoría---------//
-    const [openCategories, setOpenCategories] = useState(false);
-    let [selectedModal, setSelectedModal] = useState(null);
+    const [categoryRow, setCategoryRow] = useState(0);
 
-    const toggleModalCategory = () => {
-        setOpenCategories(true);
-        setSelectedModal(true);
-    }
-
-    const handleModalFieldChange = (e) => {
-        setCategoria((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
-    }
     //----------FichaMedicamentos Modal------------------------------------------------------
 
     useEffect(() => {
 
+        const fetchData = async () => {
+            try {
+                await fetchAllCategories();
+            } catch (error) {
+                console.log('Error fetching categories:', error);
+            }
+        };
+
+        if (open) {
+            fetchData();
+        }
+
+    }, [open]);
+
+    useEffect(() => {
+        apiRef.current.onSelectionChange((selection) => {
+            console.log('Selected rows:', selection);
+        });
+    }, [apiRef]);
+
+    useEffect(() => {
+
         if (!isLoggedIn) {
-            // Redirigir si no se cumple la verificación
             if (cont == 0) {
                 alert("No Cuenta con el permiso de entrar a este apartado")
-                navigate("/expedientes"); // Redirige a la página de inicio de sesión
+                navigate("/expedientes");
                 cont++;
             }
         }
-
-        const fetchAllCategories = async () => {
-            try {
-                const categoriesData = await CategoriasService.getAllCategories();
-                const CategoriesWithId = categoriesData.map((categoria) => ({
-                    ...categoria,
-                    id: categoria.id,
-                }));
-                setCategorias(CategoriesWithId);
-            } catch (error) {
-                // Handle error if any
-                console.log("Error fetching Categorias:", error);
-            }
-        };
 
         // Update tabla
         fetchAllCategories();
@@ -230,7 +240,6 @@ const Ficha_Agregar_Categorias = (props) => {
         const handleResize = () => {
             const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
 
-            // Update the column visibility based on the screen width
             setColumnVisibilityModel((prevVisibility) => ({
                 ...prevVisibility,
                 id: true,
@@ -249,74 +258,71 @@ const Ficha_Agregar_Categorias = (props) => {
 
     }, [isLoggedIn, navigate, isSubmitting]);
 
-    const [editedData, setEditedData] = useState([]);
-
     return (
         <Dialog open={open} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
             <div className='Modal-FichaCategorias'>
-                <div className='crudGrid'>
-                    <div style={{ height: '80vh' }}>
+                <div className='crudGrid rb'>
+                    <div>
                         <div className='headerDiv'>
                             <h1>Categorías</h1>
                         </div>
-                        <button className="cancelButton" onClick={() => setOpenPopupC(false)}>
+                        <button className="cancelButton" onClick={handleModalClose}>
                             <FontAwesomeIcon icon={faTimes} size="2x" />
                         </button>
                         <div className='dataGridBox'>
                             <ThemeProvider theme={theme}>
-                                <DataGrid
-                                    rows={categorias}
-                                    getRowId={(row) => row.id}
-                                    // apiRef={apiRef}
-                                    columns={[
-                                        // { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
-                                        {
-                                            field: 'Nombre_Categoria', headerName: 'Categoría', flex: 5, headerClassName: 'column-header', editable: true
-                                        },
-                                        {
-                                            field: 'actions',
-                                            headerName: '',
-                                            flex: 1,
-                                            renderCell: (params) => (
-                                                <div>
-                                                    <IconButton onClick={() => handleEditCategoryName(params.row)}>
-                                                        <Save />
-                                                    </IconButton>
+                                {categorias.length > 0 ? (
+                                    <DataGrid
+                                        rows={categorias}
+                                        getRowId={getRowId}
+                                        apiRef={apiRef}
+                                        columns={[
+                                            { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
+                                            {
+                                                field: 'Nombre_Categoria',
+                                                headerName: 'Categoría',
+                                                flex: 5,
+                                                headerClassName: 'column-header',
+                                                editable: true,
+                                            },
+                                            {
+                                                field: 'status',
+                                                headerName: '',
+                                                flex: 1,
+                                                renderCell: (params) => (
                                                     <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCategoriesClick(params.id)}>
                                                         <Delete />
                                                     </IconButton>
-                                                </div>
-                                            ),
-                                        },
-                                    ]}
-                                    components={{
-                                        Toolbar: CustomToolbar,
-                                    }}
-                                    columnVisibilityModel={columnVisibilityModel}
-                                    onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                                                ),
+                                            },
+                                        ]}
+                                        components={{
+                                            Toolbar: CustomToolbar,
+                                        }}
+                                        columnVisibilityModel={columnVisibilityModel}
+                                        onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
 
-                                    onCellEditStop={(params, event) => {
-                                        if (params.reason === GridCellEditStopReasons.cellFocusOut) {
-                                            event.defaultMuiPrevented = true;
-                                        }
-                                    }}
-
-                                // processRowUpdate={ (updatedRow, originalRow) => {
-                                //     if(originalRow.Nombre_Categoria !== updatedRow.Nombre_Categoria) {
-                                //         handleEditCategoryName(updatedRow)
-                                //     }
-                                // }}
-
-                                // onProcessRowUpdateError={handleProcessRowUpdateError}
-
-                                />
+                                        onCellEditStop={(params, event) => {
+                                            if (params.reason === GridCellEditStopReasons.cellFocusOut) {
+                                                event.defaultMuiPrevented = true;
+                                            }
+                                            else {
+                                                console.log('stopped editing:', params.row.id);
+                                                setCategoryRow(params.row.id)
+                                                dealWithUpdate();
+                                            }
+                                        }}
+                                    />
+                                ) : (
+                                    <p>Cargando categorías...</p>
+                                )}
                             </ThemeProvider>
                         </div>
                     </div>
                 </div>
-            </div>
-        </Dialog>
+            </div >
+        </Dialog >
     );
 };
 
