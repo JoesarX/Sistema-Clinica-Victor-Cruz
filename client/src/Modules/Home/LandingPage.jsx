@@ -350,41 +350,31 @@ const LandingPage = () => {
             <TopBar />
             <div className='contenido'>
                 <div className='patient-section'>
-                    <div className='userinfo'>
-                        <div className='profile-picture-and-edit'>
-                            <div className='perfil'>
-                                <FontAwesomeIcon icon={faUser} className='iconoUser' />
-                            </div>
-                            <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
-                            {isEditModalOpen && (
-                                <EditExpedienteDashboardModal
-                                    expedientess={expediente}
-                                    onClose={handleCloseEditModal}
-                                />
-                            )}
+                    <div className='profile-picture-and-edit'>
+                        <div className='perfil'>
+                            <FontAwesomeIcon icon={faUser} className='iconoUser' />
                         </div>
-                        <div className='patient-info-vert-align'>
-                            <h2 className="nombre"> Nombre</h2>
-                            <div className='patient-email-container'>
-                                Correo
-                            </div>
-                            <p className="smallText">Numero de ID</p>
-                            <p className="smallText">Sexo</p>
-                            <div className='space-between-text'>
-                                <p className="smallText">Fecha Nacimiento</p>
-                                <p className="smallText">Edad</p>
-                            </div>
-                            <div className='space-between-text'>
-                                <p className="smallText">Estado Civil</p>
-                                <p className="smallText">Ocupacion</p>
-                            </div>
-                            <p className="smallText">Direccion</p>
-                        </div>
+                        <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
+                        {isEditModalOpen && (
+                            <EditExpedienteDashboardModal
+                                expedientess={expediente}
+                                onClose={handleCloseEditModal}
+                            />
+                        )}
                     </div>
-
-
+                    <h2 className="nombre"> Nombre</h2>
+                    <div className='patient-email-container'>
+                        Correo
+                    </div>
+                    <p className="smallText">Numero de ID</p>
+                    <p className="smallText">Sexo</p>
+                    <p className="smallText">Fecha Nacimiento</p>
+                    <p className="smallText">Edad</p>
+                    <p className="smallText">Estado Civil</p>
+                    <p className="smallText">Ocupacion</p>
+                    <p className="smallText">Direccion</p>
                 </div>
-                <div className="patient-section appointments-section">
+                <div className="appointments-section">
                     <button className='large-button schedule-date'>
                         <FontAwesomeIcon icon={faCalendarPlus} />
                         Agendar Cita
