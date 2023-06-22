@@ -404,6 +404,11 @@ const Dashboard = () => {
         fetchExpediente2();
     };
 
+
+    const handleOnClickAgendarCita = () => {
+        navigate("/expedientes/dashboard/:expedienteId/cita_expediente")
+    };
+
     return (
         <div className='scrollable-page'>
             <NavBar />
@@ -743,7 +748,7 @@ const Dashboard = () => {
 
                 <div className="patient-section appointments-section">
 
-                    <button className='large-button schedule-date'>
+                    <button className='large-button schedule-date' onClick={handleOnClickAgendarCita}>
                         <FontAwesomeIcon icon={faCalendarPlus} />
                         Agendar Cita
                     </button>
