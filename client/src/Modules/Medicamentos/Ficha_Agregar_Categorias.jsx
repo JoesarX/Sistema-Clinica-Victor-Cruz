@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import CategoriasService from "../../Services/CategoriasService";
 
-import { Button } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import {
-    DataGrid, esES, GridCellEditStopReasons, useGridApiRef
+    DataGrid, esES, GridCellEditStopReasons, gridColumnsTotalWidthSelector, useGridApiRef
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
@@ -19,7 +19,6 @@ import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
-import TextField from '@mui/material/TextField';
 import { useGridDensity } from '@mui/x-data-grid/internals';
 
 const Ficha_Agregar_Categorias = (props) => {
@@ -31,8 +30,69 @@ const Ficha_Agregar_Categorias = (props) => {
     const navigate = useNavigate();
     const [categorias, setCategorias] = useState([]);
     const [selectedRow, setSelectedRow] = useState();
-    
-    const apiRef = useGridApiRef();
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [categoria, setCategoria] = useState({
+        id: '',
+        Nombre_Categoria: ''
+    });
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const [categoryRow, setCategoryRow] = useState(0);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                await fetchAllCategories();
+            } catch (error) {
+                console.log('Error fetching categories:', error);
+            }
+        };
+
+        if (open) {
+            fetchData();
+        }
+
+    }, [open]);
+
+    useEffect(() => {
+
+        if (!isLoggedIn) {
+            if (cont == 0) {
+                alert("No Cuenta con el permiso de entrar a este apartado")
+                navigate("/expedientes");
+                cont++;
+            }
+        }
+
+        // Update tabla
+        fetchAllCategories();
+        if (isSubmitting) {
+            fetchAllCategories();
+        }
+
+        const handleResize = () => {
+            const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
+
+            setColumnVisibilityModel((prevVisibility) => ({
+                ...prevVisibility,
+                id: true,
+                Nombre_Categoria: true
+            }));
+        };
+
+        // Call the handleResize function initially and on window resize
+        handleResize();
+        window.addEventListener("resize", handleResize);
+
+        // Clean up the event listener on component unmount
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+
+    }, [isLoggedIn, navigate, isSubmitting]);
 
     function handleDeleteCategoriesClick(id) {
         swal({
@@ -107,21 +167,13 @@ const Ficha_Agregar_Categorias = (props) => {
         Nombre_Categoria: true,
     });
 
-    const dealWithUpdate = () => {
-        handleEditCategoryName(getRowById(categoryRow));
-    }
-
     const handleModalClose = () => {
         setOpenPopupC(false);
         setCategorias([]);
     };
 
-    const getRowId = (row) => {
-        return row.id;
-    };
-
-    const getRowById = (rowId) => {
-        if (apiRef.current) {
+    const getRowById = (apiRef, rowId) => {
+        if (apiRef && apiRef.current) {
             const row = apiRef.current.getRow(rowId);
             if (row) {
                 console.log('row found', row);
@@ -130,6 +182,13 @@ const Ficha_Agregar_Categorias = (props) => {
             }
             return row;
         }
+        else {
+            console.log('Esperando APIREF')
+        }
+    };
+
+    const getRowId = (row) => {
+        return row.id;
     };
 
     const CustomToolbar = () => {
@@ -184,83 +243,82 @@ const Ficha_Agregar_Categorias = (props) => {
             </GridToolbarContainer>
         );
     };
-    //==================================================================================================================================================================================
 
-    //ADD MEDICAMENTOS MODAL
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [categoria, setCategoria] = useState({
-        id: '',
-        Nombre_Categoria: ''
-    });
+    const CategoriesDataGrid = () => {
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+        const [editedData, setEditedData] = useState({});
 
-    const [categoryRow, setCategoryRow] = useState(0);
+        const handleTextChange = (event, params) => {
+            const { id, field } = params;
+            const value = event.target.value;
 
-    //----------FichaMedicamentos Modal------------------------------------------------------
-
-    useEffect(() => {
-
-        const fetchData = async () => {
-            try {
-                await fetchAllCategories();
-            } catch (error) {
-                console.log('Error fetching categories:', error);
-            }
-        };
-
-        if (open) {
-            fetchData();
-        }
-
-    }, [open]);
-
-    useEffect(() => {
-        apiRef.current.onSelectionChange((selection) => {
-            console.log('Selected rows:', selection);
-        });
-    }, [apiRef]);
-
-    useEffect(() => {
-
-        if (!isLoggedIn) {
-            if (cont == 0) {
-                alert("No Cuenta con el permiso de entrar a este apartado")
-                navigate("/expedientes");
-                cont++;
-            }
-        }
-
-        // Update tabla
-        fetchAllCategories();
-        if (isSubmitting) {
-            fetchAllCategories();
-        }
-
-        const handleResize = () => {
-            const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
-
-            setColumnVisibilityModel((prevVisibility) => ({
-                ...prevVisibility,
-                id: true,
-                Nombre_Categoria: true
+            setEditedData((prevData) => ({
+                ...prevData,
+                [id]: { ...prevData[id], [field]: value },
             }));
         };
 
-        // Call the handleResize function initially and on window resize
-        handleResize();
-        window.addEventListener("resize", handleResize);
-
-        // Clean up the event listener on component unmount
-        return () => {
-            window.removeEventListener("resize", handleResize);
+        const handleTextKeyDown = async (event, params) => {
+            if (event.key === 'Enter') {
+                const { id, field } = params;
+                const value = event.target.value;
+                const updatedRow = { id, [field]: value };
+                console.log('Updated row:', updatedRow);
+                await handleEditCategoryName(updatedRow);
+            }
         };
 
-    }, [isLoggedIn, navigate, isSubmitting]);
+        return <DataGrid
+            rows={categorias}
+            getRowId={getRowId}
+            columns={[
+                // { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
+                {
+                    field: 'Nombre_Categoria',
+                    headerName: 'Categoría',
+                    flex: 5,
+                    headerClassName: 'column-header',
+                    // editable: true,
+                    renderCell: (params) => (
+                        <div style={{ width: '100%' }}>
+                            <TextField
+                                value={editedData[params.id]?.Nombre_Categoria || params.value}
+                                onChange={(event) => handleTextChange(event, params)}
+                                onKeyDown={(event) => handleTextKeyDown(event, params)}
+                            />
+                        </div>
+                    )
+                },
+                {
+                    field: 'status',
+                    headerName: '',
+                    flex: 1,
+                    renderCell: (params) => (
+                        <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCategoriesClick(params.id)}>
+                            <Delete />
+                        </IconButton>
+                    ),
+                },
+            ]}
+            components={{
+                Toolbar: CustomToolbar,
+            }}
+            columnVisibilityModel={columnVisibilityModel}
+            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+
+            onCellEditStop={(params, event) => {
+                if (params.reason === GridCellEditStopReasons.cellFocusOut) {
+                    event.defaultMuiPrevented = true;
+                }
+            }}
+        />
+    };
+
+
+    //----------FichaMedicamentos Modal------------------------------------------------------
 
     return (
         <Dialog open={open} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
-
             <div className='Modal-FichaCategorias'>
                 <div className='crudGrid rb'>
                     <div>
@@ -273,47 +331,7 @@ const Ficha_Agregar_Categorias = (props) => {
                         <div className='dataGridBox'>
                             <ThemeProvider theme={theme}>
                                 {categorias.length > 0 ? (
-                                    <DataGrid
-                                        rows={categorias}
-                                        getRowId={getRowId}
-                                        apiRef={apiRef}
-                                        columns={[
-                                            { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
-                                            {
-                                                field: 'Nombre_Categoria',
-                                                headerName: 'Categoría',
-                                                flex: 5,
-                                                headerClassName: 'column-header',
-                                                editable: true,
-                                            },
-                                            {
-                                                field: 'status',
-                                                headerName: '',
-                                                flex: 1,
-                                                renderCell: (params) => (
-                                                    <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCategoriesClick(params.id)}>
-                                                        <Delete />
-                                                    </IconButton>
-                                                ),
-                                            },
-                                        ]}
-                                        components={{
-                                            Toolbar: CustomToolbar,
-                                        }}
-                                        columnVisibilityModel={columnVisibilityModel}
-                                        onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-
-                                        onCellEditStop={(params, event) => {
-                                            if (params.reason === GridCellEditStopReasons.cellFocusOut) {
-                                                event.defaultMuiPrevented = true;
-                                            }
-                                            else {
-                                                console.log('stopped editing:', params.row.id);
-                                                setCategoryRow(params.row.id)
-                                                dealWithUpdate();
-                                            }
-                                        }}
-                                    />
+                                    <CategoriesDataGrid />
                                 ) : (
                                     <p>Cargando categorías...</p>
                                 )}
