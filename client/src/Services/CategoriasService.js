@@ -14,10 +14,10 @@ export const getAllCategories = async () => {
 };
 
 //agregar Categoría
-export const postCategories = async (categories) => {
-    console.log(categories)
+export const postCategories = async (categoriaValue) => {
+    console.log(categoriaValue)
     try {
-        const res = await axios.post(`${API_URL}/categorias`, categories);
+        const res = await axios.post(`${API_URL}/categorias`, categoriaValue);
         return res.data;
     } catch (error) {
         console.log(error);
