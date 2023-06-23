@@ -14,12 +14,13 @@ import {
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { Delete, Medication, SaveOutlined, CheckCircleOutline, ConstructionOutlined } from '@mui/icons-material';
+import { Delete, Medication, SaveOutlined, CheckCircleOutline, ConstructionOutlined, Check, Cancel, Edit } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
 import { useGridDensity } from '@mui/x-data-grid/internals';
+import { debounce } from 'lodash';
 
 const Ficha_Agregar_Categorias = (props) => {
 
@@ -95,6 +96,7 @@ const Ficha_Agregar_Categorias = (props) => {
     }, [isLoggedIn, navigate, isSubmitting]);
 
     function handleDeleteCategoriesClick(id) {
+        console.log(id);
         swal({
             title: "¿Estás seguro?",
             text: "Una vez borrado, no podrás recuperar esta categoria.",
@@ -111,7 +113,7 @@ const Ficha_Agregar_Categorias = (props) => {
                         });
                         fetchAllCategories();
                     } catch (error) {
-                        swal("Error al eliminar la categoría. Por favor, inténtalo de nuevo más tarde.", {
+                        swal("Error al eliminar la categoría. Por favor, inténtalo de nuevo más tarde.\n".concat(error.message), {
                             icon: "error",
                         });
                     }
@@ -126,9 +128,9 @@ const Ficha_Agregar_Categorias = (props) => {
         try {
             var categoriaInput = document.getElementById("categoriaInput");
             var categoriaValue = categoriaInput.value;
-            console.log("Verificando string: "+categoriaValue);
-        
-            if ((categoriaValue == "" )  || (categoriaValue == " ") || (categoriaValue == "   ")) {
+            console.log("Verificando string: " + categoriaValue);
+
+            if ((categoriaValue == "") || (categoriaValue == " ") || (categoriaValue == "   ")) {
                 swal({
                     title: "Error al agregar categoría",
                     text: "No puede agregar una categoría Vacía",
@@ -147,17 +149,17 @@ const Ficha_Agregar_Categorias = (props) => {
                 });
                 trust = false;
             }
-            const verificacion= await CategoriasService.getAllCategories();
+            const verificacion = await CategoriasService.getAllCategories();
             console.log(verificacion.Nombre_Categoria);
-            const existe= verificacion.some((verificacion)=>verificacion.Nombre_Categoria === categoriaValue)
+            const existe = verificacion.some((verificacion) => verificacion.Nombre_Categoria === categoriaValue)
             console.log(existe);
-            if(existe){
+            if (existe) {
                 swal({
                     title: "Error al agregar categoría",
                     text: "La categoría escrita ya existe",
                     icon: "error"
                 });
-                trust =false;
+                trust = false;
             }
             console.log(categoriaValue);
             if (trust) {
@@ -170,17 +172,17 @@ const Ficha_Agregar_Categorias = (props) => {
                     text: "Categoria Agregada exitosamente",
                     icon: "success"
                 });
-                
+                fetchAllCategories();
             }
-            } catch (error) {
-                swal({
-                    title: "Error al agregar categoría",
-                    text: "Reportar este error: ".concat(error),
-                    icon: "error",
-                });
-                console.log(error);
-            }
-        
+        } catch (error) {
+            swal({
+                title: "Error al agregar categoría",
+                text: "Reportar este error: ".concat(error),
+                icon: "error",
+            });
+            console.log(error);
+        }
+
     }
     const handleEditCategoryName = async (newValue) => {
         console.log('handle eddit caterogyu', newValue)
@@ -319,73 +321,124 @@ const Ficha_Agregar_Categorias = (props) => {
     };
 
     const CategoriesDataGrid = () => {
+        const [editMode, setEditMode] = useState(null);
+        const [editedValue, setEditedValue] = useState('');
+        const [rows, setRows] = useState(categorias);
+        const inputRef = useRef(null);
 
-        const [editedData, setEditedData] = useState({});
+        const debouncedSave = useRef(
+            debounce(() => {
+                saveChanges();
+            }, 500)
+        ).current;
 
-        const handleTextChange = (event, params) => {
-            const { id, field } = params;
-            const value = event.target.value;
+        useEffect(() => {
+            if (editMode !== null && inputRef.current) {
+                inputRef.current.focus();
+            }
+        }, [editMode]);
 
-            setEditedData((prevData) => ({
-                ...prevData,
-                [id]: { ...prevData[id], [field]: value },
-            }));
+        const handleEditClick = (id, value) => {
+            setEditMode(id);
+            setEditedValue(value);
         };
 
-        const handleTextKeyDown = async (event, params) => {
-            if (event.key === 'Enter') {
-                const { id, field } = params;
-                const value = event.target.value;
-                const updatedRow = { id, [field]: value };
-                console.log('Updated row:', updatedRow);
-                await handleEditCategoryName(updatedRow);
+        const handleCancelClick = () => {
+            setEditMode(null);
+            setEditedValue('');
+        };
+
+        const handleSaveClick = (editedRow) => {
+            saveChanges(editedRow);
+        };
+
+        const handleInputChange = (event) => {
+            const updatedRow = { id: editMode, Nombre_Categoria: event.target.value };
+            setEditedValue(event.target.value);
+            debouncedSave(updatedRow);
+        };
+
+        const saveChanges = (editedRow) => {
+            if (editedRow) {
+                handleEditCategoryName(editedRow);
+                console.log('Edited Row:', editedRow);
+
+                const updatedRows = rows.map((row) =>
+                    row.id === editedRow.id ? { ...row, Nombre_Categoria: editedRow.Nombre_Categoria } : row
+                );
+
+                setRows(updatedRows);
+                setEditMode(null);
+                setEditedValue('');
             }
         };
 
-        return <DataGrid
-            rows={categorias}
-            getRowId={getRowId}
-            columns={[
-                // { field: 'id', headerName: 'ID Categoría', flex: 1, headerClassName: 'column-header' },
-                {
-                    field: 'Nombre_Categoria',
-                    headerName: 'Categoría',
-                    flex: 5,
-                    headerClassName: 'column-header',
-                    // editable: true,
-                    renderCell: (params) => (
-                        <div style={{ width: '100%' }}>
-                            <TextField
-                                value={editedData[params.id]?.Nombre_Categoria || params.value}
-                                onChange={(event) => handleTextChange(event, params)}
-                                onKeyDown={(event) => handleTextKeyDown(event, params)}
-                            />
-                        </div>
-                    )
-                },
-                {
-                    field: 'status',
-                    headerName: '',
-                    flex: 1,
-                    renderCell: (params) => (
-                        <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCategoriesClick(params.id)}>
-                            <Delete />
-                        </IconButton>
-                    ),
-                },
-            ]}
-            components={{
-                Toolbar: CustomToolbar,
-            }}
-            columnVisibilityModel={columnVisibilityModel}
-            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+        return (
+            <DataGrid
+                rows={categorias}
+                getRowId={getRowId}
+                columns={[
+                    {
+                        field: 'Nombre_Categoria',
+                        headerName: 'Categoría',
+                        flex: 5,
+                        headerClassName: 'column-header',
+                        renderCell: (params) => {
+                            const { id, value } = params;
+                            if (editMode === id) {
+                                return (
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <TextField
+                                            value={editedValue}
+                                            onChange={handleInputChange}
+                                            inputRef={inputRef}
+                                            autoFocus
+                                            fullWidth
+                                        />
+                                        <IconButton onClick={() => handleSaveClick(params.row)}>
+                                            <Check />
+                                        </IconButton>
+                                        <IconButton onClick={handleCancelClick}>
+                                            <Cancel />
+                                        </IconButton>
+                                    </div>
+                                );
+                            }
 
-            onCellEditStop={(params, event) => {
-                if (params.reason === GridCellEditStopReasons.cellFocusOut) {
-                    event.defaultMuiPrevented = true;
-                }
-            }}
-        />
+                            return (
+                                <div style={{ display: 'flex', alignItems: 'center' }}>
+                                    <div>{value}</div>
+                                    <IconButton onClick={() => handleEditClick(id, value)}>
+                                        <Edit />
+                                    </IconButton>
+                                </div>
+                            );
+                        },
+                    },
+                    {
+                        field: 'status',
+                        headerName: '',
+                        flex: 1,
+                        renderCell: (params) => (
+                            <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCategoriesClick(params.id)}>
+                                <Delete />
+                            </IconButton>
+                        ),
+                    },
+                ]}
+                components={{
+                    Toolbar: CustomToolbar,
+                }}
+                columnVisibilityModel={columnVisibilityModel}
+                onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                disableColumnVirtualization
+                onCellEditStop={(params, event) => {
+                    if (params.reason === GridCellEditStopReasons.cellFocusOut) {
+                        event.defaultMuiPrevented = true;
+                    }
+                }}
+            />
+        );
     };
 
 
