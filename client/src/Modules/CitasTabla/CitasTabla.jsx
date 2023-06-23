@@ -177,7 +177,7 @@ const Citas = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
 
-    console.log(isSubmitting2)
+
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
@@ -255,7 +255,39 @@ const Citas = () => {
         e.preventDefault();
         try {
             console.log("test");
-            submitCita();
+            const selDate2 = new Date(cita.hora_final)
+            
+            const day = String(selDate2.getDate()).padStart(2, '0');
+
+            const year = selDate2.getFullYear();
+            const month = String(selDate2.getMonth() + 1).padStart(2, '0'); 
+            const hours = String(selDate2.getHours()).padStart(2, '0');
+            console.log(hours)
+            const minutes = String(selDate2.getMinutes()).padStart(2, '0');
+            const seconds = String(selDate2.getSeconds()).padStart(2, '0');
+            
+            const selDate = new Date(cita.hora_inicio)
+            console.log(selDate)
+            const day3 = String(selDate.getDate()).padStart(2, '0');
+            const year1 = selDate.getFullYear();
+            const month1 = String(selDate.getMonth() + 1).padStart(2, '0'); 
+            const hours1 = String(selDate.getHours()).padStart(2, '0');
+            console.log(hours1)
+            const minutes1 = String(selDate.getMinutes()).padStart(2, '0');
+            const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
+            
+            console.log(day3)
+            if(day<day3 || month<month1 || year<year1 || hours<hours1 ){
+                alert('La hora final no puede ser mayor a la hora de inicio')   
+            }
+            else{
+                if(validations()){
+                    submitCita();
+                }
+                
+            }
+
+            
         } catch (error) {
             // Handle error if any
             console.log('Error submitting cita:', error);
@@ -270,9 +302,11 @@ const Citas = () => {
     }, [isSubmitting]);
 
     const submitCita = async () => {
-        if (validations()) {
+        console.log("doneee");
+       
             console.log("Entra a agregar despues de validaciones");
             try {
+                console.log('yay')
                 await CitasService.postCitas(cita);
                 alert('Cita Agregado');
                 toggleModal();
@@ -281,7 +315,7 @@ const Citas = () => {
                 // Handle error if any
                 console.log('Error submitting cita:', error);
             }
-        }
+       
     };
 
     const EditHandler = async (e) => {
@@ -329,62 +363,47 @@ const Citas = () => {
     };
 
     const validations = () => {
-        // const { nombre, categoria, stock, precio_unitario, via, dosis } = cita
-        // //Nombre validations
-        // if (nombre === null || nombre === '') {
-        //     alert('Debe agregarle un nombre al cita')
-        //     return false
-        // } else if (!nombre.replace(/\s/g, '').length) {
-        //     alert('El nombre no puede contener solo espacios.');
-        //     return false
-        // } else if (nombre.charAt(0) === ' ') {
-        //     alert('El nombre no puede iniciar con un espacio.');
-        //     return false
-        // } else if (nombre.charAt(nombre.length - 1) === ' ') {
-        //     alert('El nombre no puede terminar con un espacio.');
-        //     return false
-        // }
-        // //Categoria validations
-        // if (categoria === null || categoria === '') {
-        //     alert('Debe agregar una categoria valida.');
-        //     return false;
-        // }
-        // //Stock validations
-        // if (stock === null || stock === '') {
-        //     alert('Debe agregarle la cantidad de unidades al cita');
-        //     return false;
-        // } else if (!(/^\d+$/.test(stock))) {
-        //     alert("Las unidades deben ser un numero entero.");
-        //     return false;
-        // }
-        // //Precio validations
-        // if (precio_unitario === null || precio_unitario === '') {
-        //     alert('Debe agregarle un precio unitario al cita');
-        //     return false;
-        // } else if (!(/^[0-9,.]*$/.test(parseFloat(precio_unitario)))) {
-        //     alert("Ingrese un precio valido");
-        //     return false;
-        // }
-        // //Via validations
-        // if (via === null || via === '') {
-        //     alert('Ingrese una via para el cita');
-        //     return false;
-        // }
-        // //Dosis validations
-        // if (dosis === null || dosis === '') {
-        //     alert('Debe agregarle una dosis al cita')
-        //     return false;
-        // } else if (!dosis.replace(/\s/g, '').length) {
-        //     alert('La dosis no puede contener solo espacios.');
-        //     return false
-        // } else if (dosis.charAt(0) === ' ') {
-        //     alert('La dosis no puede iniciar con un espacio.');
-        //     return false
-        // } else if (dosis.charAt(nombre.length - 1) === ' ') {
-        //     alert('La dosis no puede terminar con un espacio.');
-        //     return false
-        // }
-        // console.log("END DE VALIDACINES");
+         const { nombre_persona, estado, hora_inicio, hora_final} = cita
+         //Nombre validations
+         if (nombre_persona === null || nombre_persona === '') {
+             alert('Debe agregarle un nombre al cita')
+             return false
+         } else if (!nombre_persona.replace(/\s/g, '').length) {
+             alert('El nombre no puede contener solo espacios.');
+             return false
+         } else if (nombre_persona.charAt(0) === ' ') {
+             alert('El nombre no puede iniciar con un espacio.');
+             return false
+         } else if (nombre_persona.charAt(nombre_persona.length - 1) === ' ') {
+             alert('El nombre no puede terminar con un espacio.');
+             return false
+         }
+         
+         if (estado === null || estado === '') {
+             alert('Debe agregar un estado valido.');
+             return false;
+         } else if (!estado.replace(/\s/g, '').length) {
+            alert('El estado no puede contener solo espacios.');
+            return false
+        } else if (estado.charAt(0) === ' ') {
+            alert('El estado no puede iniciar con un espacio.');
+            return false
+        } else if (estado.charAt(estado.length - 1) === ' ') {
+            alert('El estado no puede terminar con un espacio.');
+            return false
+        }
+        
+         if (hora_inicio === null || hora_inicio === '') {
+             alert('Debe agregar la hora de inicio a la cita');
+             return false;
+         }
+        
+        if (hora_final === null || hora_final === '') {
+            alert('Debe agregar la hora de final a la cita');
+            return false;
+        }
+        
+         console.log("END DE VALIDACINES");
         return true;
     }
 
@@ -454,7 +473,41 @@ const Citas = () => {
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
+    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
 
+    const handleDateChange = (date, name) => {
+
+
+        setFechaNacimiento(date);
+        console.log(name)
+
+        if (date !== null && date.getHours !== '00' && date.getMinutes !== '00') {
+
+            const selectedDate = date.toDate();
+            const year = selectedDate.getFullYear();
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
+            const day = String(selectedDate.getDate()).padStart(2, '0');
+            const hours = String(selectedDate.getHours()).padStart(2, '0');
+            const minutes = String(selectedDate.getMinutes()).padStart(2, '0');
+            const seconds = String(selectedDate.getSeconds()).padStart(2, '0');
+
+            const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            if (name === 'hora_final') {
+
+                cita.hora_final = formattedDate;
+                console.log(cita);
+
+            } else {
+                console.log('hora inicio')
+                console.log(formattedDate)
+                cita.hora_inicio = formattedDate;
+                console.log(cita);
+            }
+
+        }
+
+
+    };
 
     return (
 
@@ -507,11 +560,13 @@ const Citas = () => {
                         />
                     </ThemeProvider>
 
-                    {/* <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }} >
+
+                    <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
                         <div className='modalContainer modalCitas'>
 
-                            <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
+
+                            <h2 className="modalHeader">AGREGAR CITA</h2>
                             <button className="cancelButton" onClick={toggleModal}>
                                 <FontAwesomeIcon icon={faTimes} size="2x" />
                             </button>
@@ -526,78 +581,48 @@ const Citas = () => {
                                 noValidate
                                 autoComplete="off"
                             >
-                                <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
-                                <Autocomplete
-                                    disablePortal
-                                    id="categoria"
-                                    required
-                                    options={listaCategoriaCitas}
-                                    onChange={(event, newValue) =>
-                                        setCita({
-                                            ...cita,
-                                            categoria: newValue
-                                        })
-
-                                    }
-                                    renderInput={(params) => <TextField {...params} label="Categoria" required />}
-                                />
+                                <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" onChange={handleModalFieldChange} name='nombre_persona' required />
+                                <TextField id="estado" label="Estado" variant="outlined" onChange={handleModalFieldChange} name='estado' required />
+                                <TextField id="idpaciente" label="Expediente ID" variant="outlined" onChange={handleModalFieldChange} name='idpaciente' required />
+                                <TextField id="correouser" label="User Correo" variant="outlined" onChange={handleModalFieldChange} name='correouser' required />
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required />
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <MobileDateTimePicker
+                                                id="hora_inicio"
+                                                label="Hora Inicio"
+
+                                                onChange={(date) => handleDateChange(date, 'hora_inicio')}
+                                                renderInput={(params) => <TextField {...params} />}
+                                                name='hora_inicio'
+                                            />
+                                        </LocalizationProvider>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required />
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <MobileDateTimePicker
+                                                id="hora_final"
+                                                label="Hora Final"
+                                                onChange={(date) => handleDateChange(date, 'hora_final')}
+                                                renderInput={(params) => <TextField {...params} />}
+                                                name='hora_final'
+                                            />
+                                        </LocalizationProvider>
                                     </Grid>
                                 </Grid>
 
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={6}>
-                                        <Autocomplete
-                                            disablePortal
-                                            id="via"
-                                            required
-                                            options={listaVias}
-                                            onChange={(event, newValue) =>
-                                                setCita({
-                                                    ...cita,
-                                                    via: newValue
-                                                })
 
-                                            }
-                                            renderInput={(params) => <TextField {...params} label="Via" required />}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
-                                    </Grid>
-                                </Grid>
-                                <Grid container spacing={2} >
-                                    <Grid item xs={3} sm={1} >
-                                        <input
-                                            type="file"
-                                            onChange={(event) => {
-                                                setImageUpload(event.target.files[0]);
-                                                console.log(imageUpload);
-                                            }}
-                                            name='urlfoto'
-                                            id="urlfoto"
-                                        />
-                                    </Grid>
-                                </Grid>
 
-                                <Button
-                                    onClick={handleModalSubmit}
-                                    variant="contained"
-                                    className="modalButton"
-                                    type="submit"
-                                    id='crudButton'>
+                                <Button onClick={handleModalSubmit} variant="contained" style={{
+                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                }}>
                                     Agregar Cita
                                 </Button>
                             </Box>
+
                         </div>
-
-
-                    </Modal> */}
+                    </Modal>
 
                     <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 

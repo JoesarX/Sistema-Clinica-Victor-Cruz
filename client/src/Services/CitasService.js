@@ -32,7 +32,7 @@ export const postCitas = async (cita) => {
         return res.data;
     } catch (error) {
         console.log('Error posting cita:', error);
-        throw error; // Rethrow the original error instead of throwing a new one
+        throw error; 
     }
 };
 
