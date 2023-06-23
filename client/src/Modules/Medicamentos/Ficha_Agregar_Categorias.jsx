@@ -358,9 +358,11 @@ const Ficha_Agregar_Categorias = (props) => {
             debouncedSave(updatedRow);
         };
 
-        const saveChanges = (editedRow) => {
+        const saveChanges = async (editedRow) => {
             if (editedRow) {
-                handleEditCategoryName(editedRow);
+                
+                await handleEditCategoryName(editedRow);
+
                 console.log('Edited Row:', editedRow);
 
                 const updatedRows = rows.map((row) =>
