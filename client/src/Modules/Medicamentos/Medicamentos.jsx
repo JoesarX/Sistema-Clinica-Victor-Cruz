@@ -11,7 +11,7 @@ import 'firebase/compat/storage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import Ficha_Agregar_Categorias from './Ficha_Agregar_Categorias';
-
+import CategoriasService from '../../Services/CategoriasService';
 import {
     ref,
     uploadBytes,
@@ -51,7 +51,8 @@ import './Medicamentos.css';
 import '../HojaDeEstilos/CrudStyles.css';
 import NavBar from '../NavBar';
 
-
+let listaCategoriaMedicamentos=[];
+let idListaCategoriaMedicamentos=[];
 const Medicamentos = () => {
     //========================================================================================================================================================================================================================
     //LOGIN VALIDATION
@@ -211,23 +212,24 @@ const Medicamentos = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [medicamento, setMedicamento] = useState({
         nombre: '',
-        categoria: '',
         stock: '',
         precio_unitario: '',
         via: '',
         dosis: '',
         urlfoto: '',
+        id_categoria: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
-    const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
+    
     const listaVias = ['Oral', 'Subcutánea', 'Intramuscular ', 'Intravenosa']
-
+   
     //console.log(isSubmitting2)
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
         cleanExpediente();
+        console.log( listaCategoriaMedicamentos);
     };
     const [id, setID] = useState(null);
     const toggleModal2 = async (id) => {
@@ -262,7 +264,7 @@ const Medicamentos = () => {
     //----------FichaMedicamentos Modal-------------------------------------------------------
 
     const [nombre, setNombre] = useState(false);
-    const [categoria, setCategoria] = useState(false);
+    const [id_categoria, setIdCategoria] = useState(false);
     const [stock, setStock] = useState(false);
     const [precioUnitario, setPrecioUnitario] = useState(false);
     const [openFicha, setOpenFicha] = useState(false);
@@ -273,7 +275,7 @@ const Medicamentos = () => {
     const handleSelectedFicha = (row) => {
         setOpenFicha(true);
         setNombre(row.nombre);
-        setCategoria(row.categoria);
+        setIdCategoria(row.categoria);
         setStock(row.stock);
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
@@ -285,7 +287,7 @@ const Medicamentos = () => {
     const cleanExpediente = () => {
         medicamento.nombre = null;
         medicamento.stock = null;
-        medicamento.categoria = null;
+        medicamento.id_categoria = null;
         medicamento.precio_unitario = null;
         medicamento.via = null;
         medicamento.dosis = null;
@@ -317,6 +319,24 @@ const Medicamentos = () => {
                 .catch((error) => reject(error));
         });
     };
+
+    const setCategoriasID = async(valor)=>{
+        let cat=0;
+        try{
+            for( let i=0; i<listaCategoriaMedicamentos.length;i++){
+                if(listaCategoriaMedicamentos[i]==valor){
+                    console.log(idListaCategoriaMedicamentos[i]);
+                    cat=idListaCategoriaMedicamentos[i]
+                }
+            }
+            setMedicamento({
+                ...medicamento,
+                id_categoria: cat
+            })
+        }catch(error){
+
+        }
+    }
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
@@ -419,7 +439,7 @@ const Medicamentos = () => {
     };
 
     const validations = () => {
-        const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
+        const { nombre, stock, precio_unitario, via, dosis,id_categoria } = medicamento
         //Nombre validations
         if (nombre === null || nombre === '') {
             alert('Debe agregarle un nombre al medicamento')
@@ -435,7 +455,7 @@ const Medicamentos = () => {
             return false
         }
         //Categoria validations
-        if (categoria === null || categoria === '') {
+        if (id_categoria === null || id_categoria === '') {
             alert('Debe agregar una categoria valida.');
             return false;
         }
@@ -510,6 +530,7 @@ const Medicamentos = () => {
     useEffect(() => {
         // Validación login
         console.log("Este es el error en Med: " + (buscaError++));
+        
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
@@ -525,6 +546,23 @@ const Medicamentos = () => {
         const fetchAllMedicamentos = async () => {
             try {
                 const medicamentosData = await MedicamentosService.getAllMedicamentos();
+                //Actualizar lista de categorías
+                const nombresCategorias = await CategoriasService.getAllCategories()
+                console.log(medicamentosData);
+
+                if(cont==0){
+                    listaCategoriaMedicamentos=nombresCategorias.map((nombresCategorias)=>nombresCategorias.Nombre_Categoria );
+                    idListaCategoriaMedicamentos=nombresCategorias.map((nombresCategorias)=>nombresCategorias.id);
+                    cont++;
+                }
+                
+                    console.log("No Entré");
+                    
+                
+                console.log(listaCategoriaMedicamentos);
+                console.log(medicamentosData);
+
+                
                 const medicamentosWithId = medicamentosData.map((medicamento) => ({
                     ...medicamento,
                     medId: medicamento.idmed,
@@ -569,7 +607,7 @@ const Medicamentos = () => {
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
-    const categoriaSelected = medicamento.categoria;
+    const categoriaSelected = medicamento.Nombre_Categoria;
     const viaSelected = medicamento.via;
 
 
@@ -588,7 +626,7 @@ const Medicamentos = () => {
                             getRowId={(row) => row.medId}
                             columns={[
                                 { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
-                                { field: 'categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
+                                { field: 'Nombre_Categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
                                 { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
                                 { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
                                 { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
@@ -628,7 +666,7 @@ const Medicamentos = () => {
                     </ThemeProvider>
 
                     <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }} >
-
+                            
                         <div className='modalContainer modalMedicamentos'>
 
                             <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
@@ -648,17 +686,18 @@ const Medicamentos = () => {
                             >
                                 <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required />
                                 <Autocomplete
+                                
                                     disablePortal
                                     id="categoria"
                                     required
+                                    
                                     options={listaCategoriaMedicamentos}
-                                    onChange={(event, newValue) =>
-                                        setMedicamento({
-                                            ...medicamento,
-                                            categoria: newValue
-                                        })
-
-                                    }
+                                    
+                                    onChange={(event,newValue)=>
+                                        setCategoriasID(newValue)
+                                    } 
+                                        
+                                   
                                     renderInput={(params) => <TextField {...params} label="Categoria" required />}
                                 />
                                 <Grid container spacing={2}>
@@ -748,12 +787,10 @@ const Medicamentos = () => {
 
 
                                             options={listaCategoriaMedicamentos}
-                                            onChange={(event, newValue) =>
-                                                setMedicamento({
-                                                    ...medicamento,
-                                                    categoria: newValue
-                                                })
-                                            }
+                                            onChange={(event,newValue)=>
+                                                setCategoriasID(newValue)
+                                            } 
+                                                
                                             renderInput={(params) => <TextField {...params} label="Categoria" required />}
                                         />
                                         <Grid container spacing={2}>
@@ -821,7 +858,7 @@ const Medicamentos = () => {
                     open={openFicha}
                     setOpenPopup={setOpenFicha}
                     setNombreF={nombre}
-                    setCategoriaF={categoria}
+                    setCategoriaF={id_categoria}
                     setPrecioUnitarioF={precioUnitario}
                     setStockF={stock}
                     setImagenF={imagen}
