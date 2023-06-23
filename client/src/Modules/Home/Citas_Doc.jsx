@@ -1,38 +1,38 @@
 import React, { useState } from 'react';
-import moment from 'moment';
 import '../HojaDeEstilos/Citas.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-
-import Topbar from './Topbar';
-import Footer from './Footer';
+import NavBar from '../NavBar';
 
 
-const Citas = () => {
 
 
+const Citas_Doc = () => {
+
+
+  const hiddenDays = [1, 7];
 
   return (
-    <div className="App">
-    <header>
-      <Topbar />
-      <h1 className="header">NUESTRA DISPONIBILIDAD</h1>
-    </header>
 
-    <main>
+
+    <div className="App">
+
+      <NavBar />
+      <h1 className="header">Agendar Cita</h1>
+      <main>
         <div className="cal-container">
           <div className="cal">
             <FullCalendar
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
-                right: 'timeGridWeek,timeGridDay',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay',
               }}
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="timeGridWeek"
+              initialView="dayGridMonth"
               weekends={true}
               selectable={true}
               selectMirror={true}
@@ -44,12 +44,13 @@ const Citas = () => {
         </div>
       </main>
 
-    <footer>
-      <Footer />
-    </footer>
-  </div>
+      <footer>
+
+      </footer>
+    </div>
+
   );
 
 };
 
-export default Citas;
+export default Citas_Doc;
