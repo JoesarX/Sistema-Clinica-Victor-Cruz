@@ -225,6 +225,7 @@ const Medicamentos = () => {
             setMedicamentoss([medicamentoData]);
             setMedicamento(medicamentoData);
             console.log(medicamentoData)
+            console.log("medicamento: " + medicamento)
         } catch (error) {
             console.log(error);
         }
