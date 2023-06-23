@@ -10,6 +10,7 @@ import esLocale from '@fullcalendar/core/locales/es';
 import Topbar from './Topbar';
 import Footer from './Footer';
 
+import CitasService from '../../Services/CitasService';
 
 const Citas = () => {
 
