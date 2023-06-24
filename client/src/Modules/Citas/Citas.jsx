@@ -1,36 +1,29 @@
 import React, { useState } from 'react';
-import '../HojaDeEstilos/Citas.css';
+import moment from 'moment';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
-import NavBar from '../NavBar';
-import Footer from './Footer';
 
+import Topbar from '../Home/Topbar';
+import Footer from '../Home/Footer';
 
-//GRID
-import { Box, Button } from '@mui/material'
-import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
+import CitasService from '../../Services/CitasService';
+import './CitasStyle.css';
+import '../HojaDeEstilos/CrudStyles.css';
 
+const Citas = () => {
 
-
-const Citas_Doc = () => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const toggleModal = () => {
-    setIsAddModalOpen(!isAddModalOpen);
-    setIsSubmitting(false);
-
-  };
-
-
-  const hiddenDays = [1, 7];
+  const hiddenDays = [0, 6, 5];
 
   return (
     <div className="App">
-      <NavBar />
-      
+      <header>
+        <Topbar />
+        <h1 className="header">NUESTRA DISPONIBILIDAD</h1>
+      </header>
+
       <main>
         <div className="cal-container">
           <div className="cal">
@@ -38,11 +31,10 @@ const Citas_Doc = () => {
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                
+                right: 'timeGridWeek,timeGridDay',
               }}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
+              plugins={[timeGridPlugin, interactionPlugin]}
+              initialView="timeGridWeek"
               locale={esLocale}
               hiddenDays={hiddenDays}
               slotDuration="00:30:00"
@@ -62,11 +54,15 @@ const Citas_Doc = () => {
             />
           </div>
         </div>
-        
       </main>
-      <Footer />
+
+
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
+
 };
 
-export default Citas_Doc;
+export default Citas;

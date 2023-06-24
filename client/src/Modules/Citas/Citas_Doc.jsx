@@ -1,36 +1,22 @@
 import React, { useState } from 'react';
-import '../HojaDeEstilos/Citas.css';
+import './CitasStyle.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import NavBar from '../NavBar';
-import Footer from './Footer';
+
+import Footer from '../Home/Footer';
 
 
-//GRID
-import { Box, Button } from '@mui/material'
-import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
-
-
-
-const Citas_Doc = () => {
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const toggleModal = () => {
-    setIsAddModalOpen(!isAddModalOpen);
-    setIsSubmitting(false);
-
-  };
-
-
+const Citas = () => {
   const hiddenDays = [1, 7];
 
   return (
     <div className="App">
       <NavBar />
-      
+      <h1 className="header">Agendar Cita</h1>
       <main>
         <div className="cal-container">
           <div className="cal">
@@ -62,11 +48,9 @@ const Citas_Doc = () => {
             />
           </div>
         </div>
-        
       </main>
       <Footer />
     </div>
   );
 };
-
-export default Citas_Doc;
+export default Citas;
