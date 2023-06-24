@@ -6,13 +6,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 import NavBar from '../NavBar';
+import Footer from './Footer';
 
 
 //GRID
 import { Box, Button } from '@mui/material'
 import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
-
-
 
 
 
