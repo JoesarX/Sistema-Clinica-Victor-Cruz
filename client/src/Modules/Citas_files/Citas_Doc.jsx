@@ -25,7 +25,7 @@ const Citas_Doc = () => {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                
+
               }}
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
@@ -49,7 +49,10 @@ const Citas_Doc = () => {
           </div>
         </div>
       </main>
-      <Footer />
+
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 };
