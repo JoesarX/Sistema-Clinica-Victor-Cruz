@@ -9,22 +9,48 @@ import NavBar from '../NavBar';
 import Footer from '../Home/Footer';
 import CitasService from '../../Services/CitasService';
 
+
+
 const Citas_Doc = () => {
   const hiddenDays = [1, 7];
   const [citas, setCitas] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(true);
 
   useEffect(() => {
-    obtenerCitas();
-  }, []);
+    // Validación login
+    
 
-  const obtenerCitas = async () => {
-    try {
-      const citasData = await CitasService.getAllCitas();
-      setCitas(citasData);
-    } catch (error) {
-      console.error('Error al obtener las citas:', error);
+    const fetchAllCitas = async () => {
+        try {
+            const citasData = await CitasService.getAllCitas();
+            const citasWithId = citasData.map((cita) => ({
+                ...cita,
+                medId: cita.idmed,
+            }));
+
+            setCitas(citasWithId);
+      
+        } catch (error) {
+            // Handle error if any
+            console.log("Error fetching citas:", error);
+        }
+    };
+    // Update tabla
+    fetchAllCitas();
+
+    if (isSubmitting) {
+        fetchAllCitas();
+        setIsSubmitting(false);
+        console.log("TEST DE CITAS API AAAAAAAAAAAAAAAAAAAAAAA")
     }
-  };
+
+    // Clean up the event listener on component unmount
+    return () => {
+      setIsSubmitting(false);
+    };
+}, [isSubmitting]);
+
+  console.log("Hola"+citas);
 
   return (
     <div className="App">
