@@ -53,24 +53,33 @@ const categoriesRouter = (pool) => {
     router.put("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const { id } = req.params;
-            const {
-                Nombre_Categoria,
-                
-            } = req.body;
+            const {id}  = req.params;
+           // console.log(id);
+           const {
+            editedValue
+           }=req.body;
             const q =
                 "UPDATE categorias SET Nombre_Categoria = ? WHERE ID = ?";
-            console.log(req.categoria + " " + req.id);
+          
+            console.log(req.body[1] + " " + req.body[0]);
+           // console.log(req);
             const values = [
-                Nombre_Categoria,
-                id
+                req.body[0],
+                req.body[1]
+                
             ];
-    
-            await connection.query(q, values);
+            
+           /* console.log(values);
+            console.log(values[0]);
+            console.log(values[1]);*/
+            console.log("Esto es params: "+req.params);
+            console.log("Esto es values: "+values);
+           await connection.query(q, values);
             connection.release();
+            res.json("Categoría actualizado exitosamente!");
           
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
