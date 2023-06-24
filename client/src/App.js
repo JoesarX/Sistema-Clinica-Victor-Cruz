@@ -17,6 +17,7 @@ import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
 import Medicamentos from "./Modules/Medicamentos/Medicamentos";
+import CitasTabla from "./Modules/CitasTabla/CitasTabla";
 
 import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
@@ -43,8 +44,8 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contactanos" element={<Contactanos />} />
 
+          <Route path="/citas_tabla" element={<CitasTabla/>}/>
           {/* <Route path="/dashboard" element={<Dashboard/>}/> */}
-
           <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
 
         </Routes>
