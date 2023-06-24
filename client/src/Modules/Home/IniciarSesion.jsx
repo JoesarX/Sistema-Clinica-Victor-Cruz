@@ -110,6 +110,7 @@ const IniciarSesion = () => {
                             localStorage.setItem("100", true);
                             alert("Bienvenido!");
                             navigate("/expedientes");
+                            handleSignIn('normal');
                             resolve();
                             
                         }
@@ -128,10 +129,12 @@ const IniciarSesion = () => {
                     alert("Bienvenido Doctor!");
                     localStorage.setItem("400", true);
                     navigate("/expedientes");
+                    handleSignIn('master');
                 } else if (await loginAdmin(email, password) === true) {
                     alert("Bienvenido");
                     localStorage.setItem("300", true);
                     navigate("/expedientes");
+                    handleSignIn('administrador');
                 } else {
                    
 
