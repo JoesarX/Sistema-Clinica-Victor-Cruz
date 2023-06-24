@@ -88,6 +88,7 @@ const IniciarSesion = () => {
             console.log(passUser)
             var flag = false;
             localStorage.setItem("100", true);
+            handleSignIn('normal');
             navigate("/userpage");
             if (passUser === "") {
                 console.log("Not found!")
@@ -107,7 +108,8 @@ const IniciarSesion = () => {
                             console.log(flag)
                             localStorage.setItem("300", true);
                             alert("Bienvenido!");
-                            navigate("/expedientes");
+                            handleSignIn('normal');
+                            navigate("/userpage");
                             resolve();
                         }
                     })
@@ -122,9 +124,11 @@ const IniciarSesion = () => {
                 } else if (await loginMaster(email, password) === true) {
                     alert("Bienvenido Doctor!");
                     localStorage.setItem("400", true);
+                    handleSignIn('master');
                     navigate("/expedientes");
                 } else if (await loginAdmin(email, password) === true) {
                     alert("Bienvenido");
+                    handleSignIn('administrador');
                     localStorage.setItem("300", true);
                     navigate("/expedientes");
                 } else {

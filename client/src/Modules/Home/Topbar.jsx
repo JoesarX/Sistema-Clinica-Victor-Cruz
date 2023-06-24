@@ -52,7 +52,7 @@ const Topbar = () => {
         navigate('/administrador');
     };
     const handlePerfil = () => {
-        // navigate('/dashboard');
+        navigate('/userpage');
     };
     const handleVerDashboard = () => {
         // navigate('/dashboard');

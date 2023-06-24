@@ -3,11 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/LandingPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
-import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
-import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
-import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
-import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from '../Dashboard/EditExpedienteDashboardModal.jsx';
 import TopBar from '../Home/Topbar.jsx';
@@ -114,16 +109,6 @@ const LandingPage = () => {
         address: '',
     });
 
-
-    function Signout() {
-        localStorage.clear();
-        navigate('/');
-    }
-
-    function enviar_A_Crud() {
-        navigate('/administrador');
-    }
-
     const fetchExpediente2 = async () => {
         try {
             const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
@@ -197,135 +182,6 @@ const LandingPage = () => {
         fetchExpediente();
     }, [id]);
 
-    {/* Editar Button  */ }
-
-    const [isEditingLabel, setIsEditingLabel] = useState(false);
-    const [isChangesSaved, setIsChangesSaved] = useState(false);
-
-    const [isEditingLabel2, setIsEditingLabel2] = useState(false);
-    const [isChangesSaved2, setIsChangesSaved2] = useState(false);
-
-    const [isEditingLabel3, setIsEditingLabel3] = useState(false);
-    const [isChangesSaved3, setIsChangesSaved3] = useState(false);
-
-
-    const handleLabelEdit = () => {
-        setIsEditingLabel(true);
-        setIsChangesSaved(false);
-    };
-
-    const handleLabelEdit2 = () => {
-        setIsEditingLabel2(true);
-        setIsChangesSaved2(false);
-    };
-
-    const handleLabelEdit3 = () => {
-        setIsEditingLabel3(true);
-        setIsChangesSaved3(false);
-    };
-
-    const validacionesSignos = () => {
-        if (patient.altura > 280) {
-            alert("La altura ingresada no es valida");
-            return false;
-        }
-        if (patient.peso > 250) {
-            alert("el peso ingresado no es valido");
-        }
-        if (patient.temperatura > 43) {
-            alert("La temperatura ingresada es invalida");
-        }
-
-        const regexFinal = /\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
-
-        if (!regexFinal.test(patient.presion)) {
-            alert("El ritmo cardiaco ingresado es invalido");
-            return false;
-        }
-        if (patient.presion)
-
-            return true;
-
-    }
-
-    const handleSaveChangesSignos = () => {
-        console.log(patient.idpaciente)
-
-
-        const editExpediente = async () => {
-            if (validacionesSignos()) {
-                console.log(patient)
-                await ExpedientesService.editExpedientesDashboard(patient.idpaciente, patient);
-                alert('Expediente Editado');
-                setIsEditingLabel(false);
-                setIsChangesSaved(true);
-            }
-        };
-        console.log(patient)
-        editExpediente();
-    };
-
-    const handleSaveChanges2 = () => {
-        setIsEditingLabel2(false);
-        setIsChangesSaved2(true);
-    };
-
-    const handleSaveChanges3 = () => {
-        setIsEditingLabel3(false);
-        setIsChangesSaved3(true);
-    };
-
-    const hanldeSignosLabelChange = (e) => {
-        const { name, value } = e.target;
-        const wholeNumberRegex = /^\d*$/
-        const decimalRegex = /^\d*\.?\d*$/
-        const fractionRegex = /(?:[1-9][0-9]*|0)\/[1-9][0-9]*/g
-        // setPatient((prevPatient) => ({
-        //     ...prevPatient,
-        //     [name]: value,
-        // }));
-        if (name === 'altura') {
-            if (decimalRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'peso') {
-            if (decimalRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'temperatura') {
-            if (decimalRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'ritmo_cardiaco') {
-            if (wholeNumberRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'presion') {
-            if (true) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        }
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setIsEditingLabel(false);
-    };
 
     const handleOpenEditModal = () => {
         setSelectedExpediente(expediente);
@@ -340,19 +196,15 @@ const LandingPage = () => {
         fetchExpediente2();
     };
 
-    const handleCancelarEditSignos = () => {
-        setIsEditingLabel(false);
-        fetchExpediente2();
-    };
 
     return (
         <div className='scrollable-page'>
             <TopBar />
-            <div className='contenido'>
-                <div className='patient-section'>
-                    <div className='profile-picture-and-edit'>
-                        <div className='perfil'>
-                            <FontAwesomeIcon icon={faUser} className='iconoUser' />
+            <div className='contenidos'>
+                <div className='patient-sections'>
+                    <div className='profile-picture-and-edits'>
+                        <div className='perfile'>
+                            <FontAwesomeIcon icon={faUser} className='iconoUsers' />
                         </div>
                         <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
                         {isEditModalOpen && (
@@ -362,17 +214,24 @@ const LandingPage = () => {
                             />
                         )}
                     </div>
-                    <h2 className="nombre"> Nombre</h2>
-                    <div className='patient-email-container'>
-                        Correo
+                    <div className='infoP'>
+                        <h2 className="nombres">{patient.nombre}</h2>
+                        <p className='smallTexts'>Correo:  <span style={{color: '#464646',marginLeft: '10px'}}>{patient.correo}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Numero de ID: <span style={{color: '#464646',marginLeft: '10px'}}>{patient.numid}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Sexo: <span style={{color: '#464646', marginLeft: '10px'}}>{patient.sexo}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Fecha Nacimiento: <span style={{color: '#464646',marginLeft: '10px'}}>{patient.fecha_nacimiento}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Edad: <span style={{color: '#464646',marginLeft: '10px'}}>{patient.edad}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Estado Civil: <span style={{color: '#464646',marginLeft: '10px'}}>{patient.estado_civil}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Ocupacion: <span style={{color: '#464646',marginLeft: '10px'}}>{patient.ocupacion}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Direccion: <span style={{color: '#464646',marginLeft: '10px'}}>{patient.address}</span></p>
                     </div>
-                    <p className="smallText">Numero de ID</p>
-                    <p className="smallText">Sexo</p>
-                    <p className="smallText">Fecha Nacimiento</p>
-                    <p className="smallText">Edad</p>
-                    <p className="smallText">Estado Civil</p>
-                    <p className="smallText">Ocupacion</p>
-                    <p className="smallText">Direccion</p>
                 </div>
                 <div className="appointments-section">
                     <button className='large-button schedule-date'>
