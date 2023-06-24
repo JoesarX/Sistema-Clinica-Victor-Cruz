@@ -7,8 +7,8 @@ import {
   Routes,
 } from "react-router-dom";
 import Home from "./Modules/Home/Home";
-import Citas from "./Modules/Citas/Citas";
-import Citas_Doc from "./Modules/Citas/Citas_Doc";
+import Citas from "./Modules/Citas_files/Citas";
+import Citas_Doc from "./Modules/Citas_files/Citas_Doc";
 import IniciarSesion from "./Modules/Home/IniciarSesion";
 import Servicios from "./Modules/Home/Servicios";
 import Acercade from "./Modules/Home/Acercade";
