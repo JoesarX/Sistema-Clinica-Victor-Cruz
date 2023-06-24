@@ -10,9 +10,7 @@
   footer {
     margin-top: 2rem; /* Adjust the margin as needed */
   }
-  
-  
-    
+
  /*para los elementos dentro de HeadertoolBar*/
   .fc-toolbar-center button {
     margin-right: 2%;
@@ -24,7 +22,10 @@
     margin-right: 3%;
   }
   
-
+  col {
+    width: 0px;
+    display: table-column;
+  }
   
   .time-slots {
     display: flex;

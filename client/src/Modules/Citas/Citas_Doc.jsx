@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
-import moment from 'moment';
-import '../HojaDeEstilos/Citas.css';
+import './CitasStyle.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
+import NavBar from '../NavBar';
 
-import Topbar from './Topbar';
-import Footer from './Footer';
+import Footer from '../Home/Footer';
 
-import CitasService from '../../Services/CitasService';
 
 const Citas = () => {
-
-  const hiddenDays = [0, 6, 5];
+  const hiddenDays = [1, 7];
 
   return (
     <div className="App">
-      <header>
-        <Topbar />
-        <h1 className="header">NUESTRA DISPONIBILIDAD</h1>
-      </header>
-
+      <NavBar />
+      <h1 className="header">Agendar Cita</h1>
       <main>
         <div className="cal-container">
           <div className="cal">
@@ -30,10 +24,11 @@ const Citas = () => {
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
-                right: 'timeGridWeek,timeGridDay',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                
               }}
-              plugins={[timeGridPlugin, interactionPlugin]}
-              initialView="timeGridWeek"
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              initialView="dayGridMonth"
               locale={esLocale}
               hiddenDays={hiddenDays}
               slotDuration="00:30:00"
@@ -54,14 +49,8 @@ const Citas = () => {
           </div>
         </div>
       </main>
-
-
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
-
 };
-
 export default Citas;
