@@ -88,7 +88,7 @@ const NavBar = () => {
                                 </ListItemButton>
                             </ListItem>
                         </Link>
-                        <Link to="/cita_expediente" style={{ textDecoration: 'none', color: "white" }}>
+                        <Link to="/citas_tabla" style={{ textDecoration: 'none', color: "white" }}>
                             <ListItem disablePadding>
                                 <ListItemButton>
                                     <ListItemIcon sx={{ color: "white" }}><CalendarMonth /></ListItemIcon>

@@ -13,7 +13,7 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
+import { PersonAdd, Delete, Edit, Medication, CalendarMonth } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -112,6 +112,17 @@ const Citas = () => {
         hora_final: true,
     });
 
+
+
+    //Appointments
+    
+    const handleOnClickAgendarCita = () => {
+        navigate("/citas_tabla/citas_expedientes")
+    };
+
+    //
+
+
     const CustomToolbar = () => {
         const theme = useTheme();
         const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -146,6 +157,21 @@ const Citas = () => {
                 </div>
 
                 <div>
+                    <Button
+                        onClick={handleOnClickAgendarCita}
+                        startIcon={<CalendarMonth />}
+                        style={{
+                            backgroundColor: 'rgb(27, 96, 241)',
+                            color: 'white',
+                            borderRadius: '10px',
+                            paddingLeft: '15px',
+                            paddingRight: '15px',
+                            marginRight: '15px',
+                        }}
+                    >
+                        Ver Calendario
+                    </Button>
+
                     <Button
                         onClick={toggleModal}
                         startIcon={<Medication />}
