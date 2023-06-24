@@ -10,7 +10,7 @@ import NavBar from '../NavBar';
 import Footer from '../Home/Footer';
 
 
-const Citas = () => {
+const Citas_Doc = () => {
   const hiddenDays = [1, 7];
 
   return (
@@ -53,4 +53,4 @@ const Citas = () => {
     </div>
   );
 };
-export default Citas;
+export default Citas_Doc;
