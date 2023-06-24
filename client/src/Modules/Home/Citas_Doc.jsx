@@ -30,19 +30,7 @@ const Citas_Doc = () => {
   return (
     <div className="App">
       <NavBar />
-      <Button
-        onClick={toggleModal}
-        startIcon={<PersonAdd />}
-        style={{
-          backgroundColor: 'rgb(27, 96, 241)',
-          color: 'white',
-          borderRadius: '10px',
-          paddingLeft: '10px',
-          paddingRight: '10px',
-        }}
-      >
-        Agregar Cita
-      </Button>
+      
       <main>
         <div className="cal-container">
           <div className="cal">
