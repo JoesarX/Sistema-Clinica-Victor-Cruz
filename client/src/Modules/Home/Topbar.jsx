@@ -38,7 +38,7 @@ const Topbar = () => {
     const handleAcercade = () => {
         navigate('/acerca-de');
     };
-//====Funciones para los dropdown menus ===============================================================
+    //====Funciones para los dropdown menus ===============================================================
     const handleSignOutClick = () => {
         handleSignOut();
     }
@@ -97,6 +97,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
                                         </a>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <a className="dropdown-item" onClick={handlePerfil}>VER PERFIL</a>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+const API_URL = 'http://localhost:8000';
+//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllExpedientes = async () => {
     try {
@@ -24,6 +24,17 @@ export const getOneExpediente = async (id) => {
     }
 };
 
+export const getOneUser = async (email) => {
+    console.log("este es el email en landing page " + email);
+    try {
+        const res = await axios.get(`${API_URL}/`, { params: { email } });
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch landing page');
+    }
+};
+
 export const getOneExpedienteDashboard = async (id) => {
     console.log(id);
     try {
@@ -35,13 +46,13 @@ export const getOneExpedienteDashboard = async (id) => {
     }
 };
 
-export const editExpedientesDashboard = async (id,expediente) => {
+export const editExpedientesDashboard = async (id, expediente) => {
     try {
         console.log("editExpedientes Service");
         console.log(id);
         console.log(expediente);
-        await axios.put(`${API_URL}/expedientes/dashboard/${id}`,expediente);
-       
+        await axios.put(`${API_URL}/expedientes/dashboard/${id}`, expediente);
+
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit expediente');
@@ -58,13 +69,13 @@ export const postExpedientes = async (expediente) => {
     }
 };
 
-export const editExpedientes = async (id,expediente) => {
+export const editExpedientes = async (id, expediente) => {
     try {
         console.log("editExpedientes Service");
         console.log(id);
         console.log(expediente);
-        await axios.put(`${API_URL}/expedientes/${id}`,expediente);
-       
+        await axios.put(`${API_URL}/expedientes/${id}`, expediente);
+
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit expediente');
@@ -74,21 +85,22 @@ export const editExpedientes = async (id,expediente) => {
 export const deleteExpedientes = async (id) => {
     try {
         await axios.delete(`${API_URL}/expedientes/${id}`);
-        
+
     } catch (error) {
         console.log(error);
         throw new Error('Failed to delete expediente');
     }
 };
 
-const Services ={
+const Services = {
     getAllExpedientes,
     postExpedientes,
     getOneExpediente,
     getOneExpedienteDashboard,
     deleteExpedientes,
     editExpedientes,
-    editExpedientesDashboard
+    editExpedientesDashboard,
+    getOneUser
     // Other functions
 };
 

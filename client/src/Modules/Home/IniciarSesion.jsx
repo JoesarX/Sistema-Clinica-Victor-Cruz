@@ -11,7 +11,6 @@ import Footer from './Footer';
 import Topbar from './Topbar'
 import bcrypt from 'bcryptjs';
 
-
 const IniciarSesion = () => {
     const yaEsta = localStorage.getItem("400");
     const { isLoggedIn, handleSignIn } = useContext(AuthContext);
@@ -107,6 +106,7 @@ const IniciarSesion = () => {
                             flag = true;
                             console.log(flag)
                             localStorage.setItem("300", true);
+                            localStorage.setItem("correo", email);
                             alert("Bienvenido!");
                             handleSignIn('normal');
                             navigate("/userpage");
@@ -124,12 +124,14 @@ const IniciarSesion = () => {
                 } else if (await loginMaster(email, password) === true) {
                     alert("Bienvenido Doctor!");
                     localStorage.setItem("400", true);
+                    localStorage.setItem("correo", email);
                     handleSignIn('master');
                     navigate("/expedientes");
                 } else if (await loginAdmin(email, password) === true) {
                     alert("Bienvenido");
                     handleSignIn('administrador');
                     localStorage.setItem("300", true);
+                    localStorage.setItem("correo", email);
                     navigate("/expedientes");
                 } else {
                     alert("Email o contraseña incorrecta!");

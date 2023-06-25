@@ -1,7 +1,6 @@
 import express from "express";
 import mysql from "mysql2/promise";
 import cors from "cors";
-
 import expedientesRouter from "./routes/expedientes.js"
 import usuariosRouter from "./routes/usuarios.js"
 import adminRouter from "./routes/usuarios_admin.js"
