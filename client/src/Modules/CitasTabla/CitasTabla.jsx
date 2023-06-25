@@ -202,19 +202,6 @@ const Citas = () => {
         correouser: '',
         hora_inicio: '',
         hora_final: '',
-        altura:null,
-        peso:null,  
-        temperatura:null,
-        ritmo_cardiaco:null,
-        presion:null,
-        
-    });
-    const [Expedientess, setExpedientess] = useState({
-        idpaciente: '',
-        nombre: '',
-        edad: '',
-        
-        
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -229,63 +216,32 @@ const Citas = () => {
 
     };
     const [id, setID] = useState(null);
-    const [citaD, setCitaD] = useState([]);
-    const [selectMail, setMail] = useState([]);
     const toggleModal2 = async (id) => {
         setID(id);
         console.log(id);
 
         try {
             const citaData = await CitasService.getOneCita(id);
-            console.log(citaData)
 
             // Search for the object that corresponds to idpaciente
-            const selectedIdPaciente2 = Expedientes.find((expediente) => expediente.idpaciente === citaData.idpaciente);
-            console.log(selectedIdPaciente2);
-            setExpedientess(selectedIdPaciente2)
-            console.log(Expedientess)
-            
-            
+            const selectedIdPaciente = Expedientes.find((expediente) => expediente.idPaciente === citaData.idpaciente);
 
             // Search for the object that corresponds to correouser
-            const selectedCorreoUser2 = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
-            console.log(selectedCorreoUser2)
-            setMail(selectedCorreoUser2)
-            setCitaD([citaData])
-            setCita(citaData);
-            
-         /*  setCita({
+            const selectedCorreoUser = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
+
+            setCita({
                 ...citaData,
-                idpaciente: selectedIdPaciente2 || "", // Set the selected object or an empty string if not found
-                correouser: selectedCorreoUser2 || "" // Set the selected object or an empty string if not found
-            });*/
-            cita.idcita = citaData.idcita;
-
-            cita.nombre_persona = citaData.nombre_persona;
-            cita.estado = citaData.estado;
-
-            cita.idpaciente = citaData.idpaciente;
-            cita.correouser = citaData.correouser;
-            cita.hora_inicio = citaData.hora_inicio;
-            cita.hora_final = citaData.hora_final;
-            cita.altura = citaData.altura;
-            cita.peso = citaData.peso;
-            cita.temperatura = citaData.temperatura;
-            cita.ritmo_cardiaco = citaData.ritmo_cardiaco;
-            cita.presion = citaData.presion;
-
-
-            
+                idpaciente: selectedIdPaciente || "", // Set the selected object or an empty string if not found
+                correouser: selectedCorreoUser || "" // Set the selected object or an empty string if not found
+            });
 
             console.log("cita:", citaData);
-            console.log("cita2:", cita);
         } catch (error) {
             console.log(error);
         }
 
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
-        console.log(cita)
     };
 
     const handleModalFieldChange = (e) => {
@@ -418,7 +374,6 @@ const Citas = () => {
 
         e.preventDefault();
         try {
-            console.log(cita);
             console.log("test");
             const selDate2 = new Date(cita.hora_final)
 
@@ -479,11 +434,11 @@ const Citas = () => {
                 console.log("CORREO:" + cita.correouser);
                 console.log("HORA INICIO:" + cita.hora_inicio);
                 console.log("HORA FINAL:" + cita.hora_final);
-                console.log(cita);
+
                 await CitasService.editCitas(id, cita);
 
                 console.log('SIUUU');
-                alert('Cita Editada');
+
                 toggleModal22();
                 window.location.reload();
                 cleanCita();
@@ -522,7 +477,17 @@ const Citas = () => {
             alert('Debe agregar un estado valido.');
             return false;
         }
-       
+        //   else if (!estado.replace(/\s/g, '').length) {
+        //     alert('El estado no puede contener solo espacios.');
+        //     return false
+        // } else if (estado.charAt(0) === ' ') {
+        //     alert('El estado no puede iniciar con un espacio.');
+        //     return false
+        // } else if (estado.charAt(estado.length - 1) === ' ') {
+        //     alert('El estado no puede terminar con un espacio.');
+        //     return false
+
+        // }
 
         if (hora_inicio === null || hora_inicio === '') {
             alert('Debe agregar la hora de inicio a la cita');
@@ -571,9 +536,10 @@ const Citas = () => {
 
                 const expedientesData = await ExpedientesService.getAllExpedientes();
                 const expedientesFormatted = expedientesData.map((expediente) => ({
-                    idpaciente: expediente.idpaciente,
+                    idPaciente: expediente.idpaciente,
                     nombre: expediente.nombre,
-                    edad: expediente.edad, 
+                    edad: expediente.edad, // Assuming 'age' property exists in 'expediente' object
+                    // Add other relevant properties from the 'Expedientes' table
                 }));
 
 
@@ -857,33 +823,32 @@ const Citas = () => {
                                         renderInput={(params) => <TextField {...params} label="Estado" required />}
                                     />
                                     <Autocomplete
-                                        value={Expedientess}
+                                        value={selectedIdPaciente}
                                         disablePortal
                                         id="idpaciente"
                                         options={Expedientes}
                                         getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
-                                        onChange={(event, newValue) =>{
-                                            console.log(cita)
-                                            console.log("ID Paciente Value:", newValue);
-                                            console.log("ID Paciente Type:", newValue.idpaciente);
-                                            console.log(cita.nombre_persona);
-                                            cita.idpaciente = newValue.idpaciente;
-                                            console.log(cita);
-                                        }}
+                                        onChange={(event, newValue) =>
+                                            setCita({
+                                                ...cita,
+                                                idpaciente: newValue,
+                                            })
+                                        }
                                         renderInput={(params) => <TextField {...params} label="ID Paciente" required />}
                                     />
                                     <Autocomplete
-                                        value={selectMail}
+                                        value={selectedCorreoUser}
                                         disablePortal
                                         id="correouser"
                                         required
                                         options={Usuarios}
                                         getOptionLabel={(opcion) => opcion.correouser}
-                                        onChange={(event, newValue) =>{
-                                            
-                                            
-                                            cita.correouser = newValue.correouser;
-                                        }}
+                                        onChange={(event, newValue) =>
+                                            setCita({
+                                                ...cita,
+                                                correouser: newValue, // Handle null/undefined case
+                                            })
+                                        }
                                         renderInput={(params) => <TextField {...params} label="Correo User" required />}
                                     />
 
