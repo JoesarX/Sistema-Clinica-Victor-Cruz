@@ -12,6 +12,7 @@ const expedientesRouter = (pool) => {
             const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion FROM expedientes"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(rows);
             res.json(rows);
             console.log("Get all Expedientes call successful");
         } catch (err) {
@@ -20,16 +21,27 @@ const expedientesRouter = (pool) => {
         }
     });
 
-    router.get("/", async (req, res) => {
+    router.get("/userpage/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
             //const q = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion FROM expedientes WHERE correo = `" + { req } + "`";
-            const q = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion FROM expedientes WHERE correo = '" + req + "'";
+            const email = req.query.email[0];
+           
+            console.log("PORFAVOOOOOR: "+email);
+            
+            const q = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion FROM expedientes WHERE correo = ?";
             //await connection.query(q);
-            const result = await connection.query(q);
-            //console.log("resultado de query " + result[0]);
-            connection.release();
-            res.json(result[0]);
+            
+             const result = await connection.query(q,[email]);
+             connection.release();
+             
+              
+            res.json(result);
+            console.log("resultado de query " + result);
+            
+            
+            
+            //res.json(result);
             //connection.release();
             //res.json("Verificando");
         } catch (error) {

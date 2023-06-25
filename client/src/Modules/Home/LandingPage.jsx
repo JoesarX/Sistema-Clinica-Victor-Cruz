@@ -189,7 +189,8 @@ const LandingPage = () => {
             console.log("CORREO 2.0: " + correo);
 
             try {
-                const expedienteData = await ExpedientesService.getOneUser(correo);
+                const email = [correo,"AYUDA"];
+                const expedienteData = await ExpedientesService.getOneUser(email);
                 console.log("DATA OBTENIDA POR QUERY: " + expedienteData);
                 setExpediente(expedienteData);
                 setPatient(prevPatient => ({
