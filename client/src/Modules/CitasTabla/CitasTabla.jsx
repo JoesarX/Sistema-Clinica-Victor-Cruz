@@ -458,6 +458,7 @@ const Citas = () => {
 
     const validations = () => {
         const { nombre_persona, estado, hora_inicio, hora_final } = cita
+        var lettersRegex = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/;
         //Nombre validations
         if (nombre_persona === null || nombre_persona === '') {
             alert('Debe agregarle un nombre al cita')
@@ -471,6 +472,9 @@ const Citas = () => {
         } else if (nombre_persona.charAt(nombre_persona.length - 1) === ' ') {
             alert('El nombre no puede terminar con un espacio.');
             return false
+        }else if (!lettersRegex.test(nombre_persona)) {
+            alert('Nombre invalido, no puede tener numeros ni caracteres especiales como @#$%');
+            return false;
         }
 
         if (estado === null || estado === '') {
