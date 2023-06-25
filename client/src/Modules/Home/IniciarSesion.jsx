@@ -12,6 +12,7 @@ import Topbar from './Topbar'
 import bcrypt from 'bcryptjs';
 
 const IniciarSesion = () => {
+    
     const yaEsta = localStorage.getItem("400");
     const { isLoggedIn, handleSignIn } = useContext(AuthContext);
     const [email, setEmail] = useState('');
