@@ -7,8 +7,8 @@ import {
   Routes,
 } from "react-router-dom";
 import Home from "./Modules/Home/Home";
-import Citas from "./Modules/Home/Citas";
-import Citas_Doc from "./Modules/Home/Citas_Doc";
+import Citas from "./Modules/Citas_files/Citas";
+import Citas_Doc from "./Modules/Citas_files/Citas_Doc";
 import IniciarSesion from "./Modules/Home/IniciarSesion";
 import Servicios from "./Modules/Home/Servicios";
 import Acercade from "./Modules/Home/Acercade";
@@ -38,15 +38,14 @@ function App() {
           <Route path ="/administrador" element={<Administrador/>}/>
           <Route path="/expedientes" element={<Expedientes/>}/>
           <Route path="/expedientes/dashboard/:expedienteId" element={<Dashboard/>}/>
-          <Route path="/expedientes/dashboard/:expedienteId/cita_expediente" element={<Citas_Doc/>}/>
+          <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc/>}/>
           <Route path="/cita_expediente" element={<Citas_Doc/>}/>
-          <Route path="/citas_tabla" element={<CitasTabla/>}/>
           <Route path="/medicamentos" element={<Medicamentos/>}/>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contactanos" element={<Contactanos />} />
 
+          <Route path="/citas_tabla" element={<CitasTabla/>}/>
           {/* <Route path="/dashboard" element={<Dashboard/>}/> */}
-
           <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
 
         </Routes>

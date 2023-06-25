@@ -93,7 +93,10 @@ td {
 }
 
 td:nth-child(2) {
-    width: 100%;
+   
+    width: 40%;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
 }
 
 .topLeft {
@@ -355,7 +358,7 @@ td:nth-child(2) {
         flex-direction: column;
         width: 100%;
     }
-
+   
     td {
         display: flex;
         width: 100%;
