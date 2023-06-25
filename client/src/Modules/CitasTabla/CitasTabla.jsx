@@ -320,7 +320,7 @@ const Citas = () => {
             const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
 
             console.log(day3)
-            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1)) {
+            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1 )) {
                 alert('La hora final debe ser posterior a la hora de inicio');
             }
             else {
@@ -397,7 +397,7 @@ const Citas = () => {
             const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
 
             console.log(day3)
-            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1)) {
+            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1)) {
                 alert('La hora final debe ser posterior a la hora de inicio');
             }
             else {
