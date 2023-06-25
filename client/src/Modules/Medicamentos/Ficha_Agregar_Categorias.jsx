@@ -238,6 +238,7 @@ const Ficha_Agregar_Categorias = (props) => {
     const handleModalClose = () => {
         setOpenPopupC(false);
         setCategorias([]);
+        window.location.reload()
     };
 
     const getRowById = (apiRef, rowId) => {
