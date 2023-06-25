@@ -115,7 +115,7 @@ const Citas = () => {
 
 
     //Appointments
-    
+
     const handleOnClickAgendarCita = () => {
         navigate("/citas_tabla/citas_expedientes")
     };
@@ -320,8 +320,8 @@ const Citas = () => {
             const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
 
             console.log(day3)
-            if (day < day3 || month < month1 || year < year1 || hours < hours1) {
-                alert('La hora final no puede ser mayor a la hora de inicio')
+            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1)) {
+                alert('La hora final debe ser posterior a la hora de inicio');
             }
             else {
                 if (validations()) {
@@ -397,8 +397,8 @@ const Citas = () => {
             const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
 
             console.log(day3)
-            if (day < day3 || month < month1 || year < year1 || hours < hours1) {
-                alert('La hora final no puede ser mayor a la hora de inicio')
+            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1)) {
+                alert('La hora final debe ser posterior a la hora de inicio');
             }
             else {
                 if (validations()) {
@@ -458,6 +458,7 @@ const Citas = () => {
 
     const validations = () => {
         const { nombre_persona, estado, hora_inicio, hora_final } = cita
+        var lettersRegex = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/;
         //Nombre validations
         if (nombre_persona === null || nombre_persona === '') {
             alert('Debe agregarle un nombre al cita')
@@ -471,6 +472,9 @@ const Citas = () => {
         } else if (nombre_persona.charAt(nombre_persona.length - 1) === ' ') {
             alert('El nombre no puede terminar con un espacio.');
             return false
+        } else if (!lettersRegex.test(nombre_persona)) {
+            alert('Nombre invalido, no puede tener numeros ni caracteres especiales como @#$%');
+            return false;
         }
 
         if (estado === null || estado === '') {
@@ -823,7 +827,7 @@ const Citas = () => {
                                         renderInput={(params) => <TextField {...params} label="Estado" required />}
                                     />
                                     <Autocomplete
-                                        value={selectedIdPaciente}
+                                        value={selectedIdPaciente || null}
                                         disablePortal
                                         id="idpaciente"
                                         options={Expedientes}
@@ -834,10 +838,13 @@ const Citas = () => {
                                                 idpaciente: newValue,
                                             })
                                         }
-                                        renderInput={(params) => <TextField {...params} label="ID Paciente" required />}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="ID Paciente" required />
+                                        )}
                                     />
+
                                     <Autocomplete
-                                        value={selectedCorreoUser}
+                                        value={selectedCorreoUser || null}
                                         disablePortal
                                         id="correouser"
                                         required
@@ -846,10 +853,12 @@ const Citas = () => {
                                         onChange={(event, newValue) =>
                                             setCita({
                                                 ...cita,
-                                                correouser: newValue, // Handle null/undefined case
+                                                correouser: newValue,
                                             })
                                         }
-                                        renderInput={(params) => <TextField {...params} label="Correo User" required />}
+                                        renderInput={(params) => (
+                                            <TextField {...params} label="Correo User" required />
+                                        )}
                                     />
 
 
