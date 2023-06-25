@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/LandingPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
-import EditExpedienteDashboardModal from '../Dashboard/EditExpedienteDashboardModal.jsx';
+import EditUserInfo from '../Dashboard/EditUserInfo.jsx';
 import TopBar from '../Home/Topbar.jsx';
 import ExpedientesService from '../../Services/ExpedientesService';
 import UsuariosService from '../../Services/UsuariosService';
@@ -23,6 +23,7 @@ const LandingPage = () => {
     const id = url.substring(url.lastIndexOf('/') + 1);
     const correo = localStorage.getItem("correo");
     console.log("ESTE ES EL CORREO: " + correo);
+
     let contador = 0;
 
     const [expediente, setExpediente] = React.useState({
@@ -137,10 +138,11 @@ const LandingPage = () => {
     ]);
 
     const fetchExpediente2 = async () => {
-        console.log("CORREO 2.0: " + correo);
+        console.log("FETCH 2.0: " + correo);
         if (contador == 0) {
             try {
-                const expedienteData = await ExpedientesService.getOneUser(correo);
+                const email = [correo, "AYUDA"];
+                const expedienteData = await ExpedientesService.getOneUser(email);
                 console.log(expedienteData);
                 setExpediente(expedienteData);
                 setPatient(prevPatient => ({
@@ -189,7 +191,7 @@ const LandingPage = () => {
             console.log("CORREO 2.0: " + correo);
 
             try {
-                const email = [correo,"AYUDA"];
+                const email = [correo, "AYUDA"];
                 const expedienteData = await ExpedientesService.getOneUser(email);
                 console.log("DATA OBTENIDA POR QUERY: " + expedienteData);
                 setExpediente(expedienteData);
@@ -206,7 +208,6 @@ const LandingPage = () => {
                     estado_civil: expedienteData.estado_civil,
                     padecimientos: expedienteData.padecimientos,
                     ocupacion: expedienteData.ocupacion,
-                    direccion: expedienteData.direccion,
                     altura: expedienteData.altura,
                     peso: expedienteData.peso,
                     temperatura: expedienteData.temperatura,
@@ -241,7 +242,6 @@ const LandingPage = () => {
     const handleOpenEditModal = () => {
         setSelectedExpediente(expediente);
         console.log(expediente)
-
         setIsEditModalOpen(true);
     };
 
@@ -263,7 +263,7 @@ const LandingPage = () => {
                         </div>
                         <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
                         {isEditModalOpen && (
-                            <EditExpedienteDashboardModal
+                            <EditUserInfo
                                 expedientess={expediente}
                                 onClose={handleCloseEditModal}
                             />
@@ -274,6 +274,8 @@ const LandingPage = () => {
                         <p className='smallTexts'>Correo:  <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.correo}</span></p>
                         <hr className="linea" />
                         <p className="smallTexts">Numero de ID: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.numid}</span></p>
+                        <hr className="linea" />
+                        <p className="smallTexts">Numero de Teléfono: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.telefono}</span></p>
                         <hr className="linea" />
                         <p className="smallTexts">Sexo: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.sexo}</span></p>
                         <hr className="linea" />

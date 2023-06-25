@@ -29,14 +29,14 @@ export const getOneUser = async (email) => {
     console.log("este es el mensaje en landing page " + email[1]);
     try {
         const expedientes = await axios.get(`${API_URL}/expedientes/userpage/`, { params: { email } });
-        const expedientesInfo=expedientes.data;
-        console.log("Este es nombre : "+expedientesInfo.nombre);
-        console.log("Este es correo: "+expedientesInfo.correo);
-        console.log("Este es sexo : "+expedientesInfo.sexo);
-        console.log("Este es tel : "+expedientesInfo.telefono);
-        
-        console.log("Esta es la data de expedientes "+ expedientesInfo);
-        return expedientes.data;
+        const expedientesInfo = expedientes.data[0];
+        console.log("Este es nombre : " + expedientesInfo.nombre);
+        console.log("Este es correo: " + expedientesInfo.correo);
+        console.log("Este es sexo : " + expedientesInfo.sexo);
+        console.log("Este es tel : " + expedientesInfo.telefono);
+
+        console.log("Esta es la data de expedientes " + expedientesInfo);
+        return expedientes.data[0];
     } catch (error) {
         console.log(error);
         throw new Error('Failed to fetch landing page');

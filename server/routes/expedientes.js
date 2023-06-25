@@ -24,26 +24,13 @@ const expedientesRouter = (pool) => {
     router.get("/userpage/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            //const q = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion FROM expedientes WHERE correo = `" + { req } + "`";
             const email = req.query.email[0];
-           
-            console.log("PORFAVOOOOOR: "+email);
-            
+            console.log("PORFAVOOOOOR: " + email);
             const q = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion FROM expedientes WHERE correo = ?";
-            //await connection.query(q);
-            
-             const result = await connection.query(q,[email]);
-             connection.release();
-             
-              
-            res.json(result);
-            console.log("resultado de query " + result);
-            
-            
-            
-            //res.json(result);
-            //connection.release();
-            //res.json("Verificando");
+            const result = await connection.query(q, [email]);
+            connection.release();
+            console.log("resultado de query:", result[0]);
+            res.json(result[0]);
         } catch (error) {
             console.log("fijate acá:" + error)
         }

@@ -7,7 +7,11 @@ import { AuthContext } from '../AuthContext.js';
 import React, { useContext, useState } from 'react';
 
 const Topbar = () => {
+    const nombre = localStorage.getItem("loggedInUserName");
     const { isLoggedIn, userType, handleSignOut } = useContext(AuthContext);
+    if (localStorage.getItem("userType" == "normal")) {
+
+    }
 
     const navigate = useNavigate();
 
@@ -40,8 +44,9 @@ const Topbar = () => {
     };
     //====Funciones para los dropdown menus ===============================================================
     const handleSignOutClick = () => {
-        handleSignOut();
-    }
+        localStorage.clear();
+        navigate('/');
+    };
     const handleMedicamentos = () => {
         navigate('/medicamentos');
     };
@@ -97,7 +102,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
+                                            {nombre}
                                         </a>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <a className="dropdown-item" onClick={handlePerfil}>VER PERFIL</a>

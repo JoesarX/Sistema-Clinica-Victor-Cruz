@@ -88,11 +88,9 @@ const IniciarSesion = () => {
             var flag = false;
             localStorage.setItem("100", true);
             handleSignIn('normal');
-            navigate("/userpage");
             if (passUser === "") {
                 console.log("Not found!")
                 console.log(":()()()")
-
             } else {
                 await new Promise((resolve, reject) => {
                     bcrypt.compare(password, passUser, function (err, isMatch) {
@@ -107,9 +105,9 @@ const IniciarSesion = () => {
                             console.log(flag)
                             localStorage.setItem("300", true);
                             localStorage.setItem("correo", email);
+                            navigate("/userpage");
                             alert("Bienvenido!");
                             handleSignIn('normal');
-                            navigate("/userpage");
                             resolve();
                         }
                     })
