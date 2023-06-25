@@ -17,6 +17,7 @@ const Citas = () => {
 
   const hiddenDays = [0, 6, 5];
 
+  
   return (
     <div className="App">
       <header>
