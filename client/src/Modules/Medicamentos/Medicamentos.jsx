@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import './Medicamentos.css';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
+import Ficha_Agregar_Categorias from './Ficha_Agregar_Categorias';
+
+import CategoriasService from '../../Services/CategoriasService';
 import { storage } from '../../firebase';
 import 'firebase/compat/storage';
 //import { storage } from "./firebase";
@@ -28,7 +31,7 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
+import { PersonAdd, Delete, Edit, Medication,Category } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -51,6 +54,8 @@ import './Medicamentos.css';
 import '../HojaDeEstilos/CrudStyles.css';
 import NavBar from '../NavBar';
 
+let listaCategoriaMedicamentos=[];
+let idListaCategoriaMedicamentos=[];
 
 const Medicamentos = () => {
     //========================================================================================================================================================================================================================
@@ -171,7 +176,21 @@ const Medicamentos = () => {
                         </>
                     )}
                 </div>
-
+                <div>
+                    <Button
+                        onClick={toggleModalCategory}
+                        startIcon={<Category />}
+                        style={{
+                            backgroundColor: 'rgb(27, 96, 241)',
+                            color: 'white',
+                            borderRadius: '10px',
+                            paddingLeft: '10px',
+                            paddingRight: '10px',
+                        }}
+                    >
+                        Administración de Categorías
+                    </Button>
+                </div>  
                 <div>
                     <Button
                         onClick={toggleModal}
@@ -197,16 +216,16 @@ const Medicamentos = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [medicamento, setMedicamento] = useState({
         nombre: '',
-        categoria: '',
         stock: '',
         precio_unitario: '',
         via: '',
         dosis: '',
         urlfoto: '',
+        id_categoria: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
-    const listaCategoriaMedicamentos = ['Analgésico', 'Antiinflamatorio', 'Antiinfeccioso', 'Mucolítico', 'Antitusivo', 'Antiulceroso', 'Antiácidos', 'Antidiarreico', 'Laxante', 'Antipirético', 'Antialérgico']
+
     const listaVias = ['Oral', 'Subcutánea', 'Intramuscular ', 'Intravenosa']
 
     console.log(isSubmitting2)
@@ -217,6 +236,7 @@ const Medicamentos = () => {
         setIsSubmitting(false);
        setImagePreview(null);
         cleanExpediente();
+        console.log( listaCategoriaMedicamentos);
     };
 
 
@@ -238,15 +258,24 @@ const Medicamentos = () => {
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
     };
+    //-----------------Ficha Agregar Categoría---------//
+    const[openCategories,setOpenCategories]=useState(false);
+    let [selectedModal,setSelectedModal]= useState(null);
+
+    const toggleModalCategory = ()=>{
+        setOpenCategories(true);
+        setSelectedModal(true);
+    }
 
     const handleModalFieldChange = (e) => {
         setMedicamento((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
     }
+    
     //----------FichaMedicamentos Modal-------------------------------------------------------
 
     const [nombre, setNombre] = useState(false);
-    const [categoria, setCategoria] = useState(false);
+    const [id_categoria, setIdCategoria] = useState(false);
     const [stock, setStock] = useState(false);
     const [precioUnitario, setPrecioUnitario] = useState(false);
     const [openFicha, setOpenFicha] = useState(false);
@@ -257,7 +286,7 @@ const Medicamentos = () => {
     const handleSelectedFicha = (row) => {
         setOpenFicha(true);
         setNombre(row.nombre);
-        setCategoria(row.categoria);
+        setIdCategoria(row.categoria);
         setStock(row.stock);
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);
@@ -269,7 +298,7 @@ const Medicamentos = () => {
     const cleanExpediente = () => {
         medicamento.nombre = null;
         medicamento.stock = null;
-        medicamento.categoria = null;
+        medicamento.id_categoria = null;
         medicamento.precio_unitario = null;
         medicamento.via = null;
         medicamento.dosis = null;
@@ -302,6 +331,23 @@ const Medicamentos = () => {
                 .catch((error) => reject(error));
         });
     };
+    const setCategoriasID = async(valor)=>{
+        let cat=0;
+        try{
+            for( let i=0; i<listaCategoriaMedicamentos.length;i++){
+                if(listaCategoriaMedicamentos[i]==valor){
+                    console.log(idListaCategoriaMedicamentos[i]);
+                    cat=idListaCategoriaMedicamentos[i]
+                }
+            }
+            setMedicamento({
+                ...medicamento,
+                id_categoria: cat
+            })
+        }catch(error){
+
+        }
+    }
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
@@ -554,6 +600,23 @@ const Medicamentos = () => {
         const fetchAllMedicamentos = async () => {
             try {
                 const medicamentosData = await MedicamentosService.getAllMedicamentos();
+                //Actualizar lista de categorías
+                const nombresCategorias = await CategoriasService.getAllCategories()
+                console.log(medicamentosData);
+
+                if(cont==0){
+                    listaCategoriaMedicamentos=nombresCategorias.map((nombresCategorias)=>nombresCategorias.Nombre_Categoria );
+                    idListaCategoriaMedicamentos=nombresCategorias.map((nombresCategorias)=>nombresCategorias.id);
+                    cont++;
+                }
+                
+                    console.log("No Entré");
+                    
+                
+                console.log(listaCategoriaMedicamentos);
+                console.log(medicamentosData);
+
+                
                 const medicamentosWithId = medicamentosData.map((medicamento) => ({
                     ...medicamento,
                     medId: medicamento.idmed,
@@ -564,6 +627,7 @@ const Medicamentos = () => {
                 console.log("Error fetching medicamentos:", error);
             }
         };
+
 
         // Update tabla
         fetchAllMedicamentos();
@@ -599,8 +663,9 @@ const Medicamentos = () => {
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
-    const categoriaSelected = medicamento.categoria;
+    const categoriaSelected = medicamento.Nombre_Categoria;
     const viaSelected = medicamento.via;
+
 
 
     return (
@@ -618,7 +683,7 @@ const Medicamentos = () => {
                             getRowId={(row) => row.medId}
                             columns={[
                                 { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
-                                { field: 'categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
+                                { field: 'Nombre_Categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
                                 { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
                                 { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
                                 { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
@@ -709,12 +774,9 @@ const Medicamentos = () => {
                                             id="categoria"
                                             required
                                             options={listaCategoriaMedicamentos}
-                                            onChange={(event, newValue) =>
-                                                setMedicamento({
-                                                    ...medicamento,
-                                                    categoria: newValue
-                                                })
-                                            }
+                                            onChange={(event,newValue)=>
+                                                setCategoriasID(newValue)
+                                            } 
                                             renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }}/>}
                                         />
                                         <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required style={{ marginBottom: '0.45rem' }}/>
@@ -807,12 +869,9 @@ const Medicamentos = () => {
 
 
                                                     options={listaCategoriaMedicamentos}
-                                                    onChange={(event, newValue) =>
-                                                        setMedicamento({
-                                                            ...medicamento,
-                                                            categoria: newValue
-                                                        })
-                                                    }
+                                                    onChange={(event,newValue)=>
+                                                        setCategoriasID(newValue)
+                                                    } 
                                                     renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }}/>}
                                                 />
                                                 <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' style={{ marginBottom: '0.45rem' }}/>
@@ -857,13 +916,19 @@ const Medicamentos = () => {
                     open={openFicha}
                     setOpenPopup={setOpenFicha}
                     setNombreF={nombre}
-                    setCategoriaF={categoria}
+                    setCategoriaF={id_categoria}
                     setPrecioUnitarioF={precioUnitario}
                     setStockF={stock}
                     setImagenF={imagen}
                     setViaF={via}
                 />
             )}
+             {selectedModal &&(
+            <Ficha_Agregar_Categorias
+                open={openCategories}
+                setOpenPopupC={setOpenCategories}
+                
+            />)}
         </div>
     );
 
