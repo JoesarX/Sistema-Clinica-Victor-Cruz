@@ -459,6 +459,7 @@ const Expedientes = () => {
          // Update the column visibility based on the screen width
          setColumnVisibilityModel((prevVisibility) => ({
             ...prevVisibility,
+            idpaciente: isMobile ? false : true,
             nombre: true,
             edad: isMobile ? false : true,
             sexo: isMobile ? false : true,
@@ -495,7 +496,7 @@ const Expedientes = () => {
                      rows={expedientes}
                      getRowId={(row) => row.pacienteId}
                      columns={[
-                        //{ field: 'idpaciente', headerName: 'ID', flex: 1 , headerClassName: 'column-header'},
+                        { field: 'idpaciente', headerName: 'ID', flex: 1.5 , headerClassName: 'column-header'},
                         {
                            field: 'nombre',
                            headerName: 'Nombre',
