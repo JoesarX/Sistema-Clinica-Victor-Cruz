@@ -11,6 +11,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
 import NavBar from '../NavBar';
+import moment from 'moment';
+import 'moment/locale/es';
 
 import ExpedientesService from '../../Services/ExpedientesService';
 
@@ -88,56 +90,9 @@ const Dashboard = () => {
     const [medications, setMedications] = useState(['Medicamento 1', 'Medicamento 2', 'Medicamento 3', 'Medicamento 4', 'Medicamento 5', 'Medicamento 6', 'Medicamento 7', 'Medicamento 8', 'Medicamento 9', 'Medicamento 10', 'Medicamento 11', 'Medicamento 12']);
     const [alergias, setAlergias] = useState(['Alergia 1', 'Alergia 2', 'Alergia 3', 'Alergia 4']);
     const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 3', 'Enfermedad 4']);
-    const [schAppointments, setSchAppointments] = useState([{
-        date: '2023-06-17',
-        time: '10:00 AM',
-        description: 'Dolor de cabeza',
-    },
-    {
-        date: '2023-06-20',
-        time: '10:00 AM',
-        description: 'Migraña',
-    },
-    {
-        date: '2023-06-20',
-        time: '10:00 AM',
-        description: 'Migraña',
-    },
-    {
-        date: '2023-06-20',
-        time: '10:00 AM',
-        description: 'Migraña',
-    }
-    ]);
-    const [prevAppointments, setPrevAppointments] = useState([{
-        date: '2023-05-17',
-        time: '10:00 AM',
-        description: 'Dolor de estomago',
-        medicine: 'Acetaminofén',
-        medicalExplanation: 'Lumbalgia'
-    },
-    {
-        date: '2023-05-20',
-        time: '10:00 AM',
-        description: 'Fiebre',
-        medicine: 'Acetaminofén',
-        medicalExplanation: 'Lumbalgia'
-    },
-    {
-        date: '2023-05-20',
-        time: '10:00 AM',
-        description: 'Fiebre',
-        medicine: 'Acetaminofén',
-        medicalExplanation: 'Lumbalgia'
-    },
-    {
-        date: '2023-05-20',
-        time: '10:00 AM',
-        description: 'Fiebre',
-        medicine: 'Acetaminofén',
-        medicalExplanation: 'Lumbalgia'
-    }
-    ]);
+    const [schAppointments, setSchAppointments] = useState([]);
+    const [prevAppointments, setPrevAppointments] = useState([]);
+    moment.locale('es')
 
     function Signout() {
         localStorage.clear();
@@ -147,7 +102,6 @@ const Dashboard = () => {
     function enviar_A_Crud() {
         navigate('/administrador');
     }
-    const [expedienteDatas, setExpedientess] = useState([]);
 
     const fetchExpediente2 = async () => {
         try {
@@ -177,7 +131,6 @@ const Dashboard = () => {
             console.log(error);
         }
     };
-
 
     useEffect(() => {
 
@@ -222,7 +175,25 @@ const Dashboard = () => {
             }
         };
 
+        const fetchAppointments = async () => {
+            try {
+                const appointments = await ExpedientesService.getCitasOneExpediente(id)
+
+                const scheduled = appointments.filter(appointment => appointment.estado === "Pendiente");
+                const previous = appointments.filter(appointment => (appointment.estado === "Cancelado" ||
+                    appointment.estado === "Terminada"));
+
+                setSchAppointments(scheduled)
+                setPrevAppointments(previous);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        fetchAppointments();
         fetchExpediente();
+        console.log("SCHEDULED:", schAppointments)
+        console.log("PREVIOUS:", prevAppointments)
     }, [id]);
 
     const formatDate = (date) => {
@@ -230,10 +201,26 @@ const Dashboard = () => {
         return new Date(date).toLocaleDateString("es-HN", datePrefs);
     }
 
-    const formatAppointmentDate = (date) => {
-        var datePrefs = { month: 'short', day: 'numeric' };
-        return new Date(date).toLocaleDateString("es-HN", datePrefs).toLocaleUpperCase();
-    }
+    const formatAppointmentDate = (dateString) => {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return "DIA NO VALIDO";
+        }
+        const options = { month: 'short', day: 'numeric' };
+        const formattedDate = date.toLocaleDateString("es-HN", options).toUpperCase();
+        return formattedDate;
+    };
+
+    const formatAppointmentTime = (timeString) => {
+        const date = new Date(timeString);
+        if (isNaN(date.getTime())) {
+            return "HORA NO VALIDO";
+        }
+        const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+        const formattedTime = date.toLocaleTimeString("en-US", options);
+        return formattedTime;
+    };
+
 
     const handleUploadFile = (event) => {
         const file = event.target.files[0];
@@ -279,16 +266,16 @@ const Dashboard = () => {
         if (patient.temperatura > 43) {
             alert("La temperatura ingresada es invalida");
         }
-    
-     const regexFinal=/\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
-   
+
+        const regexFinal = /\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
+
         if (!regexFinal.test(patient.presion)) {
             alert("El ritmo cardiaco ingresado es invalido");
             return false;
         }
-        if(patient.presion)
+        if (patient.presion)
 
-        return true;
+            return true;
 
     }
 
@@ -763,11 +750,11 @@ const Dashboard = () => {
                             {schAppointments.map((appointment, index) => (
                                 <div key={index} className='appointment'>
                                     <div className='appointment-date'>
-                                        {formatAppointmentDate(appointment.date)}
+                                        {formatAppointmentDate(appointment.hora_inicio)}
                                     </div>
                                     <div className='appointment-details'>
-                                        <span>{appointment.description}</span>
-                                        <span className='appointment-light-text'>{appointment.time}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora_inicio)}</span>
+                                        <span className='appointment-light-text'>{appointment.estado}</span>
                                     </div>
                                 </div>
                             ))}
@@ -777,13 +764,14 @@ const Dashboard = () => {
                             {prevAppointments.map((appointment, index) => (
                                 <div key={index} className='appointment prev-appointment'>
                                     <div className='appointment-date'>
-                                        {formatAppointmentDate(appointment.date)}
+                                        {formatAppointmentDate(appointment.hora_inicio)}
                                     </div>
                                     <div className='appointment-details'>
-                                        <span>{appointment.description}</span>
-                                        <span className='appointment-light-text'>{appointment.time}</span>
-                                        <span className='appointment-light-text'>{appointment.medicalExplanation}</span>
-                                        <span className='appointment-light-text'>{appointment.medicine}</span>
+                                        {/* <span>{appointment.description}</span> */}
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora_inicio)}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora_final)}</span>
+                                        {/* <span className='appointment-light-text'>{appointment.medicalExplanation}</span> */}
+                                        <span className='appointment-light-text'>{appointment.estado}</span>
                                     </div>
                                 </div>
                             ))}
