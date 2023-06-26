@@ -126,12 +126,14 @@ const IniciarSesion = () => {
                     localStorage.setItem("correo", email);
                     handleSignIn('master');
                     navigate("/expedientes");
+                    handleSignIn('master');
                 } else if (await loginAdmin(email, password) === true) {
                     alert("Bienvenido");
                     handleSignIn('administrador');
                     localStorage.setItem("300", true);
                     localStorage.setItem("correo", email);
                     navigate("/expedientes");
+                    handleSignIn('administrador');
                 } else {
                     alert("Email o contraseña incorrecta!");
                 }

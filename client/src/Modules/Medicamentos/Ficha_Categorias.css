@@ -1,0 +1,65 @@
+.Modal-FichaCategorias {
+    background-color: rgb(227, 235, 248);
+    width: 90%;
+    height: 85%;
+    margin: auto auto;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 30px;
+    box-sizing: border-box;
+    overflow: none;
+    padding-top: 50px;
+    scrollbar-width: none;
+}
+
+.Modal-FichaCategorias::-webkit-scrollbar {
+    display: none;
+}
+
+.Principal-FichaCategorias {
+    display: flex;
+    justify-content: center;
+    margin-right: 2%;
+    margin-top: 1.5%;
+}
+
+.Titulo-FichaCategorias {
+    font-family: 'Inter', sans-serif;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.rb {
+    height: 100vh;
+    border-radius: 30px;
+    box-sizing: border-box;
+}
+
+.save-button {
+    cursor: pointer;
+    border-radius: 100%;
+}
+
+.save-button:hover {
+    background-color: #e0e0e0;
+}
+
+.custom-editable-cell {
+    border: none;
+}
+
+.save-icon {
+    color: inherit;
+}
+
+.saved-icon {
+    color: rgb(00, 235, 0);
+}

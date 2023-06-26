@@ -62,7 +62,6 @@ const RegistrarUser = () => {
     return /[!@#$%^&*_;':"|,.<>/?]/.test(password);
   };
   // FIN DE MAGIA DE REGEX WOWWW
-
   const passie = useRef();
   const [user, setUser] = React.useState({
     correouser: '',
