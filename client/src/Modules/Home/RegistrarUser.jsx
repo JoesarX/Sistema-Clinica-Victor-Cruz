@@ -1,4 +1,4 @@
-import React, { useRef,useState } from 'react'
+import React, { useRef, useState } from 'react'
 import '../HojaDeEstilos/RegistrarUser.css';
 import { useNavigate } from 'react-router-dom';
 import UsuariosService from '../../Services/UsuariosService';
@@ -62,7 +62,6 @@ const RegistrarUser = () => {
     return /[!@#$%^&*_;':"|,.<>/?]/.test(password);
   };
   // FIN DE MAGIA DE REGEX WOWWW
-  
   const passie = useRef();
   const [user, setUser] = React.useState({
     correouser: '',
@@ -86,9 +85,9 @@ const RegistrarUser = () => {
     setPassword(passie.current.value)
     const password = passie.current.value;
     const hashedPass = bcrypt.hashSync(password, 10);
-   
+
     setUser((prevState) => ({ ...prevState, [e.target.name]: hashedPass }))
-    
+
   };
 
   const handleSubmit = async e => {

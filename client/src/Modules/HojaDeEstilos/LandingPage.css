@@ -1,0 +1,354 @@
+/* Default styles */
+
+.scrollable-page {
+    background-color: #E4EBF9;
+    overflow-y: auto;
+  }
+  
+  .infoP {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    padding-bottom: 10px;
+  }
+  
+  .profile-picture-and-edits {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10%;
+  }
+  
+  .patient-sections {
+    display: flex;
+    flex-direction: row; /* Change flex direction to row */
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+  }
+  
+  .appointments-section {
+    max-height: 100%;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .contenidos {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    left: 50%;
+    width: 95%;
+    height: 85%;
+    gap: 20px;
+    margin: 0%;
+    padding: 0%;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .box-title {
+    height: fit-content;
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: 1px solid #000000;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-family: 'Inter';
+  }
+  
+  .box-title.appointments-title {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    display: flex;
+    align-items: flex-end;
+    text-transform: uppercase;
+    color: #464646;
+    border-bottom: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  
+  .box-title h3 {
+    font-size: 18px;
+  }
+  
+  .perfile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px; /* Adjust the width to make it bigger */
+    height: 150px; /* Adjust the height to make it bigger */
+    background-color: #1560F2;
+    border-radius: 50%;
+  }
+  
+  .iconoUsers {
+    font-size: 80px;
+    color: #F8F8F8;
+  }
+  
+  .editButton {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    color: #1560F2;
+    font-weight: bold;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+  }
+  
+  .nombres {
+    width: 100%;
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 30px;
+    font-weight: 700;
+    display: flex;
+    color: #464646;
+  }
+  
+  .smallTexts {
+    margin: 5px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px; /* Updated font size */
+    display: flex;
+    color: #737373;
+  }
+  
+  .linea {
+    width: 90%;
+    height: 1px;
+    min-height: 1px;
+    border: 1px solid #000000;
+    margin: 4px;
+  }
+  
+  .large-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-self: center;
+    align-self: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    padding: 0px 15px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    text-align: center;
+    color: #FFFFFF;
+    width: 50%;
+    height: 40px;
+    border: 0px;
+    background: #198C5C;
+    border-radius: 5px;
+  }
+  
+  .large-button.schedule-date {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    background-color: #1560F2;
+    width: 95%;
+    gap: 20px;
+  }
+  
+  .large-button.schedule-date:hover {
+    background-color: #4942E4;
+  }
+  
+  .large-button:hover {
+    background-color: #5D9C59;
+  }
+  
+  .appointments-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0px;
+    width: 100%;
+    border-radius: 10px;
+    height: 100%;
+  }
+  
+  .appointments {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    gap: 10px;
+    width: 100%;
+    border-radius: 10px;
+    height: 100%;
+    max-height: 370px;
+    font-family: 'Inter';
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  
+  .appointment {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 110px;
+    max-height: 110px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-left: 10px solid #1560F2;
+    font-size: 15px;
+    font-weight: 700;
+    color: #464646;
+    gap: 20px;
+    border-radius: 10px;
+    background-color: #F8F8F8;
+    cursor: pointer;
+  }
+  
+  .appointment:hover {
+    background-color: #DBDFEA;
+  }
+  
+  .appointment.prev-appointment {
+    border-left: 10px solid #6D9AF0;
+  }
+  
+  .appointment-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    word-wrap: normal;
+    text-align: center;
+    width: 60px;
+    gap: 0px;
+    word-spacing: 0px;
+    line-height: 30px;
+    font-weight: bolder;
+    height: 100%;
+  }
+  
+  .prev-appointment > .appointment-date {
+    color: #595959;
+  }
+  
+  .appointment-details {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    gap: 0px;
+  }
+  
+  .appointment-light-text {
+    color: #737373;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+  
+  /* Responsive styles */
+  
+  @media (max-width: 768px) {
+    .patient-sections {
+      flex-direction: column;
+      
+      align-items: stretch;
+    }
+  
+    .profile-picture-and-edits {
+      margin: 5%;
+    }
+    
+.appointments-section{
+    margin-top: 30%;
+}
+
+    .contenidos {
+    margin-top: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 10px;
+    }
+  
+    .large-button {
+      width: 100%;
+    }
+  
+    .appointments {
+      max-height: none;
+      overflow-y: visible;
+      
+    }
+  
+    .appointment {
+      flex-direction: column;
+      align-items: stretch;
+      padding-left: 20px;
+      padding-right: 20px;
+      min-height: auto;
+      max-height: none;
+      
+    }
+  
+    .appointment-date {
+      width: 100%;
+      text-align: left;
+      font-size: 16px;
+      line-height: 20px;
+      margin-bottom: 5px;
+    }
+  
+    .prev-appointment > .appointment-date {
+      font-size: 14px;
+    }
+  }
+  

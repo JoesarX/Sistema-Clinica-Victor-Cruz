@@ -17,8 +17,8 @@ import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
 import Medicamentos from "./Modules/Medicamentos/Medicamentos";
+import LandingPage from "./Modules/Home/LandingPage";
 import CitasTabla from "./Modules/CitasTabla/CitasTabla";
-
 import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
 
@@ -28,29 +28,24 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/iniciarsesion" element={<IniciarSesion/>}/>
-          <Route path="/acerca-de" element={<Acercade/>}/>
-          <Route path="/servicios" element={<Servicios/>}/>
-          <Route path="/laboratorio" element={<Laboratorio/>}/>
-          <Route path="/registrar-user" element={<RegistrarUser/>}/>
-          <Route path="/citas" element={<Citas/>}/>
-          <Route path ="/administrador" element={<Administrador/>}/>
-          <Route path="/expedientes" element={<Expedientes/>}/>
-          <Route path="/expedientes/dashboard/:expedienteId" element={<Dashboard/>}/>
-          <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc/>}/>
-          <Route path="/cita_expediente" element={<Citas_Doc/>}/>
-          <Route path="/medicamentos" element={<Medicamentos/>}/>
+    <Route path="/" element={<Home />} />
+          <Route path="/iniciarsesion" element={<IniciarSesion />} />
+          <Route path="/acerca-de" element={<Acercade />} />
+          <Route path="/servicios" element={<Servicios />} />
+          <Route path="/laboratorio" element={<Laboratorio />} />
+          <Route path="/registrar-user" element={<RegistrarUser />} />
+          <Route path="/citas" element={<Citas />} />
+          <Route path="/administrador" element={<Administrador />} />
+          <Route path="/expedientes" element={<Expedientes />} />
+          <Route path="/expedientes/dashboard/:expedienteId" element={<Dashboard />} />
+          <Route path="/medicamentos" element={<Medicamentos />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contactanos" element={<Contactanos />} />
-
+          <Route path="/userpage" element={<LandingPage />} />
           <Route path="/citas_tabla" element={<CitasTabla/>}/>
-          {/* <Route path="/dashboard" element={<Dashboard/>}/> */}
           <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
-
         </Routes>
       </BrowserRouter>
-
     </div>
   );
 }

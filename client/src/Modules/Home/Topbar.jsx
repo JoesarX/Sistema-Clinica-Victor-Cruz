@@ -7,6 +7,7 @@ import { AuthContext } from '../AuthContext.js';
 import React, { useContext, useState } from 'react';
 
 const Topbar = () => {
+    const nombre = localStorage.getItem("loggedInUserName");
     const { isLoggedIn, userType, handleSignOut } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -38,10 +39,12 @@ const Topbar = () => {
     const handleAcercade = () => {
         navigate('/acerca-de');
     };
-//====Funciones para los dropdown menus ===============================================================
+    //====Funciones para los dropdown menus ===============================================================
     const handleSignOutClick = () => {
+        localStorage.clear();
+        navigate('/');
         handleSignOut();
-    }
+    };
     const handleMedicamentos = () => {
         navigate('/medicamentos');
     };
@@ -52,7 +55,7 @@ const Topbar = () => {
         navigate('/administrador');
     };
     const handlePerfil = () => {
-        // navigate('/dashboard');
+        navigate('/userpage');
     };
     const handleVerDashboard = () => {
         // navigate('/dashboard');
@@ -97,6 +100,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span style={{fontSize: '18px'}}>{nombre}</span>
                                         </a>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <a className="dropdown-item" onClick={handlePerfil}>VER PERFIL</a>
@@ -113,6 +117,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span style={{fontSize: '18px'}}>{nombre}</span>
                                         </a>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <a class="dropdown-item" onClick={handleVerDashboard}>VER DASHBOARD</a>
@@ -126,6 +131,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <span style={{fontSize: '18px'}}>{nombre}</span>
                                         </a>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <a class="dropdown-item" onClick={handleMedicamentos}>MEDICAMENTOS</a>

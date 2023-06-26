@@ -5,6 +5,7 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState();
+  const [nombreUser, setNombreUser] = useState();
 
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
