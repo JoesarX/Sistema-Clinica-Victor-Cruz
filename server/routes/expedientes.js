@@ -98,6 +98,22 @@ const expedientesRouter = (pool) => {
         }
     });
 
+    router.get("/dashboard/cita/:id", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+
+            const sqlSelect = "SELECT * from citas WHERE idpaciente = " + req.params.id;
+
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            res.json(rows)
+            console.log("Get One Cita call successful");
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
     //pUT a patient by id for Dashboard
     router.put("/dashboard/:id", async (req, res) => {
         try {

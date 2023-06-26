@@ -193,6 +193,9 @@ const Dashboard = () => {
                 console.log(expedienteData);
                 setExpediente(expedienteData);
 
+                const citas = await ExpedientesService.getCitasOneExpediente(id);
+                console.log(citas)
+
 
                 setPatient(prevPatient => ({
                     ...prevPatient,
