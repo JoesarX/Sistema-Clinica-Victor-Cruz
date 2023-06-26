@@ -87,7 +87,11 @@ const Citas_Doc = () => {
               slotMaxTime="17:00:00"
               allDaySlot={false}
               events={formattedEvents}
-              dayMaxEvents={5}
+              nowIndicator={true}
+
+              slotLabelClassNames={"custom-time-size"}
+              slotLaneClassNames={"custom-time-size"}
+              
             />
 
           </div>

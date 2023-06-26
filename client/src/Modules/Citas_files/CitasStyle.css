@@ -79,7 +79,6 @@ col {
   text-align: left;
 }
 
-.fc-day.fc-daygrid-day {
-  border: 0.5px solid #999 ;
-  border-color: #999;
+.custom-cell {
+  word-wrap: break-word;
 }
