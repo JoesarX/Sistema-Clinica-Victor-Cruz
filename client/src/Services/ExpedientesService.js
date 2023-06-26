@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000';
+// const API_URL = 'http://localhost:8000';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllExpedientes = async () => {
@@ -51,6 +51,16 @@ export const getOneExpedienteDashboard = async (id) => {
     } catch (error) {
         console.log(error);
         throw new Error('Failed to fetch expediente');
+    }
+};
+export const getCitasOneExpediente = async (id) => {
+    console.log(id);
+    try {
+        const res = await axios.get(`${API_URL}/expedientes/dashboard/cita/${id}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch citas from expediente');
     }
 };
 
@@ -108,7 +118,8 @@ const Services = {
     deleteExpedientes,
     editExpedientes,
     editExpedientesDashboard,
-    getOneUser
+    getOneUser,
+    getCitasOneExpediente
     // Other functions
 };
 
