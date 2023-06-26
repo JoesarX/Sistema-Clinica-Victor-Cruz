@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './CitasStyle.css';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -8,19 +7,15 @@ import esLocale from '@fullcalendar/core/locales/es';
 import NavBar from '../NavBar';
 import Footer from '../Home/Footer';
 import CitasService from '../../Services/CitasService';
-
-
+import './CitasStyle.css';
 
 const Citas_Doc = () => {
-  
+
   const [citas, setCitas] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(true);
-
-
+  const [formattedEvents, setFormattedEvents] = useState([]);
 
   useEffect(() => {
-    // Validación login
-
 
     const fetchAllCitas = async () => {
       try {
@@ -31,19 +26,28 @@ const Citas_Doc = () => {
         }));
 
         setCitas(citasWithId);
+        processEvents(citasWithId);
 
       } catch (error) {
-        // Handle error if any
         console.log("Error fetching citas:", error);
       }
     };
     // Update tabla
     fetchAllCitas();
 
+    const processEvents = (receivedCitas) => {
+      const events = receivedCitas.map(cita => ({
+        title: `${cita.nombre_persona}`,
+        start: cita.hora_inicio,
+        end: cita.hora_final,
+        description: `Hora de inicio: ${cita.hora_inicio}, Hora final: ${cita.hora_final}`,
+      }));
+      setFormattedEvents(events);
+    };
+
     if (isSubmitting) {
       fetchAllCitas();
       setIsSubmitting(false);
-      console.log("TEST DE CITAS API AAAAAAAAAAAAAAAAAAAAAAA")
     }
 
     // Clean up the event listener on component unmount
@@ -51,10 +55,6 @@ const Citas_Doc = () => {
       setIsSubmitting(false);
     };
   }, [isSubmitting]);
-
-  console.log("Hola" + citas);
-
-
 
   return (
     <div className="App">
@@ -86,12 +86,12 @@ const Citas_Doc = () => {
               slotMinTime="07:00:00"
               slotMaxTime="17:00:00"
               allDaySlot={false}
-              events={citas.map(cita => ({
-                title: `Expediente: ${cita.expediente}`,
-                start: cita.fechaInicio,
-                end: cita.fechaFin,
-                description: `Hora de inicio: ${cita.horaInicio}, Hora final: ${cita.horaFin}`,
-              }))}
+              events={formattedEvents}
+              nowIndicator={true}
+
+              slotLabelClassNames={"custom-time-size"}
+              slotLaneClassNames={"custom-time-size"}
+              
             />
 
           </div>
