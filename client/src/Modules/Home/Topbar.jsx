@@ -54,6 +54,11 @@ const Topbar = () => {
     const handleColaboradores = () => {
         navigate('/administrador');
     };
+
+    const handleCitas = () => {
+        navigate('/citas_tabla');
+    };
+
     const handlePerfil = () => {
         navigate('/userpage');
     };
@@ -137,6 +142,7 @@ const Topbar = () => {
                                             <a class="dropdown-item" onClick={handleMedicamentos}>MEDICAMENTOS</a>
                                             <a class="dropdown-item" onClick={handleExpedientes}>EXPEDIENTES</a>
                                             <a class="dropdown-item" onClick={handleColaboradores}>COLABORADORES</a>
+                                            <a class="dropdown-item" onClick={handleCitas}>CITAS</a>
                                             <a class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</a>
                                         </div>
                                     </div>
