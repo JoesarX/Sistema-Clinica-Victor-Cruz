@@ -110,6 +110,8 @@ const Citas = () => {
         correouser: true,
         hora_inicio: true,
         hora_final: true,
+        fecha: true,
+        hora: true,
     });
 
 
@@ -202,6 +204,8 @@ const Citas = () => {
         correouser: '',
         hora_inicio: '',
         hora_final: '',
+        fecha: '',
+        hora: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -256,12 +260,25 @@ const Citas = () => {
         // const formattedDate = dateTime ? dateTime.toISOString().slice(0, 10) : '';
         // console.log(formattedDate)
         setCita((prevState) => ({ ...prevState, hora_inicio: dateTime }))
-        // console.log(fecha_nacimiento)
+        // console.log(fecha)
         // const age = formattedDate ? calculateAge(formattedDate) : '';
         // console.log(age)
         // setExpediente((prevState) => ({ ...prevState, edad: age }))
 
     };
+    const [fecha, setFecha] = useState(null);
+
+    const [availableTimes, setAvailableTimes] = useState([]);
+
+    const handleDateChange = async (date) => {
+        setFecha(date);
+        const formattedDate = date ? date.toISOString().slice(0, 10) : '';
+        setCita((prevState) => ({ ...prevState, fecha: formattedDate }))
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        setAvailableTimes(times);
+    };
+
+    
     //----------FichaCitas Modal-------------------------------------------------------
 
 
@@ -284,13 +301,15 @@ const Citas = () => {
     //     setSelectedRow(true);
     // }
 
-    const cleanCita = () => {
+    const cleanCita = async() => {
         cita.nombre_persona = null;
         cita.estado = null;
         cita.idpaciente = null;
         cita.correouser = null;
         cita.hora_inicio = null;
         cita.hora_final = null;
+        cita.fecha = new Date();
+        cita.hora = null;
     };
 
 
@@ -319,8 +338,23 @@ const Citas = () => {
             const minutes1 = String(selDate.getMinutes()).padStart(2, '0');
             const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
 
+            const timeString = cita.hora;
+            const [time, meridiem] = timeString.split(" ");
+            const [hourString, minuteString] = time.split(":");
+            const hour = parseInt(hourString, 10);
+            const minute = parseInt(minuteString, 10);
+            let hour24 = hour;
+            console.log(hour24)
+            console.log(meridiem)
+            if (meridiem === "PM" && hour !== 12) {
+                hour24 += 12;
+            }
+            cita.hora = hour24 + ":" + minuteString + ":00";
+
+
+
             console.log(day3)
-            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1 )) {
+            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1)) {
                 alert('La hora final debe ser posterior a la hora de inicio');
             }
             else {
@@ -555,9 +589,15 @@ const Citas = () => {
                     };
                 });
 
+                const date = new Date();
+                const formattedDate = date ? date.toISOString().slice(0, 10) : '';
+                const times = await CitasService.getAvailableTimes(formattedDate);
+                
+
                 setCitas(citasWithId);
                 setExpedientes(expedientesFormatted);
                 setUsuarios(usuariosFormatted);
+                setAvailableTimes(times);
             } catch (error) {
                 // Handle error if any
                 console.log("Error fetching citas:", error);
@@ -586,6 +626,8 @@ const Citas = () => {
                 correouser: isMobile ? false : true,
                 hora_inicio: isMobile ? false : true,
                 hora_final: isMobile ? false : true,
+                fecha: isMobile ? false : true,
+                hora: isMobile ? false : true,
 
             }));
         };
@@ -600,9 +642,8 @@ const Citas = () => {
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
-    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
 
-    const handleDateChange = (date, name) => {
+    const handleDateTimeChange = (date, name) => {
 
 
         if (date !== null && date.getHours !== '00' && date.getMinutes !== '00') {
@@ -653,6 +694,8 @@ const Citas = () => {
                                 { field: 'correouser', headerName: 'Correo Cuenta', flex: 4, headerClassName: 'column-header' },
                                 { field: 'hora_inicio', headerName: 'Hora Inicio', flex: 2, headerClassName: 'column-header' },
                                 { field: 'hora_final', headerName: 'Hora Final', flex: 2, headerClassName: 'column-header' },
+                                { field: 'fecha', headerName: 'Fecha', flex: 2, headerClassName: 'column-header' },
+                                { field: 'hora', headerName: 'Hora', flex: 2, headerClassName: 'column-header' },
                                 {
                                     field: 'actions',
                                     headerName: '',
@@ -760,7 +803,7 @@ const Citas = () => {
                                                 id="hora_inicio"
                                                 label="Hora Inicio"
 
-                                                onChange={(date) => handleDateChange(date, 'hora_inicio')}
+                                                onChange={(date) => handleDateTimeChange(date, 'hora_inicio')}
                                                 renderInput={(params) => <TextField {...params} />}
                                                 name='hora_inicio'
                                             />
@@ -771,7 +814,7 @@ const Citas = () => {
                                             <MobileDateTimePicker
                                                 id="hora_final"
                                                 label="Hora Final"
-                                                onChange={(date) => handleDateChange(date, 'hora_final')}
+                                                onChange={(date) => handleDateTimeChange(date, 'hora_final')}
                                                 renderInput={(params) => <TextField {...params} />}
                                                 name='hora_final'
                                             />
@@ -779,6 +822,29 @@ const Citas = () => {
                                     </Grid>
                                 </Grid>
 
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <MobileDatePicker
+                                        id="fecha"
+                                        onChange={handleDateChange}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        name='fecha'
+                                        defaultValue={dayjs()}
+                                    />
+                                </LocalizationProvider>
+                                <Autocomplete
+                                    disablePortal
+                                    id="hora"
+                                    required
+                                    options={availableTimes}
+                                    onChange={(event, newValue) =>
+                                        setCita({
+                                            ...cita,
+                                            hora: newValue
+                                        })
+                                    }
+                                    renderInput={(params) => <TextField {...params} label="Hora
+                                    " required style={{ marginBottom: '0.45rem' }} />}
+                                />
 
 
                                 <Button onClick={handleModalSubmit} variant="contained" style={{
@@ -869,7 +935,7 @@ const Citas = () => {
                                                     id="hora_inicio"
                                                     label="Hora Inicio"
                                                     defaultValue={dayjs(citas.hora_inicio)}
-                                                    onChange={(date) => handleDateChange(date, 'hora_inicio')}
+                                                    onChange={(date) => handleDateTimeChange(date, 'hora_inicio')}
                                                     renderInput={(params) => <TextField {...params} />}
                                                     name='hora_inicio'
                                                 />
@@ -881,7 +947,7 @@ const Citas = () => {
                                                     id="hora_final"
                                                     label="Hora Final"
                                                     defaultValue={dayjs(citas.hora_inicio)}
-                                                    onChange={(date) => handleDateChange(date, 'hora_final')}
+                                                    onChange={(date) => handleDateTimeChange(date, 'hora_final')}
                                                     renderInput={(params) => <TextField {...params} />}
                                                     name='hora_final'
                                                 />

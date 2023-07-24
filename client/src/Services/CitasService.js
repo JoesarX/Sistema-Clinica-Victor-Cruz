@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+const API_URL = 'http://localhost:8000';
+// const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllCitas = async () => {
     try {
@@ -57,12 +57,27 @@ export const deleteCitas = async (id) => {
     }
 };
 
+export const getAvailableTimes = async (date) => {
+    try {
+        console.log("In Service getAvailableTimes");
+        console.log(date);
+        const res = await axios.get(`${API_URL}/citas/availableTimes/${date}`);
+        console.log("SUCCESS FETCHING AVAILABLE TIMES");
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch Times');
+    }
+};
+
 const Services ={
     getAllCitas,
     postCitas,
     getOneCita,
     deleteCitas,
-    editCitas
+    editCitas,
+    getAvailableTimes
     // Other functions
 };
 
