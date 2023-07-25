@@ -57,7 +57,7 @@ const Citas_Doc = () => {
         );
 
         // Calculate the ending time to be 40 minutes after the starting time
-        const endDateTime = new Date(startDateTime.getTime() + 40 * 60000); // 40 minutes in milliseconds
+        const endDateTime = new Date(startDateTime.getTime() + 29 * 60000); // 40 minutes in milliseconds
 
         return {
           title: `${cita.nombre_persona}`,
@@ -126,8 +126,8 @@ const Citas_Doc = () => {
 
               eventContent={(eventInfo) => (
                 <>
-                  <div style={{ fontSize: '12px', lineHeight: '1.2' }}>{eventInfo.timeText}</div>
-                  <div style={{ fontSize: '18px', lineHeight: '1.2' }}>{eventInfo.event.title}</div>
+                  <div style={{ fontSize: '11px', lineHeight: '1.2' }}>{eventInfo.timeText}</div>
+                  <div style={{ fontSize: '15px', lineHeight: '1.2' }}>{eventInfo.event.title}</div>
                 </>
               )}
 
