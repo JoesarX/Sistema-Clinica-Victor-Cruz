@@ -287,7 +287,7 @@ const Medicamentos = () => {
     const handleSelectedFicha = (row) => {
         setOpenFicha(true);
         setNombre(row.nombre);
-        setIdCategoria(row.categoria);
+        setIdCategoria(row.Nombre_Categoria);
         setStock(row.stock);
         setPrecioUnitario(row.precio_unitario);
         setSelectedRow(true);

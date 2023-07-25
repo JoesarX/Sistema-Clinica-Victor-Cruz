@@ -262,9 +262,11 @@ const Dashboard = () => {
         }
         if (patient.peso > 250) {
             alert("el peso ingresado no es valido");
+            return false;
         }
-        if (patient.temperatura > 43) {
+        if (patient.temperatura > 50 || patient.temperatura<31.2) {
             alert("La temperatura ingresada es invalida");
+            return false;
         }
 
         const regexFinal = /\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
