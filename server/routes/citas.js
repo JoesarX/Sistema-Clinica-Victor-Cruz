@@ -3,12 +3,12 @@ import express from "express";
 const router = express.Router();
 
 const citasRouter = (pool) => {
-    
+
     //Get all Citas
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM citas"
+            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -23,20 +23,21 @@ const citasRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `citas` (`nombre_persona`, `estado`, `idpaciente`, `correouser`, `hora_inicio`, `hora_final`, `altura`, `peso`, `temperatura`, `ritmo_cardiaco`, `presion`)  VALUES (?)";
+                "INSERT INTO `citas` (`nombre_persona`, `estado`, `idpaciente`, `correouser`, `fecha`,`hora`,`altura`, `peso`, `temperatura`, `ritmo_cardiaco`, `presion`)  VALUES (?)";
             const values = [
                 req.body.nombre_persona,
                 req.body.estado,
                 req.body.idpaciente,
                 req.body.correouser,
-                req.body.hora_inicio,
-                req.body.hora_final,
+                req.body.fecha,
+                req.body.hora,
                 req.body.altura,
                 req.body.peso,
                 req.body.temperatura,
                 req.body.ritmo_cardiaco,
                 req.body.presion
             ];
+            console.log(values);
             await connection.query(q, [values]);
             connection.release();
             res.json("Cita añadida exitosamente!");
@@ -50,9 +51,9 @@ const citasRouter = (pool) => {
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-           
-            const sqlSelect = "SELECT * FROM citas WHERE idcita = " + req.params.id;
-          
+
+            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE idcita = " + req.params.id;
+
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])
@@ -86,25 +87,25 @@ const citasRouter = (pool) => {
                 estado,
                 idpaciente,
                 correouser,
-                hora_inicio,
-                hora_final,
+                fecha,
+                hora,
                 altura,
                 peso,
                 temperatura,
                 ritmo_cardiaco,
-                presion    
+                presion
             } = req.body;
 
             const q =
-                "UPDATE citas SET nombre_persona = ?, estado = ?, idpaciente = ?, correouser = ?, hora_inicio = ?, hora_final = ?, altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ? WHERE idcita = ?";
+                "UPDATE citas SET nombre_persona = ?, estado = ?, idpaciente = ?, correouser = ?, fecha = ?, hora = ?, altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ? WHERE idcita = ?";
 
             const values = [
                 nombre_persona,
                 estado,
                 idpaciente,
                 correouser,
-                hora_inicio,
-                hora_final,
+                fecha,
+                hora,
                 altura,
                 peso,
                 temperatura,
@@ -121,6 +122,83 @@ const citasRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+
+    router.get("/availableTimes/:date", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const { date } = req.params;
+            const { id } = req.query; // Get the id query parameter (if provided)
+            const onlyDate = date.split("T")[0];
+            const availableTimes24 = [
+                "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", 
+                "11:00:00", "11:30:00", "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00"
+            ];
+
+            // Construct the SQL query to fetch existing times for the given date
+            let sqlSelect = `SELECT hora FROM citas WHERE fecha = '${onlyDate}'`;
+
+            if (id) {
+                // If id is provided, exclude the appointment with that id from the existing times
+                sqlSelect += ` AND idcita <> ${id}`;
+            }
+
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+
+            const existingTimes = rows.map((row) => row.hora);
+            const availableTimes = availableTimes24.filter((time) => !existingTimes.includes(time));
+
+            const availableTimesFormatted = availableTimes.map((time) => {
+                const [hour, minute] = time.split(":");
+                const meridiem = hour >= 12 ? "PM" : "AM";
+                const hour12 = hour % 12 || 12;
+                return `${hour12}:${minute} ${meridiem}`;
+            });
+
+            res.json(availableTimesFormatted);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    // const checkAndUpdateExpiredAppointments = async () => {
+    //     try {
+    //         const connection = await pool.getConnection();
+
+    //         // Get the current date and time
+    //         const currentDateTime = new Date();
+
+    //         // Query appointments with ending time that has passed the current time
+    //         const sqlSelect = `SELECT idcita, hora_final FROM citas WHERE estado = 'activa' AND hora_final <= ?`;
+    //         const [rows, fields] = await connection.query(sqlSelect, [currentDateTime]);
+
+    //         if (rows.length > 0) {
+    //             // Update the state of expired appointments to 'expirada'
+    //             const expiredIds = rows.map((row) => row.idcita);
+    //             const sqlUpdate = `UPDATE citas SET estado = 'expirada' WHERE idcita IN (?)`;
+    //             await connection.query(sqlUpdate, [expiredIds]);
+    //         }
+
+    //         connection.release();
+    //     } catch (err) {
+    //         console.log(err);
+    //         // Handle any errors that occurred during the process
+    //     }
+    // };
+
+    // // Function to start the interval for checking and updating expired appointments
+    // const startAppointmentCheckingInterval = () => {
+    //     // Call the function immediately to check for expired appointments when the server starts
+    //     checkAndUpdateExpiredAppointments();
+
+    //     // Set the interval to run the function every 5 minutes (adjust the interval time as needed)
+    //     setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); // 5 minutes in milliseconds
+    // };
+
+    // // Call the function to start the checking interval when your server starts
+    // startAppointmentCheckingInterval();
+
     return router;
 };
 

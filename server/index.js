@@ -33,7 +33,7 @@ const pool = mysql.createPool({
   password: "ea90b0e8",
   database: "heroku_9fb29a24254053e",
   waitForConnections: true,
-  connectionLimit: 10,
+  connectionLimit: 15,
   queueLimit: 0,
 });
 

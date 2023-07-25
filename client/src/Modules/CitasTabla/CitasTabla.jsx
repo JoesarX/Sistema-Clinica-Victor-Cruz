@@ -1,7 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import InfoIcon from '@mui/icons-material/Info';
 //import { storage } from "./firebase";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,7 +12,7 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication, CalendarMonth } from '@mui/icons-material'
+import { Delete, Edit, Medication, CalendarMonth } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -27,10 +26,8 @@ import Grid from '@mui/material/Grid';
 
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
-import UploadIcon from '@mui/icons-material/Upload';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 
 //STYLES
@@ -59,10 +56,10 @@ const Citas = () => {
     const [Expedientes, setExpedientes] = useState([]);
     const [Usuarios, setUsuarios] = useState([]);
 
-    const handleSelectedCitasClick = (id) => {
-        setSelectedCitaId(id);
-        setOpenPopup(true);
-    }
+    // const handleSelectedCitasClick = (id) => {
+    //     setSelectedCitaId(id);
+    //     setOpenPopup(true);
+    // }
 
     const handleDeleteCitasClick = (row, id) => {
         swal({
@@ -108,8 +105,8 @@ const Citas = () => {
         estado: true,
         idpaciente: true,
         correouser: true,
-        hora_inicio: true,
-        hora_final: true,
+        fecha: true,
+        hora: true,
     });
 
 
@@ -200,216 +197,219 @@ const Citas = () => {
         estado: '',
         idpaciente: '',
         correouser: '',
-        hora_inicio: '',
-        hora_final: '',
+        altura: null,
+        peso: null,
+        temperatura: null,
+        ritmo_cardiaco: null,
+        presion: null,
+
+    });
+    const [Expedientess, setExpedientess] = useState({
+        idpaciente: '',
+        nombre: '',
+        edad: '',
+
+
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
 
 
-    const toggleModal = () => {
+    const toggleModal = async () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
         cleanCita();
-        console.log("Expedientes", Expedientes)
-        console.log("Usuarios", Usuarios)
-
+        // // console.log("Expedientes", Expedientes)
+        // // console.log("Usuarios", Usuarios)
+        const date = new Date();
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : '';
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        setAvailableTimes(times);
     };
+
     const [id, setID] = useState(null);
+    const [citaD, setCitaD] = useState([]);
+    const [selectMail, setMail] = useState([]);
+
     const toggleModal2 = async (id) => {
         setID(id);
-        console.log(id);
 
         try {
             const citaData = await CitasService.getOneCita(id);
 
-            // Search for the object that corresponds to idpaciente
-            const selectedIdPaciente = Expedientes.find((expediente) => expediente.idPaciente === citaData.idpaciente);
+            const selectedIdPaciente2 = Expedientes.find((expediente) => expediente.idpaciente === citaData.idpaciente);
+            setExpedientess(selectedIdPaciente2)
 
-            // Search for the object that corresponds to correouser
-            const selectedCorreoUser = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
+            const selectedCorreoUser2 = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
+            console.log(selectedCorreoUser2)
+            setMail(selectedCorreoUser2)
+            setCitaD([citaData])
+            setCita(citaData);
 
-            setCita({
-                ...citaData,
-                idpaciente: selectedIdPaciente || "", // Set the selected object or an empty string if not found
-                correouser: selectedCorreoUser || "" // Set the selected object or an empty string if not found
-            });
 
-            console.log("cita:", citaData);
+            cita.idcita = citaData.idcita;
+
+            cita.nombre_persona = citaData.nombre_persona;
+            cita.estado = citaData.estado;
+
+            cita.idpaciente = citaData.idpaciente;
+            cita.correouser = citaData.correouser;
+            cita.altura = citaData.altura;
+            cita.peso = citaData.peso;
+            cita.temperatura = citaData.temperatura;
+            cita.ritmo_cardiaco = citaData.ritmo_cardiaco;
+            cita.presion = citaData.presion;
+            setHora(citaData.hora);
+            setFecha(citaData.fecha);
+            console.log(cita)
+            // console.log("cita:", citaData);
         } catch (error) {
-            console.log(error);
+            // Handle the error
         }
 
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
     };
 
+    // useEffect hook to fetch available times when cita state is updated
+    useEffect(() => {
+        if (cita.idcita && cita.fecha) {
+            const fetchAvailableTimes = async () => {
+                try {
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
+                    setAvailableTimes(times);
+
+                } catch (error) {
+                    // Handle the error
+                }
+            };
+
+            fetchAvailableTimes();
+        }
+    }, [cita]);
+
     const handleModalFieldChange = (e) => {
         setCita((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
     }
 
-    const handleStartTimeChange = (dateTime) => {
 
-        console.log(dateTime)
-        setHora_inicio(dateTime);
-        // const formattedDate = dateTime ? dateTime.toISOString().slice(0, 10) : '';
-        // console.log(formattedDate)
-        setCita((prevState) => ({ ...prevState, hora_inicio: dateTime }))
-        // console.log(fecha_nacimiento)
-        // const age = formattedDate ? calculateAge(formattedDate) : '';
-        // console.log(age)
-        // setExpediente((prevState) => ({ ...prevState, edad: age }))
+    const [fecha, setFecha] = useState(dayjs());
+    const [hora, setHora] = useState(null);
+    const [availableTimes, setAvailableTimes] = useState([]);
 
+    const handleDateChange = async (date) => {
+        setFecha(date);
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format date using dayjs
+        setAvailableTimes([]); // Clear availableTimes when date changes
+        setHora(null); // Clear selected hora when date changes
+        setCita((prevCita) => ({ ...prevCita, fecha: formattedDate }));
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        setAvailableTimes(times);
     };
+
+    const handleEditDateChange = async (date) => {
+        setFecha(date);
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format date using dayjs
+        setAvailableTimes([]); // Clear availableTimes when date changes
+        setHora(null); // Clear selected hora when date changes
+        setCita((prevCita) => ({ ...prevCita, fecha: formattedDate }));
+        const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
+        setAvailableTimes(times);
+    };
+
+
     //----------FichaCitas Modal-------------------------------------------------------
 
 
-    let [selectedRow, setSelectedRow] = useState(null);
-    const [nombre_persona, setNombre_persona] = useState(false);
-    const [estado, setEstado] = useState(false);
-    const [idpaciente, setIdpaciente] = useState(false);
-    const [correouser, setCorreouser] = useState(false);
-    const [hora_inicio, setHora_inicio] = useState(false);
-    const [hora_final, setHora_final] = useState(false);
-
-    // const handleSelectedFicha = (row) => {
-    //     setOpenFicha(true);
-    //     setNombre_persona(row.nombre_persona);
-    //     setEstado(row.estado);
-    //     setIdpaciente(row.idpaciente);
-    //     setCorreouser(row.correouser);
-    //     setHora_inicio(row.hora_inicio);
-    //     setHora_final(row.hora_final);
-    //     setSelectedRow(true);
-    // }
-
-    const cleanCita = () => {
+    const cleanCita = async () => {
         cita.nombre_persona = null;
         cita.estado = null;
         cita.idpaciente = null;
         cita.correouser = null;
-        cita.hora_inicio = null;
-        cita.hora_final = null;
+        cita.fecha = new Date();
+        cita.hora = null;
+        setFecha(dayjs());
+        setHora(null);
     };
 
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("test");
-            const selDate2 = new Date(cita.hora_final)
 
-            const day = String(selDate2.getDate()).padStart(2, '0');
-
-            const year = selDate2.getFullYear();
-            const month = String(selDate2.getMonth() + 1).padStart(2, '0');
-            const hours = String(selDate2.getHours()).padStart(2, '0');
-            console.log(hours)
-            const minutes = String(selDate2.getMinutes()).padStart(2, '0');
-            const seconds = String(selDate2.getSeconds()).padStart(2, '0');
-
-            const selDate = new Date(cita.hora_inicio)
-            console.log(selDate)
-            const day3 = String(selDate.getDate()).padStart(2, '0');
-            const year1 = selDate.getFullYear();
-            const month1 = String(selDate.getMonth() + 1).padStart(2, '0');
-            const hours1 = String(selDate.getHours()).padStart(2, '0');
-            console.log(hours1)
-            const minutes1 = String(selDate.getMinutes()).padStart(2, '0');
-            const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
-
-            console.log(day3)
-            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1 )) {
-                alert('La hora final debe ser posterior a la hora de inicio');
+            const timeString = cita.hora;
+            const [time, meridiem] = timeString.split(" ");
+            const [hourString, minuteString] = time.split(":");
+            const hour = parseInt(hourString, 10);
+            const minute = parseInt(minuteString, 10);
+            let hour24 = hour;
+            // console.log(hour24)
+            // console.log(meridiem)
+            if (meridiem === "PM" && hour !== 12) {
+                hour24 += 12;
             }
-            else {
-                if (validations()) {
-                    submitCita();
-                }
+            cita.hora = hour24 + ":" + minuteString + ":00";
 
+            if (validations()) {
+                submitCita();
             }
 
 
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting cita:', error);
+            // console.log('Error submitting cita:', error);
         }
     };
 
     useEffect(() => {
         if (isSubmitting) {
-            console.log("test");
+            // console.log("test");
             submitCita();
         }
     }, [isSubmitting]);
 
     const submitCita = async () => {
-        console.log("doneee");
+        // console.log("doneee");
 
-        console.log("Entra a agregar despues de validaciones");
+        // console.log("Entra a agregar despues de validaciones");
         try {
-            console.log('yay')
-            console.log("cita add:" + cita);
-            console.log("ID:" + id);
-            console.log("NOMBRE:" + cita.nombre_persona);
-            console.log("ESTADO:" + cita.estado);
-            console.log("IDPACIENTE:" + cita.idpaciente);
-            console.log("CORREO:" + cita.correouser);
-            console.log("HORA INICIO:" + cita.hora_inicio);
-            console.log("HORA FINAL:" + cita.hora_final);
+
             await CitasService.postCitas(cita);
             alert('Cita Agregado');
             toggleModal();
             window.location.reload();
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting cita:', error);
+            // console.log('Error submitting cita:', error);
         }
 
     };
 
     const EditHandler = async (e) => {
         console.log("Entra a editar");
-
+        console.log(cita)
         e.preventDefault();
         try {
-            console.log("test");
-            const selDate2 = new Date(cita.hora_final)
 
-            const day = String(selDate2.getDate()).padStart(2, '0');
-
-            const year = selDate2.getFullYear();
-            const month = String(selDate2.getMonth() + 1).padStart(2, '0');
-            const hours = String(selDate2.getHours()).padStart(2, '0');
-            console.log(hours)
-            const minutes = String(selDate2.getMinutes()).padStart(2, '0');
-            const seconds = String(selDate2.getSeconds()).padStart(2, '0');
-
-            const selDate = new Date(cita.hora_inicio)
-            console.log(selDate)
-            const day3 = String(selDate.getDate()).padStart(2, '0');
-            const year1 = selDate.getFullYear();
-            const month1 = String(selDate.getMonth() + 1).padStart(2, '0');
-            const hours1 = String(selDate.getHours()).padStart(2, '0');
-            console.log(hours1)
-            const minutes1 = String(selDate.getMinutes()).padStart(2, '0');
-            const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
-
-            console.log(day3)
-            if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1)) {
-                alert('La hora final debe ser posterior a la hora de inicio');
+            const timeString = cita.hora;
+            const [time, meridiem] = timeString.split(" ");
+            const [hourString, minuteString] = time.split(":");
+            const hour = parseInt(hourString, 10);
+            const minute = parseInt(minuteString, 10);
+            let hour24 = hour;
+            // console.log(hour24)
+            // console.log(meridiem)
+            if (meridiem === "PM" && hour !== 12) {
+                hour24 += 12;
             }
-            else {
-                if (validations()) {
-                    submitEditCita();
-                }
+            cita.hora = hour24 + ":" + minuteString + ":00";
 
+            if (validations()) {
+                submitEditCita();
             }
-
-
         } catch (error) {
-            // Handle error if any
             console.log('Error submitting cita:', error);
         }
     };
@@ -422,29 +422,18 @@ const Citas = () => {
 
     const submitEditCita = async () => {
         try {
-            console.log("Before validations");
             if (validations()) {
-                console.log("Entra a edit despues de validaciones");
-
-                console.log("CITA:" + cita);
-                console.log("ID:" + id);
-                console.log("NOMBRE:" + cita.nombre_persona);
-                console.log("ESTADO:" + cita.estado);
-                console.log("IDPACIENTE:" + cita.idpaciente);
-                console.log("CORREO:" + cita.correouser);
-                console.log("HORA INICIO:" + cita.hora_inicio);
-                console.log("HORA FINAL:" + cita.hora_final);
 
                 await CitasService.editCitas(id, cita);
 
-                console.log('SIUUU');
-
+                // console.log('SIUUU');
+                alert("Cita editada exitosamente!")
                 toggleModal22();
                 window.location.reload();
                 cleanCita();
             }
         } catch (error) {
-            console.log('Error submitting cita:', error);
+
         }
     };
 
@@ -457,7 +446,7 @@ const Citas = () => {
 
 
     const validations = () => {
-        const { nombre_persona, estado, hora_inicio, hora_final } = cita
+        const { nombre_persona, estado } = cita
         var lettersRegex = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/;
         //Nombre validations
         if (nombre_persona === null || nombre_persona === '') {
@@ -481,29 +470,6 @@ const Citas = () => {
             alert('Debe agregar un estado valido.');
             return false;
         }
-        //   else if (!estado.replace(/\s/g, '').length) {
-        //     alert('El estado no puede contener solo espacios.');
-        //     return false
-        // } else if (estado.charAt(0) === ' ') {
-        //     alert('El estado no puede iniciar con un espacio.');
-        //     return false
-        // } else if (estado.charAt(estado.length - 1) === ' ') {
-        //     alert('El estado no puede terminar con un espacio.');
-        //     return false
-
-        // }
-
-        if (hora_inicio === null || hora_inicio === '') {
-            alert('Debe agregar la hora de inicio a la cita');
-            return false;
-        }
-
-        if (hora_final === null || hora_final === '') {
-            alert('Debe agregar la hora de final a la cita');
-            return false;
-        }
-
-        console.log("END DE VALIDACINES");
         return true;
     }
 
@@ -517,7 +483,7 @@ const Citas = () => {
     let buscaError = 0;
     useEffect(() => {
         // Validación login
-        console.log("Este es el error en Med: " + (buscaError++));
+        // console.log("Este es el error en Med: " + (buscaError++));
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
@@ -540,7 +506,7 @@ const Citas = () => {
 
                 const expedientesData = await ExpedientesService.getAllExpedientes();
                 const expedientesFormatted = expedientesData.map((expediente) => ({
-                    idPaciente: expediente.idpaciente,
+                    idpaciente: expediente.idpaciente,
                     nombre: expediente.nombre,
                     edad: expediente.edad, // Assuming 'age' property exists in 'expediente' object
                     // Add other relevant properties from the 'Expedientes' table
@@ -555,12 +521,15 @@ const Citas = () => {
                     };
                 });
 
+
+
+
                 setCitas(citasWithId);
                 setExpedientes(expedientesFormatted);
                 setUsuarios(usuariosFormatted);
             } catch (error) {
                 // Handle error if any
-                console.log("Error fetching citas:", error);
+                // console.log("Error fetching citas:", error);
             }
         };
 
@@ -584,8 +553,8 @@ const Citas = () => {
                 estado: isMobile ? false : true,
                 idpaciente: isMobile ? false : true,
                 correouser: isMobile ? false : true,
-                hora_inicio: isMobile ? false : true,
-                hora_final: isMobile ? false : true,
+                fecha: isMobile ? false : true,
+                hora: isMobile ? false : true,
 
             }));
         };
@@ -599,39 +568,6 @@ const Citas = () => {
             window.removeEventListener("resize", handleResize);
         };
     }, [isLoggedIn, navigate, isSubmitting]);
-
-    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
-
-    const handleDateChange = (date, name) => {
-
-
-        if (date !== null && date.getHours !== '00' && date.getMinutes !== '00') {
-
-            const selectedDate = date.toDate();
-            const year = selectedDate.getFullYear();
-            const month = String(selectedDate.getMonth() + 1).padStart(2, '0'); // Month is zero-indexed
-            const day = String(selectedDate.getDate()).padStart(2, '0');
-            const hours = String(selectedDate.getHours()).padStart(2, '0');
-            const minutes = String(selectedDate.getMinutes()).padStart(2, '0');
-            const seconds = String(selectedDate.getSeconds()).padStart(2, '0');
-
-            const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-            if (name === 'hora_final') {
-
-                cita.hora_final = formattedDate;
-                console.log(cita);
-
-            } else {
-                console.log('hora inicio')
-                console.log(formattedDate)
-                cita.hora_inicio = formattedDate;
-                console.log(cita);
-            }
-
-        }
-
-
-    };
 
     return (
 
@@ -651,8 +587,8 @@ const Citas = () => {
                                 { field: 'estado', headerName: 'Estado', flex: 2, headerClassName: 'column-header' },
                                 { field: 'idpaciente', headerName: 'Expediente num', flex: 1, headerClassName: 'column-header' },
                                 { field: 'correouser', headerName: 'Correo Cuenta', flex: 4, headerClassName: 'column-header' },
-                                { field: 'hora_inicio', headerName: 'Hora Inicio', flex: 2, headerClassName: 'column-header' },
-                                { field: 'hora_final', headerName: 'Hora Final', flex: 2, headerClassName: 'column-header' },
+                                { field: 'fecha', headerName: 'Fecha', flex: 2, headerClassName: 'column-header' },
+                                { field: 'hora', headerName: 'Hora', flex: 2, headerClassName: 'column-header' },
                                 {
                                     field: 'actions',
                                     headerName: '',
@@ -719,6 +655,14 @@ const Citas = () => {
                                         })
                                     }
                                     renderInput={(params) => <TextField {...params} label="Estado" required />}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                maxHeight: '300px',
+                                                border: '1px solid BLACK'
+                                            }
+                                        }
+                                    }
                                 />
                                 <Autocomplete
                                     disablePortal
@@ -727,8 +671,8 @@ const Citas = () => {
                                     options={Expedientes}
                                     getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
                                     onChange={(event, newValue) => {
-                                        console.log("ID Paciente Value:", newValue);
-                                        console.log("ID Paciente Type:", typeof newValue);
+                                        // console.log("ID Paciente Value:", newValue);
+                                        // console.log("ID Paciente Type:", typeof newValue);
                                         setCita({
                                             ...cita,
                                             idpaciente: newValue ? newValue.idPaciente : "" // Handle null/undefined case
@@ -736,6 +680,14 @@ const Citas = () => {
                                         })
                                     }}
                                     renderInput={(params) => <TextField {...params} label="ID Paciente" required />}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                maxHeight: '220px',
+                                                border: '1px solid BLACK'
+                                            }
+                                        }
+                                    }
                                 />
                                 <Autocomplete
                                     disablePortal
@@ -750,35 +702,46 @@ const Citas = () => {
                                         })
                                     }
                                     renderInput={(params) => <TextField {...params} label="Correo User" required />}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                maxHeight: '160px',
+                                                border: '1px solid BLACK'
+                                            }
+                                        }
+                                    }
                                 />
 
-
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={6}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <MobileDateTimePicker
-                                                id="hora_inicio"
-                                                label="Hora Inicio"
-
-                                                onChange={(date) => handleDateChange(date, 'hora_inicio')}
-                                                renderInput={(params) => <TextField {...params} />}
-                                                name='hora_inicio'
-                                            />
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid item xs={12} sm={6}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <MobileDateTimePicker
-                                                id="hora_final"
-                                                label="Hora Final"
-                                                onChange={(date) => handleDateChange(date, 'hora_final')}
-                                                renderInput={(params) => <TextField {...params} />}
-                                                name='hora_final'
-                                            />
-                                        </LocalizationProvider>
-                                    </Grid>
-                                </Grid>
-
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <MobileDatePicker
+                                        id="fecha"
+                                        onChange={handleDateChange}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        name='fecha'
+                                        value={fecha}
+                                    />
+                                </LocalizationProvider>
+                                <Autocomplete
+                                    disablePortal
+                                    id="hora"
+                                    required
+                                    options={availableTimes}
+                                    value={hora}
+                                    onChange={(event, newValue) => {
+                                        setHora(newValue);
+                                        setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Hora
+                                    " required style={{ marginBottom: '0.45rem' }} />}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                maxHeight: '300px',
+                                                border: '1px solid BLACK'
+                                            }
+                                        }
+                                    }
+                                />
 
 
                                 <Button onClick={handleModalSubmit} variant="contained" style={{
@@ -825,70 +788,96 @@ const Citas = () => {
                                             })
                                         }
                                         renderInput={(params) => <TextField {...params} label="Estado" required />}
+                                        ListboxProps={
+                                            {
+                                                style: {
+                                                    border: '1px solid BLACK'
+                                                }
+                                            }
+                                        }
                                     />
                                     <Autocomplete
-                                        value={selectedIdPaciente || null}
+                                        value={Expedientess}
                                         disablePortal
                                         id="idpaciente"
                                         options={Expedientes}
                                         getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
-                                        onChange={(event, newValue) =>
-                                            setCita({
-                                                ...cita,
-                                                idpaciente: newValue,
-                                            })
-                                        }
+                                        onChange={(event, newValue) => {
+                                            console.log(cita)
+                                            console.log("ID Paciente Value:", newValue);
+                                            console.log("ID Paciente Type:", newValue.idpaciente);
+                                            console.log(cita.nombre_persona);
+                                            cita.idpaciente = newValue.idpaciente;
+                                            console.log(cita);
+                                        }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="ID Paciente" required />
                                         )}
+                                        ListboxProps={
+                                            {
+                                                style: {
+                                                    maxHeight: '220px',
+                                                    border: '1px solid BLACK'
+                                                }
+                                            }
+                                        }
                                     />
 
                                     <Autocomplete
-                                        value={selectedCorreoUser || null}
+                                        value={selectMail}
                                         disablePortal
                                         id="correouser"
                                         required
                                         options={Usuarios}
                                         getOptionLabel={(opcion) => opcion.correouser}
-                                        onChange={(event, newValue) =>
-                                            setCita({
-                                                ...cita,
-                                                correouser: newValue,
-                                            })
-                                        }
+                                        onChange={(event, newValue) => {
+
+
+                                            cita.correouser = newValue.correouser;
+                                        }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="Correo User" required />
                                         )}
+                                        ListboxProps={
+                                            {
+                                                style: {
+                                                    maxHeight: '160px',
+                                                    border: '1px solid BLACK'
+                                                }
+                                            }
+                                        }
                                     />
 
-
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <MobileDateTimePicker
-                                                    id="hora_inicio"
-                                                    label="Hora Inicio"
-                                                    defaultValue={dayjs(citas.hora_inicio)}
-                                                    onChange={(date) => handleDateChange(date, 'hora_inicio')}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                    name='hora_inicio'
-                                                />
-                                            </LocalizationProvider>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6}>
-                                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                                <MobileDateTimePicker
-                                                    id="hora_final"
-                                                    label="Hora Final"
-                                                    defaultValue={dayjs(citas.hora_inicio)}
-                                                    onChange={(date) => handleDateChange(date, 'hora_final')}
-                                                    renderInput={(params) => <TextField {...params} />}
-                                                    name='hora_final'
-                                                />
-                                            </LocalizationProvider>
-                                        </Grid>
-                                    </Grid>
-
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <MobileDatePicker
+                                            id="fecha"
+                                            onChange={handleEditDateChange}
+                                            renderInput={(params) => <TextField {...params} />}
+                                            name='fecha'
+                                            value={dayjs(fecha)}
+                                        />
+                                    </LocalizationProvider>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="hora"
+                                        required
+                                        options={availableTimes}
+                                        value={hora}
+                                        onChange={(event, newValue) => {
+                                            setHora(newValue);
+                                            setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                        }}
+                                        renderInput={(params) => <TextField {...params} label="Hora
+                                        " required style={{ marginBottom: '0.45rem' }} />}
+                                        ListboxProps={
+                                            {
+                                                style: {
+                                                    maxHeight: '300px',
+                                                    border: '1px solid BLACK'
+                                                }
+                                            }
+                                        }
+                                    />
 
 
                                     <Button onClick={EditHandler} variant="contained" style={{
