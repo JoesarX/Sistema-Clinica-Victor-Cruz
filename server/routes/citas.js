@@ -8,7 +8,7 @@ const citasRouter = (pool) => {
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM citas"
+            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, hora_inicio, hora_final, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -54,7 +54,7 @@ const citasRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
 
-            const sqlSelect = "SELECT * FROM citas WHERE idcita = " + req.params.id;
+            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, hora_inicio, hora_final, fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE idcita = " + req.params.id;
 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
@@ -133,12 +133,20 @@ const citasRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const { date } = req.params;
+            const { id } = req.query; // Get the id query parameter (if provided)
             const onlyDate = date.split("T")[0];
             const availableTimes24 = [
                 "08:00:00", "08:45:00", "09:30:00", "10:15:00", "11:00:00", "13:00:00", "13:45:00", "14:30:00", "15:15:00", "16:00:00"
             ];
 
-            const sqlSelect = `SELECT hora FROM citas WHERE fecha = '${onlyDate}'`;
+            // Construct the SQL query to fetch existing times for the given date
+            let sqlSelect = `SELECT hora FROM citas WHERE fecha = '${onlyDate}'`;
+
+            if (id) {
+                // If id is provided, exclude the appointment with that id from the existing times
+                sqlSelect += ` AND idcita <> ${id}`;
+            }
+
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
 

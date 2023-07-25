@@ -211,18 +211,21 @@ const Citas = () => {
     const [isSubmitting2, setIsSubmitting2] = useState(false);
 
 
-    const toggleModal = () => {
+    const toggleModal = async () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
         cleanCita();
-        console.log("Expedientes", Expedientes)
-        console.log("Usuarios", Usuarios)
-
+        // // console.log("Expedientes", Expedientes)
+        // // console.log("Usuarios", Usuarios)
+        const date = new Date();
+        const formattedDate = date ? date.toISOString().slice(0, 10) : '';
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        setAvailableTimes(times);
     };
+
     const [id, setID] = useState(null);
     const toggleModal2 = async (id) => {
         setID(id);
-        console.log(id);
 
         try {
             const citaData = await CitasService.getOneCita(id);
@@ -239,14 +242,33 @@ const Citas = () => {
                 correouser: selectedCorreoUser || "" // Set the selected object or an empty string if not found
             });
 
-            console.log("cita:", citaData);
+            setHora(citaData.hora);
+            setFecha(citaData.fecha);
+            // console.log("cita:", citaData);
         } catch (error) {
-            console.log(error);
+            // Handle the error
         }
 
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
     };
+
+    // useEffect hook to fetch available times when cita state is updated
+    useEffect(() => {
+        if (cita.idcita && cita.fecha) {
+            const fetchAvailableTimes = async () => {
+                try {
+                    const times = await CitasService.getAvailableTimes(cita.fecha, cita.idcita);
+                    setAvailableTimes(times);
+                    
+                } catch (error) {
+                    // Handle the error
+                }
+            };
+
+            fetchAvailableTimes();
+        }
+    }, [cita]);
 
     const handleModalFieldChange = (e) => {
         setCita((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
@@ -255,19 +277,19 @@ const Citas = () => {
 
     const handleStartTimeChange = (dateTime) => {
 
-        console.log(dateTime)
+        // console.log(dateTime)
         setHora_inicio(dateTime);
         // const formattedDate = dateTime ? dateTime.toISOString().slice(0, 10) : '';
-        // console.log(formattedDate)
+        // // console.log(formattedDate)
         setCita((prevState) => ({ ...prevState, hora_inicio: dateTime }))
-        // console.log(fecha)
+        // // console.log(fecha)
         // const age = formattedDate ? calculateAge(formattedDate) : '';
-        // console.log(age)
+        // // console.log(age)
         // setExpediente((prevState) => ({ ...prevState, edad: age }))
 
     };
-    const [fecha, setFecha] = useState(null);
-
+    const [fecha, setFecha] = useState(dayjs());
+    const [hora, setHora] = useState(null);
     const [availableTimes, setAvailableTimes] = useState([]);
 
     const handleDateChange = async (date) => {
@@ -276,9 +298,19 @@ const Citas = () => {
         setCita((prevState) => ({ ...prevState, fecha: formattedDate }))
         const times = await CitasService.getAvailableTimes(formattedDate);
         setAvailableTimes(times);
+        setHora(null);
     };
 
-    
+    const handleEditDateChange = async (date) => {
+        setFecha(date);
+        const formattedDate = date ? date.toISOString().slice(0, 10) : '';
+        setCita((prevState) => ({ ...prevState, fecha: formattedDate }))
+        const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
+        setAvailableTimes(times);
+        setHora(null);
+    };
+
+
     //----------FichaCitas Modal-------------------------------------------------------
 
 
@@ -301,7 +333,7 @@ const Citas = () => {
     //     setSelectedRow(true);
     // }
 
-    const cleanCita = async() => {
+    const cleanCita = async () => {
         cita.nombre_persona = null;
         cita.estado = null;
         cita.idpaciente = null;
@@ -310,13 +342,15 @@ const Citas = () => {
         cita.hora_final = null;
         cita.fecha = new Date();
         cita.hora = null;
+        setFecha(dayjs());
+        setHora(null);
     };
 
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("test");
+            // console.log("test");
             const selDate2 = new Date(cita.hora_final)
 
             const day = String(selDate2.getDate()).padStart(2, '0');
@@ -324,17 +358,17 @@ const Citas = () => {
             const year = selDate2.getFullYear();
             const month = String(selDate2.getMonth() + 1).padStart(2, '0');
             const hours = String(selDate2.getHours()).padStart(2, '0');
-            console.log(hours)
+            // console.log(hours)
             const minutes = String(selDate2.getMinutes()).padStart(2, '0');
             const seconds = String(selDate2.getSeconds()).padStart(2, '0');
 
             const selDate = new Date(cita.hora_inicio)
-            console.log(selDate)
+            // console.log(selDate)
             const day3 = String(selDate.getDate()).padStart(2, '0');
             const year1 = selDate.getFullYear();
             const month1 = String(selDate.getMonth() + 1).padStart(2, '0');
             const hours1 = String(selDate.getHours()).padStart(2, '0');
-            console.log(hours1)
+            // console.log(hours1)
             const minutes1 = String(selDate.getMinutes()).padStart(2, '0');
             const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
 
@@ -344,8 +378,8 @@ const Citas = () => {
             const hour = parseInt(hourString, 10);
             const minute = parseInt(minuteString, 10);
             let hour24 = hour;
-            console.log(hour24)
-            console.log(meridiem)
+            // console.log(hour24)
+            // console.log(meridiem)
             if (meridiem === "PM" && hour !== 12) {
                 hour24 += 12;
             }
@@ -353,7 +387,7 @@ const Citas = () => {
 
 
 
-            console.log(day3)
+            // console.log(day3)
             if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1)) {
                 alert('La hora final debe ser posterior a la hora de inicio');
             }
@@ -367,48 +401,50 @@ const Citas = () => {
 
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting cita:', error);
+            // console.log('Error submitting cita:', error);
         }
     };
 
     useEffect(() => {
         if (isSubmitting) {
-            console.log("test");
+            // console.log("test");
             submitCita();
         }
     }, [isSubmitting]);
 
     const submitCita = async () => {
-        console.log("doneee");
+        // console.log("doneee");
 
-        console.log("Entra a agregar despues de validaciones");
+        // console.log("Entra a agregar despues de validaciones");
         try {
-            console.log('yay')
-            console.log("cita add:" + cita);
-            console.log("ID:" + id);
-            console.log("NOMBRE:" + cita.nombre_persona);
-            console.log("ESTADO:" + cita.estado);
-            console.log("IDPACIENTE:" + cita.idpaciente);
-            console.log("CORREO:" + cita.correouser);
-            console.log("HORA INICIO:" + cita.hora_inicio);
-            console.log("HORA FINAL:" + cita.hora_final);
+            // console.log('yay')
+            // console.log("cita add:" + cita);
+            // console.log("ID:" + id);
+            // console.log("NOMBRE:" + cita.nombre_persona);
+            // console.log("ESTADO:" + cita.estado);
+            // console.log("IDPACIENTE:" + cita.idpaciente);
+            // console.log("CORREO:" + cita.correouser);
+            // console.log("HORA INICIO:" + cita.hora_inicio);
+            // console.log("HORA FINAL:" + cita.hora_final);
+            // console.log("FECHA:" + cita.fecha);
+            // console.log("HORA:" + cita.hora);
             await CitasService.postCitas(cita);
             alert('Cita Agregado');
             toggleModal();
-            window.location.reload();
+            //window.location.reload();
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting cita:', error);
+            // console.log('Error submitting cita:', error);
         }
 
     };
 
     const EditHandler = async (e) => {
-        console.log("Entra a editar");
+        // console.log("Entra a editar");
 
         e.preventDefault();
         try {
-            console.log("test");
+            // console.log("test");
             const selDate2 = new Date(cita.hora_final)
 
             const day = String(selDate2.getDate()).padStart(2, '0');
@@ -416,21 +452,21 @@ const Citas = () => {
             const year = selDate2.getFullYear();
             const month = String(selDate2.getMonth() + 1).padStart(2, '0');
             const hours = String(selDate2.getHours()).padStart(2, '0');
-            console.log(hours)
+            // console.log(hours)
             const minutes = String(selDate2.getMinutes()).padStart(2, '0');
             const seconds = String(selDate2.getSeconds()).padStart(2, '0');
 
             const selDate = new Date(cita.hora_inicio)
-            console.log(selDate)
+            // console.log(selDate)
             const day3 = String(selDate.getDate()).padStart(2, '0');
             const year1 = selDate.getFullYear();
             const month1 = String(selDate.getMonth() + 1).padStart(2, '0');
             const hours1 = String(selDate.getHours()).padStart(2, '0');
-            console.log(hours1)
+            // console.log(hours1)
             const minutes1 = String(selDate.getMinutes()).padStart(2, '0');
             const seconds1 = String(selDate.getSeconds()).padStart(2, '0');
 
-            console.log(day3)
+            // console.log(day3)
             if (day < day3 || month < month1 || year < year1 || (hours <= hours1 && minutes <= minutes1 && day <= day3 && month <= month1 && year <= year1)) {
                 alert('La hora final debe ser posterior a la hora de inicio');
             }
@@ -444,7 +480,7 @@ const Citas = () => {
 
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting cita:', error);
+            // console.log('Error submitting cita:', error);
         }
     };
 
@@ -456,29 +492,29 @@ const Citas = () => {
 
     const submitEditCita = async () => {
         try {
-            console.log("Before validations");
+            // console.log("Before validations");
             if (validations()) {
-                console.log("Entra a edit despues de validaciones");
+                // console.log("Entra a edit despues de validaciones");
 
-                console.log("CITA:" + cita);
-                console.log("ID:" + id);
-                console.log("NOMBRE:" + cita.nombre_persona);
-                console.log("ESTADO:" + cita.estado);
-                console.log("IDPACIENTE:" + cita.idpaciente);
-                console.log("CORREO:" + cita.correouser);
-                console.log("HORA INICIO:" + cita.hora_inicio);
-                console.log("HORA FINAL:" + cita.hora_final);
+                // console.log("CITA:" + cita);
+                // console.log("ID:" + id);
+                // console.log("NOMBRE:" + cita.nombre_persona);
+                // console.log("ESTADO:" + cita.estado);
+                // console.log("IDPACIENTE:" + cita.idpaciente);
+                // console.log("CORREO:" + cita.correouser);
+                // console.log("HORA INICIO:" + cita.hora_inicio);
+                // console.log("HORA FINAL:" + cita.hora_final);
 
                 await CitasService.editCitas(id, cita);
 
-                console.log('SIUUU');
+                // console.log('SIUUU');
 
                 toggleModal22();
                 window.location.reload();
                 cleanCita();
             }
         } catch (error) {
-            console.log('Error submitting cita:', error);
+            // console.log('Error submitting cita:', error);
         }
     };
 
@@ -537,7 +573,7 @@ const Citas = () => {
             return false;
         }
 
-        console.log("END DE VALIDACINES");
+        // console.log("END DE VALIDACINES");
         return true;
     }
 
@@ -551,7 +587,7 @@ const Citas = () => {
     let buscaError = 0;
     useEffect(() => {
         // Validación login
-        console.log("Este es el error en Med: " + (buscaError++));
+        // console.log("Este es el error en Med: " + (buscaError++));
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
@@ -589,18 +625,15 @@ const Citas = () => {
                     };
                 });
 
-                const date = new Date();
-                const formattedDate = date ? date.toISOString().slice(0, 10) : '';
-                const times = await CitasService.getAvailableTimes(formattedDate);
-                
+
+
 
                 setCitas(citasWithId);
                 setExpedientes(expedientesFormatted);
                 setUsuarios(usuariosFormatted);
-                setAvailableTimes(times);
             } catch (error) {
                 // Handle error if any
-                console.log("Error fetching citas:", error);
+                // console.log("Error fetching citas:", error);
             }
         };
 
@@ -660,13 +693,13 @@ const Citas = () => {
             if (name === 'hora_final') {
 
                 cita.hora_final = formattedDate;
-                console.log(cita);
+                // console.log(cita);
 
             } else {
-                console.log('hora inicio')
-                console.log(formattedDate)
+                // console.log('hora inicio')
+                // console.log(formattedDate)
                 cita.hora_inicio = formattedDate;
-                console.log(cita);
+                // console.log(cita);
             }
 
         }
@@ -770,8 +803,8 @@ const Citas = () => {
                                     options={Expedientes}
                                     getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
                                     onChange={(event, newValue) => {
-                                        console.log("ID Paciente Value:", newValue);
-                                        console.log("ID Paciente Type:", typeof newValue);
+                                        // console.log("ID Paciente Value:", newValue);
+                                        // console.log("ID Paciente Type:", typeof newValue);
                                         setCita({
                                             ...cita,
                                             idpaciente: newValue ? newValue.idPaciente : "" // Handle null/undefined case
@@ -828,7 +861,7 @@ const Citas = () => {
                                         onChange={handleDateChange}
                                         renderInput={(params) => <TextField {...params} />}
                                         name='fecha'
-                                        defaultValue={dayjs()}
+                                        value={fecha}
                                     />
                                 </LocalizationProvider>
                                 <Autocomplete
@@ -836,12 +869,11 @@ const Citas = () => {
                                     id="hora"
                                     required
                                     options={availableTimes}
-                                    onChange={(event, newValue) =>
-                                        setCita({
-                                            ...cita,
-                                            hora: newValue
-                                        })
-                                    }
+                                    value={hora}
+                                    onChange={(event, newValue) => {
+                                        setHora(newValue);
+                                        setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                    }}
                                     renderInput={(params) => <TextField {...params} label="Hora
                                     " required style={{ marginBottom: '0.45rem' }} />}
                                 />
@@ -954,6 +986,29 @@ const Citas = () => {
                                             </LocalizationProvider>
                                         </Grid>
                                     </Grid>
+
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <MobileDatePicker
+                                            id="fecha"
+                                            onChange={handleEditDateChange}
+                                            renderInput={(params) => <TextField {...params} />}
+                                            name='fecha'
+                                            value={dayjs(fecha)}
+                                        />
+                                    </LocalizationProvider>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="hora"
+                                        required
+                                        options={availableTimes}
+                                        value={hora}
+                                        onChange={(event, newValue) => {
+                                            setHora(newValue);
+                                            setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                        }}
+                                        renderInput={(params) => <TextField {...params} label="Hora
+                                    " required style={{ marginBottom: '0.45rem' }} />}
+                                    />
 
 
 
