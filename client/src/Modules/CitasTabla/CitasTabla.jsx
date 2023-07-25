@@ -218,7 +218,7 @@ const Citas = () => {
         // // console.log("Expedientes", Expedientes)
         // // console.log("Usuarios", Usuarios)
         const date = new Date();
-        const formattedDate = date ? date.toISOString().slice(0, 10) : '';
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : '';
         const times = await CitasService.getAvailableTimes(formattedDate);
         setAvailableTimes(times);
     };
@@ -258,7 +258,8 @@ const Citas = () => {
         if (cita.idcita && cita.fecha) {
             const fetchAvailableTimes = async () => {
                 try {
-                    const times = await CitasService.getAvailableTimes(cita.fecha, cita.idcita);
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
                     setAvailableTimes(times);
                     
                 } catch (error) {
@@ -294,21 +295,23 @@ const Citas = () => {
 
     const handleDateChange = async (date) => {
         setFecha(date);
-        const formattedDate = date ? date.toISOString().slice(0, 10) : '';
-        setCita((prevState) => ({ ...prevState, fecha: formattedDate }))
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format date using dayjs
+        setAvailableTimes([]); // Clear availableTimes when date changes
+        setHora(null); // Clear selected hora when date changes
+        setCita((prevCita) => ({ ...prevCita, fecha: formattedDate }));
         const times = await CitasService.getAvailableTimes(formattedDate);
         setAvailableTimes(times);
-        setHora(null);
-    };
-
-    const handleEditDateChange = async (date) => {
+      };
+    
+      const handleEditDateChange = async (date) => {
         setFecha(date);
-        const formattedDate = date ? date.toISOString().slice(0, 10) : '';
-        setCita((prevState) => ({ ...prevState, fecha: formattedDate }))
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format date using dayjs
+        setAvailableTimes([]); // Clear availableTimes when date changes
+        setHora(null); // Clear selected hora when date changes
+        setCita((prevCita) => ({ ...prevCita, fecha: formattedDate }));
         const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
         setAvailableTimes(times);
-        setHora(null);
-    };
+      };
 
 
     //----------FichaCitas Modal-------------------------------------------------------
