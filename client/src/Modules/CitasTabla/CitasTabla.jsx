@@ -204,8 +204,19 @@ const Citas = () => {
         correouser: '',
         hora_inicio: '',
         hora_final: '',
-        fecha: '',
-        hora: '',
+        altura:null,
+        peso:null,  
+        temperatura:null,
+        ritmo_cardiaco:null,
+        presion:null,
+
+    });
+    const [Expedientess, setExpedientess] = useState({
+        idpaciente: '',
+        nombre: '',
+        edad: '',
+
+
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -224,26 +235,42 @@ const Citas = () => {
     };
 
     const [id, setID] = useState(null);
+    const [citaD, setCitaD] = useState([]);
+    const [selectMail, setMail] = useState([]);
+
     const toggleModal2 = async (id) => {
         setID(id);
 
         try {
             const citaData = await CitasService.getOneCita(id);
 
-            // Search for the object that corresponds to idpaciente
-            const selectedIdPaciente = Expedientes.find((expediente) => expediente.idPaciente === citaData.idpaciente);
+            const selectedIdPaciente2 = Expedientes.find((expediente) => expediente.idpaciente === citaData.idpaciente);
+            setExpedientess(selectedIdPaciente2)
+            
+            const selectedCorreoUser2 = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
+            console.log(selectedCorreoUser2)
+            setMail(selectedCorreoUser2)
+            setCitaD([citaData])
+            setCita(citaData);
 
-            // Search for the object that corresponds to correouser
-            const selectedCorreoUser = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
+           
+            cita.idcita = citaData.idcita;
 
-            setCita({
-                ...citaData,
-                idpaciente: selectedIdPaciente || "", // Set the selected object or an empty string if not found
-                correouser: selectedCorreoUser || "" // Set the selected object or an empty string if not found
-            });
+            cita.nombre_persona = citaData.nombre_persona;
+            cita.estado = citaData.estado;
 
+            cita.idpaciente = citaData.idpaciente;
+            cita.correouser = citaData.correouser;
+            cita.hora_inicio = citaData.hora_inicio;
+            cita.hora_final = citaData.hora_final;
+            cita.altura = citaData.altura;
+            cita.peso = citaData.peso;
+            cita.temperatura = citaData.temperatura;
+            cita.ritmo_cardiaco = citaData.ritmo_cardiaco;
+            cita.presion = citaData.presion;
             setHora(citaData.hora);
             setFecha(citaData.fecha);
+            console.log(cita)
             // console.log("cita:", citaData);
         } catch (error) {
             // Handle the error
@@ -420,17 +447,7 @@ const Citas = () => {
 
         // console.log("Entra a agregar despues de validaciones");
         try {
-            // console.log('yay')
-            // console.log("cita add:" + cita);
-            // console.log("ID:" + id);
-            // console.log("NOMBRE:" + cita.nombre_persona);
-            // console.log("ESTADO:" + cita.estado);
-            // console.log("IDPACIENTE:" + cita.idpaciente);
-            // console.log("CORREO:" + cita.correouser);
-            // console.log("HORA INICIO:" + cita.hora_inicio);
-            // console.log("HORA FINAL:" + cita.hora_final);
-            // console.log("FECHA:" + cita.fecha);
-            // console.log("HORA:" + cita.hora);
+            
             await CitasService.postCitas(cita);
             alert('Cita Agregado');
             toggleModal();
@@ -443,8 +460,8 @@ const Citas = () => {
     };
 
     const EditHandler = async (e) => {
-        // console.log("Entra a editar");
-
+         console.log("Entra a editar");
+        console.log(cita)
         e.preventDefault();
         try {
             // console.log("test");
@@ -495,29 +512,18 @@ const Citas = () => {
 
     const submitEditCita = async () => {
         try {
-            // console.log("Before validations");
             if (validations()) {
-                // console.log("Entra a edit despues de validaciones");
-
-                // console.log("CITA:" + cita);
-                // console.log("ID:" + id);
-                // console.log("NOMBRE:" + cita.nombre_persona);
-                // console.log("ESTADO:" + cita.estado);
-                // console.log("IDPACIENTE:" + cita.idpaciente);
-                // console.log("CORREO:" + cita.correouser);
-                // console.log("HORA INICIO:" + cita.hora_inicio);
-                // console.log("HORA FINAL:" + cita.hora_final);
-
+             
                 await CitasService.editCitas(id, cita);
 
                 // console.log('SIUUU');
-
+                alert("Cita editada exitosamente!")
                 toggleModal22();
                 window.location.reload();
                 cleanCita();
             }
         } catch (error) {
-            // console.log('Error submitting cita:', error);
+           
         }
     };
 
@@ -613,7 +619,7 @@ const Citas = () => {
 
                 const expedientesData = await ExpedientesService.getAllExpedientes();
                 const expedientesFormatted = expedientesData.map((expediente) => ({
-                    idPaciente: expediente.idpaciente,
+                    idpaciente: expediente.idpaciente,
                     nombre: expediente.nombre,
                     edad: expediente.edad, // Assuming 'age' property exists in 'expediente' object
                     // Add other relevant properties from the 'Expedientes' table
@@ -928,35 +934,36 @@ const Citas = () => {
                                         renderInput={(params) => <TextField {...params} label="Estado" required />}
                                     />
                                     <Autocomplete
-                                        value={selectedIdPaciente || null}
+                                        value={Expedientess}
                                         disablePortal
                                         id="idpaciente"
                                         options={Expedientes}
                                         getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
-                                        onChange={(event, newValue) =>
-                                            setCita({
-                                                ...cita,
-                                                idpaciente: newValue,
-                                            })
-                                        }
+                                        onChange={(event, newValue) =>{
+                                            console.log(cita)
+                                            console.log("ID Paciente Value:", newValue);
+                                            console.log("ID Paciente Type:", newValue.idpaciente);
+                                            console.log(cita.nombre_persona);
+                                            cita.idpaciente = newValue.idpaciente;
+                                            console.log(cita);
+                                        }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="ID Paciente" required />
                                         )}
                                     />
 
                                     <Autocomplete
-                                        value={selectedCorreoUser || null}
+                                        value={selectMail}
                                         disablePortal
                                         id="correouser"
                                         required
                                         options={Usuarios}
                                         getOptionLabel={(opcion) => opcion.correouser}
-                                        onChange={(event, newValue) =>
-                                            setCita({
-                                                ...cita,
-                                                correouser: newValue,
-                                            })
-                                        }
+                                        onChange={(event, newValue) =>{
+
+
+                                            cita.correouser = newValue.correouser;
+                                        }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="Correo User" required />
                                         )}
