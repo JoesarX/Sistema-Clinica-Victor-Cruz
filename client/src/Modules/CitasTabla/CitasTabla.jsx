@@ -62,31 +62,43 @@ const Citas = () => {
     // }
 
     const handleDeleteCitasClick = (row, id) => {
-        swal({
-            title: "¿Estás seguro?",
-            text: "Una vez borrado, no podrás recuperar esta información.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then(async (willDelete) => {
-                if (willDelete) {
-                    try {
-
-                        await CitasService.deleteCitas(id);
-                        swal("Cita eliminado exitosamente!", {
-                            icon: "success",
-                        });
-                        window.location.reload();
-                    } catch (error) {
-                        swal("Error al eliminar el cita. Por favor, inténtalo de nuevo más tarde.", {
-                            icon: "error",
-                        });
+        if (row.estado == "Terminada" || row.estado == "Cancelada") {
+            swal({
+                title: "Cita Terminada/Cancelada",
+                text: "No se puede eliminar una cita terminada o cancelada.",
+                icon: "info",
+                confirmButtonText: 'Save',
+                dangerMode: false,
+            })
+        }
+        else {
+            swal({
+                title: "¿Estás seguro?",
+                text: "Una vez borrado, no podrás recuperar esta información.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then(async (willDelete) => {
+                    if (willDelete) {
+                        try {
+    
+                            await CitasService.deleteCitas(id);
+                            swal("Cita eliminado exitosamente!", {
+                                icon: "success",
+                            });
+                            window.location.reload();
+                        } catch (error) {
+                            swal("Error al eliminar el cita. Por favor, inténtalo de nuevo más tarde.", {
+                                icon: "error",
+                            });
+                        }
+                    } else {
+                        swal("¡Tu información no se ha borrado!");
                     }
-                } else {
-                    swal("¡Tu información no se ha borrado!");
-                }
-            });
+                });
+        }
+        
     };
 
     const theme = createTheme(
