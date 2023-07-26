@@ -308,7 +308,7 @@ const Dashboard = () => {
         setIsChangesSaved3(true);
     };
 
-    const hanldeSignosLabelChange = (e) => {
+    const handleSignosLabelChange = (e) => {
         const { name, value } = e.target;
         const wholeNumberRegex = /^\d*$/
         const decimalRegex = /^\d*\.?\d*$/
@@ -479,7 +479,8 @@ const Dashboard = () => {
                                                 name="altura"
                                                 style={{ width: '65px' }}
                                                 value={patient.altura}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='170'
                                             />
                                         </div>
                                     ) : (
@@ -506,9 +507,10 @@ const Dashboard = () => {
                                                 type="text"
                                                 className="edit-text-box"
                                                 name="peso"
-                                                style={{ width: '55px' }}
+                                                style={{ width: '60px' }}
                                                 value={patient.peso}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='63.3'
                                             />
                                         </div>
                                     ) : (
@@ -537,7 +539,8 @@ const Dashboard = () => {
                                                 name="temperatura"
                                                 style={{ width: '65px' }}
                                                 value={patient.temperatura}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='37.2'
                                             />
                                         </div>
                                     ) : (
@@ -566,7 +569,8 @@ const Dashboard = () => {
                                                 name="ritmo_cardiaco"
                                                 style={{ width: '60px' }}
                                                 value={patient.ritmo_cardiaco}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='80'
                                             />
                                         </div>
                                     ) : (
@@ -595,7 +599,8 @@ const Dashboard = () => {
                                                 name="presion"
                                                 style={{ width: '80px' }}
                                                 value={patient.presion}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='120/80'
                                             />
                                         </div>
                                     ) : (
