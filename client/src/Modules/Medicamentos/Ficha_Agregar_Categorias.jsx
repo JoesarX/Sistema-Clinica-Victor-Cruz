@@ -19,7 +19,6 @@ import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
-import { useGridDensity } from '@mui/x-data-grid/internals';
 
 
 const Ficha_Agregar_Categorias = (props) => {
