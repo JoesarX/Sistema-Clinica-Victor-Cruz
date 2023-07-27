@@ -6,6 +6,7 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState();
   const [nombreUser, setNombreUser] = useState();
+  const [isAlertShown, setIsAlertShown] = useState(false); // New state variable
 
   useEffect(() => {
     const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
@@ -16,6 +17,21 @@ const AuthProvider = ({ children }) => {
       setUserType(storedUserType);
     }
   }, []);
+
+  useEffect(() => {
+    const handleUnload = () => {
+      if (isLoggedIn) {
+        const lastActivityTime = new Date().getTime();
+        localStorage.setItem('lastActivityTime', lastActivityTime);
+      }
+    };
+
+    window.addEventListener('beforeunload', handleUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+    };
+  }, [isLoggedIn]);
 
   const handleSignIn = (userType) => {
     setIsLoggedIn(true);
@@ -28,19 +44,24 @@ const AuthProvider = ({ children }) => {
   const handleSignOut = () => {
     setIsLoggedIn(false);
     setUserType('normal');
+    setIsAlertShown(false); // Reset the alert flag when the user logs out
     localStorage.clear();
-    window.location.reload()
+    clearTimeout(timerIdRef.current); // Clear the auto-logout timer when the user logs out
+    window.location.reload();
   };
 
   // Auto-logout timer
-  const autoLogoutTime = 1 * 10 * 1000; // 5 minutes in milliseconds
+  const autoLogoutTime = 1 * 10 * 1000; // 10 seconds for testing (change to 5 minutes in production)
   const timerIdRef = useRef();
 
   const resetAutoLogoutTimer = () => {
     clearTimeout(timerIdRef.current);
     timerIdRef.current = setTimeout(() => {
       handleSignOut();
-      alert('You have been logged out due to inactivity.');
+      if (!isAlertShown) {
+        setIsAlertShown(true);
+        alert('You have been logged out due to inactivity.');
+      }
     }, autoLogoutTime);
   };
 
@@ -49,6 +70,19 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    const lastActivityTime = localStorage.getItem('lastActivityTime');
+    if (lastActivityTime && isLoggedIn) {
+      const currentTime = new Date().getTime();
+      const timeSinceLastActivity = currentTime - parseInt(lastActivityTime, 10);
+      if (timeSinceLastActivity > autoLogoutTime) {
+        handleSignOut();
+        if (!isAlertShown) {
+          setIsAlertShown(true);
+          alert('You have been logged out due to inactivity.');
+        }
+      }
+    }
+
     // Set up event listeners for user activity
     window.addEventListener('mousedown', handleUserActivity);
     window.addEventListener('keydown', handleUserActivity);
@@ -59,7 +93,7 @@ const AuthProvider = ({ children }) => {
       window.removeEventListener('keydown', handleUserActivity);
       clearTimeout(timerIdRef.current);
     };
-  }, []);
+  }, [isLoggedIn, isAlertShown]); // Add isAlertShown to the dependencies array
 
   const contextValue = {
     isLoggedIn,
