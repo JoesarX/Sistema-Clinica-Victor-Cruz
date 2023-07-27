@@ -51,7 +51,7 @@ const AuthProvider = ({ children }) => {
   };
 
   // Auto-logout timer
-  const autoLogoutTime = 1 * 10 * 1000; // 10 seconds for testing (change to 5 minutes in production)
+  const autoLogoutTime = 10 * 60 * 1000; // 10 seconds for testing (change to 5 minutes in production)
   const timerIdRef = useRef();
 
   const resetAutoLogoutTimer = () => {
