@@ -7,6 +7,8 @@ import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
+import misionRouter from "./routes/mision.js";
+import visionRouter from "./routes/vision.js";
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -16,15 +18,15 @@ app.listen(port, () => {
 });
 
 //LOCALHOST MYSQL CONNECTION
-// const pool = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "password",
-//   database: "softwaredb",
-//   waitForConnections: true,
-//   connectionLimit: 10,
-//   queueLimit: 0,
-// });
+ /*const pool = mysql.createPool({
+   host: "localhost",
+   user: "root",
+   password: "password",
+   database: "softwaredb",
+   waitForConnections: true,
+   connectionLimit: 10,
+   queueLimit: 0,
+ });*/
 
 //HEROKU MYSQL CONNECTION
 const pool = mysql.createPool({
@@ -54,6 +56,8 @@ app.use("/medicamentos", medicamentosRouter(pool));
 app.use("/citas", citasRouter(pool)); 
 app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
+app.use("/mision", misionRouter(pool)); // Pass the pool object as a parameter
+app.use("/vision", visionRouter(pool)); // Pass the pool object as a parameter
 
 
 

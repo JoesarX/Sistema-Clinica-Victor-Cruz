@@ -1,4 +1,5 @@
 @media (max-width: 768px) {
+
   /* Styles for smaller screens */
   .about-us-container,
   .mission-vision-container,
@@ -30,6 +31,7 @@
     width: 200px;
     height: 200px;
   }
+
   .person-image img {
     width: 200px;
     height: 200px;
@@ -40,7 +42,10 @@
   }
 }
 
+
 @media (max-width: 540px) {
+ 
+
   /* Styles for mobile screens */
   .mission-vision-container {
     flex-direction: column;
@@ -174,7 +179,7 @@
 
 .scrollable-page {
   height: 100vh;
-  
+
   background-color: #E4EBF9;
 }
 
@@ -415,4 +420,12 @@ h2 {
 p {
   margin-left: 50px;
   text-align: justify;
+}
+
+textarea {
+  
+  text-align: justify;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease-in-out;
 }
