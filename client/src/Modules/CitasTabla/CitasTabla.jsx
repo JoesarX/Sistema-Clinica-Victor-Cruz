@@ -82,7 +82,7 @@ const Citas = () => {
                 .then(async (willDelete) => {
                     if (willDelete) {
                         try {
-    
+
                             await CitasService.deleteCitas(id);
                             swal("Cita eliminado exitosamente!", {
                                 icon: "success",
@@ -98,7 +98,7 @@ const Citas = () => {
                     }
                 });
         }
-        
+
     };
 
     const theme = createTheme(
@@ -272,7 +272,7 @@ const Citas = () => {
             cita.ritmo_cardiaco = citaData.ritmo_cardiaco;
             cita.presion = citaData.presion;
             setHora(citaData.hora);
-            setFecha(citaData.fecha);
+            setFecha(dayjs(citaData.fecha));
             console.log(cita)
             // console.log("cita:", citaData);
         } catch (error) {
@@ -346,29 +346,28 @@ const Citas = () => {
         setHora(null);
     };
 
+    let isAvailabilityCheckInProgress = false;
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         try {
-
-            const timeString = cita.hora;
-            const [time, meridiem] = timeString.split(" ");
-            const [hourString, minuteString] = time.split(":");
-            const hour = parseInt(hourString, 10);
-            const minute = parseInt(minuteString, 10);
-            let hour24 = hour;
-            // console.log(hour24)
-            // console.log(meridiem)
-            if (meridiem === "PM" && hour !== 12) {
-                hour24 += 12;
-            }
-            cita.hora = hour24 + ":" + minuteString + ":00";
-
             if (validations()) {
-                submitCita();
+                // console.log("Entra a agregar despues de validaciones");
+                // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
+                const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora);;
+                const isAvailable = availableResponse.available;
+                // console.log("isAvailable: " , isAvailable);
+
+                if (!isAvailable) {
+                    alert('La hora que ha seleccionado ya ha sido ocupada.');
+                    setHora(null);
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate);
+                    setAvailableTimes(times);
+                } else {
+                    submitCita();
+                }
             }
-
-
         } catch (error) {
             // Handle error if any
             // console.log('Error submitting cita:', error);
@@ -404,22 +403,18 @@ const Citas = () => {
         console.log(cita)
         e.preventDefault();
         try {
-
-            const timeString = cita.hora;
-            const [time, meridiem] = timeString.split(" ");
-            const [hourString, minuteString] = time.split(":");
-            const hour = parseInt(hourString, 10);
-            const minute = parseInt(minuteString, 10);
-            let hour24 = hour;
-            // console.log(hour24)
-            // console.log(meridiem)
-            if (meridiem === "PM" && hour !== 12) {
-                hour24 += 12;
-            }
-            cita.hora = hour24 + ":" + minuteString + ":00";
-
             if (validations()) {
-                submitEditCita();
+                const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora, cita.idcita);
+                const isAvailable = availableResponse.available;
+                if (!isAvailable) {
+                    alert('La hora que ha seleccionado ya ha sido ocupada.');
+                    setHora(null);
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
+                    setAvailableTimes(times);
+                }else{
+                    submitEditCita();
+                }
             }
         } catch (error) {
             console.log('Error submitting cita:', error);
@@ -434,16 +429,14 @@ const Citas = () => {
 
     const submitEditCita = async () => {
         try {
-            if (validations()) {
+            await CitasService.editCitas(id, cita);
 
-                await CitasService.editCitas(id, cita);
+            // console.log('SIUUU');
+            alert("Cita editada exitosamente!")
+            toggleModal22();
+            window.location.reload();
+            cleanCita();
 
-                // console.log('SIUUU');
-                alert("Cita editada exitosamente!")
-                toggleModal22();
-                window.location.reload();
-                cleanCita();
-            }
         } catch (error) {
 
         }
@@ -480,6 +473,43 @@ const Citas = () => {
 
         if (estado === null || estado === '') {
             alert('Debe agregar un estado valido.');
+            return false;
+        }
+
+        if (fecha === null || fecha === '') {
+            alert('Debe agregar una fecha valida.');
+            return false;
+        } else if (fecha.format('YYYY-MM-DD') < dayjs().format('YYYY-MM-DD')) {
+            alert('La fecha no puede ser menor a la fecha actual.');
+            return false;
+        } else {
+            cita.fecha = fecha.format('YYYY-MM-DD');
+        }
+
+        console.log("Fecha: " + fecha.format('YYYY-MM-DD'))
+        console.log("Fecha Ahora: " + dayjs().format('YYYY-MM-DD'))
+
+        if (hora === null || hora === '') {
+            alert('Debe agregar una hora valida.');
+            return false;
+        } else {
+            const timeString = cita.hora;
+            const [time, meridiem] = timeString.split(" ");
+            const [hourString, minuteString] = time.split(":");
+            const hour = parseInt(hourString, 10);
+            const minute = parseInt(minuteString, 10);
+            let hour24 = hour;
+            // console.log(hour24)
+            // console.log(meridiem)
+            if (meridiem === "PM" && hour !== 12) {
+                hour24 += 12;
+            }
+            cita.hora = hour24 + ":" + minuteString + ":00";
+        }
+
+
+        if (fecha.format('YYYY-MM-DD') == dayjs().format('YYYY-MM-DD') && cita.hora < dayjs().format('HH:mm')) {
+            alert('La hora que ha seleccionado para hoy ya ha pasado.');
             return false;
         }
         return true;
