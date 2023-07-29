@@ -18,6 +18,20 @@ const citasRouter = (pool) => {
         }
     });
 
+    router.get('/citas_tabla/citas_expediente/:estado', async (req, res) => {
+        try {
+            const estado = req.params.estado;
+            const connection = await pool.getConnection();
+            const sqlSelect = "SELECT * FROM citas WHERE estado = ?";
+            const [rows, fields] = await connection.query(sqlSelect, [estado]);
+            connection.release();
+            res.json(rows);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
     //Add a new cita
     router.post("/", async (req, res) => {
         try {
@@ -130,7 +144,7 @@ const citasRouter = (pool) => {
             const { id } = req.query; // Get the id query parameter (if provided)
             const onlyDate = date.split("T")[0];
             const availableTimes24 = [
-                "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", 
+                "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00",
                 "11:00:00", "11:30:00", "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00"
             ];
 
