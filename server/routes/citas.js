@@ -47,12 +47,42 @@ const citasRouter = (pool) => {
         }
     });
 
+    router.get('/checkAvailability', async (req, res) => {
+        try {
+            const { fecha, hora, idcita } = req.query; // Access query parameters using req.query
+            console.log("CHECK AVAILABILITY PARAMS: ", fecha, hora, idcita);
+
+            let sqlSelect = `SELECT COUNT(*) AS count FROM citas WHERE fecha = ? AND hora = ?`;
+            if (idcita) {
+                sqlSelect += ` AND idcita <> ?`;
+            }
+            const params = [fecha, hora];
+            if (idcita) {
+                params.push(idcita);
+            }
+            console.log("CHECK AVAILABILITY QUERY: ", sqlSelect);
+            console.log("CHECK AVAILABILITY PARAMS: ", params);
+            const connection = await pool.getConnection();
+            const [rows, fields] = await connection.query(sqlSelect, params);
+            connection.release();
+
+            console.log("CHECK AVAILABILITY RESULT: ", rows[0].count);
+            const count = rows[0].count;
+            res.json({ available: count === 0 });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    });
+
+
+
     //Get a cita by id
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
 
-            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE idcita = " + req.params.id;
+            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE idcita = " + req.params.id;
 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
@@ -130,8 +160,8 @@ const citasRouter = (pool) => {
             const { id } = req.query; // Get the id query parameter (if provided)
             const onlyDate = date.split("T")[0];
             const availableTimes24 = [
-                "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", 
-                "11:00:00", "11:30:00", "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00"
+                "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", "11:00:00", "11:30:00",
+                "12:00:00", "12:30:00", "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00"
             ];
 
             // Construct the SQL query to fetch existing times for the given date
@@ -161,6 +191,7 @@ const citasRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+
 
     // const checkAndUpdateExpiredAppointments = async () => {
     //     try {
