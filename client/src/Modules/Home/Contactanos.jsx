@@ -106,7 +106,7 @@ const Contactanos = () => {
             setIsEditing2(false);
         } else {
             // Display an error message or handle the invalid email case
-            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido.');
+            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).');
         }
     };
 
