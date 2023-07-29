@@ -19,7 +19,6 @@ import MisionService from '../../Services/MisionService';
 import VisionService from '../../Services/VisionService';
 import { useEffect, useRef, useState } from 'react';
 
-
 const Acercade = () => {
   const [mision, setMision] = useState(null);
   const [vision, setVision] = useState(null);
@@ -34,8 +33,37 @@ const Acercade = () => {
     texto_campo: '',
   })
 
+  /// PARA WALTER
+
+  const DESC = 'La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado vespertino y matutino para brindar un mejor servicio a la población en general.';
+
+  const [description, setDescription] = useState(null);
+
+  const [descriptionOBJ, setDescriptionOBJ] = useState({
+    Tipo: 'Descripcion',
+    texto_campo: '',
+  });
+
+  const handleDescChange = (event) => {
+    setDescription(event.target.value);
+    descriptionOBJ.texto_campo = event.target.value;
+  }
+
+  const handleDescEdit = (event) => {
+    setIsEditingLabelDesc(true);
+  }
+
+  const handleDescSave = (event) => {
+    setIsEditingLabelDesc(false);
+    console.log(descriptionOBJ.texto_campo)
+    setDescription(descriptionOBJ.texto_campo);
+  }
+
+  /////
+
   const [isEditingLabel, setIsEditingLabel] = useState(false);
   const [isEditingLabel2, setIsEditingLabel2] = useState(false);
+  const [isEditingLabelDesc, setIsEditingLabelDesc] = useState(false);
 
   const inputRef = useRef(null);
 
@@ -65,7 +93,6 @@ const Acercade = () => {
   };
 
   const handleVisionSave = (event) => {
-
     setIsEditingLabel2(false);
     console.log(visionOBJ)
     VisionService.editVision(visionOBJ);
@@ -77,8 +104,6 @@ const Acercade = () => {
 
   useEffect(() => {
     const fetchMision = async () => {
-
-
       try {
         const misionData = await MisionService.getMision();
         setMision(misionData.texto_campo);
@@ -89,8 +114,6 @@ const Acercade = () => {
       }
     };
     const fetchVision = async () => {
-
-
       try {
         const visionData = await VisionService.getVision();
         setVision(visionData.texto_campo);
@@ -100,19 +123,28 @@ const Acercade = () => {
         console.log("Error fetching expedientes:", error);
       }
     };
+    const fetchDesc = () => {
+      setDescription(DESC);
+      descriptionOBJ.texto_campo = DESC;
+    }
     if (isEditingLabel && inputRef.current) {
       // Adjust the height of the input box to match its content
       inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
     }
     if (isEditingLabel2 && inputRef.current) {
       // Adjust the height of the input box to match its content
       inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelDesc && inputRef.current) {
+      inputRef.current.style.height = 'auto';
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
     }
     fetchMision();
     fetchVision();
-  }, [isEditingLabel,isEditingLabel2]);
+    fetchDesc();
+  }, [isEditingLabel, isEditingLabel2, isEditingLabelDesc]);
 
 
   return (
@@ -137,7 +169,7 @@ const Acercade = () => {
                     ref={inputRef}
                     name="mision"
                     value={mision}
-                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px' }}
+                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px'}}
                     onChange={handleMisionChange}
                   >
                   </textarea>
@@ -186,7 +218,7 @@ const Acercade = () => {
                   </button>
                 </span>
               )}
-              
+
             </span>
           </div>
         </div>
@@ -198,11 +230,33 @@ const Acercade = () => {
           <div className="text-container">
             <span>
               <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Descripcion de la Empresa</h2>
-              <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
-                La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990,
-                bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado
-                vespertino y matutino para brindar un mejor servicio a la población en general.
-              </p>
+              {isEditingLabelDesc ? (
+                <div>
+                  <textarea
+                    ref={inputRef}
+                    name="description"
+                    value={description}
+                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent' }}
+                    onChange={handleDescChange}
+                  >
+                  </textarea>
+                  <button onClick={handleDescSave} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                    Guardar Cambios
+                  </button>
+                </div>
+              ) :
+                (
+                  <span>
+                    <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
+                      {description}
+                    </p>
+                    <button onClick={handleDescEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                      Editar
+                    </button>
+                  </span>
+                )
+
+              }
             </span>
           </div>
         </div>
