@@ -7,14 +7,7 @@ import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
-<<<<<<< HEAD
-import id_cmdRouter from "./routes/id_cmd.js";
-import textos_cmdRouter from "./routes/textos_cmd.js";
-=======
-import misionRouter from "./routes/mision.js";
-import visionRouter from "./routes/vision.js";
 
->>>>>>> 2f5a6a6dcd9fc0a1ad4a7c361dbe1f58eb0698fb
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -61,14 +54,6 @@ app.use("/medicamentos", medicamentosRouter(pool));
 app.use("/citas", citasRouter(pool)); 
 app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
-<<<<<<< HEAD
-app.use("/id_cmd", id_cmdRouter(pool)); // Pass the pool object as a parameter
-app.use("/texto_cmd", textos_cmdRouter(pool)); // Pass the pool object as a parameter
-
-=======
-app.use("/mision", misionRouter(pool)); // Pass the pool object as a parameter
-app.use("/vision", visionRouter(pool)); // Pass the pool object as a parameter
->>>>>>> 2f5a6a6dcd9fc0a1ad4a7c361dbe1f58eb0698fb
 
 
 
