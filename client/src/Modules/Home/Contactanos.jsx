@@ -19,63 +19,95 @@ const Contactanos = () => {
 
 
     /* Para el Numero Telefoinico */
-    const [phone, setPhone] = useState('+504 2230-3901');
     const [isEditing, setIsEditing] = useState(false);
-    const [editedPhone, setEditedPhone] = useState('');
+    const [phone, setPhone] = useState('+504 2230-3901');
+    const [editedPhone, setEditedPhone] = useState('+504 2230-3901');
 
     const handleEditPhone = () => {
-        setEditedPhone(phone); // Initialize the edited value with the current value
         setIsEditing(true);
-    };
-
-    const handleSavePhone = () => {
-        setPhone(editedPhone); // Save the edited value
-        setIsEditing(false);
     };
 
     const handleCancelEdit = () => {
         setIsEditing(false);
+        setEditedPhone(phone);
     };
 
+    const isValidPhone = (phone) => {
+        // Regular expression to match the phone number pattern with a space after +504
+        const phonePattern = /^\+504\s\d{4}-\d{4}$/;
+        return phonePattern.test(phone);
+    };
+
+    const handleSavePhone = () => {
+        if (isValidPhone(editedPhone)) {
+            setPhone(editedPhone);
+            setIsEditing(false);
+        } else {
+            // Display an error message or handle the invalid phone number case
+            alert('El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
+        }
+    };
 
     /* Para el numero Movil   */
-    const [whatsapp, setWhatsapp] = useState('+504 3342-4985');
     const [isEditing1, setIsEditing1] = useState(false);
-    const [editedWhatsapp, setEditedWhatsapp] = useState('');
+    const [whatsapp, setWhatsApp] = useState('+504 3342-4985');
+    const [editedWhatsapp, setEditedWhatsapp] = useState('+504 3342-4985');
 
     const handleEditWhatsapp = () => {
-        setEditedWhatsapp(whatsapp); // Initialize the edited value with the current value
         setIsEditing1(true);
-    };
-
-    const handleSaveWhatsapp = () => {
-        setWhatsapp(editedWhatsapp); // Save the edited value
-        setIsEditing1(false);
     };
 
     const handleCancelEdit1 = () => {
         setIsEditing1(false);
+        setEditedWhatsapp(whatsapp);
+    };
+
+    const isValidWhatsApp = (whatsapp) => {
+        // Regular expression to match the WhatsApp number pattern with a space after +504 and a hyphen after the first 4 digits
+        const whatsappPattern = /^\+504\s\d{4}-\d{4}$/;
+        return whatsappPattern.test(whatsapp);
+    };
+
+    const handleSaveWhatsapp = () => {
+        if (isValidWhatsApp(editedWhatsapp)) {
+            setWhatsApp(editedWhatsapp);
+            setIsEditing1(false);
+        } else {
+            // Display an error message or handle the invalid WhatsApp number case
+            alert('El número de WhatsApp no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
+        }
     };
 
 
 
     /* Para el correo electronico */
-    const [email, setEmail] = useState('clinica.drvictorcruz@gmail.com');
     const [isEditing2, setIsEditing2] = useState(false);
-    const [editedEmail, setEditedEmail] = useState('');
+    const [email, setEmail] = useState('clinica.drvictorcruz@gmail.com');
+    const [editedEmail, setEditedEmail] = useState('clinica.drvictorcruz@gmail.com');
 
     const handleEditEmail = () => {
-        setEditedEmail(email); // Initialize the edited value with the current value
         setIsEditing2(true);
-    };
-
-    const handleSaveEmail = () => {
-        setEmail(editedEmail); // Save the edited value
-        setIsEditing2(false);
     };
 
     const handleCancelEdit2 = () => {
         setIsEditing2(false);
+        setEditedEmail(email);
+    };
+
+    const isValidEmail = (email) => {
+        // Regular expression to match the email pattern
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailPattern.test(email);
+    };
+
+    const handleSaveEmail = () => {
+        if (isValidEmail(editedEmail)) {
+            setEmail(editedEmail);
+            setIsEditing2(false);
+        } else {
+            // Display an error message or handle the invalid email case
+            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido.');
+        }
     };
 
 
@@ -123,7 +155,7 @@ const Contactanos = () => {
                             </>
                         )}
                     </div>
-                    <div className="box" >
+                    <div className="box">
                         <h4 style={{ color: '#1E60A6' }}>WhatsApp</h4>
                         {isEditing1 ? (
                             <>
@@ -144,14 +176,16 @@ const Contactanos = () => {
                             <>
                                 <p style={{ color: '#1E60A6' }}>Puedes escribirnos al número</p>
                                 <FontAwesomeIcon icon={faWhatsapp} style={{ color: '#1560F2' }} />
-                                <span onClick={openWhatsApp} style={{ color: '#1E60A6', fontWeight: 'bold' }}>{whatsapp}</span>
+                                <span onClick={openWhatsApp} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
+                                    {whatsapp}
+                                </span>
                                 <button onClick={handleEditWhatsapp} style={{ marginLeft: '5px' }}>
                                     <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                 </button>
                             </>
                         )}
                     </div>
-                    <div className="box" >
+                    <div className="box">
                         <h4 style={{ color: '#1E60A6' }}>Correo Electrónico</h4>
                         {isEditing2 ? (
                             <>
@@ -172,7 +206,9 @@ const Contactanos = () => {
                             <>
                                 <p style={{ color: '#1E60A6' }}>Puedes escribirnos al correo</p>
                                 <FontAwesomeIcon icon={faEnvelope} style={{ color: '#1560F2' }} />
-                                <span onClick={openEmail} style={{ color: '#1E60A6', fontWeight: 'bold' }}>{email}</span>
+                                <span onClick={openEmail} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
+                                    {email}
+                                </span>
                                 <button onClick={handleEditEmail} style={{ marginLeft: '5px' }}>
                                     <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                 </button>
