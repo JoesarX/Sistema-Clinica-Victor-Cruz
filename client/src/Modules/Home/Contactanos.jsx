@@ -1,17 +1,21 @@
 import React from 'react';
 import '../HojaDeEstilos/Contactanos.css';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { AuthContext } from '../AuthContext.js';
+
 
 
 const Contactanos = () => {
     const openWhatsApp = () => {
         window.open('https://wa.me/+50433424985', '_blank');
     };
+
+    const {userType} = useContext(AuthContext);
 
     const openEmail = () => {
         window.open('mailto:clinica.drvictorcruz@gmail.com', '_blank');
