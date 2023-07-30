@@ -3,12 +3,16 @@ import '../HojaDeEstilos/Footer.css'
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faHome, faPhone, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../AuthContext.js';
+
 
 
 const Topbar = () => {
 
     const navigate = useNavigate();
+
+    const { userType, isLoggedIn } = useContext(AuthContext);
 
 
     /* Para el La Direccion */
@@ -163,9 +167,13 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{address}</div>
-                                <button onClick={handleEditAddress}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <div>
+                                        <button onClick={handleEditAddress}>
+                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
@@ -190,9 +198,13 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{email}</div>
-                                <button onClick={handleEditEmail}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <div>
+                                        <button onClick={handleEditEmail}>
+                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
@@ -217,9 +229,13 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{phone}</div>
-                                <button onClick={handleEditPhone}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <div>
+                                        <button onClick={handleEditPhone}>
+                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
@@ -246,9 +262,13 @@ const Topbar = () => {
                         <span onClick={handleEditYear} style={{ cursor: 'pointer' }}>
                             © {year} Clínica Dr. Víctor Cruz
                         </span>
-                        <button onClick={handleEditYear}>
-                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                        </button>
+                        {isLoggedIn && userType !== 'normal' && (
+                            <div>
+                                <button onClick={handleEditYear}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </div>

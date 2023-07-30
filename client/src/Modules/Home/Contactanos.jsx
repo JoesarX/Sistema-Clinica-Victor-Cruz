@@ -15,7 +15,7 @@ const Contactanos = () => {
         window.open('https://wa.me/+50433424985', '_blank');
     };
 
-    const {userType} = useContext(AuthContext);
+    const { userType, isLoggedIn } = useContext(AuthContext);
 
     const openEmail = () => {
         window.open('mailto:clinica.drvictorcruz@gmail.com', '_blank');
@@ -114,9 +114,6 @@ const Contactanos = () => {
         }
     };
 
-
-
-
     return (
         <div>
             <Topbar />
@@ -153,9 +150,13 @@ const Contactanos = () => {
                                 <p style={{ color: '#1E60A6' }}>Puedes llamarnos al número</p>
                                 <FontAwesomeIcon icon={faPhone} style={{ color: '#1560F2' }} />
                                 <span style={{ color: '#1E60A6', fontWeight: 'bold' }}>{phone}</span>
-                                <button onClick={handleEditPhone} style={{ marginLeft: '5px' }}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <div>
+                                        <button onClick={handleEditPhone} style={{ marginLeft: '5px' }}>
+                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
@@ -183,9 +184,13 @@ const Contactanos = () => {
                                 <span onClick={openWhatsApp} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
                                     {whatsapp}
                                 </span>
-                                <button onClick={handleEditWhatsapp} style={{ marginLeft: '5px' }}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <div>
+                                        <button onClick={handleEditWhatsapp} style={{ marginLeft: '5px' }}>
+                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
@@ -213,9 +218,13 @@ const Contactanos = () => {
                                 <span onClick={openEmail} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
                                     {email}
                                 </span>
-                                <button onClick={handleEditEmail} style={{ marginLeft: '5px' }}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <div>
+                                        <button onClick={handleEditEmail} style={{ marginLeft: '5px' }}>
+                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
