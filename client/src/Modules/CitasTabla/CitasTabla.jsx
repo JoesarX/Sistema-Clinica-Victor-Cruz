@@ -351,6 +351,7 @@ const Citas = () => {
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         try {
+            cita.estado = "Pendiente";
             if (validations()) {
                 // console.log("Entra a agregar despues de validaciones");
                 // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
@@ -386,7 +387,6 @@ const Citas = () => {
 
         // console.log("Entra a agregar despues de validaciones");
         try {
-
             await CitasService.postCitas(cita);
             alert('Cita Agregado');
             toggleModal();
@@ -412,7 +412,7 @@ const Citas = () => {
                     const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
                     const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
                     setAvailableTimes(times);
-                }else{
+                } else {
                     submitEditCita();
                 }
             }
@@ -684,28 +684,6 @@ const Citas = () => {
                                 autoComplete="off"
                             >
                                 <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" onChange={handleModalFieldChange} name='nombre_persona' required />
-                                <Autocomplete
-                                    disablePortal
-                                    id="estado"
-                                    required
-                                    options={listaEstado}
-                                    defaultValue={cita.estado}
-                                    onChange={(event, newValue) =>
-                                        setCita({
-                                            ...cita,
-                                            estado: newValue
-                                        })
-                                    }
-                                    renderInput={(params) => <TextField {...params} label="Estado" required />}
-                                    ListboxProps={
-                                        {
-                                            style: {
-                                                maxHeight: '300px',
-                                                border: '1px solid BLACK'
-                                            }
-                                        }
-                                    }
-                                />
                                 <Autocomplete
                                     disablePortal
                                     id="idpaciente"

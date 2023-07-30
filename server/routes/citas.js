@@ -193,42 +193,40 @@ const citasRouter = (pool) => {
     });
 
 
-    // const checkAndUpdateExpiredAppointments = async () => {
-    //     try {
-    //         const connection = await pool.getConnection();
+    const checkAndUpdateExpiredAppointments = async () => {
+        try {
+            const connection = await pool.getConnection();
 
-    //         // Get the current date and time
-    //         const currentDateTime = new Date();
+            // Citas donde la Fecha es menor a la actual o la fecha es igual a la actual y la hora es menor a la actual
+            const sqlSelect = `SELECT idcita FROM citas WHERE estado = 'Pendiente' AND (curdate() > fecha or (curdate() = fecha and (CURRENT_TIME() - INTERVAL 30 MINUTE) > hora));`;
+            const [rows, fields] = await connection.query(sqlSelect);
 
-    //         // Query appointments with ending time that has passed the current time
-    //         const sqlSelect = `SELECT idcita, hora_final FROM citas WHERE estado = 'activa' AND hora_final <= ?`;
-    //         const [rows, fields] = await connection.query(sqlSelect, [currentDateTime]);
+            console.log(rows);
 
-    //         if (rows.length > 0) {
-    //             // Update the state of expired appointments to 'expirada'
-    //             const expiredIds = rows.map((row) => row.idcita);
-    //             const sqlUpdate = `UPDATE citas SET estado = 'expirada' WHERE idcita IN (?)`;
-    //             await connection.query(sqlUpdate, [expiredIds]);
-    //         }
+            if (rows.length > 0) {
+                // Cambiar cada una a expirada
+                const expiredIds = rows.map((row) => row.idcita);
+                const sqlUpdate = `UPDATE citas SET estado = 'Terminada' WHERE idcita IN (?)`;
+                await connection.query(sqlUpdate, [expiredIds]);
+            }
 
-    //         connection.release();
-    //     } catch (err) {
-    //         console.log(err);
-    //         // Handle any errors that occurred during the process
-    //     }
-    // };
+            connection.release();
+            console.log("5 Seconds")
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
-    // // Function to start the interval for checking and updating expired appointments
-    // const startAppointmentCheckingInterval = () => {
-    //     // Call the function immediately to check for expired appointments when the server starts
-    //     checkAndUpdateExpiredAppointments();
+    const startAppointmentCheckingInterval = () => {
+        // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos
+        checkAndUpdateExpiredAppointments();
 
-    //     // Set the interval to run the function every 5 minutes (adjust the interval time as needed)
-    //     setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); // 5 minutes in milliseconds
-    // };
+        // Timer que se ejecuta cada x minutos.
+        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); 
+    };
 
-    // // Call the function to start the checking interval when your server starts
-    // startAppointmentCheckingInterval();
+    //llamado a la busqueda continua de citas expiradas
+    startAppointmentCheckingInterval();
 
     return router;
 };
