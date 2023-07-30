@@ -168,11 +168,9 @@ const Topbar = () => {
                             <>
                                 <div>{address}</div>
                                 {isLoggedIn && userType !== 'normal' && (
-                                    <div>
-                                        <button onClick={handleEditAddress}>
-                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                        </button>
-                                    </div>
+                                    <button onClick={handleEditAddress}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
                                 )}
                             </>
                         )}
@@ -199,11 +197,9 @@ const Topbar = () => {
                             <>
                                 <div>{email}</div>
                                 {isLoggedIn && userType !== 'normal' && (
-                                    <div>
-                                        <button onClick={handleEditEmail}>
-                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                        </button>
-                                    </div>
+                                    <button onClick={handleEditEmail}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
                                 )}
                             </>
                         )}
@@ -230,11 +226,9 @@ const Topbar = () => {
                             <>
                                 <div>{phone}</div>
                                 {isLoggedIn && userType !== 'normal' && (
-                                    <div>
-                                        <button onClick={handleEditPhone}>
-                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                        </button>
-                                    </div>
+                                    <button onClick={handleEditPhone}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
                                 )}
                             </>
                         )}
@@ -263,11 +257,9 @@ const Topbar = () => {
                             © {year} Clínica Dr. Víctor Cruz
                         </span>
                         {isLoggedIn && userType !== 'normal' && (
-                            <div>
-                                <button onClick={handleEditYear}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </div>
+                            <button onClick={handleEditYear}>
+                                <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                            </button>
                         )}
                     </>
                 )}

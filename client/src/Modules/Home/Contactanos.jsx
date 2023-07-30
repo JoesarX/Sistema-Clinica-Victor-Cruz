@@ -151,11 +151,9 @@ const Contactanos = () => {
                                 <FontAwesomeIcon icon={faPhone} style={{ color: '#1560F2' }} />
                                 <span style={{ color: '#1E60A6', fontWeight: 'bold' }}>{phone}</span>
                                 {isLoggedIn && userType !== 'normal' && (
-                                    <div>
-                                        <button onClick={handleEditPhone} style={{ marginLeft: '5px' }}>
-                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                        </button>
-                                    </div>
+                                    <button onClick={handleEditPhone} style={{ marginLeft: '5px' }}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
                                 )}
                             </>
                         )}
@@ -185,11 +183,9 @@ const Contactanos = () => {
                                     {whatsapp}
                                 </span>
                                 {isLoggedIn && userType !== 'normal' && (
-                                    <div>
-                                        <button onClick={handleEditWhatsapp} style={{ marginLeft: '5px' }}>
-                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                        </button>
-                                    </div>
+                                    <button onClick={handleEditWhatsapp} style={{ marginLeft: '5px' }}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
                                 )}
                             </>
                         )}
@@ -219,11 +215,9 @@ const Contactanos = () => {
                                     {email}
                                 </span>
                                 {isLoggedIn && userType !== 'normal' && (
-                                    <div>
-                                        <button onClick={handleEditEmail} style={{ marginLeft: '5px' }}>
-                                            <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                        </button>
-                                    </div>
+                                    <button onClick={handleEditEmail} style={{ marginLeft: '5px' }}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
                                 )}
                             </>
                         )}
