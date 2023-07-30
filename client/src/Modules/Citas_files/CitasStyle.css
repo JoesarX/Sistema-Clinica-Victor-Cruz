@@ -1,4 +1,13 @@
 /*CSS del calendario como tal*/
+td {
+  padding: 2%;
+  width: 80%;
+  border: 1px solid gray;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  overflow-x: auto;
+}
+
 .cal-container {
   margin-top: 1.8%;
   margin-left: 5%;
