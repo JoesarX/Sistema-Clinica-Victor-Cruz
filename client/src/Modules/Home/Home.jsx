@@ -80,23 +80,31 @@ const Home = () => {
     const [editable, setEditable] = useState(false);
     const [missionText, setMissionText] = useState(originalText);
 
+    const MAX_LINES = 10;
+
     const handleEditClick = () => {
         setEditable(true);
-    };
-
-    const handleSaveClick = () => {
+      };
+    
+      const handleSaveClick = () => {
+        if (missionText.split('\n').length > MAX_LINES) {
+          alert(`¡Error! El texto no puede tener más de ${MAX_LINES} líneas.`);
+          return;
+        }
+    
         setEditable(false);
-    };
-
-    const handleCancelClick = () => {
+      };
+    
+      const handleCancelClick = () => {
         setEditable(false);
         setMissionText(originalText);
-    };
-
-    const handleChange = (event) => {
+      };
+    
+      const handleChange = (event) => {
+        // Recortar el texto si excede el máximo número de líneas permitidas
         setMissionText(event.target.value);
-    };
-
+      };
+    
     const formatOriginalText = (text) => {
         return text.split('\n').map((paragraph, index) => (
             <React.Fragment key={index}>
