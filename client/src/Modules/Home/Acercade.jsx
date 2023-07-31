@@ -253,7 +253,7 @@ const Acercade = () => {
                     ref={inputRef}
                     name="mision"
                     value={mision}
-                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', maxHeight: '250px' }}
+                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', maxHeight: '250px', wordWrap: 'breakWord' }}
                     onChange={handleMisionChange}
                   >
                   </textarea>
