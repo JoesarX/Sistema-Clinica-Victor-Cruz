@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+const API_URL = 'http://localhost:8000';
+// const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllCitas = async () => {
     try {
@@ -28,7 +28,7 @@ export const getOneCita = async (id) => {
 
 export const filterCita = async (estado) => {
     try {
-        const res = await axios.get(`${API_URL}/citas_tabla/citas_expediente/${estado}`);
+        const res = await axios.get(`${API_URL}/citas/filtrarCitasTabla/${estado}`);
         return res.data;
     } catch (error) {
         console.log(error);

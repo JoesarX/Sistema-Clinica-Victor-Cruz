@@ -52,8 +52,8 @@ app.use("/usuarios_admin", adminRouter(pool));
 app.use("/medicamentos", medicamentosRouter(pool));
 
 app.use("/citas", citasRouter(pool));
-app.use("/citas_tabla", citasRouter(pool));
-app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
+// app.use("/citas_tabla", citasRouter(pool));
+
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
 
 
