@@ -19,6 +19,15 @@ import MisionService from '../../Services/MisionService';
 import VisionService from '../../Services/VisionService';
 import { useEffect, useRef, useState } from 'react';
 
+import { v4 } from "uuid";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+  getStorage,
+} from "firebase/storage";
+
 const Acercade = () => {
   const [mision, setMision] = useState(null);
   const [vision, setVision] = useState(null);
@@ -39,6 +48,8 @@ const Acercade = () => {
   const DESC = 'La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado vespertino y matutino para brindar un mejor servicio a la población en general.';
   const ABOUT_DOCTOR = 'El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. Además, obtuvo una certificación de auditor interno de dicha norma.'
   const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
+  const DESC_IMG = hospital;
+  const DOCTOR_IMG = doctor;
 
   const [description, setDescription] = useState(null);
   const [biography, setBiography] = useState(null);
@@ -122,6 +133,50 @@ const Acercade = () => {
     }
   }
 
+
+
+  const [imageUploadDesc, setImageUploadDesc] = useState(null);
+  const [imagePreviewDesc, setImagePreviewDesc] = useState(null);
+  const [imageUploadDoctor, setImageUploadDoctor] = useState(null);
+  const [imagePreviewDoctor, setImagePreviewDoctor] = useState(null);
+
+  const storage = getStorage();
+
+  const handleCancelDescImg = () => {
+    setImageUploadDesc(null);
+    setImagePreviewDesc(null);
+  };
+
+  const handleCancelDoctorImg = () => {
+    setImageUploadDoctor(null);
+    setImagePreviewDoctor(null);
+  };
+
+  const deleteImg = (refUrl) => {
+    const imageRef = ref(storage, refUrl)
+    deleteObject(imageRef)
+      .catch((error) => {
+        console.log("Failed to delete image: ", error)
+      })
+  }
+
+  async function uploadDescImg() {
+
+    return new Promise((resolve, reject) => {
+      if (imageUploadDesc == null) {
+        return null;
+      }
+
+      const imageRef = ref(storage, `images/${imageUploadDesc.name + v4()}`);
+      uploadBytes(imageRef, imageUploadDesc)
+        .then((snapshot) => getDownloadURL(snapshot.ref))
+        .then((url) => {
+          resolve(url);
+        })
+        .catch((error) => reject(error));
+    });
+  };
+
   /////
 
   const [isEditingLabel, setIsEditingLabel] = useState(false);
@@ -201,6 +256,14 @@ const Acercade = () => {
       teamDescOBJ.texto_campo = TEAM;
     }
 
+    const fetchImgDesc = () => {
+      setImagePreviewDesc(DESC_IMG);
+    }
+
+    const fetchImgDoctor = () => {
+      setImagePreviewDoctor(DOCTOR_IMG);
+    }
+
     ////
 
     if (isEditingLabel && inputRef.current) {
@@ -228,6 +291,8 @@ const Acercade = () => {
     fetchDesc();
     fetchBio();
     fetchTeam();
+    fetchImgDesc();
+    fetchImgDoctor();
   }, [isEditingLabel, isEditingLabel2, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
 
 
@@ -319,11 +384,26 @@ const Acercade = () => {
 
         <div className="company-description">
           <div className="image-container">
-            <img src={hospital} alt="hospital" />
+            <img src={imagePreviewDesc} alt="Imagen de la clínica" />
+            <div class="upload-buttons">
+              <label htmlFor="urlDescImg">Seleccionar imagen</label>
+              <input
+                type="file"
+                onChange={(event) => {
+                  setImageUploadDesc(event.target.files[0]);
+                  setImagePreviewDesc(URL.createObjectURL(event.target.files[0]));
+                }}
+                accept="image/png, image/jpeg, image/webp"
+                name='urlDescImg'
+                id="urlDescImg"
+                className="customFileInput"
+              />
+              <label onClick={handleCancelDescImg}>Eliminar imagen</label>
+            </div>
           </div>
           <div className="text-container">
             <span>
-              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Descripcion de la Empresa</h2>
+              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Descripción de la Empresa</h2>
               {isEditingLabelDesc ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   <textarea
@@ -361,7 +441,22 @@ const Acercade = () => {
 
         <div className="person-container">
           <div className="person-image">
-            <img src={doctor} alt="doctor" />
+            <img src={imagePreviewDoctor} alt="Dr. Víctor Cruz" />
+            <div class="upload-buttons">
+              <label htmlFor="urlDrImg">Seleccionar imagen</label>
+              <input
+                type="file"
+                onChange={(event) => {
+                  setImageUploadDoctor(event.target.files[0]);
+                  setImagePreviewDoctor(URL.createObjectURL(event.target.files[0]));
+                }}
+                accept="image/png, image/jpeg, image/webp"
+                name='urlDrImg'
+                id="urlDrImg"
+                className="customFileInput"
+              />
+              <label onClick={handleCancelDoctorImg}>Eliminar imagen</label>
+            </div>
           </div>
           <div className="person-description">
             <span>
