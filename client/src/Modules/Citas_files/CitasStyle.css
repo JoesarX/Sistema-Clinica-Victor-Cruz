@@ -1,4 +1,5 @@
 /*CSS del calendario como tal*/
+
 td {
   padding: 2%;
   width: 80%;
@@ -8,6 +9,11 @@ td {
   overflow-x: auto;
 }
 
+footer {
+  margin-top: 2rem;
+  /* Adjust the margin as needed */
+}
+
 .cal-container {
   margin-top: 1.8%;
   margin-left: 5%;
@@ -15,79 +21,3 @@ td {
   height: 100%;
 }
 
-footer {
-  margin-top: 2rem;
-  /* Adjust the margin as needed */
-}
-
-/*para los elementos dentro de HeadertoolBar*/
-.fc-toolbar-center button {
-  margin-right: 2%;
-}
-
-/*para el espacio del HeadertoolBar*/
-.fc-toolbar {
-  margin-left: 3%;
-  margin-right: 3%;
-}
-
-col {
-  width: 0px;
-  display: table-column;
-}
-
-.time-slots {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* TEMPORALLL */
-  background-color: rgb(0, 255, 0, 0.3);
-  background-size: 10px 10px;
-  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px);
-}
-
-.slot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 5px;
-  cursor: pointer;
-  background-color: #fff;
-}
-
-.slot.selected {
-  background-color: red;
-  color: #fff;
-}
-
-.slot.booked {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.appointment-form {
-  margin-left: 20px;
-}
-
-.fc-day-header {
-  background-color: #999;
-  font-weight: 800;
-}
-
-.fc-event-main {
-  font-family: 'Inter';
-}
-
-.fc-axis {
-  width: 200px !important;
-}
-
-.fc-direction-ltr .fc-timegrid-slot-label-frame {
-  text-align: left;
-}
-
-.custom-cell {
-  word-wrap: break-word;
-}
