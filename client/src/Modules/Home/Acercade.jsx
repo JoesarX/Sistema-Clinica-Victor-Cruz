@@ -323,21 +323,21 @@ const Acercade = () => {
                   >
                   </textarea>
                   <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
-                    <button onClick={handleMisionSave} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                    <button onClick={handleMisionSave} class="upload-button accept">
                       Guardar Cambios
                     </button>
-                    <button onClick={() => handleCancel('mision')} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                    <button onClick={() => handleCancel('mision')} class="upload-button cancel">
                       Cancelar
                     </button>
                   </div>
                 </div>
               ) : (
-                <span style={{ display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                   <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>{mision}</p>
-                  <button onClick={handleMisionEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                  <button onClick={handleMisionEdit} class="upload-button">
                     Editar
                   </button>
-                </span>
+                </div>
               )}
             </span>
 
@@ -361,18 +361,18 @@ const Acercade = () => {
                   >
                   </textarea>
                   <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
-                    <button onClick={handleVisionSave} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                    <button onClick={handleVisionSave} class="upload-button accept">
                       Guardar Cambios
                     </button>
-                    <button onClick={() => handleCancel('vision')} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                    <button onClick={() => handleCancel('vision')} class="upload-button cancel">
                       Cancelar
                     </button>
                   </div>
                 </div>
               ) : (
-                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
                   <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>{vision}</p>
-                  <button onClick={handleVisionEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                  <button onClick={handleVisionEdit} class="upload-button">
                     Editar
                   </button>
                 </span>
@@ -398,44 +398,42 @@ const Acercade = () => {
                 id="urlDescImg"
                 className="customFileInput"
               />
-              <label onClick={handleCancelDescImg}>Eliminar imagen</label>
+              <label class="delete" onClick={handleCancelDescImg}>Eliminar imagen</label>
             </div>
           </div>
           <div className="text-container">
-            <span>
-              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Descripción de la Empresa</h2>
-              {isEditingLabelDesc ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <textarea
-                    ref={inputRef}
-                    name="description"
-                    value={description}
-                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px' }}
-                    onChange={handleDescChange}
-                  >
-                  </textarea>
-                  <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
-                    <button onClick={handleDescSave} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
-                      Guardar Cambios
-                    </button>
-                    <button onClick={() => handleCancel('desc')} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
-                      Cancelar
-                    </button>
-                  </div>
+            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Descripción de la Empresa</h2>
+            {isEditingLabelDesc ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
+                <textarea
+                  ref={inputRef}
+                  name="description"
+                  value={description}
+                  style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px' }}
+                  onChange={handleDescChange}
+                >
+                </textarea>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
+                  <button onClick={handleDescSave} class="upload-button accept">
+                    Guardar Cambios
+                  </button>
+                  <button onClick={() => handleCancel('desc')} class="upload-button cancel">
+                    Cancelar
+                  </button>
                 </div>
-              ) :
-                (
-                  <span style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
-                      {description}
-                    </p>
-                    <button onClick={handleDescEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
-                      Editar
-                    </button>
-                  </span>
-                )
-              }
-            </span>
+              </div>
+            ) :
+              (
+                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
+                  <p style={{ position: 'relative', color: 'white', fontSize: '18px' }}>
+                    {description}
+                  </p>
+                  <button onClick={handleDescEdit} class="upload-button">
+                    Editar
+                  </button>
+                </span>
+              )
+            }
           </div>
         </div>
 
@@ -455,83 +453,81 @@ const Acercade = () => {
                 id="urlDrImg"
                 className="customFileInput"
               />
-              <label onClick={handleCancelDoctorImg}>Eliminar imagen</label>
+              <label class="delete" onClick={handleCancelDoctorImg}>Eliminar imagen</label>
             </div>
           </div>
-          <div className="person-description">
-            <span>
-              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}> Dr. Victor Cruz</h2>
-              {isEditingLabelBio ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <textarea
-                    ref={inputRef}
-                    name="biography"
-                    value={biography}
-                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px', width: '85em' }}
-                    onChange={handleBioChange}
-                  >
-                  </textarea>
-                  <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
-                    <button onClick={handleBioSave} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold', justifySelf: 'flex-start' }}>
-                      Guardar Cambios
-                    </button>
-                    <button onClick={() => handleCancel('bio')} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              ) :
-                (
-                  <span style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                    <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
-                      {biography}
-                    </p>
-                    <button onClick={handleBioEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold', justifySelf: 'flex-start' }}>
-                      Editar
-                    </button>
-                  </span>
-                )
-              }
-            </span>
-          </div>
-        </div>
-
-        <div className="employee-description">
-          <FontAwesomeIcon icon={faPeopleGroup} style={{ color: 'rgb(255, 255, 255)', fontSize: '110px', position: 'relative', marginRight: '10px' }} />
-          <span>
-            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Nuestro Equipo</h2>
-            {isEditingLabelTeam ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <div className="text-container">
+            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}> Dr. Victor Cruz</h2>
+            {isEditingLabelBio ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
                 <textarea
                   ref={inputRef}
-                  name="team"
-                  value={teamDesc}
-                  style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px', width: '90em' }}
-                  onChange={handleTeamChange}
+                  name="biography"
+                  value={biography}
+                  style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px' }}
+                  onChange={handleBioChange}
                 >
                 </textarea>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
-                  <button onClick={handleTeamSave} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold', justifySelf: 'flex-start' }}>
+                  <button onClick={handleBioSave} class="upload-button accept">
                     Guardar Cambios
                   </button>
-                  <button onClick={() => handleCancel('team')} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold' }}>
+                  <button onClick={() => handleCancel('bio')} class="upload-button cancel">
                     Cancelar
                   </button>
                 </div>
               </div>
             ) :
               (
-                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
-                    {teamDesc}
+                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
+                  <p style={{ color: 'white', fontSize: '18px', }}>
+                    {biography}
                   </p>
-                  <button onClick={handleTeamEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#FFFFFF', fontWeight: 'bold', justifySelf: 'flex-start' }}>
+                  <button onClick={handleBioEdit} class="upload-button">
                     Editar
                   </button>
                 </span>
               )
             }
-          </span>
+          </div>
+        </div>
+
+        <div className="employee-description">
+          <FontAwesomeIcon icon={faPeopleGroup} style={{ color: 'rgb(255, 255, 255)', fontSize: '110px', position: 'relative', marginRight: '10px' }} />
+          <div class="text-container">
+            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Nuestro Equipo</h2>
+            {isEditingLabelTeam ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
+                <textarea
+                  ref={inputRef}
+                  name="team"
+                  value={teamDesc}
+                  style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px' }}
+                  onChange={handleTeamChange}
+                >
+                </textarea>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
+                  <button onClick={handleTeamSave} class="upload-button accept">
+                    Guardar Cambios
+                  </button>
+                  <button onClick={() => handleCancel('team')} class="upload-button cancel">
+                    Cancelar
+                  </button>
+                </div>
+              </div>
+            ) :
+              (
+                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
+                  <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
+                    {teamDesc}
+                  </p>
+                  <button onClick={handleTeamEdit} class="upload-button">
+                    Editar
+                  </button>
+                </span>
+              )
+            }
+          </div>
 
         </div>
       </div>
