@@ -1,14 +1,33 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../HojaDeEstilos/Footer.css'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faHome, faPhone, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../AuthContext.js';
-
+import text_Services from '../../Services/texto_cmdService';
 
 
 const Topbar = () => {
+
+    const [direccionOBJ, setDireccionOBJ] = React.useState({
+        Tipo: 'Footer_Dirección',
+        texto_campo: ''
+    })
+
+    const [numOBJ, setNumOBJ] = React.useState({
+        Tipo: 'Footer_Telefono',
+        texto_campo: ''
+    })
+
+    const [correoOBJ, setCorreoOBJ] = React.useState({
+        Tipo: 'Footer_Correo',
+        texto_campo: ''
+    })
+
+
+
+
 
     const navigate = useNavigate();
 
@@ -17,16 +36,23 @@ const Topbar = () => {
 
     /* Para el La Direccion */
     const [address, setAddress] = useState('Colonia Kennedy, Tegucigalpa, M.D.C, Honduras');
-    const [editedAddress, setEditedAddress] = useState('Colonia Kennedy, Tegucigalpa, M.D.C, Honduras');
+    const [editedAddress, setEditedAddress] = useState('');
     const [isEditing, setIsEditing] = useState(false);
+
+    const handleChangeAdress = (event) => {
+        setEditedAddress(event.target.value);
+        direccionOBJ.texto_campo = event.target.value;
+
+    };
 
     const handleEditAddress = () => {
         setIsEditing(true);
+        setEditedAddress(address);
     };
+
 
     const handleCancelEdit = () => {
         setIsEditing(false);
-        setEditedAddress(address);
     };
 
     const isValidAddress = (address) => {
@@ -37,27 +63,43 @@ const Topbar = () => {
 
     const handleSaveAddress = () => {
         if (isValidAddress(editedAddress)) {
-            setAddress(editedAddress);
             setIsEditing(false);
+            text_Services.editText(direccionOBJ);
+            window.location.reload(true);
         } else {
             // Display an error message or handle the invalid address case
             alert('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").');
         }
     };
 
+
+
+
+
+
+
     /* Para el correo electronico */
 
     const [email, setEmail] = useState('clinica.drvictorcruz@gmail.com');
-    const [editedEmail, setEditedEmail] = useState('clinica.drvictorcruz@gmail.com');
+    const [editedEmail, setEditedEmail] = useState('');
     const [isEditing1, setIsEditing1] = useState(false);
+
+
+
+
+    const handleChangeEmail = (event) => {
+        setEditedEmail(event.target.value);
+        correoOBJ.texto_campo = event.target.value;
+    };
+
 
     const handleEditEmail = () => {
         setIsEditing1(true);
+        setEditedEmail(email);
     };
 
     const handleCancelEdit1 = () => {
         setIsEditing1(false);
-        setEditedEmail(email);
     };
 
     const isValidEmail = (email) => {
@@ -68,8 +110,9 @@ const Topbar = () => {
 
     const handleSaveEmail = () => {
         if (isValidEmail(editedEmail)) {
-            setEmail(editedEmail);
             setIsEditing1(false);
+            text_Services.editText(correoOBJ);
+            window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
             alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos básicos de un correo electrónico válido.');
@@ -79,16 +122,22 @@ const Topbar = () => {
     /* Para el numero telefonico*/
 
     const [phone, setPhone] = useState('+504 2230-3901');
-    const [editedPhone, setEditedPhone] = useState('+504 2230-3901');
+    const [editedPhone, setEditedPhone] = useState('');
     const [isEditing2, setIsEditing2] = useState(false);
+
+    const handleChangePhone = (event) => {
+        setEditedPhone(event.target.value);
+        numOBJ.texto_campo = event.target.value;
+    };
 
     const handleEditPhone = () => {
         setIsEditing2(true);
+        setEditedPhone(phone);
     };
 
     const handleCancelEdit2 = () => {
         setIsEditing2(false);
-        setEditedPhone(phone);
+
     };
 
     const isValidPhone = (phone) => {
@@ -99,8 +148,9 @@ const Topbar = () => {
 
     const handleSavePhone = () => {
         if (isValidPhone(editedPhone)) {
-            setPhone(editedPhone);
             setIsEditing2(false);
+            text_Services.editText(numOBJ);
+            window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
             alert('El número de teléfono no es válido. Asegúrate de que empiece con +504, tenga 8 dígitos y después de los primeros 4 dígitos vaya un guion y luego el resto de los dígitos.');
@@ -142,6 +192,58 @@ const Topbar = () => {
 
 
 
+    useEffect(() => {
+        const fetchDireccion = async () => {
+            try {
+                const objectDireccion = ['Footer_Dirección'];
+                var direccionData;
+                direccionData = await text_Services.getOneText(objectDireccion);
+                console.log("Cargar Mision: " + direccionData[0].texto_campo);
+                setAddress(direccionData[0].texto_campo);
+                direccionOBJ.texto_campo = direccionData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Direccion:", error);
+            }
+        };
+
+        const fetchCorreo = async () => {
+            try {
+                const objectCorreo = ['Footer_Correo'];
+                var correoData;
+                correoData = await text_Services.getOneText(objectCorreo);
+                console.log("Cargar Correo: " + correoData[0].texto_campo);
+                setEmail(correoData[0].texto_campo);
+                correoOBJ.texto_campo = correoData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Correo:", error);
+            }
+        };
+
+
+        const fetchNumTelefono = async () => {
+            try {
+                const objectNum = ['Footer_Telefono'];
+                var numData;
+                numData = await text_Services.getOneText(objectNum);
+                console.log("Cargar Mision: " + numData[0].texto_campo);
+                setPhone(numData[0].texto_campo);
+                numOBJ.texto_campo = numData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Numero de Telefono:", error);
+            }
+        };
+
+
+
+
+        fetchDireccion();
+        fetchCorreo();
+        fetchNumTelefono();
+
+
+    }, [isEditing, isEditing1, isEditing2, isEditing3]);
+
+
     return (
         <footer class="text-center text-lg-start custom-colors custom-footer">
             <section class="d-flex justify-content-between py-2 px-0 border-bottom footer-info">
@@ -154,7 +256,7 @@ const Topbar = () => {
                                 <input
                                     type="text"
                                     value={editedAddress}
-                                    onChange={(e) => setEditedAddress(e.target.value)}
+                                    onChange={handleChangeAdress}
                                     style={{ color: '#1E60A6', fontWeight: 'bold' }}
                                 />
                                 <button onClick={handleSaveAddress}>
@@ -183,7 +285,7 @@ const Topbar = () => {
                                 <input
                                     type="text"
                                     value={editedEmail}
-                                    onChange={(e) => setEditedEmail(e.target.value)}
+                                    onChange={handleChangeEmail}
                                     style={{ color: '#1E60A6', fontWeight: 'bold' }}
                                 />
                                 <button onClick={handleSaveEmail}>
@@ -212,7 +314,7 @@ const Topbar = () => {
                                 <input
                                     type="text"
                                     value={editedPhone}
-                                    onChange={(e) => setEditedPhone(e.target.value)}
+                                    onChange={handleChangePhone}
                                     style={{ color: '#1E60A6', fontWeight: 'bold' }}
                                 />
                                 <button onClick={handleSavePhone}>
