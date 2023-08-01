@@ -76,14 +76,32 @@ export const getAvailableTimes = async (date, id = null) => {
         console.log(date);
         const url = id ? `${API_URL}/citas/availableTimes/${date}?id=${id}` : `${API_URL}/citas/availableTimes/${date}`;
         const res = await axios.get(url);
-        console.log("SUCCESS FETCHING AVAILABLE TIMES");
-        console.log(res.data);
+        
         return res.data;
     } catch (error) {
         console.log(error);
         throw new Error('Failed to fetch Times');
     }
 };
+
+export const getCheckAvailability = async (fecha, hora, idcita = null) => {
+    try {
+        const url = idcita
+            ? `${API_URL}/citas/checkAvailability?fecha=${fecha}&hora=${hora}&idcita=${idcita}`
+            : `${API_URL}/citas/checkAvailability?fecha=${fecha}&hora=${hora}`;
+
+        console.log("In Service getCheckAvailability");
+        console.log(url);
+
+        const res = await axios.get(url);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to check availability");
+    }
+};
+
+
 
 const Services = {
     getAllCitas,
@@ -92,7 +110,8 @@ const Services = {
     deleteCitas,
     editCitas,
     getAvailableTimes,
-    filterCita
+    filterCita,
+    getCheckAvailability
     // Other functions
 };
 

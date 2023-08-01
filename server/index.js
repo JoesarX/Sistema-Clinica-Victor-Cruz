@@ -7,7 +7,7 @@ import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
-
+import textos_cmdRouter from "./routes/textos_cmd.js";
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -16,15 +16,15 @@ app.listen(port, () => {
 });
 
 //LOCALHOST MYSQL CONNECTION
-//const pool = mysql.createPool({
-//  host: "localhost",
-//user: "root",
-//  password: "password",
-//  database: "softwaredb",
-//  waitForConnections: true,
-//  connectionLimit: 10,
-//  queueLimit: 0,
-//});
+ /*const pool = mysql.createPool({
+   host: "localhost",
+   user: "root",
+   password: "password",
+   database: "softwaredb",
+   waitForConnections: true,
+   connectionLimit: 10,
+   queueLimit: 0,
+ });*/
 
 //HEROKU MYSQL CONNECTION
 const pool = mysql.createPool({
@@ -55,6 +55,8 @@ app.use("/citas", citasRouter(pool));
 // app.use("/citas_tabla", citasRouter(pool));
 
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
+
+app.use('/texto_cmd',textos_cmdRouter(pool));
 
 
 
