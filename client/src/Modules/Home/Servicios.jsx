@@ -10,6 +10,8 @@ import '../HojaDeEstilos/Servicios.css';
 
 const Servicios = () => {
   const { isLoggedIn, userType } = useContext(AuthContext);
+  const [titleError, setTitleError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
 
   const [serviceData, setServiceData] = useState([
@@ -76,7 +78,20 @@ const Servicios = () => {
       alert('Porfavor ingrese titulo, descripcion e imagen');
       return;
     }
+    const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
+    if (!titleRegex.test(newTitle)) {
+      setTitleError(true);
+      alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+      return;
+    }
 
+    // Validate description
+    const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+    if (!descriptionRegex.test(newDescription)) {
+      setDescriptionError(true);
+      alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+      return;
+    }
     const reader = new FileReader();
     reader.onloadend = () => {
       const newService = {
@@ -95,12 +110,26 @@ const Servicios = () => {
 
   const handleSaveEdit = (event) => {
     event.preventDefault();
-    // Save the edited service and update the serviceData state
+    const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
+    if (!titleRegex.test(editedService.title)) {
+      setTitleError(true);
+      alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+      return;
+    }
+
+    // Validate description
+    const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+    if (!descriptionRegex.test(editedService.description)) {
+      setDescriptionError(true);
+      alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+      return;
+    }
     const updatedServiceData = serviceData.map((item) =>
       item.id === editedService.id ? { ...editedService } : item
     );
+
     setServiceData(updatedServiceData);
-    setEditedService(null); // Close the modal after saving changes
+    setEditedService(null);
   };
 
   const handleEditService = (service) => {
@@ -108,7 +137,6 @@ const Servicios = () => {
   };
 
   const handleDeleteService = (serviceId) => {
-    // Filter out the service with the given id and update the serviceData state
     const updatedServiceData = serviceData.filter((service) => service.id !== serviceId);
     setServiceData(updatedServiceData);
   };
@@ -131,7 +159,7 @@ const Servicios = () => {
             <img src={service.imageSrc} alt={service.title} />
             <div className="overlay">
               <h2>{service.title}</h2>
-              <p>{service.description}</p>
+              <p className='desc'>{service.description}</p>
               {isLoggedIn && userType !== 'normal' && showButtons && (
                 <>
                   <button onClick={() => handleEditService(service)}>Editar Servicio</button>
@@ -169,12 +197,12 @@ const Servicios = () => {
               >
                 <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
                   <Grid item xs={12} sm={6}>
-                    <div className='Div-imagen'>
-                      <div className='ImagenWrapper'>
-                        <img className='Imagen' src={imagePreview} alt="imgPreview" />
+                    <div className='DImg'>
+                      <div className='imgWrap'>
+                        <img className='imgC' src={imagePreview} alt="imgPreview" />
                       </div>
                     </div>
-                    <label htmlFor="urlfoto" className="customFileLabel">Seleccionar archivo</label>
+                    <label htmlFor="urlfoto" className="cFL">Seleccionar archivo</label>
                     <input
                       type="file"
                       onChange={(event) => {
@@ -183,10 +211,10 @@ const Servicios = () => {
                       }}
                       name='urlfoto'
                       id="urlfoto"
-                      className="customFileInput"
+                      className="cFI"
                       ref={newServiceImageRef}
                     />
-                    <label onClick={cancelarFotoA} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
+                    <label onClick={cancelarFotoA} className="cFL" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField id="titulo" label="Titulo" variant="outlined" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} name='nombre' required style={{ marginBottom: '0.45rem', width: '90%' }} />
@@ -207,7 +235,7 @@ const Servicios = () => {
                   <Grid item xs={12} sm={6}>
                     <Button
                       variant="contained"
-                      className="modalButton"
+                      className="mB"
                       type="submit"
                       id='crudButton'
                     >
@@ -253,12 +281,12 @@ const Servicios = () => {
             >
               <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
                 <Grid item xs={12} sm={6}>
-                  <div className='Div-imagen'>
-                    <div className='ImagenWrapper'>
-                      <img className='Imagen' src={editedService.imageSrc} alt={editedService.title} />
+                  <div className='DImg'>
+                    <div className='imgWrap'>
+                      <img className='imgC' src={editedService.imageSrc} alt={editedService.title} />
                     </div>
                   </div>
-                  <label htmlFor="urlfoto" className="customFileLabel">Seleccionar archivo</label>
+                  <label htmlFor="urlfoto" className="cFL">Seleccionar archivo</label>
                   <input
                     type="file"
                     onChange={(event) => {
@@ -266,7 +294,7 @@ const Servicios = () => {
                     }}
                     name='urlfoto'
                     id="urlfoto"
-                    className="customFileInput"
+                    className="cFI"
                     ref={newServiceImageRef}
                   />
                 </Grid>
@@ -304,7 +332,7 @@ const Servicios = () => {
                 <Grid item xs={12} sm={6}>
                   <Button
                     variant="contained"
-                    className="modalButton"
+                    className="mB"
                     type="submit"
                     id='crudButton'
                   >
