@@ -72,8 +72,8 @@
     border-radius: 10px;
 }
 
-th,
-td {
+.thFicha,
+.tdFicha {
     padding: 2%;
     width: 40%;
     border: 1px solid gray;
@@ -82,17 +82,17 @@ td {
 
 }
 
-th {
+.thFicha {
     background-color: #DADADA;
 
 }
 
-td {
+.tdFicha {
     background-color: #ffffff;
     color: black;
 }
 
-td:nth-child(2) {
+.tdFicha:nth-child(2) {
    
     width: 40%;
     text-align: left;
@@ -109,10 +109,20 @@ td:nth-child(2) {
 
 .topRight {
     border-top-right-radius: 10px;
+    padding: 2%;
+    width: 40%;
+    border: 1px solid gray;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
 }
 
 .bottomRight {
     border-bottom-right-radius: 10px;
+    padding: 2%;
+    width: 40%;
+    border: 1px solid gray;
+    text-align: left;
+    font-family: 'Inter', sans-serif;
 }
 
 
@@ -182,7 +192,7 @@ td:nth-child(2) {
         }
 
 
-        tr {
+        .trFicha {
             display: flex;
 
             flex-direction: column;
@@ -191,13 +201,13 @@ td:nth-child(2) {
 
         }
 
-        td {
+        .tdFicha {
             justify-content: center;
             font-size: small;
             text-align: center;
         }
 
-        th {
+        .thFicha {
 
             display: flex;
             font-size: small;
@@ -207,7 +217,11 @@ td:nth-child(2) {
         .camposT {
             display: flex;
             text-align: center;
-
+            padding: 2%;
+            width: 40%;
+            border: 1px solid gray;
+            text-align: left;
+            font-family: 'Inter', sans-serif;
         }
 
 
