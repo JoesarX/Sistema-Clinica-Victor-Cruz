@@ -1,12 +1,13 @@
 import React from 'react';
 import '../HojaDeEstilos/Contactanos.css';
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthContext } from '../AuthContext.js';
+import text_Services from '../../Services/texto_cmdService';
 
 
 
@@ -22,18 +23,60 @@ const Contactanos = () => {
     };
 
 
+    /* const [whaOBJ, setWhaOBJ] = React.useState({
+         Tipo: 'WHA',
+         texto_campo: ''
+     })
+ */
+    const [numOBJ, setNumOBJ] = React.useState({
+        Tipo: 'Footer_Telefono',
+        texto_campo: ''
+    })
+    /*
+        const [correoOBJ, setCorreoOBJ] = React.useState({
+            Tipo: 'Footer_Correo',
+            texto_campo: ''
+        })
+    */
+
+
+
+
+
+
     /* Para el Numero Telefoinico */
     const [isEditing, setIsEditing] = useState(false);
     const [phone, setPhone] = useState('+504 2230-3901');
-    const [editedPhone, setEditedPhone] = useState('+504 2230-3901');
+    const [editedPhone, setEditedPhone] = useState('');
+
+
+
+    /* 
+    const handleSaveEmail = () => {
+        if (isValidEmail(editedEmail)) {
+            setIsEditing1(false);
+            text_Services.editText(correoOBJ);
+            window.location.reload(true);
+        } else {
+            // Display an error message or handle the invalid email case
+            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos básicos de un correo electrónico válido.');
+        }
+    };
+
+    */
+
+    const handleChangePhone = (event) => {
+        setEditedPhone(event.target.value);
+        numOBJ.texto_campo = event.target.value;
+    };
 
     const handleEditPhone = () => {
         setIsEditing(true);
+        setEditedPhone(phone);
     };
 
     const handleCancelEdit = () => {
         setIsEditing(false);
-        setEditedPhone(phone);
     };
 
     const isValidPhone = (phone) => {
@@ -44,13 +87,16 @@ const Contactanos = () => {
 
     const handleSavePhone = () => {
         if (isValidPhone(editedPhone)) {
-            setPhone(editedPhone);
             setIsEditing(false);
+            text_Services.editText(numOBJ);
+            window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
             alert('El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
         }
     };
+
+
 
     /* Para el numero Movil   */
     const [isEditing1, setIsEditing1] = useState(false);
@@ -114,6 +160,32 @@ const Contactanos = () => {
         }
     };
 
+
+    /* Use Effect*/
+
+    useEffect(() => {
+        
+        const fetchNumTelefono = async () => {
+            try {
+                const objectNum = ['Footer_Telefono'];
+                var numData;
+                numData = await text_Services.getOneText(objectNum);
+                console.log("Cargar Mision: " + numData[0].texto_campo);
+                setPhone(numData[0].texto_campo);
+                numOBJ.texto_campo = numData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Numero de Telefono:", error);
+            }
+        };
+
+
+
+        fetchNumTelefono();
+
+
+    }, [isEditing, isEditing1, isEditing2]);
+
+
     return (
         <div>
             <Topbar />
@@ -135,7 +207,7 @@ const Contactanos = () => {
                                 <input
                                     type="text"
                                     value={editedPhone}
-                                    onChange={(e) => setEditedPhone(e.target.value)}
+                                    onChange={handleChangePhone}
                                     style={{ color: '#1E60A6', fontWeight: 'bold' }}
                                 />
                                 <button onClick={handleSavePhone}>
