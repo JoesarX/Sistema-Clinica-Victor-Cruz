@@ -1,12 +1,17 @@
-import '../HojaDeEstilos/Servicios.css';
+import React, { useState, useContext, useRef } from 'react';
+import Modal from '@mui/material/Modal';
+import { TextField, Grid, Button, Box, TextareaAutosize } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
+import { AuthContext } from '../AuthContext.js';
 import Topbar from './Topbar';
 import Footer from './Footer';
-import { AuthContext } from '../AuthContext.js';
-import React, { useState, useContext } from 'react';
-import Modal from '@mui/material/Modal';
+import '../HojaDeEstilos/Servicios.css';
 
 const Servicios = () => {
   const { isLoggedIn, userType } = useContext(AuthContext);
+  const [showButtons, setShowButtons] = useState(false);
+
   const [serviceData, setServiceData] = useState([
     {
       id: 1,
@@ -38,9 +43,13 @@ const Servicios = () => {
     },
   ]);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [editedService, setEditedService] = useState(null);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
-  const [newImageFile, setNewImageFile] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const newServiceImageRef = useRef(null);
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -50,22 +59,21 @@ const Servicios = () => {
     setModalOpen(false);
     setNewTitle('');
     setNewDescription('');
-    setNewImageFile(null);
+    setImageUpload(null);
+    setImagePreview(null);
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) {
-      return;
-    }
-
-    setNewImageFile(file);
+  const cancelarFotoA = () => {
+    setImageUpload(null);
+    setImagePreview(null);
+    newServiceImageRef.current.value = null;
   };
 
-  const handleAddNewService = () => {
-    if (!newTitle || !newDescription || !newImageFile) {
-      // If any of the required fields is missing, display an alert and return.
-      alert('Please enter title, description, and select an image.');
+  const handleAddNewService = (event) => {
+    event.preventDefault();
+    // Validate and add the new service
+    if (!newTitle || !newDescription || !imageUpload) {
+      alert('Porfavor ingrese titulo, descripcion e imagen');
       return;
     }
 
@@ -82,81 +90,27 @@ const Servicios = () => {
       alert('Service added successfully!');
       handleModalClose();
     };
-    reader.readAsDataURL(newImageFile);
+    reader.readAsDataURL(imageUpload);
   };
 
-  const ServiceComponent = ({ service }) => {
-    const [isEditMode, setEditMode] = useState(false);
-    const [editedTitle, setEditedTitle] = useState(service.title);
-    const [editedDescription, setEditedDescription] = useState(service.description);
-    const [editedImageSrc, setEditedImageSrc] = useState(service.imageSrc);
-    const [isDescriptionVisible, setDescriptionVisible] = useState(false);
-
-    const handleEditClick = () => {
-      setEditMode(true);
-    };
-
-    const handleSaveClick = () => {
-      setEditMode(false);
-      // Update the service data with the edited values
-      setServiceData((prevServiceData) =>
-        prevServiceData.map((prevService) => {
-          if (prevService.id === service.id) {
-            return {
-              ...prevService,
-              title: editedTitle,
-              description: editedDescription,
-              imageSrc: editedImageSrc,
-            };
-          }
-          return prevService;
-        })
-      );
-    };
-
-    const handleImageChange = (event) => {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        setEditedImageSrc(reader.result);
-      };
-
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    };
-
-    const handleMouseEnter = () => {
-      setDescriptionVisible(true);
-    };
-
-    const handleMouseLeave = () => {
-      setDescriptionVisible(false);
-    };
-
-    return (
-      <div className='services' id={service.hooverComponent} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        <img src={isEditMode ? editedImageSrc : service.imageSrc} alt={isEditMode ? editedTitle : service.title} />
-        <div className="overlay">
-          {isEditMode ? (
-            <>
-              <input type="text" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)} />
-              <textarea value={editedDescription} onChange={(e) => setEditedDescription(e.target.value)} />
-              <input type="file" accept="image/*" onChange={handleImageChange} />
-              <button onClick={handleSaveClick}>Save</button>
-              <button onClick={() => setEditMode(false)}>Cancel</button>
-            </>
-          ) : (
-            <>
-              <h2>{service.title}</h2>
-              <p>{service.description}</p>
-              {isLoggedIn && userType !== 'normal' && <button onClick={handleEditClick}>Edit</button>}
-            </>
-          )}
-        </div>
-      </div>
+  const handleSaveEdit = (event) => {
+    event.preventDefault();
+    // Save the edited service and update the serviceData state
+    const updatedServiceData = serviceData.map((item) =>
+      item.id === editedService.id ? { ...editedService } : item
     );
+    setServiceData(updatedServiceData);
+    setEditedService(null); // Close the modal after saving changes
+  };
+
+  const handleEditService = (service) => {
+    setEditedService(service);
+  };
+
+  const handleDeleteService = (serviceId) => {
+    // Filter out the service with the given id and update the serviceData state
+    const updatedServiceData = serviceData.filter((service) => service.id !== serviceId);
+    setServiceData(updatedServiceData);
   };
 
   return (
@@ -173,24 +127,193 @@ const Servicios = () => {
 
       <div>
         {serviceData.map((service) => (
-          <ServiceComponent key={service.id} service={service} />
+          <div className='services' id={service.hooverComponent} key={service.id}>
+            <img src={service.imageSrc} alt={service.title} />
+            <div className="overlay">
+              <h2>{service.title}</h2>
+              <p>{service.description}</p>
+              {isLoggedIn && userType !== 'normal' && showButtons && (
+                <>
+                  <button onClick={() => handleEditService(service)}>Editar Servicio</button>
+                  <button onClick={() => handleDeleteService(service.id)}>Borrar Servicio</button>
+                </>
+              )}
+            </div>
+          </div>
         ))}
       </div>
 
+
       {isLoggedIn && userType !== 'normal' && (
         <div>
-          <button onClick={handleModalOpen}>Add New Service</button>
+          <Modal className='mC' open={isModalOpen} onClose={handleModalClose} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+            <div className='modal-container modalServicios' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+              <div style={{ marginTop: '20px' }}>
+                <h2 className="mHeader">AGREGAR SERVICIO</h2>
+                <button className="cButton" onClick={handleModalClose}>
+                  <FontAwesomeIcon icon={faTimes} size="2x" />
+                </button>
+              </div>
+              <Box
+                component="form"
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '10px',
+                  width: '100%',
+                  marginBottom: '20px',
+                }}
+                noValidate
+                autoComplete="off"
+                onSubmit={handleAddNewService}
+              >
+                <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+                  <Grid item xs={12} sm={6}>
+                    <div className='Div-imagen'>
+                      <div className='ImagenWrapper'>
+                        <img className='Imagen' src={imagePreview} alt="imgPreview" />
+                      </div>
+                    </div>
+                    <label htmlFor="urlfoto" className="customFileLabel">Seleccionar archivo</label>
+                    <input
+                      type="file"
+                      onChange={(event) => {
+                        setImageUpload(event.target.files[0]);
+                        setImagePreview(URL.createObjectURL(event.target.files[0]));
+                      }}
+                      name='urlfoto'
+                      id="urlfoto"
+                      className="customFileInput"
+                      ref={newServiceImageRef}
+                    />
+                    <label onClick={cancelarFotoA} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField id="titulo" label="Titulo" variant="outlined" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} name='nombre' required style={{ marginBottom: '0.45rem', width: '90%' }} />
+                    <TextareaAutosize
+                      id="descripcion"
+                      aria-label="Descripcion"
+                      placeholder="Descripcion *"
+                      minRows={3}
+                      maxRows={5}
+                      value={newDescription}
+                      onChange={(e) => setNewDescription(e.target.value)}
+                      style={{ marginBottom: '0.45rem', width: '90%', height: '260px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}
+                    />
+                  </Grid>
+
+                </Grid>
+                <Grid container spacing={2} alignItems="center" justifyContent="center">
+                  <Grid item xs={12} sm={6}>
+                    <Button
+                      variant="contained"
+                      className="modalButton"
+                      type="submit"
+                      id='crudButton'
+                    >
+                      Agregar Servicio
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
+            </div>
+          </Modal>
+          {isLoggedIn && userType !== 'normal' && showButtons && (
+            <div>
+              <button onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
+            </div>
+          )}
+          <button onClick={() => setShowButtons((prevShowButtons) => !prevShowButtons)}><FontAwesomeIcon icon={faGear} /></button>
         </div>
       )}
 
-      <Modal open={isModalOpen} onClose={handleModalClose}>
-        <div className='modal-container'>
-          <h2>Add New Service</h2>
-          <input type="text" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Title" />
-          <textarea value={newDescription} onChange={(e) => setNewDescription(e.target.value)} placeholder="Description" />
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          <button onClick={handleModalClose}>Cancel</button>
-          <button onClick={handleAddNewService}>Add</button>
+      <Modal open={Boolean(editedService)} onClose={() => setEditedService(null)} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+        <div className='modal-container modalServicios' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+          {editedService && (
+            <div style={{ marginTop: '20px' }}>
+              <h2 className="mHeader">EDITAR SERVICIO</h2>
+              <button className="cButton" onClick={() => setEditedService(null)}>
+                <FontAwesomeIcon icon={faTimes} size="2x" />
+              </button>
+            </div>
+          )}
+          {editedService && (
+            <Box
+              component="form"
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                width: '100%',
+                marginBottom: '20px',
+              }}
+              noValidate
+              autoComplete="off"
+              onSubmit={handleSaveEdit}
+            >
+              <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+                <Grid item xs={12} sm={6}>
+                  <div className='Div-imagen'>
+                    <div className='ImagenWrapper'>
+                      <img className='Imagen' src={editedService.imageSrc} alt={editedService.title} />
+                    </div>
+                  </div>
+                  <label htmlFor="urlfoto" className="customFileLabel">Seleccionar archivo</label>
+                  <input
+                    type="file"
+                    onChange={(event) => {
+                      setEditedService({ ...editedService, imageSrc: URL.createObjectURL(event.target.files[0]) });
+                    }}
+                    name='urlfoto'
+                    id="urlfoto"
+                    className="customFileInput"
+                    ref={newServiceImageRef}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    id="titulo"
+                    label="Titulo"
+                    variant="outlined"
+                    value={editedService.title}
+                    onChange={(e) => setEditedService({ ...editedService, title: e.target.value })}
+                    name='nombre'
+                    required
+                    style={{ marginBottom: '0.45rem', width: '90%' }}
+                  />
+                  <TextareaAutosize
+                    id="descripcion"
+                    aria-label="Descripcion"
+                    placeholder="Descripcion"
+                    minRows={3}
+                    maxRows={5}
+                    value={editedService.description}
+                    onChange={(e) => setEditedService({ ...editedService, description: e.target.value })}
+                    style={{
+                      marginBottom: '0.45rem',
+                      width: '90%',
+                      height: '260px',
+                      padding: '6px 12px',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} alignItems="center" justifyContent="center">
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    variant="contained"
+                    className="modalButton"
+                    type="submit"
+                    id='crudButton'
+                  >
+                    Guardar Cambios
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          )}
         </div>
       </Modal>
 

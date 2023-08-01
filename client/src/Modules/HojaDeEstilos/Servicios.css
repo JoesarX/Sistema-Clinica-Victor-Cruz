@@ -6,7 +6,6 @@
   overflow-y: auto;
   background-color: #E4EBF9;
 }
-
 .header {
   font-size: 4vw !important;
   color: #ffff !important;
@@ -40,15 +39,19 @@
   position: relative;
   left: 12%;
   display: inline-block;
-  width: 500px; /* Set a fixed width for all services */
-  height: 300px; /* Set a fixed height for all services */
+  width: 500px;
+  /* Set a fixed width for all services */
+  height: 300px;
+  /* Set a fixed height for all services */
   margin: 2vw;
   text-align: center;
 }
 
 .services img {
-  width: 100%; /* Image will fill the container */
-  height: 100%; /* Image will fill the container */
+  width: 100%;
+  /* Image will fill the container */
+  height: 100%;
+  /* Image will fill the container */
   object-fit: cover;
   border-radius: 8px;
   transition: transform 0.3s ease;
@@ -82,6 +85,84 @@
   font-weight: 800;
 }
 
+.ebcont {
+  width: 100%;
+}
+
+/* Servicios.css */
+.modalServicios {
+  width: 700px;
+  height: 525px;
+  /* Aumentado el tamaño para que sea un poco más grande */
+  overflow: hidden;
+}
+
+.modal-container {
+  position: relative;
+  top: 10%;
+  left: 27%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: 80vh;
+  overflow-y: clip;
+  background-color: #E4EBF9;
+  border-radius: 10px;
+}
+.mHeader {
+  margin-top: 0px;
+  /* Aumenta el margen superior para bajar el label */
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+}
+.cButton {
+  position: absolute;
+  top: 10px;
+  font-size: 15px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.inputsAdd{
+  justify-content: center;
+  width: 50%;
+  margin-bottom: 4%;
+}
+.organizer {
+  position: relative;
+  bottom: 10%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.image-preview-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  width: 100%;
+  height: 150px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .services .overlay p {
   color: #fff;
   font-size: 18px;
@@ -89,6 +170,8 @@
   text-align: center;
   margin-right: 30px;
 }
+
+
 
 @keyframes fade-in {
   from {
@@ -114,8 +197,10 @@
   }
 
   .services {
-    width: 250px; /* Adjust as needed for smaller screens */
-    height: 150px; /* Adjust as needed for smaller screens */
+    width: 250px;
+    /* Adjust as needed for smaller screens */
+    height: 150px;
+    /* Adjust as needed for smaller screens */
     margin: 1vw;
   }
 
