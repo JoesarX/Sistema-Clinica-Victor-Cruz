@@ -46,13 +46,14 @@ app.get("/", (req, res) => {
 
 app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a parameter
 
-app.use("/usuarios", usuariosRouter(pool)); 
-app.use("/usuarios_admin", adminRouter(pool)); 
+app.use("/usuarios", usuariosRouter(pool));
+app.use("/usuarios_admin", adminRouter(pool));
 
-app.use("/medicamentos", medicamentosRouter(pool)); 
+app.use("/medicamentos", medicamentosRouter(pool));
 
-app.use("/citas", citasRouter(pool)); 
-app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
+app.use("/citas", citasRouter(pool));
+// app.use("/citas_tabla", citasRouter(pool));
+
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
 
 app.use('/texto_cmd',textos_cmdRouter(pool));

@@ -18,6 +18,24 @@ const citasRouter = (pool) => {
         }
     });
 
+    router.get('/filtrarCitasTabla/:estado', async (req, res) => {
+        try {
+            console.log("Entro al Filtro")
+            console.log(req.params)
+            console.log(req.params.estado)
+            const estado = req.params.estado;
+            const connection = await pool.getConnection();
+            const sqlSelect = "SELECT * FROM citas WHERE estado = ?";
+            const [rows, fields] = await connection.query(sqlSelect, [estado]);
+            console.log(rows)
+            connection.release();
+            res.json(rows);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
     //Add a new cita
     router.post("/", async (req, res) => {
         try {
