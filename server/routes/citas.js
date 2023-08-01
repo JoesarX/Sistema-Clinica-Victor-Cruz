@@ -47,12 +47,42 @@ const citasRouter = (pool) => {
         }
     });
 
+    router.get('/checkAvailability', async (req, res) => {
+        try {
+            const { fecha, hora, idcita } = req.query; // Access query parameters using req.query
+            console.log("CHECK AVAILABILITY PARAMS: ", fecha, hora, idcita);
+
+            let sqlSelect = `SELECT COUNT(*) AS count FROM citas WHERE fecha = ? AND hora = ?`;
+            if (idcita) {
+                sqlSelect += ` AND idcita <> ?`;
+            }
+            const params = [fecha, hora];
+            if (idcita) {
+                params.push(idcita);
+            }
+            console.log("CHECK AVAILABILITY QUERY: ", sqlSelect);
+            console.log("CHECK AVAILABILITY PARAMS: ", params);
+            const connection = await pool.getConnection();
+            const [rows, fields] = await connection.query(sqlSelect, params);
+            connection.release();
+
+            console.log("CHECK AVAILABILITY RESULT: ", rows[0].count);
+            const count = rows[0].count;
+            res.json({ available: count === 0 });
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    });
+
+
+
     //Get a cita by id
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
 
-            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE idcita = " + req.params.id;
+            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE idcita = " + req.params.id;
 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
@@ -130,8 +160,8 @@ const citasRouter = (pool) => {
             const { id } = req.query; // Get the id query parameter (if provided)
             const onlyDate = date.split("T")[0];
             const availableTimes24 = [
-                "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", 
-                "11:00:00", "11:30:00", "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00"
+                "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", "11:00:00", "11:30:00",
+                "12:00:00", "12:30:00", "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00"
             ];
 
             // Construct the SQL query to fetch existing times for the given date
@@ -162,42 +192,41 @@ const citasRouter = (pool) => {
         }
     });
 
-    // const checkAndUpdateExpiredAppointments = async () => {
-    //     try {
-    //         const connection = await pool.getConnection();
 
-    //         // Get the current date and time
-    //         const currentDateTime = new Date();
+    const checkAndUpdateExpiredAppointments = async () => {
+        try {
+            const connection = await pool.getConnection();
 
-    //         // Query appointments with ending time that has passed the current time
-    //         const sqlSelect = `SELECT idcita, hora_final FROM citas WHERE estado = 'activa' AND hora_final <= ?`;
-    //         const [rows, fields] = await connection.query(sqlSelect, [currentDateTime]);
+            // Citas donde la Fecha es menor a la actual o la fecha es igual a la actual y la hora es menor a la actual
+            const sqlSelect = `SELECT idcita FROM citas WHERE estado = 'Pendiente' AND (curdate() > fecha or (curdate() = fecha and (CURRENT_TIME() - INTERVAL 30 MINUTE) > hora));`;
+            const [rows, fields] = await connection.query(sqlSelect);
 
-    //         if (rows.length > 0) {
-    //             // Update the state of expired appointments to 'expirada'
-    //             const expiredIds = rows.map((row) => row.idcita);
-    //             const sqlUpdate = `UPDATE citas SET estado = 'expirada' WHERE idcita IN (?)`;
-    //             await connection.query(sqlUpdate, [expiredIds]);
-    //         }
+            console.log(rows);
 
-    //         connection.release();
-    //     } catch (err) {
-    //         console.log(err);
-    //         // Handle any errors that occurred during the process
-    //     }
-    // };
+            if (rows.length > 0) {
+                // Cambiar cada una a expirada
+                const expiredIds = rows.map((row) => row.idcita);
+                const sqlUpdate = `UPDATE citas SET estado = 'Terminada' WHERE idcita IN (?)`;
+                await connection.query(sqlUpdate, [expiredIds]);
+            }
 
-    // // Function to start the interval for checking and updating expired appointments
-    // const startAppointmentCheckingInterval = () => {
-    //     // Call the function immediately to check for expired appointments when the server starts
-    //     checkAndUpdateExpiredAppointments();
+            connection.release();
+            console.log("5 Seconds")
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
-    //     // Set the interval to run the function every 5 minutes (adjust the interval time as needed)
-    //     setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); // 5 minutes in milliseconds
-    // };
+    const startAppointmentCheckingInterval = () => {
+        // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos
+        checkAndUpdateExpiredAppointments();
 
-    // // Call the function to start the checking interval when your server starts
-    // startAppointmentCheckingInterval();
+        // Timer que se ejecuta cada x minutos.
+        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); 
+    };
+
+    //llamado a la busqueda continua de citas expiradas
+    startAppointmentCheckingInterval();
 
     return router;
 };
