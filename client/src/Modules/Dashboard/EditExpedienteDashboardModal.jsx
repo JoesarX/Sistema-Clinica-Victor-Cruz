@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import React from 'react'
+import swal from 'sweetalert'
 
 import { Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
@@ -109,32 +110,59 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
         const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
             expediente;
         if (nombre === null || nombre === '') {
-            alert('Nombre Completo es requerido');
+            swal({
+                title: "Error al ingresar datos",
+                text: "Nombre completo es requerido",
+                icon: "error"
+            });
             return false;
         }
         if (edad === null || edad === '' || edad < 0) {
-            alert('Una edad valida es requerida');
+            swal({
+                title: "Error al ingresar datos",
+                text: "Edad válida es requerida",
+                icon: "error"
+            });
             return false;
         }
-
         if (sexo === null || sexo === '') {
-            alert('Sexo es requerido');
+            swal({
+                title: "Error al ingresar datos",
+                text: "Sexo es requerido",
+                icon: "error"
+            });
             return false;
         }
         if (estado_civil === null || estado_civil === '') {
-            alert('Estado Civil es requerido');
+            swal({
+                title: "Error al ingresar datos",
+                text: "Estado civil es requerido",
+                icon: "error"
+            });
             return false;
         }
         if (correo === null || correo === '') {
-            alert('Correo es requerido');
+            swal({
+                title: "Error al ingresar datos",
+                text: "Correo electrónico es requerido",
+                icon: "error"
+            });
             return false;
         }
         if (telefono === null || telefono === '') {
-            alert('Telefono es requerido');
+            swal({
+                title: "Error al ingresar datos",
+                text: "Número telefónico es requerido",
+                icon: "error"
+            });
             return false;
         }
         if (numid === null || numid === '') {
-            alert('Numero de Identidad es requerido');
+            swal({
+                title: "Error al ingresar datos",
+                text: "DNI es requerido",
+                icon: "error"
+            });
             return false;
         }
 
@@ -148,7 +176,11 @@ const EditExpedienteDashboardModal = ({ expedientess, onClose }) => {
             if (validations()) {
                 console.log(':)')
                 await ExpedientesService.editExpedientes(expedientess.idpaciente, expediente);
-                alert('Expediente Editado');
+                swal({
+                    title: "Expediente editado",
+                    text: "¡Expediente editado satisfactoriamente!",
+                    icon: "success"
+                });
                 onClose();
             }
         };

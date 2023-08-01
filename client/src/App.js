@@ -21,7 +21,7 @@ import LandingPage from "./Modules/Home/LandingPage";
 import CitasTabla from "./Modules/CitasTabla/CitasTabla";
 import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
-
+import Prueba from "./Modules/CMD/prueba";
 
 function App() {
   return (
@@ -35,6 +35,7 @@ function App() {
           <Route path="/laboratorio" element={<Laboratorio />} />
           <Route path="/registrar-user" element={<RegistrarUser />} />
           <Route path="/citas" element={<Citas />} />
+          <Route path="/Prueba" element={<Prueba />} />
           <Route path="/administrador" element={<Administrador />} />
           <Route path="/expedientes" element={<Expedientes />} />
           <Route path="/expedientes/dashboard/:expedienteId" element={<Dashboard />} />

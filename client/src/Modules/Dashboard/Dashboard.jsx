@@ -13,6 +13,7 @@ import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
 import NavBar from '../NavBar';
 import moment from 'moment';
 import 'moment/locale/es';
+import swal from 'sweetalert';
 
 import ExpedientesService from '../../Services/ExpedientesService';
 
@@ -45,7 +46,6 @@ const Dashboard = () => {
         ritmo_cardiaco: '',
         presion: '',
     })
-
 
     const [patient, setPatient] = useState({
         idpaciente: '',
@@ -257,26 +257,41 @@ const Dashboard = () => {
 
     const validacionesSignos = () => {
         if (patient.altura > 280) {
-            alert("La altura ingresada no es valida");
+            swal({
+                title: "Error al ingresar datos",
+                text: "La altura ingresada no es válida",
+                icon: "error"
+            });
             return false;
         }
         if (patient.peso > 250) {
-            alert("el peso ingresado no es valido");
+            swal({
+                title: "Error al ingresar datos",
+                text: "El peso ingresado no es válido",
+                icon: "error"
+            });
             return false;
         }
-        if (patient.temperatura > 50 || patient.temperatura<31.2) {
-            alert("La temperatura ingresada es invalida");
+        if (patient.temperatura > 50 || patient.temperatura < 31.2) {
+            swal({
+                title: "Error al ingresar datos",
+                text: "La temperatura ingresada no es válida",
+                icon: "error"
+            });
             return false;
         }
 
         const regexFinal = /\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
 
         if (!regexFinal.test(patient.presion)) {
-            alert("El ritmo cardiaco ingresado es invalido");
+            swal({
+                title: "Error al ingresar datos",
+                text: "El ritmo cardíaco no es válido",
+                icon: "error"
+            });
             return false;
         }
         if (patient.presion)
-
             return true;
 
     }
@@ -289,7 +304,11 @@ const Dashboard = () => {
             if (validacionesSignos()) {
                 console.log(patient)
                 await ExpedientesService.editExpedientesDashboard(patient.idpaciente, patient);
-                alert('Expediente Editado');
+                swal({
+                    title: "Expediente editado",
+                    text: "¡Expediente editado satisfactoriamente!",
+                    icon: "success"
+                });
                 setIsEditingLabel(false);
                 setIsChangesSaved(true);
             }
@@ -308,7 +327,7 @@ const Dashboard = () => {
         setIsChangesSaved3(true);
     };
 
-    const hanldeSignosLabelChange = (e) => {
+    const handleSignosLabelChange = (e) => {
         const { name, value } = e.target;
         const wholeNumberRegex = /^\d*$/
         const decimalRegex = /^\d*\.?\d*$/
@@ -472,18 +491,19 @@ const Dashboard = () => {
                             <span className='vital-sign-value-align'>
                                 <span className="vitals-value">
                                     {isEditingLabel ? (
-                                        <div >
+                                        <div>
                                             <input
                                                 type="text"
                                                 className="edit-text-box"
                                                 name="altura"
                                                 style={{ width: '65px' }}
                                                 value={patient.altura}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='170'
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.altura}</span>
+                                        <span className="vitals-value">{(patient.altura !== null || patient.altura !== undefined) ? patient.altura : '-'}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">CM</span>
@@ -506,13 +526,14 @@ const Dashboard = () => {
                                                 type="text"
                                                 className="edit-text-box"
                                                 name="peso"
-                                                style={{ width: '55px' }}
+                                                style={{ width: '60px' }}
                                                 value={patient.peso}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='63.3'
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.peso}</span>
+                                        <span className="vitals-value">{(patient.peso !== null || patient.peso !== undefined) ? patient.peso : '-'}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">KG</span>
@@ -537,11 +558,12 @@ const Dashboard = () => {
                                                 name="temperatura"
                                                 style={{ width: '65px' }}
                                                 value={patient.temperatura}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='37.2'
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.temperatura}</span>
+                                        <span className="vitals-value">{(patient.temperatura !== null || patient.temperatura !== undefined) ? patient.temperatura : '-'}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">ºC</span>
@@ -566,11 +588,12 @@ const Dashboard = () => {
                                                 name="ritmo_cardiaco"
                                                 style={{ width: '60px' }}
                                                 value={patient.ritmo_cardiaco}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='80'
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.ritmo_cardiaco}</span>
+                                        <span className="vitals-value">{(patient.ritmo_cardiaco !== null || patient.ritmo_cardiaco !== undefined) ? patient.ritmo_cardiaco : '-'}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">ppm</span>
@@ -595,11 +618,12 @@ const Dashboard = () => {
                                                 name="presion"
                                                 style={{ width: '80px' }}
                                                 value={patient.presion}
-                                                onChange={hanldeSignosLabelChange}
+                                                onChange={handleSignosLabelChange}
+                                                placeholder='120/80'
                                             />
                                         </div>
                                     ) : (
-                                        <span className="vitals-value">{patient.presion}</span>
+                                        <span className="vitals-value">{(patient.presion !== null || patient.presion !== undefined) ? patient.presion : '-'}</span>
                                     )}
                                 </span>
                                 <span className="vitals-value">mmHg</span>

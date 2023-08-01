@@ -18,15 +18,15 @@ app.listen(port, () => {
 });
 
 //LOCALHOST MYSQL CONNECTION
-// const pool = mysql.createPool({
-//   host: "localhost",
-//   user: "root",
-//   password: "password",
-//   database: "softwaredb",
-//   waitForConnections: true,
-//   connectionLimit: 10,
-//   queueLimit: 0,
-// });
+ /*const pool = mysql.createPool({
+   host: "localhost",
+   user: "root",
+   password: "password",
+   database: "softwaredb",
+   waitForConnections: true,
+   connectionLimit: 10,
+   queueLimit: 0,
+ });*/
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
