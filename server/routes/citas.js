@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-const citasRouter = (pool) => {
+const citasRouter = (pool, transporter) => {
 
     //Get all Citas
     router.get("/", async (req, res) => {
@@ -196,7 +196,7 @@ const citasRouter = (pool) => {
     const checkAndUpdateExpiredAppointments = async () => {
         try {
             const connection = await pool.getConnection();
-
+            await connection.query("SET time_zone = 'America/Guatemala'");
             // Citas donde la Fecha es menor a la actual o la fecha es igual a la actual y la hora es menor a la actual
             const sqlSelect = `SELECT idcita FROM citas WHERE estado = 'Pendiente' AND (curdate() > fecha or (curdate() = fecha and (CURRENT_TIME() - INTERVAL 30 MINUTE) > hora));`;
             const [rows, fields] = await connection.query(sqlSelect);
@@ -217,12 +217,57 @@ const citasRouter = (pool) => {
         }
     };
 
+
+
+    const sendAppointmentReminders = async () => {
+        try {
+            const connection = await pool.getConnection();
+            await connection.query("SET time_zone = 'America/Guatemala'");
+            const sqlSelect = `SELECT idcita, nombre_persona, correouser, DATE_FORMAT(fecha, '%W %e de %M del %Y') AS fecha, 
+                                DATE_FORMAT(hora, '%l:%i %p') AS hora FROM heroku_9fb29a24254053e.citas 
+                                WHERE estado = 'Pendiente' AND not(correouser IS NULL OR correouser = '') AND fecha = curdate() + INTERVAL 1 DAY;`;
+            const [rows, fields] = await connection.query(sqlSelect);
+            console.log(rows);
+
+            if (rows.length > 0) {
+                for (const row of rows) {
+                    const { idcita, nombre_persona, correouser, fecha, hora } = row;
+
+                    const mailOptions = {
+                        from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                        to: correouser,
+                        subject: "Recordatorio de Cita Clinica Dr Victor Cruz",
+                        text: `Estimado/a ${nombre_persona}, Te recordamos cordialmente tu cita para mañana, ${fecha}, a las ${hora}. Esperamos brindarte el mejor servicio en nuestra clínica.
+                        Si tienes alguna duda o necesitas cambiar la cita, no dudes en contactarnos.
+                                                
+                        ¡Que tenga un buen día!
+                                                
+                        Atentamente,
+                        El equipo de la Clínica Dr. Victor Cruz`,
+                    };
+                    await transporter.sendMail(mailOptions);
+                    // console.log(`Reminder email sent for appointment with id ${idcita}`);
+                    // // Mark the appointment as "Reminder Sent"
+                    // const sqlUpdate = `UPDATE citas SET estado = 'Reminder Sent' WHERE idcita = ?`;
+                    // await connection.query(sqlUpdate, [idcita]);
+                    console.log(`Reminder email sent for  ${nombre_persona}`);
+                }
+            }
+
+            connection.release();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
     const startAppointmentCheckingInterval = () => {
         // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos
         checkAndUpdateExpiredAppointments();
 
+        sendAppointmentReminders();
         // Timer que se ejecuta cada x minutos.
-        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); 
+        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000);
     };
 
     //llamado a la busqueda continua de citas expiradas

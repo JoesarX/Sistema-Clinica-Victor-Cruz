@@ -52,6 +52,10 @@ const Citas = () => {
 
     const [isModalOpen1, setIsModalOpen1] = useState(false);
 
+    const [fecha, setFecha] = useState(dayjs());
+    const [hora, setHora] = useState(null);
+    const [availableTimes, setAvailableTimes] = useState([]);
+
 
     const [Expedientes, setExpedientes] = useState([]);
     const [Usuarios, setUsuarios] = useState([]);
@@ -299,17 +303,13 @@ const Citas = () => {
 
             fetchAvailableTimes();
         }
-    }, [cita]);
+    }, [cita.fecha, fecha]);
 
     const handleModalFieldChange = (e) => {
         setCita((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
     }
 
-
-    const [fecha, setFecha] = useState(dayjs());
-    const [hora, setHora] = useState(null);
-    const [availableTimes, setAvailableTimes] = useState([]);
 
     const handleDateChange = async (date) => {
         setFecha(date);
@@ -696,7 +696,6 @@ const Citas = () => {
                                         setCita({
                                             ...cita,
                                             idpaciente: newValue ? newValue.idPaciente : "" // Handle null/undefined case
-
                                         })
                                     }}
                                     renderInput={(params) => <TextField {...params} label="ID Paciente" required />}
