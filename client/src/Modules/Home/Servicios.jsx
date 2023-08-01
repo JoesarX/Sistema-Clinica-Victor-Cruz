@@ -162,8 +162,10 @@ const Servicios = () => {
               <p className='desc'>{service.description}</p>
               {isLoggedIn && userType !== 'normal' && showButtons && (
                 <>
-                  <button onClick={() => handleEditService(service)}>Editar Servicio</button>
-                  <button onClick={() => handleDeleteService(service.id)}>Borrar Servicio</button>
+                  <div className='buttonCont'>
+                    <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
+                    <button className='buttonE' onClick={() => handleDeleteService(service.id)}>Borrar Servicio</button>
+                  </div>
                 </>
               )}
             </div>
@@ -214,7 +216,7 @@ const Servicios = () => {
                       className="cFI"
                       ref={newServiceImageRef}
                     />
-                    <label onClick={cancelarFotoA} className="cFL" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
+                    <label onClick={cancelarFotoA} className="cFL" style={{ marginTop: '0.45rem' }}>Eliminar Imagen</label>
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField id="titulo" label="Titulo" variant="outlined" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} name='nombre' required style={{ marginBottom: '0.45rem', width: '90%' }} />
@@ -247,11 +249,13 @@ const Servicios = () => {
             </div>
           </Modal>
           {isLoggedIn && userType !== 'normal' && showButtons && (
-            <div>
-              <button onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
+            <div className='button-addSCont'>
+              <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
             </div>
           )}
-          <button onClick={() => setShowButtons((prevShowButtons) => !prevShowButtons)}><FontAwesomeIcon icon={faGear} /></button>
+          <div className='button-gearCont'>
+            <button className='buttonG' onClick={() => setShowButtons((prevShowButtons) => !prevShowButtons)}><FontAwesomeIcon icon={faGear} /></button>
+          </div>
         </div>
       )}
 
