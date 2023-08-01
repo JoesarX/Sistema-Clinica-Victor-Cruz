@@ -65,8 +65,7 @@ export const getAvailableTimes = async (date, id = null) => {
         console.log(date);
         const url = id ? `${API_URL}/citas/availableTimes/${date}?id=${id}` : `${API_URL}/citas/availableTimes/${date}`;
         const res = await axios.get(url);
-        console.log("SUCCESS FETCHING AVAILABLE TIMES");
-        console.log(res.data);
+        
         return res.data;
     } catch (error) {
         console.log(error);

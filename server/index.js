@@ -56,3 +56,6 @@ app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
 
 app.use('/texto_cmd',textos_cmdRouter(pool));
+
+
+
