@@ -23,21 +23,21 @@ const Contactanos = () => {
     };
 
 
-    /* const [whaOBJ, setWhaOBJ] = React.useState({
-         Tipo: 'WHA',
-         texto_campo: ''
-     })
- */
+    const [whaOBJ, setWhaOBJ] = React.useState({
+        Tipo: 'WHA',
+        texto_campo: ''
+    })
+
     const [numOBJ, setNumOBJ] = React.useState({
         Tipo: 'Footer_Telefono',
         texto_campo: ''
     })
-    /*
-        const [correoOBJ, setCorreoOBJ] = React.useState({
-            Tipo: 'Footer_Correo',
-            texto_campo: ''
-        })
-    */
+
+    const [correoOBJ, setCorreoOBJ] = React.useState({
+        Tipo: 'Footer_Correo',
+        texto_campo: ''
+    })
+
 
 
 
@@ -101,15 +101,21 @@ const Contactanos = () => {
     /* Para el numero Movil   */
     const [isEditing1, setIsEditing1] = useState(false);
     const [whatsapp, setWhatsApp] = useState('+504 3342-4985');
-    const [editedWhatsapp, setEditedWhatsapp] = useState('+504 3342-4985');
+    const [editedWhatsapp, setEditedWhatsapp] = useState('');
+
+
+    const handleChangeWhatsapp = (event) => {
+        setEditedWhatsapp(event.target.value);
+        whaOBJ.texto_campo = event.target.value;
+    };
 
     const handleEditWhatsapp = () => {
         setIsEditing1(true);
+        setEditedWhatsapp(whatsapp);
     };
 
     const handleCancelEdit1 = () => {
         setIsEditing1(false);
-        setEditedWhatsapp(whatsapp);
     };
 
     const isValidWhatsApp = (whatsapp) => {
@@ -120,8 +126,9 @@ const Contactanos = () => {
 
     const handleSaveWhatsapp = () => {
         if (isValidWhatsApp(editedWhatsapp)) {
-            setWhatsApp(editedWhatsapp);
             setIsEditing1(false);
+            text_Services.editText(whaOBJ);
+            window.location.reload(true);
         } else {
             // Display an error message or handle the invalid WhatsApp number case
             alert('El número de WhatsApp no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
@@ -133,15 +140,23 @@ const Contactanos = () => {
     /* Para el correo electronico */
     const [isEditing2, setIsEditing2] = useState(false);
     const [email, setEmail] = useState('clinica.drvictorcruz@gmail.com');
-    const [editedEmail, setEditedEmail] = useState('clinica.drvictorcruz@gmail.com');
+    const [editedEmail, setEditedEmail] = useState('');
+
+
+    const handleChangeEmail = (event) => {
+        setEditedEmail(event.target.value);
+        correoOBJ.texto_campo = event.target.value;
+
+    };
+
 
     const handleEditEmail = () => {
         setIsEditing2(true);
+        setEditedEmail(email);
     };
 
     const handleCancelEdit2 = () => {
         setIsEditing2(false);
-        setEditedEmail(email);
     };
 
     const isValidEmail = (email) => {
@@ -152,19 +167,19 @@ const Contactanos = () => {
 
     const handleSaveEmail = () => {
         if (isValidEmail(editedEmail)) {
-            setEmail(editedEmail);
             setIsEditing2(false);
+            text_Services.editText(correoOBJ);
+            window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
             alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).');
         }
     };
 
-
     /* Use Effect*/
 
     useEffect(() => {
-        
+
         const fetchNumTelefono = async () => {
             try {
                 const objectNum = ['Footer_Telefono'];
@@ -178,9 +193,37 @@ const Contactanos = () => {
             }
         };
 
+        const fetchCorreo = async () => {
+            try {
+                const objectCorreo = ['Footer_Correo'];
+                var correoData;
+                correoData = await text_Services.getOneText(objectCorreo);
+                console.log("Cargar Correo: " + correoData[0].texto_campo);
+                setEmail(correoData[0].texto_campo);
+                correoOBJ.texto_campo = correoData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Correo:", error);
+            }
+        };
+
+
+        const fetchWhataspp = async () => {
+            try {
+                const objectWha = ['WHA'];
+                var whaData;
+                whaData = await text_Services.getOneText(objectWha);
+                console.log("Cargar Whatsapp: " + whaData[0].texto_campo);
+                setWhatsApp(whaData[0].texto_campo);
+                whaOBJ.texto_campo = whaData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Correo:", error);
+            }
+        };
 
 
         fetchNumTelefono();
+        fetchCorreo();
+        fetchWhataspp();
 
 
     }, [isEditing, isEditing1, isEditing2]);
@@ -237,7 +280,7 @@ const Contactanos = () => {
                                 <input
                                     type="text"
                                     value={editedWhatsapp}
-                                    onChange={(e) => setEditedWhatsapp(e.target.value)}
+                                    onChange={handleChangeWhatsapp}
                                     style={{ color: '#1E60A6', fontWeight: 'bold' }}
                                 />
                                 <button onClick={handleSaveWhatsapp}>
@@ -269,7 +312,7 @@ const Contactanos = () => {
                                 <input
                                     type="text"
                                     value={editedEmail}
-                                    onChange={(e) => setEditedEmail(e.target.value)}
+                                    onChange={handleChangeEmail}
                                     style={{ color: '#1E60A6', fontWeight: 'bold' }}
                                 />
                                 <button onClick={handleSaveEmail}>
