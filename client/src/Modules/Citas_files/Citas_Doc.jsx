@@ -8,6 +8,7 @@ import NavBar from '../NavBar';
 import Footer from '../Home/Footer';
 import CitasService from '../../Services/CitasService';
 import './CitasStyle.css';
+import Filtro from './Filtrar_Citas';
 
 const Citas_Doc = () => {
 
@@ -92,6 +93,9 @@ const Citas_Doc = () => {
     <div className="App">
       <NavBar />
       <h1 className="header">Calendario de Citas</h1>
+      <div>
+        <Filtro />
+      </div>
       <main>
         <div className="cal-container">
           <div className="cal">

@@ -552,10 +552,6 @@ const Citas = () => {
                         // Add other relevant properties from the 'Usuario' table
                     };
                 });
-
-
-
-
                 setCitas(citasWithId);
                 setExpedientes(expedientesFormatted);
                 setUsuarios(usuariosFormatted);
@@ -681,10 +677,7 @@ const Citas = () => {
                                     options={Expedientes}
                                     getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
                                     onChange={(event, newValue) => {
-                                        setCita({
-                                            ...cita,
-                                            idpaciente: newValue ? newValue.idPaciente : "" // Handle null/undefined case
-                                        })
+                                        cita.idpaciente = newValue?.idpaciente;
                                     }}
                                     renderInput={(params) => <TextField {...params} label="ID Paciente" required />}
                                     ListboxProps={
@@ -702,12 +695,9 @@ const Citas = () => {
                                     required
                                     options={Usuarios}
                                     getOptionLabel={(usuario) => usuario.correouser}
-                                    onChange={(event, newValue) =>
-                                        setCita({
-                                            ...cita,
-                                            correouser: newValue ? newValue.correouser : "" // Handle null/undefined case
-                                        })
-                                    }
+                                    onChange={(event, newValue) => {
+                                        cita.correouser = newValue?.correouser;
+                                    }}
                                     renderInput={(params) => <TextField {...params} label="Correo User" required />}
                                     ListboxProps={
                                         {
@@ -810,7 +800,9 @@ const Citas = () => {
                                         options={Expedientes}
                                         getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
                                         onChange={(event, newValue) => {
-                                            cita.idpaciente = newValue.idpaciente;
+
+                                            cita.idpaciente = newValue?.idpaciente;
+                                          
                                         }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="ID Paciente" required />
@@ -833,9 +825,7 @@ const Citas = () => {
                                         options={Usuarios}
                                         getOptionLabel={(opcion) => opcion.correouser}
                                         onChange={(event, newValue) => {
-
-
-                                            cita.correouser = newValue.correouser;
+                                            cita.correouser = newValue?.correouser;
                                         }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="Correo User" required />

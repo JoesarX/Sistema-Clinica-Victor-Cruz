@@ -7,7 +7,9 @@ import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
+import textos_cmdRouter from "./routes/textos_cmd.js";
 import nodemailer from "nodemailer";
+
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -59,14 +61,16 @@ app.get("/", (req, res) => {
 
 app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a parameter
 
-app.use("/usuarios", usuariosRouter(pool)); 
-app.use("/usuarios_admin", adminRouter(pool)); 
+app.use("/usuarios", usuariosRouter(pool));
+app.use("/usuarios_admin", adminRouter(pool));
 
-app.use("/medicamentos", medicamentosRouter(pool)); 
+app.use("/medicamentos", medicamentosRouter(pool));
 
 app.use("/citas", citasRouter(pool, transporter)); 
-app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
+
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
+
+app.use('/texto_cmd',textos_cmdRouter(pool));
 
 
 

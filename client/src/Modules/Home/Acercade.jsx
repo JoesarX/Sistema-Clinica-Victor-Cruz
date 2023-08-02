@@ -16,6 +16,7 @@ import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 import MisionService from '../../Services/MisionService';
+import text_Services from '../../Services/texto_cmdService';
 import VisionService from '../../Services/VisionService';
 import { useEffect, useRef, useState } from 'react';
 
@@ -27,6 +28,8 @@ import {
   deleteObject,
   getStorage,
 } from "firebase/storage";
+import { WindowSharp } from '@mui/icons-material';
+import { text } from '@fortawesome/fontawesome-svg-core';
 
 const Acercade = () => {
   const [mision, setMision] = useState(null);
@@ -56,17 +59,17 @@ const Acercade = () => {
   const [teamDesc, setTeamDesc] = useState(null);
 
   const [descriptionOBJ, setDescriptionOBJ] = useState({
-    Tipo: 'Descripcion', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+    Tipo: 'Descripción_Empresa', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
     texto_campo: '',
   });
 
   const [biographyOBJ, setBiographyOBJ] = useState({
-    Tipo: 'Biografía', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+    Tipo: 'Biografia_Autor', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
     texto_campo: '',
   });
 
   const [teamDescOBJ, setTeamDescOBJ] = useState({
-    Tipo: 'Equipo', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+    Tipo: 'Texto_Nuestro_Equipo', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
     texto_campo: '',
   });
 
@@ -81,8 +84,11 @@ const Acercade = () => {
 
   const handleDescSave = (event) => {
     setIsEditingLabelDesc(false);
+    text_Services.editText(descriptionOBJ)
     console.log(descriptionOBJ.texto_campo)
     setDescription(descriptionOBJ.texto_campo);
+    window.location.reload(true);
+
   }
 
   const handleBioChange = (event) => {
@@ -96,7 +102,9 @@ const Acercade = () => {
 
   const handleBioSave = (event) => {
     setIsEditingLabelBio(false);
-    setBiography(descriptionOBJ.texto_campo);
+    text_Services.editText(biographyOBJ)
+    setBiography(biographyOBJ.texto_campo);
+    window.location.reload(true);
   }
 
   const handleTeamChange = (event) => {
@@ -110,7 +118,9 @@ const Acercade = () => {
 
   const handleTeamSave = (event) => {
     setIsEditingLabelTeam(false);
+    text_Services.editText(teamDescOBJ);
     setTeamDesc(teamDescOBJ.texto_campo);
+    window.location.reload(true);
   }
 
   const handleCancel = (edit) => {
@@ -195,7 +205,8 @@ const Acercade = () => {
 
   const handleMisionSave = (event) => {
     setIsEditingLabel(false);
-    MisionService.editMision(misionOBJ);
+    text_Services.editText(misionOBJ);
+    window.location.reload(true);
   };
 
   const handleMisionEdit = () => {
@@ -211,7 +222,8 @@ const Acercade = () => {
   const handleVisionSave = (event) => {
     setIsEditingLabel2(false);
     console.log(visionOBJ)
-    VisionService.editVision(visionOBJ);
+    text_Services.editText(visionOBJ);
+    window.location.reload(true);
   };
   const handleVisionEdit = () => {
     setIsEditingLabel2(true);
@@ -221,39 +233,71 @@ const Acercade = () => {
   useEffect(() => {
     const fetchMision = async () => {
       try {
-        const misionData = await MisionService.getMision();
-        setMision(misionData.texto_campo);
-        misionOBJ.texto_campo = misionData.texto_campo;
+        const objectMision = ['Mision'];
+        var misionData;
+        console.log(misionData = await text_Services.getOneText(objectMision));
+        console.log("Cargar Mision: " + misionData[0].texto_campo);
+        setMision(misionData[0].texto_campo);
+        misionOBJ.texto_campo = misionData[0].texto_campo;
+        // console.log("Cargar Mision: "+misionData.texto_campo);
       } catch (error) {
         // Handle error if any
-        console.log("Error fetching expedientes:", error);
+        console.log("Error fetching Mision:", error);
       }
     };
     const fetchVision = async () => {
       try {
-        const visionData = await VisionService.getVision();
-        setVision(visionData.texto_campo);
-        visionOBJ.texto_campo = visionData.texto_campo;
+        const objectVision = ['Vision'];
+
+        const visionData = await text_Services.getOneText(objectVision);
+        setVision(visionData[0].texto_campo);
+        visionOBJ.texto_campo = visionData[0].texto_campo;
       } catch (error) {
         // Handle error if any
-        console.log("Error fetching expedientes:", error);
+        console.log("Error fetching Vision:", error);
       }
     };
 
     //WALTER HACE LOS RESPECTIVOS FETCH AQUI
-    const fetchDesc = () => {
-      setDescription(DESC);
-      descriptionOBJ.texto_campo = DESC;
+    const fetchDesc = async () => {
+      try {
+        const objectDesc = ['Descripción_Empresa'];
+        const descData = await text_Services.getOneText(objectDesc);
+        setDescription(descData[0].texto_campo);
+        DESC = description;
+        descriptionOBJ.texto_campo = DESC;
+      } catch (error) {
+        console.log("Error fetching Descripción de empresa:", error);
+      }
+
     }
 
-    const fetchBio = () => {
-      setBiography(ABOUT_DOCTOR);
-      biographyOBJ.texto_campo = ABOUT_DOCTOR;
+    const fetchBio = async () => {
+      try {
+        const objectBio = ['Biografia_Autor'];
+        const descBio = await text_Services.getOneText(objectBio);
+        setBiography(descBio[0].texto_campo);
+        ABOUT_DOCTOR = biography;
+        biographyOBJ.texto_campo = ABOUT_DOCTOR;
+      } catch (error) {
+        console.log("Error fetching Biography:", error);
+      }
+
+
     }
 
-    const fetchTeam = () => {
-      setTeamDesc(TEAM);
-      teamDescOBJ.texto_campo = TEAM;
+    const fetchTeam = async () => {
+      try {
+        const objectTeam = ['Texto_Nuestro_Equipo'];
+        const descTeam = await text_Services.getOneText(objectTeam);
+        setTeamDesc(descTeam[0].texto_campo);
+        TEAM = teamDesc;
+        teamDescOBJ.texto_campo = TEAM;
+      } catch (error) {
+        console.log("Error fetching Team:", error);
+      }
+      
+      
     }
 
     const fetchImgDesc = () => {
