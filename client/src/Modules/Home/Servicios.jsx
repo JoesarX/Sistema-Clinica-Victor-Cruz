@@ -310,7 +310,7 @@ const Servicios = () => {
     }
   }, [isSubmitting3]);
 
-  const submitEditServicio = async () => {
+  const submitEditServicio = async (id, url) => {
     try {
         const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
         if (!titleRegex.test(editedService.title)) {
@@ -331,19 +331,23 @@ const Servicios = () => {
                 if (servicio.url != null) {
                     deleteImg(servicio.url);
                 }
-
+                
                 const imageUrll = await uploadFile();
-                setServicio((prevState) => ({
+                setEditedService((prevState) => ({
                     ...prevState,
                     url: imageUrll,
                 }));
-                servicio.url = imageUrll;
+                setEditedService(() => ({
+                  url: imageUrll,
+                  title: newTitle,
+                  description: newDescription,
+              }));
 
-                //await ServiciosService.editServicios(id, servicio);
+                await ServiciosService.editServicios(id, servicio);
                 alert('Servicio Editado');
             }
             else {
-                //await ServiciosService.editServicios(id, servicio);
+                await ServiciosService.editServicios(id, servicio);
                 alert('Servicio Editado');
             }
             window.location.reload();
