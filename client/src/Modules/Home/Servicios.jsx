@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import { TextField, Grid, Button, Box, TextareaAutosize } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,49 +7,74 @@ import { AuthContext } from '../AuthContext.js';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import '../HojaDeEstilos/Servicios.css';
+import { storage } from '../../firebase';
+import 'firebase/compat/storage';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+  getStorage,
+  listAll,
+  list,
+} from "firebase/storage";
+import { v4 } from "uuid";
+import swal from 'sweetalert';
+
+import ServiciosService from '../../Services/ServiciosService.js';
 
 const Servicios = () => {
   const { isLoggedIn, userType } = useContext(AuthContext);
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
+  const [servicios, setServicios] = useState([]);
+  const [servicio, setServicio] = useState({
+    url: '',
+    title: '',
+    description: '',
+    id: ''
+  });
 
   const [serviceData, setServiceData] = useState([
     {
       id: 1,
-      imageSrc: 'https://www.medigreen.com.ec/wp-content/uploads/2021/08/95368dbecc661caf7efebdb9c43364817e936d45.jpg',
+      url: 'https://www.medigreen.com.ec/wp-content/uploads/2021/08/95368dbecc661caf7efebdb9c43364817e936d45.jpg',
       title: 'Salud Ocupacional',
       description: 'Se enfoca en prevenir enfermedades y lesiones laborales, mejorar las condiciones de trabajo y promover el bienestar general de los empleados.',
       hooverComponent: '1'
     },
     {
       id: 2,
-      imageSrc: 'https://static.emol.cl/emol50/Fotos/2020/03/24/file_20200324095443.jpg',
+      url: 'https://static.emol.cl/emol50/Fotos/2020/03/24/file_20200324095443.jpg',
       title: 'Salubrista',
       description: 'Profesional que se dedica a mejorar la salud de las personas a través de diversas acciones y colaboraciones interdisciplinarias.',
       hooverComponent: '2'
     },
     {
       id: 3,
-      imageSrc: 'https://static.emisorasunidas.com/uploads/2020/09/dia-salubrista.jpg',
+      url: 'https://static.emisorasunidas.com/uploads/2020/09/dia-salubrista.jpg',
       title: 'Epidemiología',
       description: 'Estudio de los patrones, las causas y el control de las enfermedades en los grupos de personas.',
       hooverComponent: '3'
     },
     {
       id: 4,
-      imageSrc: 'https://www.clinicapremium.com/wp-content/uploads/2022/09/medicina-general-en-clinica-premium-marbella.jpg',
+      url: 'https://www.clinicapremium.com/wp-content/uploads/2022/09/medicina-general-en-clinica-premium-marbella.jpg',
       title: 'Atencion Primaria',
       description: 'Se centra en la prevención, el diagnóstico y el tratamiento de enfermedades comunes, así como en promover la salud general de las personas.',
       hooverComponent: '4'
-    },
-  ]);
+    },]);
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedService, setEditedService] = useState(null);
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [imageUpload, setImageUpload] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+
+  const [isSubmitting, setIsSubmitting] = useState(true);
+  const [isSubmitting2, setIsSubmitting2] = useState(false);
 
   const newServiceImageRef = useRef(null);
 
@@ -71,8 +96,78 @@ const Servicios = () => {
     newServiceImageRef.current.value = null;
   };
 
-  const handleAddNewService = (event) => {
+
+  //IMAGENES CODE --------------------------------------------------->
+
+  async function uploadFile() {
+
+  return new Promise((resolve, reject) => {
+        // Your file upload logic here
+        // Call resolve with the imageUrl when the upload is complete
+        // Call reject with an error if there's an issue with the upload
+        // For example:
+        if (imageUpload == null) {
+            //reject(new Error('No file selected for upload'));
+            return null;
+        }
+
+        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+        uploadBytes(imageRef, imageUpload)
+            .then((snapshot) => getDownloadURL(snapshot.ref))
+            .then((url) => {
+                resolve(url);
+                //console.log(medicamento);
+            })
+            .catch((error) => reject(error));
+    });
+  };
+
+  //CODE IMAGEN FINAL ---------------------------------------------------------------->
+
+  const fetchAllServicios = async () => {
+    try {
+        const servicioData = await ServiciosService.getAllServicios();
+        //Actualizar lista de categorías
+        const serviciosWithId = servicioData.map((servicio) => ({
+            ...servicio,
+            servId: servicio.id,
+        }));
+        console.log(serviciosWithId+"HOLA EDUARDO NOSE");
+        setServiceData(serviciosWithId);
+      } catch (error) {
+        // Handle error if any
+        console.log("Error fetching servicios:", error);
+    }
+  };
+
+  // Update tabla
+  useEffect(() => {
+    fetchAllServicios();
+    if (isSubmitting) {
+        fetchAllServicios();
+    }
+  }, [isSubmitting]);
+
+  const handleAddNewService = async (event) => {
     event.preventDefault();
+        try {
+            console.log("test");
+            submitServicio();
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting Servicio:', error);
+      }
+  }
+
+  useEffect(() => {
+    if (isSubmitting2) {
+        console.log("test");
+        submitServicio();
+    }
+  }, [isSubmitting2]);
+
+  const submitServicio = async (event) => {
+    
     // Validate and add the new service
     if (!newTitle || !newDescription || !imageUpload) {
       alert('Porfavor ingrese titulo, descripcion e imagen');
@@ -92,6 +187,36 @@ const Servicios = () => {
       alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
       return;
     }
+    if (imageUpload != null) {
+      const file = imageUpload;
+      if (validateImageFormat(file) == false) {
+          alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+          return;
+      }
+    }
+      console.log("Entra a agregar despues de validaciones");
+      try {
+          if (imageUpload != null) {
+              const imageUrll = await uploadFile();
+              console.log(imageUrll);
+              setServicio(() => ({
+                  url: imageUrll,
+                  title: newTitle,
+                  description: newDescription,
+              }));
+              servicio.url = imageUrll;
+              console.log(servicio.urlfoto);
+          }
+          await ServiciosService.postServicios(servicio);
+          alert('Servicio Agregado');
+          handleModalClose();
+          setImagePreview(null);
+          window.location.reload();
+      } catch (error) {
+          // Handle error if any
+          console.log('Error submitting Servicio:', error);
+      }
+    /* en duro
     const reader = new FileReader();
     reader.onloadend = () => {
       const newService = {
@@ -106,7 +231,69 @@ const Servicios = () => {
       handleModalClose();
     };
     reader.readAsDataURL(imageUpload);
+    */
   };
+
+  const validateImageFormat = (file) => {
+    const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
+    if (!allowedFormats.includes(file.type)) {
+        console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+        return false;
+    }
+
+    if (file.size > maxSizeInBytes) {
+        console.log('La imagen no debe superar los 5MB de tamaño');
+        return false;
+    }
+    return true;
+  };
+
+  const handleDeleteService = (row, id) => {
+    swal({
+        title: "¿Estás seguro?",
+        text: "Una vez borrado, no podrás recuperar esta información.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    })
+        .then(async (willDelete) => {
+            if (willDelete) {
+                try {
+                    const url = row.url
+                    console.log("DELETE THIS URL: " + url);
+                    await ServiciosService.deleteServicios(id);
+                    if (url != null) {
+                        console.log("DELETE THIS URL no es null: " + url);
+                        deleteImg(url);
+                    }
+                    else {
+                        window.location.reload();
+                    }
+                    swal("Servicio eliminado exitosamente!", {
+                        icon: "success",
+                    });
+                    window.location.reload();
+                } catch (error) {
+                    swal("Error al eliminar el servicio. Por favor, inténtalo de nuevo más tarde.", {
+                        icon: "error",
+                    });
+                }
+            } else {
+                swal("¡Tu información no se ha borrado!");
+            }
+        });
+  };
+  const storage = getStorage();
+  const deleteImg = (refUrl) => {
+      const imageRef = ref(storage, refUrl)
+      deleteObject(imageRef)
+          .catch((error) => {
+              console.log("Failed to delete image: ", error)
+          })
+      //window.location.reload();
+  }
 
   const handleSaveEdit = (event) => {
     event.preventDefault();
@@ -136,10 +323,7 @@ const Servicios = () => {
     setEditedService(service);
   };
 
-  const handleDeleteService = (serviceId) => {
-    const updatedServiceData = serviceData.filter((service) => service.id !== serviceId);
-    setServiceData(updatedServiceData);
-  };
+  
 
   return (
     <div className='scrollable-page'>
@@ -156,7 +340,7 @@ const Servicios = () => {
       <div>
         {serviceData.map((service) => (
           <div className='services' id={service.hooverComponent} key={service.id}>
-            <img src={service.imageSrc} alt={service.title} />
+            <img src={service.url} alt={service.title} />
             <div className="overlay">
               <h2>{service.title}</h2>
               <p className='desc'>{service.description}</p>

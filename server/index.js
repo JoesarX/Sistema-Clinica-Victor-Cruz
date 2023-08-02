@@ -7,6 +7,7 @@ import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
+import serviciosRouter from "./routes/servicios.js";
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -54,6 +55,6 @@ app.use("/medicamentos", medicamentosRouter(pool));
 app.use("/citas", citasRouter(pool)); 
 app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
-
+app.use("/servicios", serviciosRouter(pool));
 
 
