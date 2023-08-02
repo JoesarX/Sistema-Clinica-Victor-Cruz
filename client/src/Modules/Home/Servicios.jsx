@@ -75,6 +75,7 @@ const Servicios = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
+  const [isSubmitting3, setIsSubmitting3] = useState(false);
 
   const newServiceImageRef = useRef(null);
 
@@ -127,12 +128,14 @@ const Servicios = () => {
   const fetchAllServicios = async () => {
     try {
         const servicioData = await ServiciosService.getAllServicios();
-        //Actualizar lista de categorías
         const serviciosWithId = servicioData.map((servicio) => ({
             ...servicio,
-            servId: servicio.id,
+            hooverComponent: servicio.id,
         }));
         console.log(serviciosWithId+"HOLA EDUARDO NOSE");
+        serviciosWithId.forEach((servicio) => {
+          console.log(servicio);
+        });
         setServiceData(serviciosWithId);
       } catch (error) {
         // Handle error if any
@@ -198,15 +201,16 @@ const Servicios = () => {
       try {
           if (imageUpload != null) {
               const imageUrll = await uploadFile();
-              console.log(imageUrll);
               setServicio(() => ({
                   url: imageUrll,
                   title: newTitle,
                   description: newDescription,
               }));
+              servicio.title = newTitle;
+              servicio.description = newDescription;
               servicio.url = imageUrll;
-              console.log(servicio.urlfoto);
           }
+          console.log(servicio);
           await ServiciosService.postServicios(servicio);
           alert('Servicio Agregado');
           handleModalClose();
@@ -250,7 +254,7 @@ const Servicios = () => {
     return true;
   };
 
-  const handleDeleteService = (row, id) => {
+  const handleDeleteService = (id, url) => {
     swal({
         title: "¿Estás seguro?",
         text: "Una vez borrado, no podrás recuperar esta información.",
@@ -261,20 +265,15 @@ const Servicios = () => {
         .then(async (willDelete) => {
             if (willDelete) {
                 try {
-                    const url = row.url
+                  console.log(id);
                     console.log("DELETE THIS URL: " + url);
                     await ServiciosService.deleteServicios(id);
-                    if (url != null) {
-                        console.log("DELETE THIS URL no es null: " + url);
-                        deleteImg(url);
-                    }
-                    else {
-                        window.location.reload();
-                    }
+                    console.log("DELETE THIS URL no es null: " + url);
+                    deleteImg(url);
                     swal("Servicio eliminado exitosamente!", {
                         icon: "success",
                     });
-                    window.location.reload();
+                    //window.location.reload();
                 } catch (error) {
                     swal("Error al eliminar el servicio. Por favor, inténtalo de nuevo más tarde.", {
                         icon: "error",
@@ -292,9 +291,68 @@ const Servicios = () => {
           .catch((error) => {
               console.log("Failed to delete image: ", error)
           })
-      //window.location.reload();
+      window.location.reload();
   }
 
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    try {
+        submitEditServicio();
+    } catch (error) {
+        // Handle error if any
+        console.log('Error submitting servicio:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (isSubmitting3) {
+        submitEditServicio();
+    }
+  }, [isSubmitting3]);
+
+  const submitEditServicio = async () => {
+    try {
+        const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
+        if (!titleRegex.test(editedService.title)) {
+          setTitleError(true);
+          alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+          return;
+        }
+    
+        // Validate description
+        const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+        if (!descriptionRegex.test(editedService.description)) {
+          setDescriptionError(true);
+          alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+          return;
+        }
+          console.log("Entra a edit despues de validaciones");
+            if (imageUpload != null) {
+                if (servicio.url != null) {
+                    deleteImg(servicio.url);
+                }
+
+                const imageUrll = await uploadFile();
+                setServicio((prevState) => ({
+                    ...prevState,
+                    url: imageUrll,
+                }));
+                servicio.url = imageUrll;
+
+                //await ServiciosService.editServicios(id, servicio);
+                alert('Servicio Editado');
+            }
+            else {
+                //await ServiciosService.editServicios(id, servicio);
+                alert('Servicio Editado');
+            }
+            window.location.reload();
+    } catch (error) {
+        console.log('Error submitting servicio:', error);
+    }
+};
+
+  /*
   const handleSaveEdit = (event) => {
     event.preventDefault();
     const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
@@ -311,13 +369,15 @@ const Servicios = () => {
       alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
       return;
     }
+
+    
     const updatedServiceData = serviceData.map((item) =>
       item.id === editedService.id ? { ...editedService } : item
     );
-
     setServiceData(updatedServiceData);
     setEditedService(null);
   };
+  */
 
   const handleEditService = (service) => {
     setEditedService(service);
@@ -348,7 +408,7 @@ const Servicios = () => {
                 <>
                   <div className='buttonCont'>
                     <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
-                    <button className='buttonE' onClick={() => handleDeleteService(service.id)}>Borrar Servicio</button>
+                    <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url)}>Borrar Servicio</button>
                   </div>
                 </>
               )}
@@ -471,14 +531,14 @@ const Servicios = () => {
                 <Grid item xs={12} sm={6}>
                   <div className='DImg'>
                     <div className='imgWrap'>
-                      <img className='imgC' src={editedService.imageSrc} alt={editedService.title} />
+                      <img className='imgC' src={editedService.url} alt={editedService.title} />
                     </div>
                   </div>
                   <label htmlFor="urlfoto" className="cFL">Seleccionar archivo</label>
                   <input
                     type="file"
                     onChange={(event) => {
-                      setEditedService({ ...editedService, imageSrc: URL.createObjectURL(event.target.files[0]) });
+                      setEditedService({ ...editedService, url: URL.createObjectURL(event.target.files[0]) });
                     }}
                     name='urlfoto'
                     id="urlfoto"
