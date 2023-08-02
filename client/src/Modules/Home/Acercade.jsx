@@ -1,6 +1,5 @@
 import React from 'react';
 import '../HojaDeEstilos/Acercade.css';
-import { useNavigate } from 'react-router-dom';
 import 'react-slideshow-image/dist/styles.css';
 import hospital from '../Imagenes/hospital.jpeg';
 import doctor from '../Imagenes/victor_cruz.jpeg';
@@ -8,16 +7,11 @@ import Topbar from './Topbar';
 import Footer from './Footer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 
-import MisionService from '../../Services/MisionService';
 import text_Services from '../../Services/texto_cmdService';
-import VisionService from '../../Services/VisionService';
 import { useEffect, useRef, useState } from 'react';
 
 import { v4 } from "uuid";
@@ -28,117 +22,140 @@ import {
   deleteObject,
   getStorage,
 } from "firebase/storage";
-import { WindowSharp } from '@mui/icons-material';
-import { text } from '@fortawesome/fontawesome-svg-core';
 
 const Acercade = () => {
-  const [mision, setMision] = useState(null);
-  const [vision, setVision] = useState(null);
-
-  const [misionOBJ, setMisionOBJ] = React.useState({
-    Tipo: 'Mision',
-    texto_campo: ''
-  })
-
-  const [visionOBJ, setVisionOBJ] = React.useState({
-    Tipo: 'Vision',
-    texto_campo: '',
-  })
-
-  /// PARA WALTER
 
   //CONSTANTES POR MIENTRAS
-  const DESC = 'La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado vespertino y matutino para brindar un mejor servicio a la población en general.';
-  const ABOUT_DOCTOR = 'El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. Además, obtuvo una certificación de auditor interno de dicha norma.'
-  const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
+  // const DESC = 'La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado vespertino y matutino para brindar un mejor servicio a la población en general.';
+  // const ABOUT_DOCTOR = 'El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. Además, obtuvo una certificación de auditor interno de dicha norma.'
+  // const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
   const DESC_IMG = hospital;
   const DOCTOR_IMG = doctor;
 
   const [description, setDescription] = useState(null);
   const [biography, setBiography] = useState(null);
   const [teamDesc, setTeamDesc] = useState(null);
+  const [mision, setMision] = useState(null);
+  const [vision, setVision] = useState(null);
 
-  const [descriptionOBJ, setDescriptionOBJ] = useState({
-    Tipo: 'Descripción_Empresa', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+  const [misionOBJ] = React.useState({
+    Tipo: 'Mision',
+    texto_campo: ''
+  })
+
+  const [visionOBJ] = React.useState({
+    Tipo: 'Vision',
+    texto_campo: '',
+  })
+
+  const [descriptionOBJ] = useState({
+    Tipo: 'Descripción_Empresa',
     texto_campo: '',
   });
 
-  const [biographyOBJ, setBiographyOBJ] = useState({
-    Tipo: 'Biografia_Autor', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+  const [biographyOBJ] = useState({
+    Tipo: 'Biografia_Autor',
     texto_campo: '',
   });
 
-  const [teamDescOBJ, setTeamDescOBJ] = useState({
-    Tipo: 'Texto_Nuestro_Equipo', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+  const [teamDescOBJ] = useState({
+    Tipo: 'Texto_Nuestro_Equipo',
     texto_campo: '',
   });
 
   const handleDescChange = (event) => {
     setDescription(event.target.value);
-    descriptionOBJ.texto_campo = event.target.value;
   }
 
   const handleDescEdit = (event) => {
     setIsEditingLabelDesc(true);
   }
 
-  const handleDescSave = (event) => {
+  const handleDescSave = async (event) => {
     setIsEditingLabelDesc(false);
-    text_Services.editText(descriptionOBJ)
-    console.log(descriptionOBJ.texto_campo)
-    setDescription(descriptionOBJ.texto_campo);
-    window.location.reload(true);
-
+    descriptionOBJ.texto_campo = description;
+    await text_Services.editText(descriptionOBJ)
   }
 
   const handleBioChange = (event) => {
     setBiography(event.target.value);
-    biographyOBJ.texto_campo = event.target.value;
   }
 
   const handleBioEdit = (event) => {
     setIsEditingLabelBio(true);
   }
 
-  const handleBioSave = (event) => {
+  const handleBioSave = async (event) => {
     setIsEditingLabelBio(false);
-    text_Services.editText(biographyOBJ)
-    setBiography(biographyOBJ.texto_campo);
-    window.location.reload(true);
+    biographyOBJ.texto_campo = biography;
+    await text_Services.editText(biographyOBJ)
   }
 
   const handleTeamChange = (event) => {
     setTeamDesc(event.target.value);
-    teamDescOBJ.texto_campo = event.target.value;
   }
 
   const handleTeamEdit = (event) => {
     setIsEditingLabelTeam(true);
   }
 
-  const handleTeamSave = (event) => {
+  const handleTeamSave = async (event) => {
     setIsEditingLabelTeam(false);
-    text_Services.editText(teamDescOBJ);
-    setTeamDesc(teamDescOBJ.texto_campo);
-    window.location.reload(true);
+    teamDescOBJ.texto_campo = teamDesc;
+    await text_Services.editText(teamDescOBJ);
   }
+
+  const handleMisionChange = (event) => {
+    setMision(event.target.value);
+  };
+
+  const handleMisionSave = async (event) => {
+    setIsEditingLabelMision(false);
+    misionOBJ.texto_campo = mision;
+    await text_Services.editText(misionOBJ);
+  };
+
+  const handleMisionEdit = () => {
+    setIsEditingLabelMision(true);
+  };
+
+  const handleVisionChange = (event) => {
+    setVision(event.target.value);
+  };
+
+  const handleVisionSave = async (event) => {
+    setIsEditingLabelVision(false);
+    visionOBJ.texto_campo = vision;
+    await text_Services.editText(visionOBJ);
+  };
+
+  const handleVisionEdit = () => {
+    setIsEditingLabelVision(true);
+  };
 
   const handleCancel = (edit) => {
     switch (edit) {
       case 'mision':
-        setIsEditingLabel(false);
+        setIsEditingLabelMision(false);
+        setMision(misionOBJ.texto_campo);
         break;
       case 'vision':
-        setIsEditingLabel2(false);
+        setIsEditingLabelVision(false);
+        setVision(visionOBJ.texto_campo);
         break;
       case 'desc':
         setIsEditingLabelDesc(false);
+        setDescription(descriptionOBJ.texto_campo);
         break;
       case 'bio':
         setIsEditingLabelBio(false);
+        setBiography(biographyOBJ.texto_campo);
         break;
       case 'team':
         setIsEditingLabelTeam(false);
+        setTeamDesc(teamDescOBJ.texto_campo);
+        break;
+      default:
         break;
     }
   }
@@ -189,147 +206,72 @@ const Acercade = () => {
 
   /////
 
-  const [isEditingLabel, setIsEditingLabel] = useState(false);
-  const [isEditingLabel2, setIsEditingLabel2] = useState(false);
+  const [isEditingLabelMision, setIsEditingLabelMision] = useState(false);
+  const [isEditingLabelVision, setIsEditingLabelVision] = useState(false);
   const [isEditingLabelDesc, setIsEditingLabelDesc] = useState(false);
   const [isEditingLabelBio, setIsEditingLabelBio] = useState(false);
   const [isEditingLabelTeam, setIsEditingLabelTeam] = useState(false);
 
   const inputRef = useRef(null);
 
-  const handleMisionChange = (event) => {
-    setMision(event.target.value);
-    misionOBJ.texto_campo = event.target.value;
-    console.log(mision)
+  const fetchMision = async () => {
+    try {
+      const objectMision = ['Mision'];
+      var misionData = await text_Services.getOneText(objectMision);
+      setMision(misionData[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Mision:", error);
+    }
+  };
+  const fetchVision = async () => {
+    try {
+      const objectVision = ['Vision'];
+      const visionData = await text_Services.getOneText(objectVision);
+      setVision(visionData[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Vision:", error);
+    }
   };
 
-  const handleMisionSave = (event) => {
-    setIsEditingLabel(false);
-    text_Services.editText(misionOBJ);
-    window.location.reload(true);
-  };
+  const fetchDesc = async () => {
+    try {
+      const objectDesc = ['Descripción_Empresa'];
+      const descData = await text_Services.getOneText(objectDesc);
+      setDescription(descData[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Descripción de empresa:", error);
+    }
+  }
 
-  const handleMisionEdit = () => {
-    setIsEditingLabel(true);
-  };
+  const fetchBio = async () => {
+    try {
+      const objectBio = ['Biografia_Autor'];
+      const descBio = await text_Services.getOneText(objectBio);
+      setBiography(descBio[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Biography:", error);
+    }
+  }
 
-  const handleVisionChange = (event) => {
-    setVision(event.target.value);
-    visionOBJ.texto_campo = event.target.value;
-    console.log(vision)
-  };
+  const fetchTeam = async () => {
+    try {
+      const objectTeam = ['Texto_Nuestro_Equipo'];
+      const descTeam = await text_Services.getOneText(objectTeam);
+      setTeamDesc(descTeam[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Team:", error);
+    }
+  }
 
-  const handleVisionSave = (event) => {
-    setIsEditingLabel2(false);
-    console.log(visionOBJ)
-    text_Services.editText(visionOBJ);
-    window.location.reload(true);
-  };
-  const handleVisionEdit = () => {
-    setIsEditingLabel2(true);
-  };
+  const fetchImgDesc = () => {
+    setImagePreviewDesc(DESC_IMG);
+  }
 
+  const fetchImgDoctor = () => {
+    setImagePreviewDoctor(DOCTOR_IMG);
+  }
 
   useEffect(() => {
-    const fetchMision = async () => {
-      try {
-        const objectMision = ['Mision'];
-        var misionData;
-        console.log(misionData = await text_Services.getOneText(objectMision));
-        console.log("Cargar Mision: " + misionData[0].texto_campo);
-        setMision(misionData[0].texto_campo);
-        misionOBJ.texto_campo = misionData[0].texto_campo;
-        // console.log("Cargar Mision: "+misionData.texto_campo);
-      } catch (error) {
-        // Handle error if any
-        console.log("Error fetching Mision:", error);
-      }
-    };
-    const fetchVision = async () => {
-      try {
-        const objectVision = ['Vision'];
-
-        const visionData = await text_Services.getOneText(objectVision);
-        setVision(visionData[0].texto_campo);
-        visionOBJ.texto_campo = visionData[0].texto_campo;
-      } catch (error) {
-        // Handle error if any
-        console.log("Error fetching Vision:", error);
-      }
-    };
-
-    //WALTER HACE LOS RESPECTIVOS FETCH AQUI
-    const fetchDesc = async () => {
-      try {
-        const objectDesc = ['Descripción_Empresa'];
-        const descData = await text_Services.getOneText(objectDesc);
-        setDescription(descData[0].texto_campo);
-        DESC = description;
-        descriptionOBJ.texto_campo = DESC;
-      } catch (error) {
-        console.log("Error fetching Descripción de empresa:", error);
-      }
-
-    }
-
-    const fetchBio = async () => {
-      try {
-        const objectBio = ['Biografia_Autor'];
-        const descBio = await text_Services.getOneText(objectBio);
-        setBiography(descBio[0].texto_campo);
-        ABOUT_DOCTOR = biography;
-        biographyOBJ.texto_campo = ABOUT_DOCTOR;
-      } catch (error) {
-        console.log("Error fetching Biography:", error);
-      }
-
-
-    }
-
-    const fetchTeam = async () => {
-      try {
-        const objectTeam = ['Texto_Nuestro_Equipo'];
-        const descTeam = await text_Services.getOneText(objectTeam);
-        setTeamDesc(descTeam[0].texto_campo);
-        TEAM = teamDesc;
-        teamDescOBJ.texto_campo = TEAM;
-      } catch (error) {
-        console.log("Error fetching Team:", error);
-      }
-      
-      
-    }
-
-    const fetchImgDesc = () => {
-      setImagePreviewDesc(DESC_IMG);
-    }
-
-    const fetchImgDoctor = () => {
-      setImagePreviewDoctor(DOCTOR_IMG);
-    }
-
-    ////
-
-    if (isEditingLabel && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabel2 && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelDesc && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelBio && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelTeam && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
     fetchMision();
     fetchVision();
     fetchDesc();
@@ -337,7 +279,27 @@ const Acercade = () => {
     fetchTeam();
     fetchImgDesc();
     fetchImgDoctor();
-  }, [isEditingLabel, isEditingLabel2, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (isEditingLabelMision && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelVision && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelDesc && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelBio && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelTeam && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+
+  }, [isEditingLabelMision, isEditingLabelVision, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
 
 
   return (
@@ -356,7 +318,7 @@ const Acercade = () => {
             </div>
             <span >
               <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px' }}>Misión</h2>
-              {isEditingLabel ? (
+              {isEditingLabelMision ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   <textarea
                     ref={inputRef}
@@ -394,7 +356,7 @@ const Acercade = () => {
             <span>
               <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px' }}>Visión</h2>
 
-              {isEditingLabel2 ? (
+              {isEditingLabelVision ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                   <textarea
                     ref={inputRef}
