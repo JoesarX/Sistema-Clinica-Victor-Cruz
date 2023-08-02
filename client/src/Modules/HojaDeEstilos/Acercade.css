@@ -227,7 +227,7 @@ h2 {
   text-align: center;
 }
 
-.upload-buttons label, input {
+.upload-buttons > * {
   background-color: azure;
   border-radius: 20px;
   cursor: pointer;
@@ -256,7 +256,7 @@ h2 {
   border-radius: 20px;
 }
 
-.upload-buttons label:hover,input:hover{
+.upload-buttons >*:hover{
   background-color: rgb(6, 130, 130);
 }
 
@@ -268,7 +268,7 @@ h2 {
   background-color: rgb(169, 173, 169);
 }
 
-.upload-buttons > label.delete:hover {
+.upload-buttons > .delete:hover {
   background-color: rgb(245, 95, 72);
 }
 
