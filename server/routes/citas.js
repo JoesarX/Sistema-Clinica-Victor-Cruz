@@ -315,7 +315,7 @@ const citasRouter = (pool, transporter) => {
         const millisecondsInADay = 24 * 60 * 60 * 1000;
         const now = new Date();
         const targetTime = new Date(now);
-        targetTime.setHours(15, 30, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correos
+        targetTime.setHours(16, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correos
 
         let timeUntilNextDay = targetTime - now;
         if (timeUntilNextDay < 0) {
