@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
@@ -16,6 +16,7 @@ import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 
 import axios from 'axios'; // Import axios library
@@ -67,6 +68,77 @@ const Home = () => {
         indicators: true,
         arrows: true
     };
+
+
+
+
+    /* msion Edit */
+
+    const originalText = `Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
+    \nEstamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.`;
+
+    const [editable, setEditable] = useState(false);
+    const [missionText, setMissionText] = useState(originalText);
+
+    const MAX_LINES = 10;
+
+    const handleEditClick = () => {
+        setEditable(true);
+    };
+
+    const handleSaveClick = () => {
+        if (missionText.split('\n').length > MAX_LINES) {
+            alert(`¡Error! El texto no puede tener más de ${MAX_LINES} líneas.`);
+            return;
+        }
+
+        setEditable(false);
+    };
+
+    const handleCancelClick = () => {
+        setEditable(false);
+        setMissionText(originalText);
+    };
+
+    const handleChange = (event) => {
+        // Recortar el texto si excede el máximo número de líneas permitidas
+        setMissionText(event.target.value);
+    };
+
+    const formatOriginalText = (text) => {
+        return text.split('\n').map((paragraph, index) => (
+            <React.Fragment key={index}>
+                {paragraph}
+                <br />
+            </React.Fragment>
+        ));
+    };
+
+
+
+    /* Google Maps*/
+    const [editable1, setEditable1] = useState(false);
+    const mapEmbedURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn";
+    const [mapURL, setMapURL] = useState(mapEmbedURL);
+  
+    const handleEditClick1 = () => {
+      setEditable1(true);
+    };
+  
+    const handleSaveClick1 = () => {
+      setEditable1(false);
+    };
+  
+    const handleCancelClick1 = () => {
+      setEditable1(false);
+      setMapURL(mapEmbedURL);
+    };
+  
+    const handleChange1 = (event) => {
+      setMapURL(event.target.value);
+    };
+  
+
 
 
     return (
@@ -132,21 +204,62 @@ const Home = () => {
             <div className="home-about-us-container">
                 <div className='about-us-content'>
                     <div className='content-header align-left'>Misión</div>
-                    <div className='about-us-text'>
-                        Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
-                        <br /><br />Estamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.
-                    </div>
-                    <button class="see-more-button about-us" onClick={handleAboutUsClick}>Más Información</button>
+                    {editable ? (
+                        <textarea
+                            className='about-us-text'
+                            value={missionText}
+                            onChange={handleChange}
+                            rows="10"
+                        />
+                    ) : (
+                        <div className='about-us-text'>{formatOriginalText(missionText)}</div>
+                    )}
+                    {editable ? (
+                        <>
+                            <button onClick={handleSaveClick} style={{ display: 'inline-block' }}>
+                                <FontAwesomeIcon icon={faSave} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
+                            </button>
+                            <button onClick={handleCancelClick} style={{ display: 'inline-block' }}>
+                                <FontAwesomeIcon icon={faTimes} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
+                            </button>
+                        </>
+                    ) : (
+                        <button onClick={handleEditClick}>
+                            <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                        </button>
+                    )}
                 </div>
                 <div className='about-us-content'>
                     <div className="content-header align-left small-text">Estamos ubicados en:</div>
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn"
-                        allowFullScreen=""
-                        loading="lazy"
-                        className='google-map-frame'
-                    >
-                    </iframe>
+                    {editable1 ? (
+                        <input
+                            type="text"
+                            className='google-map-input'
+                            value={mapURL}
+                            onChange={handleChange1}
+                        />
+                    ) : (
+                        <iframe
+                            src={mapURL}
+                            allowFullScreen=""
+                            loading="lazy"
+                            className='google-map-frame'
+                        />
+                    )}
+                    {editable1 ? (
+                        <div className="button-container">
+                            <button className='edit-button' onClick={handleSaveClick1}>
+                                <FontAwesomeIcon icon={faSave} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
+                            </button>
+                            <button className='cancel-button' onClick={handleCancelClick1}>
+                                <FontAwesomeIcon icon={faTimes} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
+                            </button>
+                        </div>
+                    ) : (
+                        <button className='edit-button' onClick={handleEditClick1}>
+                            <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                        </button>
+                    )}
                 </div>
             </div>
             <div className="smooth-line" />
