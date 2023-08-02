@@ -17,23 +17,23 @@ const FichaMedicamentos = (props) => {
                     </div>
                     <div className='Contenido'>
                         <table className='tablaMed'>
-                            <tr>
-                                <th className='topLeft'>Nombre</th>
+                            <tr classname ="trFicha">
+                                <th classname ="thFicha" className='topLeft'>Nombre</th>
                                 <td className='topRight'>{setNombreF}</td>
                             </tr>
-                            <tr>
-                                <th>Categoría</th>
+                            <tr classname ="trFicha">
+                                <th classname ="thFicha">Categoría</th>
                                 <td className='camposT'>{setCategoriaF}</td>
                             </tr>
-                            <tr>
-                                <th>Precio Unitario</th>
+                            <tr classname ="trFicha">
+                                <th classname ="thFicha">Precio Unitario</th>
                                 <td className='camposT'>{setPrecioUnitarioF}</td>
                             </tr>
-                            <tr>
-                                <th>Cantidad de stock</th>
+                            <tr classname ="trFicha">
+                                <th classname ="thFicha">Cantidad de stock</th>
                                 <td className='camposT'>{setStockF}</td>
                             </tr>
-                            <tr>
+                            <tr classname ="trFicha">
                                 <th className='bottomLeft'>Vía</th>
                                 <td className='bottomRight'>{setViaF}</td>
                             </tr>
