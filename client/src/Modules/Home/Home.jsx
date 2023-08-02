@@ -1,8 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
+import { AuthContext } from '../AuthContext.js';
 
 import Topbar from './Topbar';
 import Footer from './Footer';
@@ -25,6 +26,8 @@ import axios from 'axios'; // Import axios library
 
 const Home = () => {
     const navigate = useNavigate();
+
+    const { userType, isLoggedIn } = useContext(AuthContext);
 
     useEffect(() => {
         // Make the initial request on component mount
@@ -70,6 +73,115 @@ const Home = () => {
     };
 
 
+    /* Container Clinica */
+    /*
+       const [isEditingTitle, setIsEditingTitle] = useState(false);
+       const [clinicTitle, setClinicTitle] = useState('Clínica');
+       const [editedTitle, setEditedTitle] = useState('');
+   */
+    const [isEditingDescription, setIsEditingDescription] = useState(false);
+    const [clinicDescription, setClinicDescription] = useState(
+        'Dedicada a brindar servicios de salud de alta calidad y atención médica integral.'
+    );
+    const [editedDescription, setEditedDescription] = useState('');
+
+    /*
+    const handleChangeTitle = (event) => {
+        setEditedTitle(event.target.value);
+    };
+ 
+ 
+ 
+    const handleSaveTitle = () => {
+        setClinicTitle(editedTitle);
+        setIsEditingTitle(false);
+    };
+ 
+ 
+    const handleEditTitle = () => {
+        setIsEditingTitle(true);
+        setEditedTitle(clinicTitle);
+    };
+ 
+ 
+    const handleCancelTitle = () => {
+        setIsEditingTitle(false);
+    };
+ 
+*/
+    const handleEditDescription = () => {
+        setIsEditingDescription(true);
+        setEditedDescription(clinicDescription);
+    };
+
+    const handleChangeDescription = (event) => {
+        setEditedDescription(event.target.value);
+    };
+
+
+    const handleSaveDescription = () => {
+        setClinicDescription(editedDescription);
+        setIsEditingDescription(false);
+    };
+
+    const handleCancelDescription = () => {
+        setIsEditingDescription(false);
+    };
+
+
+    /* Salud Ocupacional*/
+
+    const [isEditingDescription1, setIsEditingDescription1] = useState(false);
+    const [saludOcupacionalDescription, setSaludOcupacionalDescription] = useState(
+        'Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.'
+    );
+    const [editedSaludOcupacionalDescription, setEditedSaludOcupacionalDescription] = useState('');
+
+    const handleChangeDescription1 = (event) => {
+        setEditedSaludOcupacionalDescription(event.target.value);
+    };
+
+    const handleEditDescription1 = () => {
+        setIsEditingDescription1(true);
+        setEditedSaludOcupacionalDescription(saludOcupacionalDescription);
+    };
+
+    const handleSaveDescription1 = () => {
+        setSaludOcupacionalDescription(editedSaludOcupacionalDescription);
+        setIsEditingDescription1(false);
+    };
+
+    const handleCancelDescription1 = () => {
+        setIsEditingDescription1(false);
+    };
+
+
+
+    /* Container Laboratorio - Descripción */
+
+    const [isEditingLaboratorioDescription, setIsEditingLaboratorioDescription] = useState(false);
+    const [laboratorioDescription, setLaboratorioDescription] = useState(
+        'Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.'
+    );
+    const [editedLaboratorioDescription, setEditedLaboratorioDescription] = useState('');
+
+    const handleChangeLaboratorioDescription = (event) => {
+        setEditedLaboratorioDescription(event.target.value);
+    };
+
+    const handleEditLaboratorioDescription = () => {
+        setIsEditingLaboratorioDescription(true);
+        setEditedLaboratorioDescription(laboratorioDescription);
+    };
+
+    const handleSaveLaboratorioDescription = () => {
+        setLaboratorioDescription(editedLaboratorioDescription);
+        setIsEditingLaboratorioDescription(false);
+    };
+
+    const handleCancelLaboratorioDescription = () => {
+        setIsEditingLaboratorioDescription(false);
+    };
 
 
     /* msion Edit */
@@ -120,24 +232,24 @@ const Home = () => {
     const [editable1, setEditable1] = useState(false);
     const mapEmbedURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn";
     const [mapURL, setMapURL] = useState(mapEmbedURL);
-  
+
     const handleEditClick1 = () => {
-      setEditable1(true);
+        setEditable1(true);
     };
-  
+
     const handleSaveClick1 = () => {
-      setEditable1(false);
+        setEditable1(false);
     };
-  
+
     const handleCancelClick1 = () => {
-      setEditable1(false);
-      setMapURL(mapEmbedURL);
+        setEditable1(false);
+        setMapURL(mapEmbedURL);
     };
-  
+
     const handleChange1 = (event) => {
-      setMapURL(event.target.value);
+        setMapURL(event.target.value);
     };
-  
+
 
 
 
@@ -167,10 +279,31 @@ const Home = () => {
                     </div>
                     <div className="service-text-elements">
                         <h1 className="service-header">Clínica</h1>
-                        <div className="service-text">
-                            Dedicada a brindar servicios de salud de alta calidad y atención médica integral.
-                        </div>
+                        {isEditingDescription ? (
+                            <>
+                                <textarea
+                                    value={editedDescription}
+                                    onChange={handleChangeDescription}
+                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
+                                />
+                                <button onClick={handleSaveDescription}>
+                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
+                                </button>
+                                <button onClick={handleCancelDescription}>
+                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <div className="service-text">{clinicDescription}</div>
+                                <button onClick={handleEditDescription}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                </button>
+                            </>
+                        )}
                     </div>
+
+
                 </div>
                 <div className="service-container">
                     <div className="service-icon-container">
@@ -178,9 +311,30 @@ const Home = () => {
                     </div>
                     <div className="service-text-elements">
                         <h1 className="service-header">Salud Ocupacional</h1>
-                        <div className="service-text">
-                            Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.
-                        </div>
+                        {isEditingDescription1 ? (
+                            <>
+                                <textarea
+                                    value={editedSaludOcupacionalDescription}
+                                    onChange={handleChangeDescription1}
+                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
+                                />
+                                <button onClick={handleSaveDescription}>
+                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
+                                </button>
+                                <button onClick={handleCancelDescription1}>
+                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <div className="service-text">{saludOcupacionalDescription}</div>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <button onClick={handleEditDescription1} style={{ marginLeft: '5px' }}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
                 <div className="service-container">
@@ -189,9 +343,30 @@ const Home = () => {
                     </div>
                     <div className="service-text-elements">
                         <h1 className="service-header">Laboratorio</h1>
-                        <div className="service-text">
-                            Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.
-                        </div>
+                        {isEditingLaboratorioDescription ? (
+                            <>
+                                <textarea
+                                    value={editedLaboratorioDescription}
+                                    onChange={handleChangeLaboratorioDescription}
+                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
+                                />
+                                <button onClick={handleSaveLaboratorioDescription}>
+                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
+                                </button>
+                                <button onClick={handleCancelLaboratorioDescription}>
+                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <div className="service-text">{laboratorioDescription}</div>
+                                {isLoggedIn && userType !== 'normal' && (
+                                    <button onClick={handleEditLaboratorioDescription} style={{ marginLeft: '5px' }}>
+                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                    </button>
+                                )}
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

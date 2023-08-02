@@ -39,31 +39,10 @@ const Contactanos = () => {
     })
 
 
-
-
-
-
-
     /* Para el Numero Telefoinico */
     const [isEditing, setIsEditing] = useState(false);
     const [phone, setPhone] = useState('+504 2230-3901');
     const [editedPhone, setEditedPhone] = useState('');
-
-
-
-    /* 
-    const handleSaveEmail = () => {
-        if (isValidEmail(editedEmail)) {
-            setIsEditing1(false);
-            text_Services.editText(correoOBJ);
-            window.location.reload(true);
-        } else {
-            // Display an error message or handle the invalid email case
-            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos básicos de un correo electrónico válido.');
-        }
-    };
-
-    */
 
     const handleChangePhone = (event) => {
         setEditedPhone(event.target.value);
