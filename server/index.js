@@ -8,6 +8,8 @@ import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
 import textos_cmdRouter from "./routes/textos_cmd.js";
+import serviciosRouter from "./routes/servicios.js";
+
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -58,5 +60,6 @@ app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a par
 
 app.use('/texto_cmd',textos_cmdRouter(pool));
 
+app.use("/servicios", serviciosRouter(pool));
 
 
