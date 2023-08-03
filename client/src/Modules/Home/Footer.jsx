@@ -245,7 +245,7 @@ const Topbar = () => {
                 copyData = await text_Services.getOneText(objectCopy);
                 console.log("Cargar Copyright: " + copyData[0].texto_campo);
                 setYear(copyData[0].texto_campo);
-                objectCopy.texto_campo = copyData[0].texto_campo;
+                copyOBJ.texto_campo = copyData[0].texto_campo;
             } catch (error) {
                 console.log("Error fetching Copyright:", error);
             }
