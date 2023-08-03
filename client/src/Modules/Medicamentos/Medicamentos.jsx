@@ -313,10 +313,6 @@ const Medicamentos = () => {
     async function uploadFile() {
 
         return new Promise((resolve, reject) => {
-            // Your file upload logic here
-            // Call resolve with the imageUrl when the upload is complete
-            // Call reject with an error if there's an issue with the upload
-            // For example:
             if (imageUpload == null) {
                 //reject(new Error('No file selected for upload'));
                 return null;

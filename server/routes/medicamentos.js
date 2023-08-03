@@ -24,36 +24,15 @@ const medicamentosRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `medicamentos` (`nombre`, `stock`, `precio_unitario`, `via`, `dosis`, `urlfoto`,`id_categoria`)  VALUES (?)";
+                "INSERT INTO `imagenes` (`tipo`, `url`)  VALUES (?)";
             const values = [
-                req.body.nombre,
-                req.body.stock,
-                req.body.precio_unitario,
-                req.body.via,
-                req.body.dosis,
-                req.body.urlfoto,
-                req.body.id_categoria
+                tipo = 'Carrusel',
+                url = req.body.url
             ];
-            console.log("Este es el id de categoría: " + req.body.id_categoria);
+            console.log("Este es el url: " + req.body.url);
             await connection.query(q, [values]);
             connection.release();
-            res.json("Medicamento añadido exitosamente!");
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-    });
-
-    //Get a medicamento by id
-    router.get("/:id", async (req, res) => {
-        try {
-            const connection = await pool.getConnection();
-
-            const sqlSelect = "SELECT * FROM medicamentos WHERE idmed = " + req.params.id;
-
-            const [rows, fields] = await connection.query(sqlSelect);
-            connection.release();
-            res.json(rows[0])
+            res.json("Imagen añadida exitosamente!");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
@@ -64,49 +43,10 @@ const medicamentosRouter = (pool) => {
     router.delete("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM medicamentos where idmed = " + req.params.id;
+            const sqlSelect = "delete FROM imagenes where idfoto = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
-        } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-    });
-
-
-    //Update a patient by id
-    router.put("/:id", async (req, res) => {
-        try {
-            const connection = await pool.getConnection();
-            const { id } = req.params;
-            const {
-                nombre,
-                stock,
-                precio_unitario,
-                via,
-                dosis,
-                urlfoto,
-                id_categoria,
-            } = req.body;
-            console.log("Esta es la categoria: " + id_categoria);
-            const q =
-                "UPDATE medicamentos SET nombre = ?, stock = ?, precio_unitario = ?, via = ?, dosis = ?, urlfoto = ?, id_categoria=? WHERE idmed = ?";
-
-            const values = [
-                nombre,
-                stock,
-                precio_unitario,
-                via,
-                dosis,
-                urlfoto,
-                id_categoria,
-                id
-            ];
-
-            await connection.query(q, values);
-            connection.release();
-            res.json("Medicamento actualizado exitosamente!");
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
