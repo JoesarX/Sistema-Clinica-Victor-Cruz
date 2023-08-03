@@ -46,7 +46,10 @@ const Prueba = () => {
     console.log(probando2_1);*/
 
     // Lógica editar texto_cmd
-    var nuevaCMD = ['+504 3342-4985','WHA']
+    var nuevaCMD = {
+      texto_campo : '+504 3342-4987',
+      Tipo: 'WHA'
+  }
     const probando2 = await text_Services.editText(nuevaCMD);
     const probando2_1 = await text_Services.getAll_Text();
     console.log(probando2_1)
@@ -63,8 +66,8 @@ const Prueba = () => {
     */
     // Lógica Eliminar textos_cmd
     const variable='WHA';
-    const probando3 = await text_Services.deleteText(variable);
-    const probando3_1 = await text_Services.getAll_Text();
+    //const probando3 = await text_Services.deleteText(variable);
+    const probando3_1 = await text_Services.getOneText(variable);
     console.log(probando3_1);
     console.log('Botón 3 Aceptado');
   };
