@@ -22,10 +22,8 @@ import swal from 'sweetalert';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import Grid from '@mui/material/Grid';
 
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { MobileDateTimePicker } from '@mui/x-date-pickers/MobileDateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
@@ -51,6 +49,10 @@ const Citas = () => {
     const [selectedCitaId, setSelectedCitaId] = useState(null);
 
     const [isModalOpen1, setIsModalOpen1] = useState(false);
+
+    const [fecha, setFecha] = useState(dayjs());
+    const [hora, setHora] = useState(null);
+    const [availableTimes, setAvailableTimes] = useState([]);
 
 
     const [Expedientes, setExpedientes] = useState([]);
@@ -253,7 +255,6 @@ const Citas = () => {
             setExpedientess(selectedIdPaciente2)
 
             const selectedCorreoUser2 = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
-            console.log(selectedCorreoUser2)
             setMail(selectedCorreoUser2)
             setCitaD([citaData])
             setCita(citaData);
@@ -273,7 +274,6 @@ const Citas = () => {
             cita.presion = citaData.presion;
             setHora(citaData.hora);
             setFecha(dayjs(citaData.fecha));
-            console.log(cita)
             // console.log("cita:", citaData);
         } catch (error) {
             // Handle the error
@@ -299,17 +299,13 @@ const Citas = () => {
 
             fetchAvailableTimes();
         }
-    }, [cita]);
+    }, [cita.fecha, fecha]);
 
     const handleModalFieldChange = (e) => {
         setCita((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
     }
 
-
-    const [fecha, setFecha] = useState(dayjs());
-    const [hora, setHora] = useState(null);
-    const [availableTimes, setAvailableTimes] = useState([]);
 
     const handleDateChange = async (date) => {
         setFecha(date);
@@ -399,8 +395,7 @@ const Citas = () => {
     };
 
     const EditHandler = async (e) => {
-        console.log("Entra a editar");
-        console.log(cita)
+
         e.preventDefault();
         try {
             if (validations()) {
@@ -486,9 +481,6 @@ const Citas = () => {
             cita.fecha = fecha.format('YYYY-MM-DD');
         }
 
-        console.log("Fecha: " + fecha.format('YYYY-MM-DD'))
-        console.log("Fecha Ahora: " + dayjs().format('YYYY-MM-DD'))
-
         if (hora === null || hora === '') {
             alert('Debe agregar una hora valida.');
             return false;
@@ -501,14 +493,13 @@ const Citas = () => {
             let hour24 = hour;
             // console.log(hour24)
             // console.log(meridiem)
-            if (meridiem === "PM" && hour !== 12) {
+            if (meridiem === "PM" && hour != 12) {
                 hour24 += 12;
             }
             cita.hora = hour24 + ":" + minuteString + ":00";
         }
 
-
-        if (fecha.format('YYYY-MM-DD') == dayjs().format('YYYY-MM-DD') && cita.hora < dayjs().format('HH:mm')) {
+        if (fecha.format('YYYY-MM-DD') == dayjs().format('YYYY-MM-DD') && cita.hora < dayjs().format('HH:mm:ss')) {
             alert('La hora que ha seleccionado para hoy ya ha pasado.');
             return false;
         }
@@ -525,7 +516,6 @@ const Citas = () => {
     let buscaError = 0;
     useEffect(() => {
         // Validación login
-        // console.log("Este es el error en Med: " + (buscaError++));
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
@@ -567,7 +557,7 @@ const Citas = () => {
                 setUsuarios(usuariosFormatted);
             } catch (error) {
                 // Handle error if any
-                // console.log("Error fetching citas:", error);
+                console.log("Error fetching citas:", error);
             }
         };
 
@@ -810,6 +800,7 @@ const Citas = () => {
                                         options={Expedientes}
                                         getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
                                         onChange={(event, newValue) => {
+
                                             cita.idpaciente = newValue?.idpaciente;
                                           
                                         }}

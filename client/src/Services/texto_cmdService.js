@@ -67,4 +67,4 @@ const text_Services = {
     // Other functions
 };
 
-export default text_Services;
+export default text_Services;
