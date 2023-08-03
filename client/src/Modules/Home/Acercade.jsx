@@ -1,6 +1,5 @@
 import React from 'react';
 import '../HojaDeEstilos/Acercade.css';
-import { useNavigate } from 'react-router-dom';
 import 'react-slideshow-image/dist/styles.css';
 import hospital from '../Imagenes/hospital.jpeg';
 import doctor from '../Imagenes/victor_cruz.jpeg';
@@ -8,16 +7,11 @@ import Topbar from './Topbar';
 import Footer from './Footer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
-import { faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
 
-import MisionService from '../../Services/MisionService';
 import text_Services from '../../Services/texto_cmdService';
-import VisionService from '../../Services/VisionService';
 import { useEffect, useRef, useState } from 'react';
 
 import { v4 } from "uuid";
@@ -28,122 +22,261 @@ import {
   deleteObject,
   getStorage,
 } from "firebase/storage";
-import { WindowSharp } from '@mui/icons-material';
-import { text } from '@fortawesome/fontawesome-svg-core';
+import swal from 'sweetalert';
 
 const Acercade = () => {
-  const [mision, setMision] = useState(null);
-  const [vision, setVision] = useState(null);
-
-  const [misionOBJ, setMisionOBJ] = React.useState({
-    Tipo: 'Mision',
-    texto_campo: ''
-  })
-
-  const [visionOBJ, setVisionOBJ] = React.useState({
-    Tipo: 'Vision',
-    texto_campo: '',
-  })
-
-  /// PARA WALTER
 
   //CONSTANTES POR MIENTRAS
-  const DESC = 'La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado vespertino y matutino para brindar un mejor servicio a la población en general.';
-  const ABOUT_DOCTOR = 'El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. Además, obtuvo una certificación de auditor interno de dicha norma.'
-  const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
+  // const DESC = 'La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado vespertino y matutino para brindar un mejor servicio a la población en general.';
+  // const ABOUT_DOCTOR = 'El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. Además, obtuvo una certificación de auditor interno de dicha norma.'
+  // const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
   const DESC_IMG = hospital;
   const DOCTOR_IMG = doctor;
 
   const [description, setDescription] = useState(null);
   const [biography, setBiography] = useState(null);
   const [teamDesc, setTeamDesc] = useState(null);
+  const [mision, setMision] = useState(null);
+  const [vision, setVision] = useState(null);
 
-  const [descriptionOBJ, setDescriptionOBJ] = useState({
-    Tipo: 'Descripción_Empresa', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+  const [misionOBJ] = React.useState({
+    Tipo: 'Mision',
+    texto_campo: ''
+  })
+
+  const [visionOBJ] = React.useState({
+    Tipo: 'Vision',
+    texto_campo: '',
+  })
+
+  const [descriptionOBJ] = useState({
+    Tipo: 'Descripción_Empresa',
     texto_campo: '',
   });
 
-  const [biographyOBJ, setBiographyOBJ] = useState({
-    Tipo: 'Biografia_Autor', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+  const [biographyOBJ] = useState({
+    Tipo: 'Biografia_Autor',
     texto_campo: '',
   });
 
-  const [teamDescOBJ, setTeamDescOBJ] = useState({
-    Tipo: 'Texto_Nuestro_Equipo', //SEPA COMO LO ACTUALIZAS Y NI ENTIENDO LO DE EDUARDO PERO VOS LO TOCAS
+  const [teamDescOBJ] = useState({
+    Tipo: 'Texto_Nuestro_Equipo',
     texto_campo: '',
   });
 
   const handleDescChange = (event) => {
     setDescription(event.target.value);
-    descriptionOBJ.texto_campo = event.target.value;
   }
 
-  const handleDescEdit = (event) => {
+  const handleDescEdit = () => {
     setIsEditingLabelDesc(true);
   }
 
-  const handleDescSave = (event) => {
-    setIsEditingLabelDesc(false);
-    text_Services.editText(descriptionOBJ)
-    console.log(descriptionOBJ.texto_campo)
-    setDescription(descriptionOBJ.texto_campo);
-    window.location.reload(true);
-
+  const handleDescSave = async () => {
+    if (isValidText(description, "Descripción de la empresa")) {
+      try {
+        descriptionOBJ.texto_campo = description;
+        await text_Services.editText(descriptionOBJ)
+        setIsEditingLabelDesc(false);
+        swal({
+          title: "Descripción actualizada",
+          text: "La descripción ha sido actualizada exitosamente.",
+          icon: "success"
+        });
+      } catch (error) {
+        swal({
+          title: "Error de servidor",
+          text: `Error, reportar este error: ${error}`,
+          icon: "error"
+        });
+      }
+    }
   }
 
   const handleBioChange = (event) => {
     setBiography(event.target.value);
-    biographyOBJ.texto_campo = event.target.value;
   }
 
-  const handleBioEdit = (event) => {
+  const handleBioEdit = () => {
     setIsEditingLabelBio(true);
   }
 
-  const handleBioSave = (event) => {
-    setIsEditingLabelBio(false);
-    text_Services.editText(biographyOBJ)
-    setBiography(biographyOBJ.texto_campo);
-    window.location.reload(true);
+  const handleBioSave = async () => {
+    if (isValidText(biography, "Biografía")) {
+      try {
+        biographyOBJ.texto_campo = biography;
+        await text_Services.editText(biographyOBJ)
+        setIsEditingLabelBio(false);
+        swal({
+          title: "Biografía actualizada",
+          text: "La biografía ha sido actualizada exitosamente.",
+          icon: "success"
+        });
+      } catch (error) {
+        swal({
+          title: "Error de servidor",
+          text: `Error, reportar este error: ${error}`,
+          icon: "error"
+        });
+      }
+    }
   }
 
   const handleTeamChange = (event) => {
     setTeamDesc(event.target.value);
-    teamDescOBJ.texto_campo = event.target.value;
   }
 
-  const handleTeamEdit = (event) => {
+  const handleTeamEdit = () => {
     setIsEditingLabelTeam(true);
   }
 
-  const handleTeamSave = (event) => {
-    setIsEditingLabelTeam(false);
-    text_Services.editText(teamDescOBJ);
-    setTeamDesc(teamDescOBJ.texto_campo);
-    window.location.reload(true);
+  const handleTeamSave = async () => {
+    if (isValidText(teamDesc, "Nuestro equipo")) {
+      try {
+        teamDescOBJ.texto_campo = teamDesc;
+        await text_Services.editText(teamDescOBJ);
+        setIsEditingLabelTeam(false);
+        swal({
+          title: "Nuestro equipo actualizado",
+          text: "Apartado de nuestro equipo ha sido actualizado exitosamente.",
+          icon: "success"
+        });
+      } catch (error) {
+        swal({
+          title: "Error de servidor",
+          text: `Error, reportar este error: ${error}`,
+          icon: "error"
+        });
+      }
+    }
   }
+
+  const handleMisionChange = (event) => {
+    setMision(event.target.value);
+  };
+
+  const handleMisionSave = async () => {
+    if (isValidText(mision, "Misión")) {
+      try {
+        misionOBJ.texto_campo = mision;
+        await text_Services.editText(misionOBJ);
+        setIsEditingLabelMision(false);
+        swal({
+          title: "Misión actualizada",
+          text: "La misión ha sido actualizada exitosamente.",
+          icon: "success"
+        });
+      } catch (error) {
+        swal({
+          title: "Error de servidor",
+          text: `Error, reportar este error: ${error}`,
+          icon: "error"
+        });
+      }
+    }
+  };
+
+  const handleMisionEdit = () => {
+    setIsEditingLabelMision(true);
+  };
+
+  const handleVisionChange = (event) => {
+    setVision(event.target.value);
+  };
+
+  const handleVisionSave = async () => {
+    if (isValidText(vision, "Visión")) {
+      try {
+        visionOBJ.texto_campo = vision;
+        await text_Services.editText(visionOBJ);
+        setIsEditingLabelVision(false);
+        swal({
+          title: "Visión actualizada",
+          text: "La visión ha sido actualizada exitosamente.",
+          icon: "success"
+        });
+      } catch (error) {
+        swal({
+          title: "Error de servidor",
+          text: `Error, reportar este error: ${error}`,
+          icon: "error"
+        });
+      }
+    }
+  };
+
+  const handleVisionEdit = () => {
+    setIsEditingLabelVision(true);
+  };
 
   const handleCancel = (edit) => {
     switch (edit) {
       case 'mision':
-        setIsEditingLabel(false);
+        setIsEditingLabelMision(false);
+        setMision(misionOBJ.texto_campo);
         break;
       case 'vision':
-        setIsEditingLabel2(false);
+        setIsEditingLabelVision(false);
+        setVision(visionOBJ.texto_campo);
         break;
       case 'desc':
         setIsEditingLabelDesc(false);
+        setDescription(descriptionOBJ.texto_campo);
         break;
       case 'bio':
         setIsEditingLabelBio(false);
+        setBiography(biographyOBJ.texto_campo);
         break;
       case 'team':
         setIsEditingLabelTeam(false);
+        setTeamDesc(teamDescOBJ.texto_campo);
+        break;
+      default:
         break;
     }
   }
 
+  const isValidText = (text, editing) => {
+    const cleanText = text.trim();
 
+    if (text === null || text === '') {
+      swal({
+        title: `Error al actualizar ${editing}`,
+        text: `${editing} no puede ir vacío`,
+        icon: "error"
+      });
+      return false;
+    }
+
+    if (cleanText.length > 512) {
+      swal({
+        title: `Error al actualizar ${editing}`,
+        text: `¡${editing} no puede exceder los 512 caracteres!`,
+        icon: "error"
+      });
+      return false;
+    }
+
+    if (/^\d|^\s*\d|\d\s*$/.test(cleanText)) {
+      swal({
+        title: `Error al actualizar ${editing}`,
+        text: `¡${editing} no puede ni empezar ni terminar con números!`,
+        icon: "error"
+      });
+      return false;
+    }
+
+    if (text !== cleanText) {
+      swal({
+        title: `Error al actualizar ${editing}`,
+        text: `¡${editing} no puede ni empezar ni terminar con espacios ni nuevas líneas!"`,
+        icon: "error"
+      });
+      return false;
+    }
+
+    return true;
+  }
 
   const [imageUploadDesc, setImageUploadDesc] = useState(null);
   const [imagePreviewDesc, setImagePreviewDesc] = useState(null);
@@ -189,147 +322,77 @@ const Acercade = () => {
 
   /////
 
-  const [isEditingLabel, setIsEditingLabel] = useState(false);
-  const [isEditingLabel2, setIsEditingLabel2] = useState(false);
+  const [isEditingLabelMision, setIsEditingLabelMision] = useState(false);
+  const [isEditingLabelVision, setIsEditingLabelVision] = useState(false);
   const [isEditingLabelDesc, setIsEditingLabelDesc] = useState(false);
   const [isEditingLabelBio, setIsEditingLabelBio] = useState(false);
   const [isEditingLabelTeam, setIsEditingLabelTeam] = useState(false);
 
   const inputRef = useRef(null);
 
-  const handleMisionChange = (event) => {
-    setMision(event.target.value);
-    misionOBJ.texto_campo = event.target.value;
-    console.log(mision)
+  const fetchMision = async () => {
+    try {
+      const objectMision = ['Mision'];
+      var misionData = await text_Services.getOneText(objectMision);
+      misionOBJ.texto_campo = misionData[0].texto_campo;
+      setMision(misionData[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Mision:", error);
+    }
+  };
+  const fetchVision = async () => {
+    try {
+      const objectVision = ['Vision'];
+      const visionData = await text_Services.getOneText(objectVision);
+      visionOBJ.texto_campo = visionData[0].texto_campo;
+      setVision(visionData[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Vision:", error);
+    }
   };
 
-  const handleMisionSave = (event) => {
-    setIsEditingLabel(false);
-    text_Services.editText(misionOBJ);
-    window.location.reload(true);
-  };
+  const fetchDesc = async () => {
+    try {
+      const objectDesc = ['Descripción_Empresa'];
+      const descData = await text_Services.getOneText(objectDesc);
+      descriptionOBJ.texto_campo = descData[0].texto_campo;
+      setDescription(descData[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Descripción de empresa:", error);
+    }
+  }
 
-  const handleMisionEdit = () => {
-    setIsEditingLabel(true);
-  };
+  const fetchBio = async () => {
+    try {
+      const objectBio = ['Biografia_Autor'];
+      const descBio = await text_Services.getOneText(objectBio);
+      biographyOBJ.texto_campo = descBio[0].texto_campo;
+      setBiography(descBio[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Biography:", error);
+    }
+  }
 
-  const handleVisionChange = (event) => {
-    setVision(event.target.value);
-    visionOBJ.texto_campo = event.target.value;
-    console.log(vision)
-  };
+  const fetchTeam = async () => {
+    try {
+      const objectTeam = ['Texto_Nuestro_Equipo'];
+      const descTeam = await text_Services.getOneText(objectTeam);
+      teamDescOBJ.texto_campo = descTeam[0].texto_campo;
+      setTeamDesc(descTeam[0].texto_campo);
+    } catch (error) {
+      console.log("Error fetching Team:", error);
+    }
+  }
 
-  const handleVisionSave = (event) => {
-    setIsEditingLabel2(false);
-    console.log(visionOBJ)
-    text_Services.editText(visionOBJ);
-    window.location.reload(true);
-  };
-  const handleVisionEdit = () => {
-    setIsEditingLabel2(true);
-  };
+  const fetchImgDesc = () => {
+    setImagePreviewDesc(DESC_IMG);
+  }
 
+  const fetchImgDoctor = () => {
+    setImagePreviewDoctor(DOCTOR_IMG);
+  }
 
   useEffect(() => {
-    const fetchMision = async () => {
-      try {
-        const objectMision = ['Mision'];
-        var misionData;
-        console.log(misionData = await text_Services.getOneText(objectMision));
-        console.log("Cargar Mision: " + misionData[0].texto_campo);
-        setMision(misionData[0].texto_campo);
-        misionOBJ.texto_campo = misionData[0].texto_campo;
-        // console.log("Cargar Mision: "+misionData.texto_campo);
-      } catch (error) {
-        // Handle error if any
-        console.log("Error fetching Mision:", error);
-      }
-    };
-    const fetchVision = async () => {
-      try {
-        const objectVision = ['Vision'];
-
-        const visionData = await text_Services.getOneText(objectVision);
-        setVision(visionData[0].texto_campo);
-        visionOBJ.texto_campo = visionData[0].texto_campo;
-      } catch (error) {
-        // Handle error if any
-        console.log("Error fetching Vision:", error);
-      }
-    };
-
-    //WALTER HACE LOS RESPECTIVOS FETCH AQUI
-    const fetchDesc = async () => {
-      try {
-        const objectDesc = ['Descripción_Empresa'];
-        const descData = await text_Services.getOneText(objectDesc);
-        setDescription(descData[0].texto_campo);
-        DESC = description;
-        descriptionOBJ.texto_campo = DESC;
-      } catch (error) {
-        console.log("Error fetching Descripción de empresa:", error);
-      }
-
-    }
-
-    const fetchBio = async () => {
-      try {
-        const objectBio = ['Biografia_Autor'];
-        const descBio = await text_Services.getOneText(objectBio);
-        setBiography(descBio[0].texto_campo);
-        ABOUT_DOCTOR = biography;
-        biographyOBJ.texto_campo = ABOUT_DOCTOR;
-      } catch (error) {
-        console.log("Error fetching Biography:", error);
-      }
-
-
-    }
-
-    const fetchTeam = async () => {
-      try {
-        const objectTeam = ['Texto_Nuestro_Equipo'];
-        const descTeam = await text_Services.getOneText(objectTeam);
-        setTeamDesc(descTeam[0].texto_campo);
-        TEAM = teamDesc;
-        teamDescOBJ.texto_campo = TEAM;
-      } catch (error) {
-        console.log("Error fetching Team:", error);
-      }
-      
-      
-    }
-
-    const fetchImgDesc = () => {
-      setImagePreviewDesc(DESC_IMG);
-    }
-
-    const fetchImgDoctor = () => {
-      setImagePreviewDoctor(DOCTOR_IMG);
-    }
-
-    ////
-
-    if (isEditingLabel && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabel2 && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelDesc && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelBio && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelTeam && inputRef.current) {
-      inputRef.current.style.height = 'auto';
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
     fetchMision();
     fetchVision();
     fetchDesc();
@@ -337,7 +400,27 @@ const Acercade = () => {
     fetchTeam();
     fetchImgDesc();
     fetchImgDoctor();
-  }, [isEditingLabel, isEditingLabel2, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (isEditingLabelMision && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelVision && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelDesc && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelBio && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelTeam && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+
+  }, [isEditingLabelMision, isEditingLabelVision, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
 
 
   return (
@@ -351,56 +434,49 @@ const Acercade = () => {
 
         <div className="mission-vision-container">
           <div className="mission">
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', fontSize: '40px' }}>
-              <FontAwesomeIcon icon={faCircleDot} style={{ color: '#D3B938', fontSize: '50px' }} />
-            </div>
-            <span >
-              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px' }}>Misión</h2>
-              {isEditingLabel ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  <textarea
-                    ref={inputRef}
-                    name="mision"
-                    value={mision}
-                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', maxHeight: '250px', wordWrap: 'breakWord' }}
-                    onChange={handleMisionChange}
-                  >
-                  </textarea>
-                  <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
-                    <button onClick={handleMisionSave} class="upload-button accept">
-                      Guardar Cambios
-                    </button>
-                    <button onClick={() => handleCancel('mision')} class="upload-button cancel">
-                      Cancelar
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>{mision}</p>
-                  <button onClick={handleMisionEdit} class="upload-button">
-                    Editar
+            <FontAwesomeIcon icon={faCircleDot} style={{ color: '#D3B938', fontSize: '50px' }} />
+            <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px' }}>Misión</h2>
+            {isEditingLabelMision ? (
+              <div class="container">
+                <textarea
+                  ref={inputRef}
+                  name="mision"
+                  value={mision}
+                  style={{ fontSize: '18px', maxHeight: '250px', wordWrap: 'breakWord', width: '100%' }}
+                  onChange={handleMisionChange}
+                >
+                </textarea>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
+                  <button onClick={handleMisionSave} class="upload-button accept">
+                    Guardar Cambios
+                  </button>
+                  <button onClick={() => handleCancel('mision')} class="upload-button cancel">
+                    Cancelar
                   </button>
                 </div>
-              )}
-            </span>
+              </div>
+            ) : (
+              <div class="container">
+                <p class="new-text">{mision}</p>
+                <button onClick={handleMisionEdit} class="upload-button">
+                  Editar
+                </button>
+              </div>
+            )}
 
           </div>
 
           <div className="vision">
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px', fontSize: '40px' }}>
-              <FontAwesomeIcon icon={faStar} style={{ color: '#D3B938', fontSize: '50px' }} />
-            </div>
-            <span>
-              <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px' }}>Visión</h2>
+            <FontAwesomeIcon icon={faStar} style={{ color: '#D3B938', fontSize: '50px' }} />
+              <h2 style={{color: '#8FC1B5', fontSize: '40px' }}>Visión</h2>
 
-              {isEditingLabel2 ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              {isEditingLabelVision ? (
+                <div class="container">
                   <textarea
                     ref={inputRef}
                     name="vision"
                     value={vision}
-                    style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', maxHeight: '250px' }}
+                    style={{fontSize: '18px', maxHeight: '250px', wordWrap: 'break-word', width: '100%' }}
                     onChange={handleVisionChange}
                   >
                   </textarea>
@@ -414,15 +490,14 @@ const Acercade = () => {
                   </div>
                 </div>
               ) : (
-                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
-                  <p style={{ position: 'relative', color: 'white', marginRight: '30px', fontSize: '18px' }}>{vision}</p>
+                <div class="container">
+                  <p class="new-text">{vision}</p>
                   <button onClick={handleVisionEdit} class="upload-button">
                     Editar
                   </button>
-                </span>
+                </div>
               )}
 
-            </span>
           </div>
         </div>
 
@@ -448,12 +523,12 @@ const Acercade = () => {
           <div className="text-container">
             <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Descripción de la Empresa</h2>
             {isEditingLabelDesc ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
+              <div class="container">
                 <textarea
                   ref={inputRef}
                   name="description"
                   value={description}
-                  style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px' }}
+                  style={{fontSize: '18px', maxHeight: '250px', width: '100%' }}
                   onChange={handleDescChange}
                 >
                 </textarea>
@@ -468,14 +543,14 @@ const Acercade = () => {
               </div>
             ) :
               (
-                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
-                  <p style={{ position: 'relative', color: 'white', fontSize: '18px' }}>
+                <div class="container">
+                  <p class="new-text">
                     {description}
                   </p>
                   <button onClick={handleDescEdit} class="upload-button">
                     Editar
                   </button>
-                </span>
+                </div>
               )
             }
           </div>
@@ -503,12 +578,12 @@ const Acercade = () => {
           <div className="text-container">
             <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}> Dr. Victor Cruz</h2>
             {isEditingLabelBio ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
+              <div class="container">
                 <textarea
                   ref={inputRef}
                   name="biography"
                   value={biography}
-                  style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px' }}
+                  style={{width: '100%', height: 'fitContent', maxHeight: '250px' }}
                   onChange={handleBioChange}
                 >
                 </textarea>
@@ -523,14 +598,14 @@ const Acercade = () => {
               </div>
             ) :
               (
-                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
-                  <p style={{ color: 'white', fontSize: '18px', }}>
+                <div class="container">
+                  <p class="new-text">
                     {biography}
                   </p>
                   <button onClick={handleBioEdit} class="upload-button">
                     Editar
                   </button>
-                </span>
+                </div>
               )
             }
           </div>
@@ -541,12 +616,12 @@ const Acercade = () => {
           <div class="text-container">
             <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Nuestro Equipo</h2>
             {isEditingLabelTeam ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '100%' }}>
+              <div class="container">
                 <textarea
                   ref={inputRef}
                   name="team"
                   value={teamDesc}
-                  style={{ display: 'flex', position: 'relative', marginRight: '30px', fontSize: '18px', height: 'fitContent', maxHeight: '250px' }}
+                  style={{ width: '100%', fontSize: '18px', maxHeight: '250px' }}
                   onChange={handleTeamChange}
                 >
                 </textarea>
@@ -561,14 +636,14 @@ const Acercade = () => {
               </div>
             ) :
               (
-                <span style={{ display: 'flex', flexDirection: 'column', gap: '5px', justifyContent: 'center', alignItems: 'center' }}>
-                  <p style={{ position: 'relative', color: 'white', fontSize: '18px', margin: '0px', left: '20px' }}>
+                <div class="container">
+                  <p class="new-text">
                     {teamDesc}
                   </p>
                   <button onClick={handleTeamEdit} class="upload-button">
                     Editar
                   </button>
-                </span>
+                </div>
               )
             }
           </div>
