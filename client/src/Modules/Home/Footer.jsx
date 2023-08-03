@@ -2,13 +2,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../HojaDeEstilos/Footer.css'
 import { useNavigate, } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faHome, faPhone, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faHome, faPhone, faEdit, faSave, faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
 
 
 const Topbar = () => {
+
+     /* Funciones para toggle los botones de editar*/
+     const [showButtons, setShowButtons] = useState(false);
+
+     const handleToggleButtonClick = () => {
+         setShowButtons((prevShowButtons) => !prevShowButtons);
+     };
 
     const [direccionOBJ, setDireccionOBJ] = React.useState({
         Tipo: 'Footer_Dirección',
@@ -269,7 +276,7 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{address}</div>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditAddress}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -298,7 +305,7 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{email}</div>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditEmail}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -327,7 +334,7 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{phone}</div>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditPhone}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -358,13 +365,18 @@ const Topbar = () => {
                         <span onClick={handleEditYear} style={{ cursor: 'pointer' }}>
                             © {year} Clínica Dr. Víctor Cruz
                         </span>
-                        {isLoggedIn && userType !== 'normal' && (
+                        {isLoggedIn && userType !== 'normal' && showButtons &&(
                             <button onClick={handleEditYear}>
                                 <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                             </button>
                         )}
                     </>
                 )}
+            </div>
+            <div className='button-gearCont'>
+                <button className='buttonG' onClick={handleToggleButtonClick}>
+                    <FontAwesomeIcon icon={faGear} />
+                </button>
             </div>
         </footer>
     );

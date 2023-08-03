@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from 'react';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faEnvelope, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faEnvelope, faEdit, faSave, faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
@@ -12,6 +12,15 @@ import text_Services from '../../Services/texto_cmdService';
 
 
 const Contactanos = () => {
+    /* Funciones para toggle los botones de editar*/
+    const [showButtons, setShowButtons] = useState(false);
+
+    const handleToggleButtonClick = () => {
+        setShowButtons((prevShowButtons) => !prevShowButtons);
+    };
+
+
+
     const openWhatsApp = () => {
         window.open('https://wa.me/+50433424985', '_blank');
     };
@@ -244,7 +253,7 @@ const Contactanos = () => {
                                 <p style={{ color: '#1E60A6' }}>Puedes llamarnos al número</p>
                                 <FontAwesomeIcon icon={faPhone} style={{ color: '#1560F2' }} />
                                 <span style={{ color: '#1E60A6', fontWeight: 'bold' }}>{phone}</span>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditPhone} style={{ marginLeft: '5px' }}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -276,7 +285,7 @@ const Contactanos = () => {
                                 <span onClick={openWhatsApp} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
                                     {whatsapp}
                                 </span>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditWhatsapp} style={{ marginLeft: '5px' }}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -308,7 +317,7 @@ const Contactanos = () => {
                                 <span onClick={openEmail} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
                                     {email}
                                 </span>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditEmail} style={{ marginLeft: '5px' }}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -318,9 +327,15 @@ const Contactanos = () => {
                     </div>
                 </div>
             </section>
+            <div className='button-gearCont'>
+                <button className='buttonG' onClick={handleToggleButtonClick}>
+                    <FontAwesomeIcon icon={faGear} />
+                </button>
+            </div>
             <Footer />
         </div>
     );
+
 };
 
 export default Contactanos;
