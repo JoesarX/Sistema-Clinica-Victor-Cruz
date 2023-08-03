@@ -233,13 +233,22 @@ const Citas = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
         cleanCita();
-        // // console.log("Expedientes", Expedientes)
-        // // console.log("Usuarios", Usuarios)
-        const date = new Date();
-        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : '';
+
+        const currentDate = new Date();
+        const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+
+        // Calculate the number of days to add to the current date to reach the next Monday
+        const daysUntilNextMonday = currentDayOfWeek === 0 ? 1 : 8 - currentDayOfWeek;
+
+        // Create a new date by adding the days to the current date
+        const nextMonday = new Date(currentDate);
+        nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
+
+        const formattedDate = nextMonday ? dayjs(nextMonday).format('YYYY-MM-DD') : '';
         const times = await CitasService.getAvailableTimes(formattedDate);
         setAvailableTimes(times);
     };
+
 
     const [id, setID] = useState(null);
     const [citaD, setCitaD] = useState([]);
@@ -343,6 +352,11 @@ const Citas = () => {
     };
 
     let isAvailabilityCheckInProgress = false;
+
+    const isWeekday = (date) => {
+        const day = date.day();
+        return day == 0 || day == 6; // 0 is Sunday, 6 is Saturday
+    };
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
@@ -714,6 +728,7 @@ const Citas = () => {
                                         id="fecha"
                                         onChange={handleDateChange}
                                         renderInput={(params) => <TextField {...params} />}
+                                        shouldDisableDate={isWeekday} // Disable weekends
                                         name='fecha'
                                         value={fecha}
                                     />
@@ -802,7 +817,7 @@ const Citas = () => {
                                         onChange={(event, newValue) => {
 
                                             cita.idpaciente = newValue?.idpaciente;
-                                          
+
                                         }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="ID Paciente" required />
@@ -845,6 +860,7 @@ const Citas = () => {
                                             id="fecha"
                                             onChange={handleEditDateChange}
                                             renderInput={(params) => <TextField {...params} />}
+                                            shouldDisableDate={isWeekday} // Disable weekends
                                             name='fecha'
                                             value={dayjs(fecha)}
                                         />
