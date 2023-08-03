@@ -10,12 +10,12 @@ import text_Services from '../../Services/texto_cmdService';
 
 const Topbar = () => {
 
-     /* Funciones para toggle los botones de editar*/
-     const [showButtons, setShowButtons] = useState(false);
+    /* Funciones para toggle los botones de editar*/
+    const [showButtons, setShowButtons] = useState(false);
 
-     const handleToggleButtonClick = () => {
-         setShowButtons((prevShowButtons) => !prevShowButtons);
-     };
+    const handleToggleButtonClick = () => {
+        setShowButtons((prevShowButtons) => !prevShowButtons);
+    };
 
     const [direccionOBJ, setDireccionOBJ] = React.useState({
         Tipo: 'Footer_Dirección',
@@ -29,6 +29,12 @@ const Topbar = () => {
 
     const [correoOBJ, setCorreoOBJ] = React.useState({
         Tipo: 'Footer_Correo',
+        texto_campo: ''
+    })
+
+
+    const [copyOBJ, setcopyOBJ] = React.useState({
+        Tipo: 'copyright',
         texto_campo: ''
     })
 
@@ -168,16 +174,26 @@ const Topbar = () => {
     /* para el copyright */
 
     const [year, setYear] = useState(String(new Date().getFullYear()));
-    const [editedYear, setEditedYear] = useState(String(new Date().getFullYear()));
+    const [editedYear, setEditedYear] = useState('');
     const [isEditing3, setIsEditing3] = useState(false);
+
+
+  
+
+    const handleChangeYear = (event) => {
+        setEditedYear(event.target.value);
+        copyOBJ.texto_campo = event.target.value;
+
+    };
+
 
     const handleEditYear = () => {
         setIsEditing3(true);
+        setEditedYear(year);
     };
 
     const handleCancelEdit3 = () => {
         setIsEditing3(false);
-        setEditedYear(year);
     };
 
     const isValidYearFormat = (year) => {
@@ -188,8 +204,9 @@ const Topbar = () => {
 
     const handleSaveYear = () => {
         if (isValidYearFormat(editedYear)) {
-            setYear(editedYear);
             setIsEditing3(false);
+            text_Services.editText(copyOBJ);
+            window.location.reload(true);
         } else {
             // Display an error message or handle the invalid year case
             alert('El año ingresado no es válido. Asegúrate de que sea un año válido en cuatro dígitos.');
@@ -205,7 +222,7 @@ const Topbar = () => {
                 const objectDireccion = ['Footer_Dirección'];
                 var direccionData;
                 direccionData = await text_Services.getOneText(objectDireccion);
-                console.log("Cargar Mision: " + direccionData[0].texto_campo);
+                console.log("Cargar Direccion: " + direccionData[0].texto_campo);
                 setAddress(direccionData[0].texto_campo);
                 direccionOBJ.texto_campo = direccionData[0].texto_campo;
             } catch (error) {
@@ -232,11 +249,25 @@ const Topbar = () => {
                 const objectNum = ['Footer_Telefono'];
                 var numData;
                 numData = await text_Services.getOneText(objectNum);
-                console.log("Cargar Mision: " + numData[0].texto_campo);
+                console.log("Cargar Numero Telefonico: " + numData[0].texto_campo);
                 setPhone(numData[0].texto_campo);
                 numOBJ.texto_campo = numData[0].texto_campo;
             } catch (error) {
                 console.log("Error fetching Numero de Telefono:", error);
+            }
+        };
+
+
+        const fetchCopyright = async () => {
+            try {
+                const objectCopy = ['copyright'];
+                var copyData;
+                copyData = await text_Services.getOneText(objectCopy);
+                console.log("Cargar Copyright: " + copyData[0].texto_campo);
+                setYear(copyData[0].texto_campo);
+                objectCopy.texto_campo = copyData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Copyright:", error);
             }
         };
 
@@ -246,6 +277,7 @@ const Topbar = () => {
         fetchDireccion();
         fetchCorreo();
         fetchNumTelefono();
+        fetchCopyright();
 
 
     }, [isEditing, isEditing1, isEditing2, isEditing3]);
@@ -350,7 +382,7 @@ const Topbar = () => {
                         <input
                             type="text"
                             value={editedYear}
-                            onChange={(e) => setEditedYear(e.target.value)}
+                            onChange={handleChangeYear}
                             style={{ color: '#1E60A6', fontWeight: 'bold' }}
                         />
                         <button onClick={handleSaveYear}>
@@ -365,7 +397,7 @@ const Topbar = () => {
                         <span onClick={handleEditYear} style={{ cursor: 'pointer' }}>
                             © {year} Clínica Dr. Víctor Cruz
                         </span>
-                        {isLoggedIn && userType !== 'normal' && showButtons &&(
+                        {isLoggedIn && userType !== 'normal' && showButtons && (
                             <button onClick={handleEditYear}>
                                 <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                             </button>
