@@ -315,7 +315,7 @@ const citasRouter = (pool, transporter) => {
         const millisecondsInADay = 24 * 60 * 60 * 1000;
         const now = new Date();
         const targetTime = new Date(now);
-        targetTime.setHours(16, 15, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
+        targetTime.setHours(9, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
 
         let timeUntilNextDay = targetTime - now;
 
@@ -326,6 +326,7 @@ const citasRouter = (pool, transporter) => {
         if (timeUntilNextDay < 0) {
             // Si ya paso la hora de mandar correos, esperar hasta la misma hora del dia siguiente
             timeUntilNextDay += millisecondsInADay;
+            console.log("Today passed so new time until next day: " + timeUntilNextDay)
         }
 
         setTimeout(() => {
