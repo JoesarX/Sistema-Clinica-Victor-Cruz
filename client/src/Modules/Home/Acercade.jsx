@@ -7,7 +7,7 @@ import Topbar from './Topbar';
 import Footer from './Footer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleDot } from '@fortawesome/free-solid-svg-icons';
+import { faCircleDot, faGear } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 
@@ -32,6 +32,22 @@ const Acercade = () => {
   // const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
   const DESC_IMG = hospital;
   const DOCTOR_IMG = doctor;
+
+  const [isEditingPage, setIsEditingPage] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const handleEditPage = () => {
+    if(isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
+      swal({
+        title: "Cambios sin guardar",
+        text: "¡Tiene cambios sin guardar!",
+        icon: "warning"
+      });
+    }
+    else {
+      setIsEditingPage(!isEditingPage);
+    }
+  }
 
   const [description, setDescription] = useState(null);
   const [biography, setBiography] = useState(null);
@@ -248,13 +264,24 @@ const Acercade = () => {
       return false;
     }
 
-    if (cleanText.length > 512) {
-      swal({
-        title: `Error al actualizar ${editing}`,
-        text: `¡${editing} no puede exceder los 512 caracteres!`,
-        icon: "error"
-      });
-      return false;
+    if (editing === "Misión" || editing === "Visión") {
+      if (cleanText.length > 512) {
+        swal({
+          title: `Error al actualizar ${editing}`,
+          text: `¡${editing} no puede exceder los 512 carácteres!`,
+          icon: "error"
+        });
+        return false;
+      }
+    } else {
+      if (cleanText.length > 1024) {
+        swal({
+          title: `Error al actualizar ${editing}`,
+          text: `¡${editing} no puede exceder los 1024 carácteres!`,
+          icon: "error"
+        });
+        return false;
+      }
     }
 
     if (/^\d|^\s*\d|\d\s*$/.test(cleanText)) {
@@ -393,6 +420,13 @@ const Acercade = () => {
   }
 
   useEffect(() => {
+
+    const fetchAdmin = () => {
+      setIsAdmin(localStorage.getItem("300") || localStorage.getItem("400"));
+    }
+
+    fetchAdmin();
+
     fetchMision();
     fetchVision();
     fetchDesc();
@@ -426,11 +460,22 @@ const Acercade = () => {
   return (
     <div className="scrollable-page">
       <Topbar />
+
       <div className="info header">
         SOBRE NOSOTROS
       </div>
 
       <div className="about-us-container">
+
+        {isAdmin &&
+          <div class="admin-edit">
+            {
+              isEditingPage &&
+              <h2>EDITANDO</h2>
+            }
+            <FontAwesomeIcon onClick={handleEditPage} icon={faGear} />
+          </div>
+        }
 
         <div className="mission-vision-container">
           <div className="mission">
@@ -458,9 +503,11 @@ const Acercade = () => {
             ) : (
               <div class="container">
                 <p class="new-text">{mision}</p>
-                <button onClick={handleMisionEdit} class="upload-button">
-                  Editar
-                </button>
+                {isEditingPage &&
+                  <button onClick={handleMisionEdit} class="upload-button">
+                    Editar
+                  </button>
+                }
               </div>
             )}
 
@@ -468,35 +515,37 @@ const Acercade = () => {
 
           <div className="vision">
             <FontAwesomeIcon icon={faStar} style={{ color: '#D3B938', fontSize: '50px' }} />
-              <h2 style={{color: '#8FC1B5', fontSize: '40px' }}>Visión</h2>
+            <h2 style={{ color: '#8FC1B5', fontSize: '40px' }}>Visión</h2>
 
-              {isEditingLabelVision ? (
-                <div class="container">
-                  <textarea
-                    ref={inputRef}
-                    name="vision"
-                    value={vision}
-                    style={{fontSize: '18px', maxHeight: '250px', wordWrap: 'break-word', width: '100%' }}
-                    onChange={handleVisionChange}
-                  >
-                  </textarea>
-                  <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
-                    <button onClick={handleVisionSave} class="upload-button accept">
-                      Guardar Cambios
-                    </button>
-                    <button onClick={() => handleCancel('vision')} class="upload-button cancel">
-                      Cancelar
-                    </button>
-                  </div>
+            {isEditingLabelVision ? (
+              <div class="container">
+                <textarea
+                  ref={inputRef}
+                  name="vision"
+                  value={vision}
+                  style={{ fontSize: '18px', maxHeight: '250px', wordWrap: 'break-word', width: '100%' }}
+                  onChange={handleVisionChange}
+                >
+                </textarea>
+                <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
+                  <button onClick={handleVisionSave} class="upload-button accept">
+                    Guardar Cambios
+                  </button>
+                  <button onClick={() => handleCancel('vision')} class="upload-button cancel">
+                    Cancelar
+                  </button>
                 </div>
-              ) : (
-                <div class="container">
-                  <p class="new-text">{vision}</p>
+              </div>
+            ) : (
+              <div class="container">
+                <p class="new-text">{vision}</p>
+                {isEditingPage &&
                   <button onClick={handleVisionEdit} class="upload-button">
                     Editar
                   </button>
-                </div>
-              )}
+                }
+              </div>
+            )}
 
           </div>
         </div>
@@ -528,7 +577,7 @@ const Acercade = () => {
                   ref={inputRef}
                   name="description"
                   value={description}
-                  style={{fontSize: '18px', maxHeight: '250px', width: '100%' }}
+                  style={{ fontSize: '18px', maxHeight: '250px', width: '100%' }}
                   onChange={handleDescChange}
                 >
                 </textarea>
@@ -547,9 +596,11 @@ const Acercade = () => {
                   <p class="new-text">
                     {description}
                   </p>
-                  <button onClick={handleDescEdit} class="upload-button">
-                    Editar
-                  </button>
+                  {isEditingPage &&
+                    <button onClick={handleDescEdit} class="upload-button">
+                      Editar
+                    </button>
+                  }
                 </div>
               )
             }
@@ -583,7 +634,7 @@ const Acercade = () => {
                   ref={inputRef}
                   name="biography"
                   value={biography}
-                  style={{width: '100%', height: 'fitContent', maxHeight: '250px' }}
+                  style={{ width: '100%', height: 'fitContent', maxHeight: '250px', fontSize: '18px' }}
                   onChange={handleBioChange}
                 >
                 </textarea>
@@ -602,9 +653,11 @@ const Acercade = () => {
                   <p class="new-text">
                     {biography}
                   </p>
-                  <button onClick={handleBioEdit} class="upload-button">
-                    Editar
-                  </button>
+                  {isEditingPage &&
+                    <button onClick={handleBioEdit} class="upload-button">
+                      Editar
+                    </button>
+                  }
                 </div>
               )
             }
@@ -640,9 +693,11 @@ const Acercade = () => {
                   <p class="new-text">
                     {teamDesc}
                   </p>
-                  <button onClick={handleTeamEdit} class="upload-button">
-                    Editar
-                  </button>
+                  {isEditingPage &&
+                    <button onClick={handleTeamEdit} class="upload-button">
+                      Editar
+                    </button>
+                  }
                 </div>
               )
             }

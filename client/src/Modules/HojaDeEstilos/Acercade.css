@@ -367,3 +367,29 @@
   font-size: 28px;
   margin-bottom: 20px;
 }
+
+.admin-edit {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  height: 20px;
+  width: 100%;
+
+  gap: 50px;
+
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.admin-edit > *  {
+  font-size: 40px;
+  color: #626262;
+
+  cursor: pointer;
+  font-weight: bolder;
+
+  line-height: normal;
+
+}
