@@ -79,7 +79,6 @@ const serviciosRouter = (pool) => {
                 title,
                 description,
             } = req.body;
-            console.log("Esta es la categoria: " + id_categoria);
             const q =
                 "UPDATE servicios SET url = ?, title = ?, description = ? WHERE id = ?";
 

@@ -71,13 +71,12 @@ const Servicios = () => {
   const [newTitle, setNewTitle] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [imageUpload, setImageUpload] = useState(null);
+  const [imageEdit, setImageEdit] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [isSubmitting3, setIsSubmitting3] = useState(false);
-
-  const newServiceImageRef = useRef(null);
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -94,7 +93,6 @@ const Servicios = () => {
   const cancelarFotoA = () => {
     setImageUpload(null);
     setImagePreview(null);
-    newServiceImageRef.current.value = null;
   };
 
 
@@ -102,24 +100,23 @@ const Servicios = () => {
 
   async function uploadFile() {
 
-  return new Promise((resolve, reject) => {
-        // Your file upload logic here
-        // Call resolve with the imageUrl when the upload is complete
-        // Call reject with an error if there's an issue with the upload
-        // For example:
-        if (imageUpload == null) {
-            //reject(new Error('No file selected for upload'));
-            return null;
-        }
+    return new Promise((resolve, reject) => {
+      // Your file upload logic here
+      // Call resolve with the imageUrl when the upload is complete
+      // Call reject with an error if there's an issue with the upload
+      // For example:
+      if (imageUpload == null || imageUpload == "") {
+          //reject(new Error('No file selected for upload'));
+          return null;
+      }
 
-        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-        uploadBytes(imageRef, imageUpload)
-            .then((snapshot) => getDownloadURL(snapshot.ref))
-            .then((url) => {
-                resolve(url);
-                //console.log(medicamento);
-            })
-            .catch((error) => reject(error));
+      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+      uploadBytes(imageRef, imageUpload)
+          .then((snapshot) => getDownloadURL(snapshot.ref))
+          .then((url) => {
+              resolve(url);
+          })
+          .catch((error) => reject(error));
     });
   };
 
@@ -130,7 +127,6 @@ const Servicios = () => {
         const servicioData = await ServiciosService.getAllServicios();
         const serviciosWithId = servicioData.map((servicio) => ({
             ...servicio,
-            hooverComponent: servicio.id,
         }));
         console.log(serviciosWithId+"HOLA EDUARDO NOSE");
         serviciosWithId.forEach((servicio) => {
@@ -268,12 +264,17 @@ const Servicios = () => {
                   console.log(id);
                     console.log("DELETE THIS URL: " + url);
                     await ServiciosService.deleteServicios(id);
-                    console.log("DELETE THIS URL no es null: " + url);
-                    deleteImg(url);
+                    if (url != null) {
+                      console.log("DELETE THIS URL no es null: " + url);
+                      deleteImg(url);
+                    }
+                    else {
+                      window.location.reload();
+                    }
                     swal("Servicio eliminado exitosamente!", {
                         icon: "success",
                     });
-                    //window.location.reload();
+                    window.location.reload();
                 } catch (error) {
                     swal("Error al eliminar el servicio. Por favor, inténtalo de nuevo más tarde.", {
                         icon: "error",
@@ -310,7 +311,8 @@ const Servicios = () => {
     }
   }, [isSubmitting3]);
 
-  const submitEditServicio = async (id, url) => {
+  const submitEditServicio = async () => {
+    console.log(editedService);
     try {
         const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
         if (!titleRegex.test(editedService.title)) {
@@ -326,68 +328,41 @@ const Servicios = () => {
           alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
           return;
         }
-          console.log("Entra a edit despues de validaciones");
-            if (imageUpload != null) {
-                if (servicio.url != null) {
-                    deleteImg(servicio.url);
+        if (imageUpload != null) {
+          const file = imageUpload;
+          if (validateImageFormat(file) == false) {
+              alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+              return;
+          }
+        }
+            if (imageUpload != null && imageUpload != "") {
+                if (imageUpload != null) {
+                    deleteImg(imageEdit);
+                    console.log("Elimina imagen");
                 }
-                
+                console.log("Image Upload: "+imageUpload);
                 const imageUrll = await uploadFile();
-                setEditedService((prevState) => ({
-                    ...prevState,
-                    url: imageUrll,
-                }));
-                setEditedService(() => ({
-                  url: imageUrll,
-                  title: newTitle,
-                  description: newDescription,
-              }));
+                editedService.url = imageUrll;
 
-                await ServiciosService.editServicios(id, servicio);
+                await ServiciosService.editServicios(editedService.id, editedService);
                 alert('Servicio Editado');
-            }
-            else {
-                await ServiciosService.editServicios(id, servicio);
-                alert('Servicio Editado');
-            }
-            window.location.reload();
-    } catch (error) {
+            } else {
+              console.log("Entro en else de edit");
+              await ServiciosService.editServicios(editedService.id, editedService);
+              alert('Servicio Editado');
+          }
+          window.location.reload();
+      } catch (error) {
         console.log('Error submitting servicio:', error);
     }
-};
-
-  /*
-  const handleSaveEdit = (event) => {
-    event.preventDefault();
-    const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
-    if (!titleRegex.test(editedService.title)) {
-      setTitleError(true);
-      alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
-      return;
-    }
-
-    // Validate description
-    const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
-    if (!descriptionRegex.test(editedService.description)) {
-      setDescriptionError(true);
-      alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
-      return;
-    }
-
-    
-    const updatedServiceData = serviceData.map((item) =>
-      item.id === editedService.id ? { ...editedService } : item
-    );
-    setServiceData(updatedServiceData);
-    setEditedService(null);
   };
-  */
 
   const handleEditService = (service) => {
+    console.log("Entro handleeditservice");
+    setImageEdit(service.url);
     setEditedService(service);
+    setImagePreview(service.url);
   };
-
-  
 
   return (
     <div className='scrollable-page'>
@@ -456,13 +431,12 @@ const Servicios = () => {
                     <input
                       type="file"
                       onChange={(event) => {
-                        setImageUpload(event.target.files[0]);
-                        setImagePreview(URL.createObjectURL(event.target.files[0]));
+                          setImageUpload(event.target.files[0]);
+                          setImagePreview(URL.createObjectURL(event.target.files[0]));
                       }}
                       name='urlfoto'
                       id="urlfoto"
-                      className="cFI"
-                      ref={newServiceImageRef}
+                      className="customFileInput"
                     />
                     <label onClick={cancelarFotoA} className="cFL" style={{ marginTop: '0.45rem' }}>Eliminar Imagen</label>
                   </Grid>
@@ -535,19 +509,19 @@ const Servicios = () => {
                 <Grid item xs={12} sm={6}>
                   <div className='DImg'>
                     <div className='imgWrap'>
-                      <img className='imgC' src={editedService.url} alt={editedService.title} />
+                      <img className='imgC' src={imagePreview} alt={editedService.title} />
                     </div>
                   </div>
                   <label htmlFor="urlfoto" className="cFL">Seleccionar archivo</label>
                   <input
                     type="file"
                     onChange={(event) => {
-                      setEditedService({ ...editedService, url: URL.createObjectURL(event.target.files[0]) });
+                        setImageUpload(event.target.files[0]);
+                        setImagePreview(URL.createObjectURL(event.target.files[0]));
                     }}
                     name='urlfoto'
                     id="urlfoto"
-                    className="cFI"
-                    ref={newServiceImageRef}
+                    className="customFileInput"
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
