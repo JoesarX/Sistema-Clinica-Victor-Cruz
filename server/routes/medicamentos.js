@@ -12,9 +12,10 @@ const medicamentosRouter = (pool) => {
             const sqlSelect = "SELECT m.idmed, m.nombre, m.stock, m.precio_unitario, m.via,m.dosis,m.urlfoto,c.Nombre_Categoria FROM medicamentos m inner join categorias c where m.id_categoria=c.id"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log("Get all medicamentos Successfull");
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log("Get all medicamentos Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -34,12 +35,12 @@ const medicamentosRouter = (pool) => {
                 req.body.urlfoto,
                 req.body.id_categoria
             ];
-            console.log("Este es el id de categoría: " + req.body.id_categoria);
             await connection.query(q, [values]);
             connection.release();
+            console.log("Post medicamento Successfull");
             res.json("Medicamento añadido exitosamente!");
         } catch (err) {
-            console.log(err);
+            console.log("Post medicamento Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -53,9 +54,10 @@ const medicamentosRouter = (pool) => {
 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(`Get One medicamento ${req.params.id} Successfull`)
             res.json(rows[0])
         } catch (err) {
-            console.log(err);
+            console.log(`Get One medicamento ${req.params.id} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -67,9 +69,10 @@ const medicamentosRouter = (pool) => {
             const sqlSelect = "delete FROM medicamentos where idmed = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(`Delete medicamento ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log(`Delete medicamento ${req.params.id} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -89,7 +92,6 @@ const medicamentosRouter = (pool) => {
                 urlfoto,
                 id_categoria,
             } = req.body;
-            console.log("Esta es la categoria: " + id_categoria);
             const q =
                 "UPDATE medicamentos SET nombre = ?, stock = ?, precio_unitario = ?, via = ?, dosis = ?, urlfoto = ?, id_categoria=? WHERE idmed = ?";
 
@@ -106,9 +108,10 @@ const medicamentosRouter = (pool) => {
 
             await connection.query(q, values);
             connection.release();
+            console.log(`Update medicamento ${req.params.id} Successfull`)
             res.json("Medicamento actualizado exitosamente!");
         } catch (err) {
-            console.log(err);
+            console.log(`Update medicamento ${req.params.id} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
