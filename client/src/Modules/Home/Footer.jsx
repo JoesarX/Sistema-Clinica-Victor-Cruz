@@ -77,18 +77,13 @@ const Topbar = () => {
     const handleSaveAddress = async () => {
         if (isValidAddress(editedAddress)) {
             setIsEditing(false);
-           await text_Services.editText(direccionOBJ);
+            await text_Services.editText(direccionOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid address case
             alert('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").');
         }
     };
-
-
-
-
-
 
 
     /* Para el correo electronico */
@@ -124,7 +119,7 @@ const Topbar = () => {
     const handleSaveEmail = async () => {
         if (isValidEmail(editedEmail)) {
             setIsEditing1(false);
-           await text_Services.editText(correoOBJ);
+            await text_Services.editText(correoOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
@@ -173,46 +168,31 @@ const Topbar = () => {
 
     /* para el copyright */
 
-    const [year, setYear] = useState(String(new Date().getFullYear()));
-    const [editedYear, setEditedYear] = useState('');
+    const [year, setYear] = useState('© 2023 Clínica Dr. Víctor Cruz');
+    const [editedText, setEditedText] = useState('');
     const [isEditing3, setIsEditing3] = useState(false);
 
-
-
-
-    const handleChangeYear = (event) => {
-        setEditedYear(event.target.value);
+    const handleChangeText = (event) => {
+        setEditedText(event.target.value);
         copyOBJ.texto_campo = event.target.value;
 
     };
 
-
     const handleEditYear = () => {
         setIsEditing3(true);
-        setEditedYear(year);
+        setEditedText(year); // Set the current selected text as the initial value for editing
     };
 
     const handleCancelEdit3 = () => {
         setIsEditing3(false);
     };
 
-    const isValidYearFormat = (year) => {
-        // Regular expression to match a valid year in four digits (1900 to 9999)
-        const yearPattern = /^(19[0-9][0-9]|20[0-9][0-9]|9999)$/;
-        return yearPattern.test(year);
+    const handleSaveText = async () => {
+        setIsEditing3(false);
+        setYear(editedText); // Update the selected text after saving
+        await text_Services.editText(copyOBJ);
+        window.location.reload(true);
     };
-
-    const handleSaveYear = async() => {
-        if (isValidYearFormat(editedYear)) {
-            setIsEditing3(false);
-           await text_Services.editText(copyOBJ);
-            window.location.reload(true);
-        } else {
-            // Display an error message or handle the invalid year case
-            alert('El año ingresado no es válido. Asegúrate de que sea un año válido en cuatro dígitos.');
-        }
-    };
-
 
 
 
@@ -381,11 +361,11 @@ const Topbar = () => {
                     <>
                         <input
                             type="text"
-                            value={editedYear}
-                            onChange={handleChangeYear}
+                            value={editedText}
+                            onChange={handleChangeText}
                             style={{ color: '#1E60A6', fontWeight: 'bold' }}
                         />
-                        <button onClick={handleSaveYear}>
+                        <button onClick={handleSaveText}>
                             <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
                         </button>
                         <button onClick={handleCancelEdit3}>
@@ -395,7 +375,7 @@ const Topbar = () => {
                 ) : (
                     <>
                         <span onClick={handleEditYear} style={{ cursor: 'pointer' }}>
-                            © {year} Clínica Dr. Víctor Cruz
+                            {year}
                         </span>
                         {isLoggedIn && userType !== 'normal' && showButtons && (
                             <button onClick={handleEditYear}>
