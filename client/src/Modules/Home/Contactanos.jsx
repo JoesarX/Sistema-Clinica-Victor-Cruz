@@ -73,10 +73,10 @@ const Contactanos = () => {
         return phonePattern.test(phone);
     };
 
-    const handleSavePhone = () => {
+    const handleSavePhone = async () => {
         if (isValidPhone(editedPhone)) {
             setIsEditing(false);
-            text_Services.editText(numOBJ);
+            await text_Services.editText(numOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
@@ -112,10 +112,10 @@ const Contactanos = () => {
         return whatsappPattern.test(whatsapp);
     };
 
-    const handleSaveWhatsapp = () => {
+    const handleSaveWhatsapp = async() => {
         if (isValidWhatsApp(editedWhatsapp)) {
             setIsEditing1(false);
-            text_Services.editText(whaOBJ);
+            await text_Services.editText(whaOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid WhatsApp number case
@@ -153,10 +153,10 @@ const Contactanos = () => {
         return emailPattern.test(email);
     };
 
-    const handleSaveEmail = () => {
+    const handleSaveEmail = async () => {
         if (isValidEmail(editedEmail)) {
             setIsEditing2(false);
-            text_Services.editText(correoOBJ);
+           await text_Services.editText(correoOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case

@@ -74,10 +74,10 @@ const Topbar = () => {
         return commaCount >= 3 && address.trim().endsWith('Honduras');
     };
 
-    const handleSaveAddress = () => {
+    const handleSaveAddress = async () => {
         if (isValidAddress(editedAddress)) {
             setIsEditing(false);
-            text_Services.editText(direccionOBJ);
+           await text_Services.editText(direccionOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid address case
@@ -121,10 +121,10 @@ const Topbar = () => {
         return emailPattern.test(email);
     };
 
-    const handleSaveEmail = () => {
+    const handleSaveEmail = async () => {
         if (isValidEmail(editedEmail)) {
             setIsEditing1(false);
-            text_Services.editText(correoOBJ);
+           await text_Services.editText(correoOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
@@ -159,10 +159,10 @@ const Topbar = () => {
         return phonePattern.test(phone);
     };
 
-    const handleSavePhone = () => {
+    const handleSavePhone = async () => {
         if (isValidPhone(editedPhone)) {
             setIsEditing2(false);
-            text_Services.editText(numOBJ);
+            await text_Services.editText(numOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
@@ -202,10 +202,10 @@ const Topbar = () => {
         return yearPattern.test(year);
     };
 
-    const handleSaveYear = () => {
+    const handleSaveYear = async() => {
         if (isValidYearFormat(editedYear)) {
             setIsEditing3(false);
-            text_Services.editText(copyOBJ);
+           await text_Services.editText(copyOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid year case
