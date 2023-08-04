@@ -2,3 +2,14 @@
 from = "/*"
 to = "/index.html"
 status = 200
+
+[[plugins]]
+  package = "netlify-plugin-bundle-budget"
+
+[build]
+  command = "npm run build"
+  functions = "functions"
+
+  # Config for netlify-plugin-bundle-budget
+  [build.environment]
+    CRYPTO_BROWSERIFY = "require.resolve('crypto-browserify')"

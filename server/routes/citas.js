@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-const citasRouter = (pool) => {
+const citasRouter = (pool, transporter) => {
 
     //Get all Citas
     router.get("/", async (req, res) => {
@@ -11,27 +11,25 @@ const citasRouter = (pool) => {
             const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log("Get all citas Successfull");
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log("Get all citas Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
 
     router.get('/filtrarCitasTabla/:estado', async (req, res) => {
         try {
-            console.log("Entro al Filtro")
-            console.log(req.params)
-            console.log(req.params.estado)
             const estado = req.params.estado;
             const connection = await pool.getConnection();
             const sqlSelect = "SELECT * FROM citas WHERE estado = ?";
             const [rows, fields] = await connection.query(sqlSelect, [estado]);
-            console.log(rows)
             connection.release();
+            console.log("Get all citas Successfull");
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log("Get all citas Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -55,12 +53,12 @@ const citasRouter = (pool) => {
                 req.body.ritmo_cardiaco,
                 req.body.presion
             ];
-            console.log(values);
             await connection.query(q, [values]);
             connection.release();
+            console.log("Post cita Successfull");
             res.json("Cita añadida exitosamente!");
         } catch (err) {
-            console.log(err);
+            console.log("Post cita Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -68,8 +66,6 @@ const citasRouter = (pool) => {
     router.get('/checkAvailability', async (req, res) => {
         try {
             const { fecha, hora, idcita } = req.query; // Access query parameters using req.query
-            console.log("CHECK AVAILABILITY PARAMS: ", fecha, hora, idcita);
-
             let sqlSelect = `SELECT COUNT(*) AS count FROM citas WHERE fecha = ? AND hora = ?`;
             if (idcita) {
                 sqlSelect += ` AND idcita <> ?`;
@@ -78,17 +74,15 @@ const citasRouter = (pool) => {
             if (idcita) {
                 params.push(idcita);
             }
-            console.log("CHECK AVAILABILITY QUERY: ", sqlSelect);
-            console.log("CHECK AVAILABILITY PARAMS: ", params);
             const connection = await pool.getConnection();
             const [rows, fields] = await connection.query(sqlSelect, params);
             connection.release();
-
-            console.log("CHECK AVAILABILITY RESULT: ", rows[0].count);
+            console.log(`Check Availability succesfull for ${fecha} ${hora}`)
+            console.log("Check Availability Result: ", rows[0].count);
             const count = rows[0].count;
             res.json({ available: count === 0 });
         } catch (err) {
-            console.log(err);
+            console.log(`Check Availability failed for ${fecha} ${hora}. Error: ${err}`)
             res.status(500).json({ error: 'Internal Server Error' });
         }
     });
@@ -99,14 +93,13 @@ const citasRouter = (pool) => {
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-
             const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE idcita = " + req.params.id;
-
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(`Get cita with id: ${req.params.id} Successfull`)
             res.json(rows[0])
         } catch (err) {
-            console.log(err);
+            console.log(`Get cita with id: ${req.params.id} Failed. Error: ${err}`)
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -118,9 +111,10 @@ const citasRouter = (pool) => {
             const sqlSelect = "delete FROM citas where idcita = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(`Delete cita with id: ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log(`Delete cita with id: ${req.params.id} Failed. Error: ${err}`)
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -164,9 +158,10 @@ const citasRouter = (pool) => {
 
             await connection.query(q, values);
             connection.release();
+            console.log(`Update cita with id: ${id} Successfull`)
             res.json("Cita actualizada exitosamente!");
         } catch (err) {
-            console.log(err);
+            console.log(`Update cita with id: ${id} Failed. Error: ${err}`)
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -203,9 +198,11 @@ const citasRouter = (pool) => {
                 return `${hour12}:${minute} ${meridiem}`;
             });
 
+            console.log(`Get available times for date: ${date} Successfull`)
+            console.log(`Available times: ${availableTimesFormatted}`)
             res.json(availableTimesFormatted);
         } catch (err) {
-            console.log(err);
+            console.log(`Get available times for date: ${date} Failed. Error: ${err}`)
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -214,33 +211,127 @@ const citasRouter = (pool) => {
     const checkAndUpdateExpiredAppointments = async () => {
         try {
             const connection = await pool.getConnection();
-
+            await connection.query("SET time_zone = 'America/Guatemala'");
             // Citas donde la Fecha es menor a la actual o la fecha es igual a la actual y la hora es menor a la actual
             const sqlSelect = `SELECT idcita FROM citas WHERE estado = 'Pendiente' AND (curdate() > fecha or (curdate() = fecha and (CURRENT_TIME() - INTERVAL 30 MINUTE) > hora));`;
             const [rows, fields] = await connection.query(sqlSelect);
 
-            console.log(rows);
+            console.log(`Check and update expired appointments Start`)
 
             if (rows.length > 0) {
                 // Cambiar cada una a expirada
                 const expiredIds = rows.map((row) => row.idcita);
+                console.log(`Expired appointments: ${expiredIds}`)
                 const sqlUpdate = `UPDATE citas SET estado = 'Terminada' WHERE idcita IN (?)`;
                 await connection.query(sqlUpdate, [expiredIds]);
             }
 
             connection.release();
-            console.log("5 Seconds")
+            console.log("Check and update expired appointments Successfull\n")
         } catch (err) {
-            console.log(err);
+            console.log(`Check and update expired appointments Failed. Error: ${err}`)
         }
     };
 
-    const startAppointmentCheckingInterval = () => {
-        // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos
-        checkAndUpdateExpiredAppointments();
 
-        // Timer que se ejecuta cada x minutos.
-        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); 
+
+    const sendAppointmentReminders = async () => {
+        try {
+            const connection = await pool.getConnection();
+            await connection.query(`SET time_zone = 'America/Guatemala';`);
+            await connection.query(`SET lc_time_names = 'es_ES';`);
+            const sqlSelect = `SELECT distinct idcita, nombre_persona, correouser, expedientes.correo as correoexpediente ,DATE_FORMAT(fecha, '%W %e de %M del %Y') AS fecha, 
+                            DATE_FORMAT(hora, '%l:%i %p') AS hora FROM citas LEFT JOIN expedientes on citas.idpaciente = expedientes.idpaciente 
+                            WHERE estado = 'Pendiente' AND correoenviado = 0 
+                            AND (not(correouser IS NULL OR correouser = '') or not(expedientes.correo IS NULL OR expedientes.correo = '')) 
+                            AND fecha = curdate() + INTERVAL 1 DAY;`;
+            const [rows, fields] = await connection.query(sqlSelect);
+
+            console.log(`Send appointment reminders Start`)
+            if (rows.length > 0) {
+                for (const row of rows) {
+                    const {
+                        idcita,
+                        nombre_persona,
+                        correouser,
+                        correoexpediente,
+                        fecha,
+                        hora,
+                    } = row;
+
+                    // Agregar correos a la lista de correos
+                    let toEmails = [];
+                    if (correouser && correouser.trim() !== "") {
+                        toEmails.push(correouser);
+                    }
+                    if (
+                        correoexpediente &&
+                        correoexpediente.trim() !== "" &&
+                        correoexpediente !== correouser
+                    ) {
+                        toEmails.push(correoexpediente);
+                    }
+
+                    // Mandar Correo
+                    if (toEmails.length > 0) {
+                        const mailOptions = {
+                            from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                            to: toEmails.join(", "), // Join multiple emails with a comma and space
+                            subject: "Recordatorio de Cita Clinica Dr Victor Cruz",
+                            text: `Estimado/a ${nombre_persona}, Le recordamos cordialmente de su cita para mañana, ${fecha}, a las ${hora}. Esperamos brindarle el mejor servicio en nuestra clínica.\n` +
+                                `Si tiene alguna duda o necesita cambiar la cita, no dude en contactarnos.\n` +
+                                `¡Que tenga un buen día!\n\n` +
+                                `Atentamente,\n` +
+                                `El equipo de la Clínica Dr. Victor Cruz`,
+
+                        };
+
+                        await transporter.sendMail(mailOptions);
+                        console.log(`Reminder email sent for ${toEmails.join(", ")}`);
+                    }
+
+                    // Marcar la cita como enviada
+                    const sqlUpdate = `UPDATE citas SET correoenviado = '1' WHERE idcita = ?`;
+                    await connection.query(sqlUpdate, [idcita]);
+                }
+            }
+            connection.release();
+            console.log("Send appointment reminders Successfull\n")
+        } catch (err) {
+            console.log("Send appointment reminders Failed. Error: " + err);
+        }
+    };
+
+
+    const startAppointmentCheckingInterval = () => {
+        // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos para cancelar citas expiradas
+        checkAndUpdateExpiredAppointments();
+        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000);
+
+        // Set up intervalo para mandar correos de recordatorio de citas
+        const millisecondsInADay = 24 * 60 * 60 * 1000;
+        const now = new Date();
+        const targetTime = new Date(now);
+        targetTime.setHours(9, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
+
+        let timeUntilNextDay = targetTime - now;
+        console.log("Email Reminder Interval Start")
+        console.log("Target Time: " + targetTime)
+        console.log("Now: " + now)
+        console.log("Time Until Next Day: " + timeUntilNextDay)
+
+        if (timeUntilNextDay < 0) {
+            // Si ya paso la hora de mandar correos, esperar hasta la misma hora del dia siguiente
+            timeUntilNextDay += millisecondsInADay;
+            console.log("Today passed so new time until next day: " + timeUntilNextDay)
+        }
+
+        setTimeout(() => {
+            sendAppointmentReminders();
+            console.log("Email Reminder Interval Successfull")
+            setInterval(sendAppointmentReminders, millisecondsInADay);
+        }, timeUntilNextDay);
+
     };
 
     //llamado a la busqueda continua de citas expiradas

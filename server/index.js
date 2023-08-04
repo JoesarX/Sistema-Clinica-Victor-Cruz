@@ -8,9 +8,15 @@ import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
 import textos_cmdRouter from "./routes/textos_cmd.js";
+
 import CarruselRouter from "./routes/carrusel.js";
+
+import nodemailer from "nodemailer";
+
+
 const app = express();
 const port = process.env.PORT || 8000;
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}!`);
@@ -26,6 +32,17 @@ app.listen(port, () => {
    connectionLimit: 10,
    queueLimit: 0,
  });*/
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.net",
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'ClinicaVictorCruz@gmail.com',
+    pass: 'hljvucilzplqaedf'
+  }
+});
 
 //HEROKU MYSQL CONNECTION
 const pool = mysql.createPool({
@@ -52,8 +69,7 @@ app.use("/usuarios_admin", adminRouter(pool));
 
 app.use("/medicamentos", medicamentosRouter(pool));
 
-app.use("/citas", citasRouter(pool));
-// app.use("/citas_tabla", citasRouter(pool));
+app.use("/citas", citasRouter(pool, transporter)); 
 
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
 
