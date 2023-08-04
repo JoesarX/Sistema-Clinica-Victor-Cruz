@@ -35,16 +35,7 @@ const Home = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
 
-    let CarruselData = [];
-
-    let [Carrusel, setCarrusel] = React.useState({
-        tipo: 'Carrusel',
-        size: null,
-        visibility: null,
-        url: '',
-        created_at: '',
-        updated_at: ''
-    })
+    let [CarruselData, setCarruselData] = useState([]);
 
     useEffect(() => {
         // Make the initial request on component mount
@@ -55,47 +46,24 @@ const Home = () => {
             wakeUpServer();
         }, 300000); // Every 5 minutes (adjust as needed)
 
+        return () => clearInterval(interval);
+    }, [isSubmitting]);
 
-
+    useEffect(() => {
         const fetchAllCarruselPics = async () => {
             try {
                 const CarruselArray = await CarruselService.getPicsCarrusel();
-                console.log(CarruselArray);
-
-                CarruselData = CarruselArray.map((carrusel) => ({
-
-                    url: carrusel.url,
-                }));
-                Carrusel = CarruselArray.map((carrusel) => ({
-                    ...carrusel,
-                    url: carrusel.url,
-                }));
-
-                console.log(CarruselData);
-                console.log(Carrusel);
+                console.log("CARRUSEL: ", CarruselArray);
+                setCarruselData(CarruselArray);
             } catch (error) {
                 // Handle error if   any
                 console.log("Error fetching carrusel pictures:", error);
             }
         };
 
-
         fetchAllCarruselPics();
+    }, [])
 
-
-
-
-        if (isSubmitting) {
-            fetchAllCarruselPics();
-            console.log(CarruselData)
-        }
-
-
-        return () => clearInterval(interval);
-
-
-
-    }, [isSubmitting]);
 
     const wakeUpServer = () => {
         // Make a GET request to wake up the server
@@ -199,49 +167,24 @@ const Home = () => {
         setMapURL(event.target.value);
     };
 
-
-    const mapping = () => {
-        console.log("HELLOOOOOOOOOo")
-        console.log(CarruselData)
-        console.log(Carrusel)
-        {
-            CarruselData.map((carrusel) => (
-                console.log(carrusel.url)
-            ))
-        };
-    };
-
-
-
-
     return (
         <div className="scrollable-page">
             <Topbar />
+            
             <div className="imagenes">
-                {/*  <Slide {...properties}>
-                    {CarruselData.map((Carrusel) => (
-                        <div className='innerCard' key={Carrusel.idfoto}>
-                            <div className="each-slide">
-                                <img src={Carrusel.url} alt={`imagen ${Carrusel.idfoto}`} />
-                            </div>
+                <Slide {...properties}>
+                    {CarruselData.map((carrusel) => (
+                        <div className='each-slide' key={carrusel.idfoto}>
+                            <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
                         </div>
                     ))}
-                </Slide>*/}
-                <Slide {...properties}>
-                    <div className="each-slide">
-                        <img src={doctor_slide} alt="imagen 1" />
-                    </div>
-                    <div className="each-slide">
-                        <img src={doctor_slide1} alt="imagen 2" />
-                    </div>
-                    <div className="each-slide">
-                        <img src={saludOcupacional} alt="imagen 3" />
-                    </div>
                 </Slide>
             </div>
+
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
+
             <div className="services-container">
                 <div className="service-container">
                     <div className="service-icon-container">
