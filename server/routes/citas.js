@@ -45,7 +45,6 @@ const citasRouter = (pool, transporter) => {
                 sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE fecha >= CURDATE() order by fecha, citas.hora";
             }
             const [rows, fields] = await connection.query(sqlSelect);
-            console.log(rows)
             connection.release();
             console.log("Get all citas by Filter Successfull");
             res.json(rows);
