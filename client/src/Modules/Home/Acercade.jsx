@@ -14,6 +14,7 @@ import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import text_Services from '../../Services/texto_cmdService';
 import { useEffect, useRef, useState } from 'react';
 
+import 'firebase/compat/storage';
 import { v4 } from "uuid";
 import {
   ref,
@@ -32,7 +33,7 @@ const Acercade = () => {
   // const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
   const DESC_IMG = hospital;
   const DOCTOR_IMG = doctor;
-
+  
   const [isEditingPage, setIsEditingPage] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
@@ -305,20 +306,43 @@ const Acercade = () => {
     return true;
   }
 
-  const [imageUploadDesc, setImageUploadDesc] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
   const [imagePreviewDesc, setImagePreviewDesc] = useState(null);
-  const [imageUploadDoctor, setImageUploadDoctor] = useState(null);
   const [imagePreviewDoctor, setImagePreviewDoctor] = useState(null);
 
   const storage = getStorage();
 
-  const handleCancelDescImg = () => {
-    setImageUploadDesc(null);
-    setImagePreviewDesc(null);
+  const handleConfirmarImagen = async (e) => {
+    e.preventDefault();
+        try {
+            console.log("test");
+            submitImagenDesc();
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+    }
+    //setImageUpload(null);
+    //setImagePreviewDesc(null);
   };
 
-  const handleCancelDoctorImg = () => {
-    setImageUploadDoctor(null);
+  const submitImagenDesc = async () => {
+    try {
+      if (imageUpload != null) {
+          const imageUrll = await uploadFile();
+          console.log(imageUrll);
+          //medicamento.urlfoto = imageUrll;
+          //await MedicamentosService.postMedicamentos(medicamento);
+          alert('Imagen Agregada');
+          window.location.reload();
+      }
+    } catch (error) {
+      // Handle error if any
+      console.log('Error submitting Imagen:', error);
+    }
+  }  
+
+  const handleConfirmarDoctorImg = () => {
+    setImageUpload(null);
     setImagePreviewDoctor(null);
   };
 
@@ -330,15 +354,15 @@ const Acercade = () => {
       })
   }
 
-  async function uploadDescImg() {
+  async function uploadFile() {
 
     return new Promise((resolve, reject) => {
-      if (imageUploadDesc == null) {
+      if (imageUpload == null) {
         return null;
       }
 
-      const imageRef = ref(storage, `images/${imageUploadDesc.name + v4()}`);
-      uploadBytes(imageRef, imageUploadDesc)
+      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+      uploadBytes(imageRef, imageUpload)
         .then((snapshot) => getDownloadURL(snapshot.ref))
         .then((url) => {
           resolve(url);
@@ -411,8 +435,19 @@ const Acercade = () => {
     }
   }
 
-  const fetchImgDesc = () => {
-    setImagePreviewDesc(DESC_IMG);
+  const fetchImgDesc = async () => {
+      try {
+        //const medicamentosData = await MedicamentosService.getAllMedicamentos();
+        //const medicamentosWithId = medicamentosData.map((medicamento) => ({
+        //    ...medicamento,
+        //    medId: medicamento.idmed,
+        //}));
+        setImagePreviewDesc();
+      } catch (error) {
+        // Handle error if any
+        console.log("Error fetching imagen:", error);
+      }
+    //setImagePreviewDesc(DESC_IMG);
   }
 
   const fetchImgDoctor = () => {
@@ -558,7 +593,7 @@ const Acercade = () => {
               <input
                 type="file"
                 onChange={(event) => {
-                  setImageUploadDesc(event.target.files[0]);
+                  setImageUpload(event.target.files[0]);
                   setImagePreviewDesc(URL.createObjectURL(event.target.files[0]));
                 }}
                 accept="image/png, image/jpeg, image/webp"
@@ -566,7 +601,7 @@ const Acercade = () => {
                 id="urlDescImg"
                 className="customFileInput"
               />
-              <label class="delete" onClick={handleCancelDescImg}>Eliminar imagen</label>
+              <label class="delete" onClick={handleConfirmarImagen}>Confirmar imagen</label>
             </div>
           </div>
           <div className="text-container">
@@ -615,7 +650,7 @@ const Acercade = () => {
               <input
                 type="file"
                 onChange={(event) => {
-                  setImageUploadDoctor(event.target.files[0]);
+                  setImageUpload(event.target.files[0]);
                   setImagePreviewDoctor(URL.createObjectURL(event.target.files[0]));
                 }}
                 accept="image/png, image/jpeg, image/webp"
@@ -623,7 +658,7 @@ const Acercade = () => {
                 id="urlDrImg"
                 className="customFileInput"
               />
-              <label class="delete" onClick={handleCancelDoctorImg}>Eliminar imagen</label>
+              <label class="delete" onClick={handleConfirmarDoctorImg}>Confirmar imagen</label>
             </div>
           </div>
           <div className="text-container">
