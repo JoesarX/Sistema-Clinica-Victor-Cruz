@@ -4,15 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-
 import Topbar from './Topbar';
 import Footer from './Footer';
-
-import doctor_slide from '../Imagenes/doctor_slide.jpeg';
-import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
-import saludOcupacional from '../Imagenes/saludOcupacional.webp';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
@@ -23,28 +16,26 @@ import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import CarruselService from '../../Services/CarruselService';
 
-
 import axios from 'axios'; // Import axios library
-import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
-
 
 
 const Home = () => {
     const navigate = useNavigate();
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    let [CarruselData, setCarruselData] = useState([]);
 
-
-    let CarruselData = [];
-
-    let [Carrusel, setCarrusel] = React.useState({
-        tipo: 'Carrusel',
-        size: null,
-        visibility: null,
-        url: '',
-        created_at: '',
-        updated_at: ''
-    })
+    useEffect(() => {
+        const fetchAllCarruselPics = async () => {
+            try {
+                const CarruselArray = await CarruselService.getPicsCarrusel();
+                console.log("CARRUSEL: ", CarruselArray);
+                setCarruselData(CarruselArray);
+            } catch (error) {
+                console.log("Error fetching carrusel pictures:", error);
+            }
+        };
+        fetchAllCarruselPics();
+    }, []);
 
     useEffect(() => {
         // Make the initial request on component mount
@@ -55,47 +46,8 @@ const Home = () => {
             wakeUpServer();
         }, 300000); // Every 5 minutes (adjust as needed)
 
-
-
-        const fetchAllCarruselPics = async () => {
-            try {
-                const CarruselArray = await CarruselService.getPicsCarrusel();
-                console.log(CarruselArray);
-
-                CarruselData = CarruselArray.map((carrusel) => ({
-
-                    url: carrusel.url,
-                }));
-                Carrusel = CarruselArray.map((carrusel) => ({
-                    ...carrusel,
-                    url: carrusel.url,
-                }));
-
-                console.log(CarruselData);
-                console.log(Carrusel);
-            } catch (error) {
-                // Handle error if   any
-                console.log("Error fetching carrusel pictures:", error);
-            }
-        };
-
-
-        fetchAllCarruselPics();
-
-
-
-
-        if (isSubmitting) {
-            fetchAllCarruselPics();
-            console.log(CarruselData)
-        }
-
-
         return () => clearInterval(interval);
-
-
-
-    }, [isSubmitting]);
+    }, []);
 
     const wakeUpServer = () => {
         // Make a GET request to wake up the server
@@ -107,19 +59,12 @@ const Home = () => {
         console.log('Server is awake!');
     };
 
-
-
-
     const handleCitaClick = () => {
         navigate('/citas');
     };
 
     const handleServicesClick = () => {
         navigate('/servicios');
-    };
-
-    const handleAboutUsClick = () => {
-        navigate('acerca-de');
     };
 
     const properties = {
@@ -130,10 +75,6 @@ const Home = () => {
         arrows: true
     };
 
-
-
-
-    /* msion Edit */
 
     const originalText = `Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
     \nEstamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.`;
@@ -199,49 +140,30 @@ const Home = () => {
         setMapURL(event.target.value);
     };
 
-
-    const mapping = () => {
-        console.log("HELLOOOOOOOOOo")
-        console.log(CarruselData)
-        console.log(Carrusel)
-        {
-            CarruselData.map((carrusel) => (
-                console.log(carrusel.url)
-            ))
-        };
+    const Carrusel = () => {
+        return (
+            <div className="imagenes">
+                <Slide {...properties}>
+                    {CarruselData.map((carrusel) => (
+                        <div className='each-slide' key={carrusel.idfoto}>
+                            <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
+                        </div>
+                    ))}
+                </Slide>
+            </div>
+        )
     };
-
-
-
 
     return (
         <div className="scrollable-page">
             <Topbar />
-            <div className="imagenes">
-                {/*  <Slide {...properties}>
-                    {CarruselData.map((Carrusel) => (
-                        <div className='innerCard' key={Carrusel.idfoto}>
-                            <div className="each-slide">
-                                <img src={Carrusel.url} alt={`imagen ${Carrusel.idfoto}`} />
-                            </div>
-                        </div>
-                    ))}
-                </Slide>*/}
-                <Slide {...properties}>
-                    <div className="each-slide">
-                        <img src={doctor_slide} alt="imagen 1" />
-                    </div>
-                    <div className="each-slide">
-                        <img src={doctor_slide1} alt="imagen 2" />
-                    </div>
-                    <div className="each-slide">
-                        <img src={saludOcupacional} alt="imagen 3" />
-                    </div>
-                </Slide>
-            </div>
+
+            <Carrusel/>
+
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
+
             <div className="services-container">
                 <div className="service-container">
                     <div className="service-icon-container">
