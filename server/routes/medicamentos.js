@@ -22,6 +22,8 @@ const medicamentosRouter = (pool) => {
 
     //Add a new medicamento
     router.post("/", async (req, res) => {
+        console.log(":)")
+        console.log(":()()")
         try {
             const connection = await pool.getConnection();
             const q =
