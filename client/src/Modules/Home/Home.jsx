@@ -4,6 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+
 import Topbar from './Topbar';
 import Footer from './Footer';
 
@@ -18,13 +21,30 @@ import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 
+import CarruselService from '../../Services/CarruselService';
+
 
 import axios from 'axios'; // Import axios library
+import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
 
 
 
 const Home = () => {
     const navigate = useNavigate();
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+    let CarruselData = [];
+
+    let [Carrusel, setCarrusel] = React.useState({
+        tipo: 'Carrusel',
+        size: null,
+        visibility: null,
+        url: '',
+        created_at: '',
+        updated_at: ''
+    })
 
     useEffect(() => {
         // Make the initial request on component mount
@@ -35,9 +55,47 @@ const Home = () => {
             wakeUpServer();
         }, 300000); // Every 5 minutes (adjust as needed)
 
-        // Clean up the interval on component unmount
+
+
+        const fetchAllCarruselPics = async () => {
+            try {
+                const CarruselArray = await CarruselService.getPicsCarrusel();
+                console.log(CarruselArray);
+
+                CarruselData = CarruselArray.map((carrusel) => ({
+
+                    url: carrusel.url,
+                }));
+                Carrusel = CarruselArray.map((carrusel) => ({
+                    ...carrusel,
+                    url: carrusel.url,
+                }));
+
+                console.log(CarruselData);
+                console.log(Carrusel);
+            } catch (error) {
+                // Handle error if   any
+                console.log("Error fetching carrusel pictures:", error);
+            }
+        };
+
+
+        fetchAllCarruselPics();
+
+
+
+
+        if (isSubmitting) {
+            fetchAllCarruselPics();
+            console.log(CarruselData)
+        }
+
+
         return () => clearInterval(interval);
-    }, []);
+
+
+
+    }, [isSubmitting]);
 
     const wakeUpServer = () => {
         // Make a GET request to wake up the server
@@ -48,6 +106,9 @@ const Home = () => {
             });
         console.log('Server is awake!');
     };
+
+
+
 
     const handleCitaClick = () => {
         navigate('/citas');
@@ -120,24 +181,36 @@ const Home = () => {
     const [editable1, setEditable1] = useState(false);
     const mapEmbedURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn";
     const [mapURL, setMapURL] = useState(mapEmbedURL);
-  
+
     const handleEditClick1 = () => {
-      setEditable1(true);
+        setEditable1(true);
     };
-  
+
     const handleSaveClick1 = () => {
-      setEditable1(false);
+        setEditable1(false);
     };
-  
+
     const handleCancelClick1 = () => {
-      setEditable1(false);
-      setMapURL(mapEmbedURL);
+        setEditable1(false);
+        setMapURL(mapEmbedURL);
     };
-  
+
     const handleChange1 = (event) => {
-      setMapURL(event.target.value);
+        setMapURL(event.target.value);
     };
-  
+
+
+    const mapping = () => {
+        console.log("HELLOOOOOOOOOo")
+        console.log(CarruselData)
+        console.log(Carrusel)
+        {
+            CarruselData.map((carrusel) => (
+                console.log(carrusel.url)
+            ))
+        };
+    };
+
 
 
 
@@ -145,6 +218,15 @@ const Home = () => {
         <div className="scrollable-page">
             <Topbar />
             <div className="imagenes">
+                {/*  <Slide {...properties}>
+                    {CarruselData.map((Carrusel) => (
+                        <div className='innerCard' key={Carrusel.idfoto}>
+                            <div className="each-slide">
+                                <img src={Carrusel.url} alt={`imagen ${Carrusel.idfoto}`} />
+                            </div>
+                        </div>
+                    ))}
+                </Slide>*/}
                 <Slide {...properties}>
                     <div className="each-slide">
                         <img src={doctor_slide} alt="imagen 1" />
@@ -271,7 +353,7 @@ const Home = () => {
                 <button className="see-more-button schedule-appointment" onClick={handleCitaClick}>Agenda ya!</button>
             </div>
             <Footer />
-        </div>
+        </div >
     );
 };
 
