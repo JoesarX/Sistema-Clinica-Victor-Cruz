@@ -4,15 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-
 import Topbar from './Topbar';
 import Footer from './Footer';
-
-import doctor_slide from '../Imagenes/doctor_slide.jpeg';
-import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
-import saludOcupacional from '../Imagenes/saludOcupacional.webp';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
@@ -23,19 +16,26 @@ import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import CarruselService from '../../Services/CarruselService';
 
-
 import axios from 'axios'; // Import axios library
-import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
-
 
 
 const Home = () => {
     const navigate = useNavigate();
 
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-
     let [CarruselData, setCarruselData] = useState([]);
+
+    useEffect(() => {
+        const fetchAllCarruselPics = async () => {
+            try {
+                const CarruselArray = await CarruselService.getPicsCarrusel();
+                console.log("CARRUSEL: ", CarruselArray);
+                setCarruselData(CarruselArray);
+            } catch (error) {
+                console.log("Error fetching carrusel pictures:", error);
+            }
+        };
+        fetchAllCarruselPics();
+    }, []);
 
     useEffect(() => {
         // Make the initial request on component mount
@@ -47,23 +47,7 @@ const Home = () => {
         }, 300000); // Every 5 minutes (adjust as needed)
 
         return () => clearInterval(interval);
-    }, [isSubmitting]);
-
-    useEffect(() => {
-        const fetchAllCarruselPics = async () => {
-            try {
-                const CarruselArray = await CarruselService.getPicsCarrusel();
-                console.log("CARRUSEL: ", CarruselArray);
-                setCarruselData(CarruselArray);
-            } catch (error) {
-                // Handle error if   any
-                console.log("Error fetching carrusel pictures:", error);
-            }
-        };
-
-        fetchAllCarruselPics();
-    }, [])
-
+    }, []);
 
     const wakeUpServer = () => {
         // Make a GET request to wake up the server
@@ -75,19 +59,12 @@ const Home = () => {
         console.log('Server is awake!');
     };
 
-
-
-
     const handleCitaClick = () => {
         navigate('/citas');
     };
 
     const handleServicesClick = () => {
         navigate('/servicios');
-    };
-
-    const handleAboutUsClick = () => {
-        navigate('acerca-de');
     };
 
     const properties = {
@@ -98,10 +75,6 @@ const Home = () => {
         arrows: true
     };
 
-
-
-
-    /* msion Edit */
 
     const originalText = `Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
     \nEstamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.`;
@@ -167,10 +140,8 @@ const Home = () => {
         setMapURL(event.target.value);
     };
 
-    return (
-        <div className="scrollable-page">
-            <Topbar />
-            
+    const Carrusel = () => {
+        return (
             <div className="imagenes">
                 <Slide {...properties}>
                     {CarruselData.map((carrusel) => (
@@ -180,6 +151,14 @@ const Home = () => {
                     ))}
                 </Slide>
             </div>
+        )
+    };
+
+    return (
+        <div className="scrollable-page">
+            <Topbar />
+
+            <Carrusel/>
 
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
