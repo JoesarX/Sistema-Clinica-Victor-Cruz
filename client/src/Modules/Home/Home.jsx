@@ -218,7 +218,7 @@ const Home = () => {
         <div className="scrollable-page">
             <Topbar />
             <div className="imagenes">
-                <Slide {...properties}>
+                {/*  <Slide {...properties}>
                     {CarruselData.map((Carrusel) => (
                         <div className='innerCard' key={Carrusel.idfoto}>
                             <div className="each-slide">
@@ -226,8 +226,8 @@ const Home = () => {
                             </div>
                         </div>
                     ))}
-                </Slide>
-                {/*  <Slide {...properties}>
+                </Slide>*/}
+                <Slide {...properties}>
                     <div className="each-slide">
                         <img src={doctor_slide} alt="imagen 1" />
                     </div>
@@ -237,7 +237,7 @@ const Home = () => {
                     <div className="each-slide">
                         <img src={saludOcupacional} alt="imagen 3" />
                     </div>
-    </Slide>*/}
+                </Slide>
             </div>
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
