@@ -17,7 +17,7 @@ import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 
 
 import axios from 'axios'; // Import axios library
@@ -25,6 +25,110 @@ import axios from 'axios'; // Import axios library
 
 
 const Home = () => {
+    //Array donde se va a ir guardando el componente/servicio segun un id
+    const servicesData = [
+        {
+            id: 1,
+            title: 'Clinica',
+            description: 'Dedicada a brindar servicios de salud de alta calidad y atención médica integral.',
+            icon: faStethoscope
+        },
+        {
+            id: 2,
+            title: 'Salud Ocupacional',
+            description: 'Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.',
+            icon: faUserDoctor
+        },
+        {
+            id: 3,
+            title: 'Laboratorio',
+            description: 'Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.',
+            icon: faFlask
+        }
+    ];
+    const [editAll, setEditAll] = useState(false);
+    const [editAll2, setEditAll2] = useState(false);
+
+
+
+    const ServiceComponent = ({ title, description, icon, isEditMode }) => {
+        const [editable, setEditable] = useState(false);
+        const [editedTitle, setEditedTitle] = useState(title);
+        const [editedDescription, setEditedDescription] = useState(description);
+
+        const handleEditToggle = () => {
+            setEditable(!editable);
+        };
+
+        const handleSave = () => {
+            // Implement your save functionality here
+            setEditable(false);
+        };
+
+        const handleCancel = () => {
+            setEditable(false);
+            // Reset to original values
+            setEditedTitle(title);
+            setEditedDescription(description);
+        };
+
+        return (
+            <div className="service-container">
+                <div className="service-icon-container">
+                    <FontAwesomeIcon icon={icon} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                </div>
+                <div className="service-text-elements" style={{ height: '270px' }}>
+                    <h1 className="service-header">
+                        {editable ? (
+                            <input
+                                type="text"
+                                value={editedTitle}
+                                onChange={(e) => setEditedTitle(e.target.value)}
+                                style={{ width: '100%' }} // Set width to 100%
+                            />
+                        ) : (
+                            editedTitle
+                        )}
+                    </h1>
+                    <div className="service-text">
+                        {editable ? (
+                            <textarea
+                                value={editedDescription}
+                                onChange={(e) => setEditedDescription(e.target.value)}
+                                rows={5}
+                                cols={40} // Adjust the number of cols for desired width
+                                style={{ width: '100%' }} // Set width to 100%
+                            />
+                        ) : (
+                            editedDescription
+                        )}
+                    </div>
+                    {isEditMode && (
+                        <div className="edit-buttons-container">
+                            {editable ? (
+                                <div className="centered-edit-buttons">
+                                    <button onClick={handleSave}>
+                                        <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
+                                    </button>
+                                    <button onClick={handleCancel}>
+                                        <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <button onClick={handleEditToggle}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+
+    // ==========================================================================================
+
     const navigate = useNavigate();
 
     const { userType, isLoggedIn } = useContext(AuthContext);
@@ -70,117 +174,6 @@ const Home = () => {
         infinite: true,
         indicators: true,
         arrows: true
-    };
-
-
-    /* Container Clinica */
-    /*
-       const [isEditingTitle, setIsEditingTitle] = useState(false);
-       const [clinicTitle, setClinicTitle] = useState('Clínica');
-       const [editedTitle, setEditedTitle] = useState('');
-   */
-    const [isEditingDescription, setIsEditingDescription] = useState(false);
-    const [clinicDescription, setClinicDescription] = useState(
-        'Dedicada a brindar servicios de salud de alta calidad y atención médica integral.'
-    );
-    const [editedDescription, setEditedDescription] = useState('');
-
-    /*
-    const handleChangeTitle = (event) => {
-        setEditedTitle(event.target.value);
-    };
- 
- 
- 
-    const handleSaveTitle = () => {
-        setClinicTitle(editedTitle);
-        setIsEditingTitle(false);
-    };
- 
- 
-    const handleEditTitle = () => {
-        setIsEditingTitle(true);
-        setEditedTitle(clinicTitle);
-    };
- 
- 
-    const handleCancelTitle = () => {
-        setIsEditingTitle(false);
-    };
- 
-*/
-    const handleEditDescription = () => {
-        setIsEditingDescription(true);
-        setEditedDescription(clinicDescription);
-    };
-
-    const handleChangeDescription = (event) => {
-        setEditedDescription(event.target.value);
-    };
-
-
-    const handleSaveDescription = () => {
-        setClinicDescription(editedDescription);
-        setIsEditingDescription(false);
-    };
-
-    const handleCancelDescription = () => {
-        setIsEditingDescription(false);
-    };
-
-
-    /* Salud Ocupacional*/
-
-    const [isEditingDescription1, setIsEditingDescription1] = useState(false);
-    const [saludOcupacionalDescription, setSaludOcupacionalDescription] = useState(
-        'Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.'
-    );
-    const [editedSaludOcupacionalDescription, setEditedSaludOcupacionalDescription] = useState('');
-
-    const handleChangeDescription1 = (event) => {
-        setEditedSaludOcupacionalDescription(event.target.value);
-    };
-
-    const handleEditDescription1 = () => {
-        setIsEditingDescription1(true);
-        setEditedSaludOcupacionalDescription(saludOcupacionalDescription);
-    };
-
-    const handleSaveDescription1 = () => {
-        setSaludOcupacionalDescription(editedSaludOcupacionalDescription);
-        setIsEditingDescription1(false);
-    };
-
-    const handleCancelDescription1 = () => {
-        setIsEditingDescription1(false);
-    };
-
-
-
-    /* Container Laboratorio - Descripción */
-
-    const [isEditingLaboratorioDescription, setIsEditingLaboratorioDescription] = useState(false);
-    const [laboratorioDescription, setLaboratorioDescription] = useState(
-        'Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.'
-    );
-    const [editedLaboratorioDescription, setEditedLaboratorioDescription] = useState('');
-
-    const handleChangeLaboratorioDescription = (event) => {
-        setEditedLaboratorioDescription(event.target.value);
-    };
-
-    const handleEditLaboratorioDescription = () => {
-        setIsEditingLaboratorioDescription(true);
-        setEditedLaboratorioDescription(laboratorioDescription);
-    };
-
-    const handleSaveLaboratorioDescription = () => {
-        setLaboratorioDescription(editedLaboratorioDescription);
-        setIsEditingLaboratorioDescription(false);
-    };
-
-    const handleCancelLaboratorioDescription = () => {
-        setIsEditingLaboratorioDescription(false);
     };
 
 
@@ -273,106 +266,33 @@ const Home = () => {
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
             <div className="services-container">
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Clínica</h1>
-                        {isEditingDescription ? (
-                            <>
-                                <textarea
-                                    value={editedDescription}
-                                    onChange={handleChangeDescription}
-                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
-                                />
-                                <button onClick={handleSaveDescription}>
-                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
-                                </button>
-                                <button onClick={handleCancelDescription}>
-                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <div className="service-text">{clinicDescription}</div>
-                                <button onClick={handleEditDescription}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        )}
-                    </div>
-
-
-                </div>
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Salud Ocupacional</h1>
-                        {isEditingDescription1 ? (
-                            <>
-                                <textarea
-                                    value={editedSaludOcupacionalDescription}
-                                    onChange={handleChangeDescription1}
-                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
-                                />
-                                <button onClick={handleSaveDescription}>
-                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
-                                </button>
-                                <button onClick={handleCancelDescription1}>
-                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <div className="service-text">{saludOcupacionalDescription}</div>
-                                {isLoggedIn && userType !== 'normal' && (
-                                    <button onClick={handleEditDescription1} style={{ marginLeft: '5px' }}>
-                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </div>
-                </div>
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Laboratorio</h1>
-                        {isEditingLaboratorioDescription ? (
-                            <>
-                                <textarea
-                                    value={editedLaboratorioDescription}
-                                    onChange={handleChangeLaboratorioDescription}
-                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
-                                />
-                                <button onClick={handleSaveLaboratorioDescription}>
-                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
-                                </button>
-                                <button onClick={handleCancelLaboratorioDescription}>
-                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <div className="service-text">{laboratorioDescription}</div>
-                                {isLoggedIn && userType !== 'normal' && (
-                                    <button onClick={handleEditLaboratorioDescription} style={{ marginLeft: '5px' }}>
-                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </div>
-                </div>
+                <ServiceComponent
+                    title={servicesData[0].title}
+                    description={servicesData[0].description}
+                    icon={servicesData[0].icon}
+                    isEditMode={editAll}
+                />
+                <ServiceComponent
+                    title={servicesData[1].title}
+                    description={servicesData[1].description}
+                    icon={servicesData[1].icon}
+                    isEditMode={editAll}
+                />
+                <ServiceComponent
+                    title={servicesData[2].title}
+                    description={servicesData[2].description}
+                    icon={servicesData[2].icon}
+                    isEditMode={editAll}
+                />
             </div>
             <div class="button-container">
                 <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
             </div>
+            {isLoggedIn && userType !== 'normal' && (
+                <button onClick={() => setEditAll(!editAll)}>
+                    <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                </button>
+            )}
             <div className="content-header-banner">
                 SOBRE <span style={{ color: '#223240', marginLeft: '10px' }}>NOSOTROS</span>
             </div>
@@ -385,6 +305,7 @@ const Home = () => {
                             value={missionText}
                             onChange={handleChange}
                             rows="10"
+                            cols={50}
                         />
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
@@ -399,9 +320,13 @@ const Home = () => {
                             </button>
                         </>
                     ) : (
-                        <button onClick={handleEditClick}>
-                            <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
-                        </button>
+                        <div>
+                            {editAll2 && (
+                                <button className='edit-button' onClick={handleEditClick}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                                </button>
+                            )}
+                        </div>
                     )}
                 </div>
                 <div className='about-us-content'>
@@ -431,12 +356,25 @@ const Home = () => {
                             </button>
                         </div>
                     ) : (
-                        <button className='edit-button' onClick={handleEditClick1}>
-                            <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
-                        </button>
+                        <div>
+                            {editAll2 && (
+                                <button className='edit-button' onClick={handleEditClick1}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                                </button>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
+            {isLoggedIn && userType !== 'normal' && (
+                <button onClick={() => setEditAll2(!editAll2)}>
+                    <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                </button>
+            )}
+
+
+
+
             <div className="smooth-line" />
             <div className="home-schedule-container">
                 <FontAwesomeIcon icon={faCalendarDays} className="content-header white-text schedule-calendar-icon" />
