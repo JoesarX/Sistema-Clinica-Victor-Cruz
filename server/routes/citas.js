@@ -337,7 +337,7 @@ const citasRouter = (pool, transporter) => {
         const targetTimeEmails = new Date(now);
         targetTimeEmails.setHours(9, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
         const targetTimeTerminate = new Date(now);
-        targetTimeTerminate.setHours(14, 27, 0, 0); // Aqui se puede cambiar la hora a la que se terminan las citas
+        targetTimeTerminate.setHours(17, 0, 0, 0); // Aqui se puede cambiar la hora a la que se terminan las citas
 
         let timeUntilNextDayEmail = targetTimeEmails - now;
         let timeUntilNextDayTerminate = targetTimeTerminate - now;
