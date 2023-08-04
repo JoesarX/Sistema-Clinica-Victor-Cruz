@@ -24,9 +24,20 @@ export const editMision = async (mision) => {
     }
 };
 
+export const postPicture = async (carrusel) => {
+    try {
+        const res = await axios.post(`${API_URL}/carrusel`,carrusel);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to post picture');
+    }
+};
+
 const Services = {
     getPicsCarrusel,
-    editMision
+    editMision,
+    postPicture
 
 };
 

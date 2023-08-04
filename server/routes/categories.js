@@ -5,11 +5,12 @@ const categoriesRouter = (pool) => {
     //get all categories
     router.get("/", async (req, res) => {
         try {
+            console.log("hellooo")
             const connection = await pool.getConnection();
             const sqlSelect = "SELECT * FROM categorias ";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            Console.log("Get all categories Successfull");
+            console.log("Get all categories Successfull");
             res.json(rows);
         } catch (err) {
             console.log("Get all categories Failed. Error: " + err);
@@ -41,7 +42,7 @@ const categoriesRouter = (pool) => {
             const sqlSelect = "delete FROM categorias where id = '" + req.params.id + "'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            Console.log("Delete category "+ req.params.id+ " Successfull");
+            console.log("Delete category "+ req.params.id+ " Successfull");
             res.json(rows);
         } catch (err) {
             console.log("Delete category "+ req.params.id+ " Failed. Error: " + err);

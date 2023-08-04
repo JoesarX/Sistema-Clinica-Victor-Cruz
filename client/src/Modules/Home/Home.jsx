@@ -27,12 +27,29 @@ import CarruselService from '../../Services/CarruselService';
 import axios from 'axios'; // Import axios library
 import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
 
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject,
+    getStorage,
+    listAll,
+    list,
+} from "firebase/storage";
+
+import { v4 } from "uuid";
+
 
 
 const Home = () => {
     const navigate = useNavigate();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    let [imageUpload, setImageUpload] = useState(null);
+    let [imagePreview, setImagePreview] = useState(null);
+
+
 
 
     let CarruselData = [];
@@ -64,10 +81,6 @@ const Home = () => {
 
                 CarruselData = CarruselArray.map((carrusel) => ({
 
-                    url: carrusel.url,
-                }));
-                Carrusel = CarruselArray.map((carrusel) => ({
-                    ...carrusel,
                     url: carrusel.url,
                 }));
 
@@ -199,16 +212,66 @@ const Home = () => {
         setMapURL(event.target.value);
     };
 
+    const storage = getStorage();
+    async function uploadFile() {
 
-    const mapping = () => {
-        console.log("HELLOOOOOOOOOo")
-        console.log(CarruselData)
-        console.log(Carrusel)
-        {
-            CarruselData.map((carrusel) => (
-                console.log(carrusel.url)
-            ))
-        };
+        return new Promise((resolve, reject) => {
+            if (imageUpload == null) {
+                return null;
+            }
+
+            const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+            uploadBytes(imageRef, imageUpload)
+                .then((snapshot) => getDownloadURL(snapshot.ref))
+                .then((url) => {
+                    resolve(url);
+                    //console.log(medicamento);
+                })
+                .catch((error) => reject(error));
+        });
+    };
+
+    const handleModalSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            console.log("test");
+            submitPicture();
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (isSubmitting) {
+            console.log("test");
+            submitPicture();
+        }
+    }, [isSubmitting]);
+
+    const submitPicture = async () => {
+
+        console.log("Entra a agregar despues de validaciones");
+        try {
+            if (imageUpload != null) {
+                const imageUrll = await uploadFile();
+                console.log(imageUrll);
+                setCarrusel((prevState) => ({
+                    ...prevState,
+                    url: imageUrll,
+                }));
+                Carrusel.url = imageUrll;
+            }
+            await CarruselService.postPicture(Carrusel);
+            alert('Foto Agregada');
+            // toggleModal();
+            setImagePreview(null);
+            //  window.location.reload();
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+        }
+
     };
 
 
@@ -238,7 +301,29 @@ const Home = () => {
                         <img src={saludOcupacional} alt="imagen 3" />
                     </div>
                 </Slide>
+                <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+                <input
+                    type="file"
+                    onChange={(event) => {
+                        imageUpload = event.target.files[0];
+                        imagePreview = URL.createObjectURL(event.target.files[0]);
+
+                        const selectedFile = event.target.files[0];
+                        if (selectedFile) {
+                            console.log(":)))))))))")
+                            // Do something with the selected file, e.g., display its details
+                            console.log('Selected file name:', selectedFile.name);
+                            console.log('Selected file type:', selectedFile.type);
+                            console.log('Selected file size:', selectedFile.size);
+                            handleModalSubmit(event);
+                        }
+                    }}
+                    name='urlfoto'
+                    id="urlfoto"
+                    className="customFileInput"
+                />
             </div>
+
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
