@@ -213,7 +213,7 @@ const citasRouter = (pool, transporter) => {
             const connection = await pool.getConnection();
             await connection.query("SET time_zone = 'America/Guatemala'");
             // Citas donde la Fecha es menor a la actual o la fecha es igual a la actual y la hora es menor a la actual
-            const sqlSelect = `SELECT idcita FROM citas WHERE estado = 'Pendiente' AND (curdate() > fecha or (curdate() = fecha and (CURRENT_TIME() - INTERVAL 30 MINUTE) > hora));`;
+            const sqlSelect = `SELECT idcita FROM citas WHERE estado = 'Pendiente' AND curdate() >= fecha`;
             const [rows, fields] = await connection.query(sqlSelect);
 
             console.log(`Check and update expired appointments Start`)
@@ -311,26 +311,37 @@ const citasRouter = (pool, transporter) => {
         // Set up intervalo para mandar correos de recordatorio de citas
         const millisecondsInADay = 24 * 60 * 60 * 1000;
         const now = new Date();
-        const targetTime = new Date(now);
-        targetTime.setHours(9, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
+        const targetTimeEmails = new Date(now);
+        targetTimeEmails.setHours(9, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
+        const targetTimeTerminate = new Date(now);
+        targetTimeTerminate.setHours(23, 59, 0, 0); // Aqui se puede cambiar la hora a la que se terminan las citas
 
-        let timeUntilNextDay = targetTime - now;
+        let timeUntilNextDayEmail = targetTimeEmails - now;
+        let timeUntilNextDayTerminate = targetTimeTerminate - now;
         console.log("Email Reminder Interval Start")
-        console.log("Target Time: " + targetTime)
-        console.log("Now: " + now)
-        console.log("Time Until Next Day: " + timeUntilNextDay)
+        console.log("Target Time Emails: " + targetTimeEmails)
+        console.log("Target Time Terminate: " + targetTimeTerminate)
 
-        if (timeUntilNextDay < 0) {
-            // Si ya paso la hora de mandar correos, esperar hasta la misma hora del dia siguiente
-            timeUntilNextDay += millisecondsInADay;
-            console.log("Today passed so new time until next day: " + timeUntilNextDay)
+        if (timeUntilNextDayEmail < 0) {
+            timeUntilNextDayEmail += millisecondsInADay;
         }
+        if (timeUntilNextDayTerminate < 0) {
+            timeUntilNextDayTerminate += millisecondsInADay;
+        }
+        console.log("Time Until Next Day Emails: " + timeUntilNextDayEmail)
+        console.log("Time Until Next Day Terminate: " + timeUntilNextDayTerminate)
 
         setTimeout(() => {
             sendAppointmentReminders();
             console.log("Email Reminder Interval Successfull")
             setInterval(sendAppointmentReminders, millisecondsInADay);
-        }, timeUntilNextDay);
+        }, timeUntilNextDayEmail);
+
+        setTimeout(() => {
+            checkAndUpdateExpiredAppointments();
+            console.log("Terminate Citas Interval Successfull")
+            setInterval(checkAndUpdateExpiredAppointments, millisecondsInADay);
+        }, timeUntilNextDayTerminate);
 
     };
 
