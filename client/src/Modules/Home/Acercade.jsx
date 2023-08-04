@@ -25,6 +25,8 @@ import {
 } from "firebase/storage";
 import swal from 'sweetalert';
 
+import AboutUsService from '../../Services/AboutUsService';
+
 const Acercade = () => {
 
   //CONSTANTES POR MIENTRAS
@@ -55,6 +57,17 @@ const Acercade = () => {
   const [teamDesc, setTeamDesc] = useState(null);
   const [mision, setMision] = useState(null);
   const [vision, setVision] = useState(null);
+
+  let ImgsData = [];
+
+  let [images, setImages] = React.useState({
+    tipo: 'AboutUs',
+    size: null,
+    visibility: null,
+    url: '',
+    created_at: '',
+    updated_at: ''
+  })
 
   const [misionOBJ] = React.useState({
     Tipo: 'Mision',
@@ -311,47 +324,88 @@ const Acercade = () => {
   const [imagePreviewDoctor, setImagePreviewDoctor] = useState(null);
 
   const storage = getStorage();
+  const [dctr, setDoctor] = useState(null);
+  const [desc, setDesc] = useState(null);
 
+  //DESCRIPTION
   const handleConfirmarImagen = async (e) => {
     e.preventDefault();
         try {
             console.log("test");
-            submitImagenDesc();
+            submitImagen(1);
         } catch (error) {
             // Handle error if any
             console.log('Error submitting medicamento:', error);
     }
-    //setImageUpload(null);
-    //setImagePreviewDesc(null);
+    setImageUpload(null);
   };
 
-  const submitImagenDesc = async () => {
-    try {
-      if (imageUpload != null) {
-          const imageUrll = await uploadFile();
-          console.log(imageUrll);
-          //medicamento.urlfoto = imageUrll;
-          //await MedicamentosService.postMedicamentos(medicamento);
-          alert('Imagen Agregada');
-          window.location.reload();
+  //DOCTOR
+  const handleConfirmarDoctorImg = async (e) => {
+    e.preventDefault();
+        try {
+            console.log("test");
+            submitImagen(2);
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+    }
+    setImageUpload(null);
+  };
+
+  const submitImagen = async (flag) => {
+    console.log(flag);
+    if (flag == 1) {
+      try {
+        if (imageUpload != null) {
+            deleteImg(images[desc].url);
+            console.log("Elimino foto en firebase");
+            const imageUrll = await uploadFile();
+            console.log(imageUrll);
+            images[desc].url = imageUrll;
+            console.log("DESC EDITADO");
+            await AboutUsService.editImagen(images[desc].id, images[desc].url);
+            alert('Imagen Agregada');
+            //window.location.reload();
+        } else {
+          alert('No se ha seleccionado una imagen nueva');
+        }
+      } catch (error) {
+        // Handle error if any
+        console.log('Error submitting Imagen:', error);
       }
-    } catch (error) {
-      // Handle error if any
-      console.log('Error submitting Imagen:', error);
+    } else if (flag == 2){
+      try {
+        if (imageUpload != null) {
+            deleteImg(images[dctr].url);
+            console.log("Elimino foto en firebase");
+            const imageUrll = await uploadFile();
+            console.log(imageUrll);
+            images[dctr].url = imageUrll;
+            console.log("DOCTOR EDITADO");
+            await AboutUsService.editImagen(images[dctr].id, images[dctr].url);
+            alert('Imagen Agregada');
+            //window.location.reload();
+        } else {
+          alert('No se ha seleccionado una imagen nueva');
+        }
+      } catch (error) {
+        // Handle error if any
+        console.log('Error submitting Imagen:', error);
+      }
+    } 
+    else {
+      console.log("Hay un error");
     }
   }  
-
-  const handleConfirmarDoctorImg = () => {
-    setImageUpload(null);
-    setImagePreviewDoctor(null);
-  };
 
   const deleteImg = (refUrl) => {
     const imageRef = ref(storage, refUrl)
     deleteObject(imageRef)
-      .catch((error) => {
-        console.log("Failed to delete image: ", error)
-      })
+        .catch((error) => {
+            console.log("Failed to delete image: ", error)
+        })
+    //window.location.reload();
   }
 
   async function uploadFile() {
@@ -380,6 +434,39 @@ const Acercade = () => {
   const [isEditingLabelTeam, setIsEditingLabelTeam] = useState(false);
 
   const inputRef = useRef(null);
+
+  const fetchImgs = async () => {
+    try {
+        const imgsArray = await AboutUsService.getPicsDoctoryDesc();
+        console.log(imgsArray);
+
+        ImgsData = imgsArray.map((images) => ({
+
+            url: images.url,
+        }));
+        images = imgsArray.map((img) => ({
+            ...img,
+            url: img.url,
+        }));
+        if (images[0].tipo == "AboutUsDesc") {
+          setImagePreviewDesc(images[0].url);
+          setDesc(0);
+          setImagePreviewDoctor(images[1].url);
+          setDoctor(1);
+        }
+        else {
+          setImagePreviewDoctor(images[0].url);
+          setDoctor(0);
+          setImagePreviewDesc(images[1].url);
+          setDesc(1);
+        }
+        console.log(ImgsData);
+        console.log(images);
+    } catch (error) {
+        // Handle error if   any
+        console.log("Error fetching pictures:", error);
+    }
+  };
 
   const fetchMision = async () => {
     try {
@@ -435,25 +522,6 @@ const Acercade = () => {
     }
   }
 
-  const fetchImgDesc = async () => {
-      try {
-        //const medicamentosData = await MedicamentosService.getAllMedicamentos();
-        //const medicamentosWithId = medicamentosData.map((medicamento) => ({
-        //    ...medicamento,
-        //    medId: medicamento.idmed,
-        //}));
-        setImagePreviewDesc();
-      } catch (error) {
-        // Handle error if any
-        console.log("Error fetching imagen:", error);
-      }
-    //setImagePreviewDesc(DESC_IMG);
-  }
-
-  const fetchImgDoctor = () => {
-    setImagePreviewDoctor(DOCTOR_IMG);
-  }
-
   useEffect(() => {
 
     const fetchAdmin = () => {
@@ -461,14 +529,12 @@ const Acercade = () => {
     }
 
     fetchAdmin();
-
+    fetchImgs();
     fetchMision();
     fetchVision();
     fetchDesc();
     fetchBio();
     fetchTeam();
-    fetchImgDesc();
-    fetchImgDoctor();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
