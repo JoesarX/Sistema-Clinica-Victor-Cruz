@@ -23,7 +23,8 @@ const citasRouter = (pool, transporter) => {
         try {
             const estado = req.params.estado;
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM citas WHERE estado = ?";
+            const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE estado = ?";
+
             const [rows, fields] = await connection.query(sqlSelect, [estado]);
             connection.release();
             console.log("Get all citas Successfull");
@@ -324,9 +325,11 @@ const citasRouter = (pool, transporter) => {
 
 
     const startAppointmentCheckingInterval = () => {
-        // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos para cancelar citas expiradas
-        checkAndUpdateExpiredAppointments();
-        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000);
+
+        const keepServerAwake = () => {
+            console.log("\nKeeping Server On\n");
+        };
+        setInterval(keepServerAwake, 10 * 60 * 1000);
 
         // Set up intervalo para mandar correos de recordatorio de citas
         const millisecondsInADay = 24 * 60 * 60 * 1000;
@@ -334,7 +337,7 @@ const citasRouter = (pool, transporter) => {
         const targetTimeEmails = new Date(now);
         targetTimeEmails.setHours(9, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
         const targetTimeTerminate = new Date(now);
-        targetTimeTerminate.setHours(23, 59, 0, 0); // Aqui se puede cambiar la hora a la que se terminan las citas
+        targetTimeTerminate.setHours(14, 27, 0, 0); // Aqui se puede cambiar la hora a la que se terminan las citas
 
         let timeUntilNextDayEmail = targetTimeEmails - now;
         let timeUntilNextDayTerminate = targetTimeTerminate - now;

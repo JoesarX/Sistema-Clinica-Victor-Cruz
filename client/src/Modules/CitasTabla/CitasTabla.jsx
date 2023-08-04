@@ -254,15 +254,25 @@ const Citas = () => {
         const currentDate = new Date();
         const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
 
+        console.log("currentDayOfWeek: ", currentDayOfWeek);
+
         // Calculate the number of days to add to the current date to reach the next Monday
-        const daysUntilNextMonday = currentDayOfWeek === 0 ? 1 : 8 - currentDayOfWeek;
+        const daysUntilNextMonday = 0
+
+        if (currentDayOfWeek === 0) {
+            daysUntilNextMonday = 1;
+        }else if (currentDayOfWeek === 6) {
+            daysUntilNextMonday = 2;
+        }
 
         // Create a new date by adding the days to the current date
         const nextMonday = new Date(currentDate);
         nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
 
         const formattedDate = nextMonday ? dayjs(nextMonday).format('YYYY-MM-DD') : '';
+        console.log("formattedDate: ", formattedDate);
         const times = await CitasService.getAvailableTimes(formattedDate);
+        console.log("times: ", times);
         setAvailableTimes(times);
     };
 
