@@ -45,7 +45,7 @@ function App() {
           <Route path="/userpage" element={<LandingPage />} />
           <Route path="/citas_tabla" element={<CitasTabla/>}/>
           <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc/>}/>
-          <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
+          <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
         </Routes>
       </BrowserRouter>
     </div>
