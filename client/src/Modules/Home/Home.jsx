@@ -174,13 +174,13 @@ const Home = () => {
 
 
 
-       /* useEffect(() => {
+       useEffect(() => {
             const fetchTitulo1 = async () => {
                 try {
                     const titulo1 = ['título_servicio1'];
                     var titulo1Data;
                     titulo1Data = await text_Services.getOneText(titulo1);
-                    console.log("Cargar titulo: " + titulo1Data[0].texto_campo);
+                    console.log("Cargar titulo1 : " + titulo1Data[0].texto_campo);
                     setEditedTitle(titulo1Data[0].texto_campo);
                     titulo1OBJ.texto_campo = titulo1Data[0].texto_campo;
                 } catch (error) {
@@ -194,7 +194,7 @@ const Home = () => {
                     const titulo2 = ['título_servicio2'];
                     var titulo2Data;
                     titulo2Data = await text_Services.getOneText(titulo2);
-                    console.log("Cargar titulo: " + titulo2Data[0].texto_campo);
+                    console.log("Cargar titulo 2: " + titulo2Data[0].texto_campo);
                     setEditedTitle(titulo2Data[0].texto_campo);
                     titulo2OBJ.texto_campo = titulo2Data[0].texto_campo;
                 } catch (error) {
@@ -208,7 +208,7 @@ const Home = () => {
                     const titulo3 = ['título_servicio3'];
                     var titulo3Data;
                     titulo3Data = await text_Services.getOneText(titulo3);
-                    console.log("Cargar titulo: " + titulo3Data[0].texto_campo);
+                    console.log("Cargar titulo 3: " + titulo3Data[0].texto_campo);
                     setEditedTitle(titulo3Data[0].texto_campo);
                     titulo3OBJ.texto_campo = titulo3Data[0].texto_campo;
                 } catch (error) {
@@ -223,27 +223,27 @@ const Home = () => {
 
 
         }, [editable]);
-*/
 
+/*
 useEffect(() => {
     const fetchTitulos = async () => {
       try {
-        const titulo1Data = await text_Services.getOneText(['título_servicio1']);
-        setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
+     //   const titulo1Data = await text_Services.getOneText(['título_servicio1']);
+     //  setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
 
-        const titulo2Data = await text_Services.getOneText(['título_servicio2']);
-        setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
+       // const titulo2Data = await text_Services.getOneText(['título_servicio2']);
+       // setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
 
-        const titulo3Data = await text_Services.getOneText(['título_servicio3']);
-        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
+        //const titulo3Data = await text_Services.getOneText(['título_servicio3']);
+        //setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
       } catch (error) {
         console.log("Error fetching titles:", error);
       }
     };
-
+    console.log("Error de effect");
     fetchTitulos();
   }, [editable]);
-
+*/
 
         return (
             <div className="service-container">
