@@ -37,7 +37,7 @@ const Acercade = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const handleEditPage = () => {
-    if (isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
+    if(isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
       swal({
         title: "Cambios sin guardar",
         text: "¡Tiene cambios sin guardar!",
@@ -438,9 +438,22 @@ const Acercade = () => {
   }, []);
 
   useEffect(() => {
-    if ((isEditingLabelMision || isEditingLabelVision || isEditingLabelDesc || isEditingLabelBio || isEditingLabelTeam) && inputRef.current) {
+    if (isEditingLabelMision && inputRef.current) {
       inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
     }
+    if (isEditingLabelVision && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelDesc && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelBio && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelTeam && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+
   }, [isEditingLabelMision, isEditingLabelVision, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
 
 

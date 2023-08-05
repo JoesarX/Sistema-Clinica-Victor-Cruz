@@ -9,6 +9,10 @@ import text_Services from '../../Services/texto_cmdService';
 import Topbar from './Topbar';
 import Footer from './Footer';
 
+import doctor_slide from '../Imagenes/doctor_slide.jpeg';
+import doctor_slide1 from '../Imagenes/doctor_slide1.jpeg';
+import saludOcupacional from '../Imagenes/saludOcupacional.webp';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
@@ -16,9 +20,9 @@ import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 
-import CarruselService from '../../Services/CarruselService';
 
 import axios from 'axios'; // Import axios library
+
 
 
 const Home = () => {
@@ -301,21 +305,6 @@ useEffect(() => {
 
     const { userType, isLoggedIn } = useContext(AuthContext);
 
-    let [CarruselData, setCarruselData] = useState([]);
-
-    useEffect(() => {
-        const fetchAllCarruselPics = async () => {
-            try {
-                const CarruselArray = await CarruselService.getPicsCarrusel();
-                console.log("CARRUSEL: ", CarruselArray);
-                setCarruselData(CarruselArray);
-            } catch (error) {
-                console.log("Error fetching carrusel pictures:", error);
-            }
-        };
-        fetchAllCarruselPics();
-    }, []);
-
     useEffect(() => {
         // Make the initial request on component mount
         wakeUpServer();
@@ -325,6 +314,7 @@ useEffect(() => {
             wakeUpServer();
         }, 300000); // Every 5 minutes (adjust as needed)
 
+        // Clean up the interval on component unmount
         return () => clearInterval(interval);
     }, []);
 
@@ -346,6 +336,10 @@ useEffect(() => {
         navigate('/servicios');
     };
 
+    const handleAboutUsClick = () => {
+        navigate('acerca-de');
+    };
+
     const properties = {
         duration: 3000,
         transitionDuration: 500,
@@ -354,6 +348,8 @@ useEffect(() => {
         arrows: true
     };
 
+
+    /* msion Edit */
 
     const originalText = `Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
     \nEstamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.`;
@@ -419,30 +415,37 @@ useEffect(() => {
         setMapURL(event.target.value);
     };
 
-    const Carrusel = () => {
-        return (
-            <div className="imagenes">
-                <Slide {...properties}>
-                    {CarruselData.map((carrusel) => (
-                        <div className='each-slide' key={carrusel.idfoto}>
-                            <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
-                        </div>
-                    ))}
-                </Slide>
-            </div>
-        )
-    };
+
+
+
+
+    /* Metodos de Fetch de la D*/
+
+
+
+
+
+
 
     return (
         <div className="scrollable-page">
             <Topbar />
-
-            <Carrusel/>
-
+            <div className="imagenes">
+                <Slide {...properties}>
+                    <div className="each-slide">
+                        <img src={doctor_slide} alt="imagen 1" />
+                    </div>
+                    <div className="each-slide">
+                        <img src={doctor_slide1} alt="imagen 2" />
+                    </div>
+                    <div className="each-slide">
+                        <img src={saludOcupacional} alt="imagen 3" />
+                    </div>
+                </Slide>
+            </div>
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
-
             <div className="services-container">
         <ServiceComponent
           title={titulo1OBJ.texto_campo}
@@ -562,7 +565,7 @@ useEffect(() => {
                 <button className="see-more-button schedule-appointment" onClick={handleCitaClick}>Agenda ya!</button>
             </div>
             <Footer />
-        </div >
+        </div>
     );
 };
 

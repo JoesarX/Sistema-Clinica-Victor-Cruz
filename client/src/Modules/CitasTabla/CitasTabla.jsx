@@ -8,7 +8,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 
 //GRID
-import { Box, Button, Radio, RadioGroup, FormControlLabel } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
@@ -64,7 +64,7 @@ const Citas = () => {
     // }
 
     const handleDeleteCitasClick = (row, id) => {
-        if (row.estado === "Terminada" || row.estado === "Cancelada") {
+        if (row.estado == "Terminada" || row.estado == "Cancelada") {
             swal({
                 title: "Cita Terminada/Cancelada",
                 text: "No se puede eliminar una cita terminada o cancelada.",
@@ -132,17 +132,11 @@ const Citas = () => {
     };
 
     //
-    const [selectedRadio, setSelectedRadio] = React.useState('Hoy');
+
 
     const CustomToolbar = () => {
         const theme = useTheme();
         const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-        const handleChange = (event) => {
-            setSelectedRadio(event.target.value);
-            // Call the function to update your DataGrid here
-            // For example: updateDataGrid(event.target.value);
-        };
 
         return (
             <GridToolbarContainer
@@ -156,7 +150,7 @@ const Citas = () => {
                     gap: '10px',
                 }}
             >
-                <Box display="flex" alignItems="center"> {/* Use Box to create a flex container */}
+                <div>
                     {isMobile ? (
                         <>
                             <GridToolbarColumnsButton />
@@ -171,21 +165,9 @@ const Citas = () => {
                             <GridToolbarExport />
                         </>
                     )}
-                </Box>
+                </div>
 
-                <Box display="flex" alignItems="center"> {/* Use Box to create a flex container */}
-                    <RadioGroup
-                        row
-                        aria-labelledby="demo-controlled-radio-buttons-group"
-                        name="controlled-radio-buttons-group"
-                        value={selectedRadio}
-                        sx={{ transform: "translateY(-2px)" }}
-                        onChange={handleChange} // Use the handleChange function to update the selectedRadio state
-                    >
-                        <FormControlLabel value="Todas" control={<Radio />} label="Todas las Citas" />
-                        <FormControlLabel value="Hoy" control={<Radio />} label="Citas de Hoy" />
-                        <FormControlLabel value="Futuras" control={<Radio />} label="Citas Futuras" />
-                    </RadioGroup>
+                <div>
                     <Button
                         onClick={handleOnClickAgendarCita}
                         startIcon={<CalendarMonth />}
@@ -214,7 +196,8 @@ const Citas = () => {
                     >
                         Agregar Cita
                     </Button>
-                </Box>
+                </div>
+
             </GridToolbarContainer>
         );
     };
@@ -250,32 +233,13 @@ const Citas = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
         cleanCita();
-
-        const currentDate = new Date();
-        const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
-
-        console.log("currentDayOfWeek: ", currentDayOfWeek);
-
-        // Calculate the number of days to add to the current date to reach the next Monday
-        const daysUntilNextMonday = 0
-
-        if (currentDayOfWeek === 0) {
-            daysUntilNextMonday = 1;
-        }else if (currentDayOfWeek === 6) {
-            daysUntilNextMonday = 2;
-        }
-
-        // Create a new date by adding the days to the current date
-        const nextMonday = new Date(currentDate);
-        nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
-
-        const formattedDate = nextMonday ? dayjs(nextMonday).format('YYYY-MM-DD') : '';
-        console.log("formattedDate: ", formattedDate);
+        // // console.log("Expedientes", Expedientes)
+        // // console.log("Usuarios", Usuarios)
+        const date = new Date();
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : '';
         const times = await CitasService.getAvailableTimes(formattedDate);
-        console.log("times: ", times);
         setAvailableTimes(times);
     };
-
 
     const [id, setID] = useState(null);
     const [citaD, setCitaD] = useState([]);
@@ -379,11 +343,6 @@ const Citas = () => {
     };
 
     let isAvailabilityCheckInProgress = false;
-
-    const isWeekday = (date) => {
-        const day = date.day();
-        return day == 0 || day == 6; // 0 is Sunday, 6 is Saturday
-    };
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
@@ -571,13 +530,12 @@ const Citas = () => {
 
         const fetchAllCitas = async () => {
             try {
-                console.log(`Selected radio: ${selectedRadio}`)
-                const citasData = await CitasService.getAllCitasFiltered(selectedRadio);
+                const citasData = await CitasService.getAllCitas();
                 const citasWithId = citasData.map((cita) => ({
                     ...cita,
                     medId: cita.idmed,
                 }));
-                
+
                 const expedientesData = await ExpedientesService.getAllExpedientes();
                 const expedientesFormatted = expedientesData.map((expediente) => ({
                     idpaciente: expediente.idpaciente,
@@ -637,7 +595,7 @@ const Citas = () => {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, [isLoggedIn, navigate, isSubmitting, selectedRadio]);
+    }, [isLoggedIn, navigate, isSubmitting]);
 
     return (
 
@@ -756,7 +714,6 @@ const Citas = () => {
                                         id="fecha"
                                         onChange={handleDateChange}
                                         renderInput={(params) => <TextField {...params} />}
-                                        shouldDisableDate={isWeekday} // Disable weekends
                                         name='fecha'
                                         value={fecha}
                                     />
@@ -845,7 +802,7 @@ const Citas = () => {
                                         onChange={(event, newValue) => {
 
                                             cita.idpaciente = newValue?.idpaciente;
-
+                                          
                                         }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="ID Paciente" required />
@@ -888,7 +845,6 @@ const Citas = () => {
                                             id="fecha"
                                             onChange={handleEditDateChange}
                                             renderInput={(params) => <TextField {...params} />}
-                                            shouldDisableDate={isWeekday} // Disable weekends
                                             name='fecha'
                                             value={dayjs(fecha)}
                                         />
