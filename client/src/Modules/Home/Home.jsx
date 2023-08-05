@@ -30,7 +30,7 @@ const Home = () => {
 
     /* Para la DB*/
 
-
+    const [isFetching, setIsFetching] = useState(true);
 
     const [titulo1OBJ, setTitulo1OBJ] = React.useState({
         Tipo: 'título_servicio1',
@@ -66,6 +66,11 @@ const Home = () => {
 
 
 
+
+
+
+
+
     const [misionOBJ] = React.useState({
         Tipo: 'Mision',
         texto_campo: ''
@@ -76,11 +81,6 @@ const Home = () => {
         Tipo: 'google_maps',
         texto_campo: ''
     })
-
-
-
-
-
 
 
 
@@ -110,7 +110,7 @@ const Home = () => {
 
 
 
-    const ServiceComponent = ({ title, description, icon, isEditMode }) => {
+    const ServiceComponent = ({ title, description, icon, isEditMode, TipoTitulo, TipoDesc }) => {
         const [editable, setEditable] = useState(false);
         const [editedTitle, setEditedTitle] = useState(title);
         const [editedDescription, setEditedDescription] = useState(description);
@@ -121,10 +121,12 @@ const Home = () => {
 
         };
 
-        const handleSave = () => {
+        const handleSave = async () => {
             // Remove extra spaces at the end of title and description
+            const TituloOriginal = TipoTitulo.texto_campo;
             const trimmedTitle = editedTitle.trim();
             const trimmedDescription = editedDescription.trim();
+
 
             // Check if the description ends with a period
             if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
@@ -152,10 +154,21 @@ const Home = () => {
                 alert("La descripción no puede exceder los 190 caracteres.");
                 return;
             }
+            console.log("Este es el titulo:" + TipoTitulo.texto_campo);
+
+            TipoTitulo.texto_campo = trimmedTitle;
+
+            console.log("Este es el titulo original:" + TituloOriginal);
+            await text_Services.editText(TipoTitulo);
+            TipoDesc.texto_campo = trimmedDescription;
+            await text_Services.editText(TipoDesc);
             cont = 0;
+
+
             setEditable(false);
             setEditedTitle(trimmedTitle);
             setEditedDescription(trimmedDescription);
+            window.location.reload(true);
         };
 
         const handleCancel = () => {
@@ -173,6 +186,7 @@ const Home = () => {
             } else {
                 setEditedTitle(value.charAt(0).toUpperCase() + value.slice(1));
             }
+
         };
 
         const handleDescriptionChange = (e) => {
@@ -188,60 +202,10 @@ const Home = () => {
 
 
 
-        /* useEffect(() => {
-      /*    if(cont==0){
-              const fetchTitulo1 = async () => {
-                  try {
-                      const titulo1 = ['título_servicio1'];
-                      var titulo1Data;
-                      titulo1Data = await text_Services.getOneText(titulo1);
-                      console.log("Cargar titulo1 : " + titulo1Data[0].texto_campo);
-                   //  setTitulo1OBJ(titulo1Data[0].texto_campo);
-                   setTitulo1OBJ = titulo1Data[0];
-                  } catch (error) {
-                      console.log("Error fetching titulo 1:", error);
-                  }
-              };
-  
-  
-              const fetchTitulo2 = async () => {
-                  try {
-                      const titulo2 = ['título_servicio2'];
-                      var titulo2Data;
-                      titulo2Data = await text_Services.getOneText(titulo2);
-                      console.log("Cargar titulo 2: " + titulo2Data[0].texto_campo);
-                     // setTitulo2OBJ(titulo2Data[0].texto_campo);
-                     setTitulo2OBJ.
-                  } catch (error) {
-                      console.log("Error fetching titulo 2:", error);
-                  }
-              };
-  
-  
-              const fetchTitulo3 = async () => {
-                  try {
-                      const titulo3 = ['título_servicio3'];
-                      var titulo3Data;
-                      titulo3Data = await text_Services.getOneText(titulo3);
-                      console.log("Cargar titulo 3: " + titulo3Data[0]);
-                    //  setTitulo3OBJ(titulo3Data[0].texto_campo);
-                    setTitulo3OBJ = titulo3Data[0];
-                  } catch (error) {
-                      console.log("Error fetching titulo 3:", error);
-                  }
-              };
-  
-  
-              fetchTitulo1();
-              fetchTitulo2();
-              fetchTitulo3();
-              cont++;
-          }
-          }, [editable]);
-  */
 
         useEffect(() => {
-            if (cont == 0) {
+            console.log("Soy el cont; " + cont);
+            if (isFetching) {
                 const fetchTitulos = async () => {
                     try {
                         const titulo1Data = await text_Services.getOneText(['título_servicio1']);
@@ -252,6 +216,17 @@ const Home = () => {
 
                         const titulo3Data = await text_Services.getOneText(['título_servicio3']);
                         setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
+
+                        const servicio1Data = await text_Services.getOneText(['texto_servicio1']);
+                        setdescripcion1OBJ({ ...descripcion1OBJ, texto_campo: servicio1Data[0].texto_campo });
+
+                        const servicio2Data = await text_Services.getOneText(['texto_servicio2']);
+                        setdescripcion2OBJ({ ...descripcion2OBJ, texto_campo: servicio2Data[0].texto_campo });
+
+                        const servicio3Data = await text_Services.getOneText(['texto_servicio3']);
+                        setdescripcion3OBJ({ ...descripcion3OBJ, texto_campo: servicio3Data[0].texto_campo });
+                        setIsFetching(false);
+
                     } catch (error) {
                         console.log("Error fetching titles:", error);
                     }
@@ -259,8 +234,9 @@ const Home = () => {
                 console.log("Error de effect");
                 fetchTitulos();
                 cont++;
+                setIsFetching(false);
             }
-        }, [editable]);
+        }, [isFetching]);
 
 
         return (
@@ -318,6 +294,7 @@ const Home = () => {
     };
 
     // ==========================================================================================
+
 
     const navigate = useNavigate();
 
@@ -434,49 +411,49 @@ const Home = () => {
     const handleEditClick1 = () => {
         setEditedMapURL(mapURL);
         setEditable1(true);
-      };
-    
-      const isValidMapURL = (url) => {
+    };
+
+    const isValidMapURL = (url) => {
         // Expresión regular para verificar si el valor es un enlace válido de Google Maps
         const mapURLRegex = /^(https?:\/\/)?www\.google\.com\/maps\/embed\?.*$/;
         return mapURLRegex.test(url);
-      };
-    
-      const handleSaveClick1 = async () => {
+    };
+
+    const handleSaveClick1 = async () => {
         setEditable1(false);
-      
+
         // Extraer el enlace del iframe y validar
         const extractedSrc = extractSrcFromIframe(editedMapURL);
         if (!extractedSrc || !isValidMapURL(extractedSrc)) {
-          alert("Por favor, ingrese un enlace válido de Google Maps.");
-          return;
+            alert("Por favor, ingrese un enlace válido de Google Maps.");
+            return;
         }
-      
+
         // Guardar el enlace en el estado
         setMapURL(extractedSrc);
         mapsOBJ.texto_campo = extractedSrc;
-      
+
         await text_Services.editText(mapsOBJ);
         window.location.reload(true);
-      };
-    
-      const handleCancelClick1 = () => {
+    };
+
+    const handleCancelClick1 = () => {
         setEditable1(false);
         setEditedMapURL(mapURL); // Restaurar el valor original si se cancela la edición
-      };
+    };
 
 
 
 
 
-      const extractSrcFromIframe = (iframeCode) => {
+    const extractSrcFromIframe = (iframeCode) => {
         const srcRegex = /src="([^"]*)"/;
         const matches = srcRegex.exec(iframeCode);
         if (matches && matches.length >= 2) {
-          return matches[1];
+            return matches[1];
         }
         return null;
-      };
+    };
 
 
 
@@ -544,21 +521,28 @@ const Home = () => {
             <div className="services-container">
                 <ServiceComponent
                     title={titulo1OBJ.texto_campo}
-                    description={servicesData[0].description}
+                    description={descripcion1OBJ.texto_campo}
                     icon={servicesData[0].icon}
                     isEditMode={editAll}
+                    TipoTitulo={titulo1OBJ}
+                    TipoDesc={descripcion1OBJ}
+
                 />
                 <ServiceComponent
                     title={titulo2OBJ.texto_campo}
-                    description={servicesData[1].description}
+                    description={descripcion2OBJ.texto_campo}
                     icon={servicesData[1].icon}
                     isEditMode={editAll}
+                    TipoTitulo={titulo2OBJ}
+                    TipoDesc={descripcion2OBJ}
                 />
                 <ServiceComponent
                     title={titulo3OBJ.texto_campo}
-                    description={servicesData[2].description}
+                    description={descripcion3OBJ.texto_campo}
                     icon={servicesData[2].icon}
                     isEditMode={editAll}
+                    TipoTitulo={titulo3OBJ}
+                    TipoDesc={descripcion3OBJ}
                 />
             </div>
             <div class="button-container">
