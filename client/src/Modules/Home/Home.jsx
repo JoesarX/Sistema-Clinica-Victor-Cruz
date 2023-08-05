@@ -22,7 +22,7 @@ import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icon
 
 
 import axios from 'axios'; // Import axios library
-let cont =0;
+let cont = 0;
 
 
 const Home = () => {
@@ -66,6 +66,18 @@ const Home = () => {
 
 
 
+    const [misionOBJ] = React.useState({
+        Tipo: 'Mision',
+        texto_campo: ''
+    })
+
+
+    const [mapsOBJ] = React.useState({
+        Tipo: 'google_maps',
+        texto_campo: ''
+    })
+
+
 
 
 
@@ -105,7 +117,7 @@ const Home = () => {
 
         const handleEditToggle = () => {
             setEditable(!editable);
-            
+
 
         };
 
@@ -140,7 +152,7 @@ const Home = () => {
                 alert("La descripción no puede exceder los 190 caracteres.");
                 return;
             }
-            cont=0; 
+            cont = 0;
             setEditable(false);
             setEditedTitle(trimmedTitle);
             setEditedDescription(trimmedDescription);
@@ -176,79 +188,79 @@ const Home = () => {
 
 
 
-      /* useEffect(() => {
-    /*    if(cont==0){
-            const fetchTitulo1 = async () => {
-                try {
-                    const titulo1 = ['título_servicio1'];
-                    var titulo1Data;
-                    titulo1Data = await text_Services.getOneText(titulo1);
-                    console.log("Cargar titulo1 : " + titulo1Data[0].texto_campo);
-                 //  setTitulo1OBJ(titulo1Data[0].texto_campo);
-                 setTitulo1OBJ = titulo1Data[0];
-                } catch (error) {
-                    console.log("Error fetching titulo 1:", error);
-                }
-            };
+        /* useEffect(() => {
+      /*    if(cont==0){
+              const fetchTitulo1 = async () => {
+                  try {
+                      const titulo1 = ['título_servicio1'];
+                      var titulo1Data;
+                      titulo1Data = await text_Services.getOneText(titulo1);
+                      console.log("Cargar titulo1 : " + titulo1Data[0].texto_campo);
+                   //  setTitulo1OBJ(titulo1Data[0].texto_campo);
+                   setTitulo1OBJ = titulo1Data[0];
+                  } catch (error) {
+                      console.log("Error fetching titulo 1:", error);
+                  }
+              };
+  
+  
+              const fetchTitulo2 = async () => {
+                  try {
+                      const titulo2 = ['título_servicio2'];
+                      var titulo2Data;
+                      titulo2Data = await text_Services.getOneText(titulo2);
+                      console.log("Cargar titulo 2: " + titulo2Data[0].texto_campo);
+                     // setTitulo2OBJ(titulo2Data[0].texto_campo);
+                     setTitulo2OBJ.
+                  } catch (error) {
+                      console.log("Error fetching titulo 2:", error);
+                  }
+              };
+  
+  
+              const fetchTitulo3 = async () => {
+                  try {
+                      const titulo3 = ['título_servicio3'];
+                      var titulo3Data;
+                      titulo3Data = await text_Services.getOneText(titulo3);
+                      console.log("Cargar titulo 3: " + titulo3Data[0]);
+                    //  setTitulo3OBJ(titulo3Data[0].texto_campo);
+                    setTitulo3OBJ = titulo3Data[0];
+                  } catch (error) {
+                      console.log("Error fetching titulo 3:", error);
+                  }
+              };
+  
+  
+              fetchTitulo1();
+              fetchTitulo2();
+              fetchTitulo3();
+              cont++;
+          }
+          }, [editable]);
+  */
 
+        useEffect(() => {
+            if (cont == 0) {
+                const fetchTitulos = async () => {
+                    try {
+                        const titulo1Data = await text_Services.getOneText(['título_servicio1']);
+                        setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
 
-            const fetchTitulo2 = async () => {
-                try {
-                    const titulo2 = ['título_servicio2'];
-                    var titulo2Data;
-                    titulo2Data = await text_Services.getOneText(titulo2);
-                    console.log("Cargar titulo 2: " + titulo2Data[0].texto_campo);
-                   // setTitulo2OBJ(titulo2Data[0].texto_campo);
-                   setTitulo2OBJ.
-                } catch (error) {
-                    console.log("Error fetching titulo 2:", error);
-                }
-            };
+                        const titulo2Data = await text_Services.getOneText(['título_servicio2']);
+                        setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
 
-
-            const fetchTitulo3 = async () => {
-                try {
-                    const titulo3 = ['título_servicio3'];
-                    var titulo3Data;
-                    titulo3Data = await text_Services.getOneText(titulo3);
-                    console.log("Cargar titulo 3: " + titulo3Data[0]);
-                  //  setTitulo3OBJ(titulo3Data[0].texto_campo);
-                  setTitulo3OBJ = titulo3Data[0];
-                } catch (error) {
-                    console.log("Error fetching titulo 3:", error);
-                }
-            };
-
-
-            fetchTitulo1();
-            fetchTitulo2();
-            fetchTitulo3();
-            cont++;
-        }
+                        const titulo3Data = await text_Services.getOneText(['título_servicio3']);
+                        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
+                    } catch (error) {
+                        console.log("Error fetching titles:", error);
+                    }
+                };
+                console.log("Error de effect");
+                fetchTitulos();
+                cont++;
+            }
         }, [editable]);
-*/
-
-useEffect(() => {
-    if(cont==0){
-    const fetchTitulos = async () => {
-      try {
-       const titulo1Data = await text_Services.getOneText(['título_servicio1']);
-      setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
-
-       const titulo2Data = await text_Services.getOneText(['título_servicio2']);
-       setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
-
-        const titulo3Data = await text_Services.getOneText(['título_servicio3']);
-        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
-      } catch (error) {
-        console.log("Error fetching titles:", error);
-      }
-    };
-    console.log("Error de effect");
-    fetchTitulos();
-    cont++;
-}
-  }, [editable]);
 
 
         return (
@@ -355,38 +367,43 @@ useEffect(() => {
     };
 
 
-    /* msion Edit */
+    /* mision Edit */
 
     const originalText = `Nuestra misión en nuestra clínica médica y laboratorio de análisis clínicos es proporcionar atención médica de alta calidad a nuestros pacientes, con énfasis en la prevención, el diagnóstico y el tratamiento de enfermedades.
     \nEstamos dedicados a proporcionar atención médica individualizada, segura y eficiente mediante la utilización de tecnologías.`;
 
     const [editable, setEditable] = useState(false);
     const [missionText, setMissionText] = useState(originalText);
+    const [editedMission, setEditedMission] = useState('');
 
     const MAX_LINES = 10;
 
-    const handleEditClick = () => {
-        setEditable(true);
+    const handleChange = (event) => {
+        setEditedMission(event.target.value);
+        misionOBJ.texto_campo = event.target.value; // Actualizamos el valor en misionOBJ mientras se edita
     };
 
-    const handleSaveClick = () => {
-        if (missionText.split('\n').length > MAX_LINES) {
+    const handleEditClick = () => {
+        setEditable(true);
+        setEditedMission(missionText);
+    };
+
+    const handleSaveClick = async () => {
+        if (editedMission.split('\n').length > MAX_LINES) {
             alert(`¡Error! El texto no puede tener más de ${MAX_LINES} líneas.`);
             return;
         }
 
         setEditable(false);
+        setMissionText(editedMission);
+        await text_Services.editText(misionOBJ);
+        window.location.reload(true);
     };
 
     const handleCancelClick = () => {
         setEditable(false);
-        setMissionText(originalText);
     };
 
-    const handleChange = (event) => {
-        // Recortar el texto si excede el máximo número de líneas permitidas
-        setMissionText(event.target.value);
-    };
 
     const formatOriginalText = (text) => {
         return text.split('\n').map((paragraph, index) => (
@@ -399,34 +416,106 @@ useEffect(() => {
 
 
 
+
+
+
+
     /* Google Maps*/
     const [editable1, setEditable1] = useState(false);
     const mapEmbedURL = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3870.2772379811036!2d-87.18158692600126!3d14.060799390066796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8f6fbd687c0d3b49%3A0xb5416f51d417978c!2sCl%C3%ADnica%20Dr.%20V%C3%ADctor%20Cruz%20Andino!5e0!3m2!1ses!2shn!4v1684216285312!5m2!1ses!2shn";
     const [mapURL, setMapURL] = useState(mapEmbedURL);
-
-    const handleEditClick1 = () => {
-        setEditable1(true);
-    };
-
-    const handleSaveClick1 = () => {
-        setEditable1(false);
-    };
-
-    const handleCancelClick1 = () => {
-        setEditable1(false);
-        setMapURL(mapEmbedURL);
-    };
+    const [editedMapURL, setEditedMapURL] = useState('');
 
     const handleChange1 = (event) => {
-        setMapURL(event.target.value);
+        setEditedMapURL(event.target.value);
+        mapsOBJ.texto_campo = event.target.value;
     };
 
+    const handleEditClick1 = () => {
+        setEditedMapURL(mapURL);
+        setEditable1(true);
+      };
+    
+      const isValidMapURL = (url) => {
+        // Expresión regular para verificar si el valor es un enlace válido de Google Maps
+        const mapURLRegex = /^(https?:\/\/)?www\.google\.com\/maps\/embed\?.*$/;
+        return mapURLRegex.test(url);
+      };
+    
+      const handleSaveClick1 = async () => {
+        setEditable1(false);
+      
+        // Extraer el enlace del iframe y validar
+        const extractedSrc = extractSrcFromIframe(editedMapURL);
+        if (!extractedSrc || !isValidMapURL(extractedSrc)) {
+          alert("Por favor, ingrese un enlace válido de Google Maps.");
+          return;
+        }
+      
+        // Guardar el enlace en el estado
+        setMapURL(extractedSrc);
+        mapsOBJ.texto_campo = extractedSrc;
+      
+        await text_Services.editText(mapsOBJ);
+        window.location.reload(true);
+      };
+    
+      const handleCancelClick1 = () => {
+        setEditable1(false);
+        setEditedMapURL(mapURL); // Restaurar el valor original si se cancela la edición
+      };
 
 
 
 
-    /* Metodos de Fetch de la D*/
 
+      const extractSrcFromIframe = (iframeCode) => {
+        const srcRegex = /src="([^"]*)"/;
+        const matches = srcRegex.exec(iframeCode);
+        if (matches && matches.length >= 2) {
+          return matches[1];
+        }
+        return null;
+      };
+
+
+
+
+    /* Metodos de Fetch de la DB*/
+
+    useEffect(() => {
+
+        const fetchMision = async () => {
+            try {
+                const objectMision = ['Mision'];
+                var misionData = await text_Services.getOneText(objectMision);
+                misionOBJ.texto_campo = misionData[0].texto_campo;
+                setMissionText(misionData[0].texto_campo);
+            } catch (error) {
+                console.log("Error fetching Mision:", error);
+            }
+        };
+
+
+        const fetchMaps = async () => {
+            try {
+                const objectMaps = ['google_maps'];
+                var mapsData = await text_Services.getOneText(objectMaps);
+                mapsOBJ.texto_campo = mapsData[0].texto_campo;
+                setMapURL(mapsData[0].texto_campo);
+            } catch (error) {
+                console.log("Error fetching Google Maps:", error);
+            }
+        };
+
+
+
+        fetchMision();
+        fetchMaps();
+
+
+
+    }, [editable, editable1]);
 
 
 
@@ -453,25 +542,25 @@ useEffect(() => {
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
             <div className="services-container">
-        <ServiceComponent
-          title={titulo1OBJ.texto_campo}
-          description={servicesData[0].description}
-          icon={servicesData[0].icon}
-          isEditMode={editAll}
-        />
-        <ServiceComponent
-          title={titulo2OBJ.texto_campo}
-          description={servicesData[1].description}
-          icon={servicesData[1].icon}
-          isEditMode={editAll}
-        />
-        <ServiceComponent
-          title={titulo3OBJ.texto_campo}
-          description={servicesData[2].description}
-          icon={servicesData[2].icon}
-          isEditMode={editAll}
-        />
-      </div>
+                <ServiceComponent
+                    title={titulo1OBJ.texto_campo}
+                    description={servicesData[0].description}
+                    icon={servicesData[0].icon}
+                    isEditMode={editAll}
+                />
+                <ServiceComponent
+                    title={titulo2OBJ.texto_campo}
+                    description={servicesData[1].description}
+                    icon={servicesData[1].icon}
+                    isEditMode={editAll}
+                />
+                <ServiceComponent
+                    title={titulo3OBJ.texto_campo}
+                    description={servicesData[2].description}
+                    icon={servicesData[2].icon}
+                    isEditMode={editAll}
+                />
+            </div>
             <div class="button-container">
                 <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
             </div>
@@ -489,7 +578,7 @@ useEffect(() => {
                     {editable ? (
                         <textarea
                             className='about-us-text'
-                            value={missionText}
+                            value={editedMission}
                             onChange={handleChange}
                             rows="10"
                             cols={50}
@@ -522,7 +611,7 @@ useEffect(() => {
                         <input
                             type="text"
                             className='google-map-input'
-                            value={mapURL}
+                            value={editedMapURL} // Usar editedMapURL en lugar de mapURL
                             onChange={handleChange1}
                         />
                     ) : (
