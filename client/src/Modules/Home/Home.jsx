@@ -22,7 +22,7 @@ import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icon
 
 
 import axios from 'axios'; // Import axios library
-
+let cont =0;
 
 
 const Home = () => {
@@ -105,6 +105,8 @@ const Home = () => {
 
         const handleEditToggle = () => {
             setEditable(!editable);
+            
+
         };
 
         const handleSave = () => {
@@ -138,7 +140,7 @@ const Home = () => {
                 alert("La descripción no puede exceder los 190 caracteres.");
                 return;
             }
-
+            cont=0; 
             setEditable(false);
             setEditedTitle(trimmedTitle);
             setEditedDescription(trimmedDescription);
@@ -174,15 +176,16 @@ const Home = () => {
 
 
 
-       useEffect(() => {
+      /* useEffect(() => {
+    /*    if(cont==0){
             const fetchTitulo1 = async () => {
                 try {
                     const titulo1 = ['título_servicio1'];
                     var titulo1Data;
                     titulo1Data = await text_Services.getOneText(titulo1);
                     console.log("Cargar titulo1 : " + titulo1Data[0].texto_campo);
-                    setEditedTitle(titulo1Data[0].texto_campo);
-                    titulo1OBJ.texto_campo = titulo1Data[0].texto_campo;
+                 //  setTitulo1OBJ(titulo1Data[0].texto_campo);
+                 setTitulo1OBJ = titulo1Data[0];
                 } catch (error) {
                     console.log("Error fetching titulo 1:", error);
                 }
@@ -195,8 +198,8 @@ const Home = () => {
                     var titulo2Data;
                     titulo2Data = await text_Services.getOneText(titulo2);
                     console.log("Cargar titulo 2: " + titulo2Data[0].texto_campo);
-                    setEditedTitle(titulo2Data[0].texto_campo);
-                    titulo2OBJ.texto_campo = titulo2Data[0].texto_campo;
+                   // setTitulo2OBJ(titulo2Data[0].texto_campo);
+                   setTitulo2OBJ.
                 } catch (error) {
                     console.log("Error fetching titulo 2:", error);
                 }
@@ -208,9 +211,9 @@ const Home = () => {
                     const titulo3 = ['título_servicio3'];
                     var titulo3Data;
                     titulo3Data = await text_Services.getOneText(titulo3);
-                    console.log("Cargar titulo 3: " + titulo3Data[0].texto_campo);
-                    setEditedTitle(titulo3Data[0].texto_campo);
-                    titulo3OBJ.texto_campo = titulo3Data[0].texto_campo;
+                    console.log("Cargar titulo 3: " + titulo3Data[0]);
+                  //  setTitulo3OBJ(titulo3Data[0].texto_campo);
+                  setTitulo3OBJ = titulo3Data[0];
                 } catch (error) {
                     console.log("Error fetching titulo 3:", error);
                 }
@@ -220,30 +223,33 @@ const Home = () => {
             fetchTitulo1();
             fetchTitulo2();
             fetchTitulo3();
-
-
+            cont++;
+        }
         }, [editable]);
+*/
 
-/*
 useEffect(() => {
+    if(cont==0){
     const fetchTitulos = async () => {
       try {
-     //   const titulo1Data = await text_Services.getOneText(['título_servicio1']);
-     //  setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
+       const titulo1Data = await text_Services.getOneText(['título_servicio1']);
+      setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
 
-       // const titulo2Data = await text_Services.getOneText(['título_servicio2']);
-       // setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
+       const titulo2Data = await text_Services.getOneText(['título_servicio2']);
+       setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
 
-        //const titulo3Data = await text_Services.getOneText(['título_servicio3']);
-        //setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
+        const titulo3Data = await text_Services.getOneText(['título_servicio3']);
+        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
       } catch (error) {
         console.log("Error fetching titles:", error);
       }
     };
     console.log("Error de effect");
     fetchTitulos();
+    cont++;
+}
   }, [editable]);
-*/
+
 
         return (
             <div className="service-container">
