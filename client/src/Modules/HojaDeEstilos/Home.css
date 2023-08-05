@@ -317,6 +317,17 @@
     -12px 0 15px -4px rgba(0, 0, 0, 0.3);
   padding-bottom: 10px;
 }
+.innerCard{
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 2000px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 12px 0 15px -4px rgba(0, 0, 0, 0.3),
+    -12px 0 15px -4px rgba(0, 0, 0, 0.3);
+  padding-bottom: 10px;
+}
 
 .each-slide img {
   width: 100%;

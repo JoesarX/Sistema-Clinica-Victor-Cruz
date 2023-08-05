@@ -11,9 +11,10 @@ const adminRouter = (pool) => {
             const sqlSelect = "select * from usuarios_admin";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log("Get all Usuarios Admin Successful!");
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log("Get all  Usuarios Admin Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -25,9 +26,10 @@ const adminRouter = (pool) => {
             const sqlSelect = "SELECT * FROM usuarios_admin WHERE id =" + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(`Get  Usuarios Admin by id ${req.params.id} Successful!`);
             res.json(rows[0])
         } catch (err) {
-            console.log(err);
+            console.log(`Get  Usuarios Admin by id ${req.params.id} Failed. Error: ${err}`)
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -49,9 +51,10 @@ const adminRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
+            console.log("Usuario Admin post successful");
             res.json("Usuario Admin añadido exitosamente!");
         } catch (err) {
-            console.log(err);
+            console.log("Usuario Admin post Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -85,9 +88,10 @@ const adminRouter = (pool) => {
 
             await connection.query(q, values);
             connection.release();
+            console.log(`Usuarios Admin put ${id} successful`)
             res.json("Admin actualizado exitosamente!");
         } catch (err) {
-            console.log(err);
+            console.log(`Usuarios Admin put ${id} failed. Error: ${err}`);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -99,9 +103,10 @@ const adminRouter = (pool) => {
             const sqlSelect = "delete FROM usuarios_admin where id = '" + req.params.id + "'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(`Usuarios Admin delete ${req.params.id} successful`)
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log(`Usuarios Admin delete ${req.params.id} failed. Error: ${err}`);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -112,9 +117,10 @@ const adminRouter = (pool) => {
             const sqlSelect = "SELECT * FROM usuarios_admin WHERE correo= `" + { req } + "`";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log("Get all Usuarios Admin Usuarios Admin Successful!");
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log("Get all  Usuarios Admin Usuarios Admin Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
