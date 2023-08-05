@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import { AuthContext } from '../AuthContext.js';
+import text_Services from '../../Services/texto_cmdService';
 
 import Topbar from './Topbar';
 import Footer from './Footer';
@@ -25,6 +26,52 @@ import axios from 'axios'; // Import axios library
 
 
 const Home = () => {
+
+
+    /* Para la DB*/
+
+
+
+    const [titulo1OBJ, setTitulo1OBJ] = React.useState({
+        Tipo: 'título_servicio1',
+        texto_campo: ''
+    })
+
+
+    const [titulo2OBJ, setTitulo2OBJ] = React.useState({
+        Tipo: 'título_servicio2',
+        texto_campo: ''
+    })
+
+    const [titulo3OBJ, setTitulo3OBJ] = React.useState({
+        Tipo: 'título_servicio3',
+        texto_campo: ''
+    })
+
+
+    const [descripcion1OBJ, setdescripcion1OBJ] = React.useState({
+        Tipo: 'texto_servicio1',
+        texto_campo: ''
+    })
+
+    const [descripcion2OBJ, setdescripcion2OBJ] = React.useState({
+        Tipo: 'texto_servicio2',
+        texto_campo: ''
+    })
+
+    const [descripcion3OBJ, setdescripcion3OBJ] = React.useState({
+        Tipo: 'texto_servicio3',
+        texto_campo: ''
+    })
+
+
+
+
+
+
+
+
+
     //Array donde se va a ir guardando el componente/servicio segun un id
     const servicesData = [
         {
@@ -61,8 +108,40 @@ const Home = () => {
         };
 
         const handleSave = () => {
-            // Implement your save functionality here
+            // Remove extra spaces at the end of title and description
+            const trimmedTitle = editedTitle.trim();
+            const trimmedDescription = editedDescription.trim();
+
+            // Check if the description ends with a period
+            if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
+                alert("La descripción debe terminar con un punto.");
+                return;
+            }
+
+            // Check if title starts with an uppercase letter and is within 25 characters
+            if (
+                !/^[A-Z]/.test(trimmedTitle) ||
+                trimmedTitle.length > 20
+            ) {
+                alert("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.");
+                return;
+            }
+
+            // Check if there are more than one consecutive spaces in title or description
+            if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
+                alert("No se permiten más de un espacio consecutivo en el texto.");
+                return;
+            }
+
+            // Check if the description has more than 80 characters
+            if (trimmedDescription.length > 190) {
+                alert("La descripción no puede exceder los 190 caracteres.");
+                return;
+            }
+
             setEditable(false);
+            setEditedTitle(trimmedTitle);
+            setEditedDescription(trimmedDescription);
         };
 
         const handleCancel = () => {
@@ -71,6 +150,100 @@ const Home = () => {
             setEditedTitle(title);
             setEditedDescription(description);
         };
+
+        const handleTitleChange = (e) => {
+            // Capitalize the first letter of the title
+            const value = e.target.value;
+            if (value.length === 0) {
+                setEditedTitle(value);
+            } else {
+                setEditedTitle(value.charAt(0).toUpperCase() + value.slice(1));
+            }
+        };
+
+        const handleDescriptionChange = (e) => {
+            // Capitalize the first letter of the description
+            const value = e.target.value;
+            if (value.length === 0) {
+                setEditedDescription(value);
+            } else {
+                setEditedDescription(value.charAt(0).toUpperCase() + value.slice(1));
+            }
+        };
+
+
+
+
+       /* useEffect(() => {
+            const fetchTitulo1 = async () => {
+                try {
+                    const titulo1 = ['título_servicio1'];
+                    var titulo1Data;
+                    titulo1Data = await text_Services.getOneText(titulo1);
+                    console.log("Cargar titulo: " + titulo1Data[0].texto_campo);
+                    setEditedTitle(titulo1Data[0].texto_campo);
+                    titulo1OBJ.texto_campo = titulo1Data[0].texto_campo;
+                } catch (error) {
+                    console.log("Error fetching titulo 1:", error);
+                }
+            };
+
+
+            const fetchTitulo2 = async () => {
+                try {
+                    const titulo2 = ['título_servicio2'];
+                    var titulo2Data;
+                    titulo2Data = await text_Services.getOneText(titulo2);
+                    console.log("Cargar titulo: " + titulo2Data[0].texto_campo);
+                    setEditedTitle(titulo2Data[0].texto_campo);
+                    titulo2OBJ.texto_campo = titulo2Data[0].texto_campo;
+                } catch (error) {
+                    console.log("Error fetching titulo 2:", error);
+                }
+            };
+
+
+            const fetchTitulo3 = async () => {
+                try {
+                    const titulo3 = ['título_servicio3'];
+                    var titulo3Data;
+                    titulo3Data = await text_Services.getOneText(titulo3);
+                    console.log("Cargar titulo: " + titulo3Data[0].texto_campo);
+                    setEditedTitle(titulo3Data[0].texto_campo);
+                    titulo3OBJ.texto_campo = titulo3Data[0].texto_campo;
+                } catch (error) {
+                    console.log("Error fetching titulo 3:", error);
+                }
+            };
+
+
+            fetchTitulo1();
+            fetchTitulo2();
+            fetchTitulo3();
+
+
+        }, [editable]);
+*/
+
+useEffect(() => {
+    const fetchTitulos = async () => {
+      try {
+        const titulo1Data = await text_Services.getOneText(['título_servicio1']);
+        setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
+
+        const titulo2Data = await text_Services.getOneText(['título_servicio2']);
+        setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
+
+        const titulo3Data = await text_Services.getOneText(['título_servicio3']);
+        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
+      } catch (error) {
+        console.log("Error fetching titles:", error);
+      }
+    };
+
+    fetchTitulos();
+  }, [editable]);
+
 
         return (
             <div className="service-container">
@@ -83,8 +256,8 @@ const Home = () => {
                             <input
                                 type="text"
                                 value={editedTitle}
-                                onChange={(e) => setEditedTitle(e.target.value)}
-                                style={{ width: '100%' }} // Set width to 100%
+                                onChange={handleTitleChange}
+                                style={{ width: '100%' }}
                             />
                         ) : (
                             editedTitle
@@ -94,10 +267,10 @@ const Home = () => {
                         {editable ? (
                             <textarea
                                 value={editedDescription}
-                                onChange={(e) => setEditedDescription(e.target.value)}
+                                onChange={handleDescriptionChange}
                                 rows={5}
-                                cols={40} // Adjust the number of cols for desired width
-                                style={{ width: '100%' }} // Set width to 100%
+                                cols={40}
+                                style={{ width: '100%' }}
                             />
                         ) : (
                             editedDescription
@@ -125,7 +298,6 @@ const Home = () => {
             </div>
         );
     };
-
 
     // ==========================================================================================
 
@@ -246,6 +418,15 @@ const Home = () => {
 
 
 
+
+    /* Metodos de Fetch de la D*/
+
+
+
+
+
+
+
     return (
         <div className="scrollable-page">
             <Topbar />
@@ -266,25 +447,25 @@ const Home = () => {
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
             <div className="services-container">
-                <ServiceComponent
-                    title={servicesData[0].title}
-                    description={servicesData[0].description}
-                    icon={servicesData[0].icon}
-                    isEditMode={editAll}
-                />
-                <ServiceComponent
-                    title={servicesData[1].title}
-                    description={servicesData[1].description}
-                    icon={servicesData[1].icon}
-                    isEditMode={editAll}
-                />
-                <ServiceComponent
-                    title={servicesData[2].title}
-                    description={servicesData[2].description}
-                    icon={servicesData[2].icon}
-                    isEditMode={editAll}
-                />
-            </div>
+        <ServiceComponent
+          title={titulo1OBJ.texto_campo}
+          description={servicesData[0].description}
+          icon={servicesData[0].icon}
+          isEditMode={editAll}
+        />
+        <ServiceComponent
+          title={titulo2OBJ.texto_campo}
+          description={servicesData[1].description}
+          icon={servicesData[1].icon}
+          isEditMode={editAll}
+        />
+        <ServiceComponent
+          title={titulo3OBJ.texto_campo}
+          description={servicesData[2].description}
+          icon={servicesData[2].icon}
+          isEditMode={editAll}
+        />
+      </div>
             <div class="button-container">
                 <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
             </div>
