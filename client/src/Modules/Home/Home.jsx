@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import { AuthContext } from '../AuthContext.js';
+import text_Services from '../../Services/texto_cmdService';
 
 import Topbar from './Topbar';
 import Footer from './Footer';
@@ -17,7 +18,7 @@ import { faFlask } from '@fortawesome/free-solid-svg-icons';
 import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
-import { faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
 
 
 import axios from 'axios'; // Import axios library
@@ -25,6 +26,281 @@ import axios from 'axios'; // Import axios library
 
 
 const Home = () => {
+
+
+    /* Para la DB*/
+
+
+
+    const [titulo1OBJ, setTitulo1OBJ] = React.useState({
+        Tipo: 'título_servicio1',
+        texto_campo: ''
+    })
+
+
+    const [titulo2OBJ, setTitulo2OBJ] = React.useState({
+        Tipo: 'título_servicio2',
+        texto_campo: ''
+    })
+
+    const [titulo3OBJ, setTitulo3OBJ] = React.useState({
+        Tipo: 'título_servicio3',
+        texto_campo: ''
+    })
+
+
+    const [descripcion1OBJ, setdescripcion1OBJ] = React.useState({
+        Tipo: 'texto_servicio1',
+        texto_campo: ''
+    })
+
+    const [descripcion2OBJ, setdescripcion2OBJ] = React.useState({
+        Tipo: 'texto_servicio2',
+        texto_campo: ''
+    })
+
+    const [descripcion3OBJ, setdescripcion3OBJ] = React.useState({
+        Tipo: 'texto_servicio3',
+        texto_campo: ''
+    })
+
+
+
+
+
+
+
+
+
+    //Array donde se va a ir guardando el componente/servicio segun un id
+    const servicesData = [
+        {
+            id: 1,
+            title: 'Clinica',
+            description: 'Dedicada a brindar servicios de salud de alta calidad y atención médica integral.',
+            icon: faStethoscope
+        },
+        {
+            id: 2,
+            title: 'Salud Ocupacional',
+            description: 'Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.',
+            icon: faUserDoctor
+        },
+        {
+            id: 3,
+            title: 'Laboratorio',
+            description: 'Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.',
+            icon: faFlask
+        }
+    ];
+    const [editAll, setEditAll] = useState(false);
+    const [editAll2, setEditAll2] = useState(false);
+
+
+
+    const ServiceComponent = ({ title, description, icon, isEditMode }) => {
+        const [editable, setEditable] = useState(false);
+        const [editedTitle, setEditedTitle] = useState(title);
+        const [editedDescription, setEditedDescription] = useState(description);
+
+        const handleEditToggle = () => {
+            setEditable(!editable);
+        };
+
+        const handleSave = () => {
+            // Remove extra spaces at the end of title and description
+            const trimmedTitle = editedTitle.trim();
+            const trimmedDescription = editedDescription.trim();
+
+            // Check if the description ends with a period
+            if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
+                alert("La descripción debe terminar con un punto.");
+                return;
+            }
+
+            // Check if title starts with an uppercase letter and is within 25 characters
+            if (
+                !/^[A-Z]/.test(trimmedTitle) ||
+                trimmedTitle.length > 20
+            ) {
+                alert("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.");
+                return;
+            }
+
+            // Check if there are more than one consecutive spaces in title or description
+            if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
+                alert("No se permiten más de un espacio consecutivo en el texto.");
+                return;
+            }
+
+            // Check if the description has more than 80 characters
+            if (trimmedDescription.length > 190) {
+                alert("La descripción no puede exceder los 190 caracteres.");
+                return;
+            }
+
+            setEditable(false);
+            setEditedTitle(trimmedTitle);
+            setEditedDescription(trimmedDescription);
+        };
+
+        const handleCancel = () => {
+            setEditable(false);
+            // Reset to original values
+            setEditedTitle(title);
+            setEditedDescription(description);
+        };
+
+        const handleTitleChange = (e) => {
+            // Capitalize the first letter of the title
+            const value = e.target.value;
+            if (value.length === 0) {
+                setEditedTitle(value);
+            } else {
+                setEditedTitle(value.charAt(0).toUpperCase() + value.slice(1));
+            }
+        };
+
+        const handleDescriptionChange = (e) => {
+            // Capitalize the first letter of the description
+            const value = e.target.value;
+            if (value.length === 0) {
+                setEditedDescription(value);
+            } else {
+                setEditedDescription(value.charAt(0).toUpperCase() + value.slice(1));
+            }
+        };
+
+
+
+
+       /* useEffect(() => {
+            const fetchTitulo1 = async () => {
+                try {
+                    const titulo1 = ['título_servicio1'];
+                    var titulo1Data;
+                    titulo1Data = await text_Services.getOneText(titulo1);
+                    console.log("Cargar titulo: " + titulo1Data[0].texto_campo);
+                    setEditedTitle(titulo1Data[0].texto_campo);
+                    titulo1OBJ.texto_campo = titulo1Data[0].texto_campo;
+                } catch (error) {
+                    console.log("Error fetching titulo 1:", error);
+                }
+            };
+
+
+            const fetchTitulo2 = async () => {
+                try {
+                    const titulo2 = ['título_servicio2'];
+                    var titulo2Data;
+                    titulo2Data = await text_Services.getOneText(titulo2);
+                    console.log("Cargar titulo: " + titulo2Data[0].texto_campo);
+                    setEditedTitle(titulo2Data[0].texto_campo);
+                    titulo2OBJ.texto_campo = titulo2Data[0].texto_campo;
+                } catch (error) {
+                    console.log("Error fetching titulo 2:", error);
+                }
+            };
+
+
+            const fetchTitulo3 = async () => {
+                try {
+                    const titulo3 = ['título_servicio3'];
+                    var titulo3Data;
+                    titulo3Data = await text_Services.getOneText(titulo3);
+                    console.log("Cargar titulo: " + titulo3Data[0].texto_campo);
+                    setEditedTitle(titulo3Data[0].texto_campo);
+                    titulo3OBJ.texto_campo = titulo3Data[0].texto_campo;
+                } catch (error) {
+                    console.log("Error fetching titulo 3:", error);
+                }
+            };
+
+
+            fetchTitulo1();
+            fetchTitulo2();
+            fetchTitulo3();
+
+
+        }, [editable]);
+*/
+
+useEffect(() => {
+    const fetchTitulos = async () => {
+      try {
+        const titulo1Data = await text_Services.getOneText(['título_servicio1']);
+        setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
+
+        const titulo2Data = await text_Services.getOneText(['título_servicio2']);
+        setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
+
+        const titulo3Data = await text_Services.getOneText(['título_servicio3']);
+        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
+      } catch (error) {
+        console.log("Error fetching titles:", error);
+      }
+    };
+
+    fetchTitulos();
+  }, [editable]);
+
+
+        return (
+            <div className="service-container">
+                <div className="service-icon-container">
+                    <FontAwesomeIcon icon={icon} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
+                </div>
+                <div className="service-text-elements" style={{ height: '270px' }}>
+                    <h1 className="service-header">
+                        {editable ? (
+                            <input
+                                type="text"
+                                value={editedTitle}
+                                onChange={handleTitleChange}
+                                style={{ width: '100%' }}
+                            />
+                        ) : (
+                            editedTitle
+                        )}
+                    </h1>
+                    <div className="service-text">
+                        {editable ? (
+                            <textarea
+                                value={editedDescription}
+                                onChange={handleDescriptionChange}
+                                rows={5}
+                                cols={40}
+                                style={{ width: '100%' }}
+                            />
+                        ) : (
+                            editedDescription
+                        )}
+                    </div>
+                    {isEditMode && (
+                        <div className="edit-buttons-container">
+                            {editable ? (
+                                <div className="centered-edit-buttons">
+                                    <button onClick={handleSave}>
+                                        <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
+                                    </button>
+                                    <button onClick={handleCancel}>
+                                        <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <button onClick={handleEditToggle}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                                </button>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+    };
+
+    // ==========================================================================================
+
     const navigate = useNavigate();
 
     const { userType, isLoggedIn } = useContext(AuthContext);
@@ -70,117 +346,6 @@ const Home = () => {
         infinite: true,
         indicators: true,
         arrows: true
-    };
-
-
-    /* Container Clinica */
-    /*
-       const [isEditingTitle, setIsEditingTitle] = useState(false);
-       const [clinicTitle, setClinicTitle] = useState('Clínica');
-       const [editedTitle, setEditedTitle] = useState('');
-   */
-    const [isEditingDescription, setIsEditingDescription] = useState(false);
-    const [clinicDescription, setClinicDescription] = useState(
-        'Dedicada a brindar servicios de salud de alta calidad y atención médica integral.'
-    );
-    const [editedDescription, setEditedDescription] = useState('');
-
-    /*
-    const handleChangeTitle = (event) => {
-        setEditedTitle(event.target.value);
-    };
- 
- 
- 
-    const handleSaveTitle = () => {
-        setClinicTitle(editedTitle);
-        setIsEditingTitle(false);
-    };
- 
- 
-    const handleEditTitle = () => {
-        setIsEditingTitle(true);
-        setEditedTitle(clinicTitle);
-    };
- 
- 
-    const handleCancelTitle = () => {
-        setIsEditingTitle(false);
-    };
- 
-*/
-    const handleEditDescription = () => {
-        setIsEditingDescription(true);
-        setEditedDescription(clinicDescription);
-    };
-
-    const handleChangeDescription = (event) => {
-        setEditedDescription(event.target.value);
-    };
-
-
-    const handleSaveDescription = () => {
-        setClinicDescription(editedDescription);
-        setIsEditingDescription(false);
-    };
-
-    const handleCancelDescription = () => {
-        setIsEditingDescription(false);
-    };
-
-
-    /* Salud Ocupacional*/
-
-    const [isEditingDescription1, setIsEditingDescription1] = useState(false);
-    const [saludOcupacionalDescription, setSaludOcupacionalDescription] = useState(
-        'Contamos con una amplia experiencia en la prevención y el control de riesgos laborales, así como en el diseño y la ejecución de planes de promoción de la salud.'
-    );
-    const [editedSaludOcupacionalDescription, setEditedSaludOcupacionalDescription] = useState('');
-
-    const handleChangeDescription1 = (event) => {
-        setEditedSaludOcupacionalDescription(event.target.value);
-    };
-
-    const handleEditDescription1 = () => {
-        setIsEditingDescription1(true);
-        setEditedSaludOcupacionalDescription(saludOcupacionalDescription);
-    };
-
-    const handleSaveDescription1 = () => {
-        setSaludOcupacionalDescription(editedSaludOcupacionalDescription);
-        setIsEditingDescription1(false);
-    };
-
-    const handleCancelDescription1 = () => {
-        setIsEditingDescription1(false);
-    };
-
-
-
-    /* Container Laboratorio - Descripción */
-
-    const [isEditingLaboratorioDescription, setIsEditingLaboratorioDescription] = useState(false);
-    const [laboratorioDescription, setLaboratorioDescription] = useState(
-        'Respaldado por un equipo de profesionales altamente capacitados y comprometidos con la excelencia científica y la precisión diagnóstica.'
-    );
-    const [editedLaboratorioDescription, setEditedLaboratorioDescription] = useState('');
-
-    const handleChangeLaboratorioDescription = (event) => {
-        setEditedLaboratorioDescription(event.target.value);
-    };
-
-    const handleEditLaboratorioDescription = () => {
-        setIsEditingLaboratorioDescription(true);
-        setEditedLaboratorioDescription(laboratorioDescription);
-    };
-
-    const handleSaveLaboratorioDescription = () => {
-        setLaboratorioDescription(editedLaboratorioDescription);
-        setIsEditingLaboratorioDescription(false);
-    };
-
-    const handleCancelLaboratorioDescription = () => {
-        setIsEditingLaboratorioDescription(false);
     };
 
 
@@ -253,6 +418,15 @@ const Home = () => {
 
 
 
+
+    /* Metodos de Fetch de la D*/
+
+
+
+
+
+
+
     return (
         <div className="scrollable-page">
             <Topbar />
@@ -273,106 +447,33 @@ const Home = () => {
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
             <div className="services-container">
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faStethoscope} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Clínica</h1>
-                        {isEditingDescription ? (
-                            <>
-                                <textarea
-                                    value={editedDescription}
-                                    onChange={handleChangeDescription}
-                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
-                                />
-                                <button onClick={handleSaveDescription}>
-                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
-                                </button>
-                                <button onClick={handleCancelDescription}>
-                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <div className="service-text">{clinicDescription}</div>
-                                <button onClick={handleEditDescription}>
-                                    <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        )}
-                    </div>
-
-
-                </div>
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faUserDoctor} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Salud Ocupacional</h1>
-                        {isEditingDescription1 ? (
-                            <>
-                                <textarea
-                                    value={editedSaludOcupacionalDescription}
-                                    onChange={handleChangeDescription1}
-                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
-                                />
-                                <button onClick={handleSaveDescription}>
-                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
-                                </button>
-                                <button onClick={handleCancelDescription1}>
-                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <div className="service-text">{saludOcupacionalDescription}</div>
-                                {isLoggedIn && userType !== 'normal' && (
-                                    <button onClick={handleEditDescription1} style={{ marginLeft: '5px' }}>
-                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </div>
-                </div>
-                <div className="service-container">
-                    <div className="service-icon-container">
-                        <FontAwesomeIcon icon={faFlask} style={{ color: 'rgb(30, 96, 166)', fontSize: '104px' }} />
-                    </div>
-                    <div className="service-text-elements">
-                        <h1 className="service-header">Laboratorio</h1>
-                        {isEditingLaboratorioDescription ? (
-                            <>
-                                <textarea
-                                    value={editedLaboratorioDescription}
-                                    onChange={handleChangeLaboratorioDescription}
-                                    style={{ color: '#1E60A6', fontWeight: 'bold' }}
-                                />
-                                <button onClick={handleSaveLaboratorioDescription}>
-                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
-                                </button>
-                                <button onClick={handleCancelLaboratorioDescription}>
-                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <div className="service-text">{laboratorioDescription}</div>
-                                {isLoggedIn && userType !== 'normal' && (
-                                    <button onClick={handleEditLaboratorioDescription} style={{ marginLeft: '5px' }}>
-                                        <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
-                                    </button>
-                                )}
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
+        <ServiceComponent
+          title={titulo1OBJ.texto_campo}
+          description={servicesData[0].description}
+          icon={servicesData[0].icon}
+          isEditMode={editAll}
+        />
+        <ServiceComponent
+          title={titulo2OBJ.texto_campo}
+          description={servicesData[1].description}
+          icon={servicesData[1].icon}
+          isEditMode={editAll}
+        />
+        <ServiceComponent
+          title={titulo3OBJ.texto_campo}
+          description={servicesData[2].description}
+          icon={servicesData[2].icon}
+          isEditMode={editAll}
+        />
+      </div>
             <div class="button-container">
                 <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
             </div>
+            {isLoggedIn && userType !== 'normal' && (
+                <button onClick={() => setEditAll(!editAll)}>
+                    <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                </button>
+            )}
             <div className="content-header-banner">
                 SOBRE <span style={{ color: '#223240', marginLeft: '10px' }}>NOSOTROS</span>
             </div>
@@ -385,6 +486,7 @@ const Home = () => {
                             value={missionText}
                             onChange={handleChange}
                             rows="10"
+                            cols={50}
                         />
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
@@ -399,9 +501,13 @@ const Home = () => {
                             </button>
                         </>
                     ) : (
-                        <button onClick={handleEditClick}>
-                            <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
-                        </button>
+                        <div>
+                            {editAll2 && (
+                                <button className='edit-button' onClick={handleEditClick}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                                </button>
+                            )}
+                        </div>
                     )}
                 </div>
                 <div className='about-us-content'>
@@ -431,12 +537,25 @@ const Home = () => {
                             </button>
                         </div>
                     ) : (
-                        <button className='edit-button' onClick={handleEditClick1}>
-                            <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
-                        </button>
+                        <div>
+                            {editAll2 && (
+                                <button className='edit-button' onClick={handleEditClick1}>
+                                    <FontAwesomeIcon icon={faEdit} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                                </button>
+                            )}
+                        </div>
                     )}
                 </div>
             </div>
+            {isLoggedIn && userType !== 'normal' && (
+                <button onClick={() => setEditAll2(!editAll2)}>
+                    <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                </button>
+            )}
+
+
+
+
             <div className="smooth-line" />
             <div className="home-schedule-container">
                 <FontAwesomeIcon icon={faCalendarDays} className="content-header white-text schedule-calendar-icon" />

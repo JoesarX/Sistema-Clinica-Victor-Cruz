@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-const citasRouter = (pool) => {
+const citasRouter = (pool, transporter) => {
 
     //Get all Citas
     router.get("/", async (req, res) => {
@@ -214,7 +214,7 @@ const citasRouter = (pool) => {
     const checkAndUpdateExpiredAppointments = async () => {
         try {
             const connection = await pool.getConnection();
-
+            await connection.query("SET time_zone = 'America/Guatemala'");
             // Citas donde la Fecha es menor a la actual o la fecha es igual a la actual y la hora es menor a la actual
             const sqlSelect = `SELECT idcita FROM citas WHERE estado = 'Pendiente' AND (curdate() > fecha or (curdate() = fecha and (CURRENT_TIME() - INTERVAL 30 MINUTE) > hora));`;
             const [rows, fields] = await connection.query(sqlSelect);
@@ -235,12 +235,105 @@ const citasRouter = (pool) => {
         }
     };
 
-    const startAppointmentCheckingInterval = () => {
-        // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos
-        checkAndUpdateExpiredAppointments();
 
-        // Timer que se ejecuta cada x minutos.
-        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000); 
+
+    const sendAppointmentReminders = async () => {
+        try {
+            const connection = await pool.getConnection();
+            await connection.query(`SET time_zone = 'America/Guatemala';`);
+            await connection.query(`SET lc_time_names = 'es_ES';`);
+            const sqlSelect = `SELECT distinct idcita, nombre_persona, correouser, expedientes.correo as correoexpediente ,DATE_FORMAT(fecha, '%W %e de %M del %Y') AS fecha, 
+                            DATE_FORMAT(hora, '%l:%i %p') AS hora FROM citas LEFT JOIN expedientes on citas.idpaciente = expedientes.idpaciente 
+                            WHERE estado = 'Pendiente' AND correoenviado = 0 
+                            AND (not(correouser IS NULL OR correouser = '') or not(expedientes.correo IS NULL OR expedientes.correo = '')) 
+                            AND fecha = curdate() + INTERVAL 1 DAY;`;
+            const [rows, fields] = await connection.query(sqlSelect);
+            console.log("Citas a las que enviar correos hoy:\n" + rows + "\nFin de citas a las que enviar correos hoy\n");
+
+            if (rows.length > 0) {
+                for (const row of rows) {
+                    const {
+                        idcita,
+                        nombre_persona,
+                        correouser,
+                        correoexpediente,
+                        fecha,
+                        hora,
+                    } = row;
+
+                    // Agregar correos a la lista de correos
+                    let toEmails = [];
+                    if (correouser && correouser.trim() !== "") {
+                        toEmails.push(correouser);
+                    }
+                    if (
+                        correoexpediente &&
+                        correoexpediente.trim() !== "" &&
+                        correoexpediente !== correouser
+                    ) {
+                        toEmails.push(correoexpediente);
+                    }
+
+                    // Mandar Correo
+                    if (toEmails.length > 0) {
+                        const mailOptions = {
+                            from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                            to: toEmails.join(", "), // Join multiple emails with a comma and space
+                            subject: "Recordatorio de Cita Clinica Dr Victor Cruz",
+                            text: `Estimado/a ${nombre_persona}, Le recordamos cordialmente de su cita para mañana, ${fecha}, a las ${hora}. Esperamos brindarle el mejor servicio en nuestra clínica.\n` +
+                                `Si tiene alguna duda o necesita cambiar la cita, no dude en contactarnos.\n` +
+                                `¡Que tenga un buen día!\n\n` +
+                                `Atentamente,\n` +
+                                `El equipo de la Clínica Dr. Victor Cruz`,
+
+                        };
+
+                        await transporter.sendMail(mailOptions);
+                        console.log(`Reminder email sent for ${toEmails.join(", ")}`);
+                    }
+
+                    // Marcar la cita como enviada
+                    const sqlUpdate = `UPDATE citas SET correoenviado = '1' WHERE idcita = ?`;
+                    await connection.query(sqlUpdate, [idcita]);
+                }
+            }
+
+
+            connection.release();
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+
+    const startAppointmentCheckingInterval = () => {
+        // LLamado inicial cuando encienda el server para que no tenga que esperar 5 minutos para cancelar citas expiradas
+        checkAndUpdateExpiredAppointments();
+        setInterval(checkAndUpdateExpiredAppointments, 5 * 60 * 1000);
+
+        // Set up intervalo para mandar correos de recordatorio de citas
+        const millisecondsInADay = 24 * 60 * 60 * 1000;
+        const now = new Date();
+        const targetTime = new Date(now);
+        targetTime.setHours(9, 0, 0, 0); // Aqui se puede cambiar la hora a la que se mandan los correo
+
+        let timeUntilNextDay = targetTime - now;
+
+        console.log("Target Time: " + targetTime)
+        console.log("Now: " + now)
+        console.log("Time Until Next Day: " + timeUntilNextDay)
+
+        if (timeUntilNextDay < 0) {
+            // Si ya paso la hora de mandar correos, esperar hasta la misma hora del dia siguiente
+            timeUntilNextDay += millisecondsInADay;
+            console.log("Today passed so new time until next day: " + timeUntilNextDay)
+        }
+
+        setTimeout(() => {
+            sendAppointmentReminders();
+            setInterval(sendAppointmentReminders, millisecondsInADay);
+        }, timeUntilNextDay);
+
     };
 
     //llamado a la busqueda continua de citas expiradas

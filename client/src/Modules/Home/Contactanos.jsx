@@ -327,11 +327,11 @@ const Contactanos = () => {
                     </div>
                 </div>
             </section>
-            <div className='button-gearCont'>
+            {isLoggedIn && userType !== 'normal' && (
                 <button className='buttonG' onClick={handleToggleButtonClick}>
-                    <FontAwesomeIcon icon={faGear} />
-                </button>
-            </div>
+                <FontAwesomeIcon icon={faGear} />
+            </button>
+            )}
             <Footer />
         </div>
     );

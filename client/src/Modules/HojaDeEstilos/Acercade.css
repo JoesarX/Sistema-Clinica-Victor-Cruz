@@ -44,7 +44,7 @@
 
 
 @media (max-width: 540px) {
- 
+
 
   /* Styles for mobile screens */
   .mission-vision-container {
@@ -92,51 +92,74 @@
 }
 
 .about-us-container {
-  margin: 0 auto;
-  padding: 40px;
-  margin-bottom: 60px;
-}
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-h1,
-h2 {
-  color: #333;
-  font-size: 32px;
-  margin-bottom: 20px;
-  margin-bottom: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+
+  margin: 0 auto;
+  max-width: 2000px;
+  min-width: 90vw;
+  gap: 50px;
 }
 
 .mission-vision-container {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 60px;
-  padding: 40px;
+
+  padding: 20px;
+
   background-color: #1E60A6;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
+  gap: 20px;
+  width: 100%;
 }
 
 .mission-vision-container:hover {
   transform: translateY(-5px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-
 }
 
 .mission,
 .vision {
-  flex-basis: 50%;
+
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+
+  max-width: 49.5%;
+  min-width: 49.5%;
+
+  /* background-color: rgba(47, 37, 176, 0.3);
+  background-size: 10px 10px;
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
-.mission {
-  border-right: none;
-  padding-right: 0;
-  margin-right: 40px;
-}
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 
-.vision {
-  padding-left: 0;
-}
+  min-width: 100%;
+  width: 100%;
 
+  gap: 10px;
+
+  padding-right: 50px;
+
+  /* background-color: rgb(0, 255, 0, 0.3);
+  background-size: 10px 10px;
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
 
 .mission h2,
 .vision h2 {
@@ -146,23 +169,28 @@ h2 {
   text-align: center;
 }
 
-.mission p,
-.vision p {
-  font-size: 24px;
+.new-text {
+  justify-self: center;
+  text-align: justify;
+  text-justify: inter-ideograph;
+  max-width: 100%;
+  font-size: 18px;
   line-height: 1.5;
-  color: #000;
+  color: #ffffff;
+  word-wrap: break-word;
+  font-family: 'Inter';
 }
-
 
 .company-description {
   display: flex;
   align-items: center;
-  margin-bottom: 60px;
   padding: 40px;
   background-color: #1E60A6;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
+  gap: 20px;
+  width: 100%;
 }
 
 .company-description:hover {
@@ -199,19 +227,21 @@ h2 {
 }
 
 .text-container {
-  flex-grow: 1;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  max-width: 100%;
+
+  /* background-color: rgba(15, 25, 220, 0.3);
+  background-size: 10px 10px;
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .company-description h2 {
   font-size: 30px;
   margin-bottom: 10px;
-}
-
-.company-description p {
-  font-size: 22px;
-  line-height: 1.5;
-  justify-content: center;
 }
 
 .upload-buttons {
@@ -223,11 +253,11 @@ h2 {
   margin: 10px;
 
   width: 200px;
-  
+
   text-align: center;
 }
 
-.upload-buttons > * {
+.upload-buttons>* {
   background-color: azure;
   border-radius: 20px;
   cursor: pointer;
@@ -256,7 +286,7 @@ h2 {
   border-radius: 20px;
 }
 
-.upload-buttons >*:hover{
+.upload-buttons>*:hover {
   background-color: rgb(6, 130, 130);
 }
 
@@ -268,7 +298,7 @@ h2 {
   background-color: rgb(169, 173, 169);
 }
 
-.upload-buttons > .delete:hover {
+.upload-buttons>.delete:hover {
   background-color: rgb(245, 95, 72);
 }
 
@@ -276,12 +306,13 @@ h2 {
 .person-container {
   display: flex;
   align-items: center;
-  margin-bottom: 60px;
+  width: 100%;
   padding: 40px;
   background-color: #1E60A6;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
+
 }
 
 .person-container:hover {
@@ -319,12 +350,12 @@ h2 {
   text-align: center;
   display: flex;
   align-items: center;
-  margin-bottom: 60px;
   padding: 40px;
   background-color: #1E60A6;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease-in-out;
+  width: 100%;
 }
 
 .employee-description:hover {
@@ -337,19 +368,28 @@ h2 {
   margin-bottom: 20px;
 }
 
-.employee-description p {
-  font-size: 18px;
-  line-height: 1.5;
-}
+.admin-edit {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 
-p {
-  margin-left: 50px;
-  text-align: justify;
-}
-
-textarea {
-  text-align: justify;
+  height: 20px;
   width: 100%;
-  height: 100%;
-  transition: transform 0.3s ease-in-out;
+
+  gap: 50px;
+
+  padding-left: 10px;
+  padding-right: 10px;
+
+}
+
+.admin-edit > *  {
+  font-size: 40px;
+  color: #626262;
+
+  cursor: pointer;
+  font-weight: bolder;
+
+  line-height: normal;
+
 }
