@@ -9,9 +9,10 @@ const textos_cmdRouter = (pool) => {
             const sqlSelect = "SELECT * FROM textos_cmd";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log("Get all textos_cmd Successfull");
             res.json(rows);
         } catch (err) {
-            console.log(err);
+            console.log("Get all textos_cmd Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -19,12 +20,11 @@ const textos_cmdRouter = (pool) => {
     //get one text
     router.get("/textos/:object", async (req, res) => {
         try {
-            
-            console.log("Este es el tipo en req.paramas : "+req.params.object);
             const connection = await pool.getConnection();
             const sqlSelect = "SELECT texto_campo FROM textos_cmd WHERE Tipo = '"+req.params.object+"'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(`Get textos_cmd ${req.params.object} Successfull`)
             res.json(rows);
         } catch (err) {
             console.log(err);

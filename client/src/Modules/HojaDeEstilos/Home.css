@@ -6,31 +6,6 @@
   background-color: #E4EBF9;
 }
 
-/* Editar botones de componentes */
-.edit-buttons-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px; /* Adjust margin as needed */
-}
-
-/* Style for the centered edit buttons */
-.centered-edit-buttons {
-  display: flex;
-  align-items: center;
-  gap: 10px; /* Adjust gap between buttons */
-}
-
-.edit-buttons {
-  display: flex;
-  gap: 10px; /* Adjust gap between buttons */
-}
-
-/* Style for the edit mode */
-.edit-mode .edit-buttons-container {
-  justify-content: flex-start;
-  margin-top: 0; /* Reset margin */
-}
-/* ............................. */
 .content-header-banner {
   display: flex;
   justify-content: center;
@@ -283,7 +258,11 @@
   font-family: 'Montserrat';
   padding-top: 10px;
   margin-bottom: -10px;
-  height: 80px;
+  height: 100px;
+  /* TEMPORAL */
+  /* background-color: rgb(0, 255, 0, 0.3);
+  background-size: 10px 10px;
+  background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .google-map-frame {
@@ -307,6 +286,17 @@
 }
 
 .imagenes {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 2000px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 12px 0 15px -4px rgba(0, 0, 0, 0.3),
+    -12px 0 15px -4px rgba(0, 0, 0, 0.3);
+  padding-bottom: 10px;
+}
+.innerCard{
   position: relative;
   width: 100%;
   height: auto;
@@ -356,8 +346,8 @@
   .service-text-elements {
     display: flex;
     flex-direction: column;
+    gap: 5px;
     text-align: left;
-    height: 30%;
   }
 
   .service-header {

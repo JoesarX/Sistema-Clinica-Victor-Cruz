@@ -1,12 +1,26 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000';
+// const API_URL = 'http://localhost:8000';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllCitas = async () => {
     try {
         const res = await axios.get(`${API_URL}/citas`);
         console.log("SUCCESS FETCHING MEDICAMENTOS");
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch citas');
+    }
+};
+
+export const getAllCitasFiltered = async (status) => {
+    try {
+        console.log("In Service getAllCitasFiltered")
+        console.log("Url: " + `${API_URL}/citas/citasPasadas/${status}`)
+        const res = await axios.get(`${API_URL}/citas/citasPasadas/${status}`);
+        console.log("SUCCESS FETCHING FILTERED MEDICAMENTOS");
         console.log(res.data);
         return res.data;
     } catch (error) {
@@ -105,6 +119,7 @@ export const getCheckAvailability = async (fecha, hora, idcita = null) => {
 
 const Services = {
     getAllCitas,
+    getAllCitasFiltered,
     postCitas,
     getOneCita,
     deleteCitas,

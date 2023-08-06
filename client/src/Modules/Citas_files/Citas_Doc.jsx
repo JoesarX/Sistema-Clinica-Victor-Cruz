@@ -35,6 +35,7 @@ const Citas_Doc = () => {
       } catch (error) {
         console.log("Error fetching citas:", error);
       }
+<<<<<<< HEAD
     } else {
       try {
         const citasData = await CitasService.filterCita(filter);
@@ -47,6 +48,61 @@ const Citas_Doc = () => {
       } catch (error) {
         console.log('Error fetching filtered citas:', error);
       }
+=======
+    };
+    // Update tabla
+    fetchAllCitas();
+
+    const processEvents = (receivedCitas) => {
+      const events = receivedCitas.map(cita => {
+        // Parse the fecha and hora values to create JavaScript Date objects
+        const fechaParts = cita.fecha.split('-');
+        let horaParts;
+
+        // Time format is in "1:45 PM" format
+        const timeString = cita.hora;
+        const [time, meridiem] = timeString.split(' ');
+        const [hour, minute] = time.split(':');
+        const hour24 = parseInt(hour) + (meridiem === 'PM' && hour!=12 ? 12 : 0);
+        //console.log("hour24: ", hour24)
+        horaParts = [hour24.toString(), minute];
+        //console.log("HoraParts: ", horaParts)
+
+
+        const startDateTime = new Date(
+          parseInt(fechaParts[0]),    // Year
+          parseInt(fechaParts[1]) - 1,  // Month (months are zero-indexed in JavaScript Date)
+          parseInt(fechaParts[2]),    // Day
+          parseInt(horaParts[0]),      // Hours
+          parseInt(horaParts[1])       // Minutes
+        );
+        //console.log("startDateTime: ", startDateTime)
+
+        // Calculate the ending time to be 40 minutes after the starting time
+        const endDateTime = new Date(startDateTime.getTime() + 29 * 60000); // 29 minutes in milliseconds
+
+        return {
+          title: `${cita.nombre_persona}`,
+          start: startDateTime,
+          end: endDateTime,
+          // description: `Hora de inicio: ${cita.hora}, Hora final: ${formatEndTime(endDateTime)}`,
+        };
+      });
+      setFormattedEvents(events);
+    };
+
+
+    // Helper function to format the ending time as "%H:%i"
+    const formatEndTime = (endTime) => {
+      const hours = endTime.getHours().toString().padStart(2, '0');
+      const minutes = endTime.getMinutes().toString().padStart(2, '0');
+      return `${hours}:${minutes}`;
+    };
+
+    if (isSubmitting) {
+      fetchAllCitas();
+      setIsSubmitting(false);
+>>>>>>> parent of 79b73b7 (Merge pull request #106 from JoesarX/CMS_HomePage)
     }
 
   };
