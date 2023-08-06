@@ -22,7 +22,7 @@ const textos_cmdRouter = (pool) => {
             
             console.log("Este es el tipo en req.paramas : "+req.params.object);
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT texto_campo FROM textos_cmd WHERE Tipo = '"+req.params.object+"'";
+            const sqlSelect = "SELECT * FROM textos_cmd WHERE Tipo = '"+req.params.object+"'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -72,8 +72,8 @@ const textos_cmdRouter = (pool) => {
         }
     });
 
-    //edit text 
-    router.put("/:objectTipo", async (req, res) => {
+    //edit category 
+    router.put("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
             const {id}  = req.params;
@@ -84,20 +84,19 @@ const textos_cmdRouter = (pool) => {
             const q =
                 "UPDATE textos_cmd SET texto_campo = ? WHERE Tipo = ?";
           
-            console.log("ReqBody papu;: "+req.body[1] + " " + req.body[0]+  " "+req.body.texto_campo);
+            console.log(req.body[1] + " " + req.body[0]);
            // console.log(req);
             const values = [
-                req.body.texto_campo,
-                req.params.objectTipo
-                
+                req.body[0],
+                req.body[1]
                 
             ];
             
            /* console.log(values);
             console.log(values[0]);
             console.log(values[1]);*/
-            //console.log("Esto es params: "+req.params);
-            console.log("Esto es values!!!! : "+values);
+            console.log("Esto es params: "+req.params);
+            console.log("Esto es values: "+values);
            await connection.query(q, values);
             connection.release();
             res.json("Categoría actualizado exitosamente!");

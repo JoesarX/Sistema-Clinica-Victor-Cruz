@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000';
+// const API_URL = 'http://localhost:8000';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllCitas = async () => {
@@ -25,17 +25,6 @@ export const getOneCita = async (id) => {
         throw new Error('Failed to fetch cita');
     }
 };
-
-export const filterCita = async (estado) => {
-    try {
-        const res = await axios.get(`${API_URL}/citas/filtrarCitasTabla/${estado}`);
-        return res.data;
-    } catch (error) {
-        console.log(error);
-        throw new Error('Failed to fetch cita');
-    }
-};
-
 
 export const postCitas = async (cita) => {
     try {
@@ -76,7 +65,8 @@ export const getAvailableTimes = async (date, id = null) => {
         console.log(date);
         const url = id ? `${API_URL}/citas/availableTimes/${date}?id=${id}` : `${API_URL}/citas/availableTimes/${date}`;
         const res = await axios.get(url);
-        
+        console.log("SUCCESS FETCHING AVAILABLE TIMES");
+        console.log(res.data);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -110,7 +100,6 @@ const Services = {
     deleteCitas,
     editCitas,
     getAvailableTimes,
-    filterCita,
     getCheckAvailability
     // Other functions
 };
