@@ -22,13 +22,14 @@ import CitasTabla from "./Modules/CitasTabla/CitasTabla";
 import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
 import Prueba from "./Modules/CMD/prueba";
+import HistorialCita from "./Modules/CitasTabla/HistorialCita";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-    <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/iniciarsesion" element={<IniciarSesion />} />
           <Route path="/acerca-de" element={<Acercade />} />
           <Route path="/servicios" element={<Servicios />} />
@@ -43,8 +44,9 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contactanos" element={<Contactanos />} />
           <Route path="/userpage" element={<LandingPage />} />
-          <Route path="/citas_tabla" element={<CitasTabla/>}/>
-          <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc/>}/>
+          <Route path="/citas_tabla" element={<CitasTabla />} />
+          <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc />} />
+          <Route path="/citas_tabla/historial_cita" element={<HistorialCita />} />
           <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
         </Routes>
       </BrowserRouter>
