@@ -5,6 +5,7 @@ const categoriesRouter = (pool) => {
     //get all categories
     router.get("/", async (req, res) => {
         try {
+            console.log("hellooo")
             const connection = await pool.getConnection();
             const sqlSelect = "SELECT * FROM categorias ";
             const [rows, fields] = await connection.query(sqlSelect);
