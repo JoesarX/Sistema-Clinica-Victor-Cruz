@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faFile } from '@fortawesome/free-solid-svg-icons';
 
 
 //GRID
@@ -607,6 +608,48 @@ const Citas = () => {
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
+    /*const handleClick = (id) => {
+        console.log("ID ENVIADA: " + selectedIdPaciente)
+        //navigate(`/citas_tabla/historial_cita/${id}`);
+    }*/
+
+    const handleClick = () => {
+        navigate('/citas_tabla/historial_cita/');
+    }
+
+    const getActionButtons = (estado) => {
+
+        if (estado === 'Pendiente') {
+            return (
+                <Button variant="success">
+                    <FontAwesomeIcon icon={faPlay} />
+                </Button>
+            );
+        }
+
+        if (estado === 'En Curso') {
+            return (
+                <>
+                    <Button variant="warning">
+                        <FontAwesomeIcon icon={faTimes} />
+                    </Button>
+
+                    <Button variant="info" onClick={handleClick}>
+                        <FontAwesomeIcon icon={faFile} />
+                    </Button>
+                </>
+            )
+        }
+
+        if (estado === 'Terminada') {
+            return (
+                <Button variant="info" onClick={handleClick}>
+                    <FontAwesomeIcon icon={faFile} />
+                </Button>
+            )
+        }
+    };
+
     return (
 
         <div className='crudGrid'>
@@ -632,20 +675,17 @@ const Citas = () => {
                                     headerName: '',
                                     flex: 2,
                                     renderCell: (params) => (
-
-                                        <div>
-
-                                            <IconButton onClick={() => toggleModal2(params.id)} >
+                                        <>
+                                            <IconButton onClick={() => toggleModal2(params.id)}>
                                                 <Edit />
                                             </IconButton>
-
-
                                             <IconButton onClick={() => handleDeleteCitasClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
+                                            {getActionButtons(params.row.estado)}
+                                        </>
 
-                                        </div>
-                                    ),
+                                    )
                                 },
 
                             ]}
@@ -811,7 +851,7 @@ const Citas = () => {
                                         getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
                                         onChange={(event, newValue) => {
                                             cita.idpaciente = newValue?.idpaciente;
-                                          
+
                                         }}
                                         renderInput={(params) => (
                                             <TextField {...params} label="ID Paciente" required />
