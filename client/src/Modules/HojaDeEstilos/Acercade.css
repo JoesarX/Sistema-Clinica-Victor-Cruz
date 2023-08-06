@@ -286,7 +286,7 @@
   border-radius: 20px;
 }
 
-.upload-buttons >*:hover {
+.upload-buttons>*:hover {
   background-color: rgb(6, 130, 130);
 }
 

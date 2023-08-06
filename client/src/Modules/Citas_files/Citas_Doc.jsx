@@ -46,11 +46,8 @@ const Citas_Doc = () => {
         const timeString = cita.hora;
         const [time, meridiem] = timeString.split(' ');
         const [hour, minute] = time.split(':');
-        const hour24 = parseInt(hour) + (meridiem === 'PM' && hour!=12 ? 12 : 0);
-        //console.log("hour24: ", hour24)
+        const hour24 = parseInt(hour) + (meridiem === 'PM' ? 12 : 0);
         horaParts = [hour24.toString(), minute];
-        //console.log("HoraParts: ", horaParts)
-
 
         const startDateTime = new Date(
           parseInt(fechaParts[0]),    // Year
@@ -59,10 +56,9 @@ const Citas_Doc = () => {
           parseInt(horaParts[0]),      // Hours
           parseInt(horaParts[1])       // Minutes
         );
-        //console.log("startDateTime: ", startDateTime)
 
         // Calculate the ending time to be 40 minutes after the starting time
-        const endDateTime = new Date(startDateTime.getTime() + 29 * 60000); // 29 minutes in milliseconds
+        const endDateTime = new Date(startDateTime.getTime() + 29 * 60000); // 40 minutes in milliseconds
 
         return {
           title: `${cita.nombre_persona}`,

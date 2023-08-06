@@ -51,9 +51,9 @@ const Filtro = () => {
                 const timeString = cita.hora;
                 const [time, meridiem] = timeString.split(' ');
                 const [hour, minute] = time.split(':');
-                const hour24 = parseInt(hour) + (meridiem === 'PM' && hour != 12 ? 12 : 0);
+                const hour24 = parseInt(hour) + (meridiem === 'PM' ? 12 : 0);
                 horaParts = [hour24.toString(), minute];
- 
+
                 const startDateTime = new Date(
                     parseInt(fechaParts[0]),    // Year
                     parseInt(fechaParts[1]) - 1,  // Month (months are zero-indexed in JavaScript Date)

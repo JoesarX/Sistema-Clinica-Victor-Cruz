@@ -8,9 +8,6 @@ import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
 import textos_cmdRouter from "./routes/textos_cmd.js";
-
-import CarruselRouter from "./routes/carrusel.js";
-
 import nodemailer from "nodemailer";
 
 
@@ -74,7 +71,6 @@ app.use("/citas", citasRouter(pool, transporter));
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
 
 app.use('/texto_cmd',textos_cmdRouter(pool));
-app.use('/carrusel',CarruselRouter(pool));
 
 
 
