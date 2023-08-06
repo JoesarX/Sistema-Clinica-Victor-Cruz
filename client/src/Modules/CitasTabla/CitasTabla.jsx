@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { faPlay, faFile } from '@fortawesome/free-solid-svg-icons';
 
 
 //GRID
@@ -234,13 +233,22 @@ const Citas = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
         cleanCita();
-        // // console.log("Expedientes", Expedientes)
-        // // console.log("Usuarios", Usuarios)
-        const date = new Date();
-        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : '';
+
+        const currentDate = new Date();
+        const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+
+        // Calculate the number of days to add to the current date to reach the next Monday
+        const daysUntilNextMonday = currentDayOfWeek === 0 ? 1 : 8 - currentDayOfWeek;
+
+        // Create a new date by adding the days to the current date
+        const nextMonday = new Date(currentDate);
+        nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
+
+        const formattedDate = nextMonday ? dayjs(nextMonday).format('YYYY-MM-DD') : '';
         const times = await CitasService.getAvailableTimes(formattedDate);
         setAvailableTimes(times);
     };
+
 
     const [id, setID] = useState(null);
     const [citaD, setCitaD] = useState([]);
@@ -344,6 +352,11 @@ const Citas = () => {
     };
 
     let isAvailabilityCheckInProgress = false;
+
+    const isWeekday = (date) => {
+        const day = date.day();
+        return day == 0 || day == 6; // 0 is Sunday, 6 is Saturday
+    };
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
@@ -598,48 +611,6 @@ const Citas = () => {
         };
     }, [isLoggedIn, navigate, isSubmitting]);
 
-    /*const handleClick = (id) => {
-        console.log("ID ENVIADA: " + selectedIdPaciente)
-        //navigate(`/citas_tabla/historial_cita/${id}`);
-    }*/
-
-    const handleClick = () => {
-        navigate('/citas_tabla/historial_cita/');
-    }
-
-    const getActionButtons = (estado) => {
-
-        if (estado === 'Pendiente') {
-            return (
-                <Button variant="success">
-                    <FontAwesomeIcon icon={faPlay} />
-                </Button>
-            );
-        }
-
-        if (estado === 'En Curso') {
-            return (
-                <>
-                    <Button variant="warning">
-                        <FontAwesomeIcon icon={faTimes} />
-                    </Button>
-
-                    <Button variant="info" onClick={handleClick}>
-                        <FontAwesomeIcon icon={faFile} />
-                    </Button>
-                </>
-            )
-        }
-
-        if (estado === 'Terminada') {
-            return (
-                <Button variant="info" onClick={handleClick}>
-                    <FontAwesomeIcon icon={faFile} />
-                </Button>
-            )
-        }
-    };
-
     return (
 
         <div className='crudGrid'>
@@ -665,17 +636,20 @@ const Citas = () => {
                                     headerName: '',
                                     flex: 2,
                                     renderCell: (params) => (
-                                        <>
-                                            <IconButton onClick={() => toggleModal2(params.id)}>
+
+                                        <div>
+
+                                            <IconButton onClick={() => toggleModal2(params.id)} >
                                                 <Edit />
                                             </IconButton>
+
+
                                             <IconButton onClick={() => handleDeleteCitasClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
-                                            {getActionButtons(params.row.estado)}
-                                        </>
 
-                                    )
+                                        </div>
+                                    ),
                                 },
 
                             ]}
@@ -754,6 +728,7 @@ const Citas = () => {
                                         id="fecha"
                                         onChange={handleDateChange}
                                         renderInput={(params) => <TextField {...params} />}
+                                        shouldDisableDate={isWeekday} // Disable weekends
                                         name='fecha'
                                         value={fecha}
                                     />
@@ -885,6 +860,7 @@ const Citas = () => {
                                             id="fecha"
                                             onChange={handleEditDateChange}
                                             renderInput={(params) => <TextField {...params} />}
+                                            shouldDisableDate={isWeekday} // Disable weekends
                                             name='fecha'
                                             value={dayjs(fecha)}
                                         />

@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "tonybaloney.vscode-pets"
+        "tonybaloney.vscode-pets",
+        "oderwat.indent-rainbow"
     ]
 }
