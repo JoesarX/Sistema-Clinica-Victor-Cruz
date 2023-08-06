@@ -258,7 +258,7 @@ const Citas = () => {
         console.log("currentDayOfWeek: ", currentDayOfWeek);
 
         // Calculate the number of days to add to the current date to reach the next Monday
-        const daysUntilNextMonday = 0
+        let daysUntilNextMonday = 0
 
         if (currentDayOfWeek === 0) {
             daysUntilNextMonday = 1;
@@ -269,11 +269,10 @@ const Citas = () => {
         // Create a new date by adding the days to the current date
         const nextMonday = new Date(currentDate);
         nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
-
-        const formattedDate = nextMonday ? dayjs(nextMonday).format('YYYY-MM-DD') : '';
-        console.log("formattedDate: ", formattedDate);
+        const formattedDate = dayjs(nextMonday).format('YYYY-MM-DD');
         const times = await CitasService.getAvailableTimes(formattedDate);
-        console.log("times: ", times);
+        const fechaAsDayjs = dayjs(formattedDate);
+        setFecha(fechaAsDayjs);
         setAvailableTimes(times);
     };
 
