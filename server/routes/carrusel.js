@@ -45,12 +45,13 @@ const CarruselRouter = (pool) => {
     router.delete("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM imagenes where id = '" + req.params.id + "'";
+            const sqlSelect = "delete FROM imagenes where idfoto = '" + req.params.id + "'and tipo = 'Carrusel'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
+            console.log(`Delete Picture successful for ${req.params.id}`);
         } catch (err) {
-            console.log(err);
+            console.log(`Delete Picture failed for ${req.params.id}. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

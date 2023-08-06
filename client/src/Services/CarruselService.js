@@ -34,10 +34,23 @@ export const postPicture = async (carrusel) => {
     }
 };
 
+
+export const deletePicture = async (id) => {
+    try {
+        await axios.delete(`${API_URL}/carrusel/${id}`);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to delete picture');
+    }
+};
+
+
 const Services = {
     getPicsCarrusel,
     editMision,
-    postPicture
+    postPicture,
+    deletePicture
 
 };
 
