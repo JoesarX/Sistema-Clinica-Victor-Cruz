@@ -79,6 +79,7 @@ const Servicios = () => {
   const [isSubmitting3, setIsSubmitting3] = useState(false);
 
   const handleModalOpen = () => {
+    setImagePreview(null);
     setModalOpen(true);
   };
 
@@ -180,19 +181,23 @@ const Servicios = () => {
     }
 
     // Validate description
-    const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
-    if (!descriptionRegex.test(newDescription)) {
-      setDescriptionError(true);
-      alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
-      return;
-    }
-    if (imageUpload != null) {
-      const file = imageUpload;
-      if (validateImageFormat(file) == false) {
-          alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
-          return;
-      }
-    }
+const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+let cleanedDescription = newDescription.trim().replace(/ +$/, ' ');
+
+if (!descriptionRegex.test(cleanedDescription)) {
+  setDescriptionError(true);
+  alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+  return;
+}
+
+if (imageUpload != null) {
+  const file = imageUpload;
+  if (validateImageFormat(file) == false) {
+    alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+    return;
+  }
+}
+
       console.log("Entra a agregar despues de validaciones");
       try {
           if (imageUpload != null) {

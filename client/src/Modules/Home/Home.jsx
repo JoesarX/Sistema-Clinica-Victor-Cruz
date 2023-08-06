@@ -124,7 +124,7 @@ const Home = () => {
                 </div>
             </div>
             <div class="button-container">
-                <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
+                <button class="see-more-button servicecomponent" onClick={handleServicesClick}>Ver más...</button>
             </div>
             <div className="content-header-banner">
                 SOBRE <span style={{ color: '#223240', marginLeft: '10px' }}>NOSOTROS</span>
