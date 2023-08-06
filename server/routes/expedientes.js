@@ -12,10 +12,11 @@ const expedientesRouter = (pool) => {
             const sqlSelect = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion FROM expedientes"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log(rows);
             res.json(rows);
             console.log("Get all Expedientes call successful");
         } catch (err) {
-            console.log("Get all Expedientes call failed. Error: " + err)
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -24,14 +25,14 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const email = req.query.email[0];
+            console.log("PORFAVOOOOOR: " + email);
             const q = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion FROM expedientes WHERE correo = ?";
             const result = await connection.query(q, [email]);
             connection.release();
-            console.log("Get userpage call successful")
+            console.log("resultado de query:", result[0]);
             res.json(result[0]);
         } catch (error) {
-            console.log("Get userpage call failed. Error: " + error);
-            res.status(500).json({ error: "Internal Server Error" });
+            console.log("fijate acá:" + error)
         }
     });
 
@@ -55,10 +56,10 @@ const expedientesRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
-            console.log("Post Expediente successful");
+            console.log("Post call successful");
             res.json("Expediente añadido exitosamente!");
         } catch (err) {
-            console.log("Post Expediente failed. Error: " + err);
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -73,9 +74,9 @@ const expedientesRouter = (pool) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])
-            console.log(`Get One Expediente successful for ${req.params.id}`);
+            console.log("Get One call successful");
         } catch (err) {
-            console.log(`Get One Expediente failed for ${req.params.id}. Error: ` + err);
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -90,9 +91,9 @@ const expedientesRouter = (pool) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0])
-            console.log(`Get One Expediente Dashboard call successful for ${req.params.id}`);
+            console.log("Get One Dashboard call successful");
         } catch (err) {
-            console.log(`Get One Expediente Dashboard call failed for ${req.params.id}. Error: ` + err);
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -106,9 +107,9 @@ const expedientesRouter = (pool) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows)
-            console.log(`Get One Expediente Dashboard call successful for ${req.params.id}`);
+            console.log("Get One Cita call successful");
         } catch (err) {
-            console.log(`Get One Expediente Dashboard call failed for ${req.params.id}. Error: ` + err);
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -137,15 +138,19 @@ const expedientesRouter = (pool) => {
                 presion,
                 id
             ];
+            console.log(values);
             await connection.query(q, values);
             connection.release();
-            console.log(`Put Expediente Dashboard call successful for ${req.params.id}`);
+            console.log("Update Signos Dashboard call successful");
             res.json("Expediente actualizado exitosamente!");
         } catch (err) {
-            console.log(`Put Expediente Dashboard call failed for ${req.params.id}. Error: ` + err);
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+
+
+
 
     //Delete a patient by id
     router.delete("/:id", async (req, res) => {
@@ -155,9 +160,9 @@ const expedientesRouter = (pool) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
-            console.log(`Delete Expediente successful for ${req.params.id}`);
+            console.log("Delete call successful");
         } catch (err) {
-            console.log(`Delete Expediente failed for ${req.params.id}. Error: ` + err);
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -167,6 +172,7 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const { id } = req.params;
+            console.log(req.params);
             const {
                 nombre,
                 edad,
@@ -196,12 +202,13 @@ const expedientesRouter = (pool) => {
                 ocupacion,
                 id
             ];
+            console.log(values);
             await connection.query(q, values);
             connection.release();
-            console.log(`Put Expediente successful for ${req.params.id}`);
+            console.log("Update call successful");
             res.json("Expediente actualizado exitosamente!");
         } catch (err) {
-            console.log(`Put Expediente failed for ${req.params.id}. Error: ` + err);
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

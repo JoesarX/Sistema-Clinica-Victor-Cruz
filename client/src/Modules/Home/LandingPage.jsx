@@ -287,7 +287,6 @@ const LandingPage = () => {
                         <hr className="linea" />
                         <p className="smallTexts">Ocupacion: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.ocupacion}</span></p>
                         <hr className="linea" />
-
                     </div>
                 </div>
                 <div className="appointments-section">

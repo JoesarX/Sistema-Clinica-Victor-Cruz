@@ -2,13 +2,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '../HojaDeEstilos/Footer.css'
 import { useNavigate, } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faHome, faPhone, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faHome, faPhone, faEdit, faSave, faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
 
 
 const Topbar = () => {
+
+    /* Funciones para toggle los botones de editar*/
+    const [showButtons, setShowButtons] = useState(false);
+
+    const handleToggleButtonClick = () => {
+        setShowButtons((prevShowButtons) => !prevShowButtons);
+    };
 
     const [direccionOBJ, setDireccionOBJ] = React.useState({
         Tipo: 'Footer_Dirección',
@@ -22,6 +29,12 @@ const Topbar = () => {
 
     const [correoOBJ, setCorreoOBJ] = React.useState({
         Tipo: 'Footer_Correo',
+        texto_campo: ''
+    })
+
+
+    const [copyOBJ, setcopyOBJ] = React.useState({
+        Tipo: 'copyright',
         texto_campo: ''
     })
 
@@ -61,21 +74,16 @@ const Topbar = () => {
         return commaCount >= 3 && address.trim().endsWith('Honduras');
     };
 
-    const handleSaveAddress = () => {
+    const handleSaveAddress = async () => {
         if (isValidAddress(editedAddress)) {
             setIsEditing(false);
-            text_Services.editText(direccionOBJ);
+            await text_Services.editText(direccionOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid address case
             alert('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").');
         }
     };
-
-
-
-
-
 
 
     /* Para el correo electronico */
@@ -108,10 +116,10 @@ const Topbar = () => {
         return emailPattern.test(email);
     };
 
-    const handleSaveEmail = () => {
+    const handleSaveEmail = async () => {
         if (isValidEmail(editedEmail)) {
             setIsEditing1(false);
-            text_Services.editText(correoOBJ);
+            await text_Services.editText(correoOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
@@ -146,10 +154,10 @@ const Topbar = () => {
         return phonePattern.test(phone);
     };
 
-    const handleSavePhone = () => {
+    const handleSavePhone = async () => {
         if (isValidPhone(editedPhone)) {
             setIsEditing2(false);
-            text_Services.editText(numOBJ);
+            await text_Services.editText(numOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
@@ -160,35 +168,31 @@ const Topbar = () => {
 
     /* para el copyright */
 
-    const [year, setYear] = useState(String(new Date().getFullYear()));
-    const [editedYear, setEditedYear] = useState(String(new Date().getFullYear()));
+    const [year, setYear] = useState('© 2023 Clínica Dr. Víctor Cruz');
+    const [editedText, setEditedText] = useState('');
     const [isEditing3, setIsEditing3] = useState(false);
+
+    const handleChangeText = (event) => {
+        setEditedText(event.target.value);
+        copyOBJ.texto_campo = event.target.value;
+
+    };
 
     const handleEditYear = () => {
         setIsEditing3(true);
+        setEditedText(year); // Set the current selected text as the initial value for editing
     };
 
     const handleCancelEdit3 = () => {
         setIsEditing3(false);
-        setEditedYear(year);
     };
 
-    const isValidYearFormat = (year) => {
-        // Regular expression to match a valid year in four digits (1900 to 9999)
-        const yearPattern = /^(19[0-9][0-9]|20[0-9][0-9]|9999)$/;
-        return yearPattern.test(year);
+    const handleSaveText = async () => {
+        setIsEditing3(false);
+        setYear(editedText); // Update the selected text after saving
+        await text_Services.editText(copyOBJ);
+        window.location.reload(true);
     };
-
-    const handleSaveYear = () => {
-        if (isValidYearFormat(editedYear)) {
-            setYear(editedYear);
-            setIsEditing3(false);
-        } else {
-            // Display an error message or handle the invalid year case
-            alert('El año ingresado no es válido. Asegúrate de que sea un año válido en cuatro dígitos.');
-        }
-    };
-
 
 
 
@@ -198,7 +202,7 @@ const Topbar = () => {
                 const objectDireccion = ['Footer_Dirección'];
                 var direccionData;
                 direccionData = await text_Services.getOneText(objectDireccion);
-                console.log("Cargar Mision: " + direccionData[0].texto_campo);
+                console.log("Cargar Direccion: " + direccionData[0].texto_campo);
                 setAddress(direccionData[0].texto_campo);
                 direccionOBJ.texto_campo = direccionData[0].texto_campo;
             } catch (error) {
@@ -225,11 +229,25 @@ const Topbar = () => {
                 const objectNum = ['Footer_Telefono'];
                 var numData;
                 numData = await text_Services.getOneText(objectNum);
-                console.log("Cargar Mision: " + numData[0].texto_campo);
+                console.log("Cargar Numero Telefonico: " + numData[0].texto_campo);
                 setPhone(numData[0].texto_campo);
                 numOBJ.texto_campo = numData[0].texto_campo;
             } catch (error) {
                 console.log("Error fetching Numero de Telefono:", error);
+            }
+        };
+
+
+        const fetchCopyright = async () => {
+            try {
+                const objectCopy = ['copyright'];
+                var copyData;
+                copyData = await text_Services.getOneText(objectCopy);
+                console.log("Cargar Copyright: " + copyData[0].texto_campo);
+                setYear(copyData[0].texto_campo);
+                copyOBJ.texto_campo = copyData[0].texto_campo;
+            } catch (error) {
+                console.log("Error fetching Copyright:", error);
             }
         };
 
@@ -239,6 +257,7 @@ const Topbar = () => {
         fetchDireccion();
         fetchCorreo();
         fetchNumTelefono();
+        fetchCopyright();
 
 
     }, [isEditing, isEditing1, isEditing2, isEditing3]);
@@ -269,7 +288,7 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{address}</div>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditAddress}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -298,7 +317,7 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{email}</div>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditEmail}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -327,7 +346,7 @@ const Topbar = () => {
                         ) : (
                             <>
                                 <div>{phone}</div>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditPhone}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -342,11 +361,11 @@ const Topbar = () => {
                     <>
                         <input
                             type="text"
-                            value={editedYear}
-                            onChange={(e) => setEditedYear(e.target.value)}
+                            value={editedText}
+                            onChange={handleChangeText}
                             style={{ color: '#1E60A6', fontWeight: 'bold' }}
                         />
-                        <button onClick={handleSaveYear}>
+                        <button onClick={handleSaveText}>
                             <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
                         </button>
                         <button onClick={handleCancelEdit3}>
@@ -356,9 +375,9 @@ const Topbar = () => {
                 ) : (
                     <>
                         <span onClick={handleEditYear} style={{ cursor: 'pointer' }}>
-                            © {year} Clínica Dr. Víctor Cruz
+                            {year}
                         </span>
-                        {isLoggedIn && userType !== 'normal' && (
+                        {isLoggedIn && userType !== 'normal' && showButtons && (
                             <button onClick={handleEditYear}>
                                 <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                             </button>
@@ -366,6 +385,11 @@ const Topbar = () => {
                     </>
                 )}
             </div>
+            {isLoggedIn && userType !== 'normal' && (
+                <button className='buttonG' onClick={handleToggleButtonClick}>
+                <FontAwesomeIcon icon={faGear} />
+            </button>
+            )}
         </footer>
     );
 

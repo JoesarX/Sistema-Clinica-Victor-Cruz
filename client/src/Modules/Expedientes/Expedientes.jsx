@@ -441,7 +441,6 @@ const Expedientes = () => {
                pacienteId: expediente.idpaciente,
             }));
             setExpedientes(expedientesWithId);
-            console.log(expedientes)
          } catch (error) {
             // Handle error if any
             console.log("Error fetching expedientes:", error);
@@ -453,7 +452,6 @@ const Expedientes = () => {
       if (isSubmitting) {
          fetchAllExpedientes();
       }
-      console.log(expedientes)
 
       const handleResize = () => {
          const isMobile = window.innerWidth < 600; // Define the screen width threshold for mobile devices
