@@ -15,9 +15,9 @@ export const getPicsCarrusel = async () => {
 
 
 export const editMision = async (mision) => {
-   
+
     try {
-        await axios.put(`${API_URL}/mision/${'24'}`,mision);
+        await axios.put(`${API_URL}/mision/${'24'}`, mision);
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit mision');
@@ -26,7 +26,7 @@ export const editMision = async (mision) => {
 
 export const postPicture = async (carrusel) => {
     try {
-        const res = await axios.post(`${API_URL}/carrusel`,carrusel);
+        const res = await axios.post(`${API_URL}/carrusel`, carrusel);
         return res.data;
     } catch (error) {
         console.log(error);

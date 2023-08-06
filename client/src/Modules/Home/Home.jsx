@@ -39,34 +39,19 @@ const Home = () => {
 
     let [CarruselData, setCarruselData] = useState([]);
 
-
     let [imageUpload, setImageUpload] = useState(null);
     let [imagePreview, setImagePreview] = useState(null);
 
-
-
-
-    let [CarruselPics, setCarruselPics] = React.useState({
-        tipo: 'Carrusel',
-        size: null,
-        visibility: null,
-        url: '',
-        created_at: '',
-        updated_at: ''
-    })
-
-
+    const fetchAllCarruselPics = async () => {
+        try {
+            const CarruselArray = await CarruselService.getPicsCarrusel();
+            setCarruselData(CarruselArray);
+        } catch (error) {
+            console.log("Error fetching carrusel pictures:", error);
+        }
+    };
 
     useEffect(() => {
-        const fetchAllCarruselPics = async () => {
-            try {
-                const CarruselArray = await CarruselService.getPicsCarrusel();
-                console.log("CARRUSEL: ", CarruselArray);
-                setCarruselData(CarruselArray);
-            } catch (error) {
-                console.log("Error fetching carrusel pictures:", error);
-            }
-        };
         fetchAllCarruselPics();
     }, []);
 
@@ -204,26 +189,21 @@ const Home = () => {
         }
     };
 
-    
+
 
     const submitPicture = async () => {
 
         console.log("Entra a agregar despues de validaciones");
         try {
             if (imageUpload != null) {
-                const imageUrll = await uploadFile();
-                console.log(imageUrll);
-                setCarruselPics((prevState) => ({
-                    ...prevState,
-                    url: imageUrll,
-                }));
-                Carrusel.url = imageUrll;
+                const imageUrl = await uploadFile();
+                const carruselToSend = { url: imageUrl };
+                await CarruselService.postPicture(carruselToSend);
+                alert('Foto Agregada');
+                // window.location.reload();
             }
-            await CarruselService.postPicture(Carrusel);
-            alert('Foto Agregada');
             // toggleModal();
             setImagePreview(null);
-            //  window.location.reload();
         } catch (error) {
             // Handle error if any
             console.log('Error submitting medicamento:', error);
@@ -251,26 +231,26 @@ const Home = () => {
             <Carrusel />
 
             <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
-                <input
-                    type="file"
-                    onChange={(event) => {
-                        imageUpload = event.target.files[0];
-                        imagePreview = URL.createObjectURL(event.target.files[0]);
+            <input
+                type="file"
+                onChange={(event) => {
+                    imageUpload = event.target.files[0];
+                    imagePreview = URL.createObjectURL(event.target.files[0]);
 
-                        const selectedFile = event.target.files[0];
-                        if (selectedFile) {
-                            console.log(":)))))))))")
-                            // Do something with the selected file, e.g., display its details
-                            console.log('Selected file name:', selectedFile.name);
-                            console.log('Selected file type:', selectedFile.type);
-                            console.log('Selected file size:', selectedFile.size);
-                            handleModalSubmit(event);
-                        }
-                    }}
-                    name='urlfoto'
-                    id="urlfoto"
-                    className="customFileInput"
-                />
+                    const selectedFile = event.target.files[0];
+                    if (selectedFile) {
+                        console.log(":)))))))))")
+                        // Do something with the selected file, e.g., display its details
+                        console.log('Selected file name:', selectedFile.name);
+                        console.log('Selected file type:', selectedFile.type);
+                        console.log('Selected file size:', selectedFile.size);
+                        handleModalSubmit(event);
+                    }
+                }}
+                name='urlfoto'
+                id="urlfoto"
+                className="customFileInput"
+            />
 
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
@@ -326,6 +306,7 @@ const Home = () => {
                             value={missionText}
                             onChange={handleChange}
                             rows="10"
+                            style = {{width: '100%'}}
                         />
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
