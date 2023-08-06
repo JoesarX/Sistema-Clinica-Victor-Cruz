@@ -546,7 +546,7 @@ const Home = () => {
                 />
             </div>
             <div class="button-container">
-                <button class="see-more-button services" onClick={handleServicesClick}>Ver más...</button>
+                <button class="see-more-button servicecomponent" onClick={handleServicesClick}>Ver más...</button>
             </div>
             {isLoggedIn && userType !== 'normal' && (
                 <button onClick={() => setEditAll(!editAll)}>
