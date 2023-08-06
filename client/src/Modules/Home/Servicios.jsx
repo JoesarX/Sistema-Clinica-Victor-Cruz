@@ -36,35 +36,7 @@ const Servicios = () => {
     id: ''
   });
 
-  const [serviceData, setServiceData] = useState([
-    {
-      id: 1,
-      url: 'https://www.medigreen.com.ec/wp-content/uploads/2021/08/95368dbecc661caf7efebdb9c43364817e936d45.jpg',
-      title: 'Salud Ocupacional',
-      description: 'Se enfoca en prevenir enfermedades y lesiones laborales, mejorar las condiciones de trabajo y promover el bienestar general de los empleados.',
-      hooverComponent: '1'
-    },
-    {
-      id: 2,
-      url: 'https://static.emol.cl/emol50/Fotos/2020/03/24/file_20200324095443.jpg',
-      title: 'Salubrista',
-      description: 'Profesional que se dedica a mejorar la salud de las personas a través de diversas acciones y colaboraciones interdisciplinarias.',
-      hooverComponent: '2'
-    },
-    {
-      id: 3,
-      url: 'https://static.emisorasunidas.com/uploads/2020/09/dia-salubrista.jpg',
-      title: 'Epidemiología',
-      description: 'Estudio de los patrones, las causas y el control de las enfermedades en los grupos de personas.',
-      hooverComponent: '3'
-    },
-    {
-      id: 4,
-      url: 'https://www.clinicapremium.com/wp-content/uploads/2022/09/medicina-general-en-clinica-premium-marbella.jpg',
-      title: 'Atencion Primaria',
-      description: 'Se centra en la prevención, el diagnóstico y el tratamiento de enfermedades comunes, así como en promover la salud general de las personas.',
-      hooverComponent: '4'
-    },]);
+  const [serviceData, setServiceData] = useState([]);
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedService, setEditedService] = useState(null);
