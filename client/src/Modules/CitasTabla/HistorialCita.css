@@ -103,7 +103,7 @@
 
 .nombre {
     width: 100%;
-    height: fit-content;
+    height: moz-fit-content;
     font-family: 'Inter';
     font-style: normal;
     font-size: 30px;
@@ -114,7 +114,7 @@
 }
 
 .smallText {
-    width: fit-content;
+    width: moz-fit-content;
     word-spacing: normal;
     margin: 0px;
     font-family: 'Inter';
@@ -135,7 +135,7 @@
     word-wrap: normal;
     padding: 0px;
     width: 100%;
-    height: fit-content;
+    height: moz-fit-content;
 }
 
 .patient-email-container {
@@ -143,7 +143,7 @@
     justify-content: center;
     align-items: center;
     height: 25px;
-    width: fit-content;
+    width: moz-fit-content;
     line-height: 25px;
     text-align: center;
     vertical-align: middle;

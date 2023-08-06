@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from 'react';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPhone, faEnvelope, faEdit, faSave, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPhone, faEnvelope, faEdit, faSave, faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
 import { faWhatsapp, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
@@ -12,6 +12,15 @@ import text_Services from '../../Services/texto_cmdService';
 
 
 const Contactanos = () => {
+    /* Funciones para toggle los botones de editar*/
+    const [showButtons, setShowButtons] = useState(false);
+
+    const handleToggleButtonClick = () => {
+        setShowButtons((prevShowButtons) => !prevShowButtons);
+    };
+
+
+
     const openWhatsApp = () => {
         window.open('https://wa.me/+50433424985', '_blank');
     };
@@ -39,31 +48,10 @@ const Contactanos = () => {
     })
 
 
-
-
-
-
-
     /* Para el Numero Telefoinico */
     const [isEditing, setIsEditing] = useState(false);
     const [phone, setPhone] = useState('+504 2230-3901');
     const [editedPhone, setEditedPhone] = useState('');
-
-
-
-    /* 
-    const handleSaveEmail = () => {
-        if (isValidEmail(editedEmail)) {
-            setIsEditing1(false);
-            text_Services.editText(correoOBJ);
-            window.location.reload(true);
-        } else {
-            // Display an error message or handle the invalid email case
-            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos básicos de un correo electrónico válido.');
-        }
-    };
-
-    */
 
     const handleChangePhone = (event) => {
         setEditedPhone(event.target.value);
@@ -85,10 +73,10 @@ const Contactanos = () => {
         return phonePattern.test(phone);
     };
 
-    const handleSavePhone = () => {
+    const handleSavePhone = async () => {
         if (isValidPhone(editedPhone)) {
             setIsEditing(false);
-            text_Services.editText(numOBJ);
+            await text_Services.editText(numOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
@@ -124,10 +112,10 @@ const Contactanos = () => {
         return whatsappPattern.test(whatsapp);
     };
 
-    const handleSaveWhatsapp = () => {
+    const handleSaveWhatsapp = async() => {
         if (isValidWhatsApp(editedWhatsapp)) {
             setIsEditing1(false);
-            text_Services.editText(whaOBJ);
+            await text_Services.editText(whaOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid WhatsApp number case
@@ -165,10 +153,10 @@ const Contactanos = () => {
         return emailPattern.test(email);
     };
 
-    const handleSaveEmail = () => {
+    const handleSaveEmail = async () => {
         if (isValidEmail(editedEmail)) {
             setIsEditing2(false);
-            text_Services.editText(correoOBJ);
+           await text_Services.editText(correoOBJ);
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
@@ -265,7 +253,7 @@ const Contactanos = () => {
                                 <p style={{ color: '#1E60A6' }}>Puedes llamarnos al número</p>
                                 <FontAwesomeIcon icon={faPhone} style={{ color: '#1560F2' }} />
                                 <span style={{ color: '#1E60A6', fontWeight: 'bold' }}>{phone}</span>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditPhone} style={{ marginLeft: '5px' }}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -297,7 +285,7 @@ const Contactanos = () => {
                                 <span onClick={openWhatsApp} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
                                     {whatsapp}
                                 </span>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditWhatsapp} style={{ marginLeft: '5px' }}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -329,7 +317,7 @@ const Contactanos = () => {
                                 <span onClick={openEmail} style={{ color: '#1E60A6', fontWeight: 'bold', cursor: 'pointer' }}>
                                     {email}
                                 </span>
-                                {isLoggedIn && userType !== 'normal' && (
+                                {isLoggedIn && userType !== 'normal' && showButtons && (
                                     <button onClick={handleEditEmail} style={{ marginLeft: '5px' }}>
                                         <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
                                     </button>
@@ -339,9 +327,15 @@ const Contactanos = () => {
                     </div>
                 </div>
             </section>
+            {isLoggedIn && userType !== 'normal' && (
+                <button className='buttonG' onClick={handleToggleButtonClick}>
+                <FontAwesomeIcon icon={faGear} />
+            </button>
+            )}
             <Footer />
         </div>
     );
+
 };
 
 export default Contactanos;
