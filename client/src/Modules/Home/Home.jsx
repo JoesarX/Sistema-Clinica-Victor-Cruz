@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef,  useContext  } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
@@ -20,6 +20,16 @@ import CarruselService from '../../Services/CarruselService';
 
 import axios from 'axios'; // Import axios library
 
+import { Button, TextField, Modal } from '@mui/material'
+import {
+    DataGrid, esES, GridCellEditStopReasons, gridColumnsTotalWidthSelector, useGridApiRef
+} from '@mui/x-data-grid';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Delete } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import swal from 'sweetalert';
 
 import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
 import {
@@ -33,6 +43,7 @@ import {
 } from "firebase/storage";
 
 import { v4 } from "uuid";
+import { idID } from '@mui/material/locale';
 const Home = () => {
 
 
@@ -205,10 +216,6 @@ const Home = () => {
             }
         };
 
-
-
-
-
         useEffect(() => {
             if (isFetching) {
                 const fetchTitulos = async () => {
@@ -237,6 +244,7 @@ const Home = () => {
                     }
                 };
                 console.log("Error de effect");
+                fetchAllCarruselPics();
                 fetchTitulos();
                 setIsFetching(false);
             }
@@ -314,16 +322,12 @@ const Home = () => {
     const fetchAllCarruselPics = async () => {
         try {
             const CarruselArray = await CarruselService.getPicsCarrusel();
+            console.log(CarruselArray)
             setCarruselData(CarruselArray);
         } catch (error) {
             console.log("Error fetching carrusel pictures:", error);
         }
     };
-
-    useEffect(() => {
-        fetchAllCarruselPics();
-    }, []);
-
 
     useEffect(() => {
         // Make the initial request on component mount
@@ -411,12 +415,6 @@ const Home = () => {
             </React.Fragment>
         ));
     };
-
-
-
-
-
-
 
     /* Google Maps*/
     const [editable1, setEditable1] = useState(false);
@@ -514,8 +512,10 @@ const Home = () => {
                 const imageUrl = await uploadFile();
                 const carruselToSend = { url: imageUrl };
                 await CarruselService.postPicture(carruselToSend);
-                alert('Foto Agregada');
-                // window.location.reload();
+                swal("Imagen de carrusel agregada exitosamente!", {
+                    icon: "success",
+                });
+                fetchAllCarruselPics();
             }
             // toggleModal();
             setImagePreview(null);
@@ -525,7 +525,7 @@ const Home = () => {
         }
     };
 
-useEffect(() => {
+    useEffect(() => {
 
         const fetchMision = async () => {
             try {
@@ -538,7 +538,6 @@ useEffect(() => {
             }
         };
 
-
         const fetchMaps = async () => {
             try {
                 const objectMaps = ['google_maps'];
@@ -550,53 +549,182 @@ useEffect(() => {
             }
         };
 
-
-
         fetchMision();
         fetchMaps();
     }, [editable, editable1]);
 
-    const Carrusel = () => {
-        return (
-            <div className="imagenes">
-                <Slide {...properties}>
-                    {CarruselData.map((carrusel) => (
-                        <div className='each-slide' key={carrusel.idfoto}>
-                            <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
-                        </div>
-                    ))}
-                </Slide>
-            </div>
-        )
+
+    // CRUD CARRUSEL
+
+    const getRowId = (row) => {
+        return row.idfoto;
     };
-    
+
+    const theme = createTheme(
+        {
+            palette: {
+                primary: { main: '#1976d2' },
+            },
+        },
+        esES,
+    );
+
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const handleModalOpen = () => {
+        setImagePreview(null);
+        setModalOpen(true);
+    };
+
+    const handleModalClose = () => {
+        setModalOpen(false);
+        setImageUpload(null);
+        setImagePreview(null);
+    };
+
+    const handleDeleteCarruselImage = async (id) => {
+
+        if(CarruselData.length <= 1){
+            swal("El carrusel debe tener como mínimo una imagen!", {
+                icon: "error",
+            });
+            return;
+        }
+
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta imagen del carrusel.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    try {
+                        await CarruselService.deletePicture(id);
+                        swal("Imagen de carrusel eliminada exitosamente!", {
+                            icon: "success",
+                        });
+                        fetchAllCarruselPics();
+                    } catch (error) {
+                        swal("Error al eliminar la imagen de carrusel. Por favor, inténtalo de nuevo más tarde.\n".concat(error.message), {
+                            icon: "error",
+                        });
+                    }
+                } else {
+                    swal("¡Tu información no se ha borrado!");
+                }
+            });
+    }
+
+    ////////////////////
+
+    const Carrusel = () => {
+
+        if (!isFetching) {
+            return (
+                <div className="imagenes">
+                    <Slide {...properties}>
+                        {CarruselData.map((carrusel) => (
+                            <div className='each-slide' key={carrusel.idfoto}>
+                                <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
+                            </div>
+                        ))}
+                    </Slide>
+                </div>
+            )
+        }
+
+    };
 
     return (
         <div className="scrollable-page">
             <Topbar />
 
             <Carrusel />
-            <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
-            <input
-                type="file"
-                onChange={(event) => {
-                    imageUpload = event.target.files[0];
-                    imagePreview = URL.createObjectURL(event.target.files[0]);
 
-                    const selectedFile = event.target.files[0];
-                    if (selectedFile) {
-                        console.log(":)))))))))")
-                        // Do something with the selected file, e.g., display its details
-                        console.log('Selected file name:', selectedFile.name);
-                        console.log('Selected file type:', selectedFile.type);
-                        console.log('Selected file size:', selectedFile.size);
-                        handleModalSubmit(event);
-                    }
-                }}
-                name='urlfoto'
-                id="urlfoto"
-                className="customFileInput"
-            />
+            <Modal
+                open={modalOpen}
+                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
+                closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+                <div className='modal-container-carrusel modalServicios-carrusel'>
+                    <div className='modified-crudGrid'>
+                        <div>
+                            <div className='headerDiv'>
+                                <h1>Carrusel de imágenes</h1>
+                            </div>
+                            <button className="cancelButton" onClick={handleModalClose}>
+                                <FontAwesomeIcon icon={faTimes} size="2x" />
+                            </button>
+                            <div className='dataGridBox'>
+                                <ThemeProvider theme={theme}>
+                                    {CarruselData.length > 0 ? (
+                                        <DataGrid
+                                            rows={CarruselData}
+                                            getRowId={getRowId}
+                                            rowHeight={150}
+                                            columns={[
+                                                {
+                                                    field: 'Imagen',
+                                                    headerName: 'Imagen',
+                                                    flex: 2,
+                                                    headerClassName: 'column-header',
+                                                    renderCell: (params) => {
+                                                        const { id, row } = params;
+                                                        return (
+                                                            <div key={id} >
+                                                                <img src={row.url} class="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
+                                                            </div>
+                                                        );
+                                                    },
+                                                },
+                                                {
+                                                    field: 'status',
+                                                    headerName: '',
+                                                    flex: 1,
+                                                    renderCell: (params) => (
+                                                        <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCarruselImage(params.id)}>
+                                                            <Delete />
+                                                        </IconButton>
+                                                    ),
+                                                },
+                                            ]}
+                                            onCellEditStop={(params, event) => {
+                                                if (params.reason === GridCellEditStopReasons.cellFocusOut) {
+                                                    event.defaultMuiPrevented = true;
+                                                }
+                                            }}
+                                        />
+                                    ) : (
+                                        <p>Cargando carrusel...</p>
+                                    )}
+                                </ThemeProvider>
+                            </div>
+                        </div>
+                    </div>
+                </div >
+            </Modal >
+
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', alignItems: 'center' }}>
+                <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+                <input
+                    type="file"
+                    onChange={(event) => {
+                        imageUpload = event.target.files[0];
+                        imagePreview = URL.createObjectURL(event.target.files[0]);
+
+                        const selectedFile = event.target.files[0];
+                        if (selectedFile) {
+                            handleModalSubmit(event);
+                        }
+                    }}
+                    name='urlfoto'
+                    id="urlfoto"
+                    className="customFileInput"
+                />
+                <label onClick={handleModalOpen} className="customFileLabel"  >Editar Carrusel</label>
+            </div>
+
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
@@ -648,7 +776,7 @@ useEffect(() => {
                             value={editedMission}
                             onChange={handleChange}
                             rows="10"
-                            style={{ width: '100%' }}        />
+                            style={{ width: '100%' }} />
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
                     )}
