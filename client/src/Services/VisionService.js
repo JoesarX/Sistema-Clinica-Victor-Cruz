@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
-//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net/usuarios';
+//const API_URL = 'http://localhost:8000';
+const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net/usuarios';
 
 
 
@@ -21,7 +21,7 @@ export const getVision = async () => {
 export const editVision = async (vision) => {
     try {
         console.log(vision)
-       await axios.put(`${API_URL}/vision/${'34'}`,vision);
+        await axios.put(`${API_URL}/vision/${'34'}`, vision);
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit vision');

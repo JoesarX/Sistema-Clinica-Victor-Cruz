@@ -692,8 +692,8 @@ const Home = () => {
                 <div className='modal-container-carrusel modalServicios-carrusel'>
                     <div className='modified-crudGrid'>
                         <div>
-                            <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-start', paddingTop: '5%' }}>
-                                <label htmlFor="urlfoto" className="customFileLabel"  >
+                            <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
+                                <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '32%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
                                     <FontAwesomeIcon icon={faPlus} size="2x" />
                                     Agregar foto</label>
                                 <input
@@ -713,7 +713,7 @@ const Home = () => {
                                 />
                             </div>
                             <div className='headerDiv'>
-                                <h1>Carrusel de imágenes</h1>
+                                <h2>Carrusel de imágenes</h2>
                             </div>
 
                             <button className="cancelButton" onClick={handleModalClose}>
@@ -730,7 +730,7 @@ const Home = () => {
                                                 {
                                                     field: 'Imagen',
                                                     headerName: 'Imagen',
-                                                    flex: 2,
+                                                    flex: 5,
                                                     headerClassName: 'column-header',
                                                     renderCell: (params) => {
                                                         const { id, row } = params;
@@ -746,7 +746,7 @@ const Home = () => {
                                                     headerName: '',
                                                     flex: 1,
                                                     renderCell: (params) => (
-                                                        <IconButton style={{ justifySelf: 'right' }} onClick={() => handleDeleteCarruselImage(params.id)}>
+                                                        <IconButton style={{ justifySelf: 'flex-end' }} onClick={() => handleDeleteCarruselImage(params.id)}>
                                                             <Delete />
                                                         </IconButton>
                                                     ),
@@ -771,24 +771,8 @@ const Home = () => {
                 <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
             </button>
             {showEditButtons && (
-                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', alignItems: 'center' }}>
-                    <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
-                    <input
-                        type="file"
-                        onChange={(event) => {
-                            imageUpload = event.target.files[0];
-                            imagePreview = URL.createObjectURL(event.target.files[0]);
-
-                            const selectedFile = event.target.files[0];
-                            if (selectedFile) {
-                                handleModalSubmit(event);
-                            }
-                        }}
-                        name='urlfoto'
-                        id="urlfoto"
-                        className="customFileInput"
-                    />
-                    <label onClick={handleModalOpen} className="customFileLabel"  >Editar Carrusel</label>
+                <div style={{ height: '50px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', alignItems: 'center' }}>
+                    <label onClick={handleModalOpen} className="customFileLabel" style={{ marginTop: '0%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>Editar Carrusel</label>
                 </div>
             )}
 
