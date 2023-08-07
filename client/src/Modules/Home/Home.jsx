@@ -160,6 +160,8 @@ const Home = () => {
     };
 
     const storage = getStorage();
+
+
     async function uploadFile() {
 
         return new Promise((resolve, reject) => {
@@ -306,7 +308,7 @@ const Home = () => {
                             value={missionText}
                             onChange={handleChange}
                             rows="10"
-                            style = {{width: '100%'}}
+                            style={{ width: '100%' }}
                         />
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
