@@ -601,7 +601,7 @@ const Home = () => {
         window.location.reload();
     }
 
-    const handleDeleteCarruselImage = async (id,url) => {
+    const handleDeleteCarruselImage = async (id, url) => {
 
         if (CarruselData.length <= 1) {
             swal("El carrusel debe tener como mínimo una imagen!", {
@@ -620,7 +620,7 @@ const Home = () => {
             .then(async (willDelete) => {
                 if (willDelete) {
                     try {
-                        
+
                         await CarruselService.deletePicture(id);
                         console.log(url);
                         deleteImg(url);
@@ -732,14 +732,14 @@ const Home = () => {
                                 <FontAwesomeIcon icon={faTimes} size="2x" />
                             </button>
                             <div className='dataGridBox'>
-                                
+
                                 <ThemeProvider theme={theme}>
                                     {CarruselData.length > 0 ? (
                                         <DataGrid
                                             rows={CarruselData}
                                             getRowId={getRowId}
                                             rowHeight={150}
-                                            
+
                                             columns={[
                                                 {
                                                     field: 'Imagen',
@@ -761,8 +761,8 @@ const Home = () => {
                                                     headerName: '',
                                                     flex: 1,
                                                     renderCell: (params) => (
-                                                        
-                                                        <IconButton style={{ justifySelf: 'flex-end' }} onClick={() => handleDeleteCarruselImage(params.id,urlDelete)}>
+
+                                                        <IconButton style={{ justifySelf: 'flex-end' }} onClick={() => handleDeleteCarruselImage(params.id, urlDelete)}>
                                                             <Delete />
                                                         </IconButton>
                                                     ),
@@ -783,9 +783,11 @@ const Home = () => {
                     </div>
                 </div >
             </Modal >
-            <button className='edit-button' onClick={toggleEditButtons}>
-                <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
-            </button>
+            {isLoggedIn && userType !== 'normal' && (
+                <button className='edit-button' onClick={toggleEditButtons}>
+                    <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+                </button>
+            )}
             {showEditButtons && (
                 <div style={{ height: '50px', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '10px', alignItems: 'center' }}>
                     <label onClick={handleModalOpen} className="customFileLabel" style={{ marginTop: '0%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>Editar Carrusel</label>
