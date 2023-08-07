@@ -15,18 +15,42 @@ export const getPicsCarrusel = async () => {
 
 
 export const editMision = async (mision) => {
-   
+
     try {
-        await axios.put(`${API_URL}/mision/${'24'}`,mision);
+        await axios.put(`${API_URL}/mision/${'24'}`, mision);
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit mision');
     }
 };
 
+export const postPicture = async (carrusel) => {
+    try {
+        const res = await axios.post(`${API_URL}/carrusel`, carrusel);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to post picture');
+    }
+};
+
+
+export const deletePicture = async (id) => {
+    try {
+        await axios.delete(`${API_URL}/carrusel/${id}`);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to delete picture');
+    }
+};
+
+
 const Services = {
     getPicsCarrusel,
-    editMision
+    editMision,
+    postPicture,
+    deletePicture
 
 };
 

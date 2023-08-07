@@ -20,7 +20,19 @@ import CarruselService from '../../Services/CarruselService';
 
 import axios from 'axios'; // Import axios library
 
-let cont = 0;
+
+import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject,
+    getStorage,
+    listAll,
+    list,
+} from "firebase/storage";
+
+import { v4 } from "uuid";
 const Home = () => {
 
 
@@ -300,18 +312,22 @@ const Home = () => {
 
     let [CarruselData, setCarruselData] = useState([]);
 
+    let [imageUpload, setImageUpload] = useState(null);
+    let [imagePreview, setImagePreview] = useState(null);
+
+    const fetchAllCarruselPics = async () => {
+        try {
+            const CarruselArray = await CarruselService.getPicsCarrusel();
+            setCarruselData(CarruselArray);
+        } catch (error) {
+            console.log("Error fetching carrusel pictures:", error);
+        }
+    };
+
     useEffect(() => {
-        const fetchAllCarruselPics = async () => {
-            try {
-                const CarruselArray = await CarruselService.getPicsCarrusel();
-                console.log("CARRUSEL: ", CarruselArray);
-                setCarruselData(CarruselArray);
-            } catch (error) {
-                console.log("Error fetching carrusel pictures:", error);
-            }
-        };
         fetchAllCarruselPics();
     }, []);
+
 
     useEffect(() => {
         // Make the initial request on component mount
@@ -320,7 +336,7 @@ const Home = () => {
         // Set up interval to make periodic requests
         const interval = setInterval(() => {
             wakeUpServer();
-        }, 300000); // Every 5 minutes (adjust as needed)
+        }, 300000);
 
         return () => clearInterval(interval);
     }, []);
@@ -465,11 +481,55 @@ const Home = () => {
     };
 
 
+    const storage = getStorage();
+    async function uploadFile() {
 
+        return new Promise((resolve, reject) => {
+            if (imageUpload == null) {
+                return null;
+            }
 
-    /* Metodos de Fetch de la DB*/
+            const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+            uploadBytes(imageRef, imageUpload)
+                .then((snapshot) => getDownloadURL(snapshot.ref))
+                .then((url) => {
+                    resolve(url);
+                    //console.log(medicamento);
+                })
+                .catch((error) => reject(error));
+        });
+    };
 
-    useEffect(() => {
+    const handleModalSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            console.log("test");
+            submitPicture();
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+        }
+    };
+    const submitPicture = async () => {
+
+        console.log("Entra a agregar despues de validaciones");
+        try {
+            if (imageUpload != null) {
+                const imageUrl = await uploadFile();
+                const carruselToSend = { url: imageUrl };
+                await CarruselService.postPicture(carruselToSend);
+                alert('Foto Agregada');
+                // window.location.reload();
+            }
+            // toggleModal();
+            setImagePreview(null);
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+        }
+    };
+
+useEffect(() => {
 
         const fetchMision = async () => {
             try {
@@ -498,9 +558,6 @@ const Home = () => {
 
         fetchMision();
         fetchMaps();
-
-
-
     }, [editable, editable1]);
 
     const Carrusel = () => {
@@ -516,13 +573,34 @@ const Home = () => {
             </div>
         )
     };
+    
 
     return (
         <div className="scrollable-page">
             <Topbar />
 
             <Carrusel />
+            <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+            <input
+                type="file"
+                onChange={(event) => {
+                    imageUpload = event.target.files[0];
+                    imagePreview = URL.createObjectURL(event.target.files[0]);
 
+                    const selectedFile = event.target.files[0];
+                    if (selectedFile) {
+                        console.log(":)))))))))")
+                        // Do something with the selected file, e.g., display its details
+                        console.log('Selected file name:', selectedFile.name);
+                        console.log('Selected file type:', selectedFile.type);
+                        console.log('Selected file size:', selectedFile.size);
+                        handleModalSubmit(event);
+                    }
+                }}
+                name='urlfoto'
+                id="urlfoto"
+                className="customFileInput"
+            />
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
@@ -574,8 +652,7 @@ const Home = () => {
                             value={editedMission}
                             onChange={handleChange}
                             rows="10"
-                            cols={50}
-                        />
+                            style={{ width: '100%' }}        />
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
                     )}
