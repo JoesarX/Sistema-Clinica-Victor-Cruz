@@ -39,6 +39,7 @@ const citasRouter = (pool, transporter) => {
         try {
             const status = req.params.status;
             const connection = await pool.getConnection();
+            await connection.query(`SET time_zone = 'America/Guatemala';`);
             let sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas order by fecha, citas.hora";
             if (status == 'Hoy') {
                 sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas WHERE fecha = CURDATE() order by fecha, citas.hora";
