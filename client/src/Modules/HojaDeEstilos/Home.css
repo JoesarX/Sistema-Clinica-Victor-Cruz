@@ -22,6 +22,19 @@
   box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
 }
 
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-button,
+.save-button {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
 .about-us-content {
   display: flex;
   flex-direction: column;

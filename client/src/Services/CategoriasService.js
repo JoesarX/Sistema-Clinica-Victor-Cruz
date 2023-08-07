@@ -1,6 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8000';
-//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+//const API_URL = 'http://localhost:8000';
+const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 //traer todas las categorías
 export const getAllCategories = async () => {
@@ -25,12 +25,12 @@ export const postCategories = async (categoriaValue) => {
     }
 };
 
-export const editCategories = async (id,object) => {
+export const editCategories = async (id, object) => {
     try {
         console.log(object);
-        console.log("Este es el id= "+id+" y este es el nombre: "+object[0]);
-         await axios.put(`${API_URL}/categorias/${id}`, object);
-        
+        console.log("Este es el id= " + id + " y este es el nombre: " + object[0]);
+        await axios.put(`${API_URL}/categorias/${id}`, object);
+
     } catch (error) {
         console.error('editCategories', error);
         throw new Error('Fallo al editar categorias');
