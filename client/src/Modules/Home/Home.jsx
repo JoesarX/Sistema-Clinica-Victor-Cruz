@@ -15,6 +15,9 @@ import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
+import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import CarruselService from '../../Services/CarruselService';
 
@@ -45,7 +48,19 @@ import {
 import { v4 } from "uuid";
 import { idID } from '@mui/material/locale';
 const Home = () => {
+    const AddButton = () => (
+        <button>
+            <AddIcon />
+            Agregar Foto
+        </button>
+    );
 
+    const SaveButton = () => (
+        <button>
+            <SaveIcon />
+            Guardar Cambios
+        </button>
+    );
 
     /* Para la DB*/
 
@@ -461,10 +476,6 @@ const Home = () => {
         setEditedMapURL(mapURL); // Restaurar el valor original si se cancela la edición
     };
 
-
-
-
-
     const extractSrcFromIframe = (iframeCode) => {
         const srcRegex = /src="([^"]*)"/;
         const matches = srcRegex.exec(iframeCode);
@@ -473,7 +484,6 @@ const Home = () => {
         }
         return null;
     };
-
 
     const storage = getStorage();
     async function uploadFile() {
@@ -584,7 +594,7 @@ const Home = () => {
 
     const handleDeleteCarruselImage = async (id) => {
 
-        if(CarruselData.length <= 1){
+        if (CarruselData.length <= 1) {
             swal("El carrusel debe tener como mínimo una imagen!", {
                 icon: "error",
             });
@@ -637,6 +647,38 @@ const Home = () => {
 
     };
 
+    const [showEditButtons, setShowEditButtons] = useState(false);
+    const toggleEditButtons = () => {
+        setShowEditButtons(prev => !prev);
+    };
+
+    const [selectedImage, setSelectedImage] = useState();
+
+
+    const handleImageSelect = (event) => {
+        const file = event.target.files[0];
+        addPhoto(file);
+        setSelectedImage(file);
+    }
+
+    const addPhoto = () => {
+        const newPhoto = {
+            id: Date.now(),
+            url: URL.createObjectURL(selectedImage)
+        };
+
+        setCarruselData(prev => [...prev, newPhoto]);
+
+    }
+
+    const saveChanges = async () => {
+        await fetch('/api/carrusel', {
+            method: 'POST',
+            body: JSON.stringify(CarruselData)
+        });
+        console.log('Cambios guardados!');
+    }
+
     return (
         <div className="scrollable-page">
             <Topbar />
@@ -650,9 +692,30 @@ const Home = () => {
                 <div className='modal-container-carrusel modalServicios-carrusel'>
                     <div className='modified-crudGrid'>
                         <div>
+                            <div className="button-container" style={{ display: 'flex', justifyContent: 'flex-start', paddingTop: '5%' }}>
+                                <label htmlFor="urlfoto" className="customFileLabel"  >
+                                    <FontAwesomeIcon icon={faPlus} size="2x" />
+                                    Agregar foto</label>
+                                <input
+                                    type="file"
+                                    onChange={(event) => {
+                                        imageUpload = event.target.files[0];
+                                        imagePreview = URL.createObjectURL(event.target.files[0]);
+
+                                        const selectedFile = event.target.files[0];
+                                        if (selectedFile) {
+                                            handleModalSubmit(event);
+                                        }
+                                    }}
+                                    name='urlfoto'
+                                    id="urlfoto"
+                                    className="customFileInput"
+                                />
+                            </div>
                             <div className='headerDiv'>
                                 <h1>Carrusel de imágenes</h1>
                             </div>
+
                             <button className="cancelButton" onClick={handleModalClose}>
                                 <FontAwesomeIcon icon={faTimes} size="2x" />
                             </button>
@@ -704,26 +767,30 @@ const Home = () => {
                     </div>
                 </div >
             </Modal >
+            <button className='edit-button' onClick={toggleEditButtons}>
+                <FontAwesomeIcon icon={faCog} style={{ fontSize: '25px', padding: '5px', color: '#1E60A6' }} />
+            </button>
+            {showEditButtons && (
+                <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', alignItems: 'center' }}>
+                    <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+                    <input
+                        type="file"
+                        onChange={(event) => {
+                            imageUpload = event.target.files[0];
+                            imagePreview = URL.createObjectURL(event.target.files[0]);
 
-            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: '10px', alignItems: 'center' }}>
-                <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
-                <input
-                    type="file"
-                    onChange={(event) => {
-                        imageUpload = event.target.files[0];
-                        imagePreview = URL.createObjectURL(event.target.files[0]);
-
-                        const selectedFile = event.target.files[0];
-                        if (selectedFile) {
-                            handleModalSubmit(event);
-                        }
-                    }}
-                    name='urlfoto'
-                    id="urlfoto"
-                    className="customFileInput"
-                />
-                <label onClick={handleModalOpen} className="customFileLabel"  >Editar Carrusel</label>
-            </div>
+                            const selectedFile = event.target.files[0];
+                            if (selectedFile) {
+                                handleModalSubmit(event);
+                            }
+                        }}
+                        name='urlfoto'
+                        id="urlfoto"
+                        className="customFileInput"
+                    />
+                    <label onClick={handleModalOpen} className="customFileLabel"  >Editar Carrusel</label>
+                </div>
+            )}
 
             <div className="content-header-banner">
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
