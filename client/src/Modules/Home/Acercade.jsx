@@ -14,6 +14,7 @@ import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import text_Services from '../../Services/texto_cmdService';
 import { useEffect, useRef, useState } from 'react';
 
+import 'firebase/compat/storage';
 import { v4 } from "uuid";
 import {
   ref,
@@ -24,6 +25,8 @@ import {
 } from "firebase/storage";
 import swal from 'sweetalert';
 
+import AboutUsService from '../../Services/AboutUsService';
+
 const Acercade = () => {
 
   //CONSTANTES POR MIENTRAS
@@ -32,12 +35,12 @@ const Acercade = () => {
   // const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
   const DESC_IMG = hospital;
   const DOCTOR_IMG = doctor;
-
+  
   const [isEditingPage, setIsEditingPage] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
   const handleEditPage = () => {
-    if (isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
+    if(isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
       swal({
         title: "Cambios sin guardar",
         text: "¡Tiene cambios sin guardar!",
@@ -54,6 +57,30 @@ const Acercade = () => {
   const [teamDesc, setTeamDesc] = useState(null);
   const [mision, setMision] = useState(null);
   const [vision, setVision] = useState(null);
+
+  let ImgsData = [];
+  let ImgsDataDoc = [];
+  let ImgsDataDesc = [];
+
+  const [images2, setImages2] = useState({
+    idfoto: '',
+    tipo: 'AboutUs',
+    size: null,
+    visibility: null,
+    url: '',
+    created_at: '',
+    updated_at: ''
+  });
+
+  let [images, setImages] = React.useState({
+    idfoto: '',
+    tipo: 'AboutUs',
+    size: null,
+    visibility: null,
+    url: '',
+    created_at: '',
+    updated_at: ''
+  })
 
   const [misionOBJ] = React.useState({
     Tipo: 'Mision',
@@ -305,40 +332,113 @@ const Acercade = () => {
     return true;
   }
 
-  const [imageUploadDesc, setImageUploadDesc] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
   const [imagePreviewDesc, setImagePreviewDesc] = useState(null);
-  const [imageUploadDoctor, setImageUploadDoctor] = useState(null);
   const [imagePreviewDoctor, setImagePreviewDoctor] = useState(null);
-
+  const [urlfotoDesc, seturlfotoDesc] = useState(null);
+  const [urlfotoDoc, seturlfotoDoc] = useState(null);
+  const [idfotoDesc, setidfotoDesc] = useState(74);
+  const [idfotoDoc, setidfotoDoc] = useState(64);
   const storage = getStorage();
 
-  const handleCancelDescImg = () => {
-    setImageUploadDesc(null);
-    setImagePreviewDesc(null);
+  //DESCRIPTION
+  const handleConfirmarImagen = async (e) => {
+    e.preventDefault();
+        try {
+            console.log("test");
+            submitImagen(true);
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+    }
+    setImageUpload(null);
   };
 
-  const handleCancelDoctorImg = () => {
-    setImageUploadDoctor(null);
-    setImagePreviewDoctor(null);
+  //DOCTOR
+  const handleConfirmarDoctorImg = async (e) => {
+    e.preventDefault();
+        try {
+            console.log("test");
+            submitImagen(false);
+        } catch (error) {
+            // Handle error if any
+            console.log('Error submitting medicamento:', error);
+    }
+    setImageUpload(null);
   };
+
+  const submitImagen = async (flag) => {
+    console.log(flag);
+    console.log("hola"+urlfotoDoc);
+    console.log("hola"+urlfotoDesc);
+    if (flag) {
+      try {
+        if (imageUpload != null) {
+            deleteImg(urlfotoDesc);
+            console.log("Elimino foto en firebase");
+            const imageUrll = await uploadFile();
+            setImages2(() => ({
+
+              url: imageUrll,
+            }));
+            images2.url = imageUrll;
+            console.log("DESC EDITADO");
+            await AboutUsService.editImagen(idfotoDesc, images2);
+            alert('Imagen Agregada');
+            window.location.reload();
+        } else {
+          alert('No se ha seleccionado una imagen nueva');
+        }
+      } catch (error) {
+        // Handle error if any
+        console.log('Error submitting Imagen:', error);
+      }
+    } else if (!flag) {
+      try {
+        if (imageUpload != null) {
+            deleteImg(urlfotoDoc);
+            console.log("Elimino foto en firebase");
+            const imageUrll = await uploadFile();
+            setImages2(() => ({
+
+              url: imageUrll,
+            }));
+            images2.url = imageUrll;
+            console.log("DOCTOR EDITADO");
+            await AboutUsService.editImagen(idfotoDoc, images2);
+            alert('Imagen Agregada');
+            window.location.reload();
+        } else {
+          alert('No se ha seleccionado una imagen nueva');
+        }
+      } catch (error) {
+        // Handle error if any
+        console.log('Error submitting Imagen:', error);
+      }
+    } 
+    else {
+      console.log("Hay un error");
+    }
+  }  
 
   const deleteImg = (refUrl) => {
     const imageRef = ref(storage, refUrl)
     deleteObject(imageRef)
-      .catch((error) => {
-        console.log("Failed to delete image: ", error)
-      })
+        .catch((error) => {
+            console.log("Failed to delete image: ", error)
+        })
+    //window.location.reload();
   }
 
-  async function uploadDescImg() {
+  async function uploadFile() {
 
     return new Promise((resolve, reject) => {
-      if (imageUploadDesc == null) {
+      if (imageUpload == null) {
         return null;
       }
 
-      const imageRef = ref(storage, `images/${imageUploadDesc.name + v4()}`);
-      uploadBytes(imageRef, imageUploadDesc)
+      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+      uploadBytes(imageRef, imageUpload)
         .then((snapshot) => getDownloadURL(snapshot.ref))
         .then((url) => {
           resolve(url);
@@ -356,6 +456,40 @@ const Acercade = () => {
   const [isEditingLabelTeam, setIsEditingLabelTeam] = useState(false);
 
   const inputRef = useRef(null);
+
+  const fetchImgs = async () => {
+    setidfotoDoc(64);
+    setidfotoDesc(74);
+    try {
+        const imgsArray = await AboutUsService.getPicsDoctoryDesc();
+        console.log(imgsArray);
+
+        ImgsData = imgsArray.map((images) => ({
+            idfoto: images.idfoto,
+            url: images.url,
+        }));
+        images = imgsArray.map((img) => ({
+            ...img,
+            url: img.url,
+            idfoto: img.idfoto,
+        }));
+          setImagePreviewDoctor(images[0].url);
+          seturlfotoDoc(images[0].url);
+          setImagePreviewDesc(images[1].url);
+          seturlfotoDesc(images[1].url);
+          ImgsDataDesc = images[1];
+          ImgsDataDoc = images[0];
+          console.log(ImgsDataDesc);
+          console.log(ImgsDataDoc);
+          console.log(idfotoDesc);
+          console.log(idfotoDoc);
+        console.log(ImgsData);
+        console.log(images);
+    } catch (error) {
+        // Handle error if   any
+        console.log("Error fetching pictures:", error);
+    }
+  };
 
   const fetchMision = async () => {
     try {
@@ -411,14 +545,6 @@ const Acercade = () => {
     }
   }
 
-  const fetchImgDesc = () => {
-    setImagePreviewDesc(DESC_IMG);
-  }
-
-  const fetchImgDoctor = () => {
-    setImagePreviewDoctor(DOCTOR_IMG);
-  }
-
   useEffect(() => {
 
     const fetchAdmin = () => {
@@ -426,21 +552,32 @@ const Acercade = () => {
     }
 
     fetchAdmin();
-
+    fetchImgs();
     fetchMision();
     fetchVision();
     fetchDesc();
     fetchBio();
     fetchTeam();
-    fetchImgDesc();
-    fetchImgDoctor();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if ((isEditingLabelMision || isEditingLabelVision || isEditingLabelDesc || isEditingLabelBio || isEditingLabelTeam) && inputRef.current) {
+    if (isEditingLabelMision && inputRef.current) {
       inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
     }
+    if (isEditingLabelVision && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelDesc && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelBio && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+    if (isEditingLabelTeam && inputRef.current) {
+      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
+    }
+
   }, [isEditingLabelMision, isEditingLabelVision, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
 
 
@@ -545,7 +682,7 @@ const Acercade = () => {
               <input
                 type="file"
                 onChange={(event) => {
-                  setImageUploadDesc(event.target.files[0]);
+                  setImageUpload(event.target.files[0]);
                   setImagePreviewDesc(URL.createObjectURL(event.target.files[0]));
                 }}
                 accept="image/png, image/jpeg, image/webp"
@@ -553,7 +690,7 @@ const Acercade = () => {
                 id="urlDescImg"
                 className="customFileInput"
               />
-              <label class="delete" onClick={handleCancelDescImg}>Eliminar imagen</label>
+              <label class="delete" onClick={handleConfirmarImagen}>Confirmar imagen</label>
             </div>
           </div>
           <div className="text-container">
@@ -602,7 +739,7 @@ const Acercade = () => {
               <input
                 type="file"
                 onChange={(event) => {
-                  setImageUploadDoctor(event.target.files[0]);
+                  setImageUpload(event.target.files[0]);
                   setImagePreviewDoctor(URL.createObjectURL(event.target.files[0]));
                 }}
                 accept="image/png, image/jpeg, image/webp"
@@ -610,7 +747,7 @@ const Acercade = () => {
                 id="urlDrImg"
                 className="customFileInput"
               />
-              <label class="delete" onClick={handleCancelDoctorImg}>Eliminar imagen</label>
+              <label class="delete" onClick={handleConfirmarDoctorImg}>Confirmar imagen</label>
             </div>
           </div>
           <div className="text-container">
