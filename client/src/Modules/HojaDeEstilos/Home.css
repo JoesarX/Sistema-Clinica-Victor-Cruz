@@ -296,7 +296,8 @@
     -12px 0 15px -4px rgba(0, 0, 0, 0.3);
   padding-bottom: 10px;
 }
-.innerCard{
+
+.innerCard {
   position: relative;
   width: 100%;
   height: auto;
@@ -315,6 +316,47 @@
   max-width: 2000px;
   object-fit: cover;
 }
+
+/* CARRUSEL */
+.modalServicios-carrusel {
+  min-width: 80%;
+  min-height: 80%;
+  width: 80%;
+  height: 80%;
+  max-width: 1600px;
+  overflow: hidden;
+}
+
+.modal-container-carrusel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: 80vh;
+  padding: 20px;
+  background-color: #E4EBF9;
+  border-radius: 10px;
+}
+
+.modified-crudGrid {
+  background-color: rgb(227, 235, 248);
+  height: 100%;
+  width: 100%;
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  border: none;
+  flex-direction: column;
+}
+
+.carrusel-crud-image-img {
+  height: 140px;
+  width: 140px;
+  border: 0.5px solid #1E60A6
+}
+
+/* /////////////////////// */
 
 /* GOTTA USE THAT SPACE PROPERLY! */
 @media only screen and (min-width: 780px) and (max-width: 1260px) {

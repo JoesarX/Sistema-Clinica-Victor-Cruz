@@ -183,20 +183,20 @@ const Ficha_Agregar_Categorias = (props) => {
         }
 
     }
-    const handleEditCategoryName = async (editedValue,rowId) => {
+    const handleEditCategoryName = async (editedValue, rowId) => {
         console.log('handle eddit caterogy name: ', editedValue);
         console.log('handle eddit caterogy id : ', rowId);
-        const object=[editedValue,rowId]
+        const object = [editedValue, rowId]
         try {
-            await CategoriasService.editCategories(rowId,object)
-                swal({
-                    title: "Editado con éxito",
-                    text: "Categoría editada exitosamente",
-                    icon: "success",
-                });
-            
-            
-            
+            await CategoriasService.editCategories(rowId, object)
+            swal({
+                title: "Editado con éxito",
+                text: "Categoría editada exitosamente",
+                icon: "success",
+            });
+
+
+
             fetchAllCategories();
         } catch (error) {
             swal({
@@ -331,7 +331,7 @@ const Ficha_Agregar_Categorias = (props) => {
         const [rows, setRows] = useState(categorias);
         const inputRef = useRef(null);
 
-       
+
 
         useEffect(() => {
             if (editMode !== null && inputRef.current) {
@@ -349,22 +349,22 @@ const Ficha_Agregar_Categorias = (props) => {
             setEditedValue('');
         };
 
-        const handleSaveClick = (editedValue,Row) => {
-            saveChanges(editedValue,Row);
+        const handleSaveClick = (editedValue, Row) => {
+            saveChanges(editedValue, Row);
         };
 
         const handleInputChange = (event) => {
             const updatedRow = { id: editMode, Nombre_Categoria: event.target.value };
             setEditedValue(event.target.value);
-            
+
         };
 
-        const saveChanges = async (editedvalue,Row) => {
-            console.log("Esta es la row: "+editedvalue + " "+Row.id);
-            console.log("Esta es la row: "+Row.id);
+        const saveChanges = async (editedvalue, Row) => {
+            console.log("Esta es la row: " + editedvalue + " " + Row.id);
+            console.log("Esta es la row: " + Row.id);
             if (editedvalue) {
-                
-                await handleEditCategoryName(editedvalue,Row.id);
+
+                await handleEditCategoryName(editedvalue, Row.id);
 
                 console.log('Edited Row:', editedvalue);
 
@@ -375,7 +375,7 @@ const Ficha_Agregar_Categorias = (props) => {
                 setRows(updatedRows);
                 setEditMode(null);
                 setEditedValue('');
-            }else{
+            } else {
                 console.log("No entré JAJAJAJA");
             }
         };
@@ -402,7 +402,7 @@ const Ficha_Agregar_Categorias = (props) => {
                                             autoFocus
                                             fullWidth
                                         />
-                                        <IconButton onClick={() => handleSaveClick(editedValue,params.row)}>
+                                        <IconButton onClick={() => handleSaveClick(editedValue, params.row)}>
                                             <Check />
                                         </IconButton>
                                         <IconButton onClick={handleCancelClick}>

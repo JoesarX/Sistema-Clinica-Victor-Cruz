@@ -35,12 +35,12 @@ const Acercade = () => {
   // const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
   const DESC_IMG = hospital;
   const DOCTOR_IMG = doctor;
-  
+
   const [isEditingPage, setIsEditingPage] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
   const handleEditPage = () => {
-    if(isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
+    if (isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
       swal({
         title: "Cambios sin guardar",
         text: "¡Tiene cambios sin guardar!",
@@ -344,12 +344,12 @@ const Acercade = () => {
   //DESCRIPTION
   const handleConfirmarImagen = async (e) => {
     e.preventDefault();
-        try {
-            console.log("test");
-            submitImagen(true);
-        } catch (error) {
-            // Handle error if any
-            console.log('Error submitting medicamento:', error);
+    try {
+      console.log("test");
+      submitImagen(true);
+    } catch (error) {
+      // Handle error if any
+      console.log('Error submitting medicamento:', error);
     }
     setImageUpload(null);
   };
@@ -357,35 +357,35 @@ const Acercade = () => {
   //DOCTOR
   const handleConfirmarDoctorImg = async (e) => {
     e.preventDefault();
-        try {
-            console.log("test");
-            submitImagen(false);
-        } catch (error) {
-            // Handle error if any
-            console.log('Error submitting medicamento:', error);
+    try {
+      console.log("test");
+      submitImagen(false);
+    } catch (error) {
+      // Handle error if any
+      console.log('Error submitting medicamento:', error);
     }
     setImageUpload(null);
   };
 
   const submitImagen = async (flag) => {
     console.log(flag);
-    console.log("hola"+urlfotoDoc);
-    console.log("hola"+urlfotoDesc);
+    console.log("hola" + urlfotoDoc);
+    console.log("hola" + urlfotoDesc);
     if (flag) {
       try {
         if (imageUpload != null) {
-            deleteImg(urlfotoDesc);
-            console.log("Elimino foto en firebase");
-            const imageUrll = await uploadFile();
-            setImages2(() => ({
+          deleteImg(urlfotoDesc);
+          console.log("Elimino foto en firebase");
+          const imageUrll = await uploadFile();
+          setImages2(() => ({
 
-              url: imageUrll,
-            }));
-            images2.url = imageUrll;
-            console.log("DESC EDITADO");
-            await AboutUsService.editImagen(idfotoDesc, images2);
-            alert('Imagen Agregada');
-            window.location.reload();
+            url: imageUrll,
+          }));
+          images2.url = imageUrll;
+          console.log("DESC EDITADO");
+          await AboutUsService.editImagen(idfotoDesc, images2);
+          alert('Imagen Agregada');
+          window.location.reload();
         } else {
           alert('No se ha seleccionado una imagen nueva');
         }
@@ -396,18 +396,18 @@ const Acercade = () => {
     } else if (!flag) {
       try {
         if (imageUpload != null) {
-            deleteImg(urlfotoDoc);
-            console.log("Elimino foto en firebase");
-            const imageUrll = await uploadFile();
-            setImages2(() => ({
+          deleteImg(urlfotoDoc);
+          console.log("Elimino foto en firebase");
+          const imageUrll = await uploadFile();
+          setImages2(() => ({
 
-              url: imageUrll,
-            }));
-            images2.url = imageUrll;
-            console.log("DOCTOR EDITADO");
-            await AboutUsService.editImagen(idfotoDoc, images2);
-            alert('Imagen Agregada');
-            window.location.reload();
+            url: imageUrll,
+          }));
+          images2.url = imageUrll;
+          console.log("DOCTOR EDITADO");
+          await AboutUsService.editImagen(idfotoDoc, images2);
+          alert('Imagen Agregada');
+          window.location.reload();
         } else {
           alert('No se ha seleccionado una imagen nueva');
         }
@@ -415,18 +415,18 @@ const Acercade = () => {
         // Handle error if any
         console.log('Error submitting Imagen:', error);
       }
-    } 
+    }
     else {
       console.log("Hay un error");
     }
-  }  
+  }
 
   const deleteImg = (refUrl) => {
     const imageRef = ref(storage, refUrl)
     deleteObject(imageRef)
-        .catch((error) => {
-            console.log("Failed to delete image: ", error)
-        })
+      .catch((error) => {
+        console.log("Failed to delete image: ", error)
+      })
     //window.location.reload();
   }
 
@@ -461,33 +461,27 @@ const Acercade = () => {
     setidfotoDoc(64);
     setidfotoDesc(74);
     try {
-        const imgsArray = await AboutUsService.getPicsDoctoryDesc();
-        console.log(imgsArray);
+      const imgsArray = await AboutUsService.getPicsDoctoryDesc();
+      console.log(imgsArray);
 
-        ImgsData = imgsArray.map((images) => ({
-            idfoto: images.idfoto,
-            url: images.url,
-        }));
-        images = imgsArray.map((img) => ({
-            ...img,
-            url: img.url,
-            idfoto: img.idfoto,
-        }));
-          setImagePreviewDoctor(images[0].url);
-          seturlfotoDoc(images[0].url);
-          setImagePreviewDesc(images[1].url);
-          seturlfotoDesc(images[1].url);
-          ImgsDataDesc = images[1];
-          ImgsDataDoc = images[0];
-          console.log(ImgsDataDesc);
-          console.log(ImgsDataDoc);
-          console.log(idfotoDesc);
-          console.log(idfotoDoc);
-        console.log(ImgsData);
-        console.log(images);
+      ImgsData = imgsArray.map((images) => ({
+        idfoto: images.idfoto,
+        url: images.url,
+      }));
+      images = imgsArray.map((img) => ({
+        ...img,
+        url: img.url,
+        idfoto: img.idfoto,
+      }));
+      setImagePreviewDoctor(images[0].url);
+      seturlfotoDoc(images[0].url);
+      setImagePreviewDesc(images[1].url);
+      seturlfotoDesc(images[1].url);
+      ImgsDataDesc = images[1];
+      ImgsDataDoc = images[0];
     } catch (error) {
-        // Handle error if   any
-        console.log("Error fetching pictures:", error);
+      // Handle error if   any
+      console.log("Error fetching pictures:", error);
     }
   };
 
@@ -562,22 +556,9 @@ const Acercade = () => {
   }, []);
 
   useEffect(() => {
-    if (isEditingLabelMision && inputRef.current) {
+    if (isEditingLabelMision || isEditingLabelBio || isEditingLabelDesc || isEditingLabelTeam || isEditingLabelMision && inputRef.current) {
       inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
     }
-    if (isEditingLabelVision && inputRef.current) {
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelDesc && inputRef.current) {
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelBio && inputRef.current) {
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-    if (isEditingLabelTeam && inputRef.current) {
-      inputRef.current.style.height = `${25 + inputRef.current.scrollHeight}px`;
-    }
-
   }, [isEditingLabelMision, isEditingLabelVision, isEditingLabelDesc, isEditingLabelBio, isEditingLabelTeam]);
 
 
@@ -606,7 +587,7 @@ const Acercade = () => {
             <FontAwesomeIcon icon={faCircleDot} style={{ color: '#D3B938', fontSize: '50px' }} />
             <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px' }}>Misión</h2>
             {isEditingLabelMision ? (
-              <div class="container">
+              <div class="about-us-txt-container">
                 <textarea
                   ref={inputRef}
                   name="mision"
@@ -625,7 +606,7 @@ const Acercade = () => {
                 </div>
               </div>
             ) : (
-              <div class="container">
+              <div class="about-us-txt-container">
                 <p class="new-text">{mision}</p>
                 {isEditingPage &&
                   <button onClick={handleMisionEdit} class="upload-button">
@@ -642,7 +623,7 @@ const Acercade = () => {
             <h2 style={{ color: '#8FC1B5', fontSize: '40px' }}>Visión</h2>
 
             {isEditingLabelVision ? (
-              <div class="container">
+              <div class="about-us-txt-container">
                 <textarea
                   ref={inputRef}
                   name="vision"
@@ -661,7 +642,7 @@ const Acercade = () => {
                 </div>
               </div>
             ) : (
-              <div class="container">
+              <div class="about-us-txt-container">
                 <p class="new-text">{vision}</p>
                 {isEditingPage &&
                   <button onClick={handleVisionEdit} class="upload-button">
@@ -677,26 +658,28 @@ const Acercade = () => {
         <div className="company-description">
           <div className="image-container">
             <img src={imagePreviewDesc} alt="Imagen de la clínica" />
-            <div class="upload-buttons">
-              <label htmlFor="urlDescImg">Seleccionar imagen</label>
-              <input
-                type="file"
-                onChange={(event) => {
-                  setImageUpload(event.target.files[0]);
-                  setImagePreviewDesc(URL.createObjectURL(event.target.files[0]));
-                }}
-                accept="image/png, image/jpeg, image/webp"
-                name='urlDescImg'
-                id="urlDescImg"
-                className="customFileInput"
-              />
-              <label class="delete" onClick={handleConfirmarImagen}>Confirmar imagen</label>
-            </div>
+            {isEditingPage &&
+              <div class="upload-buttons">
+                <label class="upload-button" htmlFor="urlDescImg">Seleccionar imagen</label>
+                <input
+                  type="file"
+                  onChange={(event) => {
+                    setImageUpload(event.target.files[0]);
+                    setImagePreviewDesc(URL.createObjectURL(event.target.files[0]));
+                  }}
+                  accept="image/png, image/jpeg, image/webp"
+                  name='urlDescImg'
+                  id="urlDescImg"
+                  className="customFileInput"
+                />
+                <label class="upload-button accept" onClick={handleConfirmarImagen}>Confirmar imagen</label>
+              </div>
+            }
           </div>
           <div className="text-container">
             <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Descripción de la Empresa</h2>
             {isEditingLabelDesc ? (
-              <div class="container">
+              <div class="about-us-txt-container">
                 <textarea
                   ref={inputRef}
                   name="description"
@@ -716,7 +699,7 @@ const Acercade = () => {
               </div>
             ) :
               (
-                <div class="container">
+                <div class="about-us-txt-container">
                   <p class="new-text">
                     {description}
                   </p>
@@ -734,26 +717,29 @@ const Acercade = () => {
         <div className="person-container">
           <div className="person-image">
             <img src={imagePreviewDoctor} alt="Dr. Víctor Cruz" />
-            <div class="upload-buttons">
-              <label htmlFor="urlDrImg">Seleccionar imagen</label>
-              <input
-                type="file"
-                onChange={(event) => {
-                  setImageUpload(event.target.files[0]);
-                  setImagePreviewDoctor(URL.createObjectURL(event.target.files[0]));
-                }}
-                accept="image/png, image/jpeg, image/webp"
-                name='urlDrImg'
-                id="urlDrImg"
-                className="customFileInput"
-              />
-              <label class="delete" onClick={handleConfirmarDoctorImg}>Confirmar imagen</label>
-            </div>
+            {
+              isEditingPage &&
+              <div class="upload-buttons">
+                <label class="upload-button" htmlFor="urlDrImg">Seleccionar imagen</label>
+                <input
+                  type="file"
+                  onChange={(event) => {
+                    setImageUpload(event.target.files[0]);
+                    setImagePreviewDoctor(URL.createObjectURL(event.target.files[0]));
+                  }}
+                  accept="image/png, image/jpeg, image/webp"
+                  name='urlDrImg'
+                  id="urlDrImg"
+                  className="customFileInput"
+                />
+                <label class="upload-button accept" onClick={handleConfirmarDoctorImg}>Confirmar imagen</label>
+              </div>
+            }
           </div>
           <div className="text-container">
             <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}> Dr. Victor Cruz</h2>
             {isEditingLabelBio ? (
-              <div class="container">
+              <div class="about-us-txt-container">
                 <textarea
                   ref={inputRef}
                   name="biography"
@@ -773,7 +759,7 @@ const Acercade = () => {
               </div>
             ) :
               (
-                <div class="container">
+                <div class="about-us-txt-container">
                   <p class="new-text">
                     {biography}
                   </p>
@@ -793,7 +779,7 @@ const Acercade = () => {
           <div class="text-container">
             <h2 style={{ position: 'relative', color: '#8FC1B5', fontSize: '40px', marginBottom: '30px', textAlign: 'center' }}>Nuestro Equipo</h2>
             {isEditingLabelTeam ? (
-              <div class="container">
+              <div class="about-us-txt-container">
                 <textarea
                   ref={inputRef}
                   name="team"
@@ -813,7 +799,7 @@ const Acercade = () => {
               </div>
             ) :
               (
-                <div class="container">
+                <div class="about-us-txt-container">
                   <p class="new-text">
                     {teamDesc}
                   </p>
