@@ -592,7 +592,16 @@ const Home = () => {
         setImagePreview(null);
     };
 
-    const handleDeleteCarruselImage = async (id) => {
+    const deleteImg = (refUrl) => {
+        const imageRef = ref(storage, refUrl)
+        deleteObject(imageRef)
+            .catch((error) => {
+                console.log("Failed to delete image: ", error)
+            })
+        window.location.reload();
+    }
+
+    const handleDeleteCarruselImage = async (id,url) => {
 
         if (CarruselData.length <= 1) {
             swal("El carrusel debe tener como mínimo una imagen!", {
@@ -611,7 +620,10 @@ const Home = () => {
             .then(async (willDelete) => {
                 if (willDelete) {
                     try {
+                        
                         await CarruselService.deletePicture(id);
+                        console.log(url);
+                        deleteImg(url);
                         swal("Imagen de carrusel eliminada exitosamente!", {
                             icon: "success",
                         });
@@ -678,7 +690,7 @@ const Home = () => {
         });
         console.log('Cambios guardados!');
     }
-
+    let urlDelete;
     return (
         <div className="scrollable-page">
             <Topbar />
@@ -720,12 +732,14 @@ const Home = () => {
                                 <FontAwesomeIcon icon={faTimes} size="2x" />
                             </button>
                             <div className='dataGridBox'>
+                                
                                 <ThemeProvider theme={theme}>
                                     {CarruselData.length > 0 ? (
                                         <DataGrid
                                             rows={CarruselData}
                                             getRowId={getRowId}
                                             rowHeight={150}
+                                            
                                             columns={[
                                                 {
                                                     field: 'Imagen',
@@ -734,6 +748,7 @@ const Home = () => {
                                                     headerClassName: 'column-header',
                                                     renderCell: (params) => {
                                                         const { id, row } = params;
+                                                        urlDelete = row.url;
                                                         return (
                                                             <div key={id} >
                                                                 <img src={row.url} class="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
@@ -746,7 +761,8 @@ const Home = () => {
                                                     headerName: '',
                                                     flex: 1,
                                                     renderCell: (params) => (
-                                                        <IconButton style={{ justifySelf: 'flex-end' }} onClick={() => handleDeleteCarruselImage(params.id)}>
+                                                        
+                                                        <IconButton style={{ justifySelf: 'flex-end' }} onClick={() => handleDeleteCarruselImage(params.id,urlDelete)}>
                                                             <Delete />
                                                         </IconButton>
                                                     ),

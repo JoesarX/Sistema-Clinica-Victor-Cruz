@@ -238,16 +238,9 @@ if (imageUpload != null) {
         .then(async (willDelete) => {
             if (willDelete) {
                 try {
-                  console.log(id);
-                    console.log("DELETE THIS URL: " + url);
-                    await ServiciosService.deleteServicios(id);
-                    if (url != null) {
-                      console.log("DELETE THIS URL no es null: " + url);
+                      await ServiciosService.deleteServicios(id);
+                      console.log(url);
                       deleteImg(url);
-                    }
-                    else {
-                      window.location.reload();
-                    }
                     swal("Servicio eliminado exitosamente!", {
                         icon: "success",
                     });
