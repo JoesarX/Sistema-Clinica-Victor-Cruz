@@ -170,8 +170,6 @@ const Home = () => {
             await text_Services.editText(TipoTitulo);
             TipoDesc.texto_campo = trimmedDescription;
             await text_Services.editText(TipoDesc);
-            cont = 0;
-
 
             setEditable(false);
             setEditedTitle(trimmedTitle);
@@ -212,7 +210,6 @@ const Home = () => {
 
 
         useEffect(() => {
-            console.log("Soy el cont; " + cont);
             if (isFetching) {
                 const fetchTitulos = async () => {
                     try {
@@ -241,7 +238,6 @@ const Home = () => {
                 };
                 console.log("Error de effect");
                 fetchTitulos();
-                cont++;
                 setIsFetching(false);
             }
         }, [isFetching]);
