@@ -552,7 +552,7 @@ const Citas = () => {
     const selectedEstado = cita.estado;
     const selectedCorreoUser = cita.correouser;
     const selectedIdPaciente = cita.idpaciente;
-    const listaEstado = ['Pendiente', 'En Progreso', 'Cancelada', 'Terminada']
+    const listaEstado = ['Pendiente', 'En Progreso', 'Terminada', 'Cancelada', 'Expirada']
 
     let buscaError = 0;
     useEffect(() => {
@@ -754,13 +754,12 @@ const Citas = () => {
                                 <Autocomplete
                                     disablePortal
                                     id="idpaciente"
-                                    required
                                     options={Expedientes}
                                     getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
                                     onChange={(event, newValue) => {
                                         cita.idpaciente = newValue?.idpaciente;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="ID Paciente" required />}
+                                    renderInput={(params) => <TextField {...params} label="ID Paciente"/>}
                                     ListboxProps={
                                         {
                                             style: {
@@ -773,13 +772,12 @@ const Citas = () => {
                                 <Autocomplete
                                     disablePortal
                                     id="correouser"
-                                    required
                                     options={Usuarios}
                                     getOptionLabel={(usuario) => usuario.correouser}
                                     onChange={(event, newValue) => {
                                         cita.correouser = newValue?.correouser;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="Correo User" required />}
+                                    renderInput={(params) => <TextField {...params} label="Correo User"/>}
                                     ListboxProps={
                                         {
                                             style: {
@@ -796,6 +794,7 @@ const Citas = () => {
                                         onChange={handleDateChange}
                                         renderInput={(params) => <TextField {...params} />}
                                         shouldDisableDate={isWeekday} // Disable weekends
+                                        label="Fecha"
                                         name='fecha'
                                         value={fecha}
                                     />
@@ -887,7 +886,7 @@ const Citas = () => {
 
                                         }}
                                         renderInput={(params) => (
-                                            <TextField {...params} label="ID Paciente" required />
+                                            <TextField {...params} label="ID Paciente"/>
                                         )}
                                         ListboxProps={
                                             {
@@ -903,14 +902,13 @@ const Citas = () => {
                                         value={selectMail}
                                         disablePortal
                                         id="correouser"
-                                        required
                                         options={Usuarios}
                                         getOptionLabel={(opcion) => opcion.correouser}
                                         onChange={(event, newValue) => {
                                             cita.correouser = newValue?.correouser;
                                         }}
                                         renderInput={(params) => (
-                                            <TextField {...params} label="Correo User" required />
+                                            <TextField {...params} label="Correo User" />
                                         )}
                                         ListboxProps={
                                             {
@@ -928,6 +926,7 @@ const Citas = () => {
                                             onChange={handleEditDateChange}
                                             renderInput={(params) => <TextField {...params} />}
                                             shouldDisableDate={isWeekday} // Disable weekends
+                                            label="Fecha"
                                             name='fecha'
                                             value={dayjs(fecha)}
                                         />
