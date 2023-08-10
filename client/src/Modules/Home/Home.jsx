@@ -166,7 +166,7 @@ const Home = () => {
                 alert("¡Error! El título no puede quedar en blanco.");
                 return;
             }
-        
+
             if (trimmedDescription === "") {
                 alert("¡Error! La descripción no puede quedar en blanco.");
                 return;
@@ -419,7 +419,7 @@ const Home = () => {
         setEditedMission(missionText);
     };
 
-    
+
 
     const handleSaveClick = async () => {
         if (editedMission.trim() === '') {
@@ -537,6 +537,10 @@ const Home = () => {
 
     const handleModalSubmit = async (e) => {
         e.preventDefault();
+        if (CarruselData.length >= 10) {
+            alert('Error, no se pueden agregar mas de 10 fotos para el carrusel.');
+            return;
+        }
         try {
             console.log("test");
             submitPicture();
@@ -673,12 +677,11 @@ const Home = () => {
     ////////////////////
 
     const Carrusel = () => {
-
         if (!isFetching) {
             return (
                 <div className="imagenes">
                     <Slide {...properties}>
-                        {CarruselData.map((carrusel) => (
+                        {CarruselData.slice(0, 5).map((carrusel) => ( // Display only the first 5 images
                             <div className='each-slide' key={carrusel.idfoto}>
                                 <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
                             </div>
@@ -687,7 +690,6 @@ const Home = () => {
                 </div>
             )
         }
-
     };
 
     const [showEditButtons, setShowEditButtons] = useState(false);
@@ -879,8 +881,8 @@ const Home = () => {
                             value={editedMission}
                             onChange={handleChange}
                             rows="10"
-                            style={{ width: '100%' }} 
-                            maxLength={maxDescriptionCharacters}/>
+                            style={{ width: '100%' }}
+                            maxLength={maxDescriptionCharacters} />
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
                     )}
