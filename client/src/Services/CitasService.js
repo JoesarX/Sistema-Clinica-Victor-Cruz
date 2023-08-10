@@ -98,6 +98,20 @@ export const getAvailableTimes = async (date, id = null) => {
     }
 };
 
+export const getUserExpCitas = async (correouser) => {
+    try {
+        console.log("In Service get citas de expedientes linked a usuarios");
+        console.log(correouser);
+        const res = await axios.get(`${API_URL}/citas/citasexpedientes/${correouser}`);
+        
+        
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch Times');
+    }
+};
+
 export const getCheckAvailability = async (fecha, hora, idcita = null) => {
     try {
         const url = idcita
@@ -126,7 +140,8 @@ const Services = {
     editCitas,
     getAvailableTimes,
     filterCita,
-    getCheckAvailability
+    getCheckAvailability,
+    getUserExpCitas
     // Other functions
 };
 
