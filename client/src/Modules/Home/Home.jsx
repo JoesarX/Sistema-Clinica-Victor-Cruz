@@ -48,7 +48,7 @@ import {
 import { v4 } from "uuid";
 import { idID } from '@mui/material/locale';
 const Home = () => {
-    const AddButton = () => (
+    /*const AddButton = () => (
         <button>
             <AddIcon />
             Agregar Foto
@@ -61,6 +61,7 @@ const Home = () => {
             Guardar Cambios
         </button>
     );
+    */
 
     /* Para la DB*/
 
@@ -97,13 +98,6 @@ const Home = () => {
         Tipo: 'texto_servicio3',
         texto_campo: ''
     })
-
-
-
-
-
-
-
 
     const [misionOBJ] = React.useState({
         Tipo: 'Mision',
@@ -720,6 +714,9 @@ const Home = () => {
         console.log('Cambios guardados!');
     }
     let urlDelete;
+
+
+
     return (
         <div className="scrollable-page">
             <Topbar />
