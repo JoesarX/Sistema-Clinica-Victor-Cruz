@@ -48,7 +48,7 @@ import {
 import { v4 } from "uuid";
 import { idID } from '@mui/material/locale';
 const Home = () => {
-    const AddButton = () => (
+    /*const AddButton = () => (
         <button>
             <AddIcon />
             Agregar Foto
@@ -61,6 +61,7 @@ const Home = () => {
             Guardar Cambios
         </button>
     );
+    */
 
     /* Para la DB*/
 
@@ -97,13 +98,6 @@ const Home = () => {
         Tipo: 'texto_servicio3',
         texto_campo: ''
     })
-
-
-
-
-
-
-
 
     const [misionOBJ] = React.useState({
         Tipo: 'Mision',
@@ -160,6 +154,16 @@ const Home = () => {
             const TituloOriginal = TipoTitulo.texto_campo;
             const trimmedTitle = editedTitle.trim();
             const trimmedDescription = editedDescription.trim();
+
+            if (trimmedTitle === "") {
+                alert("¡Error! El título no puede quedar en blanco.");
+                return;
+            }
+        
+            if (trimmedDescription === "") {
+                alert("¡Error! La descripción no puede quedar en blanco.");
+                return;
+            }
 
 
             // Check if the description ends with a period
@@ -393,7 +397,9 @@ const Home = () => {
     const [missionText, setMissionText] = useState(originalText);
     const [editedMission, setEditedMission] = useState('');
 
-    const MAX_LINES = 10;
+
+    const MIN_MISSION_LENGTH = 35;
+    const MAX_MISSION_LENGTH = 450;
 
     const handleChange = (event) => {
         setEditedMission(event.target.value);
@@ -405,9 +411,26 @@ const Home = () => {
         setEditedMission(missionText);
     };
 
+    
+
     const handleSaveClick = async () => {
-        if (editedMission.split('\n').length > MAX_LINES) {
-            alert(`¡Error! El texto no puede tener más de ${MAX_LINES} líneas.`);
+        if (editedMission.trim() === '') {
+            alert('¡Error! La misión no puede quedar en blanco.');
+            return;
+        }
+
+        if (editedMission.length < MIN_MISSION_LENGTH || editedMission.length > MAX_MISSION_LENGTH) {
+            alert(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`);
+            return;
+        }
+
+        if (editedMission.split('  ').length > 1) {
+            alert('¡Error! No se pueden dejar espacios dobles en la misión.');
+            return;
+        }
+
+        if (!editedMission.endsWith('.')) {
+            alert('¡Error! La misión debe terminar con un punto.');
             return;
         }
 
@@ -691,6 +714,9 @@ const Home = () => {
         console.log('Cambios guardados!');
     }
     let urlDelete;
+
+
+
     return (
         <div className="scrollable-page">
             <Topbar />
@@ -851,12 +877,15 @@ const Home = () => {
                     )}
                     {editable ? (
                         <>
-                            <button onClick={handleSaveClick} style={{ display: 'inline-block' }}>
-                                <FontAwesomeIcon icon={faSave} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
-                            </button>
-                            <button onClick={handleCancelClick} style={{ display: 'inline-block' }}>
-                                <FontAwesomeIcon icon={faTimes} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
-                            </button>
+                            <div className="button-container" style={{ justifyContent: 'left', alignContent: 'flex-start' }} >
+
+                                <button onClick={handleSaveClick} style={{ display: 'inline-block' }}>
+                                    <FontAwesomeIcon icon={faSave} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
+                                </button>
+                                <button onClick={handleCancelClick} style={{ display: 'inline-block' }}>
+                                    <FontAwesomeIcon icon={faTimes} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
+                                </button>
+                            </div>
                         </>
                     ) : (
                         <div>
@@ -886,7 +915,7 @@ const Home = () => {
                         />
                     )}
                     {editable1 ? (
-                        <div className="button-container">
+                        <div className="button-container" style={{ justifyContent: 'left', alignContent: 'flex-start' }} >
                             <button className='edit-button' onClick={handleSaveClick1}>
                                 <FontAwesomeIcon icon={faSave} style={{ fontSize: '20px', padding: '5px', color: '#1E60A6' }} />
                             </button>
