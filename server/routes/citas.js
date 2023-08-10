@@ -108,7 +108,25 @@ const citasRouter = (pool, transporter) => {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     });
-
+    //get citas linked a expediente linked a usuario
+    router.get("/citasexpedientes/:correouser", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const sqlSelect = "select distinct C.idcita, C.nombre_persona, C.estado, C.idpaciente, C.correouser, C.altura, C.peso, C.temperatura, C.ritmo_cardiaco, C.presion, C.fecha, C.hora, C.correoenviado "+
+            "from Usuarios U "+
+            "inner join expedientes E on U.correouser = E.correo " + 
+            "inner join Citas C on E.correo = C.correouser "+
+            "where U.correouser = '" + req.params.correouser + "'"; 
+            
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log(`Get cita with correo: ${req.params.correouser} Successfull`)
+            res.json(rows)
+        } catch (err) {
+            console.log(`Get cita with correo: ${req.params.correouser} Failed. Error: ${err}`)
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
 
 
     //Get a cita by id
