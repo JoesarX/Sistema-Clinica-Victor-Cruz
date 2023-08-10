@@ -48,6 +48,10 @@ import {
 import { v4 } from "uuid";
 import { idID } from '@mui/material/locale';
 const Home = () => {
+
+    const maxDescriptionCharacters = 512;
+    const maxDescriptionCharacters2 = 190;
+
     const AddButton = () => (
         <button>
             <AddIcon />
@@ -292,6 +296,7 @@ const Home = () => {
                                 rows={5}
                                 cols={40}
                                 style={{ width: '100%' }}
+                                maxLength={maxDescriptionCharacters2}
                             />
                         ) : (
                             editedDescription
@@ -845,7 +850,8 @@ const Home = () => {
                             value={editedMission}
                             onChange={handleChange}
                             rows="10"
-                            style={{ width: '100%' }} />
+                            style={{ width: '100%' }} 
+                            maxLength={maxDescriptionCharacters}/>
                     ) : (
                         <div className='about-us-text'>{formatOriginalText(missionText)}</div>
                     )}

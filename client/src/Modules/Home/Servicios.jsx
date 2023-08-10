@@ -24,6 +24,9 @@ import swal from 'sweetalert';
 import ServiciosService from '../../Services/ServiciosService.js';
 
 const Servicios = () => {
+
+  
+
   const { isLoggedIn, userType } = useContext(AuthContext);
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
@@ -138,7 +141,12 @@ const Servicios = () => {
     }
   }, [isSubmitting2]);
 
+  const maxDescriptionCharacters = 200;
+  const maxTitleCharacters = 35;
+
   const submitServicio = async (event) => {
+
+   
     
     // Validate and add the new service
     if (!newTitle || !newDescription || !imageUpload) {
@@ -411,7 +419,11 @@ if (imageUpload != null) {
                     <label onClick={cancelarFotoA} className="cFL" style={{ marginTop: '0.45rem' }}>Eliminar Imagen</label>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField id="titulo" label="Titulo" variant="outlined" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} name='nombre' required style={{ marginBottom: '0.45rem', width: '90%' }} />
+                    <TextField id="titulo" label="Titulo" variant="outlined" value={newTitle} 
+                    onChange={(e) => setNewTitle(e.target.value)} name='nombre' 
+                    required style={{ marginBottom: '0.45rem', width: '90%' }}
+                    inputProps={{ maxLength: maxTitleCharacters }}
+                     />
                     <TextareaAutosize
                       id="descripcion"
                       aria-label="Descripcion"
@@ -421,6 +433,7 @@ if (imageUpload != null) {
                       value={newDescription}
                       onChange={(e) => setNewDescription(e.target.value)}
                       style={{ marginBottom: '0.45rem', width: '90%', height: '260px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}
+                      maxLength={maxDescriptionCharacters}
                     />
                   </Grid>
 
@@ -504,6 +517,7 @@ if (imageUpload != null) {
                     name='nombre'
                     required
                     style={{ marginBottom: '0.45rem', width: '90%' }}
+                    inputProps={{ maxLength: maxTitleCharacters }}
                   />
                   <TextareaAutosize
                     id="descripcion"
@@ -521,6 +535,7 @@ if (imageUpload != null) {
                       border: '1px solid #ccc',
                       borderRadius: '4px',
                     }}
+                    maxLength={maxDescriptionCharacters}
                   />
                 </Grid>
               </Grid>

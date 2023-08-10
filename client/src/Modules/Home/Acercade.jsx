@@ -58,6 +58,9 @@ const Acercade = () => {
   const [mision, setMision] = useState(null);
   const [vision, setVision] = useState(null);
 
+  const maxDescriptionCharacters = 512;
+  const maxDescriptionCharacters2 = 1024;
+
   let ImgsData = [];
   let ImgsDataDoc = [];
   let ImgsDataDesc = [];
@@ -538,6 +541,7 @@ const Acercade = () => {
       console.log("Error fetching Team:", error);
     }
   }
+  
 
   useEffect(() => {
 
@@ -594,6 +598,7 @@ const Acercade = () => {
                   value={mision}
                   style={{ fontSize: '18px', maxHeight: '250px', wordWrap: 'breakWord', width: '100%' }}
                   onChange={handleMisionChange}
+                   maxLength={maxDescriptionCharacters}
                 >
                 </textarea>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
@@ -630,6 +635,7 @@ const Acercade = () => {
                   value={vision}
                   style={{ fontSize: '18px', maxHeight: '250px', wordWrap: 'break-word', width: '100%' }}
                   onChange={handleVisionChange}
+                  maxLength={maxDescriptionCharacters}
                 >
                 </textarea>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
@@ -686,6 +692,7 @@ const Acercade = () => {
                   value={description}
                   style={{ fontSize: '18px', maxHeight: '250px', width: '100%' }}
                   onChange={handleDescChange}
+                  maxLength={maxDescriptionCharacters2}
                 >
                 </textarea>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
@@ -746,6 +753,7 @@ const Acercade = () => {
                   value={biography}
                   style={{ width: '100%', height: 'fitContent', maxHeight: '250px', fontSize: '18px' }}
                   onChange={handleBioChange}
+                  maxLength={maxDescriptionCharacters2}
                 >
                 </textarea>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
@@ -786,6 +794,7 @@ const Acercade = () => {
                   value={teamDesc}
                   style={{ width: '100%', fontSize: '18px', maxHeight: '250px' }}
                   onChange={handleTeamChange}
+                  maxLength={maxDescriptionCharacters2}
                 >
                 </textarea>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
