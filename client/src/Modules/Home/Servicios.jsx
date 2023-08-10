@@ -28,7 +28,6 @@ const Servicios = () => {
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
-  const [servicios, setServicios] = useState([]);
   const [servicio, setServicio] = useState({
     url: '',
     title: '',
@@ -68,28 +67,70 @@ const Servicios = () => {
     setImagePreview(null);
   };
 
+  //HANDLE DRAG AND DROP==============================================
+  const [draggedIndex, setDraggedIndex] = useState(null);
+
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData('index', index);
+    setDraggedIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (index !== draggedIndex) {
+      setServiceData((prevData) => {
+        const newData = [...prevData];
+        const [movedService] = newData.splice(draggedIndex, 1);
+        newData.splice(index, 0, movedService);
+        return newData;
+      });
+      setDraggedIndex(index);
+      const updatedOrder = serviceData.map((service, newIndex) => ({
+        ...service,
+        order: newIndex,
+      }));
+      updateServiceOrderInDatabase(updatedOrder);
+    }
+  };
+  
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+  };
+  const updateServiceOrderInDatabase = async (updatedOrder) => {
+    try {
+      await Promise.all(updatedOrder.map(async (service) => {
+        await ServiciosService.updateServiceOrder(service.id, service.order);
+      }));
+    } catch (error) {
+      console.log("Error updating service order:", error);
+    }
+  };
+  
+
+
+
 
   //IMAGENES CODE --------------------------------------------------->
 
   async function uploadFile() {
 
     return new Promise((resolve, reject) => {
-      // Your file upload logic here
-      // Call resolve with the imageUrl when the upload is complete
-      // Call reject with an error if there's an issue with the upload
-      // For example:
       if (imageUpload == null || imageUpload == "") {
-          //reject(new Error('No file selected for upload'));
-          return null;
+        return null;
       }
 
       const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
       uploadBytes(imageRef, imageUpload)
-          .then((snapshot) => getDownloadURL(snapshot.ref))
-          .then((url) => {
-              resolve(url);
-          })
-          .catch((error) => reject(error));
+        .then((snapshot) => getDownloadURL(snapshot.ref))
+        .then((url) => {
+          resolve(url);
+        })
+        .catch((error) => reject(error));
     });
   };
 
@@ -97,18 +138,18 @@ const Servicios = () => {
 
   const fetchAllServicios = async () => {
     try {
-        const servicioData = await ServiciosService.getAllServicios();
-        const serviciosWithId = servicioData.map((servicio) => ({
-            ...servicio,
-        }));
-        console.log(serviciosWithId+"HOLA EDUARDO NOSE");
-        serviciosWithId.forEach((servicio) => {
-          console.log(servicio);
-        });
-        setServiceData(serviciosWithId);
-      } catch (error) {
-        // Handle error if any
-        console.log("Error fetching servicios:", error);
+      const servicioData = await ServiciosService.getAllServicios();
+      const serviciosWithId = servicioData.map((servicio) => ({
+        ...servicio,
+      }));
+      console.log(serviciosWithId + "HOLA EDUARDO NOSE");
+      serviciosWithId.forEach((servicio) => {
+        console.log(servicio);
+      });
+      setServiceData(serviciosWithId);
+    } catch (error) {
+      // Handle error if any
+      console.log("Error fetching servicios:", error);
     }
   };
 
@@ -116,30 +157,30 @@ const Servicios = () => {
   useEffect(() => {
     fetchAllServicios();
     if (isSubmitting) {
-        fetchAllServicios();
+      fetchAllServicios();
     }
   }, [isSubmitting]);
 
   const handleAddNewService = async (event) => {
     event.preventDefault();
-        try {
-            console.log("test");
-            submitServicio();
-        } catch (error) {
-            // Handle error if any
-            console.log('Error submitting Servicio:', error);
-      }
+    try {
+      console.log("test");
+      submitServicio();
+    } catch (error) {
+      // Handle error if any
+      console.log('Error submitting Servicio:', error);
+    }
   }
 
   useEffect(() => {
     if (isSubmitting2) {
-        console.log("test");
-        submitServicio();
+      console.log("test");
+      submitServicio();
     }
   }, [isSubmitting2]);
 
   const submitServicio = async (event) => {
-    
+
     // Validate and add the new service
     if (!newTitle || !newDescription || !imageUpload) {
       alert('Porfavor ingrese titulo, descripcion e imagen');
@@ -153,46 +194,46 @@ const Servicios = () => {
     }
 
     // Validate description
-const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
-let cleanedDescription = newDescription.trim().replace(/ +$/, ' ');
+    const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+    let cleanedDescription = newDescription.trim().replace(/ +$/, ' ');
 
-if (!descriptionRegex.test(cleanedDescription)) {
-  setDescriptionError(true);
-  alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
-  return;
-}
+    if (!descriptionRegex.test(cleanedDescription)) {
+      setDescriptionError(true);
+      alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+      return;
+    }
 
-if (imageUpload != null) {
-  const file = imageUpload;
-  if (validateImageFormat(file) == false) {
-    alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
-    return;
-  }
-}
-
-      console.log("Entra a agregar despues de validaciones");
-      try {
-          if (imageUpload != null) {
-              const imageUrll = await uploadFile();
-              setServicio(() => ({
-                  url: imageUrll,
-                  title: newTitle,
-                  description: newDescription,
-              }));
-              servicio.title = newTitle;
-              servicio.description = newDescription;
-              servicio.url = imageUrll;
-          }
-          console.log(servicio);
-          await ServiciosService.postServicios(servicio);
-          alert('Servicio Agregado');
-          handleModalClose();
-          setImagePreview(null);
-          window.location.reload();
-      } catch (error) {
-          // Handle error if any
-          console.log('Error submitting Servicio:', error);
+    if (imageUpload != null) {
+      const file = imageUpload;
+      if (validateImageFormat(file) == false) {
+        alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+        return;
       }
+    }
+
+    console.log("Entra a agregar despues de validaciones");
+    try {
+      if (imageUpload != null) {
+        const imageUrll = await uploadFile();
+        setServicio(() => ({
+          url: imageUrll,
+          title: newTitle,
+          description: newDescription,
+        }));
+        servicio.title = newTitle;
+        servicio.description = newDescription;
+        servicio.url = imageUrll;
+      }
+      console.log(servicio);
+      await ServiciosService.postServicios(servicio);
+      alert('Servicio Agregado');
+      handleModalClose();
+      setImagePreview(null);
+      window.location.reload();
+    } catch (error) {
+      // Handle error if any
+      console.log('Error submitting Servicio:', error);
+    }
     /* en duro
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -216,121 +257,121 @@ if (imageUpload != null) {
     const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
 
     if (!allowedFormats.includes(file.type)) {
-        console.log('La imagen debe estar en formato JPG, JPEG o PNG');
-        return false;
+      console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+      return false;
     }
 
     if (file.size > maxSizeInBytes) {
-        console.log('La imagen no debe superar los 5MB de tamaño');
-        return false;
+      console.log('La imagen no debe superar los 5MB de tamaño');
+      return false;
     }
     return true;
   };
 
   const handleDeleteService = (id, url) => {
     swal({
-        title: "¿Estás seguro?",
-        text: "Una vez borrado, no podrás recuperar esta información.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
+      title: "¿Estás seguro?",
+      text: "Una vez borrado, no podrás recuperar esta información.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
     })
-        .then(async (willDelete) => {
-            if (willDelete) {
-                try {
-                  console.log(id);
-                    console.log("DELETE THIS URL: " + url);
-                    await ServiciosService.deleteServicios(id);
-                    if (url != null) {
-                      console.log("DELETE THIS URL no es null: " + url);
-                      deleteImg(url);
-                    }
-                    else {
-                      window.location.reload();
-                    }
-                    swal("Servicio eliminado exitosamente!", {
-                        icon: "success",
-                    });
-                    window.location.reload();
-                } catch (error) {
-                    swal("Error al eliminar el servicio. Por favor, inténtalo de nuevo más tarde.", {
-                        icon: "error",
-                    });
-                }
-            } else {
-                swal("¡Tu información no se ha borrado!");
+      .then(async (willDelete) => {
+        if (willDelete) {
+          try {
+            console.log(id);
+            console.log("DELETE THIS URL: " + url);
+            await ServiciosService.deleteServicios(id);
+            if (url != null) {
+              console.log("DELETE THIS URL no es null: " + url);
+              deleteImg(url);
             }
-        });
+            else {
+              window.location.reload();
+            }
+            swal("Servicio eliminado exitosamente!", {
+              icon: "success",
+            });
+            window.location.reload();
+          } catch (error) {
+            swal("Error al eliminar el servicio. Por favor, inténtalo de nuevo más tarde.", {
+              icon: "error",
+            });
+          }
+        } else {
+          swal("¡Tu información no se ha borrado!");
+        }
+      });
   };
   const storage = getStorage();
   const deleteImg = (refUrl) => {
-      const imageRef = ref(storage, refUrl)
-      deleteObject(imageRef)
-          .catch((error) => {
-              console.log("Failed to delete image: ", error)
-          })
-      window.location.reload();
+    const imageRef = ref(storage, refUrl)
+    deleteObject(imageRef)
+      .catch((error) => {
+        console.log("Failed to delete image: ", error)
+      })
+    window.location.reload();
   }
 
   const handleSaveEdit = async (e) => {
     e.preventDefault();
     try {
-        submitEditServicio();
+      submitEditServicio();
     } catch (error) {
-        // Handle error if any
-        console.log('Error submitting servicio:', error);
+      // Handle error if any
+      console.log('Error submitting servicio:', error);
     }
   };
 
   useEffect(() => {
     if (isSubmitting3) {
-        submitEditServicio();
+      submitEditServicio();
     }
   }, [isSubmitting3]);
 
   const submitEditServicio = async () => {
     console.log(editedService);
     try {
-        const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
-        if (!titleRegex.test(editedService.title)) {
-          setTitleError(true);
-          alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
-          return;
-        }
-    
-        // Validate description
-        const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
-        if (!descriptionRegex.test(editedService.description)) {
-          setDescriptionError(true);
-          alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
-          return;
-        }
-        if (imageUpload != null) {
-          const file = imageUpload;
-          if (validateImageFormat(file) == false) {
-              alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
-              return;
-          }
-        }
-            if (imageUpload != null && imageUpload != "") {
-                if (imageUpload != null) {
-                    deleteImg(imageEdit);
-                    console.log("Elimina imagen");
-                }
-                console.log("Image Upload: "+imageUpload);
-                const imageUrll = await uploadFile();
-                editedService.url = imageUrll;
+      const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
+      if (!titleRegex.test(editedService.title)) {
+        setTitleError(true);
+        alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+        return;
+      }
 
-                await ServiciosService.editServicios(editedService.id, editedService);
-                alert('Servicio Editado');
-            } else {
-              console.log("Entro en else de edit");
-              await ServiciosService.editServicios(editedService.id, editedService);
-              alert('Servicio Editado');
-          }
-          window.location.reload();
-      } catch (error) {
-        console.log('Error submitting servicio:', error);
+      // Validate description
+      const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+      if (!descriptionRegex.test(editedService.description)) {
+        setDescriptionError(true);
+        alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+        return;
+      }
+      if (imageUpload != null) {
+        const file = imageUpload;
+        if (validateImageFormat(file) == false) {
+          alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+          return;
+        }
+      }
+      if (imageUpload != null && imageUpload != "") {
+        if (imageUpload != null) {
+          deleteImg(imageEdit);
+          console.log("Elimina imagen");
+        }
+        console.log("Image Upload: " + imageUpload);
+        const imageUrll = await uploadFile();
+        editedService.url = imageUrll;
+
+        await ServiciosService.editServicios(editedService.id, editedService);
+        alert('Servicio Editado');
+      } else {
+        console.log("Entro en else de edit");
+        await ServiciosService.editServicios(editedService.id, editedService);
+        alert('Servicio Editado');
+      }
+      window.location.reload();
+    } catch (error) {
+      console.log('Error submitting servicio:', error);
     }
   };
 
@@ -354,8 +395,19 @@ if (imageUpload != null) {
       </div>
 
       <div>
-        {serviceData.map((service) => (
-          <div className='services' id={service.hooverComponent} key={service.id}>
+      {serviceData.map((service, index) => (
+        <div
+          className={`services ${showButtons ? 'draggable' : ''}`}
+          id={service.hooverComponent}
+          key={service.id}
+          draggable={showButtons}
+          data-index={index}
+          onDragStart={(e) => handleDragStart(e, index)}
+          onDragEnd={handleDragEnd}
+          onDragOver={(e) => handleDragOver(e, index)}
+          onDrop={handleDrop}
+          style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
+        >
             <img src={service.url} alt={service.title} />
             <div className="overlay">
               <h2>{service.title}</h2>
@@ -372,6 +424,7 @@ if (imageUpload != null) {
           </div>
         ))}
       </div>
+
 
 
       {isLoggedIn && userType !== 'normal' && (
@@ -408,8 +461,8 @@ if (imageUpload != null) {
                     <input
                       type="file"
                       onChange={(event) => {
-                          setImageUpload(event.target.files[0]);
-                          setImagePreview(URL.createObjectURL(event.target.files[0]));
+                        setImageUpload(event.target.files[0]);
+                        setImagePreview(URL.createObjectURL(event.target.files[0]));
                       }}
                       name='urlfoto'
                       id="urlfoto"
@@ -493,8 +546,8 @@ if (imageUpload != null) {
                   <input
                     type="file"
                     onChange={(event) => {
-                        setImageUpload(event.target.files[0]);
-                        setImagePreview(URL.createObjectURL(event.target.files[0]));
+                      setImageUpload(event.target.files[0]);
+                      setImagePreview(URL.createObjectURL(event.target.files[0]));
                     }}
                     name='urlfoto'
                     id="urlfoto"
