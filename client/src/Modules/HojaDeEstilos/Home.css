@@ -63,7 +63,7 @@
   justify-content: center;
   font-size: 50px;
   color: #1E60A6;
-  height: fit-content;
+  height: moz-fit-content;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -135,7 +135,7 @@
 }
 
 .services-container {
-  height: fit-content;
+  height: moz-fit-content;
   width: 90vw;
   max-width: 2000px;
   display: flex;
@@ -152,7 +152,7 @@
 }
 
 .button-container {
-  height: fit-content;
+  height: moz-fit-content;
   width: 90vw;
   max-width: 2000px;
   display: flex;
@@ -408,7 +408,7 @@
 
   .service-header {
     position: static;
-    height: fit-content;
+    height: moz-fit-content;
     padding: 0;
     margin-bottom: 5px;
   }
@@ -487,13 +487,13 @@
 
   .service-container {
     width: 20vw;
-    height: fit-content;
+    height:moz-fit-content;
     gap: 0 !important;
     overflow-x: hidden;
   }
 
   .service-header {
-    height: fit-content;
+    height: moz-fit-content;
     padding: 0;
     align-items: center;
   }
