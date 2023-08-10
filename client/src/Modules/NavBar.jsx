@@ -96,11 +96,19 @@ const NavBar = () => {
                                 </ListItemButton>
                             </ListItem>
                         </Link>
-                        <ListItem disablePadding>
-                                <ListItemButton onClick={handleSignOutClick}>
-                                    <ListItemIcon sx={{ color: "white" }}><Logout /></ListItemIcon>
-                                    <ListItemText primary={"Cerrar Sesión"} />
+                        <Link to="/examenes" style={{ textDecoration: 'none', color: "white" }}>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon sx={{ color: "white" }}><CalendarMonth /></ListItemIcon>
+                                    <ListItemText primary={"Examenes"} />
                                 </ListItemButton>
+                            </ListItem>
+                        </Link>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={handleSignOutClick}>
+                                <ListItemIcon sx={{ color: "white" }}><Logout /></ListItemIcon>
+                                <ListItemText primary={"Cerrar Sesión"} />
+                            </ListItemButton>
                         </ListItem>
                     </List>
                 </Box>
