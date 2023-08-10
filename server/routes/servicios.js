@@ -8,7 +8,7 @@ const serviciosRouter = (pool) => {
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT id, url, title, description FROM servicios"
+            const sqlSelect = "SELECT id, url, title, description, orden FROM servicios order by orden asc"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -38,7 +38,7 @@ const serviciosRouter = (pool) => {
         }
     });
 
-    //Get a service by id
+    /*Get a service by id
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
@@ -53,6 +53,7 @@ const serviciosRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+    */
 
     //Delete a service by id
     router.delete("/:id", async (req, res) => {

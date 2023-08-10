@@ -32,6 +32,7 @@ const Servicios = () => {
     url: '',
     title: '',
     description: '',
+    orden: '',
     id: ''
   });
 
@@ -69,6 +70,7 @@ const Servicios = () => {
 
   //HANDLE DRAG AND DROP==============================================
   const [draggedIndex, setDraggedIndex] = useState(null);
+  const [updatedOrdenArray, setUpdatedOrdenArray] = useState(null);
 
   const handleDragStart = (e, index) => {
     e.dataTransfer.setData('index', index);
@@ -93,22 +95,33 @@ const Servicios = () => {
         ...service,
         order: newIndex,
       }));
-      updateServiceOrderInDatabase(updatedOrder);
+      setUpdatedOrdenArray(updatedOrder);
     }
   };
-  
 
   const handleDrop = (e) => {
     e.preventDefault();
   };
-  const updateServiceOrderInDatabase = async (updatedOrder) => {
-    try {
-      await Promise.all(updatedOrder.map(async (service) => {
-        await ServiciosService.updateServiceOrder(service.id, service.order);
-      }));
-    } catch (error) {
-      console.log("Error updating service order:", error);
+  
+  const updateServiceOrderInDatabase = async () => {
+    if (updatedOrdenArray != null) {
+      try {
+        await Promise.all(updatedOrdenArray.map(async (service) => {
+          console.log("New Array changge in index: ");
+          for (const obj of updatedOrdenArray) {
+            console.log(obj);
+          }
+          console.log(serviceData);
+          //await ServiciosService.updateServiceOrder(service.id, service.order);
+        }));
+      } catch (error) {
+        console.log("Error updating service order:", error);
+      }
     }
+    else {
+      console.log("null");
+    }
+    
   };
   
 
@@ -503,6 +516,7 @@ const Servicios = () => {
           {isLoggedIn && userType !== 'normal' && showButtons && (
             <div className='button-addSCont'>
               <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
+              <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Modificar Orden</button>
             </div>
           )}
           <div className='button-gearCont'>
