@@ -21,7 +21,7 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { Delete, Edit, Medication } from '@mui/icons-material'
+import { Delete, Edit, Biotech } from '@mui/icons-material'
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -68,52 +68,7 @@ const Examenes = () => {
     //==================================================================================================================================================================================
     //TEXTS AND IMAGES VALIDATIONS
 
-    const validations = useCallback(() => {
-        console.log("Called validations")
-        const { titulo, precio, descripcion } = examen
-        // //Titulo validations
-        // if (titulo === null || titulo === '') {
-        //     alert('Debe agregarle un titulo al examen')
-        //     return false
-        // } else if (!titulo.replace(/\s/g, '').length) {
-        //     alert('El titulo no puede contener solo espacios.');
-        //     return false
-        // } else if (titulo.charAt(0) === ' ') {
-        //     alert('El titulo no puede iniciar con un espacio.');
-        //     return false
-        // } else if (titulo.charAt(titulo.length - 1) === ' ') {   
-        //     alert('El titulo no puede terminar con un espacio.');
-        //     return false
-        // }
-        // //Precio validations
-        // if (precio === null || precio === '') {
-        //     alert('Debe agregarle la cantidad de unidades al examen');
-        //     return false;
-        // } else if (!(/^\d+$/.test(precio))) {
-        //     alert("Las unidades deben ser un numero entero.");
-        //     return false;
-        // }
-        // //Precio validations
-        // if (descripcion === null || descripcion === '') {
-        //     alert('Debe agregarle un precio unitario al examen');
-        //     return false;
-        // } else if (!(/^[0-9,.]*$/.test(parseFloat(descripcion)))) {
-        //     alert("Ingrese un precio valido");
-        //     return false;
-        // }
-
-        // if (imageUpload != null) {
-        //     const file = imageUpload;
-        //     if (validateImageFormat(file) == false) {
-        //         alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
-        //         return false;
-        //     }
-        // }
-
-        return true;
-    }, [examen])
-
-    const validateImageFormat = (file) => {
+    const validateImageFormat = useCallback((file) => {
         console.log("Called validateImageFormat")
         const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
         const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
@@ -124,10 +79,63 @@ const Examenes = () => {
         if (file.size > maxSizeInBytes) {
             return false;
         }
-
         // Continue with further logic or actions if the image passes the format and size checks
         return true;
-    };
+    },[]);
+
+    const validations = useCallback(() => {
+        console.log("Called validations")
+        const { titulo, precio, descripcion } = examen
+        //Titulo validations
+        if (titulo === null || titulo === '') {
+            alert('Debe agregarle un titulo al examen')
+            return false
+        } else if (!titulo.replace(/\s/g, '').length) {
+            alert('El titulo no puede contener solo espacios.');
+            return false
+        } else if (titulo.charAt(0) === ' ') {
+            alert('El titulo no puede iniciar con un espacio.');
+            return false
+        } else if (titulo.charAt(titulo.length - 1) === ' ') {   
+            alert('El titulo no puede terminar con un espacio.');
+            return false
+        }
+        //Precio validations
+        console.log("Precio:"+precio)
+        if (precio === null || precio === '') {
+            alert('Debe agregarle un precio al examen');
+            return false;
+        } else if (!(/^\$?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(parseFloat(precio)))) {
+            alert("Ingrese un precio valido");
+            return false;
+        }
+        //Precio validations
+        if (descripcion === null || descripcion === '') {
+            alert('Debe agregarle una Descripcion al examen')
+            return false
+        } else if (!descripcion.replace(/\s/g, '').length) {
+            alert('La Descripcion no puede contener solo espacios.');
+            return false
+        } else if (descripcion.charAt(0) === ' ') {
+            alert('La Descripcion no puede iniciar con un espacio.');
+            return false
+        } else if (descripcion.charAt(descripcion.length - 1) === ' ') {   
+            alert('La Descripcion no puede terminar con un espacio.');
+            return false
+        }
+
+        if (imageUpload != null) {
+            const file = imageUpload;
+            if (validateImageFormat(file) === false) {
+                alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+                return false;
+            }
+        }
+
+        return true;
+    }, [examen, imageUpload, validateImageFormat])
+
+    
 
 
     //==================================================================================================================================================================================
@@ -236,7 +244,7 @@ const Examenes = () => {
                 <div>
                     <Button
                         onClick={toggleAddModal}
-                        startIcon={<Medication />}
+                        startIcon={<Biotech />}
                         style={{
                             backgroundColor: 'rgb(27, 96, 241)',
                             color: 'white',
@@ -614,8 +622,8 @@ const Examenes = () => {
 
                                     <Grid item xs={12} sm={6}>
                                         <TextField id="titulo" label="Titulo" variant="outlined" onChange={handleModalFieldChange} name='titulo' required style={{ marginBottom: '0.45rem' }} />
-                                        <TextField id="precio" label="Precio Examen" variant="outlined" onChange={handleModalFieldChange} name='precio' required style={{ marginBottom: '0.45rem' }} />
-                                        <TextField id="descripcion" label="Descripcion" variant="outlined" onChange={handleModalFieldChange} name='descripcion' required multiline maxRows={4} style={{ marginBottom: '0.45rem' }} />                                    </Grid>
+                                        <TextField id="precio" label="Precio del Examen" variant="outlined" onChange={handleModalFieldChange} name='precio' required style={{ marginBottom: '0.45rem' }} />
+                                        <TextField id="descripcion" label="Descripcion" variant="outlined" onChange={handleModalFieldChange} name='descripcion' required multiline maxRows={5} style={{ marginBottom: '0.45rem' }} />                                    </Grid>
                                 </Grid>
 
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
@@ -682,8 +690,8 @@ const Examenes = () => {
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
                                                 <TextField id="titulo" label="Titulo" defaultValue={examen.titulo} variant="outlined" onChange={handleModalFieldChange} name='titulo' required style={{ marginBottom: '0.45rem' }} />
-                                                <TextField id="precio" label="Unidades" variant="outlined" defaultValue={examen.precio} onChange={handleModalFieldChange} name='precio' style={{ marginBottom: '0.45rem' }} />
-                                                <TextField id="descripcion" label="Precio Unitario" variant="outlined" defaultValue={examen.descripcion} onChange={handleModalFieldChange} name='descripcion' style={{ marginBottom: '0.45rem' }} />                                            </Grid>
+                                                <TextField id="precio" label="Precio del Examen" variant="outlined" defaultValue={examen.precio} onChange={handleModalFieldChange} name='precio' style={{ marginBottom: '0.45rem' }} />
+                                                <TextField id="descripcion" label="Descripcion" variant="outlined" defaultValue={examen.descripcion} onChange={handleModalFieldChange} name='descripcion' multiline maxRows={5} style={{ marginBottom: '0.45rem' }} />                                            </Grid>
                                         </Grid>
 
                                         <Button onClick={handleEditModalSubmit} variant="contained" style={{

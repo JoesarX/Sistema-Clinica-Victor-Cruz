@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../Modules/AuthContext.js';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import { Menu, Logout, People, Home, Medication, Contacts, CalendarMonth } from '@mui/icons-material';
+import { Menu, Logout, People, Home, Medication, Contacts, CalendarMonth, Biotech } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
@@ -99,7 +99,7 @@ const NavBar = () => {
                         <Link to="/examenes" style={{ textDecoration: 'none', color: "white" }}>
                             <ListItem disablePadding>
                                 <ListItemButton>
-                                    <ListItemIcon sx={{ color: "white" }}><CalendarMonth /></ListItemIcon>
+                                    <ListItemIcon sx={{ color: "white" }}><Biotech  /></ListItemIcon>
                                     <ListItemText primary={"Examenes"} />
                                 </ListItemButton>
                             </ListItem>
