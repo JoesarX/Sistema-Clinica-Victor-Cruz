@@ -262,7 +262,7 @@ const citasRouter = (pool, transporter) => {
                 // Cambiar cada una a expirada
                 const expiredIds = rows.map((row) => row.idcita);
                 console.log(`Expired appointments: ${expiredIds}`)
-                const sqlUpdate = `UPDATE citas SET estado = 'Terminada' WHERE idcita IN (?)`;
+                const sqlUpdate = `UPDATE citas SET estado = 'Expirada' WHERE idcita IN (?)`;
                 await connection.query(sqlUpdate, [expiredIds]);
             }
 
