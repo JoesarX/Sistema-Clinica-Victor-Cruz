@@ -23,11 +23,12 @@ const serviciosRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `servicios` (`url`, `title`, `description`)  VALUES (?)";
+                "INSERT INTO `servicios` (`url`, `title`, `description`, `orden`)  VALUES (?)";
             const values = [
                 req.body.url,
                 req.body.title,
-                req.body.description
+                req.body.description,
+                req.body.orden
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -38,7 +39,7 @@ const serviciosRouter = (pool) => {
         }
     });
 
-    /*Get a service by id
+    //Get a service by id
     router.get("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
@@ -53,7 +54,6 @@ const serviciosRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-    */
 
     //Delete a service by id
     router.delete("/:id", async (req, res) => {
@@ -79,14 +79,16 @@ const serviciosRouter = (pool) => {
                 url,
                 title,
                 description,
+                orden,
             } = req.body;
             const q =
-                "UPDATE servicios SET url = ?, title = ?, description = ? WHERE id = ?";
+                "UPDATE servicios SET url = ?, title = ?, description = ?, orden = ? WHERE id = ?";
 
             const values = [
                 url,
                 title,
                 description,
+                orden,
                 id
             ];
 

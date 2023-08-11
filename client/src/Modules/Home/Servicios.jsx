@@ -93,7 +93,7 @@ const Servicios = () => {
       setDraggedIndex(index);
       const updatedOrder = serviceData.map((service, newIndex) => ({
         ...service,
-        order: newIndex,
+        orden: newIndex,
       }));
       setUpdatedOrdenArray(updatedOrder);
     }
@@ -108,11 +108,18 @@ const Servicios = () => {
       try {
         await Promise.all(updatedOrdenArray.map(async (service) => {
           console.log("New Array changge in index: ");
-          for (const obj of updatedOrdenArray) {
-            console.log(obj);
-          }
           console.log(serviceData);
-          //await ServiciosService.updateServiceOrder(service.id, service.order);
+          const testingcompare = compareArrays(serviceData, updatedOrdenArray);
+          console.log(testingcompare);
+          for (const service of testingcompare) {
+            service.orden = service.copyOrden;
+            const serviceString = JSON.stringify(service);
+            console.log(service.id+" "+ serviceString);
+            await ServiciosService.editServicios(service.id, service);
+          }
+          //await ServiciosService.editServicios(service.id, service.order);
+          alert('Orden de Servicios Editado');
+          window.location.reload();
         }));
       } catch (error) {
         console.log("Error updating service order:", error);
@@ -121,10 +128,24 @@ const Servicios = () => {
     else {
       console.log("null");
     }
-    
   };
   
-
+  function compareArrays(originalArray, copyArray) {
+    const differentOrdenObjects = [];
+  
+    originalArray.forEach(originalObj => {
+      const copyObj = copyArray.find(copyObj => copyObj.id === originalObj.id);
+  
+      if (copyObj && originalObj.orden !== copyObj.orden) {
+        differentOrdenObjects.push({
+          ...originalObj, // Copy all attributes from the original object
+          originalOrden: originalObj.orden,
+          copyOrden: copyObj.orden
+        });
+      }
+    });
+    return differentOrdenObjects;
+  }
 
 
 
@@ -155,11 +176,14 @@ const Servicios = () => {
       const serviciosWithId = servicioData.map((servicio) => ({
         ...servicio,
       }));
+      /*
       console.log(serviciosWithId + "HOLA EDUARDO NOSE");
       serviciosWithId.forEach((servicio) => {
         console.log(servicio);
       });
+      */
       setServiceData(serviciosWithId);
+      console.log(serviceData)
     } catch (error) {
       // Handle error if any
       console.log("Error fetching servicios:", error);
