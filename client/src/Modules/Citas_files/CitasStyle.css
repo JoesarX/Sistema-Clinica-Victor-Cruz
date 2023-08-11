@@ -25,14 +25,6 @@ footer {
   font-family: 'Inter';
 }
 
-.fc-header-toolbar {
-  /* margin-bottom: 10px; */
-}
-
-.fc-toolbar.fc-header-toolbar {
-  /* border: none; */
-}
-
 .fc-button {
   background-color: #007bff;
   color: #ffffff;
