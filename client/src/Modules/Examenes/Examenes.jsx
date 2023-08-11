@@ -105,8 +105,8 @@ const Examenes = () => {
         if (precio === null || precio === '') {
             alert('Debe agregarle un precio al examen');
             return false;
-        } else if (!(/^\$?([1-9]{1}[0-9]{0,2}(\,[0-9]{3})*(\.[0-9]{0,2})?|[1-9]{1}[0-9]{0,}(\.[0-9]{0,2})?|0(\.[0-9]{0,2})?|(\.[0-9]{1,2})?)$/.test(parseFloat(precio)))) {
-            alert("Ingrese un precio valido");
+        } else if (!(/^\$?(?!0.00)(([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{2})?|[0-9]+(?:\.[0-9]{2})?))$/.test(precio))) {
+            alert("Ingrese un precio válido");
             return false;
         }
         //Precio validations
@@ -544,9 +544,9 @@ const Examenes = () => {
                             rows={examenes}
                             getRowId={(row) => row.idexamen}
                             columns={[
-                                { field: 'titulo', headerName: 'Titulo Examen', flex: 3, headerClassName: 'column-header' },
-                                { field: 'precio', headerName: 'Precio', flex: 1, headerClassName: 'column-header' },
-                                { field: 'descripcion', headerName: 'Descripcion del Examen', flex: 8, headerClassName: 'column-header' },
+                                { field: 'titulo', headerName: 'Titulo Examen', flex: 4, headerClassName: 'column-header' },
+                                { field: 'precio', headerName: 'Precio', flex: 2, headerClassName: 'column-header' },
+                                { field: 'descripcion', headerName: 'Descripcion del Examen', flex: 12, headerClassName: 'column-header' },
                                 {
                                     field: 'actions',
                                     headerName: '',
