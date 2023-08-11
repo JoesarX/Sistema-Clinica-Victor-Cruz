@@ -8,7 +8,7 @@ const serviciosRouter = (pool) => {
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT id, url, title, description, orden FROM servicios order by orden asc"
+            const sqlSelect = "SELECT id, url, title, description, orden, visibility FROM servicios order by orden asc"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
@@ -23,12 +23,13 @@ const serviciosRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `servicios` (`url`, `title`, `description`, `orden`)  VALUES (?)";
+                "INSERT INTO `servicios` (`url`, `title`, `description`, `orden`, `visibility`)  VALUES (?)";
             const values = [
                 req.body.url,
                 req.body.title,
                 req.body.description,
-                req.body.orden
+                req.body.orden,
+                req.body.visibility
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -80,15 +81,17 @@ const serviciosRouter = (pool) => {
                 title,
                 description,
                 orden,
+                visibility,
             } = req.body;
             const q =
-                "UPDATE servicios SET url = ?, title = ?, description = ?, orden = ? WHERE id = ?";
+                "UPDATE servicios SET url = ?, title = ?, description = ?, orden = ?, visibility = ? WHERE id = ?";
 
             const values = [
                 url,
                 title,
                 description,
                 orden,
+                visibility,
                 id
             ];
 

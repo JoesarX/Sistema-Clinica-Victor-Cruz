@@ -15,8 +15,6 @@ import {
   getDownloadURL,
   deleteObject,
   getStorage,
-  listAll,
-  list,
 } from "firebase/storage";
 import { v4 } from "uuid";
 import swal from 'sweetalert';
@@ -33,11 +31,12 @@ const Servicios = () => {
     title: '',
     description: '',
     orden: '',
+    visibility: '',
     id: ''
   });
 
   const [serviceData, setServiceData] = useState([]);
-
+  const [visibilityFlag, setVisibilityFlag] = useState(true);
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedService, setEditedService] = useState(null);
   const [newTitle, setNewTitle] = useState('');
@@ -51,8 +50,15 @@ const Servicios = () => {
   const [isSubmitting3, setIsSubmitting3] = useState(false);
 
   const handleModalOpen = () => {
-    setImagePreview(null);
-    setModalOpen(true);
+    //Validar que no este en el maximo de servicios
+    console.log("Length: "+serviceData.length);
+    if (serviceData.length < 10 ) {
+      setImagePreview(null);
+      setModalOpen(true);
+    }
+    else {
+      alert('Ha llegado al maximo de servicios, porfavor eliminar un servicio si desea agregar uno nuevo');
+    }
   };
 
   const handleModalClose = () => {
@@ -154,7 +160,7 @@ const Servicios = () => {
   async function uploadFile() {
 
     return new Promise((resolve, reject) => {
-      if (imageUpload == null || imageUpload == "") {
+      if (imageUpload === null || imageUpload === "") {
         return null;
       }
 
@@ -170,6 +176,8 @@ const Servicios = () => {
 
   //CODE IMAGEN FINAL ---------------------------------------------------------------->
 
+
+
   const fetchAllServicios = async () => {
     try {
       const servicioData = await ServiciosService.getAllServicios();
@@ -183,7 +191,15 @@ const Servicios = () => {
       });
       */
       setServiceData(serviciosWithId);
-      console.log(serviceData)
+      console.log(serviceData);
+      const countVisible = serviciosWithId.filter(item => item.visibility === 1).length;
+      console.log(`Number of objects with visibility set to true: ${countVisible}`);
+      if (countVisible < 5) {
+        setVisibilityFlag(true);
+      }
+      else {
+        setVisibilityFlag(false);
+      }
     } catch (error) {
       // Handle error if any
       console.log("Error fetching servicios:", error);
@@ -242,7 +258,7 @@ const Servicios = () => {
 
     if (imageUpload != null) {
       const file = imageUpload;
-      if (validateImageFormat(file) == false) {
+      if (validateImageFormat(file) === false) {
         alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
         return;
       }
@@ -252,14 +268,20 @@ const Servicios = () => {
     try {
       if (imageUpload != null) {
         const imageUrll = await uploadFile();
+        const newOrden = serviceData[serviceData.length].orden+1;
+        console.log(newOrden);
         setServicio(() => ({
           url: imageUrll,
           title: newTitle,
           description: newDescription,
+          orden: newOrden,
+          visibility: true,
         }));
         servicio.title = newTitle;
         servicio.description = newDescription;
         servicio.url = imageUrll;
+        servicio.orden = serviceData.length;
+        servicio.visibility = visibilityFlag;
       }
       console.log(servicio);
       await ServiciosService.postServicios(servicio);
@@ -383,15 +405,15 @@ const Servicios = () => {
         alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
         return;
       }
-      if (imageUpload != null) {
+      if (imageUpload !== null) {
         const file = imageUpload;
-        if (validateImageFormat(file) == false) {
+        if (validateImageFormat(file) === false) {
           alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
           return;
         }
       }
-      if (imageUpload != null && imageUpload != "") {
-        if (imageUpload != null) {
+      if (imageUpload !== null && imageUpload !== "") {
+        if (imageUpload !== null) {
           deleteImg(imageEdit);
           console.log("Elimina imagen");
         }
