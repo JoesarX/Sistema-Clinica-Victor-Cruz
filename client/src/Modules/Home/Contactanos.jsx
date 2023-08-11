@@ -9,6 +9,8 @@ import { faWhatsapp, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
 
+import swal from 'sweetalert';
+
 
 
 const Contactanos = () => {
@@ -80,7 +82,11 @@ const Contactanos = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
-            alert('El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
+            swal("El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.", {
+                icon: "error",
+            });
+            
+            //alert('El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
         }
     };
 
@@ -119,7 +125,10 @@ const Contactanos = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid WhatsApp number case
-            alert('El número de WhatsApp no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
+           
+            swal('El número de WhatsApp no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.', {
+                icon: "error",
+            });
         }
     };
 
@@ -160,7 +169,10 @@ const Contactanos = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
-            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).');
+            swal('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).', {
+                icon: "error",
+            });
+            //alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).');
         }
     };
 

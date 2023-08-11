@@ -708,14 +708,12 @@ const Home = () => {
             });
     }
 
-    ////////////////////
-
     const Carrusel = () => {
         if (!isFetching) {
             return (
                 <div className="imagenes">
                     <Slide {...properties}>
-                        {CarruselData.slice(0, 5).map((carrusel) => ( // Display only the first 5 images
+                        {CarruselData.slice(0, 5).map((carrusel) => ( 
                             <div className='each-slide' key={carrusel.idfoto}>
                                 <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
                             </div>
