@@ -163,19 +163,25 @@ const Home = () => {
             const trimmedDescription = editedDescription.trim();
 
             if (trimmedTitle === "") {
-                alert("¡Error! El título no puede quedar en blanco.");
+                swal("¡Error! El título no puede quedar en blanco.", {
+                    icon: "error",
+                });
                 return;
             }
 
             if (trimmedDescription === "") {
-                alert("¡Error! La descripción no puede quedar en blanco.");
+                swal("¡Error! La descripcion no puede quedar en blanco.", {
+                    icon: "error",
+                });                
                 return;
             }
 
 
             // Check if the description ends with a period
             if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
-                alert("La descripción debe terminar con un punto.");
+                swal("¡Error! La descripción debe terminar con un punto.", {
+                    icon: "error",
+                });
                 return;
             }
 
@@ -184,19 +190,29 @@ const Home = () => {
                 !/^[A-Z]/.test(trimmedTitle) ||
                 trimmedTitle.length > 20
             ) {
-                alert("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.");
+
+                swal("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.", {
+                    icon: "error",
+                });
                 return;
             }
 
             // Check if there are more than one consecutive spaces in title or description
             if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
-                alert("No se permiten más de un espacio consecutivo en el texto.");
+                
+                swal("Error, No se permiten más de un espacio consecutivo en el texto.", {
+                    icon: "error",
+                });
+                //alert("No se permiten más de un espacio consecutivo en el texto.");
                 return;
             }
 
             // Check if the description has more than 80 characters
             if (trimmedDescription.length > 190) {
-                alert("La descripción no puede exceder los 190 caracteres.");
+                swal("Error, La descripción no puede exceder los 190 caracteres.", {
+                    icon: "error",
+                });
+                //alert("La descripción no puede exceder los 190 caracteres.");
                 return;
             }
             console.log("Este es el titulo:" + TipoTitulo.texto_campo);
@@ -423,22 +439,34 @@ const Home = () => {
 
     const handleSaveClick = async () => {
         if (editedMission.trim() === '') {
-            alert('¡Error! La misión no puede quedar en blanco.');
+            swal("¡Error! La misión no puede quedar en blanco.", {
+                icon: "error",
+            });
+            //alert('¡Error! La misión no puede quedar en blanco.');
             return;
         }
 
         if (editedMission.length < MIN_MISSION_LENGTH || editedMission.length > MAX_MISSION_LENGTH) {
-            alert(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`);
+            swal(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`, {
+                icon: "error",
+            });
+            //alert(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`);
             return;
         }
 
         if (editedMission.split('  ').length > 1) {
-            alert('¡Error! No se pueden dejar espacios dobles en la misión.');
+            swal('¡Error! No se pueden dejar espacios dobles en la misión.', {
+                icon: "error",
+            });
+            //alert('¡Error! No se pueden dejar espacios dobles en la misión.');
             return;
         }
 
         if (!editedMission.endsWith('.')) {
-            alert('¡Error! La misión debe terminar con un punto.');
+            swal("¡Error! La misión debe terminar con un punto.", {
+                icon: "error",
+            });
+            //alert('¡Error! La misión debe terminar con un punto.');
             return;
         }
 
@@ -490,7 +518,10 @@ const Home = () => {
         // Extraer el enlace del iframe y validar
         const extractedSrc = extractSrcFromIframe(editedMapURL);
         if (!extractedSrc || !isValidMapURL(extractedSrc)) {
-            alert("Por favor, ingrese un enlace válido de Google Maps.");
+            swal("Por favor, ingrese un enlace válido de Google Maps.", {
+                icon: "error",
+            });
+            //alert("Por favor, ingrese un enlace válido de Google Maps.");
             return;
         }
 
@@ -538,7 +569,10 @@ const Home = () => {
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         if (CarruselData.length >= 10) {
-            alert('Error, no se pueden agregar mas de 10 fotos para el carrusel.');
+            swal("Error, no se pueden agregar mas de 10 fotos para el carrusel.", {
+                icon: "error",
+            });
+            //alert('Error, no se pueden agregar mas de 10 fotos para el carrusel.');
             return;
         }
         try {
