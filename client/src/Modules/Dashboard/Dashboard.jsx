@@ -180,8 +180,7 @@ const Dashboard = () => {
                 const appointments = await ExpedientesService.getCitasOneExpediente(id)
 
                 const scheduled = appointments.filter(appointment => appointment.estado === "Pendiente");
-                const previous = appointments.filter(appointment => (appointment.estado === "Cancelado" ||
-                    appointment.estado === "Terminada"));
+                const previous = appointments.filter(appointment => appointment.estado !== "Pendiente");
 
                 setSchAppointments(scheduled)
                 setPrevAppointments(previous);

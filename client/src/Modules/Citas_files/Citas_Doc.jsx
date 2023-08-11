@@ -98,38 +98,50 @@ const Citas_Doc = () => {
         <div className="cal-container">
           <div className="cal">
             <FullCalendar
+
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay',
               }}
+
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+
               initialView="dayGridMonth"
+
               locale={esLocale}
+
               slotDuration="00:30:00"
+
               slotLabelFormat={{
                 hour: 'numeric',
                 minute: '2-digit',
                 hour12: true,
               }}
+
               eventTimeFormat={{
                 hour: 'numeric',
                 minute: '2-digit',
                 hour12: true,
               }}
+
               slotMinTime="07:00:00"
               slotMaxTime="17:00:00"
+
               allDaySlot={false}
               events={formattedEvents}
               nowIndicator={true}
 
-              slotLabelClassNames={"custom-time-size"}
-              slotLaneClassNames={"custom-time-size"}
+              dayMaxEventRows={6}
+
+              eventMinHeight={50}
 
               eventContent={(eventInfo) => (
                 <>
-                  <div style={{ fontSize: '11px', lineHeight: '1.2' }}>{eventInfo.timeText}</div>
-                  <div style={{ fontSize: '15px', lineHeight: '1.2' }}>{eventInfo.event.title}</div>
+                  <div className='event-line-container'>
+                    <div style={{ fontSize: '13.5px', lineHeight: '1.2', fontWeight: '800' }}>{eventInfo.timeText}</div>
+                    <div style={{ fontSize: '13.5px', lineHeight: '1.2', color: '#677a92'}}>{eventInfo.event.title}</div>
+                  </div>
                 </>
               )}
             />
