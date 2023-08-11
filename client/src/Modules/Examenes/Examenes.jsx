@@ -1,25 +1,18 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import FichaExamenes from './FichaExamenes';
 
-import { storage } from '../../firebase';
-import 'firebase/compat/storage';
-//import { storage } from "./firebase";
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
-
 import {
     ref,
     uploadBytes,
     getDownloadURL,
     deleteObject,
     getStorage,
-    listAll,
-    list,
+
 } from "firebase/storage";
 import { v4 } from "uuid";
 
@@ -28,20 +21,17 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication } from '@mui/icons-material'
+import { Delete, Edit, Medication } from '@mui/icons-material'
 import InfoIcon from '@mui/icons-material/Info';
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
 
-//ADD MEDICAMENTOS MODAL
+//MODAL
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import UploadIcon from '@mui/icons-material/Upload';
 
 //STYLES
 import ExamenesService from '../../Services/ExamenesService';
@@ -70,6 +60,136 @@ const Examenes = () => {
         descripcion: '',
         urlfoto: ''
     });
+
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
+    const storage = getStorage();
+
+    //==================================================================================================================================================================================
+    //TEXTS AND IMAGES VALIDATIONS
+
+    const validations = useCallback(() => {
+        console.log("Called validations")
+        const { titulo, precio, descripcion } = examen
+        // //Titulo validations
+        // if (titulo === null || titulo === '') {
+        //     alert('Debe agregarle un titulo al examen')
+        //     return false
+        // } else if (!titulo.replace(/\s/g, '').length) {
+        //     alert('El titulo no puede contener solo espacios.');
+        //     return false
+        // } else if (titulo.charAt(0) === ' ') {
+        //     alert('El titulo no puede iniciar con un espacio.');
+        //     return false
+        // } else if (titulo.charAt(titulo.length - 1) === ' ') {   
+        //     alert('El titulo no puede terminar con un espacio.');
+        //     return false
+        // }
+        // //Precio validations
+        // if (precio === null || precio === '') {
+        //     alert('Debe agregarle la cantidad de unidades al examen');
+        //     return false;
+        // } else if (!(/^\d+$/.test(precio))) {
+        //     alert("Las unidades deben ser un numero entero.");
+        //     return false;
+        // }
+        // //Precio validations
+        // if (descripcion === null || descripcion === '') {
+        //     alert('Debe agregarle un precio unitario al examen');
+        //     return false;
+        // } else if (!(/^[0-9,.]*$/.test(parseFloat(descripcion)))) {
+        //     alert("Ingrese un precio valido");
+        //     return false;
+        // }
+
+        // if (imageUpload != null) {
+        //     const file = imageUpload;
+        //     if (validateImageFormat(file) == false) {
+        //         alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+        //         return false;
+        //     }
+        // }
+
+        return true;
+    }, [examen])
+
+    const validateImageFormat = (file) => {
+        console.log("Called validateImageFormat")
+        const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
+        const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
+        if (!allowedFormats.includes(file.type)) {;
+            return false;
+        }
+        if (file.size > maxSizeInBytes) {
+            return false;
+        }
+
+        // Continue with further logic or actions if the image passes the format and size checks
+        return true;
+    };
+
+
+    //==================================================================================================================================================================================
+    //IMAGE FUNCTIONS
+
+    const uploadFile = useCallback(async () => {
+        console.log("Called uploadFile")
+        return new Promise((resolve, reject) => {
+            // Your file upload logic here
+            // Call resolve with the imageUrl when the upload is complete
+            // Call reject with an error if there's an issue with the upload
+            // For example:
+            if (imageUpload == null) {
+                //reject(new Error('No file selected for upload'));
+                return null;
+            }
+            const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+            uploadBytes(imageRef, imageUpload)
+                .then((snapshot) => getDownloadURL(snapshot.ref))
+                .then((url) => {
+                    resolve(url);
+                })
+                .catch((error) => reject(error));
+        });
+    },[imageUpload, storage]);
+
+    const cancelarFotoA = () => {
+        console.log("Called cancelarFotoA")
+        setImageUpload(null);
+        setImagePreview(null);
+    };
+
+    const cancelarFotoE = async () => {
+        console.log("Called cancelarFotoE")
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta información.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    try {
+                        setImageUpload(null);
+                        setImagePreview(null);
+                        deleteImg(examen.urlfoto);
+                        examen.urlfoto = null;
+                        await ExamenesService.editExamenes(id, examen);
+                        swal("Foto eliminada exitosamente!", {
+                            icon: "success",
+                        });
+                    } catch (error) {
+                        swal("Error al eliminar la foto. Por favor, inténtalo de nuevo más tarde.", {
+                            icon: "error",
+                        });
+                    }
+                } else {
+                    swal("¡La foto no se ha borrado!");
+                }
+            });
+    };
 
     //========================================================================================================================================================================================================================
     //DATA GRID SETUP AND FUNCTIONS
@@ -135,6 +255,7 @@ const Examenes = () => {
 
 
     const handleDeleteExamenesClick = (row, id) => {
+        console.log("Called handleDeleteExamenesClick")
         swal({
             title: "¿Estás seguro?",
             text: "Una vez borrado, no podrás recuperar esta información.",
@@ -146,10 +267,8 @@ const Examenes = () => {
                 if (willDelete) {
                     try {
                         const url = row.urlfoto
-                        console.log("DELETE THIS URL: " + url);
                         await ExamenesService.deleteExamenes(id);
-                        if (url != null) {
-                            console.log("DELETE THIS URL no es null: " + url);
+                        if (!(url === null || url === undefined || url === "")) {
                             deleteImg(url);
                         }
                         else {
@@ -169,15 +288,14 @@ const Examenes = () => {
                 }
             });
     };
-
-    const storage = getStorage();
-    const deleteImg = (refUrl) => {
+    
+    const deleteImg = useCallback((refUrl) => {
+        console.log("Called deleteImg")
         const imageRef = ref(storage, refUrl)
         deleteObject(imageRef)
             .catch((error) => {
-                console.log("Failed to delete image: ", error)
             })
-    }
+    },[storage])
 
     const theme = createTheme(
         {
@@ -192,40 +310,41 @@ const Examenes = () => {
     //==================================================================================================================================================================================
     //MODALS SETUP AND FUNCTIONS
 
-    const cleanExpediente = () => {
+    const cleanExamen = useCallback(() => {
+        console.log("Called cleanExamen")
         examen.titulo = null;
         examen.precio = null;
         examen.descripcion = null;
         examen.urlfoto = null;
-    };
+    }, [examen]);
 
     const handleModalFieldChange = (e) => {
+        console.log("Called handleModalFieldChange")
         setExamen((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
     }
 
 
-    //ADD MEDICAMENTOS MODAL
+    //ADD EXAMENS MODAL
 
-    const toggleAddModal = () => {
+    const toggleAddModal = useCallback(() => {
+        console.log("Called toggleAddModal")
         setIsAddModalOpen(!isAddModalOpen);
         setIsAddSubmitting(false);
         setImagePreview(null);
-        cleanExpediente();
-    };
+        cleanExamen();
+    }, [setIsAddModalOpen, isAddModalOpen, setIsAddSubmitting, setImagePreview, cleanExamen]);
 
-    const submitAddExamen = async () => {
+    const submitAddExamen = useCallback(async () => {
+        console.log("Called submitAddExamen")
         if (validations()) {
-            console.log("Entra a agregar despues de validaciones");
             try {
                 if (imageUpload != null) {
                     const imageUrll = await uploadFile();
-                    console.log(imageUrll);
                     setExamen((prevState) => ({
                         ...prevState,
                         urlfoto: imageUrll,
                     }));
                     examen.urlfoto = imageUrll;
-                    console.log(examen.urlfoto);
                 }
                 await ExamenesService.postExamenes(examen);
                 alert('Examen Agregado');
@@ -234,34 +353,26 @@ const Examenes = () => {
                 window.location.reload();
             } catch (error) {
                 // Handle error if any
-                console.log('Error submitting examen:', error);
             }
         }
-    };
+    }, [validations, uploadFile, setExamen, toggleAddModal, setImagePreview, examen, imageUpload]);
 
     const handleAddModalSubmit = async (e) => {
+        console.log("Called handleAddModalSubmit")
         e.preventDefault();
         try {
-            console.log("test");
             submitAddExamen();
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting examen:', error);
         }
     };
 
-    useEffect(() => {
-        if (isAddSubmitting) {
-            console.log("test");
-            submitAddExamen();
-        }
-    }, [isAddSubmitting]);
 
-
-    //EDIT MEDICAMENTOS MODAL
+    //EDIT EXAMENS MODAL
 
     const [id, setID] = useState(null);
     const openEditModal = async (id) => {
+        console.log("Called openEditModal")
         setID(id)
         try {
             const examenData = await ExamenesService.getOneExamen(id);
@@ -272,20 +383,30 @@ const Examenes = () => {
         }
         setIsEditModalOpen(!isEditModalOpen);
         setIsEditSubmitting(false);
+        console.log(isEditSubmitting);
     };
 
     useEffect(() => {
+        console.log("Called useEffect isEditModalOpen, examen.urlfoto, setImagePreview")
         if (isEditModalOpen) {
             // Run your code here when isAddModalOpen is true
             setImagePreview(examen.urlfoto);
-            console.log('Modal is open!');
         }
-    }, [isEditModalOpen]);
+    }, [isEditModalOpen, examen.urlfoto, setImagePreview]);
 
-    const submitEditExamen = async () => {
+    const closeEditModal = useCallback(() => {
+        console.log("Called closeEditModal")
+        setIsEditModalOpen(!isEditModalOpen);
+        setImageUpload(null);
+        setImagePreview(null);
+        setIsEditSubmitting(false);
+        cleanExamen();
+    },[setIsEditModalOpen, isEditModalOpen, setImageUpload, setImagePreview, setIsEditSubmitting, cleanExamen]);
+
+    const submitEditExamen = useCallback(async () => {
+        console.log("Called submitEditExamen")
         try {
             if (validations()) {
-                console.log("Entra a edit despues de validaciones");
                 if (imageUpload != null) {
                     if (examen.urlfoto != null) {
                         deleteImg(examen.urlfoto);
@@ -305,14 +426,15 @@ const Examenes = () => {
                 }
                 closeEditModal();
                 window.location.reload();
-                cleanExpediente();
+                cleanExamen();
             }
         } catch (error) {
             console.log('Error submitting examen:', error);
         }
-    };
+    }, [validations, uploadFile, examen, id, closeEditModal, cleanExamen, deleteImg, imageUpload]);
 
     const handleEditModalSubmit = async (e) => {
+        console.log("Called handleEditModalSubmit")
         e.preventDefault();
         try {
             submitEditExamen();
@@ -322,26 +444,8 @@ const Examenes = () => {
         }
     };
 
-    useEffect(() => {
-        if (isEditSubmitting) {
-            submitEditExamen();
-        }
-    }, [isEditSubmitting]);
 
-    const closeEditModal = () => {
-        setIsEditModalOpen(!isEditModalOpen);
-        setImageUpload(null);
-        setImagePreview(null);
-        setIsEditSubmitting(false);
-        //window.location.reload();
-        cleanExpediente();
-    };
-
-
-
-    
-
-    //----------FichaExamenes Modal-------------------------------------------------------
+    //MODAL FICHA
 
     const [titulo, setTitulo] = useState(false);
     const [precio, setPrecio] = useState(false);
@@ -351,146 +455,19 @@ const Examenes = () => {
     let [selectedRow, setSelectedRow] = useState(null);
 
     const handleSelectedFicha = (row) => {
+        console.log("Called handleSelectedFicha")
         setOpenFicha(true);
         setTitulo(row.titulo);
         setPrecio(row.precio);
         setdescripcion(row.descripcion);
         setSelectedRow(true);
-
         setImagen(row.urlfoto);
     }
 
-
-
-    const [imageUpload, setImageUpload] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
-    const [imageUrl, setImageUrl] = useState(null);
-    const imagesListRef = ref(storage, "images/");
-    async function uploadFile() {
-
-        return new Promise((resolve, reject) => {
-            // Your file upload logic here
-            // Call resolve with the imageUrl when the upload is complete
-            // Call reject with an error if there's an issue with the upload
-            // For example:
-            if (imageUpload == null) {
-                //reject(new Error('No file selected for upload'));
-                return null;
-            }
-
-            const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-            uploadBytes(imageRef, imageUpload)
-                .then((snapshot) => getDownloadURL(snapshot.ref))
-                .then((url) => {
-                    resolve(url);
-                    //console.log(examen);
-                })
-                .catch((error) => reject(error));
-        });
-    };
-
-
-    const validations = () => {
-        const { titulo, precio, descripcion } = examen
-        // //Titulo validations
-        // if (titulo === null || titulo === '') {
-        //     alert('Debe agregarle un titulo al examen')
-        //     return false
-        // } else if (!titulo.replace(/\s/g, '').length) {
-        //     alert('El titulo no puede contener solo espacios.');
-        //     return false
-        // } else if (titulo.charAt(0) === ' ') {
-        //     alert('El titulo no puede iniciar con un espacio.');
-        //     return false
-        // } else if (titulo.charAt(titulo.length - 1) === ' ') {   
-        //     alert('El titulo no puede terminar con un espacio.');
-        //     return false
-        // }
-        // //Precio validations
-        // if (precio === null || precio === '') {
-        //     alert('Debe agregarle la cantidad de unidades al examen');
-        //     return false;
-        // } else if (!(/^\d+$/.test(precio))) {
-        //     alert("Las unidades deben ser un numero entero.");
-        //     return false;
-        // }
-        // //Precio validations
-        // if (descripcion === null || descripcion === '') {
-        //     alert('Debe agregarle un precio unitario al examen');
-        //     return false;
-        // } else if (!(/^[0-9,.]*$/.test(parseFloat(descripcion)))) {
-        //     alert("Ingrese un precio valido");
-        //     return false;
-        // }
-
-        // if (imageUpload != null) {
-        //     const file = imageUpload;
-        //     if (validateImageFormat(file) == false) {
-        //         alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
-        //         return false;
-        //     }
-        // }
-        // console.log("END DE VALIDACINES");
-        return true;
-    }
-
-    const validateImageFormat = (file) => {
-        const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png'];
-        const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-
-        if (!allowedFormats.includes(file.type)) {
-            console.log('La imagen debe estar en formato JPG, JPEG o PNG');
-            return false;
-        }
-        if (file.size > maxSizeInBytes) {
-            console.log('La imagen no debe superar los 5MB de tamaño');
-            return false;
-        }
-
-        // Continue with further logic or actions if the image passes the format and size checks
-        return true;
-    };
-
-    const cancelarFotoA = () => {
-        setImageUpload(null);
-        setImagePreview(null);
-    };
-
-    const cancelarFotoE = async () => {
-        swal({
-            title: "¿Estás seguro?",
-            text: "Una vez borrado, no podrás recuperar esta información.",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        })
-            .then(async (willDelete) => {
-                if (willDelete) {
-                    try {
-                        setImageUpload(null);
-                        setImagePreview(null);
-                        deleteImg(examen.urlfoto);
-                        examen.urlfoto = null;
-                        await ExamenesService.editExamenes(id, examen);
-                        swal("Foto eliminada exitosamente!", {
-                            icon: "success",
-                        });
-                    } catch (error) {
-                        swal("Error al eliminar la foto. Por favor, inténtalo de nuevo más tarde.", {
-                            icon: "error",
-                        });
-                    }
-                } else {
-                    swal("¡La foto no se ha borrado!");
-                }
-            });
-    };
-
     const [examenData, setExameness] = useState([]);
 
-    
-
     useEffect(() => {
+        console.log("Called useEffect examenData")
         // Validación login
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
@@ -504,7 +481,6 @@ const Examenes = () => {
         const fetchAllExamenes = async () => {
             try {
                 const examenesData = await ExamenesService.getAllExamenes()
-                console.log(examenesData);
                 const examenesWithId = examenesData.map((examen) => ({
                     ...examen,
                     idexamen: examen.idexamen,
@@ -544,7 +520,7 @@ const Examenes = () => {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, [isLoggedIn, navigate, isAddSubmitting]);
+    }, [isLoggedIn, navigate, isAddSubmitting, cont]);
 
     return (
 
@@ -596,7 +572,7 @@ const Examenes = () => {
                     <Modal open={isAddModalOpen} onClose={toggleAddModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
                         <div className='modalContainer modalExamenes' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
                             <div style={{ marginTop: '20px' }}>
-                                <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
+                                <h2 className="modalHeader">AGREGAR EXAMEN</h2>
                                 <button className="cancelButton" onClick={toggleAddModal}>
                                     <FontAwesomeIcon icon={faTimes} size="2x" />
                                 </button>
@@ -627,8 +603,6 @@ const Examenes = () => {
                                             onChange={(event) => {
                                                 setImageUpload(event.target.files[0]);
                                                 setImagePreview(URL.createObjectURL(event.target.files[0]));
-                                                console.log(imageUpload);
-                                                console.log(imagePreview);
                                             }}
                                             name='urlfoto'
                                             id="urlfoto"
@@ -641,7 +615,7 @@ const Examenes = () => {
                                     <Grid item xs={12} sm={6}>
                                         <TextField id="titulo" label="Titulo" variant="outlined" onChange={handleModalFieldChange} name='titulo' required style={{ marginBottom: '0.45rem' }} />
                                         <TextField id="precio" label="Precio Examen" variant="outlined" onChange={handleModalFieldChange} name='precio' required style={{ marginBottom: '0.45rem' }} />
-                                        <TextField id="descripcion" label="Descripcion" variant="outlined" onChange={handleModalFieldChange} name='descripcion' required style={{ marginBottom: '0.45rem' }} />                                    </Grid>
+                                        <TextField id="descripcion" label="Descripcion" variant="outlined" onChange={handleModalFieldChange} name='descripcion' required multiline maxRows={4} style={{ marginBottom: '0.45rem' }} />                                    </Grid>
                                 </Grid>
 
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
@@ -669,7 +643,7 @@ const Examenes = () => {
                             {examenData.map((examen) => (
                                 <div className='innerCard' key={examen.idexamen}>
 
-                                    <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
+                                    <h2 className="modalHeader">EDITAR EXAMEN</h2>
                                     <button className="cancelButton" onClick={closeEditModal}>
                                         <FontAwesomeIcon icon={faTimes} size="2x" />
                                     </button>
