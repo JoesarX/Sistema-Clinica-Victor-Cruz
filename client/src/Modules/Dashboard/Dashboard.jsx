@@ -212,13 +212,10 @@ const Dashboard = () => {
     };
 
     const formatAppointmentTime = (timeString) => {
-        const date = new Date(timeString);
-        if (isNaN(date.getTime())) {
-            return "HORA NO VALIDO";
-        }
-        const options = { hour: 'numeric', minute: 'numeric', hour12: true };
-        const formattedTime = date.toLocaleTimeString("en-US", options);
-        return formattedTime;
+        const [hours, minutes] = timeString.split(':');
+        const date = new Date(0, 0, 0, hours, minutes);
+
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     };
 
 
@@ -776,10 +773,10 @@ const Dashboard = () => {
                             {schAppointments.map((appointment, index) => (
                                 <div key={index} className='appointment'>
                                     <div className='appointment-date'>
-                                        {formatAppointmentDate(appointment.hora_inicio)}
+                                        {formatAppointmentDate(appointment.fecha)}
                                     </div>
                                     <div className='appointment-details'>
-                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora_inicio)}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
                                         <span className='appointment-light-text'>{appointment.estado}</span>
                                     </div>
                                 </div>
@@ -790,12 +787,11 @@ const Dashboard = () => {
                             {prevAppointments.map((appointment, index) => (
                                 <div key={index} className='appointment prev-appointment'>
                                     <div className='appointment-date'>
-                                        {formatAppointmentDate(appointment.hora_inicio)}
+                                        {formatAppointmentDate(appointment.fecha)}
                                     </div>
                                     <div className='appointment-details'>
                                         {/* <span>{appointment.description}</span> */}
-                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora_inicio)}</span>
-                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora_final)}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
                                         {/* <span className='appointment-light-text'>{appointment.medicalExplanation}</span> */}
                                         <span className='appointment-light-text'>{appointment.estado}</span>
                                     </div>

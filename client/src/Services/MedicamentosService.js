@@ -1,6 +1,6 @@
 import axios from 'axios';
 
- 
+
 //const API_URL = 'http://localhost:8000';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
@@ -37,10 +37,10 @@ export const postMedicamentos = async (medicamento) => {
     }
 };
 
-export const editMedicamentos = async (id,medicamento) => {
+export const editMedicamentos = async (id, medicamento) => {
     try {
-        await axios.put(`${API_URL}/medicamentos/${id}`,medicamento);
-       
+        await axios.put(`${API_URL}/medicamentos/${id}`, medicamento);
+
     } catch (error) {
         console.log(error);
         throw new Error('Failed to edit medicamento');
@@ -49,15 +49,15 @@ export const editMedicamentos = async (id,medicamento) => {
 
 export const deleteMedicamentos = async (id) => {
     try {
-         await axios.delete(`${API_URL}/medicamentos/${id}`);
-        
+        await axios.delete(`${API_URL}/medicamentos/${id}`);
+
     } catch (error) {
         console.log(error);
         throw new Error('Failed to delete medicamento');
     }
 };
 
-const Services ={
+const Services = {
     getAllMedicamentos,
     postMedicamentos,
     getOneMedicamento,

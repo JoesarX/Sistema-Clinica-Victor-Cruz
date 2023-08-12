@@ -11,6 +11,7 @@ import textos_cmdRouter from "./routes/textos_cmd.js";
 import ServiciosRouter from "./routes/servicios.js";
 import CarruselRouter from "./routes/carrusel.js";
 import AboutUsRouter from "./routes/aboutus.js";
+import examenes from "./routes/examenes.js"
 
 import nodemailer from "nodemailer";
 
@@ -24,15 +25,15 @@ app.listen(port, () => {
 });
 
 //LOCALHOST MYSQL CONNECTION
- /*const pool = mysql.createPool({
-   host: "localhost",
-   user: "root",
-   password: "password",
-   database: "softwaredb",
-   waitForConnections: true,
-   connectionLimit: 10,
-   queueLimit: 0,
- });*/
+/*const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "softwaredb",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});*/
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -70,14 +71,16 @@ app.use("/usuarios_admin", adminRouter(pool));
 
 app.use("/medicamentos", medicamentosRouter(pool));
 
-app.use("/citas", citasRouter(pool, transporter)); 
+app.use("/citas", citasRouter(pool, transporter));
 
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
 
-app.use('/servicios',ServiciosRouter(pool));
-app.use('/texto_cmd',textos_cmdRouter(pool));
-app.use('/carrusel',CarruselRouter(pool));
-app.use('/aboutus',AboutUsRouter(pool));
+app.use('/servicios', ServiciosRouter(pool));
+app.use('/texto_cmd', textos_cmdRouter(pool));
+app.use('/carrusel', CarruselRouter(pool));
+app.use('/aboutus', AboutUsRouter(pool));
+
+app.use('/examenes', examenes(pool));
 
 
 
