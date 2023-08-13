@@ -86,7 +86,7 @@ const Topbar = () => {
             swal('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").', {
                 icon: "error",
             });
-            //alert('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").');
+           
         }
     };
 
@@ -131,7 +131,7 @@ const Topbar = () => {
             swal('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).', {
                 icon: "error",
             });
-            //alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos básicos de un correo electrónico válido.');
+            
         }
     };
 
@@ -172,7 +172,7 @@ const Topbar = () => {
             swal('El número de teléfono no es válido. Asegúrate de que empiece con +504, tenga 8 dígitos y después de los primeros 4 dígitos vaya un guion y luego el resto de los dígitos.'    , {
                 icon: "error",
             });
-            //alert('El número de teléfono no es válido. Asegúrate de que empiece con +504, tenga 8 dígitos y después de los primeros 4 dígitos vaya un guion y luego el resto de los dígitos.');
+           
         }
     };
 

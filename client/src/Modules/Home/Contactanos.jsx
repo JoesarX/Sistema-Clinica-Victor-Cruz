@@ -86,7 +86,7 @@ const Contactanos = () => {
                 icon: "error",
             });
             
-            //alert('El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
+            
         }
     };
 
@@ -172,7 +172,6 @@ const Contactanos = () => {
             swal('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).', {
                 icon: "error",
             });
-            //alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).');
         }
     };
 

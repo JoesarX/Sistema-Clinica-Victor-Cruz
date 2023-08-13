@@ -10,6 +10,7 @@ import { loginUsuarios } from '../../Services/UsuariosService';
 import Footer from './Footer';
 import Topbar from './Topbar'
 import bcrypt from 'bcryptjs';
+import swal from 'sweetalert';
 
 const IniciarSesion = () => {
     
@@ -54,7 +55,9 @@ const IniciarSesion = () => {
             if (err) {
                 throw err
             } else if (!isMatch) {
-                alert("Contraseña incorrecta")
+                swal("Contraseña incorrecta", {
+                    icon: "error",
+                  });
                 console.log("Contraseña incorrecta")
                 flag = false;
                 console.log(flag)
@@ -82,7 +85,9 @@ const IniciarSesion = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         var flag = false;
         if (emailRegex.test(email) != true) {
-            alert('El correo ingresado no tiene un formato válido.')
+            swal("El correo ingresado no tiene un formato valido", {
+                icon: "error",
+              });
         } else {
             const passUser = await loginUsuarios(email, password);
             console.log(passUser)
@@ -99,7 +104,9 @@ const IniciarSesion = () => {
                         if (err) {
                             throw err
                         } else if (!isMatch) {
-                            alert("Contraseña incorrecta")
+                            swal("Contraseña incorrecta", {
+                                icon: "error",
+                              });
                             console.log("Contraseña incorrecta")
                         } else {
                             flag = true;
@@ -107,7 +114,9 @@ const IniciarSesion = () => {
                             localStorage.setItem("300", true);
                             localStorage.setItem("correo", email);
                             navigate("/userpage");
-                            alert("Bienvenido!");
+                            swal("Bienvenido", {
+                                icon: "success",
+                              });
                             handleSignIn('normal');
                             resolve();
                         }
@@ -119,23 +128,31 @@ const IniciarSesion = () => {
             console.log(":)")
             if (!flag) {
                 if (email === "" || password === "") {
-                    alert("Debe Llenar todos los campos");
+                    swal("Debo llenar todos los campos", {
+                        icon: "error",
+                      });
                 } else if (await loginMaster(email, password) === true) {
-                    alert("Bienvenido Doctor!");
+                    swal("Bienvenido Doctor!", {
+                        icon: "success",
+                      });
                     localStorage.setItem("400", true);
                     localStorage.setItem("correo", email);
                     handleSignIn('master');
                     navigate("/expedientes");
                     handleSignIn('master');
                 } else if (await loginAdmin(email, password) === true) {
-                    alert("Bienvenido");
+                    swal("Bienvenido", {
+                        icon: "success",
+                      });
                     handleSignIn('administrador');
                     localStorage.setItem("300", true);
                     localStorage.setItem("correo", email);
                     navigate("/expedientes");
                     handleSignIn('administrador');
                 } else {
-                    alert("Email o contraseña incorrecta!");
+                    swal("Email o contraseña incorrecta!", {
+                        icon: "error",
+                      });
                 }
             }
         }

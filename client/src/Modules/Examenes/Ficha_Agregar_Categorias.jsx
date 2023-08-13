@@ -61,7 +61,9 @@ const Ficha_Agregar_Categorias = (props) => {
 
         if (!isLoggedIn) {
             if (cont == 0) {
-                alert("No Cuenta con el permiso de entrar a este apartado")
+                swal("No cuenta con el permiso de entrar a este apartado.", {
+                    icon: "error",
+                });
                 navigate("/expedientes");
                 cont++;
             }

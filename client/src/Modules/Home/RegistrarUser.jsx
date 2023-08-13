@@ -7,34 +7,47 @@ import Topbar from './Topbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import bcrypt from 'bcryptjs';
+import swal from 'sweetalert';
 
 const RegistrarUser = () => {
 
   const validations = () => {
     const { correouser, nombre, edad, pregunta, respuesta, password } = user
     if (correouser === null || correouser === '') {
-      alert('Correo es requerido')
+      swal("Correo es requerido", {
+        icon: "warning",
+      });
       return false
     }
     if (nombre === null || nombre === '') {
-      alert('Nombre Completo es requerido')
+      swal("Nombre completo es requerido", {
+        icon: "warning",
+      });
       return false
     }
     if (edad === null || edad === '' || edad < 0) {
-      alert('Una edad valida es requerida')
+      swal("Una edad valida es requerido", {
+        icon: "warning",
+      });
       return false
     }
 
     if (pregunta === null || pregunta === '') {
-      alert('La pregunta es requerido')
+      swal("La pregunta es requerida", {
+        icon: "warning",
+      });
       return false
     }
     if (respuesta === null || respuesta === '') {
-      alert('La respuesta es requerido')
+      swal("La respuesta es requerida", {
+        icon: "warning",
+      });
       return false
     }
     if (password === null || password === '') {
-      alert('La password es requerida')
+      swal("La clave es requerida", {
+        icon: "warning",
+      });
       return false
     }
     if (!validateCapital && !validateLength && !validateSpecial && !validateNumber) {
@@ -98,7 +111,9 @@ const RegistrarUser = () => {
       e.preventDefault()
       console.log(user)
       await UsuariosService.postUsuarios(user);
-      alert('User Agregado')
+      swal("Usuario Agregado", {
+        icon: "success",
+      });
       navigate('/iniciarsesion');
     }
   }

@@ -387,10 +387,14 @@ const Acercade = () => {
           images2.url = imageUrll;
           console.log("DESC EDITADO");
           await AboutUsService.editImagen(idfotoDesc, images2);
-          alert('Imagen Agregada');
+          swal("Imagen Agregado", {
+            icon: "success",
+          });
           window.location.reload();
         } else {
-          alert('No se ha seleccionado una imagen nueva');
+          swal("No se ha seleccionado una imagen nueva", {
+            icon: "warning",
+          });
         }
       } catch (error) {
         // Handle error if any
@@ -409,10 +413,14 @@ const Acercade = () => {
           images2.url = imageUrll;
           console.log("DOCTOR EDITADO");
           await AboutUsService.editImagen(idfotoDoc, images2);
-          alert('Imagen Agregada');
+          swal("Imagen Agregada", {
+            icon: "success",
+          });
           window.location.reload();
         } else {
-          alert('No se ha seleccionado una imagen nueva');
+          swal("No se ha seleccionado una imagen nueva", {
+            icon: "warning",
+          });
         }
       } catch (error) {
         // Handle error if any

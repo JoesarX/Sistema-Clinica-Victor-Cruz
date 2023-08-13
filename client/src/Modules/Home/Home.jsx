@@ -203,7 +203,6 @@ const Home = () => {
                 swal("Error, No se permiten más de un espacio consecutivo en el texto.", {
                     icon: "error",
                 });
-                //alert("No se permiten más de un espacio consecutivo en el texto.");
                 return;
             }
 
@@ -212,7 +211,6 @@ const Home = () => {
                 swal("Error, La descripción no puede exceder los 190 caracteres.", {
                     icon: "error",
                 });
-                //alert("La descripción no puede exceder los 190 caracteres.");
                 return;
             }
             console.log("Este es el titulo:" + TipoTitulo.texto_campo);
@@ -442,7 +440,6 @@ const Home = () => {
             swal("¡Error! La misión no puede quedar en blanco.", {
                 icon: "error",
             });
-            //alert('¡Error! La misión no puede quedar en blanco.');
             return;
         }
 
@@ -450,7 +447,6 @@ const Home = () => {
             swal(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`, {
                 icon: "error",
             });
-            //alert(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`);
             return;
         }
 
@@ -458,7 +454,6 @@ const Home = () => {
             swal('¡Error! No se pueden dejar espacios dobles en la misión.', {
                 icon: "error",
             });
-            //alert('¡Error! No se pueden dejar espacios dobles en la misión.');
             return;
         }
 
@@ -466,7 +461,6 @@ const Home = () => {
             swal("¡Error! La misión debe terminar con un punto.", {
                 icon: "error",
             });
-            //alert('¡Error! La misión debe terminar con un punto.');
             return;
         }
 
@@ -521,7 +515,6 @@ const Home = () => {
             swal("Por favor, ingrese un enlace válido de Google Maps.", {
                 icon: "error",
             });
-            //alert("Por favor, ingrese un enlace válido de Google Maps.");
             return;
         }
 
@@ -572,7 +565,6 @@ const Home = () => {
             swal("Error, no se pueden agregar mas de 10 fotos para el carrusel.", {
                 icon: "error",
             });
-            //alert('Error, no se pueden agregar mas de 10 fotos para el carrusel.');
             return;
         }
         try {
