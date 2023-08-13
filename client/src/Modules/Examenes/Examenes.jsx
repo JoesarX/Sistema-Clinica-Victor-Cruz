@@ -88,46 +88,69 @@ const Examenes = () => {
         const { titulo, precio, descripcion } = examen
         //Titulo validations
         if (titulo === null || titulo === '') {
-            alert('Debe agregarle un titulo al examen')
+            swal("Debe agregarle titulo al examen.", {
+                icon: "error",
+            });
             return false
         } else if (!titulo.replace(/\s/g, '').length) {
-            alert('El titulo no puede contener solo espacios.');
+            swal("El titulo no puede contener solo espacios", {
+                icon: "error",
+            });
+            
             return false
         } else if (titulo.charAt(0) === ' ') {
-            alert('El titulo no puede iniciar con un espacio.');
+            swal("El titulo no puede iniciar con un espacio.", {
+                icon: "error",
+            });
             return false
-        } else if (titulo.charAt(titulo.length - 1) === ' ') {   
-            alert('El titulo no puede terminar con un espacio.');
+        } else if (titulo.charAt(titulo.length - 1) === ' ') { 
+            swal("El titulo no puede terminar con un espacio.", {
+                icon: "error",
+            });  
             return false
         }
         //Precio validations
         console.log("Precio:"+precio)
         if (precio === null || precio === '') {
-            alert('Debe agregarle un precio al examen');
+            swal("Debe agregarle un precio al examen.", {
+                icon: "error",
+            });
             return false;
         } else if (!(/^\$?(?!0.00)(([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{2})?|[0-9]+(?:\.[0-9]{2})?))$/.test(precio))) {
-            alert("Ingrese un precio válido");
+            swal("Ingrese un precio valido.", {
+                icon: "error",
+            });
             return false;
         }
         //Precio validations
         if (descripcion === null || descripcion === '') {
-            alert('Debe agregarle una Descripcion al examen')
+            swal("Debe Agregarle una Descripcion del Examen.", {
+                icon: "error",
+            });
             return false
         } else if (!descripcion.replace(/\s/g, '').length) {
-            alert('La Descripcion no puede contener solo espacios.');
+            swal("La descripcion no puede contener solo espacios.", {
+                icon: "error",
+            });
             return false
         } else if (descripcion.charAt(0) === ' ') {
-            alert('La Descripcion no puede iniciar con un espacio.');
+            swal("La Descripcion no puede iniciar con un espacio.", {
+                icon: "error",
+            });
             return false
-        } else if (descripcion.charAt(descripcion.length - 1) === ' ') {   
-            alert('La Descripcion no puede terminar con un espacio.');
+        } else if (descripcion.charAt(descripcion.length - 1) === ' ') {  
+            swal("La Descripcion no puede terminar con un espacio.", {
+                icon: "error",
+            }); 
             return false
         }
 
         if (imageUpload != null) {
             const file = imageUpload;
             if (validateImageFormat(file) === false) {
-                alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+                swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño.", {
+                    icon: "error",
+                });
                 return false;
             }
         }
@@ -355,7 +378,9 @@ const Examenes = () => {
                     examen.urlfoto = imageUrll;
                 }
                 await ExamenesService.postExamenes(examen);
-                alert('Examen Agregado');
+                swal("Examen Agregado.", {
+                    icon: "success",
+                });
                 toggleAddModal();
                 setImagePreview(null);
                 window.location.reload();
@@ -426,11 +451,15 @@ const Examenes = () => {
                     }));
                     examen.urlfoto = imageUrll;
                     await ExamenesService.editExamenes(id, examen);
-                    alert('Examen Editado');
+                    swal("Examen Editado.", {
+                        icon: "success",
+                    });
                 }
                 else {
                     await ExamenesService.editExamenes(id, examen);
-                    alert('Examen Editado');
+                    swal("Examen Editado.", {
+                        icon: "success",
+                    });
                 }
                 closeEditModal();
                 window.location.reload();
@@ -480,7 +509,9 @@ const Examenes = () => {
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont === 0) {
-                alert("No Cuenta con el permiso de entrar a este apartado")
+                swal("No Cuenta con el permiso de entrar a este apartado.", {
+                    icon: "error",
+                });
                 navigate("/expedientes"); // Redirige a la página de inicio de sesión
                 cont++;
             }
