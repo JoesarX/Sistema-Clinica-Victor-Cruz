@@ -1,5 +1,5 @@
 import axios from 'axios';
-// const API_URL = 'http://localhost:8000';
+//const API_URL = 'http://localhost:8000';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 //traer todos los textos
 export const getAll_Text = async () => {
@@ -11,6 +11,26 @@ export const getAll_Text = async () => {
         throw new Error('Failed to fetch texto_cmd');
     }
 };
+//traer todo  de un solo
+
+export const getHome = async()=>{
+    try {
+        const res = await axios.get(`${API_URL}/texto_cmd/home`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch texto_cmd');
+    } 
+}
+export const getFooter = async()=>{
+    try {
+        const res = await axios.get(`${API_URL}/texto_cmd/footer`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch footer');
+    } 
+}
 //traer un texto
 export const getOneText = async (object) => {
     console.log(object);
@@ -61,9 +81,11 @@ export const deleteText = async (id) => {
 const text_Services = {
     getAll_Text,
     getOneText,
+    getFooter,
     postText,
     editText,
-    deleteText
+    deleteText,
+    getHome
     // Other functions
 };
 
