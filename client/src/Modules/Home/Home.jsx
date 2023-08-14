@@ -747,7 +747,7 @@ const Home = () => {
                 <div className='modal-container-carrusel modalServicios-carrusel'>
                     <h1 style={{ position: 'relative', top: '13%' }}>Carrusel de imágenes</h1>
                     <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
-                        <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '5%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
+                        <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '4%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
                             <FontAwesomeIcon icon={faPlus} size="2x" />
                             Agregar foto</label>
                         <input
@@ -776,33 +776,37 @@ const Home = () => {
                                 <div className="carrusel-list-container">
                                     <ul className="carrusel-list">
                                         {CarruselData.map((row, index) => (
-                                            <li
-                                                key={getRowId(row)}
-                                                className={`carrusel-list-item ${index === draggedIndex ? 'dragging' : ''}`}
-                                                draggable
-                                                onDragStart={() => handleDragStart(index)}
-                                                onDragOver={(e) => handleDragOver(e, index)}
-                                                onDrop={() => handleDrop(index)}
-                                            >
-                                                <div className={`carrusel-list-item-image ${row.isVisible ? '' : 'hidden'}`}>
-                                                    {row.isVisible && (
-                                                        <img src={row.url} className="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
-                                                    )}
-                                                </div>
-                                                <div className="carrusel-list-item-actions">
-                                                    <IconButton onClick={() => handleDeleteCarruselImage(getRowId(row), row.url)}>
-                                                        <Delete />
-                                                    </IconButton>
-                                                    <IconButton onClick={() => handleToggleVisibility(index)}>
-                                                        {row.isVisible ? <Visibility /> : <VisibilityOff />}
-                                                    </IconButton>
-                                                    <button className="drag-handle-button" onClick={() => handleDragStart(index)}>
-                                                        <Menu />
-                                                    </button>
-                                                </div>
-                                            </li>
+                                            <div key={getRowId(row)}>
+                                                <li
+                                                    className={`carrusel-list-item ${index === draggedIndex ? 'dragging' : ''}`}
+                                                    draggable
+                                                    onDragStart={() => handleDragStart(index)}
+                                                    onDragOver={(e) => handleDragOver(e, index)}
+                                                    onDrop={() => handleDrop(index)}
+                                                >
+                                                    <div className={`carrusel-list-item-image ${row.isVisible ? '' : 'hidden'}`}>
+                                                        {row.isVisible && (
+                                                            <img src={row.url} className="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
+                                                        )}
+                                                    </div>
+                                                    <div className="carrusel-list-item-actions">
+                                                        <IconButton onClick={() => handleDeleteCarruselImage(getRowId(row), row.url)}>
+                                                            <Delete />
+                                                        </IconButton>
+                                                        <IconButton onClick={() => handleToggleVisibility(index)}>
+                                                            {row.isVisible ? <Visibility /> : <VisibilityOff />}
+                                                        </IconButton>
+                                                        <button className="drag-handle-button" onClick={() => handleDragStart(index)}>
+                                                            <Menu />
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                                <hr className="custom-hr" />
+                                            </div>
                                         ))}
                                     </ul>
+
+
                                 </div>
                             ) : (
                                 <p>Cargando carrusel...</p>
