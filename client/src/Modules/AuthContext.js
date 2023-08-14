@@ -48,7 +48,7 @@ const AuthProvider = ({ children }) => {
     setIsAlertShown(false); // Reset the alert flag when the user logs out
     localStorage.clear();
     clearTimeout(timerIdRef.current); // Clear the auto-logout timer when the user logs out
-    //window.location.reload();
+    window.location.reload();
   };
 
   // Auto-logout timer
@@ -64,7 +64,7 @@ const AuthProvider = ({ children }) => {
         swal("Ha sido desconectado de su sesion por inactividad!", {
           icon: "warning",
         });
-        window.location.reload();
+      //window.location.reload();
       }
     }, autoLogoutTime);
   };
@@ -85,6 +85,7 @@ const AuthProvider = ({ children }) => {
           swal("Ha sido desconectado de su sesion por inactividad!", {
             icon: "warning",
           });
+          //window.location.reload();
         }
       }
     }
