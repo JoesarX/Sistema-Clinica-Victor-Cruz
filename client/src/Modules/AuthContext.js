@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useRef } from 'react';
+import swal from 'sweetalert';
 
 const AuthContext = createContext();
 
@@ -60,7 +61,9 @@ const AuthProvider = ({ children }) => {
       handleSignOut();
       if (!isAlertShown) {
         setIsAlertShown(true);
-        alert('You have been logged out due to inactivity.');
+        swal("Ha sido desconectado de su sesion por inactividad!", {
+          icon: "warning",
+        });
       }
     }, autoLogoutTime);
   };
@@ -78,7 +81,9 @@ const AuthProvider = ({ children }) => {
         handleSignOut();
         if (!isAlertShown) {
           setIsAlertShown(true);
-          alert('You have been logged out due to inactivity.');
+          swal("Ha sido desconectado de su sesion por inactividad!", {
+            icon: "warning",
+          });
         }
       }
     }

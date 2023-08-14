@@ -5,10 +5,9 @@ import Topbar from './Topbar';
 import Footer from './Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope, faEdit, faSave, faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
-import { faWhatsapp, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
-
 import swal from 'sweetalert';
 
 
@@ -34,17 +33,17 @@ const Contactanos = () => {
     };
 
 
-    const [whaOBJ, setWhaOBJ] = React.useState({
+    const [whaOBJ] = React.useState({
         Tipo: 'WHA',
         texto_campo: ''
     })
 
-    const [numOBJ, setNumOBJ] = React.useState({
+    const [numOBJ] = React.useState({
         Tipo: 'Footer_Telefono',
         texto_campo: ''
     })
 
-    const [correoOBJ, setCorreoOBJ] = React.useState({
+    const [correoOBJ] = React.useState({
         Tipo: 'Footer_Correo',
         texto_campo: ''
     })

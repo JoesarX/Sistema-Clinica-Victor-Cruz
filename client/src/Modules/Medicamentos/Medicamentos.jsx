@@ -31,7 +31,7 @@ import { Box, Button } from '@mui/material'
 import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
-import { PersonAdd, Delete, Edit, Medication,Category } from '@mui/icons-material'
+import { PersonAdd, Delete, Edit, Medication, Category } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -54,8 +54,8 @@ import './Medicamentos.css';
 import '../HojaDeEstilos/CrudStyles.css';
 import NavBar from '../NavBar';
 
-let listaCategoriaMedicamentos=[];
-let idListaCategoriaMedicamentos=[];
+let listaCategoriaMedicamentos = [];
+let idListaCategoriaMedicamentos = [];
 
 const Medicamentos = () => {
     //========================================================================================================================================================================================================================
@@ -191,7 +191,7 @@ const Medicamentos = () => {
                     >
                         Administración de Categorías
                     </Button>
-                </div>  
+                </div>
                 <div>
                     <Button
                         onClick={toggleModal}
@@ -235,9 +235,9 @@ const Medicamentos = () => {
     const toggleModal = () => {
         setIsModalOpen(!isModalOpen);
         setIsSubmitting(false);
-       setImagePreview(null);
+        setImagePreview(null);
         cleanExpediente();
-        console.log( listaCategoriaMedicamentos);
+        console.log(listaCategoriaMedicamentos);
     };
 
 
@@ -256,15 +256,15 @@ const Medicamentos = () => {
         } catch (error) {
             console.log(error);
         }
-        
+
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
     };
     //-----------------Ficha Agregar Categoría---------//
-    const[openCategories,setOpenCategories]=useState(false);
-    let [selectedModal,setSelectedModal]= useState(null);
+    const [openCategories, setOpenCategories] = useState(false);
+    let [selectedModal, setSelectedModal] = useState(null);
 
-    const toggleModalCategory = ()=>{
+    const toggleModalCategory = () => {
         setOpenCategories(true);
         setSelectedModal(true);
     }
@@ -273,7 +273,7 @@ const Medicamentos = () => {
         setMedicamento((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
 
     }
-    
+
     //----------FichaMedicamentos Modal-------------------------------------------------------
 
     const [nombre, setNombre] = useState(false);
@@ -333,20 +333,20 @@ const Medicamentos = () => {
                 .catch((error) => reject(error));
         });
     };
-    const setCategoriasID = async(valor)=>{
-        let cat=0;
-        try{
-            for( let i=0; i<listaCategoriaMedicamentos.length;i++){
-                if(listaCategoriaMedicamentos[i]==valor){
+    const setCategoriasID = async (valor) => {
+        let cat = 0;
+        try {
+            for (let i = 0; i < listaCategoriaMedicamentos.length; i++) {
+                if (listaCategoriaMedicamentos[i] == valor) {
                     console.log(idListaCategoriaMedicamentos[i]);
-                    cat=idListaCategoriaMedicamentos[i]
+                    cat = idListaCategoriaMedicamentos[i]
                 }
             }
             setMedicamento({
                 ...medicamento,
                 id_categoria: cat
             })
-        }catch(error){
+        } catch (error) {
 
         }
     }
@@ -384,7 +384,9 @@ const Medicamentos = () => {
                     console.log(medicamento.urlfoto);
                 }
                 await MedicamentosService.postMedicamentos(medicamento);
-                alert('Medicamento Agregado');
+                swal("Medicamento Agregado!", {
+                    icon: "success",
+                });
                 toggleModal();
                 setImagePreview(null);
                 window.location.reload();
@@ -428,11 +430,15 @@ const Medicamentos = () => {
                     medicamento.urlfoto = imageUrll;
 
                     await MedicamentosService.editMedicamentos(id, medicamento);
-                    alert('Medicamento Editado');
+                    swal("Medicamento Editado!", {
+                        icon: "success",
+                    });
                 }
                 else {
                     await MedicamentosService.editMedicamentos(id, medicamento);
-                    alert('Medicamento Editado');
+                    swal("Medicamento Editado!", {
+                        icon: "success",
+                    });
                 }
                 toggleModal22();
                 window.location.reload();
@@ -456,63 +462,93 @@ const Medicamentos = () => {
         const { nombre, categoria, stock, precio_unitario, via, dosis } = medicamento
         //Nombre validations
         if (nombre === null || nombre === '') {
-            alert('Debe agregarle un nombre al medicamento')
+            swal("Debe Agregarle un nombre al medicamento.", {
+                icon: "warning",
+            });
             return false
         } else if (!nombre.replace(/\s/g, '').length) {
-            alert('El nombre no puede contener solo espacios.');
+            swal("El nombre no puede contener solo espacios.", {
+                icon: "warning",
+            });
             return false
         } else if (nombre.charAt(0) === ' ') {
-            alert('El nombre no puede iniciar con un espacio.');
+            swal("El nombre no puede iniciar con un espacio.", {
+                icon: "warning",
+            });
             return false
         } else if (nombre.charAt(nombre.length - 1) === ' ') {
-            alert('El nombre no puede terminar con un espacio.');
+            swal("El nombre no puede terminar con un espacio.", {
+                icon: "warning",
+            });
             return false
         }
         //Categoria validations
         if (categoria === null || categoria === '') {
-            alert('Debe agregar una categoria valida.');
+            swal("Debe agregar una categoria valida.", {
+                icon: "warning",
+            });
             return false;
         }
         //Stock validations
         if (stock === null || stock === '') {
-            alert('Debe agregarle la cantidad de unidades al medicamento');
+            swal("Debe agregarle la cantidad de unidades al medicamento", {
+                icon: "warning",
+            });
             return false;
         } else if (!(/^\d+$/.test(stock))) {
-            alert("Las unidades deben ser un numero entero.");
+            swal("Las unidades deben ser un numero entero.", {
+                icon: "warning",
+            });
             return false;
         }
         //Precio validations
         if (precio_unitario === null || precio_unitario === '') {
-            alert('Debe agregarle un precio unitario al medicamento');
+            swal("Debe agregarle un precio unitario al medicamento.", {
+                icon: "warning",
+            });
             return false;
         } else if (!(/^[0-9,.]*$/.test(parseFloat(precio_unitario)))) {
-            alert("Ingrese un precio valido");
+            swal("Ingrese un precio valido.", {
+                icon: "warning",
+            });
             return false;
         }
         //Via validations
         if (via === null || via === '') {
-            alert('Ingrese una via para el medicamento');
+            swal("Ingrese una via para el medicamento.", {
+                icon: "warning",
+            });
             return false;
         }
         //Dosis validations
         if (dosis === null || dosis === '') {
-            alert('Debe agregarle una dosis al medicamento')
+            swal("Debe agregarle una dosis al medicamento.", {
+                icon: "warning",
+            });
             return false;
         } else if (!dosis.replace(/\s/g, '').length) {
-            alert('La dosis no puede contener solo espacios.');
+            swal("La dosis no puede contener solo espacios.", {
+                icon: "warning",
+            });
             return false
         } else if (dosis.charAt(0) === ' ') {
-            alert('La dosis no puede iniciar con un espacio.');
+            swal("La dosis no puede iniciar con un espacio.", {
+                icon: "warning",
+            });
             return false
         } else if (dosis.charAt(nombre.length - 1) === ' ') {
-            alert('La dosis no puede terminar con un espacio.');
+            swal("La dosis no puede terminar con un espacio.", {
+                icon: "warning",
+            });
             return false
         }
 
         if (imageUpload != null) {
             const file = imageUpload;
             if (validateImageFormat(file) == false) {
-                alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+                swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
+                    icon: "warning",
+                });
                 return false;
             }
         }
@@ -577,9 +613,9 @@ const Medicamentos = () => {
 
     useEffect(() => {
         if (isModalOpen1) {
-          // Run your code here when isModalOpen is true
-          setImagePreview(medicamento.urlfoto);
-          console.log('Modal is open!');
+            // Run your code here when isModalOpen is true
+            setImagePreview(medicamento.urlfoto);
+            console.log('Modal is open!');
         }
     }, [isModalOpen1]);
 
@@ -590,7 +626,9 @@ const Medicamentos = () => {
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
-                alert("No Cuenta con el permiso de entrar a este apartado")
+                swal("No Cuenta con el permiso de entrar a este apartado!", {
+                    icon: "warning",
+                });
                 navigate("/expedientes"); // Redirige a la página de inicio de sesión
                 cont++;
             }
@@ -606,19 +644,19 @@ const Medicamentos = () => {
                 const nombresCategorias = await CategoriasService.getAllCategories()
                 console.log(medicamentosData);
 
-                if(cont==0){
-                    listaCategoriaMedicamentos=nombresCategorias.map((nombresCategorias)=>nombresCategorias.Nombre_Categoria );
-                    idListaCategoriaMedicamentos=nombresCategorias.map((nombresCategorias)=>nombresCategorias.id);
+                if (cont == 0) {
+                    listaCategoriaMedicamentos = nombresCategorias.map((nombresCategorias) => nombresCategorias.Nombre_Categoria);
+                    idListaCategoriaMedicamentos = nombresCategorias.map((nombresCategorias) => nombresCategorias.id);
                     cont++;
                 }
-                
-                    console.log("No Entré");
-                    
-                
+
+                console.log("No Entré");
+
+
                 console.log(listaCategoriaMedicamentos);
                 console.log(medicamentosData);
 
-                
+
                 const medicamentosWithId = medicamentosData.map((medicamento) => ({
                     ...medicamento,
                     medId: medicamento.idmed,
@@ -749,7 +787,7 @@ const Medicamentos = () => {
                                         <div className='Div-imagen'>
                                             <div className='ImagenWrapper'>
                                                 <img className='Imagen' src={imagePreview} alt="imgPreview" />
-                                                
+
                                             </div>
                                         </div>
                                         <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
@@ -765,24 +803,24 @@ const Medicamentos = () => {
                                             id="urlfoto"
                                             className="customFileInput"
                                         />
-                                        <label onClick={cancelarFotoA} className="customFileLabel"  style={{ marginTop: '0.45rem'}}>Eliminar archivo</label>
-                                        
+                                        <label onClick={cancelarFotoA} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
+
                                     </Grid>
-                                    
+
                                     <Grid item xs={12} sm={6}>
-                                        <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }}/>
+                                        <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }} />
                                         <Autocomplete
                                             disablePortal
                                             id="categoria"
                                             required
                                             options={listaCategoriaMedicamentos}
-                                            onChange={(event,newValue)=>
+                                            onChange={(event, newValue) =>
                                                 setCategoriasID(newValue)
-                                            } 
-                                            renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }}/>}
+                                            }
+                                            renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }} />}
                                         />
-                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required style={{ marginBottom: '0.45rem' }}/>
-                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required style={{ marginBottom: '0.45rem' }}/>
+                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required style={{ marginBottom: '0.45rem' }} />
+                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required style={{ marginBottom: '0.45rem' }} />
                                         <Autocomplete
                                             disablePortal
                                             id="via"
@@ -794,7 +832,7 @@ const Medicamentos = () => {
                                                     via: newValue
                                                 })
                                             }
-                                            renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }}/>}
+                                            renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }} />}
                                         />
                                         <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
                                     </Grid>
@@ -845,7 +883,7 @@ const Medicamentos = () => {
                                             <Grid item xs={12} sm={6}>
                                                 <div className='Div-imagen'>
                                                     <div className='ImagenWrapper'>
-                                                        
+
                                                         <img className='Imagen' src={imagePreview} alt="imgPreview" />
                                                     </div>
                                                 </div>
@@ -860,10 +898,10 @@ const Medicamentos = () => {
                                                     id="urlfoto"
                                                     className="customFileInput"
                                                 />
-                                                <label onClick={cancelarFotoE} className="customFileLabel"  style={{ marginTop: '0.45rem'}}>Eliminar archivo</label>
+                                                <label onClick={cancelarFotoE} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
                                             </Grid>
                                             <Grid item xs={12} sm={6}>
-                                                <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }}/>
+                                                <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }} />
                                                 <Autocomplete
                                                     value={categoriaSelected}
                                                     disablePortal
@@ -871,13 +909,13 @@ const Medicamentos = () => {
 
 
                                                     options={listaCategoriaMedicamentos}
-                                                    onChange={(event,newValue)=>
+                                                    onChange={(event, newValue) =>
                                                         setCategoriasID(newValue)
-                                                    } 
-                                                    renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }}/>}
+                                                    }
+                                                    renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }} />}
                                                 />
-                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' style={{ marginBottom: '0.45rem' }}/>
-                                                <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' style={{ marginBottom: '0.45rem' }}/>
+                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' style={{ marginBottom: '0.45rem' }} />
+                                                <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' style={{ marginBottom: '0.45rem' }} />
                                                 <Autocomplete
                                                     value={viaSelected}
                                                     disablePortal
@@ -891,9 +929,9 @@ const Medicamentos = () => {
                                                         })
 
                                                     }
-                                                    renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }}/>}
+                                                    renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }} />}
                                                 />
-                                                <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' style={{ marginBottom: '0.45rem' }}/>
+                                                <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' style={{ marginBottom: '0.45rem' }} />
                                             </Grid>
                                         </Grid>
 
@@ -925,12 +963,12 @@ const Medicamentos = () => {
                     setViaF={via}
                 />
             )}
-             {selectedModal &&(
-            <Ficha_Agregar_Categorias
-                open={openCategories}
-                setOpenPopupC={setOpenCategories}
-                
-            />)}
+            {selectedModal && (
+                <Ficha_Agregar_Categorias
+                    open={openCategories}
+                    setOpenPopupC={setOpenCategories}
+
+                />)}
         </div>
     );
 

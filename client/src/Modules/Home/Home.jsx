@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
@@ -15,61 +15,36 @@ import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import CarruselService from '../../Services/CarruselService';
 
 import axios from 'axios'; // Import axios library
 
-import { Button, TextField, Modal } from '@mui/material'
+import {Modal } from '@mui/material'
 import {
-    DataGrid, esES, GridCellEditStopReasons, gridColumnsTotalWidthSelector, useGridApiRef
+    DataGrid, esES, GridCellEditStopReasons
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
 
-import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
 import {
     ref,
     uploadBytes,
     getDownloadURL,
     deleteObject,
     getStorage,
-    listAll,
-    list,
 } from "firebase/storage";
 
 import { v4 } from "uuid";
-import { idID } from '@mui/material/locale';
 const Home = () => {
 
 
     const maxDescriptionCharacters = 512;
     const maxDescriptionCharacters2 = 190;
-
-
-    /*const AddButton = () => (
-
-        <button>
-            <AddIcon />
-            Agregar Foto
-        </button>
-    );
-
-    const SaveButton = () => (
-        <button>
-            <SaveIcon />
-            Guardar Cambios
-        </button>
-    );
-    */
-
+    
     /* Para la DB*/
 
     const [isFetching, setIsFetching] = useState(true);

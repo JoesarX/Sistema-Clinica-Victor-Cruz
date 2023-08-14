@@ -179,7 +179,9 @@ let buscaError=0;
          // Redirigir si no se cumple la verificación
 
          if(cont==0){
-            alert("No Cuenta con el permiso de entrar a este apartado")
+            swal("No Cuenta con el permiso de entrar a este apartado!", {
+               icon: "warning",
+           });
             navigate("/expedientes"); // Redirige a la página de inicio de sesiónc
             cont++;
          }
