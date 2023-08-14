@@ -78,7 +78,7 @@ const Servicios = () => {
       // Call resolve with the imageUrl when the upload is complete
       // Call reject with an error if there's an issue with the upload
       // For example:
-      if (imageUpload == null || imageUpload == "") {
+      if (imageUpload == null || imageUpload === "") {
           //reject(new Error('No file selected for upload'));
           return null;
       }
@@ -164,7 +164,7 @@ if (!descriptionRegex.test(cleanedDescription)) {
 
 if (imageUpload != null) {
   const file = imageUpload;
-  if (validateImageFormat(file) == false) {
+  if (validateImageFormat(file) === false) {
     alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
     return;
   }
@@ -300,12 +300,12 @@ if (imageUpload != null) {
         }
         if (imageUpload != null) {
           const file = imageUpload;
-          if (validateImageFormat(file) == false) {
+          if (validateImageFormat(file) === false) {
               alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
               return;
           }
         }
-            if (imageUpload != null && imageUpload != "") {
+            if (imageUpload != null && imageUpload !== "") {
                 if (imageUpload != null) {
                     deleteImg(imageEdit);
                     console.log("Elimina imagen");

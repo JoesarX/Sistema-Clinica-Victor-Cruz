@@ -1,4 +1,50 @@
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+.drag-handle-button{
+  border: #E4EBF9;
+  background-color: #E4EBF9;
+}
+.dataListBox{
+  width: 100%;
+}
+.carrusel-list-container{
+  width: 100%;
+}
+.carrusel-list {
+  list-style: none;
+  padding: 0;
+  position: relative;
+  max-height: 350px; 
+  overflow-y: auto; 
+  width: 100%;
+}
+
+.carrusel-list-item {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  margin: 8px;
+  padding: 12px;
+  width: 95%;
+  height: 10%;
+}
+
+.carrusel-list-item-image {
+  flex: 1;
+  margin-right: 12px;
+}
+
+.carrusel-list-item-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  right:6%;
+}
+
+/* Style for buttons */
+button {
+  margin-top: 8px;
+}
 
 .scrollable-page {
   height: 100vh;
@@ -333,9 +379,8 @@
 
 /* CARRUSEL */
 .modalServicios-carrusel {
-  min-width: 80%;
-  min-height: 80%;
-  width: 80%;
+  
+  width: 30%;
   height: 80%;
   max-width: 1600px;
   overflow: hidden;
@@ -362,11 +407,12 @@
   justify-content: center;
   border: none;
   flex-direction: column;
+  
 }
 
 .carrusel-crud-image-img {
   height: 140px;
-  width: 140px;
+  width: 250px;
   border: 0.5px solid #1E60A6
 }
 
