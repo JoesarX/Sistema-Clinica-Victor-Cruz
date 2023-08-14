@@ -36,6 +36,7 @@ const Servicios = () => {
   });
 
   const [serviceData, setServiceData] = useState([]);
+  const [serviceDataFlagged, setServiceDataFlagged] = useState([]);
   const [visibilityFlag, setVisibilityFlag] = useState(true);
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedService, setEditedService] = useState(null);
@@ -192,6 +193,8 @@ const Servicios = () => {
       */
       setServiceData(serviciosWithId);
       console.log(serviceData);
+      const filteredServicios = serviciosWithId.filter(servicio => servicio.visibility === 1);
+      setServiceDataFlagged(filteredServicios);
       const countVisible = serviciosWithId.filter(item => item.visibility === 1).length;
       console.log(`Number of objects with visibility set to true: ${countVisible}`);
       if (countVisible < 5) {
@@ -268,13 +271,11 @@ const Servicios = () => {
     try {
       if (imageUpload != null) {
         const imageUrll = await uploadFile();
-        const newOrden = serviceData[serviceData.length].orden+1;
-        console.log(newOrden);
         setServicio(() => ({
           url: imageUrll,
           title: newTitle,
           description: newDescription,
-          orden: newOrden,
+          orden: serviceData.length,
           visibility: true,
         }));
         servicio.title = newTitle;
@@ -293,22 +294,6 @@ const Servicios = () => {
       // Handle error if any
       console.log('Error submitting Servicio:', error);
     }
-    /* en duro
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newService = {
-        id: serviceData.length + 1,
-        imageSrc: reader.result,
-        title: newTitle,
-        description: newDescription,
-        hooverComponent: `${serviceData.length + 1}`,
-      };
-      setServiceData([...serviceData, newService]);
-      alert('Service added successfully!');
-      handleModalClose();
-    };
-    reader.readAsDataURL(imageUpload);
-    */
   };
 
   const validateImageFormat = (file) => {
@@ -327,7 +312,7 @@ const Servicios = () => {
     return true;
   };
 
-  const handleDeleteService = (id, url) => {
+  const handleDeleteService = (id, url, orden) => {
     swal({
       title: "¿Estás seguro?",
       text: "Una vez borrado, no podrás recuperar esta información.",
@@ -340,13 +325,11 @@ const Servicios = () => {
           try {
             console.log(id);
             console.log("DELETE THIS URL: " + url);
-            await ServiciosService.deleteServicios(id);
+            console.log("Orden: "+orden);
+            await ServiciosService.deleteServicios(id, orden);
             if (url != null) {
               console.log("DELETE THIS URL no es null: " + url);
               deleteImg(url);
-            }
-            else {
-              window.location.reload();
             }
             swal("Servicio eliminado exitosamente!", {
               icon: "success",
@@ -369,7 +352,7 @@ const Servicios = () => {
       .catch((error) => {
         console.log("Failed to delete image: ", error)
       })
-    window.location.reload();
+    //window.location.reload();
   }
 
   const handleSaveEdit = async (e) => {
@@ -454,34 +437,63 @@ const Servicios = () => {
       </div>
 
       <div>
-      {serviceData.map((service, index) => (
-        <div
-          className={`services ${showButtons ? 'draggable' : ''}`}
-          id={service.hooverComponent}
-          key={service.id}
-          draggable={showButtons}
-          data-index={index}
-          onDragStart={(e) => handleDragStart(e, index)}
-          onDragEnd={handleDragEnd}
-          onDragOver={(e) => handleDragOver(e, index)}
-          onDrop={handleDrop}
-          style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
-        >
-            <img src={service.url} alt={service.title} />
-            <div className="overlay">
-              <h2>{service.title}</h2>
-              <p className='desc'>{service.description}</p>
-              {isLoggedIn && userType !== 'normal' && showButtons && (
-                <>
-                  <div className='buttonCont'>
-                    <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
-                    <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url)}>Borrar Servicio</button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        ))}
+        {showButtons
+          ? serviceData.map((service, index) => (
+            <div
+              className={`services ${showButtons ? 'draggable' : ''}`}
+              id={service.hooverComponent}
+              key={service.id}
+              draggable={showButtons}
+              data-index={index}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={handleDrop}
+              style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
+            >
+                <img src={service.url} alt={service.title} />
+                <div className="overlay">
+                  <h2>{service.title}</h2>
+                  <p className='desc'>{service.description}</p>
+                  {isLoggedIn && userType !== 'normal' && showButtons && (
+                    <>
+                      <div className='buttonCont'>
+                        <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
+                        <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))
+          : serviceDataFlagged.map((service, index) => (
+            <div
+              className={`services ${showButtons ? 'draggable' : ''}`}
+              id={service.hooverComponent}
+              key={service.id}
+              draggable={showButtons}
+              data-index={index}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={handleDrop}
+              style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
+            >
+                <img src={service.url} alt={service.title} />
+                <div className="overlay">
+                  <h2>{service.title}</h2>
+                  <p className='desc'>{service.description}</p>
+                  {isLoggedIn && userType !== 'normal' && showButtons && (
+                    <>
+                      <div className='buttonCont'>
+                        <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
+                        <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
       </div>
 
 

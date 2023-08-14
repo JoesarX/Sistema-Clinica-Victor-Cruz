@@ -62,8 +62,12 @@ const serviciosRouter = (pool) => {
             const connection = await pool.getConnection();
             const sqlSelect = "delete FROM servicios where id = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
+            const updateSql = "UPDATE servicios SET orden = orden - 1 WHERE orden > ?";
+            const updateParams = [req.body.orden];
+            const [updateResult] = await connection.query(updateSql, updateParams);
             connection.release();
-            res.json(rows);
+            //res.json(rows);
+            res.json({ rows, updateResult });
         } catch (err) {
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
