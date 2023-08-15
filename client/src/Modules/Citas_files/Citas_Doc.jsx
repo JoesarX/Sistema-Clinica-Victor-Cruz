@@ -90,7 +90,7 @@ const Citas_Doc = () => {
   return (
     <div className="App">
       <NavBar />
-      <h1 className="header">Calendario de Citas</h1>
+      <h1 className="calendar-page-header header">Calendario de Citas</h1>
       <div>
         <Filtro onFilterChange={handleFilterChange} />
       </div>
@@ -102,12 +102,20 @@ const Citas_Doc = () => {
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                right: 'dayGridMonth,timeGridWeek,timeGridThreeDay',
               }}
 
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 
               initialView="dayGridMonth"
+
+              views={{
+                timeGridThreeDay:{
+                  type: 'timeGrid',
+                  duration: { days: 3 },
+                  buttonText: 'Día'
+                }
+              }}
 
               locale={esLocale}
 
@@ -135,12 +143,17 @@ const Citas_Doc = () => {
               dayMaxEventRows={6}
 
               eventMinHeight={50}
+              eventMinWidth={'100%'}
+
+              height={'80em'}
+
+              hiddenDays={[0]}
 
               eventContent={(eventInfo) => (
                 <>
                   <div className='event-line-container'>
-                    <div style={{ fontSize: '13.5px', lineHeight: '1.2', fontWeight: '800' }}>{eventInfo.timeText}</div>
-                    <div style={{ fontSize: '13.5px', lineHeight: '1.2', color: '#677a92'}}>{eventInfo.event.title}</div>
+                    <div class="event-line-time-label">{eventInfo.timeText}</div>
+                    <div class="event-line-title-label">{eventInfo.event.title}</div>
                   </div>
                 </>
               )}
