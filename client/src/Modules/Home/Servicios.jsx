@@ -117,7 +117,53 @@ const Servicios = () => {
     e.preventDefault();
   };
 
-  
+  const updateServiceOrderInDatabase = async () => {
+    if (updatedOrdenArray) {
+      try {
+        await Promise.all(updatedOrdenArray.map(async (service) => {
+          console.log("Changing service order for ID:", service.id);
+
+          const changedService = compareArrays(serviceData, updatedOrdenArray);
+
+          if (changedService) {
+            console.log("Service to update:", changedService);
+
+            changedService.orden = changedService.copyOrden;
+            const serviceString = JSON.stringify(changedService);
+            console.log("Updated service data:", serviceString);
+            swal({
+              title: 'Orden de Servicios Editado',
+              icon: 'success',
+            });
+
+            await ServiciosService.editServicios(changedService.id, changedService);
+          }
+        }));
+        window.location.reload();
+      } catch (error) {
+        console.log("Error updating service order:", error);
+      }
+    } else {
+      console.log("updatedOrdenArray is null");
+    }
+  };
+
+  function compareArrays(originalArray, copyArray) {
+    const differentOrdenObjects = [];
+
+    originalArray.forEach(originalObj => {
+      const copyObj = copyArray.find(copyObj => copyObj.id === originalObj.id);
+
+      if (copyObj && originalObj.orden !== copyObj.orden) {
+        differentOrdenObjects.push({
+          ...originalObj, // Copy all attributes from the original object
+          originalOrden: originalObj.orden,
+          copyOrden: copyObj.orden
+        });
+      }
+    });
+    return differentOrdenObjects;
+  }
 
   //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
   const toggleServiceVisibility = (serviceId) => {
@@ -562,7 +608,7 @@ const Servicios = () => {
           {isLoggedIn && userType !== 'normal' && showButtons && (
             <div className='button-addSCont'>
               <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
-              <button className='buttonE button-addS' onClick={{}}>Guardar Cambios</button>
+              <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Guardar Cambios</button>
             </div>
           )}
           <div className='button-gearCont'>
