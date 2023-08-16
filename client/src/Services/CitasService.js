@@ -1,7 +1,7 @@
 import axios from 'axios';
-
-// const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+ 
+const API_URL = 'http://localhost:8000';
+//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllCitas = async () => {
     try {
@@ -105,7 +105,7 @@ export const getUserExpCitas = async (correouser) => {
         const res = await axios.get(`${API_URL}/citas/citasexpedientes/${correouser}`);
         
         
-        return res.data;
+        return res.data[0];
     } catch (error) {
         console.log(error);
         throw new Error('Failed to fetch Times');

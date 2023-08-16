@@ -10,7 +10,7 @@ import ExpedientesService from '../../Services/ExpedientesService';
 import UsuariosService from '../../Services/UsuariosService';
 import IniciarSesion from '../Home/IniciarSesion.jsx';
 
-
+import Services from '../../Services/CitasService';
 const LandingPage = () => {
     const isLoggedIn = localStorage.getItem("100");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -87,24 +87,9 @@ const LandingPage = () => {
     });
 
     const [schAppointments, setSchAppointments] = useState([{
-        date: '2023-06-17',
-        time: '10:00 AM',
-        description: 'Dolor de cabeza',
-    },
-    {
-        date: '2023-06-20',
-        time: '10:00 AM',
-        description: 'Migraña',
-    },
-    {
-        date: '2023-06-20',
-        time: '10:00 AM',
-        description: 'Migraña',
-    },
-    {
-        date: '2023-06-20',
-        time: '10:00 AM',
-        description: 'Migraña',
+        date: '',
+        time: '',
+        description: ''
     }
     ]);
     const [prevAppointments, setPrevAppointments] = useState([{
@@ -193,6 +178,19 @@ const LandingPage = () => {
             try {
                 const email = [correo, "AYUDA"];
                 const expedienteData = await ExpedientesService.getOneUser(email);
+                const futuraCita = await Services.getUserExpCitas(email[0]);
+
+
+
+                schAppointments.description=futuraCita.nombre_persona;
+                schAppointments.time=futuraCita.hora;
+                schAppointments.date=futuraCita.fecha;
+
+                console.log("Fecha: "+ schAppointments.date);
+                console.log("Hora: "+ schAppointments.time);
+                console.log("Descripción: "+ schAppointments.description);
+
+                console.log("Citas Futuas: " + futuraCita.idcita);
                 console.log("DATA OBTENIDA POR QUERY: " + expedienteData);
                 setExpediente(expedienteData);
                 setPatient(prevPatient => ({
@@ -300,11 +298,11 @@ const LandingPage = () => {
                             {schAppointments.map((appointment, index) => (
                                 <div key={index} className='appointment'>
                                     <div className='appointment-date'>
-                                        {formatAppointmentDate(appointment.date)}
+                                        {formatAppointmentDate(schAppointments.date)}
                                     </div>
                                     <div className='appointment-details'>
-                                        <span>{appointment.description}</span>
-                                        <span className='appointment-light-text'>{appointment.time}</span>
+                                        <span>{schAppointments.description}</span>
+                                        <span className='appointment-light-text'>{schAppointments.time}</span>
                                     </div>
                                 </div>
                             ))}

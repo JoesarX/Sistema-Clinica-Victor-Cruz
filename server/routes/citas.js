@@ -120,7 +120,8 @@ const citasRouter = (pool, transporter) => {
             
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log(`Get cita with correo: ${req.params.correouser} Successfull`)
+            console.log(`Get citas futuras with correo: ${req.params.correouser} Successfull`)
+            console.log(rows);
             res.json(rows)
         } catch (err) {
             console.log(`Get cita with correo: ${req.params.correouser} Failed. Error: ${err}`)
