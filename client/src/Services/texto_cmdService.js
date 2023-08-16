@@ -36,6 +36,7 @@ export const getOneText = async (object) => {
     console.log(object);
     try {
         const res = await axios.get(`${API_URL}/texto_cmd/textos/${object}`);
+        
         return res.data;
     } catch (error) {
         console.log(error);
@@ -59,8 +60,8 @@ export const postText = async (object) => {
 export const editText = async (object) => {
     try {
         console.log(object);
-        console.log("Este es el id= "+object[0]+" y este es el nombre: "+object[1]);
-         await axios.put(`${API_URL}/texto_cmd/${object[0]}`, object);
+        console.log("Este es el id= "+object.Tipo+" y este es el nombre: "+object.texto_campo);
+         await axios.put(`${API_URL}/texto_cmd/${object.Tipo}`, object);
         
     } catch (error) {
         console.error('editTextos', error);
@@ -88,4 +89,4 @@ const text_Services = {
     // Other functions
 };
 
-export default text_Services;
+export default text_Services;
