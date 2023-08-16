@@ -1,3 +1,4 @@
+
 import React from 'react'
 import '../HojaDeEstilos/Laboratorio.css';
 import { useNavigate } from 'react-router-dom';
@@ -157,5 +158,3 @@ const Laboratorio = () => {
 
 
 export default Laboratorio;
-
-
