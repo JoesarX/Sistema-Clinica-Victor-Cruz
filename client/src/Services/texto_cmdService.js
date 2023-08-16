@@ -19,7 +19,7 @@ export const getHome = async()=>{
         return res.data;
     } catch (error) {
         console.log(error);
-        throw new Error('Failed to fetch texto_cmd');
+        throw new Error('Failed to fetch home');
     } 
 }
 export const getFooter = async()=>{

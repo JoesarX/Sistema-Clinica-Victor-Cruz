@@ -246,7 +246,9 @@ const Home = () => {
             if (isFetching) {
                 const fetchTitulos = async () => {
                     try {
-                        const info = await text_Services.getHome();
+                        console.log("Entré al fetch");
+                        var info = await text_Services.getHome();
+                        console.log("info: "+info);
                         setTitulo1OBJ({ ...titulo1OBJ, texto_campo: info[0].texto_campo });
                         setTitulo2OBJ({ ...titulo2OBJ, texto_campo: info[1].texto_campo });
                         setTitulo3OBJ({ ...titulo3OBJ, texto_campo: info[2].texto_campo });    
