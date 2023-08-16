@@ -72,8 +72,8 @@
     border-radius: 10px;
 }
 
-.thFicha,
-.tdFicha {
+th,
+td {
     padding: 2%;
     width: 40%;
     border: 1px solid gray;
@@ -82,17 +82,17 @@
 
 }
 
-.thFicha {
+th {
     background-color: #DADADA;
 
 }
 
-.tdFicha {
+td {
     background-color: #ffffff;
     color: black;
 }
 
-.tdFicha:nth-child(2) {
+td:nth-child(2) {
    
     width: 40%;
     text-align: left;
@@ -109,20 +109,10 @@
 
 .topRight {
     border-top-right-radius: 10px;
-    padding: 2%;
-    width: 40%;
-    border: 1px solid gray;
-    text-align: left;
-    font-family: 'Inter', sans-serif;
 }
 
 .bottomRight {
     border-bottom-right-radius: 10px;
-    padding: 2%;
-    width: 40%;
-    border: 1px solid gray;
-    text-align: left;
-    font-family: 'Inter', sans-serif;
 }
 
 
@@ -192,7 +182,7 @@
         }
 
 
-        .trFicha {
+        tr {
             display: flex;
 
             flex-direction: column;
@@ -201,13 +191,13 @@
 
         }
 
-        .tdFicha {
+        td {
             justify-content: center;
             font-size: small;
             text-align: center;
         }
 
-        .thFicha {
+        th {
 
             display: flex;
             font-size: small;
@@ -217,11 +207,7 @@
         .camposT {
             display: flex;
             text-align: center;
-            padding: 2%;
-            width: 40%;
-            border: 1px solid gray;
-            text-align: left;
-            font-family: 'Inter', sans-serif;
+
         }
 
 
