@@ -106,7 +106,7 @@ const Laboratorio = () => {
     };
 
     return (
-        <div className="scrollable-page">
+        <div className="scrollable-page1">
 
 
             <Topbar />
