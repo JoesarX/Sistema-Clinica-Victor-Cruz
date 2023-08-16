@@ -4,9 +4,11 @@ import { TextField, Grid, Button, Box, TextareaAutosize } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../AuthContext.js';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import '../HojaDeEstilos/Servicios.css';
+
 import { storage } from '../../firebase';
 import 'firebase/compat/storage';
 import {
@@ -49,11 +51,16 @@ const Servicios = () => {
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [isSubmitting3, setIsSubmitting3] = useState(false);
+  const [isEyeOpen, setIsEyeOpen] = useState(true);
+
+  const toggleEye = () => {
+    setIsEyeOpen((prevState) => !prevState);
+  };
 
   const handleModalOpen = () => {
     //Validar que no este en el maximo de servicios
-    console.log("Length: "+serviceData.length);
-    if (serviceData.length < 10 ) {
+    console.log("Length: " + serviceData.length);
+    if (serviceData.length < 10) {
       setImagePreview(null);
       setModalOpen(true);
     }
@@ -109,40 +116,47 @@ const Servicios = () => {
   const handleDrop = (e) => {
     e.preventDefault();
   };
-  
+
   const updateServiceOrderInDatabase = async () => {
-    if (updatedOrdenArray != null) {
+    if (updatedOrdenArray) {
       try {
         await Promise.all(updatedOrdenArray.map(async (service) => {
-          console.log("New Array changge in index: ");
-          console.log(serviceData);
-          const testingcompare = compareArrays(serviceData, updatedOrdenArray);
-          console.log(testingcompare);
-          for (const service of testingcompare) {
-            service.orden = service.copyOrden;
-            const serviceString = JSON.stringify(service);
-            console.log(service.id+" "+ serviceString);
-            await ServiciosService.editServicios(service.id, service);
+          console.log("Changing service order for ID:", service.id);
+
+          const changedService = compareArrays(serviceData, updatedOrdenArray);
+
+          if (changedService) {
+            console.log("Service to update:", changedService);
+
+            changedService.orden = changedService.copyOrden;
+            const serviceString = JSON.stringify(changedService);
+            console.log("Updated service data:", serviceString);
+
+            // Show SweetAlert instead of alert
+            swal({
+              title: 'Orden de Servicios Editado',
+              icon: 'success',
+            });
+
+            await ServiciosService.editServicios(changedService.id, changedService);
           }
-          //await ServiciosService.editServicios(service.id, service.order);
-          alert('Orden de Servicios Editado');
-          window.location.reload();
         }));
+        // Consider removing the window.location.reload() line to provide a smoother experience
+        window.location.reload();
       } catch (error) {
         console.log("Error updating service order:", error);
       }
-    }
-    else {
-      console.log("null");
+    } else {
+      console.log("updatedOrdenArray is null");
     }
   };
-  
+
   function compareArrays(originalArray, copyArray) {
     const differentOrdenObjects = [];
-  
+
     originalArray.forEach(originalObj => {
       const copyObj = copyArray.find(copyObj => copyObj.id === originalObj.id);
-  
+
       if (copyObj && originalObj.orden !== copyObj.orden) {
         differentOrdenObjects.push({
           ...originalObj, // Copy all attributes from the original object
@@ -154,6 +168,12 @@ const Servicios = () => {
     return differentOrdenObjects;
   }
 
+  //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
+  const toggleServiceVisibility = (serviceId) => {
+    //
+    //
+    //
+  }
 
 
   //IMAGENES CODE --------------------------------------------------->
@@ -325,7 +345,7 @@ const Servicios = () => {
           try {
             console.log(id);
             console.log("DELETE THIS URL: " + url);
-            console.log("Orden: "+orden);
+            console.log("Orden: " + orden);
             await ServiciosService.deleteServicios(id, orden);
             if (url != null) {
               console.log("DELETE THIS URL no es null: " + url);
@@ -451,21 +471,24 @@ const Servicios = () => {
               onDrop={handleDrop}
               style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
             >
-                <img src={service.url} alt={service.title} />
-                <div className="overlay">
-                  <h2>{service.title}</h2>
-                  <p className='desc'>{service.description}</p>
-                  {isLoggedIn && userType !== 'normal' && showButtons && (
-                    <>
-                      <div className='buttonCont'>
-                        <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
-                        <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
-                      </div>
-                    </>
-                  )}
-                </div>
+              <img src={service.url} alt={service.title} />
+              <div className="overlay">
+                <Button style={{position: 'absolute', bottom: '85%', left: '85%'}} onClick={toggleEye}>
+                  {isEyeOpen ? <Visibility /> : <VisibilityOff />}
+                </Button>
+                <h2>{service.title}</h2>
+                <p className='desc'>{service.description}</p>
+                {isLoggedIn && userType !== 'normal' && showButtons && (
+                  <>
+                    <div className='buttonCont'>
+                      <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
+                      <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
+                    </div>
+                  </>
+                )}
               </div>
-            ))
+            </div>
+          ))
           : serviceDataFlagged.map((service, index) => (
             <div
               className={`services ${showButtons ? 'draggable' : ''}`}
@@ -479,21 +502,21 @@ const Servicios = () => {
               onDrop={handleDrop}
               style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
             >
-                <img src={service.url} alt={service.title} />
-                <div className="overlay">
-                  <h2>{service.title}</h2>
-                  <p className='desc'>{service.description}</p>
-                  {isLoggedIn && userType !== 'normal' && showButtons && (
-                    <>
-                      <div className='buttonCont'>
-                        <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
-                        <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
-                      </div>
-                    </>
-                  )}
-                </div>
+              <img src={service.url} alt={service.title} />
+              <div className="overlay">
+                <h2>{service.title}</h2>
+                <p className='desc'>{service.description}</p>
+                {isLoggedIn && userType !== 'normal' && showButtons && (
+                  <>
+                    <div className='buttonCont'>
+                      <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
+                      <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
+                    </div>
+                  </>
+                )}
               </div>
-            ))}
+            </div>
+          ))}
       </div>
 
 
@@ -574,7 +597,7 @@ const Servicios = () => {
           {isLoggedIn && userType !== 'normal' && showButtons && (
             <div className='button-addSCont'>
               <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
-              <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Modificar Orden</button>
+              <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Guardar Cambios</button>
             </div>
           )}
           <div className='button-gearCont'>
