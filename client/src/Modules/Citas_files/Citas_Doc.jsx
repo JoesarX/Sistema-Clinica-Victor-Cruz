@@ -60,7 +60,12 @@ const Citas_Doc = () => {
       const timeString = cita.hora;
       const [time, meridiem] = timeString.split(' ');
       const [hour, minute] = time.split(':');
-      const hour24 = parseInt(hour) + (meridiem === 'PM' ? 12 : 0);
+      let hour24 = parseInt(hour);
+
+      if (hour24 !== 12) {
+        hour24 += (meridiem === 'PM' ? 12 : 0);
+      }
+
       horaParts = [hour24.toString(), minute];
 
       const startDateTime = new Date(
@@ -72,7 +77,7 @@ const Citas_Doc = () => {
       );
 
       // Calculate the ending time to be 40 minutes after the starting time
-      const endDateTime = new Date(startDateTime.getTime() + 29 * 60000); // 40 minutes in milliseconds
+      const endDateTime = new Date(startDateTime.getTime() + 30 * 60000); // 40 minutes in milliseconds
 
       return {
         title: `${cita.nombre_persona}`,
@@ -95,70 +100,69 @@ const Citas_Doc = () => {
         <Filtro onFilterChange={handleFilterChange} />
       </div>
       <main>
-        <div className="cal-container">
-          <div className="cal">
-            <FullCalendar
+        <div class='cal-container'>
 
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridThreeDay',
-              }}
+          <FullCalendar
 
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            headerToolbar={{
+              left: 'prev,next today',
+              center: 'title',
+              right: 'dayGridMonth,timeGridWeek,timeGridThreeDay',
+            }}
 
-              initialView="dayGridMonth"
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 
-              views={{
-                timeGridThreeDay:{
-                  type: 'timeGrid',
-                  duration: { days: 3 },
-                  buttonText: 'Día'
-                }
-              }}
+            initialView="dayGridMonth"
 
-              locale={esLocale}
+            views={{
+              timeGridThreeDay: {
+                type: 'timeGrid',
+                duration: { days: 3 },
+                buttonText: 'Día'
+              }
+            }}
 
-              slotDuration="00:30:00"
+            locale={esLocale}
 
-              slotLabelFormat={{
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              }}
+            slotDuration="00:30:00"
 
-              eventTimeFormat={{
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              }}
+            slotLabelFormat={{
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            }}
 
-              slotMinTime="07:00:00"
-              slotMaxTime="17:00:00"
+            eventTimeFormat={{
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            }}
 
-              allDaySlot={false}
-              events={formattedEvents}
-              nowIndicator={true}
+            slotMinTime="07:00:00"
+            slotMaxTime="16:30:00"
 
-              dayMaxEventRows={6}
+            allDaySlot={false}
+            events={formattedEvents}
+            nowIndicator={true}
 
-              eventMinHeight={50}
-              eventMinWidth={'100%'}
+            dayMaxEventRows={6}
 
-              height={'80em'}
+            eventMinHeight={50}
+            eventMinWidth={'100%'}
 
-              hiddenDays={[0]}
+            height={'auto'}
 
-              eventContent={(eventInfo) => (
-                <>
-                  <div className='event-line-container'>
-                    <div class="event-line-time-label">{eventInfo.timeText}</div>
-                    <div class="event-line-title-label">{eventInfo.event.title}</div>
-                  </div>
-                </>
-              )}
-            />
-          </div>
+            hiddenDays={[0]}
+
+            eventContent={(eventInfo) => (
+              <>
+                <div className='event-line-container'>
+                  <div class="event-line-time-label">{eventInfo.timeText}</div>
+                  <div class="event-line-title-label">{eventInfo.event.title}</div>
+                </div>
+              </>
+            )}
+          />
         </div>
       </main>
       <footer>

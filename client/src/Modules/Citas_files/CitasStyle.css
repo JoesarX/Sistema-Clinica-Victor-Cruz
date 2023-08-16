@@ -1,15 +1,13 @@
 /*CSS del calendario como tal*/
 
-td {
+.fc td {
   width: 80%;
-  border: 1px solid gray;
   text-align: left;
   font-family: 'Inter', sans-serif;
 }
 
 footer {
   margin-top: 2em;
-  /* Adjust the margin as needed */
 }
 
 .calendar-page-header {
@@ -25,12 +23,7 @@ footer {
 
 .fc {
   font-family: 'Inter';
-  height: max-content;
-}
-
-.fc-scroller-harness {
   overflow-y: visible;
-  height: 100%;
 }
 
 .fc-button {
@@ -226,6 +219,7 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 
 .fc-event-main>.event-line-container {
   padding: 0.5px;
+  gap: 0.5px;
   justify-content: center;
 }
 
