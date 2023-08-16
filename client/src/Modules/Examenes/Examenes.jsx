@@ -99,7 +99,13 @@ const Examenes = () => {
         } else if (titulo.charAt(titulo.length - 1) === ' ') {   
             alert('El titulo no puede terminar con un espacio.');
             return false
-        }
+        } else if (titulo.length > 50) {
+            alert('El titulo no puede contener mas de 50 caracteres.');
+            return false
+        } else if (titulo.length < 3) {
+            alert('El titulo no puede contener menos de 3 caracteres.');
+            return false
+        } 
         //Precio validations
         console.log("Precio:"+precio)
         if (precio === null || precio === '') {
@@ -122,7 +128,13 @@ const Examenes = () => {
         } else if (descripcion.charAt(descripcion.length - 1) === ' ') {   
             alert('La Descripcion no puede terminar con un espacio.');
             return false
-        }
+        } else if (descripcion.length > 250) {
+            alert('La Descripcion no puede contener mas de 250 caracteres.');
+            return false
+        } else if (descripcion.length < 25) {
+            alert('La Descripcion no puede contener menos de 25 caracteres.');
+            return false
+        } 
 
         if (imageUpload != null) {
             const file = imageUpload;
@@ -544,7 +556,7 @@ const Examenes = () => {
                             rows={examenes}
                             getRowId={(row) => row.idexamen}
                             columns={[
-                                { field: 'titulo', headerName: 'Titulo Examen', flex: 4, headerClassName: 'column-header' },
+                                { field: 'titulo', headerName: 'Titulo Examen', flex: 5, headerClassName: 'column-header' },
                                 { field: 'precio', headerName: 'Precio', flex: 2, headerClassName: 'column-header' },
                                 { field: 'descripcion', headerName: 'Descripcion del Examen', flex: 12, headerClassName: 'column-header' },
                                 {
