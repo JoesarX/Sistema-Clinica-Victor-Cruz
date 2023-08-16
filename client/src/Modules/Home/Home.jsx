@@ -246,35 +246,29 @@ const Home = () => {
             if (isFetching) {
                 const fetchTitulos = async () => {
                     try {
-                        const titulo1Data = await text_Services.getOneText(['título_servicio1']);
-                        setTitulo1OBJ({ ...titulo1OBJ, texto_campo: titulo1Data[0].texto_campo });
-
-                        const titulo2Data = await text_Services.getOneText(['título_servicio2']);
-                        setTitulo2OBJ({ ...titulo2OBJ, texto_campo: titulo2Data[0].texto_campo });
-
-                        const titulo3Data = await text_Services.getOneText(['título_servicio3']);
-                        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: titulo3Data[0].texto_campo });
-
-                        const servicio1Data = await text_Services.getOneText(['texto_servicio1']);
-                        setdescripcion1OBJ({ ...descripcion1OBJ, texto_campo: servicio1Data[0].texto_campo });
-
-                        const servicio2Data = await text_Services.getOneText(['texto_servicio2']);
-                        setdescripcion2OBJ({ ...descripcion2OBJ, texto_campo: servicio2Data[0].texto_campo });
-
-                        const servicio3Data = await text_Services.getOneText(['texto_servicio3']);
-                        setdescripcion3OBJ({ ...descripcion3OBJ, texto_campo: servicio3Data[0].texto_campo });
-                        setIsFetching(false);
-
+                        console.log("Entré al fetch");
+                        var info = await text_Services.getHome();
+                        console.log("info: "+info);
+                        setTitulo1OBJ({ ...titulo1OBJ, texto_campo: info[0].texto_campo });
+                        setTitulo2OBJ({ ...titulo2OBJ, texto_campo: info[1].texto_campo });
+                        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: info[2].texto_campo });    
+                        setdescripcion1OBJ({ ...descripcion1OBJ, texto_campo: info[3].texto_campo });                  
+                        setdescripcion2OBJ({ ...descripcion2OBJ, texto_campo: info[4].texto_campo });
+                        setdescripcion3OBJ({ ...descripcion3OBJ, texto_campo: info[5].texto_campo });
+                        
+                        console.log("HOLAAAAAA");
+                        console.log(isFetching);
                     } catch (error) {
                         console.log("Error fetching titles:", error);
                     }
                 };
                 console.log("Error de effect");
+                console.log("Antes:"+isFetching);
                 fetchAllCarruselPics();
                 fetchTitulos();
                 setIsFetching(false);
             }
-        }, [isFetching]);
+        }, []);
 
 
         return (
