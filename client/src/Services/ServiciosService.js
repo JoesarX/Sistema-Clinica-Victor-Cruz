@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
-//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+//const API_URL = 'http://localhost:8000';
+const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllServicios = async () => {
     try {
@@ -46,10 +46,10 @@ export const editServicios = async (id,servicio) => {
     }
 };
 
-export const deleteServicios = async (id, orden) => {
+export const deleteServicios = async (id) => {
     try {
-        await axios.delete(`${API_URL}/servicios/${id}`, { data: { orden } });
-        console.log(orden);
+         await axios.delete(`${API_URL}/servicios/${id}`);
+        
     } catch (error) {
         console.log(error);
         throw new Error('Failed to delete servicio');
