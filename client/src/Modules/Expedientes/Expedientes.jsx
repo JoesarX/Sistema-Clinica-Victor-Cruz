@@ -230,44 +230,64 @@ const Expedientes = () => {
          expediente;
       //Nombre validation
       if (nombre === null || nombre === '') {
-         alert('Nombre Completo es requerido');
+         swal("Nombre Completo es Requirido", {
+            icon: "warning",
+          });
          return false;
       } else if (!nombre.replace(/\s/g, '').length) {
-         alert('El nombre no puede contener solo espacios.');
+         swal("El nombre no puede contener solo espacios", {
+            icon: "warning",
+          });
          return false
       } else if (nombre.charAt(0) === ' ') {
-         alert('El nombre no puede iniciar con un espacio.');
+         swal("El nombre no puede iniciar con un espacio", {
+            icon: "warning",
+          });
          return false
       } else if (nombre.charAt(nombre.length - 1) === ' ') {
-         alert('El nombre no puede terminar con un espacio.');
+         swal("El nombre no puede terminar con un espacio", {
+            icon: "warning",
+          });
          return false
       }
       //Fecha de Nacimiento validation
       const selectedDate = new Date(fecha_nacimiento);
       const currentDate = new Date();
       if (isNaN(selectedDate.getTime()) || fecha_nacimiento === null || fecha_nacimiento === '') {
-         alert('Una Fecha valida de Nacimiento es requerida');
+         swal("Una Fecha valida de Nacimiento es Requerida", {
+            icon: "warning",
+          });
          return false;
       }
       if (selectedDate > currentDate) {
-         alert('La Fecha de Nacimiento no puede ser mayor a la fecha actual');
+         swal("La fehca de nacimiento no puede ser mayor a la fecha actual", {
+            icon: "warning",
+          });
          return false;
       }
       //Sexo validation
       if (sexo === null || sexo === '') {
-         alert('Sexo es requerido');
+         swal("Sexo es requerido", {
+            icon: "warning",
+          });
          return false;
       }
       //Ocupacion validation
       if (!(ocupacion === null || ocupacion === '')) {
          if (!ocupacion.replace(/\s/g, '').length) {
-            alert('La ocupación no puede contener solo espacios.');
+            swal("La ocupacion no puede contener solo espacios", {
+               icon: "warning",
+             });
             return false
          } else if (ocupacion.charAt(0) === ' ') {
-            alert('La ocupación no puede iniciar con un espacio.');
+            swal("La ocupacion no puede iniciar con un espacio", {
+               icon: "warning",
+             });
             return false
          } else if (ocupacion.charAt(ocupacion.length - 1) === ' ') {
-            alert('La ocupación no puede terminar con un espacio.');
+            swal("La ocupacion no puede terminar con un espacio", {
+               icon: "warning",
+             });
             return false
          }
       }
@@ -275,48 +295,70 @@ const Expedientes = () => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!(correo === null || correo === '')) {
          if (!correo.replace(/\s/g, '').length) {
-            alert('El correo no puede contener solo espacios.');
+            swal("El correo no puede contener solo espacios", {
+               icon: "warning",
+             });
             return false
          } else if (emailRegex.test(correo) != true) {
-            alert('El correo ingresado no tiene un formato válido.')
+            swal("El correo ingresadp no tiene un formato valido", {
+               icon: "warning",
+             });
             return false
          } else if (correo.charAt(0) === ' ') {
-            alert('El correo no puede iniciar con un espacio.');
+            swal("El correo no puede iniciar con un espacio", {
+               icon: "warning",
+             });
             return false
          } else if (correo.charAt(correo.length - 1) === ' ') {
-            alert('El correo no puede terminar con un espacio.');
+            swal("El correp no puede terminar con un espacio", {
+               icon: "warning",
+             });
             return false
          }
       }
       //Telefono validation
       if (!(telefono === null || telefono === '')) {
          if (!telefono.replace(/\s/g, '').length) {
-            alert('El numero de Telefono no puede contener solo espacios.');
+            swal("El numero de telefono no puede contener solo espacios", {
+               icon: "warning",
+             });
             return false
          } else if (telefono.charAt(0) === ' ') {
-            alert('El numero de Telefono no puede iniciar con un espacio.');
+            swal("El numero de telefono no puede iniciar con un espacio", {
+               icon: "warning",
+             });
             return false
          } else if (telefono.charAt(telefono.length - 1) === ' ') {
-            alert('El numero de Telefono no puede terminar con un espacio.');
+            swal("El numero de telefono no puede terminar con un espacio", {
+               icon: "warning",
+             });
             return false
          }
       }
       //Numid validation
       if (!(numid === null || numid === '')) {
          if (!numid.replace(/\s/g, '').length) {
-            alert('El numero de Identidad no puede contener solo espacios.');
+            swal("El numero de Identidad no puede contener solo espacios.", {
+               icon: "warning",
+             });
             return false
          } else if (numid.charAt(0) === ' ') {
-            alert('El numero de Identidad no puede iniciar con un espacio.');
+            swal("El numero de Identidad no puede inicar con un espacios.", {
+               icon: "warning",
+             });
             return false
          } else if (numid.charAt(numid.length - 1) === ' ') {
-            alert('El numero de Identidad no puede terminar con un espacio.');
+            swal("El numero de Identidad no puede terminar con un espacios.", {
+               icon: "warning",
+             });
             return false
          }
       }
       //Estado Civil validation
       if (estado_civil === null || estado_civil === '') {
-         alert('Estado Civil es requerido');
+         swal("Estado civil es requerido", {
+            icon: "warning",
+          });
          return false;
       }
       return true;
@@ -327,7 +369,9 @@ const Expedientes = () => {
          if (validations()) {
             console.log(':)')
             await ExpedientesService.editExpedientes(id, expediente);
-            alert('Expediente Editado');
+            swal("Expedeiente Editado", {
+               icon: "warning",
+             });
             toggleModal22();
             window.location.reload();
          }

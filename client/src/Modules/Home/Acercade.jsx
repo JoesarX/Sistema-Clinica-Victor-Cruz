@@ -1,11 +1,8 @@
 import React from 'react';
 import '../HojaDeEstilos/Acercade.css';
 import 'react-slideshow-image/dist/styles.css';
-import hospital from '../Imagenes/hospital.jpeg';
-import doctor from '../Imagenes/victor_cruz.jpeg';
 import Topbar from './Topbar';
 import Footer from './Footer';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleDot, faGear } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
@@ -33,8 +30,8 @@ const Acercade = () => {
   // const DESC = 'La clínica medica Dr. Victor Cruz fue fundada el 18 de febrero de 1990, bajo el lema de brindar atención primaria a los pobladores de la colonia Kennedy y sus Alrededores, bajo la dirección del Dr. Victor Cruz. Posteriormente, se abrió el servicio de internado vespertino y matutino para brindar un mejor servicio a la población en general.';
   // const ABOUT_DOCTOR = 'El Dr. Victor Cruz se graduó de medico general el 30 de octubre de 1987, en la universidad nacional autónoma de honduras y empezó a laborar como médico de atención primaria el 4 de enero de 1988. Posteriormente saco una maestría en salud Publica , luego saco otra maestría en Epidemiologia; a Continuación, saco una maestría en salud Ocupacional las cuales fueron cursadas en la universidad de León en Nicaragua. También, saco una certificaron en la normas ISO-45001 sobre sistemas de gestión de salud y Seguridad de Trabajadores. Además, obtuvo una certificación de auditor interno de dicha norma.'
   // const TEAM = 'Contamos con un equipo de colaboradores con alta experiencia en la rama de salud para brindar una atención de calidad a los pacientes que requieren de nuestros diferentes servicios, tanto en el área de atención primaria, como en la sección del laboratorio.'
-  const DESC_IMG = hospital;
-  const DOCTOR_IMG = doctor;
+  //const DESC_IMG = hospital;
+  //const DOCTOR_IMG = doctor;
 
   const [isEditingPage, setIsEditingPage] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -387,10 +384,14 @@ const Acercade = () => {
           images2.url = imageUrll;
           console.log("DESC EDITADO");
           await AboutUsService.editImagen(idfotoDesc, images2);
-          alert('Imagen Agregada');
+          swal("Imagen Agregado", {
+            icon: "success",
+          });
           window.location.reload();
         } else {
-          alert('No se ha seleccionado una imagen nueva');
+          swal("No se ha seleccionado una imagen nueva", {
+            icon: "warning",
+          });
         }
       } catch (error) {
         // Handle error if any
@@ -409,10 +410,14 @@ const Acercade = () => {
           images2.url = imageUrll;
           console.log("DOCTOR EDITADO");
           await AboutUsService.editImagen(idfotoDoc, images2);
-          alert('Imagen Agregada');
+          swal("Imagen Agregada", {
+            icon: "success",
+          });
           window.location.reload();
         } else {
-          alert('No se ha seleccionado una imagen nueva');
+          swal("No se ha seleccionado una imagen nueva", {
+            icon: "warning",
+          });
         }
       } catch (error) {
         // Handle error if any

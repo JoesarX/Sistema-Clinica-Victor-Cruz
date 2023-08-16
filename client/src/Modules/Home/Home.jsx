@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
@@ -15,61 +15,36 @@ import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import CarruselService from '../../Services/CarruselService';
 
 import axios from 'axios'; // Import axios library
 
-import { Button, TextField, Modal } from '@mui/material'
+import {Modal } from '@mui/material'
 import {
-    DataGrid, esES, GridCellEditStopReasons, gridColumnsTotalWidthSelector, useGridApiRef
+    DataGrid, esES, GridCellEditStopReasons
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
 
-import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
 import {
     ref,
     uploadBytes,
     getDownloadURL,
     deleteObject,
     getStorage,
-    listAll,
-    list,
 } from "firebase/storage";
 
 import { v4 } from "uuid";
-import { idID } from '@mui/material/locale';
 const Home = () => {
 
 
     const maxDescriptionCharacters = 512;
     const maxDescriptionCharacters2 = 190;
-
-
-    /*const AddButton = () => (
-
-        <button>
-            <AddIcon />
-            Agregar Foto
-        </button>
-    );
-
-    const SaveButton = () => (
-        <button>
-            <SaveIcon />
-            Guardar Cambios
-        </button>
-    );
-    */
-
+    
     /* Para la DB*/
 
     const [isFetching, setIsFetching] = useState(true);
@@ -163,19 +138,25 @@ const Home = () => {
             const trimmedDescription = editedDescription.trim();
 
             if (trimmedTitle === "") {
-                alert("¡Error! El título no puede quedar en blanco.");
+                swal("¡Error! El título no puede quedar en blanco.", {
+                    icon: "error",
+                });
                 return;
             }
 
             if (trimmedDescription === "") {
-                alert("¡Error! La descripción no puede quedar en blanco.");
+                swal("¡Error! La descripcion no puede quedar en blanco.", {
+                    icon: "error",
+                });                
                 return;
             }
 
 
             // Check if the description ends with a period
             if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
-                alert("La descripción debe terminar con un punto.");
+                swal("¡Error! La descripción debe terminar con un punto.", {
+                    icon: "error",
+                });
                 return;
             }
 
@@ -184,19 +165,27 @@ const Home = () => {
                 !/^[A-Z]/.test(trimmedTitle) ||
                 trimmedTitle.length > 20
             ) {
-                alert("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.");
+
+                swal("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.", {
+                    icon: "error",
+                });
                 return;
             }
 
             // Check if there are more than one consecutive spaces in title or description
             if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
-                alert("No se permiten más de un espacio consecutivo en el texto.");
+                
+                swal("Error, No se permiten más de un espacio consecutivo en el texto.", {
+                    icon: "error",
+                });
                 return;
             }
 
             // Check if the description has more than 80 characters
             if (trimmedDescription.length > 190) {
-                alert("La descripción no puede exceder los 190 caracteres.");
+                swal("Error, La descripción no puede exceder los 190 caracteres.", {
+                    icon: "error",
+                });
                 return;
             }
             console.log("Este es el titulo:" + TipoTitulo.texto_campo);
@@ -417,22 +406,30 @@ const Home = () => {
 
     const handleSaveClick = async () => {
         if (editedMission.trim() === '') {
-            alert('¡Error! La misión no puede quedar en blanco.');
+            swal("¡Error! La misión no puede quedar en blanco.", {
+                icon: "error",
+            });
             return;
         }
 
         if (editedMission.length < MIN_MISSION_LENGTH || editedMission.length > MAX_MISSION_LENGTH) {
-            alert(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`);
+            swal(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`, {
+                icon: "error",
+            });
             return;
         }
 
         if (editedMission.split('  ').length > 1) {
-            alert('¡Error! No se pueden dejar espacios dobles en la misión.');
+            swal('¡Error! No se pueden dejar espacios dobles en la misión.', {
+                icon: "error",
+            });
             return;
         }
 
         if (!editedMission.endsWith('.')) {
-            alert('¡Error! La misión debe terminar con un punto.');
+            swal("¡Error! La misión debe terminar con un punto.", {
+                icon: "error",
+            });
             return;
         }
 
@@ -484,7 +481,9 @@ const Home = () => {
         // Extraer el enlace del iframe y validar
         const extractedSrc = extractSrcFromIframe(editedMapURL);
         if (!extractedSrc || !isValidMapURL(extractedSrc)) {
-            alert("Por favor, ingrese un enlace válido de Google Maps.");
+            swal("Por favor, ingrese un enlace válido de Google Maps.", {
+                icon: "error",
+            });
             return;
         }
 
@@ -532,7 +531,9 @@ const Home = () => {
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         if (CarruselData.length >= 10) {
-            alert('Error, no se pueden agregar mas de 10 fotos para el carrusel.');
+            swal("Error, no se pueden agregar mas de 10 fotos para el carrusel.", {
+                icon: "error",
+            });
             return;
         }
         try {
@@ -668,14 +669,12 @@ const Home = () => {
             });
     }
 
-    ////////////////////
-
     const Carrusel = () => {
         if (!isFetching) {
             return (
                 <div className="imagenes">
                     <Slide {...properties}>
-                        {CarruselData.slice(0, 5).map((carrusel) => ( // Display only the first 5 images
+                        {CarruselData.slice(0, 5).map((carrusel) => ( 
                             <div className='each-slide' key={carrusel.idfoto}>
                                 <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
                             </div>

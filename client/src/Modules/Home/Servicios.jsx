@@ -150,13 +150,17 @@ const Servicios = () => {
     
     // Validate and add the new service
     if (!newTitle || !newDescription || !imageUpload) {
-      alert('Porfavor ingrese titulo, descripcion e imagen');
+      swal("Porfavor ingrese titulo, descripcion e imagen", {
+        icon: "warning",
+      });
       return;
     }
     const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
     if (!titleRegex.test(newTitle)) {
       setTitleError(true);
-      alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+      swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio", {
+        icon: "warning",
+      });
       return;
     }
 
@@ -166,14 +170,18 @@ let cleanedDescription = newDescription.trim().replace(/ +$/, ' ');
 
 if (!descriptionRegex.test(cleanedDescription)) {
   setDescriptionError(true);
-  alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+  swal("La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.", {
+    icon: "warning",
+  });
   return;
 }
 
 if (imageUpload != null) {
   const file = imageUpload;
   if (validateImageFormat(file) == false) {
-    alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+    swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
+      icon: "warning",
+    });
     return;
   }
 }
@@ -193,7 +201,9 @@ if (imageUpload != null) {
           }
           console.log(servicio);
           await ServiciosService.postServicios(servicio);
-          alert('Servicio Agregado');
+          swal("Servicio Agregado", {
+            icon: "success",
+          });
           handleModalClose();
           setImagePreview(null);
           window.location.reload();
@@ -201,22 +211,6 @@ if (imageUpload != null) {
           // Handle error if any
           console.log('Error submitting Servicio:', error);
       }
-    /* en duro
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newService = {
-        id: serviceData.length + 1,
-        imageSrc: reader.result,
-        title: newTitle,
-        description: newDescription,
-        hooverComponent: `${serviceData.length + 1}`,
-      };
-      setServiceData([...serviceData, newService]);
-      alert('Service added successfully!');
-      handleModalClose();
-    };
-    reader.readAsDataURL(imageUpload);
-    */
   };
 
   const validateImageFormat = (file) => {
@@ -295,7 +289,9 @@ if (imageUpload != null) {
         const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
         if (!titleRegex.test(editedService.title)) {
           setTitleError(true);
-          alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+          swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.", {
+            icon: "warning",
+          });
           return;
         }
     
@@ -303,13 +299,17 @@ if (imageUpload != null) {
         const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
         if (!descriptionRegex.test(editedService.description)) {
           setDescriptionError(true);
-          alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+          swal("La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.", {
+            icon: "warning",
+          });
           return;
         }
         if (imageUpload != null) {
           const file = imageUpload;
           if (validateImageFormat(file) == false) {
-              alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+            swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
+              icon: "warning",
+            });
               return;
           }
         }
@@ -323,11 +323,15 @@ if (imageUpload != null) {
                 editedService.url = imageUrll;
 
                 await ServiciosService.editServicios(editedService.id, editedService);
-                alert('Servicio Editado');
+                swal("Servicio Editado", {
+                  icon: "success",
+                });
             } else {
               console.log("Entro en else de edit");
               await ServiciosService.editServicios(editedService.id, editedService);
-              alert('Servicio Editado');
+              swal("Servicio Editado", {
+                icon: "success",
+              });
           }
           window.location.reload();
       } catch (error) {
