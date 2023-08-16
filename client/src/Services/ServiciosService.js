@@ -46,9 +46,10 @@ export const editServicios = async (id,servicio) => {
     }
 };
 
-export const deleteServicios = async (id) => {
+export const deleteServicios = async (id, orden) => {
     try {
-         await axios.delete(`${API_URL}/servicios/${id}`);
+         //await axios.delete(`${API_URL}/servicios/${id}`);
+         await axios.delete(`${API_URL}/servicios/${id}`, { data: { orden } });
         
     } catch (error) {
         console.log(error);
