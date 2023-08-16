@@ -18,7 +18,18 @@ const usuariosRouter = (pool) => {
         }
     });
 
-
+    router.get('/usuarios', async (req, res) => {
+        const correo = req.params.correo;
+        const connection = await pool.getConnection();
+        const query = `
+      SELECT * 
+      FROM usuarios
+      WHERE correouser = '${correo}'
+    `;
+        const [rows] = await connection.query(query);
+        connection.release();
+        res.json(rows[0]);
+    });
 
     //Add a new user
     router.post("/usuarios", async (req, res) => {

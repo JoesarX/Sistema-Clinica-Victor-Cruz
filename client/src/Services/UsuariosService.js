@@ -67,17 +67,30 @@ export const loginUsuarios = async (uEmail, uPassword) => {
     }
 };
 
-export const getOneUser = async (id) => {
-    console.log(id);
+export const getOneUser = async (email) => {
     try {
-        const res = await axios.get(`${API_URL}/usuarios/${id}`);
-        return res.data;
-        console.log(res.data);
+        const user = await axios.get(`${API_URL}/usuarios/`, email);
+        const userInfo = user.data
+        const emailEncontrado = userInfo.find(user => user.correouser === email);
+        if (emailEncontrado) {
+            const values = [
+                emailEncontrado.correouser,
+                emailEncontrado.nombre,
+                emailEncontrado.edad,
+                emailEncontrado.pregunta,
+                emailEncontrado.respuesta,
+                emailEncontrado.password
+            ];
+            console.log("V: " + values[0]);
+            console.log("V: " + values[1]);
+            return values;
+        } else {
+            return "";
+        }
     } catch (error) {
-        console.log(error);
-        throw new Error('Failed to fetch user');
+        console.log("Esto da: " + error)
     }
-};
+}
 
 const Services = {
     getAllusuarios,

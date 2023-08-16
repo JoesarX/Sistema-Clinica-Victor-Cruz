@@ -22,13 +22,12 @@ const expedientesRouter = (pool) => {
 
     router.get("/userpage/", async (req, res) => {
         try {
+            const correo = req.params.correo;
             const connection = await pool.getConnection();
-            const email = req.query.email[0];
-            const q = "SELECT idpaciente, nombre, TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, ocupacion FROM expedientes WHERE correo = ?";
-            const result = await connection.query(q, [email]);
+            const q = `SELECT idpaciente, nombre FROM expedientes WHERE correo = '${correo}'`;
+            const [rows] = await connection.query(q);
             connection.release();
-            console.log("Get userpage call successful")
-            res.json(result[0]);
+            res.json(rows);
         } catch (error) {
             console.log("Get userpage call failed. Error: " + error);
             res.status(500).json({ error: "Internal Server Error" });
