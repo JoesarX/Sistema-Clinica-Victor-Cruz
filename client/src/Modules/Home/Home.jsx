@@ -5,6 +5,7 @@ import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
+import { Delete, Menu, Visibility, VisibilityOff } from '@mui/icons-material';
 
 import Topbar from './Topbar';
 import Footer from './Footer';
@@ -21,15 +22,13 @@ import CarruselService from '../../Services/CarruselService';
 
 import axios from 'axios'; // Import axios library
 
-import {Modal } from '@mui/material'
+import { Modal } from '@mui/material'
 import {
     DataGrid, esES, GridCellEditStopReasons
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import swal from 'sweetalert';
-
 import {
     ref,
     uploadBytes,
@@ -46,7 +45,35 @@ const Home = () => {
     const maxDescriptionCharacters2 = 190;
     
     /* Para la DB*/
+    //Aqui van las funciones para el reorder del carrusel +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
 
+    const [CarruselData, setCarruselData] = useState([]);
+    const [draggedIndex, setDraggedIndex] = useState(null);
+
+    const handleToggleVisibility = (index) => {
+        const updatedCarruselData = [...CarruselData];
+        updatedCarruselData[index].isVisible = !updatedCarruselData[index].isVisible;
+        setCarruselData(updatedCarruselData);
+    };
+
+    const handleDragStart = (index) => {
+        setDraggedIndex(index);
+    };
+
+    const handleDragOver = (e, index) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (targetIndex) => {
+        const updatedCarruselData = [...CarruselData];
+        const [draggedItem] = updatedCarruselData.splice(draggedIndex, 1);
+        updatedCarruselData.splice(targetIndex, 0, draggedItem);
+
+        setCarruselData(updatedCarruselData);
+        setDraggedIndex(null);
+    };
+
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     const [isFetching, setIsFetching] = useState(true);
 
     const [titulo1OBJ, setTitulo1OBJ] = React.useState({
@@ -324,7 +351,7 @@ const Home = () => {
 
     const { userType, isLoggedIn } = useContext(AuthContext);
 
-    let [CarruselData, setCarruselData] = useState([]);
+
 
     let [imageUpload, setImageUpload] = useState(null);
     let [imagePreview, setImagePreview] = useState(null);
@@ -723,92 +750,79 @@ const Home = () => {
     return (
         <div className="scrollable-page">
             <Topbar />
-
             <Carrusel />
 
-            <Modal
-                open={modalOpen}
+            <Modal open={modalOpen}
                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 closeAfterTransition BackdropProps={{ onClick: () => { } }}>
                 <div className='modal-container-carrusel modalServicios-carrusel'>
-                    <div className='modified-crudGrid'>
-                        <div>
-                            <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
-                                <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '32%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
-                                    <FontAwesomeIcon icon={faPlus} size="2x" />
-                                    Agregar foto</label>
-                                <input
-                                    type="file"
-                                    onChange={(event) => {
-                                        imageUpload = event.target.files[0];
-                                        imagePreview = URL.createObjectURL(event.target.files[0]);
+                    <h1 style={{ position: 'relative', top: '13%' }}>Carrusel de imágenes</h1>
+                    <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
+                        <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '4%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
+                            <FontAwesomeIcon icon={faPlus} size="2x" />
+                            Agregar foto</label>
+                        <input
+                            type="file"
+                            onChange={(event) => {
+                                imageUpload = event.target.files[0];
+                                imagePreview = URL.createObjectURL(event.target.files[0]);
 
-                                        const selectedFile = event.target.files[0];
-                                        if (selectedFile) {
-                                            handleModalSubmit(event);
-                                        }
-                                    }}
-                                    name='urlfoto'
-                                    id="urlfoto"
-                                    className="customFileInput"
-                                />
-                            </div>
-                            <div className='headerDiv'>
-                                <h2>Carrusel de imágenes</h2>
-                            </div>
+                                const selectedFile = event.target.files[0];
+                                if (selectedFile) {
+                                    handleModalSubmit(event);
+                                }
+                            }}
+                            name='urlfoto'
+                            id="urlfoto"
+                            className="customFileInput"
+                        />
+                    </div>
 
-                            <button className="cancelButton" onClick={handleModalClose}>
-                                <FontAwesomeIcon icon={faTimes} size="2x" />
-                            </button>
-                            <div className='dataGridBox'>
-
-                                <ThemeProvider theme={theme}>
-                                    {CarruselData.length > 0 ? (
-                                        <DataGrid
-                                            rows={CarruselData}
-                                            getRowId={getRowId}
-                                            rowHeight={150}
-
-                                            columns={[
-                                                {
-                                                    field: 'Imagen',
-                                                    headerName: 'Imagen',
-                                                    flex: 5,
-                                                    headerClassName: 'column-header',
-                                                    renderCell: (params) => {
-                                                        const { id, row } = params;
-                                                        urlDelete = row.url;
-                                                        return (
-                                                            <div key={id} >
-                                                                <img src={row.url} class="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
-                                                            </div>
-                                                        );
-                                                    },
-                                                },
-                                                {
-                                                    field: 'status',
-                                                    headerName: '',
-                                                    flex: 1,
-                                                    renderCell: (params) => (
-
-                                                        <IconButton style={{ justifySelf: 'flex-end' }} onClick={() => handleDeleteCarruselImage(params.id, urlDelete)}>
+                    <button className="cancelButton" onClick={handleModalClose}>
+                        <FontAwesomeIcon icon={faTimes} size="2x" />
+                    </button>
+                    <div className='dataListBox'>
+                        <ThemeProvider theme={theme}>
+                            {CarruselData.length > 0 ? (
+                                <div className="carrusel-list-container">
+                                    <ul className="carrusel-list">
+                                        {CarruselData.map((row, index) => (
+                                            <div key={getRowId(row)}>
+                                                <li
+                                                    className={`carrusel-list-item ${index === draggedIndex ? 'dragging' : ''}`}
+                                                    draggable
+                                                    onDragStart={() => handleDragStart(index)}
+                                                    onDragOver={(e) => handleDragOver(e, index)}
+                                                    onDrop={() => handleDrop(index)}
+                                                >
+                                                    <div className={`carrusel-list-item-image ${row.isVisible ? '' : 'hidden'}`}>
+                                                        {row.isVisible && (
+                                                            <img src={row.url} className="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
+                                                        )}
+                                                    </div>
+                                                    <div className="carrusel-list-item-actions">
+                                                        <IconButton onClick={() => handleDeleteCarruselImage(getRowId(row), row.url)}>
                                                             <Delete />
                                                         </IconButton>
-                                                    ),
-                                                },
-                                            ]}
-                                            onCellEditStop={(params, event) => {
-                                                if (params.reason === GridCellEditStopReasons.cellFocusOut) {
-                                                    event.defaultMuiPrevented = true;
-                                                }
-                                            }}
-                                        />
-                                    ) : (
-                                        <p>Cargando carrusel...</p>
-                                    )}
-                                </ThemeProvider>
-                            </div>
-                        </div>
+                                                        <IconButton onClick={() => handleToggleVisibility(index)}>
+                                                            {row.isVisible ? <Visibility /> : <VisibilityOff />}
+                                                        </IconButton>
+                                                        <button className="drag-handle-button" onClick={() => handleDragStart(index)}>
+                                                            <Menu />
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                                <hr className="custom-hr" />
+                                            </div>
+                                        ))}
+                                    </ul>
+
+
+                                </div>
+                            ) : (
+                                <p>Cargando carrusel...</p>
+                            )}
+                        </ThemeProvider>
                     </div>
                 </div >
             </Modal >

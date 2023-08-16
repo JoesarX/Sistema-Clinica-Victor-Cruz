@@ -81,7 +81,7 @@ const Servicios = () => {
       // Call resolve with the imageUrl when the upload is complete
       // Call reject with an error if there's an issue with the upload
       // For example:
-      if (imageUpload == null || imageUpload == "") {
+      if (imageUpload == null || imageUpload === "") {
           //reject(new Error('No file selected for upload'));
           return null;
       }
@@ -313,7 +313,7 @@ if (imageUpload != null) {
               return;
           }
         }
-            if (imageUpload != null && imageUpload != "") {
+            if (imageUpload != null && imageUpload !== "") {
                 if (imageUpload != null) {
                     deleteImg(imageEdit);
                     console.log("Elimina imagen");
