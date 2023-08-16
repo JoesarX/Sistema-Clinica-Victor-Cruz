@@ -111,7 +111,7 @@ const Laboratorio = () => {
             <Topbar />
 
             <div className='header'>
-                NUESTRO CATALAGO DE EXAMENES
+                CATALAGO DE EXAMENES
             </div>
             <div className="catalog-container">
                 {exams.map((exam) => (
