@@ -57,3 +57,18 @@
 .navbar-toggler {
     border: 1px solid white;
 }
+.nav-link{
+    color: aliceblue;
+    font-family: 'Montserrat';
+}
+
+.nav-item-dropdown{
+    position: relative;
+    left: -40%;
+}
+
+.dropdown-item{
+    font-family: 'Montserrat';
+    font-size: medium;
+    color: aliceblue;
+}
