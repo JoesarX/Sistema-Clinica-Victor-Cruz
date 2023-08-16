@@ -203,8 +203,6 @@ const Topbar = () => {
             swal("Error, el texto no puede estar en blanco", {
                 icon: "error",
             });
-
-            //alert("El texto no puede estar en blanco.");
             return; // Exit the function if text is blank
         }
         

@@ -109,10 +109,15 @@ const Examenes = () => {
             });  
             return false
         } else if (titulo.length > 50) {
-            alert('El titulo no puede contener mas de 50 caracteres.');
+            
+            swal("El titulo no puede contener mas de 50 caracteres.", {
+                icon: "warning",
+            });
             return false
         } else if (titulo.length < 3) {
-            alert('El titulo no puede contener menos de 3 caracteres.');
+            swal("El titulo no puede contener menos de 3 caracteres.", {
+                icon: "warning",
+            });
             return false
         } 
         //Precio validations
@@ -150,10 +155,14 @@ const Examenes = () => {
             }); 
             return false
         } else if (descripcion.length > 250) {
-            alert('La Descripcion no puede contener mas de 250 caracteres.');
+            swal("La Descripcion no puede contener mas de 250 caracteres.", {
+                icon: "error",
+            }); 
             return false
         } else if (descripcion.length < 25) {
-            alert('La Descripcion no puede contener menos de 25 caracteres.');
+            swal("La Descripcion no puede contener menos de 25 caracteres.", {
+                icon: "error",
+            }); 
             return false
         } 
 
