@@ -7,6 +7,30 @@
     padding: 20px;
   }
   
+  .scrollable-page {
+    height: 100vh;
+    overflow-y: auto;
+    background-color: #E4EBF9;
+  }
+  
+
+  .header {
+    font-size: 4vw !important;
+    color: #ffff !important;
+    background-color: #677a92;
+    box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+    text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
+    margin-top: 0 !important;
+    justify-items: center !important;
+    align-items: center !important;
+    justify-content: center !important;
+    display: flex;
+    text-align: center !important;
+    font-weight: 700;
+    padding-top: 1.5vh;
+    padding-bottom: 1.5vh;
+  }
+  
   .buttons {
     display: flex;
     align-items: center;

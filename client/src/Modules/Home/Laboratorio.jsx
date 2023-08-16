@@ -3,6 +3,10 @@ import '../HojaDeEstilos/Laboratorio.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+import Topbar from './Topbar';
+import Footer from './Footer';
+
+
 const Laboratorio = () => {
     const [cartItems, setCartItems] = useState([]);
     const [selectedExams, setSelectedExams] = useState([]);
@@ -101,17 +105,14 @@ const Laboratorio = () => {
     };
 
     return (
-        <div className="container">
-            <header className="header">
-                <div className="logo">Logo</div>
-                <nav>
-                    <div className="buttons">
-                        <button onClick={handleVolverClick}>Volver a Inicio</button>
-                        <button onClick={handleCotizarClick}>Cotizar</button>
-                    </div>
-                </nav>
-            </header>
+        <div className="scrollable-page">
 
+
+            <Topbar />
+
+            <div className='header'>
+                NUESTRO CATALAGO DE EXAMENES
+            </div>
             <div className="catalog-container">
                 {exams.map((exam) => (
                     <div className="exam-card" key={exam.id}>
@@ -146,6 +147,8 @@ const Laboratorio = () => {
                     </button>
                 </div>
             )}
+
+            <Footer />
         </div>
     );
 };
