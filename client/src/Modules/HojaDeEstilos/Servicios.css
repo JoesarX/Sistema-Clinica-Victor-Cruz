@@ -23,9 +23,26 @@
   padding-bottom: 1.5vh;
 }
 
+.dragged-service {
+  transform: scale(0.8);
+  transition: transform 0.3s ease-in-out;
+}
+.draggable {
+  cursor: grab;
+}
+
+.draggable:active {
+  cursor: grabbing;
+  transform: scale(0.8); /* Example shrinking effect */
+}
+
+.dragged-over {
+  transform: translateY(-30px); /* Example: Create space for dragged service */
+  transition: transform 0.3s ease-in-out;
+}
 .info {
   display: flex;
-  justify-content: center;
+  justify-content: center; 
   align-content: center;
   font-size: 1.5vw;
   color: darkslategrey;
@@ -43,6 +60,7 @@
   height: 300px;
   margin: 2vw;
   text-align: center;
+  transition: transform 0.3s ease-in-out;
 }
 
 .services img {
