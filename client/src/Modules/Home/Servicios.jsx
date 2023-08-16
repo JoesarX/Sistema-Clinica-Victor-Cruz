@@ -562,7 +562,7 @@ const Servicios = () => {
           {isLoggedIn && userType !== 'normal' && showButtons && (
             <div className='button-addSCont'>
               <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
-              <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Guardar Cambios</button>
+              <button className='buttonE button-addS' onClick={{}}>Guardar Cambios</button>
             </div>
           )}
           <div className='button-gearCont'>
