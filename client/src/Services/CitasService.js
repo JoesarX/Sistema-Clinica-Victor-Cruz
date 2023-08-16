@@ -15,6 +15,20 @@ export const getAllCitas = async () => {
     }
 };
 
+export const getAllCitasFiltered = async (status) => {
+    try {
+        console.log("In Service getAllCitasFiltered")
+        console.log("Url: " + `${API_URL}/citas/citasPasadas/${status}`)
+        const res = await axios.get(`${API_URL}/citas/citasPasadas/${status}`);
+        console.log("SUCCESS FETCHING FILTERED MEDICAMENTOS");
+        console.log(res.data);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch citas');
+    }
+};
+
 export const getOneCita = async (id) => {
     console.log(id);
     try {
@@ -25,6 +39,17 @@ export const getOneCita = async (id) => {
         throw new Error('Failed to fetch cita');
     }
 };
+
+export const filterCita = async (estado) => {
+    try {
+        const res = await axios.get(`${API_URL}/citas/filtrarCitasTabla/${estado}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch cita');
+    }
+};
+
 
 export const postCitas = async (cita) => {
     try {
@@ -65,8 +90,21 @@ export const getAvailableTimes = async (date, id = null) => {
         console.log(date);
         const url = id ? `${API_URL}/citas/availableTimes/${date}?id=${id}` : `${API_URL}/citas/availableTimes/${date}`;
         const res = await axios.get(url);
-        console.log("SUCCESS FETCHING AVAILABLE TIMES");
-        console.log(res.data);
+        
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch Times');
+    }
+};
+
+export const getUserExpCitas = async (correouser) => {
+    try {
+        console.log("In Service get citas de expedientes linked a usuarios");
+        console.log(correouser);
+        const res = await axios.get(`${API_URL}/citas/citasexpedientes/${correouser}`);
+        
+        
         return res.data;
     } catch (error) {
         console.log(error);
@@ -95,12 +133,15 @@ export const getCheckAvailability = async (fecha, hora, idcita = null) => {
 
 const Services = {
     getAllCitas,
+    getAllCitasFiltered,
     postCitas,
     getOneCita,
     deleteCitas,
     editCitas,
     getAvailableTimes,
-    getCheckAvailability
+    filterCita,
+    getCheckAvailability,
+    getUserExpCitas
     // Other functions
 };
 

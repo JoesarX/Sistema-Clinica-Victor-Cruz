@@ -9,15 +9,14 @@ const usuariosRouter = (pool) => {
             const sqlSelect = "SELECT * FROM usuarios ";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            console.log("Get all usuarios Successfull");
             res.json(rows);
         } catch (err) {
+            console.log("Get all usuarios Failed. Error: " + err);
             console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-    
-
-  
 
 
 
@@ -37,25 +36,28 @@ const usuariosRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
+            console.log("Post usuarios Successfull");
             res.json("Usuario añadido exitosamente!");
         } catch (err) {
-            console.log(err);
+            console.log("Post usuarios Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-     //Login
-     router.get("/usuarios",async (req,res)=>{
-        try{
+    //Login
+    router.get("/usuarios", async (req, res) => {
+        try {
             const connection = await pool.getConnection();
-            const q = "SELECT * FROM usuarios WHERE correouser = `"+{req}+"`";
+            const q = "SELECT * FROM usuarios WHERE correouser = `" + { req } + "`";
             await connection.query(q);
             connection.release();
+            console.log("Login Successfull");
             res.json("Verificando");
-        }catch(error){
-            console.log("fijate acá:"+ error)
+        } catch (error) {
+            console.log("Login Failed. Error: " + error);
+            res.status(500).json({ error: "Internal Server Error" });
         }
     });
-    
+
     return router;
 };
 

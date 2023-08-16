@@ -7,25 +7,44 @@ import adminRouter from "./routes/usuarios_admin.js"
 import medicamentosRouter from "./routes/medicamentos.js";
 import citasRouter from "./routes/citas.js";
 import categoriesRouter from "./routes/categories.js";
-import serviciosRouter from "./routes/servicios.js";
+import textos_cmdRouter from "./routes/textos_cmd.js";
+import ServiciosRouter from "./routes/servicios.js";
+import CarruselRouter from "./routes/carrusel.js";
+import AboutUsRouter from "./routes/aboutus.js";
+import examenes from "./routes/examenes.js"
+
+import nodemailer from "nodemailer";
+
 
 const app = express();
 const port = process.env.PORT || 8000;
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}!`);
 });
 
 //LOCALHOST MYSQL CONNECTION
- /*const pool = mysql.createPool({
-   host: "localhost",
-   user: "root",
-   password: "password",
-   database: "softwaredb",
-   waitForConnections: true,
-   connectionLimit: 10,
-   queueLimit: 0,
- });*/
+/*const pool = mysql.createPool({
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "softwaredb",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});*/
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.net",
+  port: 465,
+  secure: true,
+  auth: {
+    user: 'ClinicaVictorCruz@gmail.com',
+    pass: 'hljvucilzplqaedf'
+  }
+});
 
 //HEROKU MYSQL CONNECTION
 const pool = mysql.createPool({
@@ -47,14 +66,21 @@ app.get("/", (req, res) => {
 
 app.use("/expedientes", expedientesRouter(pool)); // Pass the pool object as a parameter
 
-app.use("/usuarios", usuariosRouter(pool)); 
-app.use("/usuarios_admin", adminRouter(pool)); 
+app.use("/usuarios", usuariosRouter(pool));
+app.use("/usuarios_admin", adminRouter(pool));
 
-app.use("/medicamentos", medicamentosRouter(pool)); 
+app.use("/medicamentos", medicamentosRouter(pool));
 
-app.use("/citas", citasRouter(pool)); 
-app.use("/medicamentos", medicamentosRouter(pool)); // Pass the pool object as a parameter
+app.use("/citas", citasRouter(pool, transporter));
+
 app.use("/categorias", categoriesRouter(pool)); // Pass the pool object as a parameter
-app.use("/servicios", serviciosRouter(pool));
+
+app.use('/servicios', ServiciosRouter(pool));
+app.use('/texto_cmd', textos_cmdRouter(pool));
+app.use('/carrusel', CarruselRouter(pool));
+app.use('/aboutus', AboutUsRouter(pool));
+
+app.use('/examenes', examenes(pool));
+
 
 

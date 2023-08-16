@@ -78,6 +78,7 @@ const Medicamentos = () => {
         setOpenPopup(true);
     }
 
+
     const handleDeleteMedicamentosClick = (row, id) => {
         swal({
             title: "¿Estás seguro?",

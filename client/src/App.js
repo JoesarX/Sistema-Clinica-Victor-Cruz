@@ -22,6 +22,8 @@ import CitasTabla from "./Modules/CitasTabla/CitasTabla";
 import Dashboard from "./Modules/Dashboard/Dashboard";
 import Contactanos from "./Modules/Home/Contactanos";
 import Prueba from "./Modules/CMD/prueba";
+import HistorialCita from "./Modules/CitasTabla/HistorialCita";
+import Examenes from "./Modules/Examenes/Examenes";
 
 function App() {
   return (
@@ -43,9 +45,11 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/contactanos" element={<Contactanos />} />
           <Route path="/userpage" element={<LandingPage />} />
-          <Route path="/citas_tabla" element={<CitasTabla/>}/>
-          <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc/>}/>
-          <Route path="*" element={<p>No encontramos lo que buscas:(</p>} />
+          <Route path="/citas_tabla" element={<CitasTabla />} />
+          <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc />} />
+          <Route path="/citas_tabla/historial_cita" element={<HistorialCita />} />
+          <Route path="/examenes" element={<Examenes />} />
+          <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
         </Routes>
       </BrowserRouter>
     </div>

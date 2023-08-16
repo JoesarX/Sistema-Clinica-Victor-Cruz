@@ -22,6 +22,19 @@
   box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
 }
 
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add-button,
+.save-button {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
 .about-us-content {
   display: flex;
   flex-direction: column;
@@ -50,7 +63,7 @@
   justify-content: center;
   font-size: 50px;
   color: #1E60A6;
-  height: fit-content;
+  height: moz-fit-content;
   width: 100%;
   align-items: center;
   justify-content: center;
@@ -122,7 +135,7 @@
 }
 
 .services-container {
-  height: fit-content;
+  height: moz-fit-content;
   width: 90vw;
   max-width: 2000px;
   display: flex;
@@ -139,7 +152,7 @@
 }
 
 .button-container {
-  height: fit-content;
+  height: moz-fit-content;
   width: 90vw;
   max-width: 2000px;
   display: flex;
@@ -235,6 +248,7 @@
   padding: 50px;
   margin: 50px auto 20px auto;
   gap: 20px;
+  overflow-x: hidden;
   /* TEMPORAL */
   /* background-color: rgb(0, 255, 0, 0.3);
   background-size: 10px 10px;
@@ -297,6 +311,18 @@
   padding-bottom: 10px;
 }
 
+.innerCard {
+  position: relative;
+  width: 100%;
+  height: auto;
+  max-width: 2000px;
+  left: 50%;
+  transform: translateX(-50%);
+  /*box-shadow: 12px 0 15px -4px rgba(0, 0, 0, 0.3),
+    -12px 0 15px -4px rgba(0, 0, 0, 0.3);*/
+  padding-bottom: 10px;
+}
+
 .each-slide img {
   width: 100%;
   height: 70vh;
@@ -304,6 +330,47 @@
   max-width: 2000px;
   object-fit: cover;
 }
+
+/* CARRUSEL */
+.modalServicios-carrusel {
+  min-width: 80%;
+  min-height: 80%;
+  width: 80%;
+  height: 80%;
+  max-width: 1600px;
+  overflow: hidden;
+}
+
+.modal-container-carrusel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: 80vh;
+  padding: 20px;
+  background-color: #E4EBF9;
+  border-radius: 10px;
+}
+
+.modified-crudGrid {
+  background-color: rgb(227, 235, 248);
+  height: 100%;
+  width: 100%;
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  border: none;
+  flex-direction: column;
+}
+
+.carrusel-crud-image-img {
+  height: 140px;
+  width: 140px;
+  border: 0.5px solid #1E60A6
+}
+
+/* /////////////////////// */
 
 /* GOTTA USE THAT SPACE PROPERLY! */
 @media only screen and (min-width: 780px) and (max-width: 1260px) {
@@ -341,7 +408,7 @@
 
   .service-header {
     position: static;
-    height: fit-content;
+    height: moz-fit-content;
     padding: 0;
     margin-bottom: 5px;
   }
@@ -411,6 +478,7 @@
 
   .home-about-us-container {
     flex-direction: column;
+    overflow-x: hidden;
   }
 
   .about-us-content {
@@ -419,12 +487,13 @@
 
   .service-container {
     width: 20vw;
-    height: fit-content;
+    height:moz-fit-content;
     gap: 0 !important;
+    overflow-x: hidden;
   }
 
   .service-header {
-    height: fit-content;
+    height: moz-fit-content;
     padding: 0;
     align-items: center;
   }
@@ -455,5 +524,7 @@
   .content-header {
     flex-direction: column;
     text-align: center;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 }
