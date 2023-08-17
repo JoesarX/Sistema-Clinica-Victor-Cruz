@@ -6,8 +6,9 @@
   overflow-y: auto;
   background-color: #E4EBF9;
 }
+
 .header {
-  font-size: 4vw !important;
+  font-size: 4vw;
   color: #ffff !important;
   background-color: #677a92;
   box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
@@ -313,7 +314,7 @@
 
 @media (max-width: 768px) {
   .header {
-    font-size: 6vw !important;
+    font-size: 6vw;
     text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
     padding-top: 3vh;
     padding-bottom: 3vh;
