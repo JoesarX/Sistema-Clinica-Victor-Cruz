@@ -25,7 +25,7 @@ const LandingPage = () => {
     console.log("ESTE ES EL CORREO: " + correo);
 
     let contador = 0;
-
+    const [data, setData] = useState([]);
     const [expediente, setExpediente] = React.useState({
         idpaciente: '',
         nombre: '',
@@ -85,12 +85,8 @@ const LandingPage = () => {
             },
         ],
     });
-
-    const [schAppointments, setSchAppointments] = useState([{
-        date: '',
-        time: '',
-        description: ''
-    }
+    const [cFuturas, setCFuturas] = useState([]);
+    const [schAppointments, setSchAppointments] = useState([
     ]);
     const [prevAppointments, setPrevAppointments] = useState([{
         date: '2023-05-17',
@@ -180,15 +176,37 @@ const LandingPage = () => {
                 const expedienteData = await ExpedientesService.getOneUser(email);
                 const futuraCita = await Services.getUserExpCitas(email[0]);
 
+                console.log(futuraCita);
 
+                setData(futuraCita.map((cita) => ({
+                    date: cita.fecha,
+                    time: cita.hora,
+                    description: cita.nombre_persona
+                })))
 
-                schAppointments.description=futuraCita.nombre_persona;
-                schAppointments.time=futuraCita.hora;
-                schAppointments.date=futuraCita.fecha;
+                console.log(data);
+                setSchAppointments(data);
+                setCFuturas(data);
+                console.log(cFuturas);
 
-                console.log("Fecha: "+ schAppointments.date);
-                console.log("Hora: "+ schAppointments.time);
-                console.log("Descripción: "+ schAppointments.description);
+                // console.log( futuraCita[0].fecha)
+                // console.log( futuraCita[0].hora)
+                // console.log( futuraCita[0].nombre_persona)
+                //  setSchAppointments(futuraCita=>({
+                //      ...futuraCita,
+                //      date: futuraCita.fecha,
+                //     time :futuraCita.hora ,
+                //     description : futuraCita.nombre_persona
+
+                //  }));
+                console.log(schAppointments);
+
+                // schAppointments.description=futuraCita.nombre_persona;
+                // schAppointments.time=futuraCita.hora;
+                // schAppointments.date=futuraCita.fecha;
+
+                console.log("info citas " + schAppointments);
+
 
                 console.log("Citas Futuas: " + futuraCita.idcita);
                 console.log("DATA OBTENIDA POR QUERY: " + expedienteData);
@@ -231,10 +249,21 @@ const LandingPage = () => {
         return new Date(date).toLocaleDateString("es-HN", datePrefs);
     }
 
-    const formatAppointmentDate = (date) => {
-        var datePrefs = { month: 'short', day: 'numeric' };
-        return new Date(date).toLocaleDateString("es-HN", datePrefs).toLocaleUpperCase();
-    }
+    const formatAppointmentDate = (dateString) => {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return "DIA NO VALIDO";
+        }
+        const options = { month: 'short', day: 'numeric' };
+        const formattedDate = date.toLocaleDateString("es-HN", options).toUpperCase();
+        return formattedDate;
+    };
+    const formatAppointmentTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':');
+        const date = new Date(0, 0, 0, hours, minutes);
+
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    };
 
 
     const handleOpenEditModal = () => {
@@ -295,14 +324,14 @@ const LandingPage = () => {
                     <div className='appointments-container'>
                         <div className='box-title appointments-title'>Citas Agendadas</div>
                         <div className='appointments'>
-                            {schAppointments.map((appointment, index) => (
+                            {data.map((appointment, index) => (
                                 <div key={index} className='appointment'>
                                     <div className='appointment-date'>
-                                        {formatAppointmentDate(schAppointments.date)}
+                                        {formatAppointmentDate(appointment.date)}
                                     </div>
                                     <div className='appointment-details'>
-                                        <span>{schAppointments.description}</span>
-                                        <span className='appointment-light-text'>{schAppointments.time}</span>
+                                        <span>{appointment.description}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
                                     </div>
                                 </div>
                             ))}
@@ -316,7 +345,7 @@ const LandingPage = () => {
                                     </div>
                                     <div className='appointment-details'>
                                         <span>{appointment.description}</span>
-                                        <span className='appointment-light-text'>{appointment.time}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
                                         <span className='appointment-light-text'>{appointment.medicalExplanation}</span>
                                         <span className='appointment-light-text'>{appointment.medicine}</span>
                                     </div>
