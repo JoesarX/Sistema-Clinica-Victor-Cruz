@@ -224,14 +224,17 @@ const LandingPage = () => {
                         <h3 className='archivostit'>Expedientes relacionados al perfil</h3>
                     </div>
                     <ul className="file-list">
-                        {usuarios.map((usuario => {
-                            let indice = cont;
-                            cont++;
-                            <div key={indice} className='file-item-line'>
-                                <li className='lifile'>{usuario.nombre}</li>
-                                {indice !== usuarios.length - 1 && <hr className='divider'></hr>}
-                            </div>
-                        }))}
+                        {usuarios.map((usuario, index) => {
+
+                            return (
+                                <div key={usuario.idPaciente}>
+                                    <li>{usuario.nombre}</li>
+                                    {index !== usuarios.length - 1 && (
+                                        <hr className="divider" />
+                                    )}
+                                </div>
+                            )
+                        })}
                     </ul>
                 </div>
                 <div className="appointments-section">

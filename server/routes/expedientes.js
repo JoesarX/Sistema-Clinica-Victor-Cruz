@@ -20,14 +20,24 @@ const expedientesRouter = (pool) => {
         }
     });
 
-    router.get("/userpage/", async (req, res) => {
+    router.get("/userpage/:correo", async (req, res) => {
         try {
             const correo = req.params.correo;
             const connection = await pool.getConnection();
-            const q = `SELECT idpaciente, nombre FROM expedientes WHERE correo = '${correo}'`;
-            const [rows] = await connection.query(q);
+            const q = `
+            SELECT idpaciente, nombre 
+            FROM expedientes 
+            WHERE correo = ?
+          `;
+            const [rows] = await connection.query(q, [correo]);
+            const data = rows.map(row => {
+                return {
+                    idPaciente: row.idpaciente,
+                    nombre: row.nombre
+                }
+            })
             connection.release();
-            res.json(rows);
+            res.json(data);
         } catch (error) {
             console.log("Get userpage call failed. Error: " + error);
             res.status(500).json({ error: "Internal Server Error" });

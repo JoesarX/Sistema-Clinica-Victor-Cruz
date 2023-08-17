@@ -26,8 +26,8 @@ export const getOneExpediente = async (id) => {
 
 export const getExpedientes = async (email) => {
     try {
-        const expedientes = await axios.get(`${API_URL}/expedientes/userpage/`, email);
-        console.log("ARREGLO OBTENIDO: " + expedientes.data);
+        const expedientes = await axios.get(`${API_URL}/expedientes/userpage/${email}`);
+        console.log(JSON.stringify(expedientes));
         return expedientes.data;
     } catch (error) {
         console.log(error);
