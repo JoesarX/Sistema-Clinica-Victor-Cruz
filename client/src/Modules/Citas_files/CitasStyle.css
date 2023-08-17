@@ -222,11 +222,13 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 
 .fc-event-main>.event-line-container>.event-line-time-label {
   font-weight: 700;
-  font-size: 1.4vh;
+  /* font-size: 1.4vh; */
+  font-size: 75%;
 }
 
 .fc-event-main>.event-line-container>.event-line-title-label {
-  font-size: 1.5vh;
+  /* font-size: 1.5vh; */
+  font-size: 75%;
   color: rgb(32, 20, 139);
 }
 
