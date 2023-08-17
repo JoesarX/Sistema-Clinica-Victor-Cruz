@@ -114,6 +114,7 @@ const Laboratorio = () => {
             <div className='header'>
                 CATALAGO DE EXAMENES
             </div>
+            <div className="empty-space-top"></div>
             <div className="catalog-container">
                 {exams.map((exam) => (
                     <div className="exam-card" key={exam.id}>
@@ -130,9 +131,9 @@ const Laboratorio = () => {
 
                         <h2>{exam.name}</h2>
                         <p>{exam.description}</p>
-                        <div className="price">{`Price: $${exam.price}`}</div>
+                        <div className="price">{`Precio: Lps.${exam.price}`}</div>
                         <div className="quantity">
-                            <span>Unidad: </span>
+                            <span>Unidadades: </span>
                             <button onClick={() => decreaseQuantity(exam)}>-</button>
                             <span>{cartItems.find((item) => item.id === exam.id)?.quantity || 0}</span>
                             <button onClick={() => addToCart(exam)}>+</button>
@@ -149,6 +150,7 @@ const Laboratorio = () => {
                 </div>
             )}
 
+            <div className="empty-space-bottom"></div>
             <Footer />
         </div>
     );

@@ -16,6 +16,14 @@
 }
 
 
+.empty-space-top {
+  margin-top: 20px; /* Ajusta el valor según lo que necesites */
+}
+
+.empty-space-bottom {
+  margin-bottom: 60px; /* Ajusta el valor según lo que necesites */
+}
+
 .header {
   font-size: 4vw !important;
   color: #ffff !important;
@@ -82,6 +90,7 @@
   grid-gap: 20px;
   margin-top: 20px;
   align-items: center;
+  margin: 0 35px;
 }
 
 
