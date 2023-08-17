@@ -53,8 +53,10 @@ const Servicios = () => {
   const [isSubmitting3, setIsSubmitting3] = useState(false);
   const [isEyeOpen, setIsEyeOpen] = useState(true);
 
-  const toggleEye = () => {
+  const toggleEye = (arrayServicio) => {
     setIsEyeOpen((prevState) => !prevState);
+    console.log(arrayServicio);
+    toggleServiceVisibility(arrayServicio);
   };
 
   const handleModalOpen = () => {
@@ -166,10 +168,25 @@ const Servicios = () => {
   }
 
   //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
-  const toggleServiceVisibility = (serviceId) => {
-    //
-    //
-    //
+  const toggleServiceVisibility = async (arrayServicio) => {
+    arrayServicio.visibility = isEyeOpen;
+    if (!visibilityFlag && isEyeOpen) {
+      swal("Solo pueden haber 5 Servicios visibles", {
+        icon: "warning",
+      });
+    } else {
+      try {
+        console.log(arrayServicio);
+        await ServiciosService.editServicios(arrayServicio.id, arrayServicio);
+        swal("Visibilidad Editada", {
+          icon: "success",
+        });
+        window.location.reload();
+      } 
+      catch (error) {
+        console.log('Error submitting servicio:', error);
+      }
+    }
   }
 
 
@@ -484,7 +501,7 @@ const Servicios = () => {
             >
               <img src={service.url} alt={service.title} />
               <div className="overlay">
-                <Button style={{position: 'absolute', bottom: '85%', left: '85%'}} onClick={toggleEye}>
+                <Button style={{position: 'absolute', bottom: '85%', left: '85%'}} onClick={() => toggleEye(service)}>
                   {isEyeOpen ? <Visibility /> : <VisibilityOff />}
                 </Button>
                 <h2>{service.title}</h2>
