@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import esLocale from '@fullcalendar/core/locales/es';
 import NavBar from '../NavBar';
 import Footer from '../Home/Footer';
 import CitasService from '../../Services/CitasService';
-import './CitasStyle.css';
 import Filtro from './Filtrar_Citas';
+import CitasCalendar from './CitasCalendar';
 
 const Citas_Doc = () => {
-  const [citas, setCitas] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(true);
   const [formattedEvents, setFormattedEvents] = useState([]);
-  const [currentFilter, setCurrentFilter] = useState('Ver Todas');
-  const [showAllCitas, setShowAllCitas] = useState(true);
   const [filter, setFilter] = useState('Ver Todas');
 
   const handleFilterChange = (newFilter) => {
@@ -30,7 +21,6 @@ const Citas_Doc = () => {
           ...cita,
           medId: cita.idmed,
         }));
-        setCitas(citasWithId);
         processEvents(citasWithId);
       } catch (error) {
         console.log("Error fetching citas:", error);
@@ -42,7 +32,6 @@ const Citas_Doc = () => {
           ...cita,
           medId: cita.idmed,
         }));
-        setCitas(citasWithId);
         processEvents(citasWithId);
       } catch (error) {
         console.log('Error fetching filtered citas:', error);
@@ -60,7 +49,12 @@ const Citas_Doc = () => {
       const timeString = cita.hora;
       const [time, meridiem] = timeString.split(' ');
       const [hour, minute] = time.split(':');
-      const hour24 = parseInt(hour) + (meridiem === 'PM' ? 12 : 0);
+      let hour24 = parseInt(hour);
+
+      if (hour24 !== 12) {
+        hour24 += (meridiem === 'PM' ? 12 : 0);
+      }
+
       horaParts = [hour24.toString(), minute];
 
       const startDateTime = new Date(
@@ -72,7 +66,7 @@ const Citas_Doc = () => {
       );
 
       // Calculate the ending time to be 40 minutes after the starting time
-      const endDateTime = new Date(startDateTime.getTime() + 29 * 60000); // 40 minutes in milliseconds
+      const endDateTime = new Date(startDateTime.getTime() + 30 * 60000); // 40 minutes in milliseconds
 
       return {
         title: `${cita.nombre_persona}`,
@@ -90,55 +84,14 @@ const Citas_Doc = () => {
   return (
     <div className="App">
       <NavBar />
-      <h1 className="header">Calendario de Citas</h1>
+      <h1 className="calendar-page-header header">Calendario de Citas</h1>
       <div>
         <Filtro onFilterChange={handleFilterChange} />
       </div>
       <main>
-        <div className="cal-container">
-          <div className="cal">
-            <FullCalendar
-              headerToolbar={{
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay',
-              }}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              initialView="dayGridMonth"
-              locale={esLocale}
-              slotDuration="00:30:00"
-              slotLabelFormat={{
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              }}
-              eventTimeFormat={{
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              }}
-              slotMinTime="07:00:00"
-              slotMaxTime="17:00:00"
-              allDaySlot={false}
-              events={formattedEvents}
-              nowIndicator={true}
-
-              slotLabelClassNames={"custom-time-size"}
-              slotLaneClassNames={"custom-time-size"}
-
-              eventContent={(eventInfo) => (
-                <>
-                  <div style={{ fontSize: '11px', lineHeight: '1.2' }}>{eventInfo.timeText}</div>
-                  <div style={{ fontSize: '15px', lineHeight: '1.2' }}>{eventInfo.event.title}</div>
-                </>
-              )}
-            />
-          </div>
-        </div>
+        <CitasCalendar events={formattedEvents} isDoctor={true}/>
       </main>
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 };
