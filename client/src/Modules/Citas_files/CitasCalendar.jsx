@@ -4,7 +4,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 
-const CitasCalendar = ({ events, isDoctor=true }) => {
+const CitasCalendar = ({ events, isDoctor = true }) => {
 
     let views = 'dayGridMonth,timeGridWeek,timeGridThreeDay';
     let eventColor = '';
@@ -71,21 +71,12 @@ const CitasCalendar = ({ events, isDoctor=true }) => {
                 eventColor={eventColor}
 
                 eventContent={(eventInfo) => (
-                    isDoctor ? (
-                        <>
-                            <div className='event-line-container'>
-                                <div class="event-line-time-label">{eventInfo.timeText}</div>
-                                <div class="event-line-title-label">{eventInfo.event.title}</div>
-                            </div>
-                        </>) :
-                        (
-
-                            <>
-                                <div className='event-line-container reserved'>
-                                    <div class="event-line-time-label">{eventInfo.timeText}</div>
-                                </div>
-                            </>
-                        )
+                    <>
+                        <div className='event-line-container'>
+                            <div class="event-line-time-label">{eventInfo.timeText}</div>
+                            <div class="event-line-title-label">{eventInfo.event.title}</div>
+                        </div>
+                    </>
                 )}
             />
         </div>
