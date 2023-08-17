@@ -6,10 +6,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-footer {
-  margin-top: 2em;
-}
-
 .calendar-page-header {
   font-size: 48px !important;
 }
@@ -24,6 +20,7 @@ footer {
 .fc {
   font-family: 'Inter';
   overflow-y: visible;
+  margin-bottom: 50px;
 }
 
 .fc-button {
@@ -111,7 +108,9 @@ footer {
   padding: 5px;
   background-color: rgba(188, 200, 255, 0.5);
   font-size: 14px;
-  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .fc .fc-event-main:hover {
@@ -225,6 +224,7 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 
 
 .fc-event-main>.event-line-container>.event-line-time-label {
+  font-weight: 700;
   font-size: 15px;
 }
 

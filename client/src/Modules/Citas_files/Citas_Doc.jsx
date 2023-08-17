@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import esLocale from '@fullcalendar/core/locales/es';
 import NavBar from '../NavBar';
 import Footer from '../Home/Footer';
 import CitasService from '../../Services/CitasService';
-import './CitasStyle.css';
 import Filtro from './Filtrar_Citas';
+import CitasCalendar from './CitasCalendar';
 
 const Citas_Doc = () => {
-  const [citas, setCitas] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(true);
   const [formattedEvents, setFormattedEvents] = useState([]);
-  const [currentFilter, setCurrentFilter] = useState('Ver Todas');
-  const [showAllCitas, setShowAllCitas] = useState(true);
   const [filter, setFilter] = useState('Ver Todas');
 
   const handleFilterChange = (newFilter) => {
@@ -30,7 +21,6 @@ const Citas_Doc = () => {
           ...cita,
           medId: cita.idmed,
         }));
-        setCitas(citasWithId);
         processEvents(citasWithId);
       } catch (error) {
         console.log("Error fetching citas:", error);
@@ -42,7 +32,6 @@ const Citas_Doc = () => {
           ...cita,
           medId: cita.idmed,
         }));
-        setCitas(citasWithId);
         processEvents(citasWithId);
       } catch (error) {
         console.log('Error fetching filtered citas:', error);
@@ -100,74 +89,9 @@ const Citas_Doc = () => {
         <Filtro onFilterChange={handleFilterChange} />
       </div>
       <main>
-        <div class='cal-container'>
-
-          <FullCalendar
-
-            headerToolbar={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'dayGridMonth,timeGridWeek,timeGridThreeDay',
-            }}
-
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-
-            initialView="dayGridMonth"
-
-            views={{
-              timeGridThreeDay: {
-                type: 'timeGrid',
-                duration: { days: 3 },
-                buttonText: 'Día'
-              }
-            }}
-
-            locale={esLocale}
-
-            slotDuration="00:30:00"
-
-            slotLabelFormat={{
-              hour: 'numeric',
-              minute: '2-digit',
-              hour12: true,
-            }}
-
-            eventTimeFormat={{
-              hour: 'numeric',
-              minute: '2-digit',
-              hour12: true,
-            }}
-
-            slotMinTime="07:00:00"
-            slotMaxTime="16:30:00"
-
-            allDaySlot={false}
-            events={formattedEvents}
-            nowIndicator={true}
-
-            dayMaxEventRows={6}
-
-            eventMinHeight={50}
-            eventMinWidth={'100%'}
-
-            height={'auto'}
-
-            hiddenDays={[0]}
-
-            eventContent={(eventInfo) => (
-              <>
-                <div className='event-line-container'>
-                  <div class="event-line-time-label">{eventInfo.timeText}</div>
-                  <div class="event-line-title-label">{eventInfo.event.title}</div>
-                </div>
-              </>
-            )}
-          />
-        </div>
+        <CitasCalendar events={formattedEvents} isDoctor={true}/>
       </main>
-      <footer>
-        <Footer />
-      </footer>
+      <Footer />
     </div>
   );
 };
