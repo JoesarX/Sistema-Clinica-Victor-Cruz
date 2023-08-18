@@ -26,6 +26,7 @@ const LandingPage = () => {
 
     let contador = 0;
     const [data, setData] = useState([]);
+    const [data2, setData2] = useState([]);
     const [expediente, setExpediente] = React.useState({
         idpaciente: '',
         nombre: '',
@@ -177,17 +178,29 @@ const LandingPage = () => {
                 const futuraCita = await Services.getUserExpCitas(email[0]);
 
                 console.log(futuraCita);
-
-                setData(futuraCita.map((cita) => ({
+               // futuraCita=futuraCita.filter(futuraCita=>futuraCita.estado=== "Pendiente");
+               const validar_Futura = futuraCita.filter(futuraCita=>futuraCita.estado=== "Pendiente");
+               const validar_Pasadas = futuraCita.filter(futuraCita=>futuraCita.estado=== "Terminada" ||futuraCita.estado=== "Expirada" );
+                setData(validar_Futura.map((cita) => ({
                     date: cita.fecha,
                     time: cita.hora,
                     description: cita.nombre_persona
                 })))
 
+                //para citas pasadas
+                setData2(validar_Pasadas.map((cita) => ({
+                    date: cita.fecha,
+                    time: cita.hora,
+                    description: cita.nombre_persona
+                })))
                 console.log(data);
                 setSchAppointments(data);
                 setCFuturas(data);
                 console.log(cFuturas);
+            
+               
+
+               
 
                 // console.log( futuraCita[0].fecha)
                 // console.log( futuraCita[0].hora)
@@ -338,7 +351,7 @@ const LandingPage = () => {
                         </div>
                         <div className='box-title appointments-title'>Citas Previas</div>
                         <div className='appointments'>
-                            {prevAppointments.map((appointment, index) => (
+                            {data2.map((appointment, index) => (
                                 <div key={index} className='appointment prev-appointment'>
                                     <div className='appointment-date'>
                                         {formatAppointmentDate(appointment.date)}
@@ -346,8 +359,7 @@ const LandingPage = () => {
                                     <div className='appointment-details'>
                                         <span>{appointment.description}</span>
                                         <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
-                                        <span className='appointment-light-text'>{appointment.medicalExplanation}</span>
-                                        <span className='appointment-light-text'>{appointment.medicine}</span>
+                                        
                                     </div>
                                 </div>
                             ))}
