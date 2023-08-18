@@ -54,7 +54,7 @@ const Servicios = () => {
   const [isEyeOpen, setIsEyeOpen] = useState(true);
 
   const toggleEye = (arrayServicio) => {
-    setIsEyeOpen((prevState) => !prevState);
+    //setIsEyeOpen((prevState) => !prevState);
     console.log(arrayServicio);
     toggleServiceVisibility(arrayServicio);
   };
@@ -169,12 +169,13 @@ const Servicios = () => {
 
   //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
   const toggleServiceVisibility = async (arrayServicio) => {
-    arrayServicio.visibility = isEyeOpen;
     if (!visibilityFlag && isEyeOpen) {
       swal("Solo pueden haber 5 Servicios visibles", {
         icon: "warning",
       });
     } else {
+      setIsEyeOpen((prevState) => !prevState);
+      arrayServicio.visibility = isEyeOpen;
       try {
         console.log(arrayServicio);
         await ServiciosService.editServicios(arrayServicio.id, arrayServicio);
