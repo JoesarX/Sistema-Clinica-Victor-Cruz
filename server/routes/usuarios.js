@@ -18,6 +18,7 @@ const usuariosRouter = (pool) => {
         }
     });
 
+    
 
 
     //Add a new user
