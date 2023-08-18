@@ -5,9 +5,10 @@ import Topbar from './Topbar';
 import Footer from './Footer';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPhone, faEnvelope, faEdit, faSave, faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
-import { faWhatsapp, faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faWhatsapp} from '@fortawesome/free-brands-svg-icons';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
+import swal from 'sweetalert';
 
 
 
@@ -32,17 +33,17 @@ const Contactanos = () => {
     };
 
 
-    const [whaOBJ, setWhaOBJ] = React.useState({
+    const [whaOBJ] = React.useState({
         Tipo: 'WHA',
         texto_campo: ''
     })
 
-    const [numOBJ, setNumOBJ] = React.useState({
+    const [numOBJ] = React.useState({
         Tipo: 'Footer_Telefono',
         texto_campo: ''
     })
 
-    const [correoOBJ, setCorreoOBJ] = React.useState({
+    const [correoOBJ] = React.useState({
         Tipo: 'Footer_Correo',
         texto_campo: ''
     })
@@ -80,7 +81,11 @@ const Contactanos = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
-            alert('El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
+            swal("El número telefonico no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.", {
+                icon: "error",
+            });
+            
+            
         }
     };
 
@@ -119,7 +124,10 @@ const Contactanos = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid WhatsApp number case
-            alert('El número de WhatsApp no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.');
+           
+            swal('El número de WhatsApp no es válido. Asegúrate de que sea un número de 8 dígitos, empiece con +504, tenga un espacio después de los primeros 4 dígitos y un guión después del cuarto dígito.', {
+                icon: "error",
+            });
         }
     };
 
@@ -160,7 +168,9 @@ const Contactanos = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
-            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).');
+            swal('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).', {
+                icon: "error",
+            });
         }
     };
 

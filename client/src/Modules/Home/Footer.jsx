@@ -8,6 +8,8 @@ import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
 
 
+import swal from 'sweetalert';
+
 const Topbar = () => {
 
     /* Funciones para toggle los botones de editar*/
@@ -81,7 +83,10 @@ const Topbar = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid address case
-            alert('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").');
+            swal('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").', {
+                icon: "error",
+            });
+           
         }
     };
 
@@ -123,7 +128,10 @@ const Topbar = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
-            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos básicos de un correo electrónico válido.');
+            swal('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).', {
+                icon: "error",
+            });
+            
         }
     };
 
@@ -161,7 +169,10 @@ const Topbar = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
-            alert('El número de teléfono no es válido. Asegúrate de que empiece con +504, tenga 8 dígitos y después de los primeros 4 dígitos vaya un guion y luego el resto de los dígitos.');
+            swal('El número de teléfono no es válido. Asegúrate de que empiece con +504, tenga 8 dígitos y después de los primeros 4 dígitos vaya un guion y luego el resto de los dígitos.'    , {
+                icon: "error",
+            });
+           
         }
     };
 
@@ -188,6 +199,13 @@ const Topbar = () => {
     };
 
     const handleSaveText = async () => {
+        if (!editedText.trim()) {
+            swal("Error, el texto no puede estar en blanco", {
+                icon: "error",
+            });
+            return; // Exit the function if text is blank
+        }
+        
         setIsEditing3(false);
         setYear(editedText); // Update the selected text after saving
         await text_Services.editText(copyOBJ);

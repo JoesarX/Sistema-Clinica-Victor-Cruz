@@ -4,9 +4,11 @@ import { TextField, Grid, Button, Box, TextareaAutosize } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../AuthContext.js';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import '../HojaDeEstilos/Servicios.css';
+
 import { storage } from '../../firebase';
 import 'firebase/compat/storage';
 import {
@@ -15,8 +17,6 @@ import {
   getDownloadURL,
   deleteObject,
   getStorage,
-  listAll,
-  list,
 } from "firebase/storage";
 import { v4 } from "uuid";
 import swal from 'sweetalert';
@@ -24,23 +24,22 @@ import swal from 'sweetalert';
 import ServiciosService from '../../Services/ServiciosService.js';
 
 const Servicios = () => {
-
-  
-
   const { isLoggedIn, userType } = useContext(AuthContext);
   const [titleError, setTitleError] = useState(false);
   const [descriptionError, setDescriptionError] = useState(false);
   const [showButtons, setShowButtons] = useState(false);
-  const [servicios, setServicios] = useState([]);
   const [servicio, setServicio] = useState({
     url: '',
     title: '',
     description: '',
+    orden: '',
+    visibility: '',
     id: ''
   });
 
   const [serviceData, setServiceData] = useState([]);
-
+  const [serviceDataFlagged, setServiceDataFlagged] = useState([]);
+  const [visibilityFlag, setVisibilityFlag] = useState(true);
   const [isModalOpen, setModalOpen] = useState(false);
   const [editedService, setEditedService] = useState(null);
   const [newTitle, setNewTitle] = useState('');
@@ -52,10 +51,22 @@ const Servicios = () => {
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [isSubmitting3, setIsSubmitting3] = useState(false);
+  const [isEyeOpen, setIsEyeOpen] = useState(true);
+
+  const toggleEye = () => {
+    setIsEyeOpen((prevState) => !prevState);
+  };
 
   const handleModalOpen = () => {
-    setImagePreview(null);
-    setModalOpen(true);
+    //Validar que no este en el maximo de servicios
+    console.log("Length: " + serviceData.length);
+    if (serviceData.length < 10) {
+      setImagePreview(null);
+      setModalOpen(true);
+    }
+    else {
+      alert('Ha llegado al maximo de servicios, porfavor eliminar un servicio si desea agregar uno nuevo');
+    }
   };
 
   const handleModalClose = () => {
@@ -71,47 +82,147 @@ const Servicios = () => {
     setImagePreview(null);
   };
 
+  //HANDLE DRAG AND DROP==============================================
+  const [draggedIndex, setDraggedIndex] = useState(null);
+  const [updatedOrdenArray, setUpdatedOrdenArray] = useState(null);
+
+  const handleDragStart = (e, index) => {
+    e.dataTransfer.setData('index', index);
+    setDraggedIndex(index);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (index !== draggedIndex) {
+      setServiceData((prevData) => {
+        const newData = [...prevData];
+        const [movedService] = newData.splice(draggedIndex, 1);
+        newData.splice(index, 0, movedService);
+        return newData;
+      });
+      setDraggedIndex(index);
+      const updatedOrder = serviceData.map((service, newIndex) => ({
+        ...service,
+        orden: newIndex,
+      }));
+      setUpdatedOrdenArray(updatedOrder);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+  };
+
+  const updateServiceOrderInDatabase = async () => {
+    if (updatedOrdenArray) {
+      try {
+        await Promise.all(updatedOrdenArray.map(async (service) => {
+          console.log("Changing service order for ID:", service.id);
+
+          const changedService = compareArrays(serviceData, updatedOrdenArray);
+
+          if (changedService) {
+            console.log("Service to update:", changedService);
+
+            changedService.orden = changedService.copyOrden;
+            const serviceString = JSON.stringify(changedService);
+            console.log("Updated service data:", serviceString);
+            swal({
+              title: 'Orden de Servicios Editado',
+              icon: 'success',
+            });
+
+            await ServiciosService.editServicios(changedService.id, changedService);
+          }
+        }));
+        window.location.reload();
+      } catch (error) {
+        console.log("Error updating service order:", error);
+      }
+    } else {
+      console.log("updatedOrdenArray is null");
+    }
+  };
+
+  function compareArrays(originalArray, copyArray) {
+    const differentOrdenObjects = [];
+
+    originalArray.forEach(originalObj => {
+      const copyObj = copyArray.find(copyObj => copyObj.id === originalObj.id);
+
+      if (copyObj && originalObj.orden !== copyObj.orden) {
+        differentOrdenObjects.push({
+          ...originalObj, // Copy all attributes from the original object
+          originalOrden: originalObj.orden,
+          copyOrden: copyObj.orden
+        });
+      }
+    });
+    return differentOrdenObjects;
+  }
+
+  //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
+  const toggleServiceVisibility = (serviceId) => {
+    //
+    //
+    //
+  }
+
 
   //IMAGENES CODE --------------------------------------------------->
 
   async function uploadFile() {
 
     return new Promise((resolve, reject) => {
-      // Your file upload logic here
-      // Call resolve with the imageUrl when the upload is complete
-      // Call reject with an error if there's an issue with the upload
-      // For example:
-      if (imageUpload == null || imageUpload == "") {
-          //reject(new Error('No file selected for upload'));
-          return null;
+      if (imageUpload === null || imageUpload === "") {
+        return null;
       }
 
       const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
       uploadBytes(imageRef, imageUpload)
-          .then((snapshot) => getDownloadURL(snapshot.ref))
-          .then((url) => {
-              resolve(url);
-          })
-          .catch((error) => reject(error));
+        .then((snapshot) => getDownloadURL(snapshot.ref))
+        .then((url) => {
+          resolve(url);
+        })
+        .catch((error) => reject(error));
     });
   };
 
   //CODE IMAGEN FINAL ---------------------------------------------------------------->
 
+
+
   const fetchAllServicios = async () => {
     try {
-        const servicioData = await ServiciosService.getAllServicios();
-        const serviciosWithId = servicioData.map((servicio) => ({
-            ...servicio,
-        }));
-        console.log(serviciosWithId+"HOLA EDUARDO NOSE");
-        serviciosWithId.forEach((servicio) => {
-          console.log(servicio);
-        });
-        setServiceData(serviciosWithId);
-      } catch (error) {
-        // Handle error if any
-        console.log("Error fetching servicios:", error);
+      const servicioData = await ServiciosService.getAllServicios();
+      const serviciosWithId = servicioData.map((servicio) => ({
+        ...servicio,
+      }));
+      /*
+      console.log(serviciosWithId + "HOLA EDUARDO NOSE");
+      serviciosWithId.forEach((servicio) => {
+        console.log(servicio);
+      });
+      */
+      setServiceData(serviciosWithId);
+      console.log(serviceData);
+      const filteredServicios = serviciosWithId.filter(servicio => servicio.visibility === 1);
+      setServiceDataFlagged(filteredServicios);
+      const countVisible = serviciosWithId.filter(item => item.visibility === 1).length;
+      console.log(`Number of objects with visibility set to true: ${countVisible}`);
+      if (countVisible < 5) {
+        setVisibilityFlag(true);
+      }
+      else {
+        setVisibilityFlag(false);
+      }
+    } catch (error) {
+      // Handle error if any
+      console.log("Error fetching servicios:", error);
     }
   };
 
@@ -119,104 +230,91 @@ const Servicios = () => {
   useEffect(() => {
     fetchAllServicios();
     if (isSubmitting) {
-        fetchAllServicios();
+      fetchAllServicios();
     }
   }, [isSubmitting]);
 
   const handleAddNewService = async (event) => {
     event.preventDefault();
-        try {
-            console.log("test");
-            submitServicio();
-        } catch (error) {
-            // Handle error if any
-            console.log('Error submitting Servicio:', error);
-      }
+    try {
+      console.log("test");
+      submitServicio();
+    } catch (error) {
+      // Handle error if any
+      console.log('Error submitting Servicio:', error);
+    }
   }
 
   useEffect(() => {
     if (isSubmitting2) {
-        console.log("test");
-        submitServicio();
+      console.log("test");
+      submitServicio();
     }
   }, [isSubmitting2]);
 
-  const maxDescriptionCharacters = 200;
-  const maxTitleCharacters = 35;
-
   const submitServicio = async (event) => {
 
-   
-    
     // Validate and add the new service
     if (!newTitle || !newDescription || !imageUpload) {
-      alert('Porfavor ingrese titulo, descripcion e imagen');
+      swal("Porfavor ingrese titulo, descripcion e imagen", {
+        icon: "warning",
+      });
       return;
     }
     const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
     if (!titleRegex.test(newTitle)) {
       setTitleError(true);
-      alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+      swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio", {
+        icon: "warning",
+      });
       return;
     }
 
     // Validate description
-const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
-let cleanedDescription = newDescription.trim().replace(/ +$/, ' ');
+    const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+    let cleanedDescription = newDescription.trim().replace(/ +$/, ' ');
 
-if (!descriptionRegex.test(cleanedDescription)) {
-  setDescriptionError(true);
-  alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
-  return;
-}
+    if (!descriptionRegex.test(cleanedDescription)) {
+      setDescriptionError(true);
+      alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+      return;
+    }
 
-if (imageUpload != null) {
-  const file = imageUpload;
-  if (validateImageFormat(file) == false) {
-    alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
-    return;
-  }
-}
-
-      console.log("Entra a agregar despues de validaciones");
-      try {
-          if (imageUpload != null) {
-              const imageUrll = await uploadFile();
-              setServicio(() => ({
-                  url: imageUrll,
-                  title: newTitle,
-                  description: newDescription,
-              }));
-              servicio.title = newTitle;
-              servicio.description = newDescription;
-              servicio.url = imageUrll;
-          }
-          console.log(servicio);
-          await ServiciosService.postServicios(servicio);
-          alert('Servicio Agregado');
-          handleModalClose();
-          setImagePreview(null);
-          window.location.reload();
-      } catch (error) {
-          // Handle error if any
-          console.log('Error submitting Servicio:', error);
+    if (imageUpload != null) {
+      const file = imageUpload;
+      if (validateImageFormat(file) === false) {
+        alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+        return;
       }
-    /* en duro
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const newService = {
-        id: serviceData.length + 1,
-        imageSrc: reader.result,
-        title: newTitle,
-        description: newDescription,
-        hooverComponent: `${serviceData.length + 1}`,
-      };
-      setServiceData([...serviceData, newService]);
-      alert('Service added successfully!');
+    }
+
+    console.log("Entra a agregar despues de validaciones");
+    try {
+      if (imageUpload != null) {
+        const imageUrll = await uploadFile();
+        setServicio(() => ({
+          url: imageUrll,
+          title: newTitle,
+          description: newDescription,
+          orden: serviceData.length,
+          visibility: true,
+        }));
+        servicio.title = newTitle;
+        servicio.description = newDescription;
+        servicio.url = imageUrll;
+        servicio.orden = serviceData.length;
+        servicio.visibility = visibilityFlag;
+      }
+      console.log(servicio);
+      await ServiciosService.postServicios(servicio);
+      alert('Servicio Agregado');
       handleModalClose();
-    };
-    reader.readAsDataURL(imageUpload);
-    */
+      setImagePreview(null);
+      window.location.reload();
+    } catch (error) {
+      // Handle error if any
+      console.log('Error submitting Servicio:', error);
+    }
   };
 
   const validateImageFormat = (file) => {
@@ -224,68 +322,73 @@ if (imageUpload != null) {
     const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
 
     if (!allowedFormats.includes(file.type)) {
-        console.log('La imagen debe estar en formato JPG, JPEG o PNG');
-        return false;
+      console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+      return false;
     }
 
     if (file.size > maxSizeInBytes) {
-        console.log('La imagen no debe superar los 5MB de tamaño');
-        return false;
+      console.log('La imagen no debe superar los 5MB de tamaño');
+      return false;
     }
     return true;
   };
 
-  const handleDeleteService = (id, url) => {
+  const handleDeleteService = (id, url, orden) => {
     swal({
-        title: "¿Estás seguro?",
-        text: "Una vez borrado, no podrás recuperar esta información.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
+      title: "¿Estás seguro?",
+      text: "Una vez borrado, no podrás recuperar esta información.",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
     })
-        .then(async (willDelete) => {
-            if (willDelete) {
-                try {
-                      await ServiciosService.deleteServicios(id);
-                      console.log(url);
-                      deleteImg(url);
-                    swal("Servicio eliminado exitosamente!", {
-                        icon: "success",
-                    });
-                    window.location.reload();
-                } catch (error) {
-                    swal("Error al eliminar el servicio. Por favor, inténtalo de nuevo más tarde.", {
-                        icon: "error",
-                    });
-                }
-            } else {
-                swal("¡Tu información no se ha borrado!");
+      .then(async (willDelete) => {
+        if (willDelete) {
+          try {
+            console.log(id);
+            console.log("DELETE THIS URL: " + url);
+            console.log("Orden: " + orden);
+            await ServiciosService.deleteServicios(id, orden);
+            if (url != null) {
+              console.log("DELETE THIS URL no es null: " + url);
+              deleteImg(url);
             }
-        });
+            swal("Servicio eliminado exitosamente!", {
+              icon: "success",
+            });
+            window.location.reload();
+          } catch (error) {
+            swal("Error al eliminar el servicio. Por favor, inténtalo de nuevo más tarde.", {
+              icon: "error",
+            });
+          }
+        } else {
+          swal("¡Tu información no se ha borrado!");
+        }
+      });
   };
   const storage = getStorage();
   const deleteImg = (refUrl) => {
-      const imageRef = ref(storage, refUrl)
-      deleteObject(imageRef)
-          .catch((error) => {
-              console.log("Failed to delete image: ", error)
-          })
-      window.location.reload();
+    const imageRef = ref(storage, refUrl)
+    deleteObject(imageRef)
+      .catch((error) => {
+        console.log("Failed to delete image: ", error)
+      })
+    //window.location.reload();
   }
 
   const handleSaveEdit = async (e) => {
     e.preventDefault();
     try {
-        submitEditServicio();
+      submitEditServicio();
     } catch (error) {
-        // Handle error if any
-        console.log('Error submitting servicio:', error);
+      // Handle error if any
+      console.log('Error submitting servicio:', error);
     }
   };
 
   useEffect(() => {
     if (isSubmitting3) {
-        submitEditServicio();
+      submitEditServicio();
     }
   }, [isSubmitting3]);
 
@@ -295,7 +398,9 @@ if (imageUpload != null) {
         const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
         if (!titleRegex.test(editedService.title)) {
           setTitleError(true);
-          alert('El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.');
+          swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.", {
+            icon: "warning",
+          });
           return;
         }
     
@@ -303,17 +408,21 @@ if (imageUpload != null) {
         const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
         if (!descriptionRegex.test(editedService.description)) {
           setDescriptionError(true);
-          alert('La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.');
+          swal("La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.", {
+            icon: "warning",
+          });
           return;
         }
         if (imageUpload != null) {
           const file = imageUpload;
           if (validateImageFormat(file) == false) {
-              alert('La imagen debe estar en formato JPG y no exceder 5mb de tamaño')
+            swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
+              icon: "warning",
+            });
               return;
           }
         }
-            if (imageUpload != null && imageUpload != "") {
+            if (imageUpload != null && imageUpload !== "") {
                 if (imageUpload != null) {
                     deleteImg(imageEdit);
                     console.log("Elimina imagen");
@@ -323,11 +432,15 @@ if (imageUpload != null) {
                 editedService.url = imageUrll;
 
                 await ServiciosService.editServicios(editedService.id, editedService);
-                alert('Servicio Editado');
+                swal("Servicio Editado", {
+                  icon: "success",
+                });
             } else {
               console.log("Entro en else de edit");
               await ServiciosService.editServicios(editedService.id, editedService);
-              alert('Servicio Editado');
+              swal("Servicio Editado", {
+                icon: "success",
+              });
           }
           window.location.reload();
       } catch (error) {
@@ -355,24 +468,68 @@ if (imageUpload != null) {
       </div>
 
       <div>
-        {serviceData.map((service) => (
-          <div className='services' id={service.hooverComponent} key={service.id}>
-            <img src={service.url} alt={service.title} />
-            <div className="overlay">
-              <h2>{service.title}</h2>
-              <p className='desc'>{service.description}</p>
-              {isLoggedIn && userType !== 'normal' && showButtons && (
-                <>
-                  <div className='buttonCont'>
-                    <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
-                    <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url)}>Borrar Servicio</button>
-                  </div>
-                </>
-              )}
+        {showButtons
+          ? serviceData.map((service, index) => (
+            <div
+              className={`services ${showButtons ? 'draggable' : ''}`}
+              id={service.hooverComponent}
+              key={service.id}
+              draggable={showButtons}
+              data-index={index}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={handleDrop}
+              style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
+            >
+              <img src={service.url} alt={service.title} />
+              <div className="overlay">
+                <Button style={{position: 'absolute', bottom: '85%', left: '85%'}} onClick={toggleEye}>
+                  {isEyeOpen ? <Visibility /> : <VisibilityOff />}
+                </Button>
+                <h2>{service.title}</h2>
+                <p className='desc'>{service.description}</p>
+                {isLoggedIn && userType !== 'normal' && showButtons && (
+                  <>
+                    <div className='buttonCont'>
+                      <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
+                      <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+          : serviceDataFlagged.map((service, index) => (
+            <div
+              className={`services ${showButtons ? 'draggable' : ''}`}
+              id={service.hooverComponent}
+              key={service.id}
+              draggable={showButtons}
+              data-index={index}
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragEnd={handleDragEnd}
+              onDragOver={(e) => handleDragOver(e, index)}
+              onDrop={handleDrop}
+              style={{ transform: draggedIndex === index ? 'translateY(-10px)' : '' }}
+            >
+              <img src={service.url} alt={service.title} />
+              <div className="overlay">
+                <h2>{service.title}</h2>
+                <p className='desc'>{service.description}</p>
+                {isLoggedIn && userType !== 'normal' && showButtons && (
+                  <>
+                    <div className='buttonCont'>
+                      <button className='buttonE' onClick={() => handleEditService(service)}>Editar Servicio</button>
+                      <button className='buttonE' onClick={() => handleDeleteService(service.id, service.url, service.orden)}>Borrar Servicio</button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          ))}
       </div>
+
 
 
       {isLoggedIn && userType !== 'normal' && (
@@ -409,8 +566,8 @@ if (imageUpload != null) {
                     <input
                       type="file"
                       onChange={(event) => {
-                          setImageUpload(event.target.files[0]);
-                          setImagePreview(URL.createObjectURL(event.target.files[0]));
+                        setImageUpload(event.target.files[0]);
+                        setImagePreview(URL.createObjectURL(event.target.files[0]));
                       }}
                       name='urlfoto'
                       id="urlfoto"
@@ -419,11 +576,7 @@ if (imageUpload != null) {
                     <label onClick={cancelarFotoA} className="cFL" style={{ marginTop: '0.45rem' }}>Eliminar Imagen</label>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField id="titulo" label="Titulo" variant="outlined" value={newTitle} 
-                    onChange={(e) => setNewTitle(e.target.value)} name='nombre' 
-                    required style={{ marginBottom: '0.45rem', width: '90%' }}
-                    inputProps={{ maxLength: maxTitleCharacters }}
-                     />
+                    <TextField id="titulo" label="Titulo" variant="outlined" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} name='nombre' required style={{ marginBottom: '0.45rem', width: '90%' }} />
                     <TextareaAutosize
                       id="descripcion"
                       aria-label="Descripcion"
@@ -433,7 +586,6 @@ if (imageUpload != null) {
                       value={newDescription}
                       onChange={(e) => setNewDescription(e.target.value)}
                       style={{ marginBottom: '0.45rem', width: '90%', height: '260px', padding: '6px 12px', border: '1px solid #ccc', borderRadius: '4px' }}
-                      maxLength={maxDescriptionCharacters}
                     />
                   </Grid>
 
@@ -456,6 +608,7 @@ if (imageUpload != null) {
           {isLoggedIn && userType !== 'normal' && showButtons && (
             <div className='button-addSCont'>
               <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
+              <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Guardar Cambios</button>
             </div>
           )}
           <div className='button-gearCont'>
@@ -499,8 +652,8 @@ if (imageUpload != null) {
                   <input
                     type="file"
                     onChange={(event) => {
-                        setImageUpload(event.target.files[0]);
-                        setImagePreview(URL.createObjectURL(event.target.files[0]));
+                      setImageUpload(event.target.files[0]);
+                      setImagePreview(URL.createObjectURL(event.target.files[0]));
                     }}
                     name='urlfoto'
                     id="urlfoto"
@@ -517,7 +670,6 @@ if (imageUpload != null) {
                     name='nombre'
                     required
                     style={{ marginBottom: '0.45rem', width: '90%' }}
-                    inputProps={{ maxLength: maxTitleCharacters }}
                   />
                   <TextareaAutosize
                     id="descripcion"
@@ -535,7 +687,6 @@ if (imageUpload != null) {
                       border: '1px solid #ccc',
                       borderRadius: '4px',
                     }}
-                    maxLength={maxDescriptionCharacters}
                   />
                 </Grid>
               </Grid>

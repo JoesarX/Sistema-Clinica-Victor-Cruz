@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import '../HojaDeEstilos/Home.css';
 import { useNavigate } from 'react-router-dom';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
+import { Delete, Menu, Visibility, VisibilityOff } from '@mui/icons-material';
 
 import Topbar from './Topbar';
 import Footer from './Footer';
@@ -15,63 +16,64 @@ import { faUserDoctor } from '@fortawesome/free-solid-svg-icons';
 import { faStethoscope } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { faEdit, faSave, faTimes, faCog } from '@fortawesome/free-solid-svg-icons';
-import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import CarruselService from '../../Services/CarruselService';
 
 import axios from 'axios'; // Import axios library
 
-import { Button, TextField, Modal } from '@mui/material'
+import { Modal } from '@mui/material'
 import {
-    DataGrid, esES, GridCellEditStopReasons, gridColumnsTotalWidthSelector, useGridApiRef
+    DataGrid, esES, GridCellEditStopReasons
 } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
-
-import { CompressOutlined, LegendToggleSharp } from '@mui/icons-material';
 import {
     ref,
     uploadBytes,
     getDownloadURL,
     deleteObject,
     getStorage,
-    listAll,
-    list,
 } from "firebase/storage";
 
 import { v4 } from "uuid";
-import { idID } from '@mui/material/locale';
 const Home = () => {
 
 
     const maxDescriptionCharacters = 512;
     const maxDescriptionCharacters2 = 190;
-
-
-    /*const AddButton = () => (
-
-        <button>
-            <AddIcon />
-            Agregar Foto
-        </button>
-    );
-
-    const SaveButton = () => (
-        <button>
-            <SaveIcon />
-            Guardar Cambios
-        </button>
-    );
-    */
-
+    
     /* Para la DB*/
+    //Aqui van las funciones para el reorder del carrusel +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
 
+    const [CarruselData, setCarruselData] = useState([]);
+    const [draggedIndex, setDraggedIndex] = useState(null);
+
+    const handleToggleVisibility = (index) => {
+        const updatedCarruselData = [...CarruselData];
+        updatedCarruselData[index].isVisible = !updatedCarruselData[index].isVisible;
+        setCarruselData(updatedCarruselData);
+    };
+
+    const handleDragStart = (index) => {
+        setDraggedIndex(index);
+    };
+
+    const handleDragOver = (e, index) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (targetIndex) => {
+        const updatedCarruselData = [...CarruselData];
+        const [draggedItem] = updatedCarruselData.splice(draggedIndex, 1);
+        updatedCarruselData.splice(targetIndex, 0, draggedItem);
+
+        setCarruselData(updatedCarruselData);
+        setDraggedIndex(null);
+    };
+
+    //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     const [isFetching, setIsFetching] = useState(true);
 
     const [titulo1OBJ, setTitulo1OBJ] = React.useState({
@@ -163,19 +165,25 @@ const Home = () => {
             const trimmedDescription = editedDescription.trim();
 
             if (trimmedTitle === "") {
-                alert("¡Error! El título no puede quedar en blanco.");
+                swal("¡Error! El título no puede quedar en blanco.", {
+                    icon: "error",
+                });
                 return;
             }
 
             if (trimmedDescription === "") {
-                alert("¡Error! La descripción no puede quedar en blanco.");
+                swal("¡Error! La descripcion no puede quedar en blanco.", {
+                    icon: "error",
+                });                
                 return;
             }
 
 
             // Check if the description ends with a period
             if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
-                alert("La descripción debe terminar con un punto.");
+                swal("¡Error! La descripción debe terminar con un punto.", {
+                    icon: "error",
+                });
                 return;
             }
 
@@ -184,19 +192,27 @@ const Home = () => {
                 !/^[A-Z]/.test(trimmedTitle) ||
                 trimmedTitle.length > 20
             ) {
-                alert("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.");
+
+                swal("Asegúrate de que el título inicie con mayúscula y que no exceda los 20 caracteres.", {
+                    icon: "error",
+                });
                 return;
             }
 
             // Check if there are more than one consecutive spaces in title or description
             if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
-                alert("No se permiten más de un espacio consecutivo en el texto.");
+                
+                swal("Error, No se permiten más de un espacio consecutivo en el texto.", {
+                    icon: "error",
+                });
                 return;
             }
 
             // Check if the description has more than 80 characters
             if (trimmedDescription.length > 190) {
-                alert("La descripción no puede exceder los 190 caracteres.");
+                swal("Error, La descripción no puede exceder los 190 caracteres.", {
+                    icon: "error",
+                });
                 return;
             }
             console.log("Este es el titulo:" + TipoTitulo.texto_campo);
@@ -335,7 +351,7 @@ const Home = () => {
 
     const { userType, isLoggedIn } = useContext(AuthContext);
 
-    let [CarruselData, setCarruselData] = useState([]);
+
 
     let [imageUpload, setImageUpload] = useState(null);
     let [imagePreview, setImagePreview] = useState(null);
@@ -417,22 +433,30 @@ const Home = () => {
 
     const handleSaveClick = async () => {
         if (editedMission.trim() === '') {
-            alert('¡Error! La misión no puede quedar en blanco.');
+            swal("¡Error! La misión no puede quedar en blanco.", {
+                icon: "error",
+            });
             return;
         }
 
         if (editedMission.length < MIN_MISSION_LENGTH || editedMission.length > MAX_MISSION_LENGTH) {
-            alert(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`);
+            swal(`¡Error! La misión debe tener entre ${MIN_MISSION_LENGTH} y ${MAX_MISSION_LENGTH} caracteres.`, {
+                icon: "error",
+            });
             return;
         }
 
         if (editedMission.split('  ').length > 1) {
-            alert('¡Error! No se pueden dejar espacios dobles en la misión.');
+            swal('¡Error! No se pueden dejar espacios dobles en la misión.', {
+                icon: "error",
+            });
             return;
         }
 
         if (!editedMission.endsWith('.')) {
-            alert('¡Error! La misión debe terminar con un punto.');
+            swal("¡Error! La misión debe terminar con un punto.", {
+                icon: "error",
+            });
             return;
         }
 
@@ -484,7 +508,9 @@ const Home = () => {
         // Extraer el enlace del iframe y validar
         const extractedSrc = extractSrcFromIframe(editedMapURL);
         if (!extractedSrc || !isValidMapURL(extractedSrc)) {
-            alert("Por favor, ingrese un enlace válido de Google Maps.");
+            swal("Por favor, ingrese un enlace válido de Google Maps.", {
+                icon: "error",
+            });
             return;
         }
 
@@ -532,7 +558,9 @@ const Home = () => {
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         if (CarruselData.length >= 10) {
-            alert('Error, no se pueden agregar mas de 10 fotos para el carrusel.');
+            swal("Error, no se pueden agregar mas de 10 fotos para el carrusel.", {
+                icon: "error",
+            });
             return;
         }
         try {
@@ -668,14 +696,12 @@ const Home = () => {
             });
     }
 
-    ////////////////////
-
     const Carrusel = () => {
         if (!isFetching) {
             return (
                 <div className="imagenes">
                     <Slide {...properties}>
-                        {CarruselData.slice(0, 5).map((carrusel) => ( // Display only the first 5 images
+                        {CarruselData.slice(0, 5).map((carrusel) => ( 
                             <div className='each-slide' key={carrusel.idfoto}>
                                 <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
                             </div>
@@ -724,92 +750,79 @@ const Home = () => {
     return (
         <div className="scrollable-page">
             <Topbar />
-
             <Carrusel />
 
-            <Modal
-                open={modalOpen}
+            <Modal open={modalOpen}
                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 closeAfterTransition BackdropProps={{ onClick: () => { } }}>
                 <div className='modal-container-carrusel modalServicios-carrusel'>
-                    <div className='modified-crudGrid'>
-                        <div>
-                            <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
-                                <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '32%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
-                                    <FontAwesomeIcon icon={faPlus} size="2x" />
-                                    Agregar foto</label>
-                                <input
-                                    type="file"
-                                    onChange={(event) => {
-                                        imageUpload = event.target.files[0];
-                                        imagePreview = URL.createObjectURL(event.target.files[0]);
+                    <h1 style={{ position: 'relative', top: '13%' }}>Carrusel de imágenes</h1>
+                    <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
+                        <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '4%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
+                            <FontAwesomeIcon icon={faPlus} size="2x" />
+                            Agregar foto</label>
+                        <input
+                            type="file"
+                            onChange={(event) => {
+                                imageUpload = event.target.files[0];
+                                imagePreview = URL.createObjectURL(event.target.files[0]);
 
-                                        const selectedFile = event.target.files[0];
-                                        if (selectedFile) {
-                                            handleModalSubmit(event);
-                                        }
-                                    }}
-                                    name='urlfoto'
-                                    id="urlfoto"
-                                    className="customFileInput"
-                                />
-                            </div>
-                            <div className='headerDiv'>
-                                <h2>Carrusel de imágenes</h2>
-                            </div>
+                                const selectedFile = event.target.files[0];
+                                if (selectedFile) {
+                                    handleModalSubmit(event);
+                                }
+                            }}
+                            name='urlfoto'
+                            id="urlfoto"
+                            className="customFileInput"
+                        />
+                    </div>
 
-                            <button className="cancelButton" onClick={handleModalClose}>
-                                <FontAwesomeIcon icon={faTimes} size="2x" />
-                            </button>
-                            <div className='dataGridBox'>
-
-                                <ThemeProvider theme={theme}>
-                                    {CarruselData.length > 0 ? (
-                                        <DataGrid
-                                            rows={CarruselData}
-                                            getRowId={getRowId}
-                                            rowHeight={150}
-
-                                            columns={[
-                                                {
-                                                    field: 'Imagen',
-                                                    headerName: 'Imagen',
-                                                    flex: 5,
-                                                    headerClassName: 'column-header',
-                                                    renderCell: (params) => {
-                                                        const { id, row } = params;
-                                                        urlDelete = row.url;
-                                                        return (
-                                                            <div key={id} >
-                                                                <img src={row.url} class="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
-                                                            </div>
-                                                        );
-                                                    },
-                                                },
-                                                {
-                                                    field: 'status',
-                                                    headerName: '',
-                                                    flex: 1,
-                                                    renderCell: (params) => (
-
-                                                        <IconButton style={{ justifySelf: 'flex-end' }} onClick={() => handleDeleteCarruselImage(params.id, urlDelete)}>
+                    <button className="cancelButton" onClick={handleModalClose}>
+                        <FontAwesomeIcon icon={faTimes} size="2x" />
+                    </button>
+                    <div className='dataListBox'>
+                        <ThemeProvider theme={theme}>
+                            {CarruselData.length > 0 ? (
+                                <div className="carrusel-list-container">
+                                    <ul className="carrusel-list">
+                                        {CarruselData.map((row, index) => (
+                                            <div key={getRowId(row)}>
+                                                <li
+                                                    className={`carrusel-list-item ${index === draggedIndex ? 'dragging' : ''}`}
+                                                    draggable
+                                                    onDragStart={() => handleDragStart(index)}
+                                                    onDragOver={(e) => handleDragOver(e, index)}
+                                                    onDrop={() => handleDrop(index)}
+                                                >
+                                                    <div className={`carrusel-list-item-image ${row.isVisible ? '' : 'hidden'}`}>
+                                                        {row.isVisible && (
+                                                            <img src={row.url} className="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
+                                                        )}
+                                                    </div>
+                                                    <div className="carrusel-list-item-actions">
+                                                        <IconButton onClick={() => handleDeleteCarruselImage(getRowId(row), row.url)}>
                                                             <Delete />
                                                         </IconButton>
-                                                    ),
-                                                },
-                                            ]}
-                                            onCellEditStop={(params, event) => {
-                                                if (params.reason === GridCellEditStopReasons.cellFocusOut) {
-                                                    event.defaultMuiPrevented = true;
-                                                }
-                                            }}
-                                        />
-                                    ) : (
-                                        <p>Cargando carrusel...</p>
-                                    )}
-                                </ThemeProvider>
-                            </div>
-                        </div>
+                                                        <IconButton onClick={() => handleToggleVisibility(index)}>
+                                                            {row.isVisible ? <Visibility /> : <VisibilityOff />}
+                                                        </IconButton>
+                                                        <button className="drag-handle-button" onClick={() => handleDragStart(index)}>
+                                                            <Menu />
+                                                        </button>
+                                                    </div>
+                                                </li>
+                                                <hr className="custom-hr" />
+                                            </div>
+                                        ))}
+                                    </ul>
+
+
+                                </div>
+                            ) : (
+                                <p>Cargando carrusel...</p>
+                            )}
+                        </ThemeProvider>
                     </div>
                 </div >
             </Modal >
