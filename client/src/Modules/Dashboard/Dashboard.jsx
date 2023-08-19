@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,7 +20,7 @@ import ExpedientesService from '../../Services/ExpedientesService';
 
 
 const Dashboard = () => {
-    const isLoggedIn = localStorage.getItem("400");
+    const { isLoggedIn, userType } = useContext(AuthContext);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [expedientes, setExpedientes] = useState([]);
     const [selectedExpediente, setSelectedExpediente] = useState(null);
@@ -136,8 +137,7 @@ const Dashboard = () => {
 
         //validación login
         if (!isLoggedIn) {
-            // Redirigir si no se cumple la verificación
-            navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+            navigate("/iniciarsesion"); 
         }
 
         const fetchExpediente = async () => {
@@ -419,7 +419,11 @@ const Dashboard = () => {
 
     return (
         <div className='scrollable-page'>
-            <NavBar />
+            {userType !== 'normal' && (
+
+                <NavBar />
+            )}
+
             <div className='contenido'>
                 <div className='patient-section'>
 
@@ -428,7 +432,9 @@ const Dashboard = () => {
                             <div className='perfil'>
                                 <FontAwesomeIcon icon={faUser} className='iconoUser' />
                             </div>
-                            <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
+                            {userType !== 'normal' && (
+                                <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
+                            )}
                             {isEditModalOpen && (
                                 <EditExpedienteDashboardModal
                                     expedientess={expediente}
@@ -469,9 +475,11 @@ const Dashboard = () => {
                                         </button>
                                     </>
                                     ) : (
-                                        <button onClick={handleLabelEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                            Editar
-                                        </button>
+                                        userType !== 'normal' && (
+                                            <button onClick={handleLabelEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                                Editar
+                                            </button>
+                                        )
                                     )}
                                 </span>
                             </h3>
@@ -640,12 +648,14 @@ const Dashboard = () => {
                                 </div>
                             ))}
                         </ul>
-                        <button className="large-button">
+                        {userType !== 'normal' && (
+                            <button className="large-button">
                             <span>
                                 <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
                                 Subir Archivo
                             </span>
                         </button>
+                        )}
                     </div>
 
                 </div>
@@ -666,9 +676,11 @@ const Dashboard = () => {
                                         </button>
                                     </>
                                     ) : (
-                                        <button onClick={handleLabelEdit2} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
-                                            Editar
-                                        </button>
+                                        userType !== 'normal' && (
+                                            <button onClick={handleLabelEdit2} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                                Editar
+                                            </button>
+                                        )
                                     )}
                                 </span>
                             </h3>
@@ -722,20 +734,24 @@ const Dashboard = () => {
                         <div className='box-title'>
                             <h3 className='medtit'>Medicamentos
                                 <span>
-                                    {isEditingLabel3 ? (<>
-                                        <button onClick={handleSaveChanges3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
-                                            Guardar cambios
-                                        </button>
-                                        <button onClick={() => setIsEditingLabel3(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
-                                            Cancelar
-                                        </button>
-                                    </>
+                                    {isEditingLabel3 ? (
+                                        <>
+                                            <button onClick={handleSaveChanges3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                                Guardar cambios
+                                            </button>
+                                            <button onClick={() => setIsEditingLabel3(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                                Cancelar
+                                            </button>
+                                        </>
                                     ) : (
-                                        <button onClick={handleLabelEdit3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
-                                            Editar
-                                        </button>
+                                        userType !== 'normal' && (
+                                            <button onClick={handleLabelEdit3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                                Editar
+                                            </button>
+                                        )
                                     )}
                                 </span>
+
                             </h3>
                         </div>
                         <ul className="section-value">
@@ -760,12 +776,13 @@ const Dashboard = () => {
                 </div>
 
                 <div className="patient-section appointments-section">
+                    {userType !== 'normal' && (
+                        <button className='large-button schedule-date' onClick={handleOnClickAgendarCita}>
+                            <FontAwesomeIcon icon={faCalendarPlus} />
+                            Agendar Cita
+                        </button>
 
-                    <button className='large-button schedule-date' onClick={handleOnClickAgendarCita}>
-                        <FontAwesomeIcon icon={faCalendarPlus} />
-                        Agendar Cita
-                    </button>
-
+                    )}
                     <div className='appointments-container'>
 
                         <div className='box-title appointments-title'>Citas Agendadas</div>

@@ -5,7 +5,6 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState();
-  const [nombreUser, setNombreUser] = useState();
   const [isAlertShown, setIsAlertShown] = useState(false); // New state variable
 
   useEffect(() => {
@@ -93,7 +92,7 @@ const AuthProvider = ({ children }) => {
       window.removeEventListener('keydown', handleUserActivity);
       clearTimeout(timerIdRef.current);
     };
-  }, [isLoggedIn, isAlertShown]); // Add isAlertShown to the dependencies array
+  }, [isLoggedIn, isAlertShown]); 
 
   const contextValue = {
     isLoggedIn,

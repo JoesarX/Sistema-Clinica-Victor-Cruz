@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import AddExpedientesModal from './AddExpedientesModal.jsx';
 
@@ -15,6 +15,7 @@ import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
 import moment from 'moment';
 import dayjs from 'dayjs';
+import { AuthContext } from '../AuthContext.js';
 
 
 //modal
@@ -47,10 +48,8 @@ import NavBar from '../NavBar';
 const Expedientes = () => {
    //========================================================================================================================================================================================================================
    //LOGIN VALIDATION
-   const AdminIsLoggedIng = localStorage.getItem("300");
-   const UserIsLoggedIng = localStorage.getItem("100");
-   const MasterIsLoggedIng = localStorage.getItem("400");
-   let isLoggedIn = false;
+  
+   let { isLoggedIn } = useContext(AuthContext);
 
    //========================================================================================================================================================================================================================
    //EXPEDIENTES GRID DATA
@@ -425,7 +424,7 @@ const Expedientes = () => {
    useEffect(() => {
       // Validación login
       console.log("Este es el error: " + (buscaError++));
-      if (!AdminIsLoggedIng && !UserIsLoggedIng && !MasterIsLoggedIng) {
+      if (!isLoggedIn ) {
 
          navigate("/iniciarsesion");
       } else {
