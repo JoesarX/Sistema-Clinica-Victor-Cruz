@@ -36,7 +36,7 @@ export const postPicture = async (carrusel) => {
 
 export const editCarrusel = async (id,carrusel) => {
     try {
-        await axios.put(`${API_URL}/servicios/${id}`,carrusel);
+        await axios.put(`${API_URL}/carrusel/${id}`,carrusel);
        
     } catch (error) {
         console.log(error);

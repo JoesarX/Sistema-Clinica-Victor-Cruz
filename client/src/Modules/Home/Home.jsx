@@ -56,14 +56,15 @@ const Home = () => {
       });
     const [draggedIndex, setDraggedIndex] = useState(null);
     const [updatedOrdenArray, setUpdatedOrdenArray] = useState(null);
+    const [isEyeOpen, setIsEyeOpen] = useState(true);
 
-    const handleToggleVisibility = async (index) => {
-        /*
+    const handleToggleVisibility = async (arrayServicio, index) => {
+        
         const updatedCarruselData = [...CarruselData];
         updatedCarruselData[index].isVisible = !updatedCarruselData[index].isVisible;
         setCarruselData(updatedCarruselData);
         
-        CarruselData[index].visibility = isEyeOpen;
+        arrayServicio.visibility = isEyeOpen;
         if (!visibilityFlag && isEyeOpen) {
           swal("Solo pueden haber 5 Servicios visibles", {
             icon: "warning",
@@ -71,17 +72,17 @@ const Home = () => {
         } else {
           try {
             console.log(arrayServicio);
-            await ServiciosService.editServicios(arrayServicio.id, arrayServicio);
+            console.log(arrayServicio.idfoto);
+            await CarruselService.editCarrusel(arrayServicio.idfoto, arrayServicio);
             swal("Visibilidad Editada", {
               icon: "success",
             });
-            window.location.reload();
+            //window.location.reload();
           } 
           catch (error) {
             console.log('Error submitting servicio:', error);
           }
         }
-        */
     };
 
     const handleDragStart = (index) => {
@@ -921,8 +922,8 @@ const Home = () => {
                                                         <IconButton onClick={() => handleDeleteCarruselImage(getRowId(row), row.url, row.orden)}>
                                                             <Delete />
                                                         </IconButton>
-                                                        <IconButton onClick={() => handleToggleVisibility(index)}>
-                                                            {row.isVisible ? <Visibility /> : <VisibilityOff />}
+                                                        <IconButton onClick={() => handleToggleVisibility(row, index)}>
+                                                            {isEyeOpen ? <Visibility /> : <VisibilityOff />}
                                                         </IconButton>
                                                         <button className="drag-handle-button" onClick={() => handleDragStart(index)}>
                                                             <Menu />

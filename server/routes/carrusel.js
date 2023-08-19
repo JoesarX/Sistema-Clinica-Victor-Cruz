@@ -73,6 +73,7 @@ const CarruselRouter = (pool) => {
                 orden,
                 visibility,
             } = req.body;
+            console.log(id);
             const q =
                 "UPDATE imagenes SET url = ?, orden = ?, visibility = ? WHERE idfoto = ? && tipo = 'Carrusel'";
 
@@ -82,7 +83,6 @@ const CarruselRouter = (pool) => {
                 visibility,
                 id
             ];
-
             await connection.query(q, values);
             connection.release();
             res.json("Imagen actualizado exitosamente!");
