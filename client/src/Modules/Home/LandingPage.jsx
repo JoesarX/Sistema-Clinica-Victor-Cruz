@@ -191,6 +191,10 @@ const LandingPage = () => {
         setIsEditModalOpen(false);
     };
 
+    const handleViewExpediente = (id) => {
+        navigate(`/expedientes/dashboard/${id}`);
+     };
+
 
     return (
         <div className='scrollable-page'>
@@ -232,6 +236,8 @@ const LandingPage = () => {
                                     {index !== usuarios.length - 1 && (
                                         <hr className="divider" />
                                     )}
+                                    <button onClick={() => handleViewExpediente(usuario.idPaciente)}>Ver Perfil
+                                 </button>
                                 </div>
                             )
                         })}
