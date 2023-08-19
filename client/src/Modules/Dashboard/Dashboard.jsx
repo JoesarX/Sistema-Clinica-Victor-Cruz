@@ -137,7 +137,7 @@ const Dashboard = () => {
 
         //validación login
         if (!isLoggedIn) {
-            navigate("/iniciarsesion"); 
+            navigate("/iniciarsesion");
         }
 
         const fetchExpediente = async () => {
@@ -411,6 +411,9 @@ const Dashboard = () => {
         setIsEditingLabel(false);
         fetchExpediente2();
     };
+    const handleVolver = () => {
+        navigate(-1);
+    };
 
 
     const handleOnClickAgendarCita = () => {
@@ -422,6 +425,10 @@ const Dashboard = () => {
             {userType !== 'normal' && (
 
                 <NavBar />
+            )}
+            {userType === 'normal' && (
+
+                <button onClick={handleVolver}> Volver</button>
             )}
 
             <div className='contenido'>
@@ -650,11 +657,11 @@ const Dashboard = () => {
                         </ul>
                         {userType !== 'normal' && (
                             <button className="large-button">
-                            <span>
-                                <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
-                                Subir Archivo
-                            </span>
-                        </button>
+                                <span>
+                                    <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
+                                    Subir Archivo
+                                </span>
+                            </button>
                         )}
                     </div>
 
