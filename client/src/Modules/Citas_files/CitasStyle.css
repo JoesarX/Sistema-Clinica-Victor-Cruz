@@ -105,12 +105,12 @@
 }
 
 .fc .fc-event-main {
-  padding: 5px;
   background-color: rgba(188, 200, 255, 0.5);
-  font-size: 14px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 0px;
+  padding: 0px 1px 0px 1px;
 }
 
 .fc .fc-event-main:hover {
@@ -191,7 +191,6 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 
   justify-content: center;
 
-  gap: 1px;
   word-wrap: break-word;
 
   margin: 0px;
@@ -217,19 +216,19 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 }
 
 .fc-event-main>.event-line-container {
-  padding: 0.5px;
-  gap: 0.5px;
   justify-content: center;
 }
 
 
 .fc-event-main>.event-line-container>.event-line-time-label {
   font-weight: 700;
-  font-size: 15px;
+  /* font-size: 1.4vh; */
+  font-size: 65%;
 }
 
 .fc-event-main>.event-line-container>.event-line-title-label {
-  font-size: 15px;
+  /* font-size: 1.5vh; */
+  font-size: 75%;
   color: rgb(32, 20, 139);
 }
 
@@ -246,11 +245,6 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   background-color: rgba(188, 200, 255, 0.2)
 }
 
-.fc-event-main {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 /* 
 .fc-col-header>colgroup>col {
   width: 150px !important;

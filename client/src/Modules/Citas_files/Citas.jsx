@@ -54,7 +54,7 @@ const Citas = () => {
       const endDateTime = new Date(startDateTime.getTime() + 30 * 60000); // 40 minutes in milliseconds
 
       return {
-        title: `${cita.nombre_persona}`,
+        // title: `${cita.nombre_persona}`,
         start: startDateTime,
         end: endDateTime,
       };
