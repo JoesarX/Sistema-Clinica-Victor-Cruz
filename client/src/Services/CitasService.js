@@ -18,7 +18,7 @@ export const getAllCitas = async () => {
 export const getAllCitasFiltered = async (status) => {
     try {
         console.log("In Service getAllCitasFiltered")
-        console.log("Url: " + `${API_URL}/citas/citasPasadas/${status}`)
+        console.log("Url: " , `${API_URL}/citas/citasPasadas/${status}`)
         const res = await axios.get(`${API_URL}/citas/citasPasadas/${status}`);
         console.log("SUCCESS FETCHING FILTERED MEDICAMENTOS");
         console.log(res.data);
@@ -98,6 +98,19 @@ export const getAvailableTimes = async (date, id = null) => {
     }
 };
 
+export const getAvailableTimesTwoWeeks = async (option) => {
+    try {
+        console.log("In Service getAvailableTimesTwoWeeks");
+        console.log(option);
+        const url = `${API_URL}/citas/availableTimesRange/${option}`;
+        const res = await axios.get(url);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch Times');
+    }
+};
+
 export const getUserExpCitas = async (correouser) => {
     try {
         console.log("In Service get citas de expedientes linked a usuarios");
@@ -141,7 +154,8 @@ const Services = {
     getAvailableTimes,
     filterCita,
     getCheckAvailability,
-    getUserExpCitas
+    getUserExpCitas,
+    getAvailableTimesTwoWeeks
     // Other functions
 };
 

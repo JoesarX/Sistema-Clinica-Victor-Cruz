@@ -11,27 +11,14 @@ const Citas = () => {
 
   const [formattedEvents, setFormattedEvents] = useState([]);
 
-  const fetchCitas = async () => {
-    try {
-      const citasData = await CitasService.getAllCitas();
-      const citasWithId = citasData.map((cita) => ({
-        ...cita,
-        medId: cita.idmed,
-      }));
-      processEvents(citasWithId);
-    } catch (error) {
-      console.log("Error fetching citas:", error);
-    }
-  };
-
   const processEvents = (receivedCitas) => {
     const events = receivedCitas.map(cita => {
       // Parse the fecha and hora values to create JavaScript Date objects
-      const fechaParts = cita.fecha.split('-');
+      const fechaParts = cita.date.split('-');
       let horaParts;
 
       // Time format is in "1:45 PM" format
-      const timeString = cita.hora;
+      const timeString = cita.time;
       const [time, meridiem] = timeString.split(' ');
       const [hour, minute] = time.split(':');
       let hour24 = parseInt(hour);
@@ -54,7 +41,7 @@ const Citas = () => {
       const endDateTime = new Date(startDateTime.getTime() + 30 * 60000); // 40 minutes in milliseconds
 
       return {
-        title: `${cita.nombre_persona}`,
+        // title: 'Disponible',
         start: startDateTime,
         end: endDateTime,
       };
@@ -63,6 +50,16 @@ const Citas = () => {
   };
 
   useEffect(() => {
+
+    const fetchCitas = async () => {
+      try {
+        const citasData = await CitasService.getAvailableTimesTwoWeeks(2);
+        processEvents(citasData);
+      } catch (error) {
+        console.log("Error fetching citas:", error);
+      }
+    };
+
     fetchCitas();
   }, []);
 

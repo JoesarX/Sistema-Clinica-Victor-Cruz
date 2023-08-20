@@ -112,12 +112,12 @@ const citasRouter = (pool, transporter) => {
     router.get("/citasexpedientes/:correouser", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "select distinct C.idcita, C.nombre_persona, C.estado, C.idpaciente, C.correouser, C.altura, C.peso, C.temperatura, C.ritmo_cardiaco, C.presion, C.fecha, C.hora, C.correoenviado "+
-            "from Usuarios U "+
-            "inner join expedientes E on U.correouser = E.correo " + 
-            "inner join Citas C on E.correo = C.correouser "+
-            "where U.correouser = '" + req.params.correouser + "'"; 
-            
+            const sqlSelect = "select distinct C.idcita, C.nombre_persona, C.estado, C.idpaciente, C.correouser, C.altura, C.peso, C.temperatura, C.ritmo_cardiaco, C.presion, C.fecha, C.hora, C.correoenviado " +
+                "from Usuarios U " +
+                "inner join expedientes E on U.correouser = E.correo " +
+                "inner join Citas C on E.correo = C.correouser " +
+                "where U.correouser = '" + req.params.correouser + "'";
+
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log(`Get citas futuras with correo: ${req.params.correouser} Successfull`)
@@ -125,6 +125,94 @@ const citasRouter = (pool, transporter) => {
             res.json(rows)
         } catch (err) {
             console.log(`Get cita with correo: ${req.params.correouser} Failed. Error: ${err}`)
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    router.get("/availableTimesRange/:option", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const today = new Date();
+            // const twoWeeksLater = new Date(today);
+            // twoWeeksLater.setDate(today.getDate() + 14); // Add 14 days to today
+
+            const availableTimes = [];
+
+
+            // Loop through each day within the date range
+            let currentDate = new Date(today);
+            let isToday = (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) ? true : false;
+            let weekCounter = 0
+            while (weekCounter <= 2) {
+                //console.log("currentDate:" + currentDate)
+                //console.log("isToday:" + isToday)
+
+                if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) { // Skip weekends
+                    const formattedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).toISOString().slice(0, 10);
+                    //console.log("day:" + currentDate.getDate)
+                    //console.log("formattedDate:" + formattedDate)
+
+                    // Generate all possible times for a day
+                    const allPossibleTimes = [
+                        "07:00:00", "07:30:00", "08:00:00", "08:30:00", "09:00:00", "09:30:00", "10:00:00", "10:30:00", "11:00:00", "11:30:00",
+                        "12:00:00", "12:30:00", "13:00:00", "13:30:00", "14:00:00", "14:30:00", "15:00:00", "15:30:00"
+                    ];
+
+                    // Fetch reserved times for the current date from the database (similar to getAvailableTimes)
+                    let sqlSelect = `SELECT hora FROM citas WHERE fecha = '${formattedDate}'`;
+                    const [rows, fields] = await connection.query(sqlSelect);
+
+                    const existingTimes = rows.map((row) => row.hora);
+
+                    const currentTime = new Date().toLocaleTimeString("en-US", { hour12: false });
+
+                    // Filter out reserved times and times earlier than the current time
+                    let availableTimesForDate = null;
+
+                    if (isToday) {
+                        availableTimesForDate = allPossibleTimes.filter(
+                            (time) => !existingTimes.includes(time) && time >= currentTime
+                        );
+                        isToday = false;
+                    } else {
+                        availableTimesForDate = allPossibleTimes.filter((time) => !existingTimes.includes(time));
+                    }
+
+
+                    // Format available times and add to the list
+                    const availableTimesFormatted = availableTimesForDate.map((time) => {
+                        const [hour, minute] = time.split(":");
+                        const meridiem = hour >= 12 ? "PM" : "AM";
+                        const hour12 = hour % 12 || 12;
+                        return `${hour12}:${minute} ${meridiem}`;
+                    });
+
+
+                    if (req.params.option === '1') {
+                        availableTimes.push({
+                            date: formattedDate,
+                            times: availableTimesFormatted
+                        });
+                    } else {
+                        for(let i = 0; i < availableTimesFormatted.length; i++) {
+                            availableTimes.push({
+                                date: formattedDate,
+                                time: availableTimesFormatted[i]
+                            });
+                        }
+                    }
+
+                    // Move to the next day
+                } else if (currentDate.getDay() === 6) {
+                    weekCounter++;
+                }
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            connection.release();
+            console.log("Get available times range Successfull");
+            res.json(availableTimes);
+        } catch (err) {
+            console.log("Get available times range Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -247,7 +335,6 @@ const citasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-
 
     const checkAndUpdateExpiredAppointments = async () => {
         try {

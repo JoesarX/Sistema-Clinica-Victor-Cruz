@@ -4,37 +4,44 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import esLocale from '@fullcalendar/core/locales/es';
 
-const CitasCalendar = ({ events, isDoctor=true }) => {
+const CitasCalendar = ({ events, isDoctor = true }) => {
 
-    let views = 'dayGridMonth,timeGridWeek,timeGridThreeDay';
-    let eventColor = '';
+    let views = 'dayGridMonth,timeGridWeek';
+
+    let headerToolbar = {
+        left: 'prev,next today',
+        center: 'title',
+        right: views,
+    }
+    // let hiddenDays = [0]
 
     if (!isDoctor) {
-        views = 'timeGridWeek,timeGridThreeDay';
-        eventColor = '#6c757d';
+        views = 'timeGridWeek';
+        headerToolbar = {
+            left: 'prev,next today',
+            center: 'title',
+            right: null,
+        }
+        // hiddenDays.push(6);
     }
 
     return (
         <div class='cal-container'>
             <FullCalendar
 
-                headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: views,
-                }}
+                headerToolbar={headerToolbar}
 
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 
                 initialView={isDoctor ? "dayGridMonth" : "timeGridWeek"}
 
-                views={{
-                    timeGridThreeDay: {
-                        type: 'timeGrid',
-                        duration: { days: 3 },
-                        buttonText: 'Día'
-                    }
-                }}
+                // views={{
+                //     timeGridThreeDay: {
+                //         type: 'timeGrid',
+                //         duration: { days: 3 },
+                //         buttonText: 'Día'
+                //     }
+                // }}
 
                 locale={esLocale}
 
@@ -66,26 +73,20 @@ const CitasCalendar = ({ events, isDoctor=true }) => {
 
                 height={'auto'}
 
-                hiddenDays={[0]}
-
-                eventColor={eventColor}
+                // hiddenDays={hiddenDays}
+                hiddenDays={[0, 6]}
 
                 eventContent={(eventInfo) => (
-                    isDoctor ? (
-                        <>
-                            <div className='event-line-container'>
-                                <div class="event-line-time-label">{eventInfo.timeText}</div>
-                                <div class="event-line-title-label">{eventInfo.event.title}</div>
+                    <>
+                        <div class={'event-line-container' + (!isDoctor ? ' user' : '')}>
+                            <div class={'event-line-time-label' + (!isDoctor ? ' user' : '')}>
+                                {eventInfo.timeText}
                             </div>
-                        </>) :
-                        (
-
-                            <>
-                                <div className='event-line-container reserved'>
-                                    <div class="event-line-time-label">{eventInfo.timeText}</div>
-                                </div>
-                            </>
-                        )
+                            <div class={'event-line-title-label' + (!isDoctor ? ' user' : '')}>
+                                {eventInfo.event.title}
+                            </div>
+                        </div>
+                    </>
                 )}
             />
         </div>
