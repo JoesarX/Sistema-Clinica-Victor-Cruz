@@ -143,11 +143,13 @@ const citasRouter = (pool, transporter) => {
             let isToday = (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) ? true : false;
             let weekCounter = 0
             while (weekCounter <= 2) {
-                console.log("currentDate:" + currentDate)
-                console.log("isToday:" + isToday)
+                //console.log("currentDate:" + currentDate)
+                //console.log("isToday:" + isToday)
+
                 if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) { // Skip weekends
-                    const formattedDate = currentDate.toISOString().slice(0, 10);
-                    console.log("formattedDate:" + formattedDate)
+                    const formattedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).toISOString().slice(0, 10);
+                    //console.log("day:" + currentDate.getDate)
+                    //console.log("formattedDate:" + formattedDate)
 
                     // Generate all possible times for a day
                     const allPossibleTimes = [
@@ -157,15 +159,11 @@ const citasRouter = (pool, transporter) => {
 
                     // Fetch reserved times for the current date from the database (similar to getAvailableTimes)
                     let sqlSelect = `SELECT hora FROM citas WHERE fecha = '${formattedDate}'`;
-
-                    console.log("sqlSelect:" + sqlSelect)
                     const [rows, fields] = await connection.query(sqlSelect);
-
 
                     const existingTimes = rows.map((row) => row.hora);
 
                     const currentTime = new Date().toLocaleTimeString("en-US", { hour12: false });
-                    console.log("currentTime:" + currentTime)
 
                     // Filter out reserved times and times earlier than the current time
                     let availableTimesForDate = null;
@@ -179,7 +177,6 @@ const citasRouter = (pool, transporter) => {
                         availableTimesForDate = allPossibleTimes.filter((time) => !existingTimes.includes(time));
                     }
 
-                    console.log("availableTimesForDate:" + availableTimesForDate)
 
                     // Format available times and add to the list
                     const availableTimesFormatted = availableTimesForDate.map((time) => {
@@ -189,7 +186,6 @@ const citasRouter = (pool, transporter) => {
                         return `${hour12}:${minute} ${meridiem}`;
                     });
 
-                    console.log("Available times for " + formattedDate + ": " + availableTimesFormatted);
 
                     if (req.params.option === '1') {
                         availableTimes.push({
@@ -338,11 +334,6 @@ const citasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-
-
-
-
-
 
     const checkAndUpdateExpiredAppointments = async () => {
         try {
