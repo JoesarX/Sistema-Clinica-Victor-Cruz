@@ -215,6 +215,14 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   white-space: break-spaces;
 }
 
+.event-line-container.user {
+  align-items: center;
+}
+
+.event-line-container.user > .event-line-time-label.user {
+  font-size: 80%;
+}
+
 .fc-event-main>.event-line-container {
   justify-content: center;
 }
@@ -244,6 +252,9 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 .fc-timegrid-slots tr:nth-child(4n) td {
   background-color: rgba(188, 200, 255, 0.2)
 }
+
+
+
 
 /* 
 .fc-col-header>colgroup>col {

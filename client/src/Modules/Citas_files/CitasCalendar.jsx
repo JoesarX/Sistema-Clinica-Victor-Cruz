@@ -7,11 +7,11 @@ import esLocale from '@fullcalendar/core/locales/es';
 const CitasCalendar = ({ events, isDoctor = true }) => {
 
     let views = 'dayGridMonth,timeGridWeek,timeGridThreeDay';
-    let eventColor = '';
+    // let hiddenDays = [0]
 
     if (!isDoctor) {
         views = 'timeGridWeek,timeGridThreeDay';
-        eventColor = '#6c757d';
+        // hiddenDays.push(6);
     }
 
     return (
@@ -66,15 +66,18 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 height={'auto'}
 
-                hiddenDays={[0]}
-
-                eventColor={eventColor}
+                // hiddenDays={hiddenDays}
+                hiddenDays={[0, 6]}
 
                 eventContent={(eventInfo) => (
                     <>
-                        <div className='event-line-container'>
-                            <div class="event-line-time-label">{eventInfo.timeText}</div>
-                            <div class="event-line-title-label">{eventInfo.event.title}</div>
+                        <div class={'event-line-container' + (!isDoctor ? ' user' : '')}>
+                            <div class={'event-line-time-label' + (!isDoctor ? ' user' : '')}>
+                                {eventInfo.timeText}
+                            </div>
+                            <div class={'event-line-title-label' + (!isDoctor ? ' user' : '')}>
+                                {eventInfo.event.title}
+                            </div>
                         </div>
                     </>
                 )}
