@@ -49,7 +49,7 @@ const Expedientes = () => {
    //========================================================================================================================================================================================================================
    //LOGIN VALIDATION
   
-   let { isLoggedIn } = useContext(AuthContext);
+   let { isLoggedIn, userType } = useContext(AuthContext);
 
    //========================================================================================================================================================================================================================
    //EXPEDIENTES GRID DATA
@@ -424,13 +424,31 @@ const Expedientes = () => {
    useEffect(() => {
       // Validación login
       console.log("Este es el error: " + (buscaError++));
-      if (!isLoggedIn ) {
-
-         navigate("/iniciarsesion");
-      } else {
-         isLoggedIn = true;
-         console.log(':)')
-      }
+      if (userType === 'normal') {
+         // Create the overlay element
+         const overlay = document.createElement('div');
+         overlay.classList.add('custom-o');
+       
+         // Append the overlay to the body
+         document.body.appendChild(overlay);
+       
+         // Display swal with "Acceso restringido" message and custom styling
+         swal({
+           title: "Acceso restringido",
+           text: "",
+           icon: "warning",
+           customClass: {
+             popup: "custom-swal-popup" // Apply custom class to the modal
+           }
+         }).then(() => {
+           // Remove the overlay
+           overlay.remove();
+       
+           // Redirect user to the actual home page
+           navigate("/userpage"); // Replace "/home" with the correct home page path
+         });
+       }
+       
 
       const fetchAllExpedientes = async () => {
          try {

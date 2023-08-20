@@ -135,10 +135,7 @@ const Dashboard = () => {
 
     useEffect(() => {
 
-        //validación login
-        if (!isLoggedIn) {
-            navigate("/iniciarsesion");
-        }
+        
 
         const fetchExpediente = async () => {
             try {
@@ -195,7 +192,10 @@ const Dashboard = () => {
         console.log("SCHEDULED:", schAppointments)
         console.log("PREVIOUS:", prevAppointments)
     }, [id]);
-
+    //validación login
+    if (!isLoggedIn) {
+        navigate("/iniciarsesion");
+    }
     const formatDate = (date) => {
         var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(date).toLocaleDateString("es-HN", datePrefs);
