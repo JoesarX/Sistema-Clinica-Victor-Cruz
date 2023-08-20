@@ -53,7 +53,7 @@ const Citas = () => {
 
     const fetchCitas = async () => {
       try {
-        const citasData = await CitasService.getAvailableTimesTwoWeeks(2)
+        const citasData = await CitasService.getAvailableTimesTwoWeeks(2);
         processEvents(citasData);
       } catch (error) {
         console.log("Error fetching citas:", error);

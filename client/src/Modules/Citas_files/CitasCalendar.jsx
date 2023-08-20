@@ -6,11 +6,22 @@ import esLocale from '@fullcalendar/core/locales/es';
 
 const CitasCalendar = ({ events, isDoctor = true }) => {
 
-    let views = 'dayGridMonth,timeGridWeek,timeGridThreeDay';
+    let views = 'dayGridMonth,timeGridWeek';
+
+    let headerToolbar = {
+        left: 'prev,next today',
+        center: 'title',
+        right: views,
+    }
     // let hiddenDays = [0]
 
     if (!isDoctor) {
-        views = 'timeGridWeek,timeGridThreeDay';
+        views = 'timeGridWeek';
+        headerToolbar = {
+            left: 'prev,next today',
+            center: 'title',
+            right: null,
+        }
         // hiddenDays.push(6);
     }
 
@@ -18,23 +29,19 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         <div class='cal-container'>
             <FullCalendar
 
-                headerToolbar={{
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: views,
-                }}
+                headerToolbar={headerToolbar}
 
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
 
                 initialView={isDoctor ? "dayGridMonth" : "timeGridWeek"}
 
-                views={{
-                    timeGridThreeDay: {
-                        type: 'timeGrid',
-                        duration: { days: 3 },
-                        buttonText: 'Día'
-                    }
-                }}
+                // views={{
+                //     timeGridThreeDay: {
+                //         type: 'timeGrid',
+                //         duration: { days: 3 },
+                //         buttonText: 'Día'
+                //     }
+                // }}
 
                 locale={esLocale}
 
