@@ -48,16 +48,13 @@ const Servicios = () => {
   const [imageEdit, setImageEdit] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
+
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [isSubmitting3, setIsSubmitting3] = useState(false);
   const [isEyeOpen, setIsEyeOpen] = useState(true);
 
-  const toggleEye = (arrayServicio) => {
-    //setIsEyeOpen((prevState) => !prevState);
-    console.log(arrayServicio);
-    toggleServiceVisibility(arrayServicio);
-  };
+
 
   const handleModalOpen = () => {
     //Validar que no este en el maximo de servicios
@@ -120,75 +117,87 @@ const Servicios = () => {
   };
 
   const updateServiceOrderInDatabase = async () => {
-    if (updatedOrdenArray) {
-      try {
-        await Promise.all(updatedOrdenArray.map(async (service) => {
-          console.log("Changing service order for ID:", service.id);
+    if (!updatedOrdenArray) {
+      console.log("updatedOrdenArray is null");
+      return;
+    }
 
-          const changedService = compareArrays(serviceData, updatedOrdenArray);
+    try {
+      await Promise.all(
+        updatedOrdenArray.map(async (service) => {
+          const changedService = compareArrays(serviceData, updatedOrdenArray, service.id);
 
           if (changedService) {
-            console.log("Service to update:", changedService);
+            console.log("Changing service order for ID:", changedService.id);
+            console.log("Updated service data:", changedService);
 
-            changedService.orden = changedService.copyOrden;
-            const serviceString = JSON.stringify(changedService);
-            console.log("Updated service data:", serviceString);
-            swal({
-              title: 'Orden de Servicios Editado',
-              icon: 'success',
-            });
+            const updatedData = { orden: changedService.copyOrden }; // Prepare the updated data object
 
-            await ServiciosService.editServicios(changedService.id, changedService);
+            await ServiciosService.editServicios(changedService.id, updatedData); // Pass the updated data object
           }
-        }));
-        window.location.reload();
-      } catch (error) {
-        console.log("Error updating service order:", error);
-      }
-    } else {
-      console.log("updatedOrdenArray is null");
+        })
+      );
+
+      swal({
+        title: 'Orden de Servicios Editado',
+        icon: 'success',
+      });
+
+      window.location.reload();
+    } catch (error) {
+      console.log("Error updating service order:", error);
     }
   };
 
-  function compareArrays(originalArray, copyArray) {
-    const differentOrdenObjects = [];
 
-    originalArray.forEach(originalObj => {
-      const copyObj = copyArray.find(copyObj => copyObj.id === originalObj.id);
+  function compareArrays(originalArray, copyArray, serviceId) {
+    const originalObj = originalArray.find((obj) => obj.id === serviceId);
+    const copyObj = copyArray.find((obj) => obj.id === serviceId);
 
-      if (copyObj && originalObj.orden !== copyObj.orden) {
-        differentOrdenObjects.push({
-          ...originalObj, // Copy all attributes from the original object
-          originalOrden: originalObj.orden,
-          copyOrden: copyObj.orden
-        });
-      }
-    });
-    return differentOrdenObjects;
+    if (originalObj && copyObj && originalObj.orden !== copyObj.orden) {
+      return {
+        ...originalObj,
+        originalOrden: originalObj.orden,
+        copyOrden: copyObj.orden,
+      };
+    }
+
+    return null;
   }
+
 
   //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
-  const toggleServiceVisibility = async (arrayServicio) => {
-    if (!visibilityFlag && isEyeOpen) {
-      swal("Solo pueden haber 5 Servicios visibles", {
-        icon: "warning",
+  const toggleEye = (arrayServicio) => {
+    console.log(arrayServicio);
+    toggleServiceVisibility(arrayServicio);
+  };
+
+  const toggleServiceVisibility = async (service) => {
+    const updatedService = { ...service, visibility: !service.visibility };
+  
+    try {
+      await ServiciosService.editServicios(updatedService.id, updatedService);
+      swal("Visibilidad Editada", {
+        icon: "success",
       });
-    } else {
-      setIsEyeOpen((prevState) => !prevState);
-      arrayServicio.visibility = isEyeOpen;
-      try {
-        console.log(arrayServicio);
-        await ServiciosService.editServicios(arrayServicio.id, arrayServicio);
-        swal("Visibilidad Editada", {
-          icon: "success",
-        });
-        window.location.reload();
-      } 
-      catch (error) {
-        console.log('Error submitting servicio:', error);
-      }
+  
+      // Update the service data in your component's state
+      const updatedServiceData = serviceData.map(item =>
+        item.id === updatedService.id ? updatedService : item
+      );
+      setServiceData(updatedServiceData);
+  
+      // Toggle the eye icon state based on the updated visibility
+      setIsEyeOpen(!updatedService.visibility);
+      window.location.reload();
+  
+    } catch (error) {
+      console.log('Error submitting servicio:', error);
     }
-  }
+  };
+  
+
+
 
 
   //IMAGENES CODE --------------------------------------------------->
@@ -413,56 +422,56 @@ const Servicios = () => {
   const submitEditServicio = async () => {
     console.log(editedService);
     try {
-        const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
-        if (!titleRegex.test(editedService.title)) {
-          setTitleError(true);
-          swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.", {
-            icon: "warning",
-          });
-          return;
-        }
-    
-        // Validate description
-        const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
-        if (!descriptionRegex.test(editedService.description)) {
-          setDescriptionError(true);
-          swal("La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.", {
-            icon: "warning",
-          });
-          return;
-        }
-        if (imageUpload != null) {
-          const file = imageUpload;
-          if (validateImageFormat(file) == false) {
-            swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
-              icon: "warning",
-            });
-              return;
-          }
-        }
-            if (imageUpload != null && imageUpload !== "") {
-                if (imageUpload != null) {
-                    deleteImg(imageEdit);
-                    console.log("Elimina imagen");
-                }
-                console.log("Image Upload: "+imageUpload);
-                const imageUrll = await uploadFile();
-                editedService.url = imageUrll;
+      const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
+      if (!titleRegex.test(editedService.title)) {
+        setTitleError(true);
+        swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.", {
+          icon: "warning",
+        });
+        return;
+      }
 
-                await ServiciosService.editServicios(editedService.id, editedService);
-                swal("Servicio Editado", {
-                  icon: "success",
-                });
-            } else {
-              console.log("Entro en else de edit");
-              await ServiciosService.editServicios(editedService.id, editedService);
-              swal("Servicio Editado", {
-                icon: "success",
-              });
-          }
-          window.location.reload();
-      } catch (error) {
-        console.log('Error submitting servicio:', error);
+      // Validate description
+      const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+      if (!descriptionRegex.test(editedService.description)) {
+        setDescriptionError(true);
+        swal("La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.", {
+          icon: "warning",
+        });
+        return;
+      }
+      if (imageUpload != null) {
+        const file = imageUpload;
+        if (validateImageFormat(file) == false) {
+          swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
+            icon: "warning",
+          });
+          return;
+        }
+      }
+      if (imageUpload != null && imageUpload !== "") {
+        if (imageUpload != null) {
+          deleteImg(imageEdit);
+          console.log("Elimina imagen");
+        }
+        console.log("Image Upload: " + imageUpload);
+        const imageUrll = await uploadFile();
+        editedService.url = imageUrll;
+
+        await ServiciosService.editServicios(editedService.id, editedService);
+        swal("Servicio Editado", {
+          icon: "success",
+        });
+      } else {
+        console.log("Entro en else de edit");
+        await ServiciosService.editServicios(editedService.id, editedService);
+        swal("Servicio Editado", {
+          icon: "success",
+        });
+      }
+      window.location.reload();
+    } catch (error) {
+      console.log('Error submitting servicio:', error);
     }
   };
 
@@ -502,9 +511,14 @@ const Servicios = () => {
             >
               <img src={service.url} alt={service.title} />
               <div className="overlay">
-                <Button style={{position: 'absolute', bottom: '85%', left: '85%'}} onClick={() => toggleEye(service)}>
-                  {isEyeOpen ? <Visibility /> : <VisibilityOff />}
-                </Button>
+              <Button
+  style={{ position: 'absolute', bottom: '85%', left: '85%' }}
+  onClick={() => toggleEye(service)}
+>
+  {service.visibility === 1 ? <Visibility /> : <VisibilityOff />}
+</Button>
+
+
                 <h2>{service.title}</h2>
                 <p className='desc'>{service.description}</p>
                 {isLoggedIn && userType !== 'normal' && showButtons && (
