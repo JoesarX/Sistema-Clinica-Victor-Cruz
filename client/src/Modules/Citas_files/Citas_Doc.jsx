@@ -13,32 +13,6 @@ const Citas_Doc = () => {
     setFilter(newFilter);
   }
 
-  const fetchCitas = async () => {
-    if (filter === 'Ver Todas') {
-      try {
-        const citasData = await CitasService.getAllCitas();
-        const citasWithId = citasData.map((cita) => ({
-          ...cita,
-          medId: cita.idmed,
-        }));
-        processEvents(citasWithId);
-      } catch (error) {
-        console.log("Error fetching citas:", error);
-      }
-    } else {
-      try {
-        const citasData = await CitasService.filterCita(filter);
-        const citasWithId = citasData.map((cita) => ({
-          ...cita,
-          medId: cita.idmed,
-        }));
-        processEvents(citasWithId);
-      } catch (error) {
-        console.log('Error fetching filtered citas:', error);
-      }
-    }
-
-  };
   const processEvents = (receivedCitas) => {
     const events = receivedCitas.map(cita => {
       // Parse the fecha and hora values to create JavaScript Date objects
@@ -78,6 +52,26 @@ const Citas_Doc = () => {
   };
 
   useEffect(() => {
+
+    const fetchCitas = async () => {
+      if (filter === 'Ver Todas') {
+        try {
+          const citasData = await CitasService.getAllCitas();
+          processEvents(citasData);
+        } catch (error) {
+          console.log("Error fetching citas:", error);
+        }
+      } else {
+        try {
+          const citasData = await CitasService.filterCita(filter);
+          processEvents(citasData);
+        } catch (error) {
+          console.log('Error fetching filtered citas:', error);
+        }
+      }
+  
+    };
+
     fetchCitas(filter);
   }, [filter]);
 
