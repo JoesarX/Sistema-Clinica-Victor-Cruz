@@ -1,7 +1,7 @@
 import axios from 'axios';
  
-//const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+const API_URL = 'http://localhost:8000';
+//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllCitas = async () => {
     try {
@@ -63,6 +63,16 @@ export const postCitas = async (cita) => {
     }
 };
 
+export const editCitasUser = async (id, cita) => {
+    try {
+        console.log("In Service Edit");
+        await axios.put(`${API_URL}/citas/user/${id}`, cita);
+
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to edit cita');
+    }
+};
 export const editCitas = async (id, cita) => {
     try {
         console.log("In Service Edit");
@@ -155,7 +165,8 @@ const Services = {
     filterCita,
     getCheckAvailability,
     getUserExpCitas,
-    getAvailableTimesTwoWeeks
+    getAvailableTimesTwoWeeks,
+    editCitasUser
     // Other functions
 };
 

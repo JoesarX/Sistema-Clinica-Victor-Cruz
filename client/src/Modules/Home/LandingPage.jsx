@@ -28,6 +28,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { Delete, Edit } from '@mui/icons-material'
 
 import { IconButton } from '@mui/material';
+import Citas from '../CitasTabla/CitasTabla';
 
 
 const LandingPage = () => {
@@ -454,7 +455,7 @@ const LandingPage = () => {
     const [availableTimes, setAvailableTimes] = useState([]);
 
     const selectedEstado = cita.estado;
-    const listaEstado = ['Pendiente', 'Cancelada']
+    const listaEstado = ['Pendiente', 'Cancelar Cita']
     useEffect(() => {
         if (cita.idcita && cita.fecha) {
             const fetchAvailableTimes = async () => {
@@ -480,6 +481,7 @@ const LandingPage = () => {
             if (validations()) {
                 const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora, cita.idcita);
                 const isAvailable = availableResponse.available;
+                
                 if (!isAvailable) {
                     swal("La hora que ha seleccionado ya ha sido ocupada.", {
                         icon: "warning",
@@ -489,6 +491,10 @@ const LandingPage = () => {
                     const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
                     setAvailableTimes(times);
                 } else {
+                    if(cita.estado==="Cancelar Cita"){
+                        cita.estado="Cancelada";
+                    }
+                    
                     submitEditCita();
                 }
             }
@@ -505,12 +511,22 @@ const LandingPage = () => {
 
     const submitEditCita = async () => {
         try {
-            await CitasService.editCitas(idd, cita);
-
             
-            swal("Cita Editada Exitosamente!.", {
-                icon: "success",
-            });
+           
+            if(cita.estado==="Cancelada"){
+                await CitasService.editCitasUser(idd,cita);
+                swal("Cita Editada Exitosamente!.", {
+                    icon: "success",
+                });
+            }else{
+                await CitasService.editCitas(idd, cita);
+                
+                swal("Cita Editada Exitosamente!.", {
+                    icon: "success",
+                });
+            }
+            
+            
             toggleModal22();
            window.location.reload();
             cleanCita();
@@ -727,12 +743,12 @@ const LandingPage = () => {
                                     required
                                     options={listaEstado}
                                     defaultValue={cita.estado}
-                                 //     onChange={(event, newValue) =>
-                                   //        setCita({
-                                     //          ...cita,
-                                       //       estado: newValue,
-                                         //  })
-                                       //}
+                                     onChange={(event, newValue) =>
+                                           setCita({
+                                               ...cita,
+                                              estado: newValue,
+                                           })
+                                       }
                                     renderInput={(params) => <TextField {...params} label="Estado" required />}
                                     ListboxProps={
                                         {

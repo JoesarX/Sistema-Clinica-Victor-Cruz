@@ -294,6 +294,65 @@ const citasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+//edit citas desde el cliente
+    router.put("/user/:id", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const { id } = req.params;
+            const {
+                nombre_persona,
+                estado,
+                idpaciente,
+                correouser,
+                fecha,
+                hora,
+                altura,
+                peso,
+                temperatura,
+                ritmo_cardiaco,
+                presion
+            } = req.body;
+
+            const q =
+                "UPDATE citas SET nombre_persona = ?, estado = ?, idpaciente = ?, correouser = ?, fecha = ?, hora = ?, altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ? WHERE idcita = ?";
+
+            const values = [
+                nombre_persona,
+                estado,
+                idpaciente,
+                correouser,
+                fecha,
+                hora,
+                altura,
+                peso,
+                temperatura,
+                ritmo_cardiaco,
+                presion,
+                id
+            ];
+
+            await connection.query(q, values);
+            connection.release();
+            console.log(`Update cita with id: ${id} Successfull`)
+            /*const mailOptions = {
+                from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                to: "", // Join multiple emails with a comma and space
+                subject: "Cancelación de Cita Clinica Dr Victor Cruz",
+                text: `Estimado Doctor, Le informamos que se ha cancelado la cita  ${nombre_paciente}, del día ${fecha}, a las ${hora}.\n` +
+                    `¡Que tenga un buen día!\n\n` +
+                    `Atentamente,\n` +
+                    `El equipo de la Clínica Dr. Victor Cruz`,
+
+            };
+
+            await transporter.sendMail(mailOptions);*/
+            res.json("Cita actualizada exitosamente!");
+           
+        } catch (err) {
+            console.log(`Update cita with id: ${id} Failed. Error: ${err}`)
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
 
     router.get("/availableTimes/:date", async (req, res) => {
         try {
