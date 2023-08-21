@@ -101,20 +101,28 @@ const Servicios = () => {
         const newData = [...prevData];
         const [movedService] = newData.splice(draggedIndex, 1);
         newData.splice(index, 0, movedService);
+        // Calculate the updatedOrder using newData
+        const updatedOrder = newData.map((service, newIndex) => ({
+          ...service,
+          orden: newIndex,
+        }));
+        setUpdatedOrdenArray(updatedOrder);
+        setDraggedIndex(index);
+        // Return the new data to update serviceData
         return newData;
       });
-      setDraggedIndex(index);
-      const updatedOrder = serviceData.map((service, newIndex) => ({
-        ...service,
-        orden: newIndex,
-      }));
-      setUpdatedOrdenArray(updatedOrder);
     }
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
   };
+
+  const descartarCambios= () => {
+    setUpdatedOrdenArray(null);
+    fetchAllServicios();
+    console.log(updatedOrdenArray);
+  }
 
   const updateServiceOrderInDatabase = async () => {
     if (!updatedOrdenArray) {
@@ -130,10 +138,10 @@ const Servicios = () => {
           if (changedService) {
             console.log("Changing service order for ID:", changedService.id);
             console.log("Updated service data:", changedService);
+            changedService.orden = changedService.copyOrden;
+            //const updatedData = { orden: changedService.copyOrden }; // Prepare the updated data object
 
-            const updatedData = { orden: changedService.copyOrden }; // Prepare the updated data object
-
-            await ServiciosService.editServicios(changedService.id, updatedData); // Pass the updated data object
+            await ServiciosService.editServicios(changedService.id, changedService); // Pass the updated data object
           }
         })
       );
@@ -143,7 +151,7 @@ const Servicios = () => {
         icon: 'success',
       });
 
-      window.location.reload();
+      //window.location.reload();
     } catch (error) {
       console.log("Error updating service order:", error);
     }
@@ -641,6 +649,7 @@ const Servicios = () => {
             <div className='button-addSCont'>
               <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
               <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Guardar Cambios</button>
+              <button className='buttonE button-addS' onClick={descartarCambios}>Descartar Cambios</button>
             </div>
           )}
           <div className='button-gearCont'>
