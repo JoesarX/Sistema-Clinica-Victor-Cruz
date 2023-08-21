@@ -102,7 +102,7 @@ const Topbar = () => {
                         <div>
                             {userType === 'normal' && (
                                 // Content for normal user dropdown menu
-                                <li className="nav-item-dropdown" style={{ width: '160px' }}>
+                                <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span style={{fontSize: '18px'}}>{nombre}</span>
@@ -118,7 +118,8 @@ const Topbar = () => {
                             )}
 
                             {userType === 'administrador' && (
-                                <li className="nav-item-dropdown" style={{ width: '160px' }}>
+                                // Content for administrator dropdown menu
+                                <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span style={{fontSize: '18px'}}>{nombre}</span>
@@ -132,7 +133,7 @@ const Topbar = () => {
                             )}
                             {userType === 'master' && (
                                 // Content for master user dropdown menu
-                                <li className="nav-item-dropdown" style={{ width: '140px' }}>
+                                <li className="nav-item dropdown" style={{ width: '160px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span style={{fontSize: '18px'}}>{nombre}</span>

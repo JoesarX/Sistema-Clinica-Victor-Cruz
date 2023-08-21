@@ -25,11 +25,12 @@ const examenesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `examenes` (`titulo`, `descripcion`, `precio`)  VALUES (?)";
+                "INSERT INTO `examenes` (`titulo`, `descripcion`, `precio`, `urlfoto`)  VALUES (?)";
             const values = [
                 req.body.titulo,
                 req.body.descripcion,
                 req.body.precio,
+                req.body.urlfoto
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -81,14 +82,16 @@ const examenesRouter = (pool) => {
             const {
                 titulo,
                 descripcion,
-                precio
+                precio,
+                urlfoto
             } = req.body;
             const q =
-                "UPDATE examenes SET titulo = ?, descripcion = ?, precio = ? WHERE idexamen = ?";
+                "UPDATE examenes SET titulo = ?, descripcion = ?, precio = ?, urlfoto = ? WHERE idexamen = ?";
             const values = [
                 titulo,
                 descripcion,
                 precio,
+                urlfoto,
                 id
             ];
 
