@@ -48,6 +48,7 @@ const Home = () => {
     //Aqui van las funciones para el reorder del carrusel +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
 
     const [CarruselData, setCarruselData] = useState([]);
+    const [carruselDataFlagged, setCarruselDataFlagged] = useState([]);
     const [imagen1, setImagen1] = useState({
         url: '',
         orden: '',
@@ -59,25 +60,32 @@ const Home = () => {
     const [isEyeOpen, setIsEyeOpen] = useState(true);
 
     const handleToggleVisibility = async (arrayServicio, index) => {
-        
+        const updatedCarrusel = { ...arrayServicio, visibility: !arrayServicio.visibility };
+        /*
         const updatedCarruselData = [...CarruselData];
         updatedCarruselData[index].isVisible = !updatedCarruselData[index].isVisible;
         setCarruselData(updatedCarruselData);
-        
         arrayServicio.visibility = isEyeOpen;
-        if (!visibilityFlag && isEyeOpen) {
+        */
+        
+        if (!visibilityFlag && arrayServicio.visibility) {
           swal("Solo pueden haber 5 Servicios visibles", {
             icon: "warning",
           });
         } else {
           try {
-            console.log(arrayServicio);
-            console.log(arrayServicio.idfoto);
-            await CarruselService.editCarrusel(arrayServicio.idfoto, arrayServicio);
+            console.log(updatedCarrusel);
+            console.log(updatedCarrusel.idfoto);
+            await CarruselService.editCarrusel(updatedCarrusel.idfoto, updatedCarrusel);
             swal("Visibilidad Editada", {
               icon: "success",
             });
-            //window.location.reload();
+            const updatedCarruselData = CarruselData.map(item =>
+                item.id === updatedCarrusel.id ? updatedCarrusel : item
+              );
+              setCarruselData(updatedCarruselData);
+          
+            window.location.reload();
           } 
           catch (error) {
             console.log('Error submitting servicio:', error);
@@ -85,8 +93,13 @@ const Home = () => {
         }
     };
 
-    const handleDragStart = (index) => {
+    const handleDragStart = (e, index) => {
+        e.dataTransfer.setData('index', index);
         setDraggedIndex(index);
+    };
+
+    const handleDragEnd = () => {
+        setDraggedIndex(null);
     };
 
     const handleDragOver = (e, index) => {
@@ -96,15 +109,19 @@ const Home = () => {
               const newData = [...prevData];
               const [movedCarrusel] = newData.splice(draggedIndex, 1);
               newData.splice(index, 0, movedCarrusel);
+
+              const updatedOrder = newData.map((carrusel, newIndex) => ({
+                ...carrusel,
+                orden: newIndex,
+              }));
+                setUpdatedOrdenArray(updatedOrder);
+                setDraggedIndex(index);
+                console.log("Original: ");
+                console.log(CarruselData);
+                console.log("Updated");
+                console.log(updatedOrder);
               return newData;
-            });
-            setDraggedIndex(index);
-            const updatedOrder = CarruselData.map((carrusel, newIndex) => ({
-              ...carrusel,
-              orden: newIndex,
-            }));
-            console.log(updatedOrder);
-            setUpdatedOrdenArray(updatedOrder);
+            });  
         }
     };
 
@@ -123,49 +140,49 @@ const Home = () => {
     const updateCarruselOrderInDatabase = async () => {
         if (updatedOrdenArray) {
           try {
-            await Promise.all(updatedOrdenArray.map(async (carrusel) => {
-              console.log("Changing imagenes order for ID:", carrusel.id);
-    
-              const changedService = compareArrays(CarruselData, updatedOrdenArray);
-    
-              if (changedService) {
-                console.log("Imagenes to update:", changedService);
-    
-                changedService.orden = changedService.copyOrden;
-                const serviceString = JSON.stringify(changedService);
-                console.log("Updated imagenes data:", serviceString);
-                swal({
-                  title: 'Orden de Imagenes Editado',
-                  icon: 'success',
-                });
-                await CarruselService.editCarrusel(changedService.id, changedService);
-              }
-            }));
-            window.location.reload();
-          } catch (error) {
-            console.log("Error updating imagenes order:", error);
-          }
+            await Promise.all(
+                updatedOrdenArray.map(async (carrusel) => {
+                  console.log(updatedOrdenArray); 
+                  const changedService = compareArrays(CarruselData, updatedOrdenArray, carrusel.idfoto);
+                  console.log(changedService);  
+                  if (changedService) {
+                    
+                    console.log("Changing service order for ID:", changedService.idfoto);
+                    console.log("Updated service data:", changedService);
+                    changedService.orden = changedService.copyOrden;
+                    await CarruselService.editCarrusel(changedService.idfoto, changedService); // Pass the updated data object
+                  }
+                })
+            );
+            swal({
+                title: 'Orden de Imagenes Editado',
+                icon: 'success',
+            });
+            //window.location.reload();
+            } catch (error) {
+                console.log("Error updating imagenes order:", error);
+            }
         } else {
           console.log("updatedOrdenArray is null");
         }
     };
 
-    function compareArrays(originalArray, copyArray) {
-        const differentOrdenObjects = [];
-    
-        originalArray.forEach(originalObj => {
-          const copyObj = copyArray.find(copyObj => copyObj.id === originalObj.id);
-    
-          if (copyObj && originalObj.orden !== copyObj.orden) {
-            differentOrdenObjects.push({
-              ...originalObj, // Copy all attributes from the original object
-              originalOrden: originalObj.orden,
-              copyOrden: copyObj.orden
-            });
-          }
-        });
-        return differentOrdenObjects;
-    }
+    function compareArrays(originalArray, copyArray, serviceId) {
+        const originalObj = originalArray.find((obj) => obj.idfoto === serviceId);
+        const copyObj = copyArray.find((obj) => obj.idfoto === serviceId);
+        //console.log("Original Object:", originalObj);
+        //console.log("Copy Object:", copyObj);
+        if (originalObj && copyObj && originalObj.orden !== copyObj.orden) {
+          //console.log("Order Changed!");
+          return {
+            ...originalObj,
+            originalOrden: originalObj.orden,
+            copyOrden: copyObj.orden,
+          };
+        }
+        //console.log("No Change.");
+        return null;
+      }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     const [isFetching, setIsFetching] = useState(true);
@@ -450,7 +467,6 @@ const Home = () => {
     let [imageUpload, setImageUpload] = useState(null);
     let [imagePreview, setImagePreview] = useState(null);
     const [visibilityFlag, setVisibilityFlag] = useState(true);
-    const [carruselDataFlagged, setCarruselDataFlagged] = useState([]);
 
     const fetchAllCarruselPics = async () => {
         try {
@@ -819,7 +835,7 @@ const Home = () => {
             return (
                 <div className="imagenes">
                     <Slide {...properties}>
-                        {CarruselData.slice(0, 5).map((carrusel) => ( 
+                        {carruselDataFlagged.slice(0, 5).map((carrusel) => ( 
                             <div className='each-slide' key={carrusel.idfoto}>
                                 <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
                             </div>
@@ -909,7 +925,8 @@ const Home = () => {
                                                 <li
                                                     className={`carrusel-list-item ${index === draggedIndex ? 'dragging' : ''}`}
                                                     draggable
-                                                    onDragStart={() => handleDragStart(index)}
+                                                    onDragStart={(e) => handleDragStart(e, index)}
+                                                    onDragEnd={handleDragEnd}
                                                     onDragOver={(e) => handleDragOver(e, index)}
                                                     onDrop={handleDrop}
                                                 >
@@ -923,7 +940,7 @@ const Home = () => {
                                                             <Delete />
                                                         </IconButton>
                                                         <IconButton onClick={() => handleToggleVisibility(row, index)}>
-                                                            {isEyeOpen ? <Visibility /> : <VisibilityOff />}
+                                                            {row.visibility === 1 ? <Visibility /> : <VisibilityOff />}
                                                         </IconButton>
                                                         <button className="drag-handle-button" onClick={() => handleDragStart(index)}>
                                                             <Menu />

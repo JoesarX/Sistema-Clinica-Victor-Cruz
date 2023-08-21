@@ -151,7 +151,7 @@ const Servicios = () => {
         icon: 'success',
       });
 
-      //window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.log("Error updating service order:", error);
     }
@@ -520,13 +520,11 @@ const Servicios = () => {
               <img src={service.url} alt={service.title} />
               <div className="overlay">
               <Button
-  style={{ position: 'absolute', bottom: '85%', left: '85%' }}
-  onClick={() => toggleEye(service)}
->
-  {service.visibility === 1 ? <Visibility /> : <VisibilityOff />}
-</Button>
-
-
+                style={{ position: 'absolute', bottom: '85%', left: '85%' }}
+                onClick={() => toggleEye(service)}
+              >
+                {service.visibility === 1 ? <Visibility /> : <VisibilityOff />}
+              </Button>
                 <h2>{service.title}</h2>
                 <p className='desc'>{service.description}</p>
                 {isLoggedIn && userType !== 'normal' && showButtons && (
