@@ -47,8 +47,12 @@
 }
 
 /* Style for buttons */
-button {
+.button {
   margin-top: 8px;
+}
+.buttonE {
+  position: relative;
+  left: 30%;
 }
 
 .scrollable-page {
@@ -386,7 +390,7 @@ button {
 .modalServicios-carrusel {
   
   width: 30%;
-  height: 80%;
+  height: 92%;
   max-width: 1600px;
   overflow: hidden;
 }
@@ -397,7 +401,7 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-height: 80vh;
+  max-height: 100vh;
   padding: 20px;
   background-color: #E4EBF9;
   border-radius: 10px;
