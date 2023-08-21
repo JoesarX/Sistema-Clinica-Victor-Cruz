@@ -12,11 +12,13 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
 import NavBar from '../NavBar';
+import TopBar from '../Home/Topbar.jsx';
 import moment from 'moment';
 import 'moment/locale/es';
 import swal from 'sweetalert';
 
 import ExpedientesService from '../../Services/ExpedientesService';
+import Topbar from '../Home/Topbar.jsx';
 
 
 const Dashboard = () => {
@@ -135,7 +137,7 @@ const Dashboard = () => {
 
     useEffect(() => {
 
-        
+
 
         const fetchExpediente = async () => {
             try {
@@ -427,9 +429,12 @@ const Dashboard = () => {
                 <NavBar />
             )}
             {userType === 'normal' && (
-
-                <button onClick={handleVolver}> Volver</button>
+                <>
+                    <Topbar />
+                    <button className='botonVolver' onClick={handleVolver}>Volver</button>
+                </>
             )}
+
 
             <div className='contenido'>
                 <div className='patient-section'>
