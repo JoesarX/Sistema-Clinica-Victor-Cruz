@@ -58,6 +58,9 @@ const Topbar = () => {
     const handleCitas = () => {
         navigate('/citas_tabla');
     };
+    const handleExamenes = () => {
+        navigate('/examenes');
+    };
 
     const handlePerfil = () => {
         navigate('/userpage');
@@ -111,7 +114,7 @@ const Topbar = () => {
                         <div>
                             {userType === 'normal' && (
                                 // Content for normal user dropdown menu
-                                <li className="nav-item dropdown" style={{ width: '160px' }}>
+                                <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span style={{fontSize: '18px'}}>{nombre}</span>
@@ -128,7 +131,7 @@ const Topbar = () => {
 
                             {userType === 'administrador' && (
                                 // Content for administrator dropdown menu
-                                <li className="nav-item dropdown" style={{ width: '160px' }}>
+                                <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <span style={{fontSize: '18px'}}>{nombre}</span>
@@ -142,7 +145,7 @@ const Topbar = () => {
                             )}
                             {userType === 'master' && (
                                 // Content for master user dropdown menu
-                                <li className="nav-item dropdown" style={{ width: '160px' }}>
+                                <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span style={{fontSize: '18px'}}>{nombre}</span>
@@ -152,6 +155,7 @@ const Topbar = () => {
                                             <div class="dropdown-item" onClick={handleExpedientes}>EXPEDIENTES</div>
                                             <div class="dropdown-item" onClick={handleColaboradores}>COLABORADORES</div>
                                             <div class="dropdown-item" onClick={handleCitas}>CITAS</div>
+                                            <div class="dropdown-item" onClick={handleExamenes}>EXAMENES</div>
                                             <div class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
                                         </div>
                                     </div>
