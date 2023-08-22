@@ -24,9 +24,9 @@ const Topbar = () => {
         navigate('/citas');
     };
 
-    // const handleLabClick = () => {
-    //     navigate('/laboratorio');
-    // };
+    const handleLaboratorio = () => {
+         navigate('/laboratorio');
+    };
 
     const handleServicios = () => {
         navigate('/servicios');
@@ -85,9 +85,18 @@ const Topbar = () => {
                             < div class="dropdown-item" onClick={handleContactanos}>CONTÁCTANOS</div>
                         </div>
                     </li>
-                    <li class="nav-item text" onClick={handleServicios}>
-                        <div class="nav-link" >SERVICIOS</div>
+                    
+                    
+                    <li class="nav-item dropdown">
+                        <div class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            SERVICIOS
+                        </div>
+                        <div class="dropdown-menu custom-colors">
+                            <div class="dropdown-item" onClick={handleServicios}>CLINICA</div>
+                            < div class="dropdown-item" onClick={handleLaboratorio}>LABORATORIO</div>
+                        </div>
                     </li>
+                    
                     <li class="nav-item text" onClick={handleCitaClick}>
                         <div class="nav-link" >AGENDA TU CITA</div>
                     </li>
