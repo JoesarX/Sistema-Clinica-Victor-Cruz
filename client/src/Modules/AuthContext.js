@@ -8,7 +8,7 @@ const AuthProvider = ({ children }) => {
   const [userType, setUserType] = useState();
   const [isAlertShown, setIsAlertShown] = useState(false);
   
-  const autoLogoutTime = 10 * 60 * 1000; // 5 minutes in milliseconds
+  const autoLogoutTime = 20 * 60 * 1000; // 5 minutes in milliseconds
   const timerIdRef = useRef();
 
   const handleSignIn = (userType) => {
