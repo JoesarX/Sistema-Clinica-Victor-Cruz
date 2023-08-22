@@ -10,7 +10,7 @@ import { useEffect, useCallback } from 'react'
 import ExamenesService from '../../Services/ExamenesService';
 
 const Laboratorio = () => {
-    
+
     const [cartItems, setCartItems] = useState([]);
     const [quotingEnabled, setQuotingEnabled] = useState(false);
 
@@ -27,7 +27,7 @@ const Laboratorio = () => {
 
     useEffect(() => {
         console.log("Called useEffect examenData")
-       
+
         const fetchAllExamenes = async () => {
             try {
                 const examenesData = await ExamenesService.getAllExamenes()
@@ -49,7 +49,7 @@ const Laboratorio = () => {
         }
         console.log(examenes + "examenes")
 
-        
+
     }, [isLoggedIn, navigate]);
 
     const addToCart = (exam) => {
@@ -81,53 +81,7 @@ const Laboratorio = () => {
 
     const totalAmount = cartItems.reduce((total, item) => total + item.precio * item.quantity, 0);
 
-    const exams = [
-        {
-            id: 1,
-            name: 'Blood Test',
-            price: 50,
-            description: 'A comprehensive blood test for various health indicators.',
-            //image: 'blood-test.jpg',
-        },
-        {
-            id: 2,
-            name: 'Urine Analysis',
-            price: 30,
-            description: 'Analysis of urine sample to detect any abnormalities.',
-            //image: 'urine-analysis.jpg',
-        },
 
-        {
-            id: 3,
-            name: 'Blood Test',
-            price: 50,
-            description: 'A comprehensive blood test for various health indicators.',
-            //image: 'blood-test.jpg',
-        },
-        {
-            id: 4,
-            name: 'Urine Analysis',
-            price: 30,
-            description: 'Analysis of urine sample to detect any abnormalities.',
-            //image: 'urine-analysis.jpg',
-        },
-
-        {
-            id: 5,
-            name: 'Blood Test',
-            price: 50,
-            description: 'A comprehensive blood test for various health indicators.',
-            //image: 'blood-test.jpg',
-        },
-        {
-            id: 6,
-            name: 'Urine Analysis',
-            price: 30,
-            description: 'Analysis of urine sample to detect any abnormalities.',
-            //image: 'urine-analysis.jpg',
-        },
-        // Add more lab exams here
-    ];
 
     return (
         <div className="scrollable-page1">
@@ -158,15 +112,17 @@ const Laboratorio = () => {
             </div>
             {quotingEnabled && (
                 <div className="quoting-container">
-                    <h3>Cotización</h3>
-                    {cartItems.map((item) => (
-                        <div key={item.id} className="quoting-item">
-                            <span className="quoting-item-name">{item.titulo}</span>
-                            <span className="quoting-item-price">{`Precio: Lps.${item.precio * item.quantity}`}</span>
-                        </div>
-                    ))}
-                    <div className="total-amount">{`Total: Lps.${totalAmount}`}</div>
-                </div>
+                <h3>Cotización</h3>
+                {cartItems.map((item, index) => (
+                    <div key={item.id} className="quoting-item">
+                        <span className="quoting-item-name">{item.titulo}</span>
+                        <span className="quoting-item-quantity">{`Cantidad: ${item.quantity}`}</span>
+                        <span className="quoting-item-total">{`Total: Lps.${item.precio * item.quantity}`}</span>
+                        {index !== cartItems.length - 1 && <hr className="quoting-item-separator" />}
+                    </div>
+                ))}
+                <div className="total-amount">{`Total: Lps.${totalAmount}`}</div>
+            </div>
             )}
             <div className="empty-space-bottom"></div>
             <Footer />
