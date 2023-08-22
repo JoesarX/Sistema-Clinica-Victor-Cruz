@@ -198,7 +198,7 @@
   background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
-.services-container {
+.servicess {
   height: moz-fit-content;
   width: 90vw;
   max-width: 2000px;
@@ -438,7 +438,7 @@
 
 /* GOTTA USE THAT SPACE PROPERLY! */
 @media only screen and (min-width: 780px) and (max-width: 1260px) {
-  .services-container {
+  .servicess {
     margin: 0px auto 20px auto;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -530,7 +530,7 @@
 
 /* SMALL DEVICES */
 @media only screen and (max-width: 780px) {
-  .services-container {
+  .servicess {
     flex-direction: column;
     align-content: flex-start;
     height: auto;

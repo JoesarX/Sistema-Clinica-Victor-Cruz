@@ -980,7 +980,7 @@ const Home = () => {
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
 
-            <div className="services-container">
+            <div className="servicess">
                 <ServiceComponent
                     title={titulo1OBJ.texto_campo}
                     description={descripcion1OBJ.texto_campo}
