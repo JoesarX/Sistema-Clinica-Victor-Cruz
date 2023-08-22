@@ -219,7 +219,7 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   align-items: center;
 }
 
-.event-line-container.user > .event-line-time-label.user {
+.event-line-container.user>.event-line-time-label.user {
   font-size: 80%;
 }
 
@@ -254,6 +254,31 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 }
 
 
+.fc-list-event {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(230, 230, 230);
+}
+
+.fc-list-event>td {
+  border: none;
+}
+
+.fc-list-event>.fc-list-event-time,
+.fc-list-event>.fc-list-event-title {
+  width: 100%;
+  height: 40px;
+}
+
+.fc-list-event-title>.event-line-container>.event-line-title-label {
+  font-size: 20px;
+}
+
+.fc-list-event>.fc-list-event-graphic {
+  display: none;
+}
 
 
 /* 
