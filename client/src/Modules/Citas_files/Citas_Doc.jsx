@@ -83,7 +83,7 @@ const Citas_Doc = () => {
         <Filtro onFilterChange={handleFilterChange} />
       </div>
       <main>
-        <CitasCalendar events={formattedEvents} isDoctor={true}/>
+        <CitasCalendar events={formattedEvents}/>
       </main>
       <Footer />
     </div>

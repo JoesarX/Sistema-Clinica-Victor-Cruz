@@ -13,7 +13,6 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         center: 'title',
         right: views,
     }
-    // let hiddenDays = [0]
 
     if (!isDoctor) {
         views = 'timeGridWeek';
@@ -22,7 +21,6 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
             center: 'title',
             right: null,
         }
-        // hiddenDays.push(6);
     }
 
     return (
@@ -42,6 +40,21 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 //         buttonText: 'Día'
                 //     }
                 // }}
+
+                validRange={(currentDate) => {
+                    if (!isDoctor) {
+                        var startDate = new Date(currentDate.valueOf());
+                        var endDate = new Date(currentDate.valueOf());
+
+                        const daysPast = startDate.getDay();
+                        const remainingDaysThisWeek = 7 - startDate.getDay();
+
+                        startDate.setDate(startDate.getDate() - daysPast);
+                        endDate.setDate(endDate.getDate() + 14 + remainingDaysThisWeek);
+
+                        return { start: startDate, end: endDate };
+                    }
+                }}
 
                 locale={esLocale}
 
@@ -73,7 +86,6 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 height={'auto'}
 
-                // hiddenDays={hiddenDays}
                 hiddenDays={[0, 6]}
 
                 eventContent={(eventInfo) => (
