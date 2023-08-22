@@ -50,9 +50,18 @@
 .button {
   margin-top: 8px;
 }
-.buttonE {
+.buttonEE {
   position: relative;
   left: 30%;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #FFF;
+  background-color: #1E60A6;
 }
 
 .scrollable-page {

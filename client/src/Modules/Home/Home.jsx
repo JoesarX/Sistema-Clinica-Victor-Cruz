@@ -956,7 +956,7 @@ const Home = () => {
 
                                     </ul>
 
-                                    <button className='buttonE button-addS' onClick={updateCarruselOrderInDatabase}>Guardar Cambios</button>
+                                    <button className='buttonEE' onClick={updateCarruselOrderInDatabase}>Guardar Cambios</button>
                                 </div>
                             ) : (
                                 <p>Cargando carrusel...</p>

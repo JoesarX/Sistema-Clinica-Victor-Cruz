@@ -118,44 +118,96 @@ const Servicios = () => {
     e.preventDefault();
   };
 
-  const descartarCambios= () => {
-    setUpdatedOrdenArray(null);
-    fetchAllServicios();
-    console.log(updatedOrdenArray);
-  }
+  const descartarCambios = () => {
+    swal({
+      title: "¿Descartar cambios?",
+      text: "Si descartas los cambios, se perderán sin posibilidad de recuperación.",
+      icon: "warning",
+      buttons: {
+        cancel: {
+          text: "Cancelar",
+          value: null,
+          visible: true,
+          closeModal: true,
+        },
+        confirm: {
+          text: "Confirmar",
+          value: true,
+          visible: true,
+          closeModal: true,
+        },
+      },
+    }).then((confirmed) => {
+      if (confirmed) {
+        setUpdatedOrdenArray(null);
+        fetchAllServicios();
+        console.log(updatedOrdenArray);
+      }
+    });
+  };
+  
 
   const updateServiceOrderInDatabase = async () => {
     if (!updatedOrdenArray) {
       console.log("updatedOrdenArray is null");
       return;
     }
-
-    try {
-      await Promise.all(
-        updatedOrdenArray.map(async (service) => {
-          const changedService = compareArrays(serviceData, updatedOrdenArray, service.id);
-
-          if (changedService) {
-            console.log("Changing service order for ID:", changedService.id);
-            console.log("Updated service data:", changedService);
-            changedService.orden = changedService.copyOrden;
-            //const updatedData = { orden: changedService.copyOrden }; // Prepare the updated data object
-
-            await ServiciosService.editServicios(changedService.id, changedService); // Pass the updated data object
-          }
-        })
-      );
-
-      swal({
-        title: 'Orden de Servicios Editado',
-        icon: 'success',
-      });
-
-      window.location.reload();
-    } catch (error) {
-      console.log("Error updating service order:", error);
-    }
+  
+    swal({
+      title: "¿Guardar cambios?",
+      text: "¿Estás seguro de que deseas guardar los cambios que has hecho?",
+      icon: "info",
+      buttons: {
+        cancel: {
+          text: "Cancelar",
+          value: null,
+          visible: true,
+          closeModal: true,
+        },
+        confirm: {
+          text: "Guardar",
+          value: true,
+          visible: true,
+          closeModal: true,
+        },
+      },
+    }).then(async (confirmed) => {
+      if (confirmed) {
+        try {
+          await Promise.all(
+            updatedOrdenArray.map(async (service) => {
+              const changedService = compareArrays(serviceData, updatedOrdenArray, service.id);
+  
+              if (changedService) {
+                console.log("Changing service order for ID:", changedService.id);
+                console.log("Updated service data:", changedService);
+                changedService.orden = changedService.copyOrden;
+                //const updatedData = { orden: changedService.copyOrden }; // Prepare the updated data object
+  
+                await ServiciosService.editServicios(changedService.id, changedService); // Pass the updated data object
+              }
+            })
+          );
+  
+          swal({
+            title: 'Orden de Servicios Editado',
+            text: 'Los cambios se han guardado exitosamente.',
+            icon: 'success',
+          }).then(() => {
+            window.location.reload(); 
+          });
+        } catch (error) {
+          console.log("Error updating service order:", error);
+          swal({
+            title: 'Error',
+            text: 'Ha ocurrido un error al intentar guardar los cambios.',
+            icon: 'error',
+          });
+        }
+      }
+    });
   };
+  
 
 
   function compareArrays(originalArray, copyArray, serviceId) {
