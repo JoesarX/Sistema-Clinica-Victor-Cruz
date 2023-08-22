@@ -69,7 +69,7 @@ const Citas_Doc = () => {
           console.log('Error fetching filtered citas:', error);
         }
       }
-  
+
     };
 
     fetchCitas(filter);
@@ -82,9 +82,7 @@ const Citas_Doc = () => {
       <div>
         <Filtro onFilterChange={handleFilterChange} />
       </div>
-      <main>
-        <CitasCalendar events={formattedEvents}/>
-      </main>
+      <CitasCalendar events={formattedEvents} />
       <Footer />
     </div>
   );

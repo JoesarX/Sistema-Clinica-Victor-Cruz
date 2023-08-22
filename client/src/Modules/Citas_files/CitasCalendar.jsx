@@ -66,7 +66,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 slotLabelFormat={{
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true,
+                    hourCycle: 'h12'
                 }}
 
                 eventTimeFormat={{
