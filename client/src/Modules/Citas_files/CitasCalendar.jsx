@@ -33,13 +33,14 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 initialView={isDoctor ? "dayGridMonth" : "timeGridWeek"}
 
-                // views={{
-                //     timeGridThreeDay: {
-                //         type: 'timeGrid',
-                //         duration: { days: 3 },
-                //         buttonText: 'Día'
-                //     }
-                // }}
+                views={{
+                    dayGridMonth: {
+                        titleFormat: { year: 'numeric', month: 'long' }
+                    },
+                    timeGridWeek: {
+                        titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+                    }
+                }}
 
                 validRange={(currentDate) => {
                     if (!isDoctor) {
@@ -56,6 +57,8 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                     }
                 }}
 
+                titleRangeSeparator=' a '
+
                 locale={esLocale}
 
                 slotDuration="00:30:00"
@@ -63,13 +66,13 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 slotLabelFormat={{
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true,
+                    hourCycle: 'h12'
                 }}
 
                 eventTimeFormat={{
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true,
+                    hourCycle: 'h12'
                 }}
 
                 slotMinTime="07:00:00"
