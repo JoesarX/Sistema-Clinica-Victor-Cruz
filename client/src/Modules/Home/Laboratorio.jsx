@@ -4,6 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
 import Footer from './Footer';
 
+import { useEffect, useCallback } from 'react'
+
+
+import ExamenesService from '../../Services/ExamenesService';
+
 const Laboratorio = () => {
     
     const [cartItems, setCartItems] = useState([]);
@@ -15,12 +20,44 @@ const Laboratorio = () => {
         navigate('/');
     };
 
+    const [examenData, setExameness] = useState([]);
+    const [examenes, setExamenes] = useState([]);
+    const [isAddSubmitting, setIsAddSubmitting] = useState(false);
+    const isLoggedIn = localStorage.getItem("400");
+
+    useEffect(() => {
+        console.log("Called useEffect examenData")
+       
+        const fetchAllExamenes = async () => {
+            try {
+                const examenesData = await ExamenesService.getAllExamenes()
+                const examenesWithId = examenesData.map((examen) => ({
+                    ...examen,
+                    idexamen: examen.idexamen,
+                }));
+                setExamenes(examenesWithId);
+            } catch (error) {
+                // Handle error if any
+                console.log("Error fetching examenes:", error);
+            }
+        };
+
+        // Update tabla
+        fetchAllExamenes();
+        if (isAddSubmitting) {
+            fetchAllExamenes();
+        }
+        console.log(examenes + "examenes")
+
+        
+    }, [isLoggedIn, navigate]);
+
     const addToCart = (exam) => {
-        const existingItem = cartItems.find((item) => item.id === exam.id);
+        const existingItem = cartItems.find((item) => item.idexamen === exam.idexamen);
 
         if (existingItem) {
             const updatedItems = cartItems.map((item) =>
-                item.id === exam.id ? { ...item, quantity: item.quantity + 1 } : item
+                item.idexamen === exam.idexamen ? { ...item, quantity: item.quantity + 1 } : item
             );
             setCartItems(updatedItems);
         } else {
@@ -30,7 +67,7 @@ const Laboratorio = () => {
 
     const decreaseQuantity = (exam) => {
         const updatedItems = cartItems.map((item) =>
-            item.id === exam.id ? { ...item, quantity: item.quantity - 1 } : item
+            item.idexamen === exam.idexamen ? { ...item, quantity: item.quantity - 1 } : item
         );
         setCartItems(updatedItems.filter((item) => item.quantity > 0));
     };
@@ -42,7 +79,7 @@ const Laboratorio = () => {
         setQuotingEnabled(!quotingEnabled);
     };
 
-    const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const totalAmount = cartItems.reduce((total, item) => total + item.precio * item.quantity, 0);
 
     const exams = [
         {
@@ -100,15 +137,15 @@ const Laboratorio = () => {
             </div>
             <div className="empty-space-top"></div>
             <div className="catalog-container">
-                {exams.map((exam) => (
-                    <div className="exam-card" key={exam.id}>
-                        <h2>{exam.name}</h2>
-                        <p className="description">{exam.description}</p>
-                        <div className="price">{`Precio: Lps.${exam.price}`}</div>
+                {examenes.map((exam) => (
+                    <div className="exam-card" key={exam.idexamen}>
+                        <h2>{exam.titulo}</h2>
+                        <p className="description">{exam.descripcion}</p>
+                        <div className="price">{`Precio: Lps.${exam.precio}`}</div>
                         <div className="quantity">
                             <span>Unidades: </span>
                             <button onClick={() => decreaseQuantity(exam)}>-</button>
-                            <span>{cartItems.find((item) => item.id === exam.id)?.quantity || 0}</span>
+                            <span>{cartItems.find((item) => item.idexamen === exam.idexamen)?.quantity || 0}</span>
                             <button onClick={() => addToCart(exam)}>+</button>
                         </div>
                     </div>
@@ -124,8 +161,8 @@ const Laboratorio = () => {
                     <h3>Cotización</h3>
                     {cartItems.map((item) => (
                         <div key={item.id} className="quoting-item">
-                            <span className="quoting-item-name">{item.name}</span>
-                            <span className="quoting-item-price">{`Precio: Lps.${item.price * item.quantity}`}</span>
+                            <span className="quoting-item-name">{item.titulo}</span>
+                            <span className="quoting-item-price">{`Precio: Lps.${item.precio * item.quantity}`}</span>
                         </div>
                     ))}
                     <div className="total-amount">{`Total: Lps.${totalAmount}`}</div>
