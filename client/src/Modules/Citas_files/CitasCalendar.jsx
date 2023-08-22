@@ -72,7 +72,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 eventTimeFormat={{
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true,
+                    hourCycle: 'h12'
                 }}
 
                 slotMinTime="07:00:00"
