@@ -48,14 +48,13 @@ const Servicios = () => {
   const [imageEdit, setImageEdit] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
+
   const [isSubmitting, setIsSubmitting] = useState(true);
   const [isSubmitting2, setIsSubmitting2] = useState(false);
   const [isSubmitting3, setIsSubmitting3] = useState(false);
   const [isEyeOpen, setIsEyeOpen] = useState(true);
 
-  const toggleEye = () => {
-    setIsEyeOpen((prevState) => !prevState);
-  };
+
 
   const handleModalOpen = () => {
     //Validar que no este en el maximo de servicios
@@ -102,14 +101,16 @@ const Servicios = () => {
         const newData = [...prevData];
         const [movedService] = newData.splice(draggedIndex, 1);
         newData.splice(index, 0, movedService);
+        // Calculate the updatedOrder using newData
+        const updatedOrder = newData.map((service, newIndex) => ({
+          ...service,
+          orden: newIndex,
+        }));
+        setUpdatedOrdenArray(updatedOrder);
+        setDraggedIndex(index);
+        // Return the new data to update serviceData
         return newData;
       });
-      setDraggedIndex(index);
-      const updatedOrder = serviceData.map((service, newIndex) => ({
-        ...service,
-        orden: newIndex,
-      }));
-      setUpdatedOrdenArray(updatedOrder);
     }
   };
 
@@ -117,60 +118,146 @@ const Servicios = () => {
     e.preventDefault();
   };
 
-  const updateServiceOrderInDatabase = async () => {
-    if (updatedOrdenArray) {
-      try {
-        await Promise.all(updatedOrdenArray.map(async (service) => {
-          console.log("Changing service order for ID:", service.id);
-
-          const changedService = compareArrays(serviceData, updatedOrdenArray);
-
-          if (changedService) {
-            console.log("Service to update:", changedService);
-
-            changedService.orden = changedService.copyOrden;
-            const serviceString = JSON.stringify(changedService);
-            console.log("Updated service data:", serviceString);
-            swal({
-              title: 'Orden de Servicios Editado',
-              icon: 'success',
-            });
-
-            await ServiciosService.editServicios(changedService.id, changedService);
-          }
-        }));
-        window.location.reload();
-      } catch (error) {
-        console.log("Error updating service order:", error);
-      }
-    } else {
-      console.log("updatedOrdenArray is null");
-    }
-  };
-
-  function compareArrays(originalArray, copyArray) {
-    const differentOrdenObjects = [];
-
-    originalArray.forEach(originalObj => {
-      const copyObj = copyArray.find(copyObj => copyObj.id === originalObj.id);
-
-      if (copyObj && originalObj.orden !== copyObj.orden) {
-        differentOrdenObjects.push({
-          ...originalObj, // Copy all attributes from the original object
-          originalOrden: originalObj.orden,
-          copyOrden: copyObj.orden
-        });
+  const descartarCambios = () => {
+    swal({
+      title: "¿Descartar cambios?",
+      text: "Si descartas los cambios, se perderán sin posibilidad de recuperación.",
+      icon: "warning",
+      buttons: {
+        cancel: {
+          text: "Cancelar",
+          value: null,
+          visible: true,
+          closeModal: true,
+        },
+        confirm: {
+          text: "Confirmar",
+          value: true,
+          visible: true,
+          closeModal: true,
+        },
+      },
+    }).then((confirmed) => {
+      if (confirmed) {
+        setUpdatedOrdenArray(null);
+        fetchAllServicios();
+        console.log(updatedOrdenArray);
       }
     });
-    return differentOrdenObjects;
+  };
+  
+
+  const updateServiceOrderInDatabase = async () => {
+    if (!updatedOrdenArray) {
+      console.log("updatedOrdenArray is null");
+      return;
+    }
+  
+    swal({
+      title: "¿Guardar cambios?",
+      text: "¿Estás seguro de que deseas guardar los cambios que has hecho?",
+      icon: "info",
+      buttons: {
+        cancel: {
+          text: "Cancelar",
+          value: null,
+          visible: true,
+          closeModal: true,
+        },
+        confirm: {
+          text: "Guardar",
+          value: true,
+          visible: true,
+          closeModal: true,
+        },
+      },
+    }).then(async (confirmed) => {
+      if (confirmed) {
+        try {
+          await Promise.all(
+            updatedOrdenArray.map(async (service) => {
+              const changedService = compareArrays(serviceData, updatedOrdenArray, service.id);
+  
+              if (changedService) {
+                console.log("Changing service order for ID:", changedService.id);
+                console.log("Updated service data:", changedService);
+                changedService.orden = changedService.copyOrden;
+                //const updatedData = { orden: changedService.copyOrden }; // Prepare the updated data object
+  
+                await ServiciosService.editServicios(changedService.id, changedService); // Pass the updated data object
+              }
+            })
+          );
+  
+          swal({
+            title: 'Orden de Servicios Editado',
+            text: 'Los cambios se han guardado exitosamente.',
+            icon: 'success',
+          }).then(() => {
+            window.location.reload(); 
+          });
+        } catch (error) {
+          console.log("Error updating service order:", error);
+          swal({
+            title: 'Error',
+            text: 'Ha ocurrido un error al intentar guardar los cambios.',
+            icon: 'error',
+          });
+        }
+      }
+    });
+  };
+  
+
+
+  function compareArrays(originalArray, copyArray, serviceId) {
+    const originalObj = originalArray.find((obj) => obj.id === serviceId);
+    const copyObj = copyArray.find((obj) => obj.id === serviceId);
+
+    if (originalObj && copyObj && originalObj.orden !== copyObj.orden) {
+      return {
+        ...originalObj,
+        originalOrden: originalObj.orden,
+        copyOrden: copyObj.orden,
+      };
+    }
+
+    return null;
   }
 
+
   //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
-  const toggleServiceVisibility = (serviceId) => {
-    //
-    //
-    //
-  }
+  const toggleEye = (arrayServicio) => {
+    console.log(arrayServicio);
+    toggleServiceVisibility(arrayServicio);
+  };
+
+  const toggleServiceVisibility = async (service) => {
+    const updatedService = { ...service, visibility: !service.visibility };
+  
+    try {
+      await ServiciosService.editServicios(updatedService.id, updatedService);
+      swal("Visibilidad Editada", {
+        icon: "success",
+      });
+  
+      // Update the service data in your component's state
+      const updatedServiceData = serviceData.map(item =>
+        item.id === updatedService.id ? updatedService : item
+      );
+      setServiceData(updatedServiceData);
+  
+      // Toggle the eye icon state based on the updated visibility
+      setIsEyeOpen(!updatedService.visibility);
+      window.location.reload();
+  
+    } catch (error) {
+      console.log('Error submitting servicio:', error);
+    }
+  };
+  
+
+
 
 
   //IMAGENES CODE --------------------------------------------------->
@@ -395,56 +482,56 @@ const Servicios = () => {
   const submitEditServicio = async () => {
     console.log(editedService);
     try {
-        const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
-        if (!titleRegex.test(editedService.title)) {
-          setTitleError(true);
-          swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.", {
-            icon: "warning",
-          });
-          return;
-        }
-    
-        // Validate description
-        const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
-        if (!descriptionRegex.test(editedService.description)) {
-          setDescriptionError(true);
-          swal("La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.", {
-            icon: "warning",
-          });
-          return;
-        }
-        if (imageUpload != null) {
-          const file = imageUpload;
-          if (validateImageFormat(file) == false) {
-            swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
-              icon: "warning",
-            });
-              return;
-          }
-        }
-            if (imageUpload != null && imageUpload !== "") {
-                if (imageUpload != null) {
-                    deleteImg(imageEdit);
-                    console.log("Elimina imagen");
-                }
-                console.log("Image Upload: "+imageUpload);
-                const imageUrll = await uploadFile();
-                editedService.url = imageUrll;
+      const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
+      if (!titleRegex.test(editedService.title)) {
+        setTitleError(true);
+        swal("El título debe tener entre 5 y 35 caracteres, no puede comenzar ni terminar con un espacio y las palabras solo pueden estar separadas por un espacio.", {
+          icon: "warning",
+        });
+        return;
+      }
 
-                await ServiciosService.editServicios(editedService.id, editedService);
-                swal("Servicio Editado", {
-                  icon: "success",
-                });
-            } else {
-              console.log("Entro en else de edit");
-              await ServiciosService.editServicios(editedService.id, editedService);
-              swal("Servicio Editado", {
-                icon: "success",
-              });
-          }
-          window.location.reload();
-      } catch (error) {
-        console.log('Error submitting servicio:', error);
+      // Validate description
+      const descriptionRegex = /^(?! )(?!.* {2})(.{35,200})$/;
+      if (!descriptionRegex.test(editedService.description)) {
+        setDescriptionError(true);
+        swal("La descripción debe tener entre 35 y 200 caracteres y las palabras solo pueden estar separadas por un espacio.", {
+          icon: "warning",
+        });
+        return;
+      }
+      if (imageUpload != null) {
+        const file = imageUpload;
+        if (validateImageFormat(file) == false) {
+          swal("La imagen debe estar en formato JPG y no exceder 5mb de tamaño", {
+            icon: "warning",
+          });
+          return;
+        }
+      }
+      if (imageUpload != null && imageUpload !== "") {
+        if (imageUpload != null) {
+          deleteImg(imageEdit);
+          console.log("Elimina imagen");
+        }
+        console.log("Image Upload: " + imageUpload);
+        const imageUrll = await uploadFile();
+        editedService.url = imageUrll;
+
+        await ServiciosService.editServicios(editedService.id, editedService);
+        swal("Servicio Editado", {
+          icon: "success",
+        });
+      } else {
+        console.log("Entro en else de edit");
+        await ServiciosService.editServicios(editedService.id, editedService);
+        swal("Servicio Editado", {
+          icon: "success",
+        });
+      }
+      window.location.reload();
+    } catch (error) {
+      console.log('Error submitting servicio:', error);
     }
   };
 
@@ -484,9 +571,12 @@ const Servicios = () => {
             >
               <img src={service.url} alt={service.title} />
               <div className="overlay">
-                <Button style={{position: 'absolute', bottom: '85%', left: '85%'}} onClick={toggleEye}>
-                  {isEyeOpen ? <Visibility /> : <VisibilityOff />}
-                </Button>
+              <Button
+                style={{ position: 'absolute', bottom: '85%', left: '85%' }}
+                onClick={() => toggleEye(service)}
+              >
+                {service.visibility === 1 ? <Visibility /> : <VisibilityOff />}
+              </Button>
                 <h2>{service.title}</h2>
                 <p className='desc'>{service.description}</p>
                 {isLoggedIn && userType !== 'normal' && showButtons && (
@@ -609,6 +699,7 @@ const Servicios = () => {
             <div className='button-addSCont'>
               <button className='buttonE button-addS' onClick={handleModalOpen}>Agregar Nuevo Servicio</button>
               <button className='buttonE button-addS' onClick={updateServiceOrderInDatabase}>Guardar Cambios</button>
+              <button className='buttonE button-addS' onClick={descartarCambios}>Descartar Cambios</button>
             </div>
           )}
           <div className='button-gearCont'>

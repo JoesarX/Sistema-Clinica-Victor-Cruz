@@ -6,7 +6,7 @@ const CarruselRouter = (pool) => {
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM imagenes where tipo = 'Carrusel' ";
+            const sqlSelect = "SELECT * FROM imagenes where tipo = 'Carrusel' order by orden asc";
             const rows = await connection.query(sqlSelect);
             connection.release();
             res.json(rows[0]);
@@ -22,16 +22,20 @@ const CarruselRouter = (pool) => {
         console.log("IM BEING CALLED")
         const tipo = 'Carrusel';
         const url = req.body.url;
+        const visibility = req.body.visibility;
+        const orden = req.body.orden;
      
         try {
             const connection = await pool.getConnection();
 
             const q =
-                "INSERT INTO imagenes (tipo,url) VALUES (?)";
+                "INSERT INTO imagenes (tipo,url,visibility,orden) VALUES (?)";
 
             const values = [
                 tipo,
-                url
+                url,
+                visibility,
+                orden
             ];
             await connection.query(q, [values]);
             connection.release();
@@ -47,11 +51,43 @@ const CarruselRouter = (pool) => {
             const connection = await pool.getConnection();
             const sqlSelect = "delete FROM imagenes where idfoto = '" + req.params.id + "'and tipo = 'Carrusel'";
             const [rows, fields] = await connection.query(sqlSelect);
+            const updateSql = "UPDATE imagenes SET orden = orden - 1 WHERE tipo = 'Carrusel' && orden > ?";
+            const updateParams = [req.body.orden];
+            const [updateResult] = await connection.query(updateSql, updateParams);
             connection.release();
-            res.json(rows);
+            res.json({ rows, updateResult });
             console.log(`Delete Picture successful for ${req.params.id}`);
         } catch (err) {
             console.log(`Delete Picture failed for ${req.params.id}. Error: ` + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+
+    router.put("/:id", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const { id } = req.params;
+            const {
+                url,
+                orden,
+                visibility,
+            } = req.body;
+            console.log(id);
+            const q =
+                "UPDATE imagenes SET url = ?, orden = ?, visibility = ? WHERE idfoto = ? && tipo = 'Carrusel'";
+
+            const values = [
+                url,
+                orden,
+                visibility,
+                id
+            ];
+            await connection.query(q, values);
+            connection.release();
+            res.json("Imagen actualizado exitosamente!");
+        } catch (err) {
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
