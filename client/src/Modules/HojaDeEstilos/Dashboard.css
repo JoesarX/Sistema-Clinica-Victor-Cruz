@@ -46,6 +46,25 @@
     background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
+
+
+.botonVolver {
+    background-color: #1e60a6;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    position: relative;
+    top: 1.5%;
+    left: 4%;
+  }
+  
+  .botonVolver:hover {
+    background-color: #18548f;
+    transform: scale(1.05);
+  }
 .contenido {
     display: flex;
     flex-direction: row;
