@@ -51,8 +51,11 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         right: views,
     }
 
-    if (!isDoctor) {
+    if (isDoctor) {
         previousViewRef.current = 'dayGridMonth'
+    }
+
+    if (!isDoctor) {
         views = 'timeGridWeek';
         headerToolbar = {
             left: 'prev,next today',
