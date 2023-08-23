@@ -6,6 +6,7 @@ import { WindowSharp } from '@mui/icons-material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import swal from 'sweetalert';
 
 const EditAdmins = (props) => {
     let { setNombre, setRol, setId, setCorreo, setTelefono, setSexo, openEditAdmin, setEditAdmin, setPassword } = props;
@@ -91,7 +92,9 @@ const EditAdmins = (props) => {
             };
             console.log(admin);
             editExpediente();
-            alert('Admin Modificado');
+            swal("Admin Modificado!", {
+                icon: "success",
+            });
             window.location.reload();
             navigate('/administrador');
 
@@ -103,101 +106,157 @@ const EditAdmins = (props) => {
         const { nombre, correo, rol, password, telefono, sexo, id } = admin
         //Validaciones Nombre
         if (nombre === null || nombre === '') {
-            alert('Nombre Completo es requerido')
+            swal("Nombre Completo es requerido!", {
+                icon: "warning",
+            });
             return false
         } else if (!nombre.replace(/\s/g, '').length) {
-            alert('El nombre no puede contener solo espacios.');
+            swal("El nombre no puede contener solo espacios.", {
+                icon: "warning",
+            });
+           
             return false
         } else if (nombre.charAt(0) === ' ') {
-            alert('El nombre no puede iniciar con un espacio.');
+            swal("El nombre no puede iniciar con un espacio.", {
+                icon: "warning",
+            });
             return false
         } else if (nombre.charAt(nombre.length - 1) === ' ') {
-            alert('El nombre no puede terminar con un espacio.');
+            swal("El nombre no puede terminar con un espacio.", {
+                icon: "warning",
+            });
             return false
         }
         //Validaciones Identidad
         console.log(id)
         if (id === null || id === '') {
-            alert('Un numero de Identidad es requerido')
+            swal("Un numero de Identidad es requerido", {
+                icon: "warning",
+            });
             return false
         } else if (!id.replace(/\s/g, '').length) {
-            alert('El numero de identidad no puede contener solo espacios.');
+            swal("El numero de identidad no puede contener solo espacios.", {
+                icon: "warning",
+            });
             return false
         } else if (id.charAt(0) === ' ') {
-            alert('El numero de identidad no puede iniciar con un espacio.');
+            swal("El numero de identidad no puede iniciar con un espacio.", {
+                icon: "warning",
+            });
             return false
         } else if (id.charAt(id.length - 1) === ' ') {
-            alert('El numero de identidad no puede terminar con un espacio.');
+            swal("El numero de identidad no puede terminar con un espacio.", {
+                icon: "warning",
+            });
             return false
         }
         //Validaciones Correo
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (correo === null || correo === '') {
-            alert('Correo es requerido')
+            swal("Correo es requerido!", {
+                icon: "warning",
+            });
             return false
         } else if (emailRegex.test(correo) != true) {
-            alert('El correo ingresado no tiene un formato válido.')
+            swal("El correo ingresado no tiene un formato válido.", {
+                icon: "warning",
+            });
             return false
         } else if (!nombre.replace(/\s/g, '').length) {
-            alert('El nombre no puede contener solo espacios.');
+            swal("El nombre no puede contener solo espacios.", {
+                icon: "warning",
+            });
+           
             return false
         } else if (nombre.charAt(0) === ' ') {
-            alert('El nombre no puede iniciar con un espacio.');
+            swal("El nombre no puede iniciar con un espacio.", {
+                icon: "warning",
+            });
             return false
         } else if (nombre.charAt(nombre.length - 1) === ' ') {
-            alert('El nombre no puede terminar con un espacio.');
+            swal("El nombre no puede terminar con un espacio.", {
+                icon: "warning",
+            });
             return false
         }
         //Validaciones Contraseña
         if (password === null || password === '') {
-            alert('Contraseña es requerida')
+            swal("Contraseña es requerida", {
+                icon: "warning",
+            });
             return false
         } else if (password.charAt(0) === ' ') {
-            alert('La contraseña no puede iniciar con un espacio.');
+            swal("La contraseña no puede iniciar con un espacio.", {
+                icon: "warning",
+            });
             return false
         } else if (password.charAt(password.length - 1) === ' ') {
-            alert('La contraseña no puede terminar con un espacio.');
+            swal("La contraseña no puede terminar con un espacio.", {
+                icon: "warning",
+            });
             return false
         }else if (password.length < 8) {
-            alert('La contraseña debe tener al menos 8 caracteres.')
+            swal("La contraseña debe tener al menos 8 caracteres.", {
+                icon: "warning",
+            });
             return false
         } else if (!/[A-Z]/.test(password)) {
-            alert('La contraseña debe tener al menos una letra mayúscula.')
+            swal("La contraseña debe tener al menos una letra mayúscula.", {
+                icon: "warning",
+            });
             return false
         } else if (!/\d/.test(password)) {
-            alert('La contraseña debe tener al menos un número.')
+            swal("La contraseña debe tener al menos un número.", {
+                icon: "warning",
+            });
             return false
         } else if (!/[!@#$%^&*_;':"|,.<>/?]/.test(password)) {
-            alert('La contraseña debe tener al menos un caracter especial.')
+            swal("La contraseña debe tener al menos un caracter especial.", {
+                icon: "warning",
+            });
             return false
         }
         //Validaciones Confirmar Contraseña
         if (password !== inputValue) {
-            alert('Contraseñas deben coincidir')
+            swal("Contraseñas deben coincidir", {
+                icon: "warning",
+            });
             return false
         }
         //Validaciones Telefono
         if (telefono === null || telefono === '') {
-            alert('Numero de celular es requerido')
+            swal("Numero de celular es requerido", {
+                icon: "warning",
+            });
             return false
         } else if (!telefono.replace(/\s/g, '').length) {
-            alert('El numero de telefono no puede contener solo espacios.');
+            swal("El numero de telefono no puede contener solo espacios.", {
+                icon: "warning",
+            });
             return false
         } else if (telefono.charAt(0) === ' ') {
-            alert('El numero de telefono no puede iniciar con un espacio.');
+            swal("El numero de telefono no puede iniciar con un espacio.", {
+                icon: "warning",
+            });
             return false
         } else if (telefono.charAt(telefono.length - 1) === ' ') {
-            alert('El numero de telefono no puede terminar con un espacio.');
+            swal("El numero de telefono no puede terminar con un espacio.", {
+                icon: "warning",
+            });
             return false
         }
         //Validaciones Rol
         if (rol === null || rol === '') {
-            alert('Rol es requerido')
+            swal("Rol es requerido!", {
+                icon: "warning",
+            });
             return false
         }
         //Validaciones Sexo
         if (sexo === null || sexo === '') {
-            alert('Sexo es requerido')
+            swal("Sexo es requerido!", {
+                icon: "warning",
+            });
             return false
         }
         return true

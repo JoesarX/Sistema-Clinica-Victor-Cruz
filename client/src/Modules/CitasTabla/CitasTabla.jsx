@@ -397,7 +397,9 @@ const Citas = () => {
                 // console.log("isAvailable: " , isAvailable);
 
                 if (!isAvailable) {
-                    alert('La hora que ha seleccionado ya ha sido ocupada.');
+                    swal("La hora que ha seleccionado ya ha sido ocupada.", {
+                        icon: "error",
+                    });
                     setHora(null);
                     const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
                     const times = await CitasService.getAvailableTimes(formattedDate);
@@ -425,7 +427,10 @@ const Citas = () => {
         // console.log("Entra a agregar despues de validaciones");
         try {
             await CitasService.postCitas(cita);
-            alert('Cita Agregado');
+            //
+            swal("Cita Agregada.", {
+                icon: "success",
+            });
             toggleModal();
             window.location.reload();
         } catch (error) {
@@ -443,7 +448,9 @@ const Citas = () => {
                 const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora, cita.idcita);
                 const isAvailable = availableResponse.available;
                 if (!isAvailable) {
-                    alert('La hora que ha seleccionado ya ha sido ocupada.');
+                    swal("La hora que ha seleccionado ya ha sido ocupada.", {
+                        icon: "warning",
+                    });
                     setHora(null);
                     const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
                     const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
@@ -468,7 +475,9 @@ const Citas = () => {
             await CitasService.editCitas(id, cita);
 
             // console.log('SIUUU');
-            alert("Cita editada exitosamente!")
+            swal("Cita Editada Exitosamente!.", {
+                icon: "success",
+            });
             toggleModal22();
             window.location.reload();
             cleanCita();
@@ -491,39 +500,58 @@ const Citas = () => {
         var lettersRegex = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/;
         //Nombre validations
         if (nombre_persona === null || nombre_persona === '') {
-            alert('Debe agregarle un nombre al cita')
+            swal("Debe Agregarle un nombre a la Cita!", {
+                icon: "error",
+            });
             return false
         } else if (!nombre_persona.replace(/\s/g, '').length) {
-            alert('El nombre no puede contener solo espacios.');
+            swal("El nombre no puede contener solo espacios.", {
+                icon: "error",
+            });
             return false
         } else if (nombre_persona.charAt(0) === ' ') {
-            alert('El nombre no puede iniciar con un espacio.');
+            
+            swal("El nombre no puede iniciar con un espacio.", {
+                icon: "error",
+            });
             return false
         } else if (nombre_persona.charAt(nombre_persona.length - 1) === ' ') {
-            alert('El nombre no puede terminar con un espacio.');
+            swal("El nombre no puede terminar con un espacio", {
+                icon: "error",
+            });
             return false
         } else if (!lettersRegex.test(nombre_persona)) {
-            alert('Nombre invalido, no puede tener numeros ni caracteres especiales como @#$%');
+            swal("Nombre invalido, no puede tener numeros ni caracteres especiales como @#$%.", {
+                icon: "error",
+            });
             return false;
         }
 
         if (estado === null || estado === '') {
-            alert('Debe agregar un estado valido.');
+            swal("Debe agregar un estado valido.", {
+                icon: "error",
+            });
             return false;
         }
 
         if (fecha === null || fecha === '') {
-            alert('Debe agregar una fecha valida.');
+            swal("Debe Agregar una fecha valida", {
+                icon: "error",
+            });
             return false;
         } else if (fecha.format('YYYY-MM-DD') < dayjs().format('YYYY-MM-DD')) {
-            alert('La fecha no puede ser menor a la fecha actual.');
+            swal("La fecha no puede ser menor a la fecha actual", {
+                icon: "error",
+            });
             return false;
         } else {
             cita.fecha = fecha.format('YYYY-MM-DD');
         }
 
         if (hora === null || hora === '') {
-            alert('Debe agregar una hora valida.');
+            swal("Debe agregar una hora valida", {
+                icon: "warning",
+            });
             return false;
         } else {
             const timeString = cita.hora;
@@ -541,7 +569,9 @@ const Citas = () => {
         }
 
         if (fecha.format('YYYY-MM-DD') == dayjs().format('YYYY-MM-DD') && cita.hora < dayjs().format('HH:mm:ss')) {
-            alert('La hora que ha seleccionado para hoy ya ha pasado.');
+            swal("La hora que ha seleccionado para hoy ya ha pasado.", {
+                icon: "error",
+            });
             return false;
         }
         return true;
@@ -560,7 +590,9 @@ const Citas = () => {
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
-                alert("No Cuenta con el permiso de entrar a este apartado")
+                swal("No cuenta con el permiso de entrar a este apartado.", {
+                    icon: "error",
+                });
                 navigate("/expedientes"); // Redirige a la página de inicio de sesión
                 cont++;
             }

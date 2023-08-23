@@ -1,4 +1,68 @@
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
+.drag-handle-button{
+  border: #E4EBF9;
+  background-color: #E4EBF9;
+}
+.custom-hr {
+  border: none; 
+  border-top: 1px solid #000000; 
+  margin: 8px 0;
+  width: 90%; 
+}
+.dataListBox{
+  width: 100%;
+}
+.carrusel-list-container{
+  width: 100%;
+}
+.carrusel-list {
+  list-style: none;
+  padding: 0;
+  position: relative;
+  max-height: 350px; 
+  overflow-y: auto; 
+  width: 100%;
+}
+
+.carrusel-list-item {
+  display: flex;
+  align-items: center;
+  margin: 8px;
+  padding: 12px;
+  width: 95%;
+  height: 10%;
+}
+
+.carrusel-list-item-image {
+  flex: 1;
+  margin-right: 12px;
+}
+
+.carrusel-list-item-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  right:6%;
+}
+
+/* Style for buttons */
+.button {
+  margin-top: 8px;
+}
+.buttonEE {
+  position: relative;
+  left: 30%;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #FFF;
+  background-color: #1E60A6;
+}
 
 .scrollable-page {
   height: 100vh;
@@ -134,7 +198,7 @@
   background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
-.services-container {
+.servicess {
   height: moz-fit-content;
   width: 90vw;
   max-width: 2000px;
@@ -333,10 +397,9 @@
 
 /* CARRUSEL */
 .modalServicios-carrusel {
-  min-width: 80%;
-  min-height: 80%;
-  width: 80%;
-  height: 80%;
+  
+  width: 30%;
+  height: 92%;
   max-width: 1600px;
   overflow: hidden;
 }
@@ -347,7 +410,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-height: 80vh;
+  max-height: 100vh;
   padding: 20px;
   background-color: #E4EBF9;
   border-radius: 10px;
@@ -362,11 +425,12 @@
   justify-content: center;
   border: none;
   flex-direction: column;
+  
 }
 
 .carrusel-crud-image-img {
   height: 140px;
-  width: 140px;
+  width: 250px;
   border: 0.5px solid #1E60A6
 }
 
@@ -374,7 +438,7 @@
 
 /* GOTTA USE THAT SPACE PROPERLY! */
 @media only screen and (min-width: 780px) and (max-width: 1260px) {
-  .services-container {
+  .servicess {
     margin: 0px auto 20px auto;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -466,7 +530,7 @@
 
 /* SMALL DEVICES */
 @media only screen and (max-width: 780px) {
-  .services-container {
+  .servicess {
     flex-direction: column;
     align-content: flex-start;
     height: auto;

@@ -16,6 +16,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 import React from 'react'
 
+import swal from 'sweetalert';
+
 import { Box, Button } from '@mui/material'
 import { useEffect, useState } from 'react'
 
@@ -27,7 +29,7 @@ import ExpedientesService from '../../Services/ExpedientesService';
 
 
 const EditUserInfo = ({ expedientess, onClose }) => {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     // const navigate = useNavigate();
     // const [expediente, setExpediente] = useState({
     //     nombre: '',
@@ -109,32 +111,47 @@ const EditUserInfo = ({ expedientess, onClose }) => {
         const { nombre, edad, fecha_nacimiento, sexo, correo, telefono, numid, estado_civil, padecimientos, ocupacion } =
             expediente;
         if (nombre === null || nombre === '') {
-            alert('Nombre Completo es requerido');
+            swal("Nombre Completo es requerido.", {
+                icon: "warning",
+            });
             return false;
         }
         if (edad === null || edad === '' || edad < 0) {
-            alert('Una edad valida es requerida');
+            swal("una edad valida es requerida.", {
+                icon: "warning",
+            });
             return false;
         }
 
         if (sexo === null || sexo === '') {
-            alert('Sexo es requerido');
+            swal("Sexo es Requerido.", {
+                icon: "warning",
+            });
             return false;
         }
         if (estado_civil === null || estado_civil === '') {
-            alert('Estado Civil es requerido');
+            swal("Estado Civil es Requerido.", {
+                icon: "warning",
+            });
             return false;
         }
         if (correo === null || correo === '') {
-            alert('Correo es requerido');
+            swal("Correo es Requerido.", {
+                icon: "warning",
+            });
             return false;
         }
         if (telefono === null || telefono === '') {
-            alert('Telefono es requerido');
+            swal("Telefono es Requerido.", {
+                icon: "warning",
+            });
             return false;
         }
         if (numid === null || numid === '') {
-            alert('Numero de Identidad es requerido');
+            swal("Numero de Indentidad es Requerido.", {
+                icon: "warning",
+            });
+           
             return false;
         }
 
@@ -148,7 +165,9 @@ const EditUserInfo = ({ expedientess, onClose }) => {
             if (validations()) {
                 console.log(':)')
                 await ExpedientesService.editExpedientes(expedientess.idpaciente, expediente);
-                alert('Información de Perfil Editada');
+                swal("Información de Perfil Editada.", {
+                    icon: "success",
+                });
                 onClose();
             }
         };

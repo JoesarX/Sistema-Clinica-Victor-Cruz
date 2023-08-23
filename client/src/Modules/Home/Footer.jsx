@@ -8,6 +8,8 @@ import { AuthContext } from '../AuthContext.js';
 import text_Services from '../../Services/texto_cmdService';
 
 
+import swal from 'sweetalert';
+
 const Topbar = () => {
 
     /* Funciones para toggle los botones de editar*/
@@ -81,7 +83,10 @@ const Topbar = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid address case
-            alert('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").');
+            swal('La dirección no es válida. Asegúrate de que contenga al menos tres comas (,) y termine con el nombre de un país (por ejemplo, "Honduras").', {
+                icon: "error",
+            });
+           
         }
     };
 
@@ -123,7 +128,10 @@ const Topbar = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid email case
-            alert('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos básicos de un correo electrónico válido.');
+            swal('El correo electrónico no es válido. Asegúrate de que contenga un símbolo de arroba (@) y cumpla con los requisitos estándar de un correo electrónico válido(tener un punto al final).', {
+                icon: "error",
+            });
+            
         }
     };
 
@@ -161,7 +169,10 @@ const Topbar = () => {
             window.location.reload(true);
         } else {
             // Display an error message or handle the invalid phone number case
-            alert('El número de teléfono no es válido. Asegúrate de que empiece con +504, tenga 8 dígitos y después de los primeros 4 dígitos vaya un guion y luego el resto de los dígitos.');
+            swal('El número de teléfono no es válido. Asegúrate de que empiece con +504, tenga 8 dígitos y después de los primeros 4 dígitos vaya un guion y luego el resto de los dígitos.'    , {
+                icon: "error",
+            });
+           
         }
     };
 
@@ -188,6 +199,13 @@ const Topbar = () => {
     };
 
     const handleSaveText = async () => {
+        if (!editedText.trim()) {
+            swal("Error, el texto no puede estar en blanco", {
+                icon: "error",
+            });
+            return; // Exit the function if text is blank
+        }
+        
         setIsEditing3(false);
         setYear(editedText); // Update the selected text after saving
         await text_Services.editText(copyOBJ);
@@ -197,67 +215,80 @@ const Topbar = () => {
 
 
     useEffect(() => {
-        const fetchDireccion = async () => {
+        const fetchFooter = async () => {
             try {
-                const objectDireccion = ['Footer_Dirección'];
-                var direccionData;
-                direccionData = await text_Services.getOneText(objectDireccion);
-                console.log("Cargar Direccion: " + direccionData[0].texto_campo);
-                setAddress(direccionData[0].texto_campo);
-                direccionOBJ.texto_campo = direccionData[0].texto_campo;
+                var footer= await text_Services.getFooter();
+                setAddress(footer[0].texto_campo);
+                direccionOBJ.texto_campo=footer[0].texto_campo;
+               
+
+                setEmail(footer[1].texto_campo);
+                correoOBJ.texto_campo = footer[1].texto_campo;
+               
+                setPhone(footer[2].texto_campo);
+                numOBJ.texto_campo = footer[2].texto_campo;
+               
+                setYear(footer[3].texto_campo);
+                copyOBJ.texto_campo = footer[3].texto_campo;
+
+                // var direccionData;
+                // direccionData = await text_Services.getOneText(objectDireccion);
+                // console.log("Cargar Direccion: " + direccionData[0].texto_campo);
+                // setAddress(direccionData[0].texto_campo);
+                // direccionOBJ.texto_campo = direccionData[0].texto_campo;
             } catch (error) {
                 console.log("Error fetching Direccion:", error);
             }
         };
 
-        const fetchCorreo = async () => {
-            try {
-                const objectCorreo = ['Footer_Correo'];
-                var correoData;
-                correoData = await text_Services.getOneText(objectCorreo);
-                console.log("Cargar Correo: " + correoData[0].texto_campo);
-                setEmail(correoData[0].texto_campo);
-                correoOBJ.texto_campo = correoData[0].texto_campo;
-            } catch (error) {
-                console.log("Error fetching Correo:", error);
-            }
-        };
+        // const fetchCorreo = async () => {
+        //     try {
+        //         const objectCorreo = ['Footer_Correo'];
+        //         var correoData;
+        //         correoData = await text_Services.getOneText(objectCorreo);
+        //         console.log("Cargar Correo: " + correoData[0].texto_campo);
+        //         setEmail(correoData[0].texto_campo);
+        //         correoOBJ.texto_campo = correoData[0].texto_campo;
+        //     } catch (error) {
+        //         console.log("Error fetching Correo:", error);
+        //     }
+        // };
 
 
-        const fetchNumTelefono = async () => {
-            try {
-                const objectNum = ['Footer_Telefono'];
-                var numData;
-                numData = await text_Services.getOneText(objectNum);
-                console.log("Cargar Numero Telefonico: " + numData[0].texto_campo);
-                setPhone(numData[0].texto_campo);
-                numOBJ.texto_campo = numData[0].texto_campo;
-            } catch (error) {
-                console.log("Error fetching Numero de Telefono:", error);
-            }
-        };
+        // const fetchNumTelefono = async () => {
+        //     try {
+        //         const objectNum = ['Footer_Telefono'];
+        //         var numData;
+        //         numData = await text_Services.getOneText(objectNum);
+        //         console.log("Cargar Numero Telefonico: " + numData[0].texto_campo);
+        //         setPhone(numData[0].texto_campo);
+        //         numOBJ.texto_campo = numData[0].texto_campo;
+        //     } catch (error) {
+        //         console.log("Error fetching Numero de Telefono:", error);
+        //     }
+        // };
 
 
-        const fetchCopyright = async () => {
-            try {
-                const objectCopy = ['copyright'];
-                var copyData;
-                copyData = await text_Services.getOneText(objectCopy);
-                console.log("Cargar Copyright: " + copyData[0].texto_campo);
-                setYear(copyData[0].texto_campo);
-                copyOBJ.texto_campo = copyData[0].texto_campo;
-            } catch (error) {
-                console.log("Error fetching Copyright:", error);
-            }
-        };
+        // const fetchCopyright = async () => {
+        //     try {
+        //         const objectCopy = ['copyright'];
+        //         var copyData;
+        //         copyData = await text_Services.getOneText(objectCopy);
+        //         console.log("Cargar Copyright: " + copyData[0].texto_campo);
+        //         setYear(copyData[0].texto_campo);
+        //         copyOBJ.texto_campo = copyData[0].texto_campo;
+        //     } catch (error) {
+        //         console.log("Error fetching Copyright:", error);
+        //     }
+        // };
 
 
 
 
-        fetchDireccion();
-        fetchCorreo();
-        fetchNumTelefono();
-        fetchCopyright();
+        fetchFooter();
+        // fetchCorreo();
+        // fetchNumTelefono();
+        // fetchCopyright();
 
 
     }, [isEditing, isEditing1, isEditing2, isEditing3]);
