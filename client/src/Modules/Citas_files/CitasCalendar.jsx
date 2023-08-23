@@ -2,9 +2,44 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list'
 import esLocale from '@fullcalendar/core/locales/es';
+import { useState, useEffect, useRef } from 'react';
 
 const CitasCalendar = ({ events, isDoctor = true }) => {
+
+    const calendarRef = useRef(null);
+    const [isMobile, setIsMobile] = useState(false);
+    const previousViewRef = useRef('timeGridWeek');
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 920);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if(isDoctor) {
+            previousViewRef.current = 'dayGridMonth'
+        }
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        const calendarApi = calendarRef.current.getApi();
+    
+        if (isMobile) {
+          previousViewRef.current = calendarApi.view.type;
+          calendarApi.changeView('listWeek'); 
+        } else {
+          calendarApi.changeView(previousViewRef.current); 
+        }
+      }, [isMobile]);
 
     let views = 'dayGridMonth,timeGridWeek';
 
@@ -27,9 +62,11 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         <div class='cal-container'>
             <FullCalendar
 
+                ref={calendarRef}
+
                 headerToolbar={headerToolbar}
 
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
 
                 initialView={isDoctor ? "dayGridMonth" : "timeGridWeek"}
 
@@ -39,7 +76,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                     },
                     timeGridWeek: {
                         titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
-                    }
+                    },
                 }}
 
                 validRange={(currentDate) => {
