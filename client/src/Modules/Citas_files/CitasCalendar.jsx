@@ -10,7 +10,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
     const calendarRef = useRef(null);
     const [isMobile, setIsMobile] = useState(false);
-    const previousViewRef = useRef('timeGridWeek');
+    const [shouldChangeView, setShouldChangeView] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -20,43 +20,34 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         window.addEventListener('resize', handleResize);
         handleResize();
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        if(isDoctor) {
-            previousViewRef.current = 'dayGridMonth'
-        }
-
         return () => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
 
     useEffect(() => {
-        const calendarApi = calendarRef.current.getApi();
-    
         if (isMobile) {
-          previousViewRef.current = calendarApi.view.type;
-          calendarApi.changeView('listWeek'); 
+            setShouldChangeView(true);
         } else {
-          calendarApi.changeView(previousViewRef.current); 
+            setShouldChangeView(false);
         }
-      }, [isMobile]);
+    }, [isMobile]);
 
-    let views = 'dayGridMonth,timeGridWeek';
+    useEffect(() => {
+        const calendarApi = calendarRef.current.getApi();
 
-    let headerToolbar = {
-        left: 'prev,next today',
-        center: 'title',
-        right: views,
-    }
-
-    if (!isDoctor) {
-        views = 'timeGridWeek';
-        headerToolbar = {
-            left: 'prev,next today',
-            center: 'title',
-            right: null,
+        if (shouldChangeView) {
+            setTimeout(() => {
+                const defaultMobileView = isDoctor ? 'listMonth' : 'listWeek'
+                calendarApi.changeView(defaultMobileView);
+            }, 0);
+        } else {
+            const defaultView = isDoctor ? 'dayGridMonth' : 'timeGridWeek';
+            setTimeout(() => {
+                calendarApi.changeView(defaultView);
+            }, 0);
         }
-    }
+    }, [shouldChangeView, isDoctor]);
 
     return (
         <div class='cal-container'>
@@ -64,11 +55,15 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 ref={calendarRef}
 
-                headerToolbar={headerToolbar}
+                headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: isMobile ? (isDoctor ? 'listMonth,listWeek' : null) : (isDoctor ? 'dayGridMonth,timeGridWeek' : null),
+                }}
 
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
 
-                initialView={isDoctor ? "dayGridMonth" : "timeGridWeek"}
+                initialView={isMobile ? 'listWeek' : (isDoctor ? 'dayGridMonth' : 'timeGridWeek')}
 
                 views={{
                     dayGridMonth: {
@@ -77,6 +72,12 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                     timeGridWeek: {
                         titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
                     },
+                    listWeek: {
+                        buttonText: 'Semana'
+                    },
+                    listMonth: {
+                        buttonText: 'Mes'
+                    }
                 }}
 
                 validRange={(currentDate) => {
@@ -127,6 +128,8 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 height={'auto'}
 
                 hiddenDays={[0, 6]}
+
+                // viewDidMount={handleViewDidMount}
 
                 eventContent={(eventInfo) => (
                     <>
