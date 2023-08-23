@@ -18,6 +18,7 @@ const usuariosRouter = (pool) => {
         }
     });
 
+
     router.get('/usuarios', async (req, res) => {
         try {
             const correo = req.params.correo;
