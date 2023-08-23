@@ -50,6 +50,8 @@ const LandingPage = () => {
     const [idd, setID] = useState(null);
     const [selectMail, setMail] = useState([]);
     const [citaD, setCitaD] = useState([]);
+    const [selectedNombre, setSelectedNombre] = useState('Ver Todas');
+
 
     const [Expedientess, setExpedientess] = useState({
         idpaciente: '',
@@ -131,11 +133,19 @@ const LandingPage = () => {
         }
         fetchExpedientes();
 
+        const citasFiltradas = data.filter(cita => {
+            if (selectedNombre === 'Ver Todas') {
+                return true;
+            }
+            return cita.description === selectedNombre;
+        });
+        setSchAppointments(citasFiltradas);
+
         if (isSubmitting2) {
             fetchExpedientes();
         }
 
-    },[isLoggedIn,isSubmitting2]);
+    }, [isLoggedIn, isSubmitting2]);
 
     const toggleModal22 = async (id) => {
         setID(id);
@@ -481,7 +491,7 @@ const LandingPage = () => {
             if (validations()) {
                 const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora, cita.idcita);
                 const isAvailable = availableResponse.available;
-                
+
                 if (!isAvailable) {
                     swal("La hora que ha seleccionado ya ha sido ocupada.", {
                         icon: "warning",
@@ -491,10 +501,10 @@ const LandingPage = () => {
                     const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
                     setAvailableTimes(times);
                 } else {
-                    if(cita.estado==="Cancelar Cita"){
-                        cita.estado="Cancelada";
+                    if (cita.estado === "Cancelar Cita") {
+                        cita.estado = "Cancelada";
                     }
-                    
+
                     submitEditCita();
                 }
             }
@@ -511,24 +521,24 @@ const LandingPage = () => {
 
     const submitEditCita = async () => {
         try {
-            
-           
-            if(cita.estado==="Cancelada"){
-                await CitasService.editCitasUser(idd,cita);
+
+
+            if (cita.estado === "Cancelada") {
+                await CitasService.editCitasUser(idd, cita);
                 swal("Cita Editada Exitosamente!.", {
                     icon: "success",
                 });
-            }else{
+            } else {
                 await CitasService.editCitas(idd, cita);
-                
+
                 swal("Cita Editada Exitosamente!.", {
                     icon: "success",
                 });
             }
-            
-            
+
+
             toggleModal22();
-           window.location.reload();
+            window.location.reload();
             cleanCita();
 
         } catch (error) {
@@ -550,7 +560,7 @@ const LandingPage = () => {
             });
             return false
         } else if (nombre_persona.charAt(0) === ' ') {
-            
+
             swal("El nombre no puede iniciar con un espacio.", {
                 icon: "error",
             });
@@ -679,7 +689,16 @@ const LandingPage = () => {
                             Agendar Cita
                         </button>
                         <div className='appointments-container'>
-                            <div className='box-title appointments-title'>Citas Agendadas</div>
+                            <div className='box-title appointments-title'>Citas Agendadas
+                                <Autocomplete
+                                    value={selectedNombre}
+                                    onChange={(event, newValue) => setSelectedNombre(newValue)}
+                                    options={['Ver Todas', 'nombre 1', 'nombre 2']}
+                                    renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
+                                    sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '65%', marginTop: '3%' }}
+                                />
+
+                            </div>
                             <div className='appointments'>
                                 {data.map((appointment, index) => (
                                     <div key={index} className='appointment'>
@@ -743,12 +762,12 @@ const LandingPage = () => {
                                     required
                                     options={listaEstado}
                                     defaultValue={cita.estado}
-                                     onChange={(event, newValue) =>
-                                           setCita({
-                                               ...cita,
-                                              estado: newValue,
-                                           })
-                                       }
+                                    onChange={(event, newValue) =>
+                                        setCita({
+                                            ...cita,
+                                            estado: newValue,
+                                        })
+                                    }
                                     renderInput={(params) => <TextField {...params} label="Estado" required />}
                                     ListboxProps={
                                         {
@@ -764,11 +783,11 @@ const LandingPage = () => {
                                     id="idpaciente"
                                     options={Expedientes}
                                     getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
-                                          onChange={(event, newValue) => {
+                                    onChange={(event, newValue) => {
 
-                                          cita.idpaciente = newValue?.idpaciente;
+                                        cita.idpaciente = newValue?.idpaciente;
 
-                                         }}
+                                    }}
                                     renderInput={(params) => (
                                         <TextField {...params} label="ID Paciente" />
                                     )}
@@ -799,10 +818,10 @@ const LandingPage = () => {
                                     required
                                     options={availableTimes}
                                     value={hora}
-                                      onChange={(event, newValue) => {
-                                           setHora(newValue);
-                                          setCita((prevCita) => ({ ...prevCita, hora: newValue }));
-                                     }}
+                                    onChange={(event, newValue) => {
+                                        setHora(newValue);
+                                        setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                    }}
                                     renderInput={(params) => <TextField {...params} label="Hora
                                         " required style={{ marginBottom: '0.45rem' }} />}
                                     ListboxProps={
