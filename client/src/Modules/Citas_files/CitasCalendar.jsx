@@ -10,7 +10,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
     const calendarRef = useRef(null);
     const [isMobile, setIsMobile] = useState(false);
-    const previousViewRef = useRef('timeGridWeek');
+    const [shouldChangeView, setShouldChangeView] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -26,43 +26,27 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
     }, []);
 
     useEffect(() => {
-        const calendarApi = calendarRef.current.getApi();
-
         if (isMobile) {
-            previousViewRef.current = calendarApi.view.type;
-            calendarApi.changeView('listWeek');
+            setShouldChangeView(true);
         } else {
-            calendarApi.changeView(previousViewRef.current);
+            setShouldChangeView(false);
         }
-
     }, [isMobile]);
 
-    const handleViewDidMount = () => {
-        if (isMobile) {
-            calendarRef.current.getApi().changeView('listWeek');
+    useEffect(() => {
+        const calendarApi = calendarRef.current.getApi();
+
+        if (shouldChangeView) {
+            setTimeout(() => {
+                calendarApi.changeView('listWeek');
+            }, 0);
+        } else {
+            const defaultView = isDoctor ? 'dayGridMonth' : 'timeGridWeek';
+            setTimeout(() => {
+                calendarApi.changeView(defaultView);
+            }, 0);
         }
-    };
-
-    let views = 'dayGridMonth,timeGridWeek';
-
-    let headerToolbar = {
-        left: 'prev,next today',
-        center: 'title',
-        right: views,
-    }
-
-    if (isDoctor) {
-        previousViewRef.current = 'dayGridMonth'
-    }
-
-    if (!isDoctor) {
-        views = 'timeGridWeek';
-        headerToolbar = {
-            left: 'prev,next today',
-            center: 'title',
-            right: null,
-        }
-    }
+    }, [shouldChangeView, isDoctor]);
 
     return (
         <div class='cal-container'>
@@ -70,7 +54,11 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 ref={calendarRef}
 
-                headerToolbar={headerToolbar}
+                headerToolbar={{
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: isMobile ? null : (isDoctor ? 'dayGridMonth,timeGridWeek' : null),
+                }}
 
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
 
@@ -134,7 +122,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 hiddenDays={[0, 6]}
 
-                viewDidMount={handleViewDidMount}
+                // viewDidMount={handleViewDidMount}
 
                 eventContent={(eventInfo) => (
                     <>
