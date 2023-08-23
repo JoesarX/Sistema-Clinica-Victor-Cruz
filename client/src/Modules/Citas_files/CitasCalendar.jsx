@@ -20,11 +20,6 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         window.addEventListener('resize', handleResize);
         handleResize();
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        if(isDoctor) {
-            previousViewRef.current = 'dayGridMonth'
-        }
-
         return () => {
             window.removeEventListener('resize', handleResize);
         };
@@ -32,14 +27,21 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
     useEffect(() => {
         const calendarApi = calendarRef.current.getApi();
-    
+
         if (isMobile) {
-          previousViewRef.current = calendarApi.view.type;
-          calendarApi.changeView('listWeek'); 
+            previousViewRef.current = calendarApi.view.type;
+            calendarApi.changeView('listWeek');
         } else {
-          calendarApi.changeView(previousViewRef.current); 
+            calendarApi.changeView(previousViewRef.current);
         }
-      }, [isMobile]);
+
+    }, [isMobile]);
+
+    const handleViewDidMount = () => {
+        if (isMobile) {
+            calendarRef.current.getApi().changeView('listWeek');
+        }
+    };
 
     let views = 'dayGridMonth,timeGridWeek';
 
@@ -50,6 +52,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
     }
 
     if (!isDoctor) {
+        previousViewRef.current = 'dayGridMonth'
         views = 'timeGridWeek';
         headerToolbar = {
             left: 'prev,next today',
@@ -68,7 +71,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
 
-                initialView={isDoctor ? "dayGridMonth" : "timeGridWeek"}
+                initialView={isMobile ? 'listWeek' : (isDoctor ? 'dayGridMonth' : 'timeGridWeek')}
 
                 views={{
                     dayGridMonth: {
@@ -127,6 +130,8 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 height={'auto'}
 
                 hiddenDays={[0, 6]}
+
+                viewDidMount={handleViewDidMount}
 
                 eventContent={(eventInfo) => (
                     <>
