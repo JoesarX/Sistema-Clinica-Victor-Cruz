@@ -38,7 +38,8 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
         if (shouldChangeView) {
             setTimeout(() => {
-                calendarApi.changeView('listWeek');
+                const defaultMobileView = isDoctor ? 'listMonth' : 'listWeek'
+                calendarApi.changeView(defaultMobileView);
             }, 0);
         } else {
             const defaultView = isDoctor ? 'dayGridMonth' : 'timeGridWeek';
@@ -57,7 +58,7 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 headerToolbar={{
                     left: 'prev,next today',
                     center: 'title',
-                    right: isMobile ? null : (isDoctor ? 'dayGridMonth,timeGridWeek' : null),
+                    right: isMobile ? (isDoctor ? 'listMonth,listWeek' : null) : (isDoctor ? 'dayGridMonth,timeGridWeek' : null),
                 }}
 
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
@@ -71,6 +72,12 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                     timeGridWeek: {
                         titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
                     },
+                    listWeek: {
+                        buttonText: 'Semana'
+                    },
+                    listMonth: {
+                        buttonText: 'Mes'
+                    }
                 }}
 
                 validRange={(currentDate) => {
