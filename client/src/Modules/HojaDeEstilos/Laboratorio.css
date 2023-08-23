@@ -234,6 +234,12 @@
 
 .quoting-item-quantity {
   font-size: 18px;
+  font-weight: bold;
+ /* Espacio entre cantidad y precio */
+}
+
+.palabra_value {
+  font-size: 18px;
   color: #777;
   font-weight: bold;
  /* Espacio entre cantidad y precio */
@@ -247,6 +253,14 @@
   font-weight: bold;
   margin-left: 15px;
 }
+
+.palabra_value1 {
+  font-size: 20px;
+  color: #777;
+  font-weight: bold;
+ /* Espacio entre cantidad y precio */
+}
+
 
 .quoting-item-separator {
   margin: 10px 0;

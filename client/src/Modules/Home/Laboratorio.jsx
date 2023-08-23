@@ -112,17 +112,27 @@ const Laboratorio = () => {
             </div>
             {quotingEnabled && (
                 <div className="quoting-container">
-                <h3>Cotización</h3>
-                {cartItems.map((item, index) => (
-                    <div key={item.id} className="quoting-item">
-                        <span className="quoting-item-name">{item.titulo}</span>
-                        <span className="quoting-item-quantity">{`Cantidad: ${item.quantity}`}</span>
-                        <span className="quoting-item-total">{`Total: Lps. ${item.precio * item.quantity}`}</span>
-                        {index !== cartItems.length - 1 && <hr className="quoting-item-separator" />}
-                    </div>
-                ))}
-                <div className="total-amount">{`Total: Lps.${totalAmount}`}</div>
-            </div>
+                    <h3>Cotización</h3>
+                    {cartItems.map((item, index) => (
+                        <div key={item.id} className="quoting-item">
+                            <span className="quoting-item-name">{item.titulo}</span>
+                            <span className="quoting-item-quantity"><span className ="palabra_value">Cantidad: </span>{`${item.quantity}`}</span>
+                            <span className="quoting-item-total"><span className ="palabra_value1">Total: </span>
+                                {`Lps. ${(
+                                    item.precio * item.quantity
+                                ).toLocaleString('es-HN', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                })}`}
+                            </span>
+                            {index !== cartItems.length - 1 && <hr className="quoting-item-separator" />}
+                        </div>
+                    ))}
+                    <div className="total-amount">{`Total: Lps. ${totalAmount.toLocaleString('es-HN', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    })}`}</div>
+                </div>
             )}
             <div className="empty-space-bottom"></div>
             <Footer />
