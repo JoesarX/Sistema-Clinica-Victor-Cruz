@@ -68,7 +68,7 @@ const Home = () => {
         arrayServicio.visibility = isEyeOpen;
         */
 
-        if (!visibilityFlag && arrayServicio.visibility) {
+        if (!visibilityFlag && !arrayServicio.visibility) {
             swal("Solo pueden haber 5 Servicios visibles", {
                 icon: "warning",
             });
@@ -84,7 +84,7 @@ const Home = () => {
                     item.id === updatedCarrusel.id ? updatedCarrusel : item
                 );
                 setCarruselData(updatedCarruselData);
-
+                //fetchAllCarruselPics();
                 window.location.reload();
             }
             catch (error) {
