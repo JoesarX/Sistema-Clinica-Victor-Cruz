@@ -7,7 +7,6 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState();
   const [isAlertShown, setIsAlertShown] = useState(false);
-  
   const autoLogoutTime = 20 * 60 * 1000; // 5 minutes in milliseconds
   const timerIdRef = useRef();
 
@@ -80,6 +79,7 @@ const AuthProvider = ({ children }) => {
       window.removeEventListener('keydown', handleUserActivity);
       clearTimeout(timerIdRef.current);
     };
+
   }, [isLoggedIn, isAlertShown]);
 
   const contextValue = {

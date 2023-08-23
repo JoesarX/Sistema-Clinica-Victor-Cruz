@@ -90,7 +90,7 @@ export const getAvailableTimes = async (date, id = null) => {
         console.log(date);
         const url = id ? `${API_URL}/citas/availableTimes/${date}?id=${id}` : `${API_URL}/citas/availableTimes/${date}`;
         const res = await axios.get(url);
-        
+
         return res.data;
     } catch (error) {
         console.log(error);
@@ -116,8 +116,6 @@ export const getUserExpCitas = async (correouser) => {
         console.log("In Service get citas de expedientes linked a usuarios");
         console.log(correouser);
         const res = await axios.get(`${API_URL}/citas/citasexpedientes/${correouser}`);
-        
-        
         return res.data;
     } catch (error) {
         console.log(error);
