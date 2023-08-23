@@ -20,6 +20,21 @@ const expedientesRouter = (pool) => {
         }
     });
 
+    router.get("/UserExpedients/:correo", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const email = req.params.correo;
+            const sqlSelect = "select E.* from Expedientes E left join Usuarios U on E.correo = U.correouser where E.correo = ?"
+            const [rows, fields] = await connection.query(sqlSelect,email);
+            connection.release();
+            res.json(rows);
+            console.log("Get User Expedientes call successful");
+        } catch (err) {
+            console.log("Get all Expedientes call failed. Error: " + err)
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
     router.get("/userpage/:correo", async (req, res) => {
         try {
             const correo = req.params.correo;

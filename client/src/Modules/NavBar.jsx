@@ -14,10 +14,11 @@ const NavBar = () => {
     const Master = localStorage.getItem("400");
     const Admin = localStorage.getItem("300");
     const User = localStorage.getItem("100");
+
     const handleSignOutClick = () => {
         localStorage.clear();
-        handleSignOut();
         navigate('/');
+        handleSignOut();
     };
     useEffect(() => {
         if (loggedUser) {

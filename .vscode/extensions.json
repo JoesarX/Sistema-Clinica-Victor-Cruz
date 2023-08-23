@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "tonybaloney.vscode-pets",
-        "oderwat.indent-rainbow"
+        "oderwat.indent-rainbow",
+        "github.copilot"
     ]
 }
