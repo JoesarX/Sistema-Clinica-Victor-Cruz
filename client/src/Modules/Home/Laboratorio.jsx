@@ -117,7 +117,7 @@ const Laboratorio = () => {
                     <div key={item.id} className="quoting-item">
                         <span className="quoting-item-name">{item.titulo}</span>
                         <span className="quoting-item-quantity">{`Cantidad: ${item.quantity}`}</span>
-                        <span className="quoting-item-total">{`Total: Lps.${item.precio * item.quantity}`}</span>
+                        <span className="quoting-item-total">{`Total: Lps. ${item.precio * item.quantity}`}</span>
                         {index !== cartItems.length - 1 && <hr className="quoting-item-separator" />}
                     </div>
                 ))}
