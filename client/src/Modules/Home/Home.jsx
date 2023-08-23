@@ -43,35 +43,146 @@ const Home = () => {
 
     const maxDescriptionCharacters = 512;
     const maxDescriptionCharacters2 = 190;
-    
+
     /* Para la DB*/
     //Aqui van las funciones para el reorder del carrusel +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++==
 
     const [CarruselData, setCarruselData] = useState([]);
+    const [carruselDataFlagged, setCarruselDataFlagged] = useState([]);
+    const [imagen1, setImagen1] = useState({
+        url: '',
+        orden: '',
+        visibility: '',
+        id: ''
+    });
     const [draggedIndex, setDraggedIndex] = useState(null);
+    const [updatedOrdenArray, setUpdatedOrdenArray] = useState(null);
+    const [isEyeOpen, setIsEyeOpen] = useState(true);
 
-    const handleToggleVisibility = (index) => {
+    const handleToggleVisibility = async (arrayServicio, index) => {
+        const updatedCarrusel = { ...arrayServicio, visibility: !arrayServicio.visibility };
+        /*
         const updatedCarruselData = [...CarruselData];
         updatedCarruselData[index].isVisible = !updatedCarruselData[index].isVisible;
         setCarruselData(updatedCarruselData);
+        arrayServicio.visibility = isEyeOpen;
+        */
+
+        if (!visibilityFlag && arrayServicio.visibility) {
+            swal("Solo pueden haber 5 Servicios visibles", {
+                icon: "warning",
+            });
+        } else {
+            try {
+                console.log(updatedCarrusel);
+                console.log(updatedCarrusel.idfoto);
+                await CarruselService.editCarrusel(updatedCarrusel.idfoto, updatedCarrusel);
+                swal("Visibilidad Editada", {
+                    icon: "success",
+                });
+                const updatedCarruselData = CarruselData.map(item =>
+                    item.id === updatedCarrusel.id ? updatedCarrusel : item
+                );
+                setCarruselData(updatedCarruselData);
+
+                window.location.reload();
+            }
+            catch (error) {
+                console.log('Error submitting servicio:', error);
+            }
+        }
     };
 
-    const handleDragStart = (index) => {
+    const handleDragStart = (e, index) => {
+        e.dataTransfer.setData('index', index);
         setDraggedIndex(index);
+    };
+
+    const handleDragEnd = () => {
+        setDraggedIndex(null);
     };
 
     const handleDragOver = (e, index) => {
         e.preventDefault();
+        if (index !== draggedIndex) {
+            setCarruselData((prevData) => {
+                const newData = [...prevData];
+                const [movedCarrusel] = newData.splice(draggedIndex, 1);
+                newData.splice(index, 0, movedCarrusel);
+
+                const updatedOrder = newData.map((carrusel, newIndex) => ({
+                    ...carrusel,
+                    orden: newIndex,
+                }));
+                setUpdatedOrdenArray(updatedOrder);
+                setDraggedIndex(index);
+                console.log("Original: ");
+                console.log(CarruselData);
+                console.log("Updated");
+                console.log(updatedOrder);
+                return newData;
+            });
+        }
     };
 
-    const handleDrop = (targetIndex) => {
+    const handleDrop = (e) => {
+        e.preventDefault();
+        /*
         const updatedCarruselData = [...CarruselData];
         const [draggedItem] = updatedCarruselData.splice(draggedIndex, 1);
         updatedCarruselData.splice(targetIndex, 0, draggedItem);
 
         setCarruselData(updatedCarruselData);
         setDraggedIndex(null);
+        */
     };
+
+    const updateCarruselOrderInDatabase = async () => {
+        if (updatedOrdenArray) {
+            try {
+                await Promise.all(
+                    updatedOrdenArray.map(async (carrusel) => {
+                        console.log(updatedOrdenArray);
+                        const changedService = compareArrays(CarruselData, updatedOrdenArray, carrusel.idfoto);
+                        console.log(changedService);
+                        if (changedService) {
+
+                            console.log("Changing service order for ID:", changedService.idfoto);
+                            console.log("Updated service data:", changedService);
+                            changedService.orden = changedService.copyOrden;
+                            await CarruselService.editCarrusel(changedService.idfoto, changedService); // Pass the updated data object
+                        }
+                    })
+                );
+                swal({
+                    title: 'Orden de Imagenes Editado',
+                    icon: 'success',
+                });
+                //window.location.reload();
+            } catch (error) {
+                console.log("Error updating imagenes order:", error);
+            }
+        } else {
+            console.log("updatedOrdenArray is null");
+        }
+    };
+
+    function compareArrays(originalArray, copyArray, serviceId) {
+        const originalObj = originalArray.find((obj) => obj.idfoto === serviceId);
+        const copyObj = copyArray.find((obj) => obj.idfoto === serviceId);
+        //console.log("Original Object:", originalObj);
+        //console.log("Copy Object:", copyObj);
+        if (originalObj && copyObj && originalObj.orden !== copyObj.orden) {
+            //console.log("Order Changed!");
+            return {
+                ...originalObj,
+                originalOrden: originalObj.orden,
+                copyOrden: copyObj.orden,
+            };
+        }
+        //console.log("No Change.");
+        return null;
+    }
 
     //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     const [isFetching, setIsFetching] = useState(true);
@@ -174,7 +285,7 @@ const Home = () => {
             if (trimmedDescription === "") {
                 swal("¡Error! La descripcion no puede quedar en blanco.", {
                     icon: "error",
-                });                
+                });
                 return;
             }
 
@@ -201,7 +312,7 @@ const Home = () => {
 
             // Check if there are more than one consecutive spaces in title or description
             if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
-                
+
                 swal("Error, No se permiten más de un espacio consecutivo en el texto.", {
                     icon: "error",
                 });
@@ -264,14 +375,14 @@ const Home = () => {
                     try {
                         console.log("Entré al fetch");
                         var info = await text_Services.getHome();
-                        console.log("info: "+info);
+                        console.log("info: " + info);
                         setTitulo1OBJ({ ...titulo1OBJ, texto_campo: info[0].texto_campo });
                         setTitulo2OBJ({ ...titulo2OBJ, texto_campo: info[1].texto_campo });
-                        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: info[2].texto_campo });    
-                        setdescripcion1OBJ({ ...descripcion1OBJ, texto_campo: info[3].texto_campo });                  
+                        setTitulo3OBJ({ ...titulo3OBJ, texto_campo: info[2].texto_campo });
+                        setdescripcion1OBJ({ ...descripcion1OBJ, texto_campo: info[3].texto_campo });
                         setdescripcion2OBJ({ ...descripcion2OBJ, texto_campo: info[4].texto_campo });
                         setdescripcion3OBJ({ ...descripcion3OBJ, texto_campo: info[5].texto_campo });
-                        
+
                         console.log("HOLAAAAAA");
                         console.log(isFetching);
                     } catch (error) {
@@ -279,7 +390,7 @@ const Home = () => {
                     }
                 };
                 console.log("Error de effect");
-                console.log("Antes:"+isFetching);
+                console.log("Antes:" + isFetching);
                 fetchAllCarruselPics();
                 fetchTitulos();
                 setIsFetching(false);
@@ -355,12 +466,27 @@ const Home = () => {
 
     let [imageUpload, setImageUpload] = useState(null);
     let [imagePreview, setImagePreview] = useState(null);
+    const [visibilityFlag, setVisibilityFlag] = useState(true);
 
     const fetchAllCarruselPics = async () => {
         try {
             const CarruselArray = await CarruselService.getPicsCarrusel();
-            console.log(CarruselArray)
-            setCarruselData(CarruselArray);
+            const carruselWithId = CarruselArray.map((carrusel) => ({
+                ...carrusel,
+            }));
+            console.log(carruselWithId);
+            setCarruselData(carruselWithId);
+            const filteredCarrusel = carruselWithId.filter(servicio => servicio.visibility === 1);
+            setCarruselDataFlagged(filteredCarrusel);
+            const countVisible = carruselWithId.filter(item => item.visibility === 1).length;
+            console.log(`Number of objects with visibility set to true: ${countVisible}`);
+            if (countVisible < 5) {
+                setVisibilityFlag(true);
+            }
+            else {
+                setVisibilityFlag(false);
+            }
+            console.log(CarruselArray.length);
         } catch (error) {
             console.log("Error fetching carrusel pictures:", error);
         }
@@ -571,14 +697,22 @@ const Home = () => {
             console.log('Error submitting medicamento:', error);
         }
     };
-    const submitPicture = async () => {
 
+    const submitPicture = async () => {
         console.log("Entra a agregar despues de validaciones");
         try {
             if (imageUpload != null) {
                 const imageUrl = await uploadFile();
-                const carruselToSend = { url: imageUrl };
-                await CarruselService.postPicture(carruselToSend);
+                setImagen1(() => ({
+                    url: imageUrl,
+                    orden: CarruselData.length,
+                    visibility: visibilityFlag,
+                }));
+                imagen1.url = imageUrl;
+                imagen1.orden = CarruselData.length;
+                console.log(visibilityFlag);
+                imagen1.visibility = visibilityFlag;
+                await CarruselService.postPicture(imagen1);
                 swal("Imagen de carrusel agregada exitosamente!", {
                     icon: "success",
                 });
@@ -655,10 +789,10 @@ const Home = () => {
             .catch((error) => {
                 console.log("Failed to delete image: ", error)
             })
-        window.location.reload();
+        //window.location.reload();
     }
 
-    const handleDeleteCarruselImage = async (id, url) => {
+    const handleDeleteCarruselImage = async (id, url, orden) => {
 
         if (CarruselData.length <= 1) {
             swal("El carrusel debe tener como mínimo una imagen!", {
@@ -678,7 +812,7 @@ const Home = () => {
                 if (willDelete) {
                     try {
 
-                        await CarruselService.deletePicture(id);
+                        await CarruselService.deletePicture(id, orden);
                         console.log(url);
                         deleteImg(url);
                         swal("Imagen de carrusel eliminada exitosamente!", {
@@ -701,7 +835,7 @@ const Home = () => {
             return (
                 <div className="imagenes">
                     <Slide {...properties}>
-                        {CarruselData.slice(0, 5).map((carrusel) => ( 
+                        {carruselDataFlagged.slice(0, 5).map((carrusel) => (
                             <div className='each-slide' key={carrusel.idfoto}>
                                 <img src={carrusel.url} alt={`imagen ${carrusel.idfoto}`} />
                             </div>
@@ -777,7 +911,6 @@ const Home = () => {
                             className="customFileInput"
                         />
                     </div>
-
                     <button className="cancelButton" onClick={handleModalClose}>
                         <FontAwesomeIcon icon={faTimes} size="2x" />
                     </button>
@@ -791,21 +924,25 @@ const Home = () => {
                                                 <li
                                                     className={`carrusel-list-item ${index === draggedIndex ? 'dragging' : ''}`}
                                                     draggable
-                                                    onDragStart={() => handleDragStart(index)}
+                                                    onDragStart={(e) => handleDragStart(e, index)}
+                                                    onDragEnd={handleDragEnd}
                                                     onDragOver={(e) => handleDragOver(e, index)}
-                                                    onDrop={() => handleDrop(index)}
+                                                    onDrop={handleDrop}
                                                 >
-                                                    <div className={`carrusel-list-item-image ${row.isVisible ? '' : 'hidden'}`}>
-                                                        {row.isVisible && (
-                                                            <img src={row.url} className="carrusel-crud-image-img" alt={`imagen ${row.idfoto}`} />
-                                                        )}
+                                                    <div className="carrusel-list-item-image">
+                                                        <img
+                                                            src={row.url}
+                                                            className={`carrusel-crud-image-img ${row.isVisible ? '' : 'hidden'}`}
+                                                            alt={`imagen ${row.idfoto}`}
+                                                            style={{ opacity: row.visibility === 1 ? 1 : 0.1}}
+                                                        />
                                                     </div>
                                                     <div className="carrusel-list-item-actions">
-                                                        <IconButton onClick={() => handleDeleteCarruselImage(getRowId(row), row.url)}>
+                                                        <IconButton onClick={() => handleDeleteCarruselImage(getRowId(row), row.url, row.orden)}>
                                                             <Delete />
                                                         </IconButton>
-                                                        <IconButton onClick={() => handleToggleVisibility(index)}>
-                                                            {row.isVisible ? <Visibility /> : <VisibilityOff />}
+                                                        <IconButton onClick={() => handleToggleVisibility(row, index)}>
+                                                            {row.visibility === 1 ? <Visibility /> : <VisibilityOff />}
                                                         </IconButton>
                                                         <button className="drag-handle-button" onClick={() => handleDragStart(index)}>
                                                             <Menu />
@@ -815,9 +952,11 @@ const Home = () => {
                                                 <hr className="custom-hr" />
                                             </div>
                                         ))}
+
+
                                     </ul>
 
-
+                                    <button className='buttonEE' onClick={updateCarruselOrderInDatabase}>Guardar Cambios</button>
                                 </div>
                             ) : (
                                 <p>Cargando carrusel...</p>
@@ -841,7 +980,7 @@ const Home = () => {
                 NUESTROS <span style={{ color: '#223240', marginLeft: '10px' }}>SERVICIOS</span>
             </div>
 
-            <div className="services-container">
+            <div className="servicess">
                 <ServiceComponent
                     title={titulo1OBJ.texto_campo}
                     description={descripcion1OBJ.texto_campo}

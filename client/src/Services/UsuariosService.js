@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000/usuarios';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net/usuarios';
+const API_URL = 'http://localhost:8000/usuarios';
+//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net/usuarios';
 
 export const getAllusuarios = async () => {
     try {
@@ -15,7 +15,7 @@ export const getAllusuarios = async () => {
 
 export const postUsuarios = async (usuario) => {
     try {
-        const res = await axios.post(`${API_URL}/usuarios`, usuario);
+        const res = await axios.post(`${API_URL}`, usuario);
         return res.data;
     } catch (error) {
         console.log(error);
@@ -23,23 +23,12 @@ export const postUsuarios = async (usuario) => {
     }
 };
 
-export const editusuarios = async (id, usuario) => {
+export const deleteusuarios = async (email) => {
     try {
-        await axios.put(`${API_URL}/usuarios/${id}`, usuario);
-
+        const res = await axios.delete(`${API_URL}/usuarios/${email}`);
+        return res.data;
     } catch (error) {
-        console.log(error);
-        throw new Error('Failed to edit usuario');
-    }
-};
-
-export const deleteusuarios = async (id) => {
-    try {
-        await axios.delete(`${API_URL}/usuarios/${id}`);
-
-    } catch (error) {
-        console.log(error);
-        throw new Error('Failed to delete usuario');
+        throw error;
     }
 };
 //Para iniciar sesión
@@ -67,17 +56,37 @@ export const loginUsuarios = async (uEmail, uPassword) => {
     }
 };
 
-export const getOneUser = async (id) => {
-    console.log(id);
+export const editusuarios = async (email, editedUser) => {
     try {
-        const res = await axios.get(`${API_URL}/usuarios/${id}`);
+        const res = await axios.put(`${API_URL}/usuarios/${email}`, editedUser);
         return res.data;
-        console.log(res.data);
     } catch (error) {
-        console.log(error);
-        throw new Error('Failed to fetch user');
+        throw new Error('Error al editar usuario');
     }
 };
+
+export const getOneUser = async (email) => {
+    try {
+        const user = await axios.get(`${API_URL}/usuarios/`, email);
+        const userInfo = user.data
+        const emailEncontrado = userInfo.find(user => user.correouser === email);
+        if (emailEncontrado) {
+            const values = [
+                emailEncontrado.correouser,
+                emailEncontrado.nombre,
+                emailEncontrado.edad,
+                emailEncontrado.pregunta,
+                emailEncontrado.respuesta,
+                emailEncontrado.password,
+            ];
+            return values;
+        } else {
+            return "";
+        }
+    } catch (error) {
+        console.log("Esto da: " + error)
+    }
+}
 
 const Services = {
     getAllusuarios,

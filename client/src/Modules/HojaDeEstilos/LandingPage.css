@@ -1,8 +1,59 @@
 /* Default styles */
 
+
+.user-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 95%;
+  border-bottom: 1px solid #464646;
+  padding: 5px 0;
+  /* Add padding for spacing */
+}
+
+.user-info {
+  padding-top: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.user-name {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.ver-perfil-button {
+  background-color: #1e60a6;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.ver-perfil-button:hover {
+  background-color: #18548f;
+  transform: scale(1.05);
+}
+
+.linead {
+  width: 100%;
+  margin: 10px 0;
+  border: none;
+}
+
+/* /////////////////////////////////////////// */
+
 .scrollable-page {
   background-color: #E4EBF9;
   overflow-y: auto;
+}
+
+.pat-fil {
+  width: 50%;
 }
 
 .infoP {
@@ -23,7 +74,35 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10%;
+  margin-left: 7%;
+  margin-right: 7%;
+}
+
+.patient-email-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 25px;
+  width: fit-content;
+  line-height: 25px;
+
+  text-align: center;
+  vertical-align: middle;
+
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: auto;
+  padding-bottom: auto;
+
+  background: #C8DAFF;
+  border-radius: 20px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 100%;
+  color: #1560F2;
 }
 
 .patient-sections {
@@ -38,6 +117,83 @@
   border-radius: 5px;
 }
 
+.expedientesV {
+  margin-top: 8%;
+  margin-bottom: 8%;
+  padding-top: 5%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  width: 100%;
+  height: 20%;
+  background: #F8F8F8;
+  border-radius: 10px;
+}
+
+.box-title {
+  height: fit-content;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #000000;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-family: 'Inter';
+}
+
+.vintit {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  display: flex;
+  align-items: flex-end;
+  text-transform: uppercase;
+  color: #464646;
+}
+
+.evlist {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  width: 100%;
+  max-height: 150px;
+  border-bottom: 1px solid #464646;
+  padding: 0;
+}
+
+.evlist li {
+  list-style: none;
+}
+
+
+
+.file-item-line {
+  width: 98%;
+}
+
+.lifile {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 24px;
+  display: flex;
+  height: 10px;
+  align-items: center;
+  color: #000000;
+  width: 100%;
+}
+
+
+.divider {
+  border-bottom: 1px solid #464646;
+  width: 100%;
+}
+
 .appointments-section {
   max-height: 100%;
   gap: 10px;
@@ -47,7 +203,7 @@
   align-items: flex-start;
   gap: 20px;
   height: 100%;
-  width: 100%;
+  width: 40%;
 }
 
 .contenidos {
@@ -56,9 +212,8 @@
   align-items: flex-start;
   justify-content: space-evenly;
   left: 50%;
-  width: 95%;
-  height: 85%;
-  gap: 20px;
+  width: 100%;
+  height: 80%;
   margin: 0%;
   padding: 0%;
   margin-top: 10px;
@@ -103,9 +258,7 @@
   justify-content: center;
   align-items: center;
   width: 150px;
-  /* Adjust the width to make it bigger */
   height: 150px;
-  /* Adjust the height to make it bigger */
   background-color: #1560F2;
   border-radius: 50%;
 }
@@ -115,7 +268,14 @@
   color: #F8F8F8;
 }
 
-.editButton {
+.buttonBox {
+  margin: 5%;
+  padding: 5%;
+}
+
+.edit-button {
+  padding: 5%;
+  margin-right: 15px;
   border: none;
   background: none;
   padding: 0;
@@ -125,9 +285,35 @@
   justify-content: center;
   align-items: center;
   font-size: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button {
+  padding: 5%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: red;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #ccebff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.delete-button:hover {
+  background-color: #ffcccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .nombres {
+  padding-top: 10%;
   width: 100%;
   font-family: 'Inter';
   font-style: normal;
@@ -138,6 +324,7 @@
 }
 
 .smallTexts {
+  padding-top: 5%;
   margin: 5px;
   font-family: 'Inter';
   font-style: normal;

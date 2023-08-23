@@ -69,9 +69,7 @@ const Citas = () => {
         <Topbar />
         <h1 className="calendar-page-header header">NUESTRA DISPONIBILIDAD</h1>
       </header>
-      <main>
-        <CitasCalendar events={formattedEvents} isDoctor={false} />
-      </main>
+      <CitasCalendar events={formattedEvents} isDoctor={false} />
       <Footer />
     </div>
   );

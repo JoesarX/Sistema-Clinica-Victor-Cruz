@@ -47,8 +47,21 @@
 }
 
 /* Style for buttons */
-button {
+.button {
   margin-top: 8px;
+}
+.buttonEE {
+  position: relative;
+  left: 30%;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: #FFF;
+  background-color: #1E60A6;
 }
 
 .scrollable-page {
@@ -185,7 +198,7 @@ button {
   background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
-.services-container {
+.servicess {
   height: moz-fit-content;
   width: 90vw;
   max-width: 2000px;
@@ -386,7 +399,7 @@ button {
 .modalServicios-carrusel {
   
   width: 30%;
-  height: 80%;
+  height: 92%;
   max-width: 1600px;
   overflow: hidden;
 }
@@ -397,7 +410,7 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-height: 80vh;
+  max-height: 100vh;
   padding: 20px;
   background-color: #E4EBF9;
   border-radius: 10px;
@@ -425,7 +438,7 @@ button {
 
 /* GOTTA USE THAT SPACE PROPERLY! */
 @media only screen and (min-width: 780px) and (max-width: 1260px) {
-  .services-container {
+  .servicess {
     margin: 0px auto 20px auto;
     padding-top: 0px;
     padding-bottom: 0px;
@@ -517,7 +530,7 @@ button {
 
 /* SMALL DEVICES */
 @media only screen and (max-width: 780px) {
-  .services-container {
+  .servicess {
     flex-direction: column;
     align-content: flex-start;
     height: auto;

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import AddExpedientesModal from './AddExpedientesModal.jsx';
 
@@ -15,6 +15,7 @@ import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
 import moment from 'moment';
 import dayjs from 'dayjs';
+import { AuthContext } from '../AuthContext.js';
 
 
 //modal
@@ -47,10 +48,8 @@ import NavBar from '../NavBar';
 const Expedientes = () => {
    //========================================================================================================================================================================================================================
    //LOGIN VALIDATION
-   const AdminIsLoggedIng = localStorage.getItem("300");
-   const UserIsLoggedIng = localStorage.getItem("100");
-   const MasterIsLoggedIng = localStorage.getItem("400");
-   let isLoggedIn = false;
+  
+   let { isLoggedIn, userType } = useContext(AuthContext);
 
    //========================================================================================================================================================================================================================
    //EXPEDIENTES GRID DATA
@@ -469,13 +468,31 @@ const Expedientes = () => {
    useEffect(() => {
       // Validación login
       console.log("Este es el error: " + (buscaError++));
-      if (!AdminIsLoggedIng && !UserIsLoggedIng && !MasterIsLoggedIng) {
-
-         navigate("/iniciarsesion");
-      } else {
-         isLoggedIn = true;
-         console.log(':)')
-      }
+      if (userType === 'normal') {
+         // Create the overlay element
+         const overlay = document.createElement('div');
+         overlay.classList.add('custom-o');
+       
+         // Append the overlay to the body
+         document.body.appendChild(overlay);
+       
+         // Display swal with "Acceso restringido" message and custom styling
+         swal({
+           title: "Acceso restringido",
+           text: "",
+           icon: "warning",
+           customClass: {
+             popup: "custom-swal-popup" // Apply custom class to the modal
+           }
+         }).then(() => {
+           // Remove the overlay
+           overlay.remove();
+       
+           // Redirect user to the actual home page
+           navigate("/userpage"); // Replace "/home" with the correct home page path
+         });
+       }
+       
 
       const fetchAllExpedientes = async () => {
          try {

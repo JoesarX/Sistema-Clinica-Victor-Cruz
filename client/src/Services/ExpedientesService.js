@@ -1,6 +1,7 @@
 import axios from 'axios';
 
- const API_URL = 'http://localhost:8000';
+
+const API_URL = 'http://localhost:8000';
 //const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllExpedientes = async () => {
@@ -24,6 +25,7 @@ export const getOneExpediente = async (id) => {
     }
 };
 
+
 export const getUserExpedients = async (mail) => {
     console.log(mail)
     try {
@@ -38,16 +40,13 @@ export const getUserExpedients = async (mail) => {
 export const getOneUser = async (email) => {
     console.log("este es el email en landing page " + email[0]);
     console.log("este es el mensaje en landing page " + email[1]);
-    try {
-        const expedientes = await axios.get(`${API_URL}/expedientes/userpage/`, { params: { email } });
-        const expedientesInfo = expedientes.data[0];
-        console.log("Este es nombre : " + expedientesInfo.nombre);
-        console.log("Este es correo: " + expedientesInfo.correo);
-        console.log("Este es sexo : " + expedientesInfo.sexo);
-        console.log("Este es tel : " + expedientesInfo.telefono);
 
-        console.log("Esta es la data de expedientes " + expedientesInfo);
-        return expedientes.data[0];
+export const getExpedientes = async (email) => {
+
+    try {
+        const expedientes = await axios.get(`${API_URL}/expedientes/userpage/${email}`);
+        console.log(JSON.stringify(expedientes));
+        return expedientes.data;
     } catch (error) {
         console.log(error);
         throw new Error('Failed to fetch landing page');
@@ -131,7 +130,10 @@ const Services = {
     editExpedientesDashboard,
     getOneUser,
     getCitasOneExpediente,
-    getUserExpedients
+    getUserExpedients,
+    getExpedientes,
+    getCitasOneExpediente
+
     // Other functions
 };
 

@@ -2,9 +2,44 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import listPlugin from '@fullcalendar/list'
 import esLocale from '@fullcalendar/core/locales/es';
+import { useState, useEffect, useRef } from 'react';
 
 const CitasCalendar = ({ events, isDoctor = true }) => {
+
+    const calendarRef = useRef(null);
+    const [isMobile, setIsMobile] = useState(false);
+    const previousViewRef = useRef('timeGridWeek');
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 920);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if(isDoctor) {
+            previousViewRef.current = 'dayGridMonth'
+        }
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        const calendarApi = calendarRef.current.getApi();
+    
+        if (isMobile) {
+          previousViewRef.current = calendarApi.view.type;
+          calendarApi.changeView('listWeek'); 
+        } else {
+          calendarApi.changeView(previousViewRef.current); 
+        }
+      }, [isMobile]);
 
     let views = 'dayGridMonth,timeGridWeek';
 
@@ -13,7 +48,6 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         center: 'title',
         right: views,
     }
-    // let hiddenDays = [0]
 
     if (!isDoctor) {
         views = 'timeGridWeek';
@@ -22,26 +56,45 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
             center: 'title',
             right: null,
         }
-        // hiddenDays.push(6);
     }
 
     return (
         <div class='cal-container'>
             <FullCalendar
 
+                ref={calendarRef}
+
                 headerToolbar={headerToolbar}
 
-                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin]}
 
                 initialView={isDoctor ? "dayGridMonth" : "timeGridWeek"}
 
-                // views={{
-                //     timeGridThreeDay: {
-                //         type: 'timeGrid',
-                //         duration: { days: 3 },
-                //         buttonText: 'Día'
-                //     }
-                // }}
+                views={{
+                    dayGridMonth: {
+                        titleFormat: { year: 'numeric', month: 'long' }
+                    },
+                    timeGridWeek: {
+                        titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+                    },
+                }}
+
+                validRange={(currentDate) => {
+                    if (!isDoctor) {
+                        var startDate = new Date(currentDate.valueOf());
+                        var endDate = new Date(currentDate.valueOf());
+
+                        const daysPast = startDate.getDay();
+                        const remainingDaysThisWeek = 7 - startDate.getDay();
+
+                        startDate.setDate(startDate.getDate() - daysPast);
+                        endDate.setDate(endDate.getDate() + 14 + remainingDaysThisWeek);
+
+                        return { start: startDate, end: endDate };
+                    }
+                }}
+
+                titleRangeSeparator=' a '
 
                 locale={esLocale}
 
@@ -50,13 +103,13 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 slotLabelFormat={{
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true,
+                    hourCycle: 'h12'
                 }}
 
                 eventTimeFormat={{
                     hour: 'numeric',
                     minute: '2-digit',
-                    hour12: true,
+                    hourCycle: 'h12'
                 }}
 
                 slotMinTime="07:00:00"
@@ -73,7 +126,6 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 height={'auto'}
 
-                // hiddenDays={hiddenDays}
                 hiddenDays={[0, 6]}
 
                 eventContent={(eventInfo) => (

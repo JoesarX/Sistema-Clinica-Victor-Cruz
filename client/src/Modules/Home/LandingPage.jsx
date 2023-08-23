@@ -2,9 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/LandingPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
-import EditUserInfo from '../Dashboard/EditUserInfo.jsx';
+import EditUserInfo from '../Home/EditUser.jsx';
 import TopBar from '../Home/Topbar.jsx';
 import ExpedientesService from '../../Services/ExpedientesService';
 import UsuariosService from '../../Services/UsuariosService';
@@ -30,12 +30,16 @@ import { Delete, Edit } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import Citas from '../CitasTabla/CitasTabla';
 
+import { CorporateFareTwoTone } from '@mui/icons-material';
+
 
 const LandingPage = () => {
     const isLoggedIn = localStorage.getItem("100");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [Expedientes, setExpedientes] = useState([]);
     const [selectedExpediente, setSelectedExpediente] = useState(null);
+    const [user, setUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
     const navigate = useNavigate();
     const [altura, setAltura] = useState('');
     const email = IniciarSesion.email;
@@ -43,7 +47,7 @@ const LandingPage = () => {
     const id = url.substring(url.lastIndexOf('/') + 1);
     const correo = localStorage.getItem("correo");
     console.log("ESTE ES EL CORREO: " + correo);
-
+    const [perfil, setPerfil] = useState({});
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
 
@@ -132,6 +136,9 @@ const LandingPage = () => {
             }
         }
         fetchExpedientes();
+
+    let cont = 0;
+
 
         const citasFiltradas = data.filter(cita => {
             if (selectedNombre === 'Ver Todas') {
@@ -287,47 +294,7 @@ const LandingPage = () => {
     }
     ]);
 
-    const fetchExpediente2 = async () => {
-        console.log("FETCH 2.0: " + correo);
-        if (contador == 0) {
-            try {
-                const email = [correo, "AYUDA"];
-                const expedienteData = await ExpedientesService.getOneUser(email);
-                console.log(expedienteData);
-                setExpediente(expedienteData);
-                setPatient(prevPatient => ({
-                    ...prevPatient,
-                    idpaciente: expedienteData.idpaciente,
-                    nombre: expedienteData.nombre,
-                    edad: expedienteData.edad,
-                    fecha_nacimiento: formatDate(expedienteData.fecha_nacimiento),
-                    sexo: (expedienteData.sexo === "M") ? 'Masculino' : 'Femenino',
-                    correo: expedienteData.correo,
-                    telefono: expedienteData.telefono,
-                    numid: expedienteData.numid,
-                    estado_civil: expedienteData.estado_civil,
-                    padecimientos: expedienteData.padecimientos,
-                    ocupacion: expedienteData.ocupacion,
-                    altura: expedienteData.altura,
-                    peso: expedienteData.peso,
-                    temperatura: expedienteData.temperatura,
-                    ritmo_cardiaco: expedienteData.ritmo_cardiaco,
-                    presion: expedienteData.presion,
-                }));
-                console.log(patient.numid);
-                console.log(patient.nombre);
-            } catch (error) {
-                console.log(error);
-            }
-            contador++;
-            console.log(contador);
-        }
-
-    };
-
-    //fetchExpediente2();
-
-
+    const [usuarios, setUsuarios] = useState([]);
 
     useEffect(() => {
 
@@ -336,10 +303,36 @@ const LandingPage = () => {
             // Redirigir si no se cumple la verificación
             navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
         }
+        const fetchPerfil = async () => {
+            try {
+                const perfilData = await UsuariosService.getOneUser(correo);
+                setPerfil({
+                    correo: perfilData[0],
+                    nombre: perfilData[1],
+                    edad: perfilData[2],
+                    preguntaSeguridad: perfilData[3],
+                    respuestaSeguridad: perfilData[4],
+                });
 
-        const fetchExpediente = async () => {
-            console.log("CORREO 2.0: " + correo);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        const fetchUsuarios = async () => {
+            const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
+            setUsuarios(usuariosObtenidos);
+        }
+        fetchPerfil();
+        fetchUsuarios();
+    }, [isLoggedIn]);
 
+    const performActionsAfterModalClose = () => {
+
+        if (!isLoggedIn) {
+            navigate("/iniciarsesion");
+            return;
+        }
+        const fetchPerfil = async () => {
             try {
                 const email = [correo, "AYUDA"];
                 const expedienteData = await ExpedientesService.getOneUser(email);
@@ -409,19 +402,27 @@ const LandingPage = () => {
                     ritmo_cardiaco: expedienteData.ritmo_cardiaco,
                     presion: expedienteData.presion,
                 }));
+                const perfilData = await UsuariosService.getOneUser(correo);
+                setPerfil({
+                    correo: perfilData[0],
+                    nombre: perfilData[1],
+                    edad: perfilData[2],
+                    preguntaSeguridad: perfilData[3],
+                    respuestaSeguridad: perfilData[4],
+                });
+
             } catch (error) {
                 console.log(error);
             }
         };
+        const fetchUsuarios = async () => {
+            const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
+            setUsuarios(usuariosObtenidos);
+        };
+        fetchPerfil();
+        fetchUsuarios();
+    };
 
-        fetchExpediente();
-    }, [isLoggedIn]);
-
-    /*if (contador === 0) {
-        contador++;
-        //fetchExpediente();
-        console.log(contador);
-    }*/
 
     const formatDate = (date) => {
         var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -446,15 +447,53 @@ const LandingPage = () => {
 
 
     const handleOpenEditModal = () => {
-        setSelectedExpediente(expediente);
-        console.log(expediente)
+        setSelectedUser(user);
         setIsEditModalOpen(true);
     };
 
     const handleCloseEditModal = () => {
-        setSelectedExpediente(null);
+        setSelectedUser(null);
         setIsEditModalOpen(false);
-        fetchExpediente2();
+        performActionsAfterModalClose();
+    };
+
+    const handleViewExpediente = (id) => {
+        navigate(`/expedientes/dashboard/${id}`);
+    };
+
+    const deleteUser = (email) => {
+        swal({
+            title: "¿Estás seguro?",
+            text: "No podrás recuperar este usuario!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(async (willDelete) => {
+            if (willDelete) {
+                try {
+                    await deleteAPI(email);
+                    swal("Usuario eliminado correctamente!", {
+                        icon: "success",
+                    });
+                    navigate("/iniciarsesion");
+                } catch (error) {
+                    swal("Ocurrió un error, intente nuevamente", {
+                        icon: "error",
+                    });
+                }
+            } else {
+                swal("Operación cancelada");
+            }
+        });
+    };
+
+    const deleteAPI = async (email) => {
+        try {
+            const response = await UsuariosService.deleteusuarios(email);
+            return response;
+        } catch (error) {
+            throw error;
+        }
     };
 
     const isWeekday = (date) => {
@@ -646,43 +685,67 @@ const LandingPage = () => {
 
 
     return (
-        <div>
-            <div className='scrollable-page'>
-                <TopBar />
-                <div className='contenidos'>
+
+        <div className='scrollable-page'>
+            <TopBar />
+            <div className='contenidos'>
+                <div className='pat-fil'>
                     <div className='patient-sections'>
                         <div className='profile-picture-and-edits'>
                             <div className='perfile'>
                                 <FontAwesomeIcon icon={faUser} className='iconoUsers' />
                             </div>
-                            <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
+                            <div className='buttonBox'>
+                                <button onClick={handleOpenEditModal} className="edit-button">
+                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                </button>
+                                <button className="delete-button" onClick={() => deleteUser(perfil.correo)}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                            </div>
                             {isEditModalOpen && (
                                 <EditUserInfo
-                                    expedientess={expediente}
+                                    profile={perfil}
                                     onClose={handleCloseEditModal}
                                 />
                             )}
                         </div>
                         <div className='infoP'>
-                            <h2 className="nombres">{patient.nombre}</h2>
-                            <p className='smallTexts'>Correo:  <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.correo}</span></p>
+                          <h2 className="nombres">{perfil.nombre}</h2>
+                            <p className='smallTexts'>Correo:  <span className='patient-email-container' style={{ color: '#464646', marginLeft: '10px' }}>{perfil.correo}</span></p>
                             <hr className="linea" />
-                            <p className="smallTexts">Numero de ID: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.numid}</span></p>
+                            <p className="smallTexts">Edad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.edad}</span></p>
                             <hr className="linea" />
-                            <p className="smallTexts">Numero de Teléfono: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.telefono}</span></p>
+                            <p className="smallTexts">Pregunta de Seguridad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.preguntaSeguridad}</span></p>
                             <hr className="linea" />
-                            <p className="smallTexts">Sexo: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.sexo}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Fecha Nacimiento: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.fecha_nacimiento}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Edad: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.edad}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Estado Civil: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.estado_civil}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Ocupacion: <span style={{ color: '#464646', marginLeft: '10px' }}>{patient.ocupacion}</span></p>
-                            <hr className="linea" />
+                            <div className="expedientesV">
+                                <div className='box-title'>
+                                    <h3 className='vintit'>Expedientes relacionados al perfil</h3>
+                                </div>
+                                <ul className="evlist">
+                                    {usuarios.map((usuario, index) => {
+                                        return (
+                                            <div key={usuario.idPaciente} className="user-item">
+                                                <li className="user-info">
+                                                    <span className="user-name">{usuario.nombre}</span>
+                                                    <button
+                                                        className="ver-perfil-button"
+                                                        onClick={() => handleViewExpediente(usuario.idPaciente)}
+                                                    >
+                                                        Ver Expediente
+                                                    </button>
+                                                </li>
+
+                                                {index !== usuarios.length - 1 && <hr className="linead" />}
+                                            </div>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
                         </div>
                     </div>
+
+                </div>
                     <div className="appointments-section">
                         <button className='large-button schedule-date'>
                             <FontAwesomeIcon icon={faCalendarPlus} />
