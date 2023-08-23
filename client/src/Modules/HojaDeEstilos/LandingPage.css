@@ -7,14 +7,15 @@
   align-items: flex-start;
   width: 95%;
   border-bottom: 1px solid #464646;
-  padding: 5px 0; /* Add padding for spacing */
+  padding: 5px 0;
+  /* Add padding for spacing */
 }
 
 .user-info {
   padding-top: 5%;
   display: flex;
-  justify-content: space-between; 
-  align-items: center; 
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 
@@ -43,6 +44,7 @@
   margin: 10px 0;
   border: none;
 }
+
 /* /////////////////////////////////////////// */
 
 .scrollable-page {
@@ -50,7 +52,7 @@
   overflow-y: auto;
 }
 
-.pat-fil{
+.pat-fil {
   width: 50%;
 }
 
@@ -72,7 +74,35 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10%;
+  margin-left: 7%;
+  margin-right: 7%;
+}
+
+.patient-email-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 25px;
+  width: fit-content;
+  line-height: 25px;
+
+  text-align: center;
+  vertical-align: middle;
+
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-top: auto;
+  padding-bottom: auto;
+
+  background: #C8DAFF;
+  border-radius: 20px;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 100%;
+  color: #1560F2;
 }
 
 .patient-sections {
@@ -81,18 +111,21 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  height: 56%;
+  height: 100%;
   width: 100%;
   background-color: #FFFFFF;
   border-radius: 5px;
 }
+
 .expedientesV {
+  margin-top: 8%;
+  margin-bottom: 8%;
+  padding-top: 5%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding-left: 10px;
   padding-right: 10px;
-  padding-top: 30px;
   padding-bottom: 10px;
   width: 100%;
   height: 20%;
@@ -235,7 +268,14 @@
   color: #F8F8F8;
 }
 
-.editButton {
+.buttonBox {
+  margin: 5%;
+  padding: 5%;
+}
+
+.edit-button {
+  padding: 5%;
+  margin-right: 15px;
   border: none;
   background: none;
   padding: 0;
@@ -245,9 +285,35 @@
   justify-content: center;
   align-items: center;
   font-size: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.delete-button {
+  padding: 5%;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: red;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #ccebff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.delete-button:hover {
+  background-color: #ffcccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .nombres {
+  padding-top: 10%;
   width: 100%;
   font-family: 'Inter';
   font-style: normal;
@@ -258,6 +324,7 @@
 }
 
 .smallTexts {
+  padding-top: 5%;
   margin: 5px;
   font-family: 'Inter';
   font-style: normal;

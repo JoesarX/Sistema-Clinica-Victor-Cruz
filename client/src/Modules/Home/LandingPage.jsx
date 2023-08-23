@@ -2,21 +2,21 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/LandingPage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
-import EditUserInfo from '../Dashboard/EditUserInfo.jsx';
+import EditUserInfo from '../Home/EditUser.jsx';
 import TopBar from '../Home/Topbar.jsx';
 import ExpedientesService from '../../Services/ExpedientesService';
 import UsuariosService from '../../Services/UsuariosService';
 import IniciarSesion from '../Home/IniciarSesion.jsx';
 import { CorporateFareTwoTone } from '@mui/icons-material';
-
+import swal from 'sweetalert';
 
 const LandingPage = () => {
     const isLoggedIn = localStorage.getItem("100");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [expedientes, setExpedientes] = useState([]);
-    const [selectedExpediente, setSelectedExpediente] = useState(null);
+    const [user, setUser] = useState([]);
+    const [selectedUser, setSelectedUser] = useState(null);
     const navigate = useNavigate();
     const [altura, setAltura] = useState('');
     const email = IniciarSesion.email;
@@ -158,6 +158,7 @@ const LandingPage = () => {
                     preguntaSeguridad: perfilData[3],
                     respuestaSeguridad: perfilData[4],
                 });
+
             } catch (error) {
                 console.log(error);
             }
@@ -169,6 +170,36 @@ const LandingPage = () => {
         fetchPerfil();
         fetchUsuarios();
     }, [isLoggedIn]);
+
+    const performActionsAfterModalClose = () => {
+
+        if (!isLoggedIn) {
+            navigate("/iniciarsesion");
+            return;
+        }
+        const fetchPerfil = async () => {
+            try {
+                const perfilData = await UsuariosService.getOneUser(correo);
+                setPerfil({
+                    correo: perfilData[0],
+                    nombre: perfilData[1],
+                    edad: perfilData[2],
+                    preguntaSeguridad: perfilData[3],
+                    respuestaSeguridad: perfilData[4],
+                });
+
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        const fetchUsuarios = async () => {
+            const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
+            setUsuarios(usuariosObtenidos);
+        };
+        fetchPerfil();
+        fetchUsuarios();
+    };
+
 
     const formatDate = (date) => {
         var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -182,18 +213,53 @@ const LandingPage = () => {
 
 
     const handleOpenEditModal = () => {
-        setSelectedExpediente(expediente);
-        console.log(expediente)
+        setSelectedUser(user);
         setIsEditModalOpen(true);
     };
 
     const handleCloseEditModal = () => {
-        setSelectedExpediente(null);
+        setSelectedUser(null);
         setIsEditModalOpen(false);
+        performActionsAfterModalClose();
     };
 
     const handleViewExpediente = (id) => {
         navigate(`/expedientes/dashboard/${id}`);
+    };
+
+    const deleteUser = (email) => {
+        swal({
+            title: "¿Estás seguro?",
+            text: "No podrás recuperar este usuario!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then(async (willDelete) => {
+            if (willDelete) {
+                try {
+                    await deleteAPI(email);
+                    swal("Usuario eliminado correctamente!", {
+                        icon: "success",
+                    });
+                    navigate("/iniciarsesion");
+                } catch (error) {
+                    swal("Ocurrió un error, intente nuevamente", {
+                        icon: "error",
+                    });
+                }
+            } else {
+                swal("Operación cancelada");
+            }
+        });
+    };
+
+    const deleteAPI = async (email) => {
+        try {
+            const response = await UsuariosService.deleteusuarios(email);
+            return response;
+        } catch (error) {
+            throw error;
+        }
     };
 
 
@@ -207,27 +273,28 @@ const LandingPage = () => {
                             <div className='perfile'>
                                 <FontAwesomeIcon icon={faUser} className='iconoUsers' />
                             </div>
-                            <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
+                            <div className='buttonBox'>
+                                <button onClick={handleOpenEditModal} className="edit-button">
+                                    <FontAwesomeIcon icon={faPencilAlt} />
+                                </button>
+                                <button className="delete-button" onClick={() => deleteUser(perfil.correo)}>
+                                    <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                            </div>
                             {isEditModalOpen && (
                                 <EditUserInfo
-                                    expedientess={expediente}
+                                    profile={perfil}
                                     onClose={handleCloseEditModal}
                                 />
                             )}
                         </div>
-                        <div className='infoP'>r
-                            <h2 className="nombres">{perfil.nombe}</h2>
-                            <p className='smallTexts'>Correo:  <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.correo}</span></p>
+                        <div className='infoP'>
+                            <h2 className="nombres">{perfil.nombre}</h2>
+                            <p className='smallTexts'>Correo:  <span className='patient-email-container' style={{ color: '#464646', marginLeft: '10px' }}>{perfil.correo}</span></p>
                             <hr className="linea" />
                             <p className="smallTexts">Edad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.edad}</span></p>
                             <hr className="linea" />
-                            <p className="smallTexts">Fecha de Nacimiento: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.fecha_nacimiento}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Sexo: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.sexo}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Telefono: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.telefono}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Ocupacion: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.ocupacion}</span></p>
+                            <p className="smallTexts">Pregunta de Seguridad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.preguntaSeguridad}</span></p>
                             <hr className="linea" />
                             <div className="expedientesV">
                                 <div className='box-title'>
@@ -243,7 +310,7 @@ const LandingPage = () => {
                                                         className="ver-perfil-button"
                                                         onClick={() => handleViewExpediente(usuario.idPaciente)}
                                                     >
-                                                        Ver Perfil
+                                                        Ver Expediente
                                                     </button>
                                                 </li>
 
