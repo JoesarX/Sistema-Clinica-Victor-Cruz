@@ -137,7 +137,7 @@ const LandingPage = () => {
         }
         fetchExpedientes();
 
-    let cont = 0;
+        let cont = 0;
 
 
         const citasFiltradas = data.filter(cita => {
@@ -294,7 +294,7 @@ const LandingPage = () => {
     }
     ]);
 
-    const [usuarios, setUsuarios] = useState([]);
+    const [usuarios, setUsuarioss] = useState([]);
 
     useEffect(() => {
 
@@ -320,7 +320,7 @@ const LandingPage = () => {
         }
         const fetchUsuarios = async () => {
             const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
-            setUsuarios(usuariosObtenidos);
+            setUsuarioss(usuariosObtenidos);
         }
         fetchPerfil();
         fetchUsuarios();
@@ -417,7 +417,7 @@ const LandingPage = () => {
         };
         const fetchUsuarios = async () => {
             const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
-            setUsuarios(usuariosObtenidos);
+            setUsuarioss(usuariosObtenidos);
         };
         fetchPerfil();
         fetchUsuarios();
@@ -711,7 +711,7 @@ const LandingPage = () => {
                             )}
                         </div>
                         <div className='infoP'>
-                          <h2 className="nombres">{perfil.nombre}</h2>
+                            <h2 className="nombres">{perfil.nombre}</h2>
                             <p className='smallTexts'>Correo:  <span className='patient-email-container' style={{ color: '#464646', marginLeft: '10px' }}>{perfil.correo}</span></p>
                             <hr className="linea" />
                             <p className="smallTexts">Edad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.edad}</span></p>
@@ -746,169 +746,172 @@ const LandingPage = () => {
                     </div>
 
                 </div>
-                    <div className="appointments-section">
-                        <button className='large-button schedule-date'>
-                            <FontAwesomeIcon icon={faCalendarPlus} />
-                            Agendar Cita
+                <div className="appointments-section">
+                    <button className='large-button schedule-date'>
+                        <FontAwesomeIcon icon={faCalendarPlus} />
+                        Agendar Cita
+                    </button>
+                    <div className='appointments-container'>
+                        <div className='box-title appointments-title'>Citas Agendadas
+                            <Autocomplete
+                                value={selectedNombre}
+                                onChange={(event, newValue) => setSelectedNombre(newValue)}
+                                options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
+                                renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
+                                sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
+                            />
+                        </div>
+                        <div className='appointments'>
+                            {data.map((appointment, index) => (
+                                <div key={index} className='appointment'>
+                                    <div className='appointment-date'>
+                                        {formatAppointmentDate(appointment.date)}
+                                    </div>
+                                    <div className='appointment-details'>
+                                        <span>{appointment.description}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
+                                    </div>
+                                    <IconButton onClick={() => toggleModal22(appointment.id)}>
+                                        <Edit />
+                                    </IconButton>
+                                </div>
+                            ))}
+                        </div>
+                        <div className='box-title appointments-title'>Citas Previas
+                            <Autocomplete
+                                value={selectedNombre}
+                                onChange={(event, newValue) => setSelectedNombre(newValue)}
+                                options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
+                                renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
+                                sx={{ marginLeft: '15%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
+                            />
+                        </div>
+                        <div className='appointments'>
+                            {data2.map((appointment, index) => (
+                                <div key={index} className='appointment prev-appointment'>
+                                    <div className='appointment-date'>
+                                        {formatAppointmentDate(appointment.date)}
+                                    </div>
+                                    <div className='appointment-details'>
+                                        <span>{appointment.description}</span>
+                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
+
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </div >
+            <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+                <div className='modalContainer modalCitas'>
+                    <div className='innerCard' key={cita.idcita} >
+                        <h2 className="modalHeader">EDITAR CITA</h2>
+                        <button className="cancelButton" onClick={toggleModal22}>
+                            <FontAwesomeIcon icon={faTimes} size="2x" />
                         </button>
-                        <div className='appointments-container'>
-                            <div className='box-title appointments-title'>Citas Agendadas
-                                <Autocomplete
-                                    value={selectedNombre}
-                                    onChange={(event, newValue) => setSelectedNombre(newValue)}
-                                    options={['Ver Todas', 'nombre 1', 'nombre 2']}
-                                    renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
-                                    sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '65%', marginTop: '3%' }}
-                                />
+                        <Box
+                            component="form" //edit modal
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px',
+                                width: '100%', // Added width property
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
 
-                            </div>
-                            <div className='appointments'>
-                                {data.map((appointment, index) => (
-                                    <div key={index} className='appointment'>
-                                        <div className='appointment-date'>
-                                            {formatAppointmentDate(appointment.date)}
-                                        </div>
-                                        <div className='appointment-details'>
-                                            <span>{appointment.description}</span>
-                                            <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
-                                        </div>
-                                        <IconButton onClick={() => toggleModal22(appointment.id)}>
-                                            <Edit />
-                                        </IconButton>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className='box-title appointments-title'>Citas Previas</div>
-                            <div className='appointments'>
-                                {data2.map((appointment, index) => (
-                                    <div key={index} className='appointment prev-appointment'>
-                                        <div className='appointment-date'>
-                                            {formatAppointmentDate(appointment.date)}
-                                        </div>
-                                        <div className='appointment-details'>
-                                            <span>{appointment.description}</span>
-                                            <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
+                            <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" name='nombre_persona' defaultValue={cita.nombre_persona} onChange={handleModalFieldChange} required />
+                            <Autocomplete
+                                value={selectedEstado}
+                                disablePortal
+                                id="estado"
+                                required
+                                options={listaEstado}
+                                defaultValue={cita.estado}
+                                onChange={(event, newValue) =>
+                                    setCita({
+                                        ...cita,
+                                        estado: newValue,
+                                    })
+                                }
+                                renderInput={(params) => <TextField {...params} label="Estado" required />}
+                                ListboxProps={
+                                    {
+                                        style: {
+                                            border: '1px solid BLACK'
+                                        }
+                                    }
+                                }
+                            />
+                            <Autocomplete
+                                value={Expedientess}
+                                disablePortal
+                                id="idpaciente"
+                                options={Expedientes}
+                                getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
+                                onChange={(event, newValue) => {
 
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div >
-            </div>
-            <div>
-                <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
-                    <div className='modalContainer modalCitas'>
-                        <div className='innerCard' key={cita.idcita} >
-                            <h2 className="modalHeader">EDITAR CITA</h2>
-                            <button className="cancelButton" onClick={toggleModal22}>
-                                <FontAwesomeIcon icon={faTimes} size="2x" />
-                            </button>
-                            <Box
-                                component="form" //edit modal
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '10px',
-                                    width: '100%', // Added width property
+                                    cita.idpaciente = newValue?.idpaciente;
+
                                 }}
-                                noValidate
-                                autoComplete="off"
-                            >
-
-                                <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" name='nombre_persona' defaultValue={cita.nombre_persona} onChange={handleModalFieldChange} required />
-                                <Autocomplete
-                                    value={selectedEstado}
-                                    disablePortal
-                                    id="estado"
-                                    required
-                                    options={listaEstado}
-                                    defaultValue={cita.estado}
-                                    onChange={(event, newValue) =>
-                                        setCita({
-                                            ...cita,
-                                            estado: newValue,
-                                        })
-                                    }
-                                    renderInput={(params) => <TextField {...params} label="Estado" required />}
-                                    ListboxProps={
-                                        {
-                                            style: {
-                                                border: '1px solid BLACK'
-                                            }
+                                renderInput={(params) => (
+                                    <TextField {...params} label="ID Paciente" />
+                                )}
+                                ListboxProps={
+                                    {
+                                        style: {
+                                            maxHeight: '220px',
+                                            border: '1px solid BLACK'
                                         }
                                     }
+                                }
+                            />
+
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <MobileDatePicker
+                                    id="fecha"
+                                    onChange={handleEditDateChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    shouldDisableDate={isWeekday} // Disable weekends
+                                    label="Fecha"
+                                    name='fecha'
+                                    value={dayjs(fecha)}
                                 />
-                                <Autocomplete
-                                    value={Expedientess}
-                                    disablePortal
-                                    id="idpaciente"
-                                    options={Expedientes}
-                                    getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
-                                    onChange={(event, newValue) => {
-
-                                        cita.idpaciente = newValue?.idpaciente;
-
-                                    }}
-                                    renderInput={(params) => (
-                                        <TextField {...params} label="ID Paciente" />
-                                    )}
-                                    ListboxProps={
-                                        {
-                                            style: {
-                                                maxHeight: '220px',
-                                                border: '1px solid BLACK'
-                                            }
-                                        }
-                                    }
-                                />
-
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <MobileDatePicker
-                                        id="fecha"
-                                        onChange={handleEditDateChange}
-                                        renderInput={(params) => <TextField {...params} />}
-                                        shouldDisableDate={isWeekday} // Disable weekends
-                                        label="Fecha"
-                                        name='fecha'
-                                        value={dayjs(fecha)}
-                                    />
-                                </LocalizationProvider>
-                                <Autocomplete
-                                    disablePortal
-                                    id="hora"
-                                    required
-                                    options={availableTimes}
-                                    value={hora}
-                                    onChange={(event, newValue) => {
-                                        setHora(newValue);
-                                        setCita((prevCita) => ({ ...prevCita, hora: newValue }));
-                                    }}
-                                    renderInput={(params) => <TextField {...params} label="Hora
+                            </LocalizationProvider>
+                            <Autocomplete
+                                disablePortal
+                                id="hora"
+                                required
+                                options={availableTimes}
+                                value={hora}
+                                onChange={(event, newValue) => {
+                                    setHora(newValue);
+                                    setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Hora
                                         " required style={{ marginBottom: '0.45rem' }} />}
-                                    ListboxProps={
-                                        {
-                                            style: {
-                                                maxHeight: '300px',
-                                                border: '1px solid BLACK'
-                                            }
+                                ListboxProps={
+                                    {
+                                        style: {
+                                            maxHeight: '300px',
+                                            border: '1px solid BLACK'
                                         }
                                     }
-                                />
-                                <Button onClick={EditHandler} variant="contained" style={{
-                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                                }}>
-                                    Editar Cita
-                                </Button>
-                            </Box>
-                        </div>
+                                }
+                            />
+                            <Button onClick={EditHandler} variant="contained" style={{
+                                backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                            }}>
+                                Editar Cita
+                            </Button>
+                        </Box>
                     </div>
-                </Modal>
-            </div>
+                </div>
+            </Modal>
         </div>
-
     );
 };
 

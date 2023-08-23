@@ -40,6 +40,7 @@ export const getUserExpedients = async (mail) => {
 export const getOneUser = async (email) => {
     console.log("este es el email en landing page " + email[0]);
     console.log("este es el mensaje en landing page " + email[1]);
+};
 
 export const getExpedientes = async (email) => {
 
