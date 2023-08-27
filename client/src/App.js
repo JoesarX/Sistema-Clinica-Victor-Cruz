@@ -25,6 +25,8 @@ import Prueba from "./Modules/CMD/prueba";
 import HistorialCita from "./Modules/CitasTabla/HistorialCita";
 import Examenes from "./Modules/Examenes/Examenes";
 
+import PruebaRecetas from "./Modules/Recetas/PruebaRecetas";
+
 function App() {
   return (
     <div className="App">
@@ -50,6 +52,7 @@ function App() {
           <Route path="/citas_tabla/historial_cita" element={<HistorialCita />} />
           <Route path="/examenes" element={<Examenes />} />
           <Route path="/laboratorio" element={<Laboratorio />} />
+          <Route path="/prueba_recetas" element={<PruebaRecetas />} />
           <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
         </Routes>
       </BrowserRouter>
