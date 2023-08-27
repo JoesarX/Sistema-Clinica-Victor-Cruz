@@ -52,7 +52,7 @@ function App() {
           <Route path="/citas_tabla/historial_cita" element={<HistorialCita />} />
           <Route path="/examenes" element={<Examenes />} />
           <Route path="/laboratorio" element={<Laboratorio />} />
-          <Route path="/prueba_recetas" element={<PruebaRecetas />} />
+          <Route path="/prueba-recetas" element={<PruebaRecetas />} />
           <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
         </Routes>
       </BrowserRouter>
