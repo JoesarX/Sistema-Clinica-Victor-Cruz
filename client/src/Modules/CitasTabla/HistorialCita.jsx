@@ -53,6 +53,7 @@ function HistorialCita() {
                 </div>
                 <div className="row align-items-center mb-4">
                 </div>
+                
                 <div className="row mb-3">
                     <div className="col-md-6">
                         <h4 className='headers'>Diagnóstico</h4>

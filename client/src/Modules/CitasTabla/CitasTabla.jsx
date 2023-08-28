@@ -262,7 +262,7 @@ const Citas = () => {
 
         if (currentDayOfWeek === 0) {
             daysUntilNextMonday = 1;
-        }else if (currentDayOfWeek === 6) {
+        } else if (currentDayOfWeek === 6) {
             daysUntilNextMonday = 2;
         }
 
@@ -510,7 +510,7 @@ const Citas = () => {
             });
             return false
         } else if (nombre_persona.charAt(0) === ' ') {
-            
+
             swal("El nombre no puede iniciar con un espacio.", {
                 icon: "error",
             });
@@ -609,7 +609,7 @@ const Citas = () => {
                     ...cita,
                     medId: cita.idmed,
                 }));
-                
+
                 const expedientesData = await ExpedientesService.getAllExpedientes();
                 const expedientesFormatted = expedientesData.map((expediente) => ({
                     idpaciente: expediente.idpaciente,
@@ -690,16 +690,15 @@ const Citas = () => {
             );
         }
 
-        if (estado === 'En Curso') {
+        if (estado === 'En Progreso') {
             return (
                 <>
-                    <Button variant="warning">
-                        <FontAwesomeIcon icon={faTimes} />
-                    </Button>
+                    
 
                     <Button variant="info" onClick={handleClick}>
                         <FontAwesomeIcon icon={faFile} />
                     </Button>
+                    
                 </>
             )
         }
@@ -791,7 +790,7 @@ const Citas = () => {
                                     onChange={(event, newValue) => {
                                         cita.idpaciente = newValue?.idpaciente;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="ID Paciente"/>}
+                                    renderInput={(params) => <TextField {...params} label="ID Paciente" />}
                                     ListboxProps={
                                         {
                                             style: {
@@ -809,7 +808,7 @@ const Citas = () => {
                                     onChange={(event, newValue) => {
                                         cita.correouser = newValue?.correouser;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="Correo User"/>}
+                                    renderInput={(params) => <TextField {...params} label="Correo User" />}
                                     ListboxProps={
                                         {
                                             style: {
@@ -918,7 +917,7 @@ const Citas = () => {
 
                                         }}
                                         renderInput={(params) => (
-                                            <TextField {...params} label="ID Paciente"/>
+                                            <TextField {...params} label="ID Paciente" />
                                         )}
                                         ListboxProps={
                                             {
