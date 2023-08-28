@@ -11,7 +11,8 @@ import textos_cmdRouter from "./routes/textos_cmd.js";
 import ServiciosRouter from "./routes/servicios.js";
 import CarruselRouter from "./routes/carrusel.js";
 import AboutUsRouter from "./routes/aboutus.js";
-import examenes from "./routes/examenes.js"
+import ExamenesRouter from "./routes/examenes.js"
+import RecetasRouter from "./routes/recetas.js";
 
 import nodemailer from "nodemailer";
 
@@ -80,7 +81,6 @@ app.use('/texto_cmd', textos_cmdRouter(pool));
 app.use('/carrusel', CarruselRouter(pool));
 app.use('/aboutus', AboutUsRouter(pool));
 
-app.use('/examenes', examenes(pool));
+app.use('/examenes', ExamenesRouter(pool));
 
-
-
+app.use('/recetas', RecetasRouter(pool));
