@@ -12,6 +12,8 @@
   color: #ffff;
   cursor: pointer;
   font-size: 18px;
+  font-family: 'Montserrat';
+  
 }
 
 .buttons button:hover {
@@ -29,6 +31,7 @@
   height: 75vh;
   min-height: 500px;
   margin: 50px auto;
+  font-family: 'Montserrat';
 }
 
 .login-details {
@@ -56,8 +59,8 @@
   text-decoration: underline !important;
   cursor: pointer;
   font-weight: 500;
-  height:fit-content;
-  width: fit-content;
+  height: moz-fit-content;
+  width: moz-fit-content;
   align-self: center;
 }
 
@@ -78,6 +81,7 @@
   padding: 12px;
   border: 1px solid #000 !important;
   border-radius: 4px !important;
+  font-family: 'Montserrat';
   
 }
 
@@ -86,6 +90,7 @@
   padding: 12px;
   border: 1px solid #000 !important;
   border-radius: 4px !important;
+  font-family: 'Montserrat';
 
 }
 
@@ -101,6 +106,7 @@ button[type='submit'] {
   -webkit-transition: background-color 0.3s ease-in-out;
   -ms-transition: background-color 0.3s ease-in-out;
   transition: background-color 0.3s ease-in-out;
+  font-family: 'Montserrat';
 }
 
 
@@ -109,9 +115,11 @@ button[type='submit']:hover {
   -webkit-transition: background-color 0.3s ease-in-out;
   -ms-transition: background-color 0.3s ease-in-out;
   transition: background-color 0.3s ease-in-out;
+  
 }
 
 p {
   margin-left: 50px;
   text-align: justify;
+  font-family: 'Montserrat';
 }

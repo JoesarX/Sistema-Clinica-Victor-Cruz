@@ -116,7 +116,6 @@ const Laboratorio = () => {
                     {cartItems.map((item, index) => (
                         <div key={item.id} className="quoting-item">
                             <span className="quoting-item-name">{item.titulo}</span>
-                            <span className="quoting-item-quantity"><span className ="palabra_value">Cantidad: </span>{`${item.quantity}`}</span>
                             <span className="quoting-item-total"><span className ="palabra_value1">Total: </span>
                                 {`Lps. ${(
                                     item.precio * item.quantity
@@ -128,7 +127,7 @@ const Laboratorio = () => {
                             {index !== cartItems.length - 1 && <hr className="quoting-item-separator" />}
                         </div>
                     ))}
-                    <div className="total-amount">{`Total: Lps. ${totalAmount.toLocaleString('es-HN', {
+                    <div className="total-amount"> <span className ="palabra_value1">Total: </span>{`Lps. ${totalAmount.toLocaleString('es-HN', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     })}`}</div>

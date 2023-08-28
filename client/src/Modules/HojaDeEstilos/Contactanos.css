@@ -28,12 +28,14 @@
     font-weight: 700;
     line-height: 56px;
     color: #fff;
+    font-family: 'Montserrat';
 }
 
 #contact h2 {
     color: rgba(255, 255, 255, 0.8);
     margin-bottom: 150px;
     font-size: 24px;
+    font-family: 'Montserrat';
 }
 
 @media (max-width: 992px) {
@@ -76,6 +78,7 @@ section {
 .section-title {
     text-align: center;
     padding-bottom: 30px;
+    font-family: 'Montserrat';
 }
 
 .section-title h2 {
@@ -84,6 +87,7 @@ section {
     margin-bottom: 20px;
     padding-bottom: 20px;
     position: relative;
+    font-family: 'Montserrat';
 }
 
 .section-title h2::before {
@@ -117,6 +121,7 @@ section {
     align-items: center;
     margin-top: 30px;
     margin-bottom: 30px;
+    font-family: 'Montserrat';
 }
 
 .medios {
@@ -124,6 +129,7 @@ section {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Montserrat';
 }
 
 .contactos {
@@ -132,6 +138,7 @@ section {
     background-color: #384046;
     height: 200px;
     width: 1000px;
+    font-family: 'Montserrat';
 }
 
 .cont {
