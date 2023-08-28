@@ -16,6 +16,7 @@
 .form-group label {
   display: block;
   margin-bottom: 5px;
+  font-family: 'Montserrat';
 }
 
 input[type='number'],
@@ -32,6 +33,7 @@ input[type='password'] {
   padding: 12px;
   /* border: 1px solid #000 !important; */
   border-radius: 4px !important;
+  font-family: 'Montserrat';
 }
 
 button[type='submit'] {
@@ -43,6 +45,7 @@ button[type='submit'] {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3 ease;
+  font-family: 'Montserrat';
 }
 
 button[type='submit']:hover {
@@ -55,11 +58,12 @@ select {
   margin: 0 auto;
   background-color: none !important;
   word-wrap: break-word !important;
+
 }
 
 select .option {
   word-wrap: break-word;
-  font-family: 'Inter' !important;
+  font-family: 'Montserrat' !important;
   background-color: none !important;
 }
 
@@ -76,6 +80,7 @@ p {
   min-height: 900px;
   margin: 40px auto;
   margin-bottom: 150px;
+  font-family: 'Montserrat';
 }
 
 .register-details {
@@ -87,6 +92,7 @@ p {
   border: 1px solid #ccc;
   border-radius: 10px;
   gap: 10px;
+  font-family: 'Montserrat';
 }
 
 .register-form h2 {
@@ -94,6 +100,7 @@ p {
   font-family: 'Montserrat';
   margin-bottom: 10px;
   font-weight: 500;
+  font-family: 'Montserrat';
 }
 
 @media only screen and (max-width: 400px) {
@@ -117,6 +124,7 @@ p {
   font-weight: 400;
   font-size: medium;
   transition: color 0.3s ease;
+  font-family: 'Montserrat';
 }
 
 .pw-item .icon{

@@ -8,6 +8,7 @@
   border-top: 1px solid #000000; 
   margin: 8px 0;
   width: 90%; 
+  font-family: 'Montserrat';
 }
 .dataListBox{
   width: 100%;
@@ -22,6 +23,7 @@
   max-height: 350px; 
   overflow-y: auto; 
   width: 100%;
+  font-family: 'Montserrat';
 }
 
 .carrusel-list-item {
@@ -31,6 +33,7 @@
   padding: 12px;
   width: 95%;
   height: 10%;
+  font-family: 'Montserrat';
 }
 
 .carrusel-list-item-image {
@@ -49,6 +52,7 @@
 /* Style for buttons */
 .button {
   margin-top: 8px;
+  font-family: 'Montserrat';
 }
 .buttonEE {
   position: relative;
@@ -84,12 +88,14 @@
   transition: all 0.3 ease;
   font-family: 'Montserrat';
   box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+  font-family: 'Montserrat';
 }
 
 
 .button-container {
   display: flex;
   justify-content: flex-end;
+  font-family: 'Montserrat';
 }
 
 .add-button,
@@ -106,6 +112,7 @@
   gap: 15px;
   justify-items: center;
   align-items: center;
+  font-family: 'Montserrat';
 }
 
 .about-us-text {
@@ -116,6 +123,7 @@
   align-self: flex-start;
   font-family: 'Inter';
   margin-bottom: 20px;
+  font-family: 'Montserrat';
   /* TEMPORAL */
   /* background-color: rgb(0, 0, 255, 0.9);
   background-size: 10px 10px;
@@ -189,7 +197,7 @@
   color: #fff;
   word-wrap: break-word;
   align-self: flex-start;
-  font-family: 'Inter';
+  font-family: 'Montserrat';
   position: relative;
   bottom: 30px;
   /* TEMPORAL */
@@ -209,6 +217,7 @@
   transition: all 0.3 ease;
   margin: 100px auto 20px auto;
   padding: 20px 50px;
+  font-family: 'Montserrat';
   /* temporal */
   /* background-color: rgb(255, 0, 0, 0.3);
   background-size: 10px 10px;
@@ -261,6 +270,7 @@
   color: #1E60A6;
   width: 50%;
   margin-top: 20px;
+  font-family: 'Montserrat';
 }
 
 .see-more-button:hover {
@@ -278,6 +288,7 @@
   padding: 20px;
   margin: 50px auto 50px auto;
   background-color: #1E60A6;
+  font-family: 'Montserrat';
   /* TEMPORAL */
   /* background-color: rgb(0, 255, 0, 0.3); */
   /* background-size: 10px 10px;
@@ -313,6 +324,7 @@
   margin: 50px auto 20px auto;
   gap: 20px;
   overflow-x: hidden;
+  font-family: 'Montserrat';
   /* TEMPORAL */
   /* background-color: rgb(0, 255, 0, 0.3);
   background-size: 10px 10px;
