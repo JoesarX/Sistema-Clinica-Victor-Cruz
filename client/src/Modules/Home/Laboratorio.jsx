@@ -92,7 +92,7 @@ const Laboratorio = () => {
             <div className="empty-space-top"></div>
             <div className="catalog-container">
                 {examenes.map((exam) => (
-                    <div className="exam-card" key={exam.idexamen}>
+                    <div className="exam-card1" key={exam.idexamen}>
                         <h2>{exam.titulo}</h2>
                         <p className="description">{exam.descripcion}</p>
                         <div className="price">{`Precio: Lps.${exam.precio}`}</div>
