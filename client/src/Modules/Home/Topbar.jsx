@@ -28,6 +28,10 @@ const Topbar = () => {
          navigate('/laboratorio');
     };
 
+    const handleSaludOcupacional = () => {
+        navigate('/salud_ocupacional');
+   };
+
     const handleServicios = () => {
         navigate('/servicios');
     };
@@ -97,6 +101,7 @@ const Topbar = () => {
                         <div class="dropdown-menu custom-colors">
                             <div class="dropdown-item" onClick={handleServicios}>CLINICA</div>
                             < div class="dropdown-item" onClick={handleLaboratorio}>LABORATORIO</div>
+                            < div class="dropdown-item" onClick={handleSaludOcupacional}>SALUD OCUPACIONAL</div>
                         </div>
                     </li>
                     
