@@ -1,11 +1,11 @@
-  .scrollable-page2 {
+/* SaludOcupacional.css */
+.scrollable-page2 {
     height: 100vh;
     overflow-y: auto;
     background-color: #E4EBF9;
     display: flex;
     flex-direction: column;
   }
-  
   
   .header1 {
     font-size: 4vw !important;
@@ -14,66 +14,49 @@
     box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
     text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
     margin-top: 0 !important;
-    justify-items: center !important;
-    align-items: center !important;
     justify-content: center !important;
     display: flex;
     text-align: center !important;
     font-weight: 700;
-    padding-top: 1.5vh;
-    padding-bottom: 1.5vh;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    padding: 1.5vh 0;
+    margin: 20px 0;
     font-family: 'Montserrat';
   }
-
-
-  .salud_desc-container {
+  
+  .salud_desc-container,
+  .salud_impor-container {
     padding: 3rem;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
     margin: 2rem auto;
     width: 80%;
-    height: 80%;
-    margin-top: 5%;
-    margin-bottom: 2%;
-    
-  }
-
-  .salud_desc-container h2{
-    margin-left: 25%;
-    margin-bottom: 5%;
-  } 
-
-  .salud_desc-container p{
-    font-size: 20px;
-    align-items: center;
-    margin-right: 5%;
-    
-  } 
-
-
-  .salud_impor-container {
-    padding: 3rem;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
-    margin: 2rem auto;
-    width: 80%;
-    height: 80%;
+    max-width: 1000px;
+    height: auto;
     margin-top: 2%;
     margin-bottom: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .salud_desc-container h2,
+  .salud_impor-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+  
+  .salud_desc-container p,
+  .salud_impor-container p {
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.6;
+    margin: 0 5%;
+    text-align: justify;
   }
 
-  .salud_impor-container h2{
-    margin-left: 25%;
-    margin-bottom: 5%;
-  } 
-
-  .salud_impor-container p{
-    font-size: 20px;
-    align-items: center;
-    margin-right: 5%;
-    
-  } 
+  
+  /* Otros estilos específicos que puedas necesitar */
+  
