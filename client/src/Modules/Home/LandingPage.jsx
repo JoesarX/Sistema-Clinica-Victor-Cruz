@@ -312,6 +312,7 @@ const LandingPage = () => {
                     edad: perfilData[2],
                     preguntaSeguridad: perfilData[3],
                     respuestaSeguridad: perfilData[4],
+                    password: perfilData[5],
                 });
 
             } catch (error) {
@@ -334,8 +335,11 @@ const LandingPage = () => {
         }
         const fetchPerfil = async () => {
             try {
+                console.log("probando cositas")
                 const email = [correo, "AYUDA"];
-                const expedienteData = await ExpedientesService.getOneUser(email);
+                console.log(email)
+                const expedienteData = await UsuariosService.getOneUser(email);
+                console.log(expedienteData)
                 const futuraCita = await CitasService.getUserExpCitas(email[0]);
 
                 console.log(futuraCita);
@@ -409,6 +413,7 @@ const LandingPage = () => {
                     edad: perfilData[2],
                     preguntaSeguridad: perfilData[3],
                     respuestaSeguridad: perfilData[4],
+                    password: perfilData[5],
                 });
 
             } catch (error) {
@@ -447,7 +452,9 @@ const LandingPage = () => {
 
 
     const handleOpenEditModal = () => {
+        
         setSelectedUser(user);
+        console.log(perfil)
         setIsEditModalOpen(true);
     };
 
@@ -708,6 +715,7 @@ const LandingPage = () => {
                                     profile={perfil}
                                     onClose={handleCloseEditModal}
                                 />
+                                
                             )}
                         </div>
                         <div className='infoP'>

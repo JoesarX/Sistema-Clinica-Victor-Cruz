@@ -3,7 +3,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import swal from 'sweetalert'; // SweetAlert
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faListSquares, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete';
 import '../HojaDeEstilos/RegistrarUser.css';
@@ -14,6 +14,7 @@ import { useRef } from 'react';
 
 const EditUserInfo = ({ profile, onClose }) => {
     const [perfil, setPerfil] = useState([]);
+    const [passChange, setPassChange] = useState(false);
     useEffect(() => {
         setPerfil([profile]);
     }, [profile]);
@@ -24,12 +25,14 @@ const EditUserInfo = ({ profile, onClose }) => {
         correo: profile.correo,
         preguntaSeguridad: profile.preguntaSeguridad,
         respuestaSeguridad: profile.respuestaSeguridad,
-        oldPassword: '',
+        oldPassword: profile.password,
         newPassword: '',
         confirmNewPassword: '',
     });
 
     const handlePasswordChange = (e) => {
+        setPassChange(true);
+
         const { name, value } = e.target;
         setUser((prevUserData) => ({
             ...prevUserData,
@@ -47,6 +50,9 @@ const EditUserInfo = ({ profile, onClose }) => {
 
 
     const handleEdit = async () => {
+        console.log(user)
+        console.log(perfil)
+        
         if (!validations()) {
             swal('Error', 'Por favor completa todos los campos requeridos y cumple con las validaciones.', 'error');
             return;
@@ -56,23 +62,51 @@ const EditUserInfo = ({ profile, onClose }) => {
             const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
             user.newPassword = hashedNewPassword;
         }
-        const editedUser = {
-            nombre: user.nombre,
-            edad: parseInt(user.edad),
-            pregunta: user.preguntaSeguridad,
-            respuesta: user.respuestaSeguridad,
-            oldPassword,
-            newPassword: user.newPassword,
-        };
-        try {
-            console.log("CORREO EN EDIT: " + user.correo);
-            await UsuariosService.editusuarios(user.correo, editedUser);
-            swal('Éxito', 'Usuario editado exitosamente', 'success');
-            onClose();
-        } catch (error) {
-            swal('Error', 'Hubo un problema al editar el usuario', 'error');
-            console.error(error);
+
+        if (passChange) {
+            const editedUser = {
+                nombre: user.nombre,
+                edad: parseInt(user.edad),
+                pregunta: user.preguntaSeguridad,
+                respuesta: user.respuestaSeguridad,
+                oldPassword,
+                newPassword: user.newPassword,
+            };
+            console.log('hellooooo 1')
+            console.log(editedUser)
+            try {
+                console.log("CORREO EN EDIT: " + user.correo);
+                await UsuariosService.editusuarios(user.correo, editedUser);
+                swal('Éxito', 'Usuario editado exitosamente', 'success');
+                onClose();
+            } catch (error) {
+                swal('Error', 'Hubo un problema al editar el usuario', 'error');
+                console.error(error);
+            }
+        } else {
+            const editedUser = {
+                nombre: user.nombre,
+                edad: parseInt(user.edad),
+                pregunta: user.preguntaSeguridad,
+                respuesta: user.respuestaSeguridad,
+                oldPassword: user.oldPassword,
+                newPassword
+            };
+            console.log('hellooooo')
+            console.log(editedUser)
+            try {
+                console.log("CORREO EN EDIT: " + user.correo);
+                await UsuariosService.editusuarios(user.correo, editedUser);
+                swal('Éxito', 'Usuario editado exitosamente', 'success');
+                onClose();
+            } catch (error) {
+                swal('Error', 'Hubo un problema al editar el usuario', 'error');
+                console.error(error);
+            }
         }
+
+
+          
     };
 
 
@@ -186,7 +220,7 @@ const EditUserInfo = ({ profile, onClose }) => {
                     name="oldPassword"
                     required
                     onChange={handlePasswordChange}
-                    value={user.oldPassword}
+                   
                     sx={{ width: '100%', backgroundColor: '#F0F0F0', marginBottom: '16px' }}
                 />
                 <TextField
