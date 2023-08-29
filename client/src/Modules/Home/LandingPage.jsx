@@ -320,8 +320,10 @@ const LandingPage = () => {
         }
         const fetchUsuarios = async () => {
             const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
-            setUsuarioss(usuariosObtenidos);
+            const filteredUsuarios = usuariosObtenidos.filter(usuario => usuario.edad < 18);
+            setUsuarioss(filteredUsuarios);
         }
+        
         fetchPerfil();
         fetchUsuarios();
     }, [isLoggedIn]);
@@ -417,8 +419,9 @@ const LandingPage = () => {
         };
         const fetchUsuarios = async () => {
             const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
-            setUsuarioss(usuariosObtenidos);
-        };
+            const filteredUsuarios = usuariosObtenidos.filter(usuario => usuario.edad < 18);
+            setUsuarioss(filteredUsuarios);
+        }
         fetchPerfil();
         fetchUsuarios();
     };
@@ -728,6 +731,7 @@ const LandingPage = () => {
                                             <div key={usuario.idPaciente} className="user-item">
                                                 <li className="user-info">
                                                     <span className="user-name">{usuario.nombre}</span>
+                                                    <span className="user-name">{usuario.n}</span>
                                                     <button
                                                         className="ver-perfil-button"
                                                         onClick={() => handleViewExpediente(usuario.idPaciente)}

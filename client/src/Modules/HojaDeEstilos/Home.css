@@ -1,26 +1,45 @@
 @import url('https://fonts.googleapis.com/css?family=Inter&display=swap');
-.drag-handle-button{
-  border: #E4EBF9;
+
+/* ///////////////////////////////////////// */
+/* Modal Styles*/
+.modal-container-carrusel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: 100vh;
+  padding: 20px;
   background-color: #E4EBF9;
+  border-radius: 10px;
 }
-.custom-hr {
-  border: none; 
-  border-top: 1px solid #000000; 
-  margin: 8px 0;
-  width: 90%; 
+
+.modalServicios-carrusel {
+  width: 30%;
+  height: 92%;
+  max-width: 1600px;
+  overflow: hidden;
 }
-.dataListBox{
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dataListBox {
   width: 100%;
 }
-.carrusel-list-container{
+
+.carrusel-list-container {
   width: 100%;
 }
+
 .carrusel-list {
   list-style: none;
   padding: 0;
   position: relative;
-  max-height: 350px; 
-  overflow-y: auto; 
+  max-height: 250px;
+  overflow-y: auto;
   width: 100%;
 }
 
@@ -43,13 +62,21 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  right:6%;
+  right: 6%;
 }
 
-/* Style for buttons */
-.button {
-  margin-top: 8px;
+.drag-handle-button {
+  border: #E4EBF9;
+  background-color: #E4EBF9;
 }
+
+.custom-hr {
+  border: none;
+  border-top: 1px solid #000000;
+  margin: 8px 0;
+  width: 90%;
+}
+
 .buttonEE {
   position: relative;
   left: 30%;
@@ -63,6 +90,66 @@
   color: #FFF;
   background-color: #1E60A6;
 }
+.customFileLabel{
+  position: relative;
+  margin-top: 5%;
+  margin-left: 4%;
+  background-color: #1E60A6;
+  font-weight: bold;
+}
+
+/* Media Queries for responsiveness */
+@media screen and (max-width: 898px) {
+  .modalServicios-carrusel {
+    width: 40%;
+    height: 80%;
+  }
+
+  .carrusel-list {
+    list-style: none;
+    padding: 0;
+    position: relative;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  .carrusel-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px;
+  }
+
+  .carrusel-list-item-image {
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+
+  .carrusel-list-item-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: static;
+    margin-top: 8px;
+  }
+
+  .buttonEE {
+    left: 0;
+  }
+}
+
+
+/* ///////////////////////////////////////// */
+
+
+
+
+
+/* Style for buttons */
+.button {
+  margin-top: 8px;
+}
+
 
 .scrollable-page {
   height: 100vh;
@@ -87,10 +174,7 @@
 }
 
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-}
+
 
 .add-button,
 .save-button {
@@ -396,25 +480,9 @@
 }
 
 /* CARRUSEL */
-.modalServicios-carrusel {
-  
-  width: 30%;
-  height: 92%;
-  max-width: 1600px;
-  overflow: hidden;
-}
 
-.modal-container-carrusel {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-height: 100vh;
-  padding: 20px;
-  background-color: #E4EBF9;
-  border-radius: 10px;
-}
+
+
 
 .modified-crudGrid {
   background-color: rgb(227, 235, 248);

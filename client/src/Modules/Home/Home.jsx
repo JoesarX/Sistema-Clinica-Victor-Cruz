@@ -890,11 +890,11 @@ const Home = () => {
                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 closeAfterTransition BackdropProps={{ onClick: () => { } }}>
                 <div className='modal-container-carrusel modalServicios-carrusel'>
-                    <h1 style={{ position: 'relative', top: '13%' }}>Carrusel de imágenes</h1>
-                    <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
-                        <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '4%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
+                    <h1 style={{ position: 'relative' }}>Carrusel de imágenes</h1>
+                    <div className="button-container" style={{ display: 'flex',justifyContent: 'center', alignItems: 'center' }}>
+                        <button htmlFor="urlfoto" className="customFileLabel" style={{position: "relative", marginTop: '5%', marginLeft: '4%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
                             <FontAwesomeIcon icon={faPlus} size="2x" />
-                            Agregar foto</label>
+                            Agregar foto</button>
                         <input
                             type="file"
                             onChange={(event) => {
