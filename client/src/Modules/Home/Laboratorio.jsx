@@ -127,7 +127,7 @@ const Laboratorio = () => {
                             {index !== cartItems.length - 1 && <hr className="quoting-item-separator" />}
                         </div>
                     ))}
-                    <div className="total-amount"> <span className ="palabra_value1">Total: </span>{`Lps. ${totalAmount.toLocaleString('es-HN', {
+                    <div className="total-amount"> <span className ="palabra_value2">Total: </span>{` Lps. ${totalAmount.toLocaleString('es-HN', {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
                     })}`}</div>
