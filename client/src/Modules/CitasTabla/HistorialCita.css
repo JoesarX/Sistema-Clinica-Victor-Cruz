@@ -7,6 +7,7 @@
 .scrollable-page {
     background-color: #E4EBF9;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 .main {
@@ -37,22 +38,6 @@
 
 .headers_TA {
     padding-top: 1.5%;
-}
-
-@media (max-width: 768px) {
-    .img-fluid {
-        max-width: 150px;
-    }
-
-    input {
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 576px) {
-    .img-fluid {
-        max-width: 120px;
-    }
 }
 
 .infoGeneral {
@@ -165,6 +150,41 @@
     font-size: 55px;
 }
 
+.nav-button-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    font-family: 'Inter'
+}
+
+.nav-button-container a {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.appointment-section-header {
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.preclinic,
+.diagnostic,
+.incapacity {
+    margin-top: 10px;
+    margin-bottom: 5px;
+
+    padding-top: 15px;
+    padding-bottom: 5px;
+
+    border-top: 2px solid #5e5e5e;
+}
+
 @media only screen and (min-width: 820px) and (max-width: 950px) {
     .space-between-text {
         flex-direction: column;
@@ -195,6 +215,11 @@
         justify-content: center;
         text-align: center;
     }
+
+    .nav-button-container {
+        justify-content: center;
+    }
+
 }
 
 @media only screen and (max-height: 768px) {
@@ -223,4 +248,28 @@
         gap: 0px;
     }
 
+}
+
+@media (max-width: 768px) {
+    .img-fluid {
+        max-width: 150px;
+    }
+
+    .nav-button-container {
+        justify-content: center;
+    }
+
+    input {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .img-fluid {
+        max-width: 120px;
+    }
+
+    .nav-button-container {
+        justify-content: center;
+    }
 }
