@@ -113,7 +113,7 @@
 }
 
 
-.exam-card1 {
+.exam-card {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -128,11 +128,11 @@
   width: 100%;
 }
 
-.exam-card1:hover {
+.exam-card:hover {
   transform: translateY(-5px);
 }
 
-.exam-card1 h2 {
+.exam-card h2 {
   font-size: 1.2rem;
   margin-bottom: 10px;
   font-family: 'Montserrat';
@@ -141,14 +141,14 @@
   
 }
 
-.exam-card1 p {
+.exam-card p {
   font-size: 0.9rem;
   color: #666;
   margin-bottom: 15px;
   font-family: 'Montserrat';
 }
 
-.exam-card1 .price {
+.exam-card .price {
   font-size: 1.1rem;
   color: #333;
   font-weight: bold;
