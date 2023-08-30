@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 //import { storage } from "./firebase";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -676,11 +677,16 @@ const Citas = () => {
         //navigate(`/citas_tabla/historial_cita/${id}`);
     }*/
 
-    const handleClick = () => {
-        navigate('/citas_tabla/historial_cita/');
-    }
+    const handleClick = (id) => {
+        console.log(id);
+        navigate(`/citas_tabla/historial_cita/${id}`);
+    };
 
-    const getActionButtons = (estado) => {
+    /*const handleClick = () => {
+        navigate('/citas_tabla/historial_cita/');
+    }*/
+
+    const getActionButtons = (estado, id) => {
 
         if (estado === 'Pendiente') {
             return (
@@ -695,7 +701,7 @@ const Citas = () => {
                 <>
                     
 
-                    <Button variant="info" onClick={handleClick}>
+                    <Button variant="info" onClick={() => handleClick(id)}>
                         <FontAwesomeIcon icon={faFile} />
                     </Button>
                     
@@ -705,7 +711,7 @@ const Citas = () => {
 
         if (estado === 'Terminada') {
             return (
-                <Button variant="info" onClick={handleClick}>
+                <Button variant="info" onClick={() => handleClick(id)}>
                     <FontAwesomeIcon icon={faFile} />
                 </Button>
             )
@@ -744,7 +750,7 @@ const Citas = () => {
                                             <IconButton onClick={() => handleDeleteCitasClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
-                                            {getActionButtons(params.row.estado)}
+                                            {getActionButtons(params.row.estado, params.id)}
                                         </>
 
                                     )

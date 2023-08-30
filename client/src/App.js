@@ -49,7 +49,7 @@ function App() {
           <Route path="/userpage" element={<LandingPage />} />
           <Route path="/citas_tabla" element={<CitasTabla />} />
           <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc />} />
-          <Route path="/citas_tabla/historial_cita" element={<HistorialCita />} />
+          <Route path="/citas_tabla/historial_cita/:id" element={<HistorialCita />} />
           <Route path="/examenes" element={<Examenes />} />
           <Route path="/laboratorio" element={<Laboratorio />} />
           <Route path="/prueba-recetas" element={<PruebaRecetas />} />

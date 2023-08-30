@@ -5,7 +5,7 @@ import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import './HistorialCita.css';
-import ExpedientesService from '../../Services/ExpedientesService';
+import CitasService from '../../Services/CitasService';
 
 function HistorialCita() {
     /*const [paciente, setPaciente] = useState(null);
@@ -19,6 +19,25 @@ function HistorialCita() {
         fetchPaciente();
     }, []);*/
 
+    const { id } = useParams();
+    const [paciente, setPaciente] = useState(null);
+
+    useEffect(() => {
+        const fetchPaciente = async () => {
+            try {
+                const response = await CitasService.getOneCita(id);
+                setPaciente(response);
+            } catch (error) {
+                console.error('Error fetching paciente:', error);
+            }
+        };
+        fetchPaciente();
+    }, [id]);
+    
+    useEffect(() => {
+        console.log(paciente); // Log paciente when it changes
+    }, [paciente]);
+
     return (
         <div className='scrollable-page'>
             <NavBar />
@@ -30,7 +49,7 @@ function HistorialCita() {
                         </div>
                     </div>
                     <div className='patient-info-vert-align'>
-                        <h2 className="nombre"> Nombre del paciente</h2>
+                        <h2 className="nombre">{paciente && paciente.nombre_persona}</h2>
                         <div className='space-between-text'>
                             <div className='patient-email-container'>
                                 Correo
