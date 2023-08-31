@@ -27,7 +27,7 @@ import Examenes from "./Modules/Examenes/Examenes";
 
 import PruebaRecetas from "./Modules/Recetas/PruebaRecetas";
 import PagoPrueba1 from "./Modules/PayPal/PayPalCheckOut"
-import PagoPrueba2 from "./Modules/PayPal/Checkout"
+import Checkout from "./Modules/PayPal/Checkout"
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function App() {
@@ -58,8 +58,8 @@ function App() {
             <Route path="/laboratorio" element={<Laboratorio />} />
 
             <Route path="/prueba-recetas" element={<PruebaRecetas />} />
-            <Route path="/PagoPrueba1" element={<PagoPrueba1 />} />
-            <Route path="/PagoPrueba2" element={<PagoPrueba2 />} />
+            {/* <Route path="/PagoPrueba1" element={<PagoPrueba1 />} /> */}
+            <Route path="/checkout" element={<Checkout />} />
 
             <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
           </Routes>

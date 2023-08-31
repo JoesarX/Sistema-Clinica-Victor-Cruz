@@ -9,7 +9,7 @@ const pagosRouter = (pool) => {
     router.get("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT * FROM pagos"
+            const sqlSelect = "SELECT * FROM pagos ORDER BY fecha DESC"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log("Get all pagos Successfull");
@@ -24,7 +24,7 @@ const pagosRouter = (pool) => {
     router.get("/usuario/:correouser", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT * FROM pagos WHERE correouser = "${req.params.correouser}"`;
+            const sqlSelect = `SELECT * FROM pagos WHERE correouser = "${req.params.correouser}" ORDER BY fecha DESC`;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log(`Get pagos by correouser ${req.params.id} Successfull`)
