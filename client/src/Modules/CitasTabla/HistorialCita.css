@@ -185,6 +185,12 @@
     border-top: 2px solid #5e5e5e;
 }
 
+.contenedor{
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 @media only screen and (min-width: 820px) and (max-width: 950px) {
     .space-between-text {
         flex-direction: column;
