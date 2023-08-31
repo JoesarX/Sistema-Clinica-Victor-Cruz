@@ -110,6 +110,42 @@ const recetasRouter = (pool) => {
     });
 
     //============================================== P U T S ==================================================================
+    //Update a citas recetas 
+    router.put("/cita/:idcita", async (req, res) => {
+        try {
+            const { recetasLista } = req.body; // Assumiendo que el body es un objeto con una propiedad recetasLista que es un array de recetas
+
+            const connection = await pool.getConnection();
+
+            console.log("In PUT recetas/cita/:idcita. Idcita: ", req.params.idcita)
+            console.log("recetasLista: ", recetasLista)
+
+            for (const recetaUnica of recetasLista) {
+                const { idreceta, nombre_medicamento, dosis, cant_dias, frequencia_horas, cant_unidades, notas_adicionales } = recetaUnica;
+
+                const q =
+                    "UPDATE recetas SET  nombre_medicamento = ?, dosis = ?, cant_dias = ?, frequencia_horas = ?, cant_unidades = ?, notas_adicionales = ? WHERE idreceta = ?";
+                const values = [
+                    nombre_medicamento,
+                    dosis,
+                    cant_dias,
+                    frequencia_horas,
+                    cant_unidades,
+                    notas_adicionales,
+                    idreceta
+                ];
+
+                await connection.query(q, values);
+            }
+            connection.release();
+            console.log(`Update receta ${req.params.idcita} Successfull`)
+            res.json("Receta actualizada exitosamente!");
+        } catch (err) {
+            console.log(`Update receta ${req.params.id} Failed. Error: ` + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+    
     //Update a receta by id
     router.put("/:id", async (req, res) => {
         try {
@@ -138,42 +174,6 @@ const recetasRouter = (pool) => {
             ];
 
             await connection.query(q, values);
-            connection.release();
-            console.log(`Update receta ${req.params.idcita} Successfull`)
-            res.json("Receta actualizada exitosamente!");
-        } catch (err) {
-            console.log(`Update receta ${req.params.id} Failed. Error: ` + err);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-    });
-
-    //Update a citas recetas 
-    router.put("/cita/:idcita", async (req, res) => {
-        try {
-            const { recetasLista } = req.body; // Assumiendo que el body es un objeto con una propiedad recetasLista que es un array de recetas
-
-            const connection = await pool.getConnection();
-
-            console.log("In PUT recetas/cita/:idcita. Idcita: ", req.params.idcita)
-            console.log("recetasLista: ", recetasLista)
-
-            for (const recetaUnica of recetasLista) {
-                const { idreceta, nombre_medicamento, dosis, cant_dias, frequencia_horas, cant_unidades, notas_adicionales } = recetaUnica;
-
-                const q =
-                    "UPDATE recetas SET  nombre_medicamento = ?, dosis = ?, cant_dias = ?, frequencia_horas = ?, cant_unidades = ?, notas_adicionales = ? WHERE idreceta = ?";
-                const values = [
-                    nombre_medicamento,
-                    dosis,
-                    cant_dias,
-                    frequencia_horas,
-                    cant_unidades,
-                    notas_adicionales,
-                    idreceta
-                ];
-
-                await connection.query(q, values);
-            }
             connection.release();
             console.log(`Update receta ${req.params.idcita} Successfull`)
             res.json("Receta actualizada exitosamente!");
