@@ -13,6 +13,7 @@ import CarruselRouter from "./routes/carrusel.js";
 import AboutUsRouter from "./routes/aboutus.js";
 import ExamenesRouter from "./routes/examenes.js"
 import RecetasRouter from "./routes/recetas.js";
+import PagosRouter from "./routes/pagos.js";
 
 import nodemailer from "nodemailer";
 
@@ -84,3 +85,4 @@ app.use('/aboutus', AboutUsRouter(pool));
 app.use('/examenes', ExamenesRouter(pool));
 
 app.use('/recetas', RecetasRouter(pool));
+app.use('/pagos', PagosRouter(pool));
