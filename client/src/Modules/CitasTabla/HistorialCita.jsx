@@ -7,26 +7,24 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import './HistorialCita.css';
 import CitasService from '../../Services/CitasService';
 
+import swal from 'sweetalert';
+
 function HistorialCita() {
-    /*const [paciente, setPaciente] = useState(null);
-    const { idPaciente } = useParams();
-    console.log("ID RECIBIDA: " + idPaciente);
-    useEffect(() => {
-        const fetchPaciente = async () => {
-            const response = await ExpedientesService.getOneExpediente(idPaciente);
-            setPaciente(response.data);
-        }
-        fetchPaciente();
-    }, []);*/
 
     const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
+    const [peso, setNewPeso] = useState(null);
+    const [altura, setNewAltura] = useState(null);
+    const [temp, setNewTemp] = useState(null);
+    const [ritmo, setNewRitmo] = useState(null);
+    const [presion, setNewPresion] = useState(null);
 
     useEffect(() => {
         const fetchPaciente = async () => {
             try {
-                const response = await CitasService.getOneCita(id);
+                const response = await CitasService.getOneCitaWithExpediente(id);
                 setPaciente(response);
+                console.log(response);
             } catch (error) {
                 console.error('Error fetching paciente:', error);
             }
@@ -37,6 +35,23 @@ function HistorialCita() {
     useEffect(() => {
         console.log(paciente); // Log paciente when it changes
     }, [paciente]);
+
+    const submitEdit = async () => {
+        try {
+            paciente.altura = altura;
+            paciente.peso = peso;
+            paciente.temperatura = temp;
+            paciente.ritmo_cardiaco = ritmo;
+            paciente.presion = presion;
+            await CitasService.editCitas(id, paciente);
+            swal("Cita Editada", {
+              icon: "success",
+            });
+          window.location.reload();
+        } catch (error) {
+          console.log('Error submitting servicio:', error);
+        }
+      };
 
     return (
         <div className='scrollable-page'>
@@ -52,21 +67,21 @@ function HistorialCita() {
                         <h2 className="nombre">{paciente && paciente.nombre_persona}</h2>
                         <div className='space-between-text'>
                             <div className='patient-email-container'>
-                                Correo
+                                {paciente && paciente.correouser}
                             </div>
-                            <p className="smallText">Estado Civil</p>
+                            <p className="smallText">{paciente && paciente.estado_civil}</p>
                         </div>
                         <div className='space-between-text'>
-                            <p className="smallText">Identidad</p>
+                            <p className="smallText">{paciente && paciente.numid}</p>
                             <p className="smallText">Dirección</p>
                         </div>
                         <div className='space-between-text'>
-                            <p className="smallText">Fecha de Nacimiento</p>
-                            <p className="smallText">Edad</p>
+                            <p className="smallText">{paciente && paciente.fecha_nacimiento}</p>
+                            <p className="smallText">{paciente && paciente.edad}</p>
                         </div>
                         <div className='space-between-text'>
-                            <p className="smallText">Genero</p>
-                            <p className="smallText">Ocupacion</p>
+                            <p className="smallText">{paciente && paciente.sexo}</p>
+                            <p className="smallText">{paciente && paciente.ocupacion}</p>
                         </div>
                     </div>
                 </div>
@@ -87,7 +102,9 @@ function HistorialCita() {
                             <input
                                 className="input-bg"
                                 type="text"
+                                value = {paciente && paciente.altura}
                                 placeholder="Altura"
+                                onChange={(e) => setNewAltura(e.target.value)}
                             />
                         </div>
                         <div className="col">
@@ -95,7 +112,9 @@ function HistorialCita() {
                             <input
                                 className="input-bg"
                                 type="text"
+                                value = {paciente && paciente.peso}
                                 placeholder="Peso"
+                                onChange={(e) => setNewPeso(e.target.value)}
                             />
                         </div>
                         <div className="col">
@@ -103,7 +122,9 @@ function HistorialCita() {
                             <input
                                 className="input-bg"
                                 type="text"
+                                value = {paciente && paciente.temperatura}
                                 placeholder="Temperatura"
+                                onChange={(e) => setNewTemp(e.target.value)}
                             />
                         </div>
                         <div className="col">
@@ -111,7 +132,9 @@ function HistorialCita() {
                             <input
                                 className="input-bg"
                                 type="text"
+                                value = {paciente && paciente.ritmo_cardiaco}
                                 placeholder="Ritmo Cardíaco"
+                                onChange={(e) => setNewRitmo(e.target.value)}
                             />
                         </div>
                         <div className="col">
@@ -119,9 +142,12 @@ function HistorialCita() {
                             <input
                                 className="input-bg"
                                 type="text"
+                                value = {paciente && paciente.presion}
                                 placeholder="Presión Arterial"
+                                onChange={(e) => setNewPresion(e.target.value)}
                             />
                         </div>
+                        <button className='buttonE' onClick={() => submitEdit()}>Editar Cita</button>
                     </div>
                 </div>
 

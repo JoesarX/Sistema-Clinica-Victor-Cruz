@@ -233,6 +233,23 @@ const citasRouter = (pool, transporter) => {
         }
     });
 
+    //Get a cita by id with inner join to expedientes
+    router.get("/citas-with-expedientes/:id", async (req, res) => {
+        try {
+            console.log("Entro");
+            const connection = await pool.getConnection();
+            const sqlSelect = 
+                "SELECT c.idcita, c.nombre_persona, c.estado, c.idpaciente, c.correouser, DATE_FORMAT(c.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, e.edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid FROM citas c INNER JOIN expedientes e ON c.idpaciente = e.idpaciente WHERE c.idcita = " + req.params.id;
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log(`Get cita with id: ${req.params.id} Successful`);
+            res.json(rows[0]);
+        } catch (err) {
+            console.log(`Get cita with id: ${req.params.id} Failed. Error: ${err}`);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
     //Delete a cita by id
     router.delete("/:id", async (req, res) => {
         try {
