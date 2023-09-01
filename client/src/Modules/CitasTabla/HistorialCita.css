@@ -4,7 +4,7 @@
     width: 100%;
 }
 
-.scrollable-page {
+.scrollable-page1 {
     background-color: #E4EBF9;
     overflow-y: auto;
     scroll-behavior: smooth;
@@ -184,12 +184,28 @@
 
     border-top: 2px solid #5e5e5e;
 }
-
+/* Falta responsiveness de estos css */
 .contenedor{
     background-color: #fff;
     padding: 10px;
     border-radius: 10px;
 }
+.delete-button {
+    width: 30px; 
+    height: 40px;
+    margin-top: 35px;
+}
+.bttcita{
+    background-color: blue;
+    color: white;
+    height: 40px;
+    width: 200px;
+    border-radius: 5px;
+    font-size: 20px;
+    border-color: white;
+}
+
+/* /////////////////////////////// */
 
 @media only screen and (min-width: 820px) and (max-width: 950px) {
     .space-between-text {

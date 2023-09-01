@@ -1,4 +1,4 @@
-
+import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons'
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
@@ -8,6 +8,55 @@ import './HistorialCita.css';
 import CitasService from '../../Services/CitasService';
 
 import swal from 'sweetalert';
+
+function MedicamentoRow({ onDelete }) {
+    return (
+        <div className='Mediv'>
+            <div className="row mb-3">
+                <div className="col-md-3">
+                    <h6 className='headers'>Medicamento</h6>
+                    <input
+                        className="input-bg"
+                        type="text"
+                        placeholder="Medicamento"
+                    />
+                </div>
+                <div className="col-md-2">
+                    <h6 className='headers'>Cantidad</h6>
+                    <input
+                        className="input-bg"
+                        type="text"
+                        placeholder="Cantidad"
+                    />
+                </div>
+                <div className="col-md-3">
+                    <h6 className='headers'>Frecuencia</h6>
+                    <input
+                        className="input-bg"
+                        type="text"
+                        placeholder="Frecuencia"
+                    />
+                </div>
+                <div className="col-md-3">
+                    <h6 className='headers'>Duración</h6>
+                    <input
+                        className="input-bg"
+                        type="text"
+                        placeholder="Duración"
+                    />
+                </div>
+                <div className="col-md-1 d-flex justify-content-center">
+                    {onDelete && (
+                        <button onClick={onDelete} className="delete-button">
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+////////////////////////////////////////////////////////////////////////////
 
 function HistorialCita() {
 
@@ -53,9 +102,30 @@ function HistorialCita() {
             console.log('Error submitting servicio:', error);
         }
     };
+    /////////////////////////////////////////////////////////////////////
+    //Este es el componente de Medicamento para agregar uno mas a la row 
+    const [medicamentos, setMedicamentos] = useState([
+        { id: 0, component: <MedicamentoRow onDelete={() => deleteMedicamento(0)} /> }
+    ]);
+
+    const addMedicamentoRow = () => {
+        const newMedicamentoId = medicamentos.length;
+        setMedicamentos(prevMedicamentos => [
+            ...prevMedicamentos,
+            {
+                id: newMedicamentoId,
+                component: <MedicamentoRow onDelete={() => deleteMedicamento(newMedicamentoId)} />
+            }
+        ]);
+    };
+
+    const deleteMedicamento = (id) => {
+        setMedicamentos(prevMedicamentos => prevMedicamentos.filter(medicamento => medicamento.id !== id));
+    };
+    ////////////////////////////////////////////////////////////////////////////
 
     return (
-        <div className='scrollable-page'>
+        <div className='scrollable-page1'>
             <NavBar />
             <div className='main'>
                 <div className="infoGeneral">
@@ -71,7 +141,7 @@ function HistorialCita() {
                         <div className='space-between-text'>
                             <div className='patient-email-container'>
                                 {paciente && paciente.correouser}
-                                
+
                             </div>
                             <p className="smallText">
                                 {paciente && paciente.estado_civil}
@@ -80,7 +150,7 @@ function HistorialCita() {
                         <div className='space-between-text'>
                             <p className="smallText">
                                 {paciente && paciente.numid}
-                                
+
                             </p>
                             <p className="smallText">Dirección</p>
                         </div>
@@ -90,18 +160,21 @@ function HistorialCita() {
                             </p>
                             <p className="smallText">
                                 {paciente && paciente.edad}
-                                
+
                             </p>
                         </div>
                         <div className='space-between-text'>
                             <p className="smallText">
                                 {paciente && paciente.sexo}
-                                
+
                             </p>
                             <p className="smallText">
                                 {paciente && paciente.ocupacion}
                             </p>
                         </div>
+                    </div>
+                    <div className='tcita' >
+                        <button className='bttcita'>Terminar Cita</button>
                     </div>
                 </div>
                 {/* <div className="row align-items-center mb-4"> */}
@@ -171,81 +244,64 @@ function HistorialCita() {
                         </div>
                     </div>
                 </div>
-            //diagnostico
+
                 <div class='diagnostic' id='diagnostico'>
                     <h3 className='appointment-section-header'>Diagnóstico y Tratamiento</h3>
-                    <div className='contenedor'>
+                    <div className='contenedo'>
                         <div className="row mb-3">
                             <div className="col-md-6">
                                 <h4 className='headers'>Diagnóstico</h4>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Ingrese diagnóstico"
-                                />
+                                <div className='contenedor'>
+                                    <input
+                                        className="input-bg"
+                                        type="text"
+                                        placeholder="Nombre o Código"
+                                    />
+                                </div>
                             </div>
                             <div className="col-md-6">
                                 <h4 className='headers'>Estudios de Gabinete</h4>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Ingrese Estudios de Laboratorio e Imagenología"
-                                />
+                                <div className='contenedor'>
+                                    <input
+                                        className="input-bg"
+                                        type="text"
+                                        placeholder="Estudios de Laboratorio e Imagenología"
+                                    />
+                                </div>
                             </div>
                         </div>
                         <h4 className='headers'>Procedimientos</h4>
                         <div className="row mb-3">
                             <div className="col">
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Ingrese Procedimientos"
-                                />
+                                <div className='contenedor'>
+                                    <input
+                                        className="input-bg"
+                                        type="text"
+                                        placeholder="Procedimientos"
+                                    />
+                                </div>
                             </div>
                         </div>
                         <h4 className='headers'>Receta de Medicamentos</h4>
-                        <div className="row mb-3">
-                            <div className="col-md-3">
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Buscar Medicamentos"
-                                />
+                        <div className='contenedor'>
+                            <div className="row mb-3">
+                                <div className="col-md-3">
+                                    <input
+                                        className="input-bg"
+                                        type="text"
+                                        placeholder="Buscar Medicamentos"
+                                    />
+                                </div>
                             </div>
-                        </div>
-                        <div className="row mb-3">
-                            <div className="col-md-3">
-                                <h6 className='headers'>Medicamento</h6>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Medicamento"
-                                />
+
+                            {/* Visualizacion de medicamentos */}
+                            <div>
+                                {medicamentos.map(({ id, component }) => (
+                                    <div key={id}>{component}</div>
+                                ))}
+                                <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
                             </div>
-                            <div className="col-md-3">
-                                <h6 className='headers'>Cantidad</h6>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Cantidad"
-                                />
-                            </div>
-                            <div className="col-md-3">
-                                <h6 className='headers'>Frecuencia</h6>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Frecuencia"
-                                />
-                            </div>
-                            <div className="col-md-3">
-                                <h6 className='headers'>Duración</h6>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    placeholder="Duración"
-                                />
-                            </div>
+                            {/* ///////////////////////////// */}
                         </div>
                         <div className="row mb-3">
                             <div className='headers_TA'>
@@ -271,7 +327,7 @@ function HistorialCita() {
                 </div>
                 <div>
 
-                    <label htmlFor="showIncapacity" style={{ fontSize: '18px', fontWeight: 'bold' }}>
+                    <label htmlFor="showIncapacity" id='incapacidad' style={{ fontSize: '18px', fontWeight: 'bold' }}>
                         Agregar Incapacidad
                     </label>
                     <input
@@ -283,23 +339,24 @@ function HistorialCita() {
                     />
 
                     {showIncapacity && (
-                        <div class='incapacity' id='incapacidad'>
+                        <div class='incapacity' >
                             <h3 class='appointment-section-header'>Incapacidad</h3>
                             <div class='contenedor'>
                                 <h4 class='headers'>Tipo</h4>
-                                <div class="btn-group my-2" role="group">
-                                    <input type="radio" class="btn-check" name="btnradio" id="laboral" autocomplete="off" />
-                                    <label class="btn btn-outline-dark" for="laboral">Laboral</label>
+                                <div className="btn-group my-2" role="group">
+                                    <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off" />
+                                    <label className="btn btn-outline-dark" htmlFor="laboral">Laboral</label>
 
-                                    <input type="radio" class="btn-check" name="btnradio" id="deportiva" autocomplete="off" />
-                                    <label class="btn btn-outline-dark" for="deportiva">Deportiva</label>
+                                    <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off" />
+                                    <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
 
-                                    <input type="radio" class="btn-check" name="btnradio" id="transporte" autocomplete="off" />
-                                    <label class="btn btn-outline-dark" for="transporte">Transporte</label>
+                                    <input type="radio" className="btn-check" name="btnradio" id="transporte" autoComplete="off" />
+                                    <label className="btn btn-outline-dark" htmlFor="transporte">Transporte</label>
 
-                                    <input type="radio" class="btn-check" name="btnradio" id="otra" autocomplete="off" />
-                                    <label class="btn btn-outline-dark" for="otra">Otra</label>
+                                    <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off" />
+                                    <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
                                 </div>
+
                                 <div class="row mb-3">
                                     <div class="form-group col-md-6">
                                         <label for="fechaInicial" class="form-label">Fecha Inicial</label>
