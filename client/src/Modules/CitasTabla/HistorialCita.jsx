@@ -171,7 +171,7 @@ function HistorialCita() {
                         </div>
                     </div>
                 </div>
-
+            //diagnostico
                 <div class='diagnostic' id='diagnostico'>
                     <h3 className='appointment-section-header'>Diagnóstico y Tratamiento</h3>
                     <div className='contenedor'>
@@ -181,7 +181,7 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    placeholder="Nombre o Código"
+                                    placeholder="Ingrese diagnóstico"
                                 />
                             </div>
                             <div className="col-md-6">
@@ -189,7 +189,7 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    placeholder="Estudios de Laboratorio e Imagenología"
+                                    placeholder="Ingrese Estudios de Laboratorio e Imagenología"
                                 />
                             </div>
                         </div>
@@ -199,7 +199,7 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    placeholder="Procedimientos"
+                                    placeholder="Ingrese Procedimientos"
                                 />
                             </div>
                         </div>
