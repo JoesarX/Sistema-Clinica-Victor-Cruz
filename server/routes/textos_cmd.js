@@ -33,6 +33,24 @@ const textos_cmdRouter = (pool) => {
             console.log("Entré al get home error");
         }
     });
+    //traer todo saludo ocupacional 
+    router.get("/saludOcupacional", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const sqlSelect = "SELECT texto_campo FROM textos_cmd  WHERE Tipo in ('tituloSaludOcupacional','textoQueEsSaludOcupacional','porqueImporta','textoPorqueImporta','subTituloSaludOcupacional','tituloItem1SaludOcupacional','tituloItem2SaludOcupacional','tituloItem3SaludOcupacional','textoItem1SaludOcupacional','textoItem2SaludOcupacional','textoItem3SaludOcupacional')"
+            ; 
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log("Get all textos_cmd Successfull");
+            console.log("Entré al get home");
+            res.json(rows);
+        } catch (err) {
+            console.log("Get all textos_cmd Failed. Error: " + err);
+            res.status(500).json({ error: "Internal Server Error" });
+            console.log("Entré al get home error");
+        }
+    });
+
     //traer todo footer de un solo
     router.get("/footer", async (req, res) => {
         try {

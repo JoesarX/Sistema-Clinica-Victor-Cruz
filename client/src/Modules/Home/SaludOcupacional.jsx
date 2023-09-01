@@ -8,13 +8,92 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcaseMedical } from '@fortawesome/free-solid-svg-icons';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { faHouseMedicalFlag } from '@fortawesome/free-solid-svg-icons';
-
+import Services from '../../Services/texto_cmdService';
 
 import { useEffect, useCallback } from 'react'
 import DoctorImg from '../Imagenes/doctorPhoto.jpg'
 
 const SaludOcupacional = () => {
+    const [tituloSaludOcupacional, setTituloSaludOcupacional] = React.useState({
+        Tipo: 'tituloSaludOcupacional',
+        texto_campo: ''
+    })
+    const [textoQueEsSaludOcupacional, setTextoQueEsSaludOcupacional] = React.useState({
+        Tipo: 'textoQueEsSaludOcupacional',
+        texto_campo: ''
+    })
+    const [porqueImporta, setPorqueImporta] = React.useState({
+        Tipo: 'porqueImporta',
+        texto_campo: ''
+    })
 
+    const [textoPorqueImporta, setTextoPorqueImporta] = React.useState({
+        Tipo: 'textoPorqueImporta',
+        texto_campo: ''
+    })
+    
+    const [subTituloSaludOcupacional, setSubTituloSaludOcupacional] = React.useState({
+        Tipo: 'subTituloSaludOcupacional',
+        texto_campo: ''
+    })
+
+    const [tituloItem1SaludOcupacional, setTituloItem1SaludOcupacional] = React.useState({
+        Tipo: 'tituloItem1SaludOcupacional',
+        texto_campo: ''
+    })
+
+    const [tituloItem2SaludOcupacional, setTituloItem2SaludOcupacional] = React.useState({
+        Tipo: 'tituloItem2SaludOcupacional',
+        texto_campo: ''
+    })
+    const [tituloItem3SaludOcupacional, setTituloItem3SaludOcupacional] = React.useState({
+        Tipo: 'tituloItem3SaludOcupacional',
+        texto_campo: ''
+    })
+
+    const [textoItem1SaludOcupacional, setTextoItem1SaludOcupacional] = React.useState({
+        Tipo: 'textoItem1SaludOcupacional',
+        texto_campo: ''
+    })
+    const [textoItem2SaludOcupacional, setTextoItem2SaludOcupacional] = React.useState({
+        Tipo: 'textoItem2SaludOcupacional',
+        texto_campo: ''
+    })
+    const [textoItem3SaludOcupacional, setTextoItem3SaludOcupacional] = React.useState({
+        Tipo: 'textoItem3SaludOcupacional',
+        texto_campo: ''
+    })
+
+    const [isFetching, setIsFetching] = useState(true);
+    
+
+    useEffect(() => {
+        if(isFetching){
+        const FetchCargarInfo = async () => {
+            try{
+            console.log("Hola");
+            var info = await  Services.getSaludOcupacional();
+            setTituloSaludOcupacional({ ...tituloSaludOcupacional, texto_campo: info[0].texto_campo });
+            setTextoQueEsSaludOcupacional({ ...textoQueEsSaludOcupacional, texto_campo: info[1].texto_campo });
+            setPorqueImporta({ ...porqueImporta, texto_campo: info[2].texto_campo });
+            setTextoPorqueImporta({ ...textoPorqueImporta, texto_campo: info[3].texto_campo });
+            setSubTituloSaludOcupacional({ ...subTituloSaludOcupacional, texto_campo: info[4].texto_campo });
+            setTituloItem1SaludOcupacional({ ...tituloItem1SaludOcupacional, texto_campo: info[5].texto_campo });
+            setTituloItem2SaludOcupacional({ ...tituloItem2SaludOcupacional, texto_campo: info[6].texto_campo });
+            setTituloItem3SaludOcupacional({ ...tituloItem3SaludOcupacional, texto_campo: info[7].texto_campo });
+            setTextoItem1SaludOcupacional({ ...textoItem1SaludOcupacional, texto_campo: info[8].texto_campo });
+            setTextoItem2SaludOcupacional({ ...textoItem2SaludOcupacional, texto_campo: info[9].texto_campo });
+            setTextoItem3SaludOcupacional({ ...textoItem3SaludOcupacional, texto_campo: info[10].texto_campo });
+
+
+            }catch(error){
+                console.log("Error fetching info");
+            }
+        }
+        FetchCargarInfo();
+        setIsFetching(false);
+    }
+},[]);
     return (
         <div className="scrollable-page2">
             <Topbar />
@@ -25,69 +104,58 @@ const SaludOcupacional = () => {
 
 
             <div className="salud_desc-container">
-                <h2>¿Qué es la Salud Ocupacional?</h2>
+                <h2>{tituloSaludOcupacional.texto_campo}</h2>
                 <p>
-                    Se define como una actividad multidisciplinaria que controla y realiza medidas de prevención para cuidar la 
-                    salud de todos los trabajadores. Esto incluye enfermedades, cualquier tipo de accidentes y todos los factores
-                    que puedan llegar a poner en peligro la vida, la salud o la seguridad de las personas en sus respectivos trabajos.
+                    {textoQueEsSaludOcupacional.texto_campo}
                 </p>
             </div>
 
             <div className="salud_impor-container">
-                <h2>¿Por qué es importante la salud ocupacional?</h2>
+                <h2>{porqueImporta.texto_campo}</h2>
                 <p>
-                Las actividades están dirigidas a promover y mantener el más alto grado de bienestar físico, mental y 
-                social entre los trabajadores de todas las áreas y profesiones; prevenir daños a la salud causados por condiciones 
-                de trabajo, así como colocar y mantener al trabajador en un empleo digno acorde con sus aptitudes fisiológicas y psicológicas.
+                {textoPorqueImporta.texto_campo}
                 </p>
             </div>
 
             <div className='header2'>
-                COMO ESTA FORMADO NUESTRO PROGRAMA
+               {subTituloSaludOcupacional.texto_campo}
             </div>
 
             <div className='containerInfo'>
                 <div style={{ position: 'relative', paddingLeft: '15%', marginTop:'1%' }}>
-                    <h2 style={{fontSize: '2.5rem' }}>PLANIFICACIÓN</h2>
+                    <h2 style={{fontSize: '2.5rem' }}>{tituloItem1SaludOcupacional.texto_campo}</h2>
                 </div>
                 <FontAwesomeIcon icon={faBriefcaseMedical} style={{ color: '#1E60A6', fontSize: '100px', position: 'relative', marginRight: '77%', marginTop: '-7%', marginBottom: '2%'  }} />
                 
                 <div style={{ fontSize: '1.1rem'}}>
                     <p style={{ marginBottom: '2%'}}>
-                    Inicia con un diagnóstico integral de las condiciones de salud y trabajo. Este diagnóstico abarca una evaluación 
-                    detallada que incluye la identificación de peligros y evaluación de riesgos, análisis de estadísticas de 
-                    accidentabilidad, detección de enfermedades laborales y comunes, así como el estudio del ausentismo laboral. 
-                    Este proceso proporciona una visión completa de la situación actual en términos de salud y seguridad laboral, 
-                    permitiendo identificar áreas clave para mejoras y acciones de control.
+                    {textoItem1SaludOcupacional.texto_campo}
                     </p>
                 </div>
             </div>
             
             <div className='containerInfo'>
                 <div style={{ position: 'relative', paddingLeft: '10%', marginTop:'1%' }}>
-                    <h2 style={{fontSize: '2.5rem' }}>DEFINICIÓN DE PRIORIADES</h2>
+                    <h2 style={{fontSize: '2.5rem' }}>{tituloItem2SaludOcupacional.texto_campo}</h2>
                 </div>
                 <FontAwesomeIcon icon={faCircleExclamation} style={{ color: '#1E60A6', fontSize: '100px', position: 'relative', marginRight: '77%', marginTop: '-7%', marginBottom: '2%'  }} />
                 
                 <div style={{ fontSize: '1.1rem'}}>
                     <p style={{ marginBottom: '2%'}}>
-                    Se lleva a cabo una revisión de los requisitos legales en salud ocupacional entre el personal de alta gerencia y el evaluador.
+                    {textoItem2SaludOcupacional.texto_campo}
                     </p>
                 </div>
             </div>
 
             <div className='containerInfo'>
                 <div style={{ position: 'relative', paddingLeft: '15%', marginTop:'1%' }}>
-                    <h2 style={{fontSize: '2.5rem' }}>PLANES DE ACCIÓN</h2>
+                    <h2 style={{fontSize: '2.5rem' }}>{tituloItem3SaludOcupacional.texto_campo}</h2>
                 </div>
                 <FontAwesomeIcon icon={faHouseMedicalFlag} style={{ color: '#1E60A6', fontSize: '100px', position: 'relative', marginRight: '74%', marginTop: '-7%', marginBottom: '2%'  }} />
                 
                 <div style={{ fontSize: '1.1rem'}}>
                     <p style={{ marginBottom: '2%'}}>
-                    Elabora estrategias para la intervención en el entorno y con las personas, incluyendo objetivos definidos, 
-                    actividades específicas, indicadores de seguimiento, asignación de responsables y fechas de inicio y finalización.
-                    Estas estrategias proveen una guía integral para implementar acciones con eficacia, enfocadas en mejorar 
-                    condiciones y promover la salud laboral.
+                   {textoItem3SaludOcupacional.texto_campo}
                     </p>
                 </div>
             </div>
