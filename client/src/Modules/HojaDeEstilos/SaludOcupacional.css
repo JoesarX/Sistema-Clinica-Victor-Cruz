@@ -22,6 +22,45 @@
     margin: 20px 0;
     font-family: 'Montserrat';
   }
+
+  .header2 {
+    font-size: 3vw !important;
+    color: #ffff !important;
+    background-color: #677a92;
+    box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+    text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
+    margin-top: 0 !important;
+    justify-content: center !important;
+    display: flex;
+    text-align: center !important;
+    font-weight: 200;
+    padding: 1.5vh 0;
+    margin: 20px 0;
+    font-family: 'Montserrat';
+    background-size: 80% auto !important;
+    width: 64%;
+    margin-left: 18%; 
+}
+
+
+
+  .salud_desc-container,
+  .containerInfo {
+    padding: 3rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+    margin: 2rem auto;
+    width: 80%;
+    max-width: 1000px;
+    height: auto;
+    margin-top: 2%;
+    margin-bottom: 2.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
   
   .salud_desc-container,
   .salud_impor-container {
@@ -34,7 +73,7 @@
     max-width: 1000px;
     height: auto;
     margin-top: 2%;
-    margin-bottom: 5%;
+    margin-bottom: 1.8%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -56,7 +95,3 @@
     margin: 0 5%;
     text-align: justify;
   }
-
-  
-  /* Otros estilos específicos que puedas necesitar */
-  
