@@ -67,9 +67,8 @@
     flex-direction: column;
     justify-content: left;
     align-items: left;
-    width: 60%;
+    width: 100%;
     gap: 3px;
-    padding-left: 3%;
 }
 
 .perfil {
@@ -86,15 +85,19 @@
 }
 
 .nombre {
-    width: 100%;
+    width: 700px;
     height: moz-fit-content;
     font-family: 'Inter';
     font-style: normal;
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     display: flex;
     color: #464646;
     margin-bottom: 0px;
+     /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .smallText {
@@ -118,8 +121,35 @@
     align-items: center;
     word-wrap: normal;
     padding: 0px;
-    width: 100%;
+    width: 50%;
     height: moz-fit-content;
+}
+
+.appointment-reason-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    width: max-content;
+    line-height: 25px;
+    text-align: center;
+    vertical-align: middle;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: auto;
+    padding-bottom: auto;
+    background: #C8DAFF;
+    border-radius: 20px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 100%;
+    color: #1560F2;
+}
+
+.appointment-reason-container.date {
+    color: #B98622;
+    background-color: #FFE1A7;
 }
 
 .patient-email-container {
@@ -164,6 +194,15 @@
 .nav-button-container a {
     font-size: 20px;
     font-weight: 700;
+    border-radius: 30px;
+    padding: 1px 10px 1px 10px;
+    color: white;
+    background-color: #1560f2;
+    text-decoration: none;
+}
+
+.nav-button-container a:hover {
+    background-color: #3f79ee
 }
 
 .appointment-section-header {
@@ -194,14 +233,24 @@
     height: 40px;
     margin-top: 35px;
 }
-.bttcita{
-    background-color: blue;
+
+.appointment-history-button {
+    background-color: #1560f2;
     color: white;
-    height: 40px;
-    width: 200px;
+    height: 60px;
+    width: 250px;
     border-radius: 5px;
     font-size: 20px;
-    border-color: white;
+    font-family: 'Inter';
+    font-weight: 800;
+    border: none;
+}
+
+.appointment-details-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
 }
 
 /* /////////////////////////////// */

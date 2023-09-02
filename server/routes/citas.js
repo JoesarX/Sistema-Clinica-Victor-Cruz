@@ -239,7 +239,9 @@ const citasRouter = (pool, transporter) => {
             console.log("Entro");
             const connection = await pool.getConnection();
             const sqlSelect = 
-                "SELECT c.idcita, c.nombre_persona, c.estado, c.idpaciente, c.correouser, DATE_FORMAT(c.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, e.edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono,  FROM citas c INNER JOIN expedientes e ON c.idpaciente = e.idpaciente WHERE c.idcita = " + req.params.id;
+                "SELECT c.idcita, c.nombre_persona, c.estado, c.idpaciente, c.correouser, DATE_FORMAT(c.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
+                + "c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, e.edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono "
+                + " FROM citas c INNER JOIN expedientes e ON c.idpaciente = e.idpaciente WHERE c.idcita = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log(`Get cita with id: ${req.params.id} Successful`);

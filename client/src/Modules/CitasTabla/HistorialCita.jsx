@@ -122,6 +122,12 @@ function HistorialCita() {
     const deleteMedicamento = (id) => {
         setMedicamentos(prevMedicamentos => prevMedicamentos.filter(medicamento => medicamento.id !== id));
     };
+
+    const formatDate = (date) => {
+        var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(date).toLocaleDateString("es-HN", datePrefs);
+    }
+
     ////////////////////////////////////////////////////////////////////////////
 
     return (
@@ -135,45 +141,40 @@ function HistorialCita() {
                         </div>
                     </div>
                     <div className='patient-info-vert-align'>
-                        <h2 className="nombre">
-                            {paciente && paciente.nombre_persona}
-                        </h2>
-                        <div className='space-between-text'>
-                            <div className='patient-email-container'>
-                                {paciente && paciente.correouser}
+                        <div class='appointment-details-container'>
+                            <h2 className="nombre">
+                                {paciente && paciente.nombre}
+                            </h2>
+                            <div className='appointment-reason-container'>
+                                {paciente && paciente.nombre_persona}
                             </div>
-                            <p className="smallText">
-                                {paciente && paciente.estado_civil}
-                            </p>
+                            <div className='appointment-reason-container date'>
+                                {paciente && formatDate(paciente.fecha)}
+                            </div>
                         </div>
                         <div className='space-between-text'>
                             <p className="smallText">
                                 {paciente && paciente.numid}
-
-                            </p>
-                            <p className="smallText">Dirección</p>
-                        </div>
-                        <div className='space-between-text'>
-                            <p className="smallText">
-                                {paciente && paciente.fecha_nacimiento}
-                            </p>
-                            <p className="smallText">
-                                {paciente && paciente.edad}
                             </p>
                         </div>
                         <div className='space-between-text'>
                             <p className="smallText">
-                                {paciente && paciente.sexo}
-
+                                {paciente && formatDate(paciente.fecha_nacimiento)}
                             </p>
                             <p className="smallText">
-                                {paciente && paciente.ocupacion}
+                                {paciente && paciente.edad} años
                             </p>
                         </div>
+                        <div className='space-between-text'>
+                            <p className="smallText">
+                                {paciente && (paciente.sexo === "M") ? 'Masculino' : 'Femenino'}
+                            </p>
+                            <div className='smallText'>
+                                {paciente && paciente.correouser}
+                            </div>
+                        </div>
                     </div>
-                    <div className='tcita' >
-                        <button className='bttcita'>Terminar Cita</button>
-                    </div>
+                    <button className='appointment-history-button'>Terminar Cita</button>
                 </div>
                 {/* <div className="row align-items-center mb-4"> */}
                 {/* </div> */}
@@ -357,11 +358,11 @@ function HistorialCita() {
 
                                 <div class="row mb-3">
                                     <div class="form-group col-md-6">
-                                        <label for="fechaInicial" class="form-label">Fecha Inicial</label>
+                                        <label htmlFor="fechaInicial" class="form-label">Fecha Inicial</label>
                                         <input type="date" class="form-control" id="fechaInicial" />
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="diasDescanso" class="form-label">Días de Descanso</label>
+                                        <label htmlFor="diasDescanso" class="form-label">Días de Descanso</label>
                                         <select class="form-select" id="diasDescanso">
                                             <option value="1">1 día</option>
                                             <option value="2">2 días</option>
@@ -371,7 +372,7 @@ function HistorialCita() {
                                 </div>
                                 <div class="row mb-3">
                                     <div class="form-group col-md-12">
-                                        <label for="comentarios" class="form-label">Comentarios</label>
+                                        <label htmlFor="comentarios" class="form-label">Comentarios</label>
                                         <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"></textarea>
                                     </div>
                                 </div>
