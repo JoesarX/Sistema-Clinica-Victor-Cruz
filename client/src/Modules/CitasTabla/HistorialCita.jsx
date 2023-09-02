@@ -174,7 +174,9 @@ function HistorialCita() {
                             </div>
                         </div>
                     </div>
-                    <button className='appointment-history-button'>Terminar Cita</button>
+                    <button className='appointment-history-button' onClick={() => submitEdit()}>
+                        Terminar Cita
+                    </button>
                 </div>
                 {/* <div className="row align-items-center mb-4"> */}
                 {/* </div> */}
@@ -239,7 +241,6 @@ function HistorialCita() {
                                     onChange={(e) => setNewPresion(e.target.value)}
                                 />
                             </div>
-                            <button className='buttonE' onClick={() => submitEdit()}>Editar Cita</button>
                         </div>
                     </div>
                 </div>
@@ -324,57 +325,55 @@ function HistorialCita() {
                         </div>
                     </div>
                 </div>
-                <div>
+                <div class='incapacity'>
+                    <div class="d-inline-flex mb-3">
+                        <label htmlFor="showIncapacity" id='incapacidad' class='appointment-section-header'>
+                            Agregar Incapacidad
+                        </label>
+                        <input
+                            type="checkbox"
+                            id="showIncapacity"
+                            checked={showIncapacity}
+                            onChange={() => setShowIncapacity(!showIncapacity)}
+                            style={{ transform: 'scale(1.5)', margin: '0 10px' }}
+                        />
 
-                    <label htmlFor="showIncapacity" id='incapacidad' style={{ fontSize: '18px', fontWeight: 'bold' }}>
-                        Agregar Incapacidad
-                    </label>
-                    <input
-                        type="checkbox"
-                        id="showIncapacity"
-                        checked={showIncapacity}
-                        onChange={() => setShowIncapacity(!showIncapacity)}
-                        style={{ transform: 'scale(1.5)', margin: '0 10px' }}
-                    />
-
+                    </div>
                     {showIncapacity && (
-                        <div class='incapacity' >
-                            <h3 class='appointment-section-header'>Incapacidad</h3>
-                            <div class='contenedor'>
-                                <h4 class='headers'>Tipo</h4>
-                                <div className="btn-group my-2" role="group">
-                                    <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off" />
-                                    <label className="btn btn-outline-dark" htmlFor="laboral">Laboral</label>
+                        <div class='contenedor'>
+                            <h4 class='headers'>Tipo</h4>
+                            <div className="btn-group my-2" role="group">
+                                <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off" />
+                                <label className="btn btn-outline-dark" htmlFor="laboral">Laboral</label>
 
-                                    <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off" />
-                                    <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
+                                <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off" />
+                                <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
 
-                                    <input type="radio" className="btn-check" name="btnradio" id="transporte" autoComplete="off" />
-                                    <label className="btn btn-outline-dark" htmlFor="transporte">Transporte</label>
+                                <input type="radio" className="btn-check" name="btnradio" id="transporte" autoComplete="off" />
+                                <label className="btn btn-outline-dark" htmlFor="transporte">Transporte</label>
 
-                                    <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off" />
-                                    <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
+                                <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off" />
+                                <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="form-group col-md-6">
+                                    <label htmlFor="fechaInicial" class="form-label">Fecha Inicial</label>
+                                    <input type="date" class="form-control" id="fechaInicial" />
                                 </div>
-
-                                <div class="row mb-3">
-                                    <div class="form-group col-md-6">
-                                        <label htmlFor="fechaInicial" class="form-label">Fecha Inicial</label>
-                                        <input type="date" class="form-control" id="fechaInicial" />
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label htmlFor="diasDescanso" class="form-label">Días de Descanso</label>
-                                        <select class="form-select" id="diasDescanso">
-                                            <option value="1">1 día</option>
-                                            <option value="2">2 días</option>
-                                            <option value="3">3 días</option>
-                                        </select>
-                                    </div>
+                                <div class="form-group col-md-6">
+                                    <label htmlFor="diasDescanso" class="form-label">Días de Descanso</label>
+                                    <select class="form-select" id="diasDescanso">
+                                        <option value="1">1 día</option>
+                                        <option value="2">2 días</option>
+                                        <option value="3">3 días</option>
+                                    </select>
                                 </div>
-                                <div class="row mb-3">
-                                    <div class="form-group col-md-12">
-                                        <label htmlFor="comentarios" class="form-label">Comentarios</label>
-                                        <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"></textarea>
-                                    </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="form-group col-md-12">
+                                    <label htmlFor="comentarios" class="form-label">Comentarios</label>
+                                    <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"></textarea>
                                 </div>
                             </div>
                         </div>
