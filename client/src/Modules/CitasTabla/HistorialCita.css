@@ -46,12 +46,11 @@
     align-items: left;
     justify-content: left;
     padding-left: 3%;
-    height: 100%;
+    height: min-content;
     gap: 20px;
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
-    height: 100%;
 }
 
 .profile-picture-and-edit {

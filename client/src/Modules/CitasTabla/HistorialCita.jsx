@@ -74,7 +74,7 @@ function HistorialCita() {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
                 setPaciente(response);
-                console.log(response);
+                console.log("RESPONSE:", response);
             } catch (error) {
                 console.error('Error fetching paciente:', error);
             }
@@ -82,9 +82,9 @@ function HistorialCita() {
         fetchPaciente();
     }, [id]);
 
-    useEffect(() => {
-        console.log(paciente); // Log paciente when it changes
-    }, [paciente]);
+    // useEffect(() => {
+    //     console.log(paciente); // Log paciente when it changes
+    // }, [paciente]);
 
     const submitEdit = async () => {
         try {
@@ -97,7 +97,7 @@ function HistorialCita() {
             swal("Cita Editada", {
                 icon: "success",
             });
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             console.log('Error submitting servicio:', error);
         }
@@ -141,7 +141,6 @@ function HistorialCita() {
                         <div className='space-between-text'>
                             <div className='patient-email-container'>
                                 {paciente && paciente.correouser}
-
                             </div>
                             <p className="smallText">
                                 {paciente && paciente.estado_civil}
@@ -160,7 +159,6 @@ function HistorialCita() {
                             </p>
                             <p className="smallText">
                                 {paciente && paciente.edad}
-
                             </p>
                         </div>
                         <div className='space-between-text'>
