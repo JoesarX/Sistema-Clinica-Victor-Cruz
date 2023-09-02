@@ -4,12 +4,12 @@
     align-items: center;
     justify-content: center;
     padding: 20px 20px 20px 10px;
-    height: 100%;
     gap: 20px;
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
     height: 100%;
+    max-height: 240px;
     /* TEMPORALLL */
     /* background-color: rgb(0, 255, 0, 0.3);
     background-size: 10px 10px;
@@ -59,12 +59,13 @@
     position: relative;
     top: 1.5%;
     left: 4%;
-  }
-  
-  .botonVolver:hover {
+}
+
+.botonVolver:hover {
     background-color: #18548f;
     transform: scale(1.05);
-  }
+}
+
 .contenido {
     display: flex;
     flex-direction: row;
@@ -159,6 +160,8 @@
     background: #F8F8F8;
     border-radius: 10px;
     height: min-content;
+
+    user-select: none;
 }
 
 .alergias {
@@ -394,6 +397,31 @@
     text-align: center;
 }
 
+.vital-sign-container {
+    width: 100%;
+}
+
+.vital-sign-container.temperature {
+    border-color: #916A9E;
+    color: #916A9E;
+}
+
+.vital-sign-container.pressure,
+.vital-sign-container.heart-rate {
+    border-color: #AB2525;
+    color: #AB2525;
+}
+
+.vital-sign-container.weight {
+    border-color: #54648D;
+    color: #54648D;
+}
+
+.vital-sign-container.height {
+    border-color: #75BD89;
+    color: #75BD89;
+}
+
 .vital-sign-content {
     display: flex;
     flex-direction: row;
@@ -408,6 +436,19 @@
     /* background-color: rgb(255, 0, 0, 0.3);
     background-size: 10px 10px;
     background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+
+    cursor: pointer;
+}
+
+.vital-sign-content:hover {
+    /* background-color: #DBDFEA; */
+    /* background: linear-gradient(90deg, rgba(219, 223, 234), rgba(219, 223, 234, 0.075) 99%,
+            rgba(219, 223, 234, 0) 100%); */
+    border-left: 10px solid;
+    border-left-color: inherit;
+    padding-left: 20px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 .vitals-label {
@@ -429,6 +470,58 @@
     align-items: flex-start;
     justify-content: center;
     color: #737373;
+}
+
+.vitals-history {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.1s ease-in-out;
+    border-color: inherit;
+}
+
+.vitals-history.expanded {
+    display: flex;
+    flex-direction: column;
+    max-height: 1000px;
+    border-bottom-left-radius: 5px;
+}
+
+.vitals-history>* {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+
+    border-left: 10px solid;
+    border-color: inherit;
+
+    font-size: 15px;
+    color: inherit;
+
+    gap: 20px;
+
+    padding-left: 5px;
+
+    /* cursor: pointer; */
+    /* TEMPORAL */
+    /* background-color: rgb(0, 0, 255, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
+.vitals-history-details {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    color: inherit;
+    font-weight: 500;
+    font-family: 'Inter';
+}
+
+.vitals-history-details>.vitals-value {
+    font-weight: inherit;
 }
 
 .file-list {
@@ -605,7 +698,7 @@
     height: 100%;
 }
 
-.prev-appointment > .appointment-date {
+.prev-appointment>.appointment-date {
     color: #595959;
 }
 
@@ -1019,7 +1112,8 @@
         height: 180px;
     }
 
-    .alergias, .enfermedades {
+    .alergias,
+    .enfermedades {
         height: 140px;
     }
 
@@ -1031,9 +1125,9 @@
         height: 300px;
     }
 
-    .vitals {
+    /* .vitals {
         height: 280px;
-    }
+    } */
 
     .files {
         height: 180px;

@@ -95,16 +95,10 @@ const Dashboard = () => {
     const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 3', 'Enfermedad 4']);
     const [schAppointments, setSchAppointments] = useState([]);
     const [prevAppointments, setPrevAppointments] = useState([]);
-    moment.locale('es')
 
-    function Signout() {
-        localStorage.clear();
-        navigate('/');
-    }
+    const [lastAppointment, setLastAppointment] = useState({});
 
-    function enviar_A_Crud() {
-        navigate('/administrador');
-    }
+    moment.locale('es');
 
     const fetchExpediente2 = async () => {
         try {
@@ -180,18 +174,18 @@ const Dashboard = () => {
 
                 const scheduled = appointments.filter(appointment => appointment.estado === "Pendiente");
                 const previous = appointments.filter(appointment => appointment.estado !== "Pendiente");
-
-                setSchAppointments(scheduled)
-                setPrevAppointments(previous);
+                
+                setSchAppointments(scheduled.reverse());
+                setPrevAppointments(previous.reverse());
+                setLastAppointment(previous.slice(-1));
             } catch (error) {
                 console.log(error);
             }
         }
 
+        
         fetchAppointments();
         fetchExpediente();
-        console.log("SCHEDULED:", schAppointments)
-        console.log("PREVIOUS:", prevAppointments)
     }, [id]);
     //validación login
     if (!isLoggedIn) {
@@ -217,6 +211,16 @@ const Dashboard = () => {
         const date = new Date(0, 0, 0, hours, minutes);
 
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    };
+
+    const formatVitalsDate = (dateString) => {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return "DIA NO VALIDO";
+        }
+        const options = { month: 'long', day: 'numeric' };
+        const formattedDate = date.toLocaleDateString("es-HN", options);
+        return formattedDate;
     };
 
 
@@ -390,11 +394,6 @@ const Dashboard = () => {
         setEnfermadades(updatedEnfermedades);
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setIsEditingLabel(false);
-    };
-
     const handleOpenEditModal = () => {
         setSelectedExpediente(expediente);
         console.log(expediente)
@@ -408,10 +407,6 @@ const Dashboard = () => {
         fetchExpediente2();
     };
 
-    const handleCancelarEditSignos = () => {
-        setIsEditingLabel(false);
-        fetchExpediente2();
-    };
     const handleVolver = () => {
         navigate(-1);
     };
@@ -419,6 +414,21 @@ const Dashboard = () => {
 
     const handleOnClickAgendarCita = () => {
         navigate("/expedientes/dashboard/:expedienteId/cita_expediente")
+    };
+
+    const toggleVitalsInfo = (event) => {
+        const element = event.currentTarget;
+        const extraInfo = element.querySelector('.vitals-history');
+        const isExpanded = extraInfo.classList.contains('expanded');
+
+        const allVitalsHistory = document.querySelectorAll('.vitals-history');
+        allVitalsHistory.forEach((history) => {
+            history.classList.remove('expanded');
+        });
+
+        if (!isExpanded) {
+            extraInfo.classList.add('expanded');
+        }
     };
 
     return (
@@ -476,7 +486,7 @@ const Dashboard = () => {
                     <div className="vitals">
                         <div className='box-title'>
                             <h3 className='histmedtit'>Signos Vitales
-                                <span>
+                                {/* <span>
                                     {isEditingLabel ? (<>
                                         <button onClick={handleSaveChangesSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Guardar cambios
@@ -492,162 +502,262 @@ const Dashboard = () => {
                                             </button>
                                         )
                                     )}
-                                </span>
+                                </span> */}
                             </h3>
                         </div>
-                        <div style={{ color: '#75BD89' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
-                                <span
-                                // style={{ marginRight: '220px' }}
-                                >
-                                    Altura
+                        {/* HEIGHT */}
+                        <div class="vital-sign-container height" onClick={toggleVitalsInfo}>
+                            <div style={{ color: '#75BD89' }} className="vital-sign-content">
+                                <span className="vitals-label">
+                                    <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
+                                    <span
+                                    // style={{ marginRight: '220px' }}
+                                    >
+                                        Altura
+                                    </span>
                                 </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div>
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="altura"
-                                                style={{ width: '65px' }}
-                                                value={patient.altura}
-                                                onChange={handleSignosLabelChange}
-                                                placeholder='170'
-                                            />
+                                <span className='vital-sign-value-align'>
+                                    <span className="vitals-value">
+                                        {isEditingLabel ? (
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    className="edit-text-box"
+                                                    name="altura"
+                                                    style={{ width: '65px' }}
+                                                    value={patient.altura}
+                                                    onChange={handleSignosLabelChange}
+                                                    placeholder='170'
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="vitals-value">
+                                                {(lastAppointment.altura !== null || lastAppointment.altura !== undefined)
+                                                    ? lastAppointment.altura : '-'}
+                                            </span>
+                                        )}
+                                    </span>
+                                    <span className="vitals-value">CM</span>
+                                </span>
+                            </div>
+                            <div class='vitals-history'>
+                                {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                    <div key={index}>
+                                        <span class='vitals-history-details'>
+                                            {formatVitalsDate(appointment.fecha)}
+                                        </span>
+                                        <div class="vitals-history-details">
+                                            <span className='vitals-value'>{appointment.altura}</span>
+                                            <span className='vitals-value'>CM</span>
                                         </div>
-                                    ) : (
-                                        <span className="vitals-value">{(patient.altura !== null || patient.altura !== undefined) ? patient.altura : '-'}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">CM</span>
-                            </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div style={{ color: '#54648D' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ marginRight: '280px' }}
-                                >
-                                    Peso
+
+                        {/* WEIGHT */}
+                        <div class="vital-sign-container weight" onClick={toggleVitalsInfo}>
+                            <div style={{ color: '#54648D' }} className="vital-sign-content">
+                                <span className="vitals-label">
+                                    <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
+                                    <span
+                                    // style={{ marginRight: '280px' }}
+                                    >
+                                        Peso
+                                    </span>
                                 </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div >
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="peso"
-                                                style={{ width: '60px' }}
-                                                value={patient.peso}
-                                                onChange={handleSignosLabelChange}
-                                                placeholder='63.3'
-                                            />
+                                <span className='vital-sign-value-align'>
+                                    <span className="vitals-value">
+                                        {isEditingLabel ? (
+                                            <div >
+                                                <input
+                                                    type="text"
+                                                    className="edit-text-box"
+                                                    name="peso"
+                                                    style={{ width: '60px' }}
+                                                    value={patient.peso}
+                                                    onChange={handleSignosLabelChange}
+                                                    placeholder='63.3'
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="vitals-value">
+                                                {(lastAppointment.peso !== null || lastAppointment.peso !== undefined)
+                                                    ? lastAppointment.peso : '-'}
+                                            </span>
+                                        )}
+                                    </span>
+                                    <span className="vitals-value">KG</span>
+                                </span>
+                            </div>
+                            <div class='vitals-history'>
+                                {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                    <div key={index}>
+                                        <span class='vitals-history-details'>
+                                            {formatVitalsDate(appointment.fecha)}
+                                        </span>
+                                        <div class="vitals-history-details">
+                                            <span className='vitals-value'>{appointment.peso}</span>
+                                            <span className='vitals-value'>KG</span>
                                         </div>
-                                    ) : (
-                                        <span className="vitals-value">{(patient.peso !== null || patient.peso !== undefined) ? patient.peso : '-'}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">KG</span>
-                            </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div style={{ color: '#916A9E' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ marginRight: '150px' }}
-                                >
-                                    Temperatura
+
+
+                        {/* TEMPERATURA */}
+                        <div class="vital-sign-container temperature" onClick={toggleVitalsInfo}>
+                            <div style={{ color: '#916A9E' }} className="vital-sign-content">
+                                <span className="vitals-label">
+                                    <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
+                                    <span
+                                    // style={{ marginRight: '150px' }}
+                                    >
+                                        Temperatura
+                                    </span>
                                 </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div >
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="temperatura"
-                                                style={{ width: '65px' }}
-                                                value={patient.temperatura}
-                                                onChange={handleSignosLabelChange}
-                                                placeholder='37.2'
-                                            />
+                                <span className='vital-sign-value-align'>
+                                    <span className="vitals-value">
+                                        {isEditingLabel ? (
+                                            <div >
+                                                <input
+                                                    type="text"
+                                                    className="edit-text-box"
+                                                    name="temperatura"
+                                                    style={{ width: '65px' }}
+                                                    value={patient.temperatura}
+                                                    onChange={handleSignosLabelChange}
+                                                    placeholder='37.2'
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="vitals-value">
+                                                {(lastAppointment.temperatura !== null || lastAppointment.temperatura !== undefined)
+                                                    ? lastAppointment.temperatura : '-'}
+                                            </span>
+                                        )}
+                                    </span>
+                                    <span className="vitals-value">ºC</span>
+                                </span>
+                            </div>
+                            <div class='vitals-history'>
+                                {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                    <div key={index}>
+                                        <span class='vitals-history-details'>
+                                            {formatVitalsDate(appointment.fecha)}
+                                        </span>
+                                        <div class="vitals-history-details">
+                                            <span className='vitals-value'>{appointment.temperatura}</span>
+                                            <span className='vitals-value'>ºC</span>
                                         </div>
-                                    ) : (
-                                        <span className="vitals-value">{(patient.temperatura !== null || patient.temperatura !== undefined) ? patient.temperatura : '-'}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">ºC</span>
-                            </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div style={{ color: '#AB2525' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ marginRight: '170px' }}
-                                >
-                                    Ritmo Cardiaco
+
+                        {/* RITMO CARDIACO */}
+                        <div class="vital-sign-container heart-rate" onClick={toggleVitalsInfo}>
+                            <div style={{ color: '#AB2525' }} className="vital-sign-content">
+                                <span className="vitals-label">
+                                    <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
+                                    <span
+                                    // style={{ marginRight: '170px' }}
+                                    >
+                                        Ritmo Cardiaco
+                                    </span>
                                 </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div >
-                                            <input
-                                                className="edit-text-box"
-                                                type="text"
-                                                name="ritmo_cardiaco"
-                                                style={{ width: '60px' }}
-                                                value={patient.ritmo_cardiaco}
-                                                onChange={handleSignosLabelChange}
-                                                placeholder='80'
-                                            />
+                                <span className='vital-sign-value-align'>
+                                    <span className="vitals-value">
+                                        {isEditingLabel ? (
+                                            <div >
+                                                <input
+                                                    className="edit-text-box"
+                                                    type="text"
+                                                    name="ritmo_cardiaco"
+                                                    style={{ width: '60px' }}
+                                                    value={patient.ritmo_cardiaco}
+                                                    onChange={handleSignosLabelChange}
+                                                    placeholder='80'
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="vitals-value">
+                                                {(lastAppointment.ritmo_cardiaco !== null || lastAppointment.ritmo_cardiaco !== undefined)
+                                                    ? lastAppointment.ritmo_cardiaco : '-'}
+                                            </span>
+                                        )}
+                                    </span>
+                                    <span className="vitals-value">ppm</span>
+                                </span>
+                            </div>
+                            <div class='vitals-history'>
+                                {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                    <div key={index}>
+                                        <span class='vitals-history-details'>
+                                            {formatVitalsDate(appointment.fecha)}
+                                        </span>
+                                        <div class="vitals-history-details">
+                                            <span className='vitals-value'>{appointment.ritmo_cardiaco}</span>
+                                            <span className='vitals-value'>ppm</span>
                                         </div>
-                                    ) : (
-                                        <span className="vitals-value">{(patient.ritmo_cardiaco !== null || patient.ritmo_cardiaco !== undefined) ? patient.ritmo_cardiaco : '-'}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">ppm</span>
-                            </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div style={{ color: '#AB2525' }} className="vital-sign-content">
-                            <span className="vitals-label">
-                                <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                                <span
-                                // style={{ width: '300px', marginRight: '10px' }}
-                                >
-                                    Presión Arterial
+
+                        {/* PRESION */}
+                        <div class="vital-sign-container pressure" onClick={toggleVitalsInfo}>
+                            <div style={{ color: '#AB2525' }} className="vital-sign-content">
+                                <span className="vitals-label">
+                                    <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
+                                    <span
+                                    // style={{ width: '300px', marginRight: '10px' }}
+                                    >
+                                        Presión Arterial
+                                    </span>
                                 </span>
-                            </span>
-                            <span className='vital-sign-value-align'>
-                                <span className="vitals-value">
-                                    {isEditingLabel ? (
-                                        <div>
-                                            <input
-                                                type="text"
-                                                className="edit-text-box"
-                                                name="presion"
-                                                style={{ width: '80px' }}
-                                                value={patient.presion}
-                                                onChange={handleSignosLabelChange}
-                                                placeholder='120/80'
-                                            />
+                                <span className='vital-sign-value-align'>
+                                    <span className="vitals-value">
+                                        {isEditingLabel ? (
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    className="edit-text-box"
+                                                    name="presion"
+                                                    style={{ width: '80px' }}
+                                                    value={patient.presion}
+                                                    onChange={handleSignosLabelChange}
+                                                    placeholder='120/80'
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="vitals-value">
+                                                {(lastAppointment.presion !== null || lastAppointment.presion !== undefined)
+                                                    ? lastAppointment.presion : '-'}
+                                            </span>
+                                        )}
+                                    </span>
+                                    <span className="vitals-value">mmHg</span>
+                                </span>
+                            </div>
+                            <div class='vitals-history'>
+                                {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                    <div key={index} style={{ borderColor: '#AB2525' }}>
+                                        <span class='vitals-history-details'>
+                                            {formatVitalsDate(appointment.fecha)}
+                                        </span>
+                                        <div class="vitals-history-details">
+                                            <span className='vitals-value'>{appointment.presion}</span>
+                                            <span className='vitals-value'>mmHg</span>
                                         </div>
-                                    ) : (
-                                        <span className="vitals-value">{(patient.presion !== null || patient.presion !== undefined) ? patient.presion : '-'}</span>
-                                    )}
-                                </span>
-                                <span className="vitals-value">mmHg</span>
-                            </span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="files">
+                    {/* <div className="files">
                         <div className='box-title'>
                             <h3 className='archivostit'>Archivos</h3>
                         </div>
@@ -667,7 +777,7 @@ const Dashboard = () => {
                                 </span>
                             </button>
                         )}
-                    </div>
+                    </div> */}
 
                 </div>
 
