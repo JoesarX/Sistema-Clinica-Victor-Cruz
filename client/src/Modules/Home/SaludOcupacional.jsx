@@ -31,7 +31,7 @@ const SaludOcupacional = () => {
         Tipo: 'textoPorqueImporta',
         texto_campo: ''
     })
-    
+
     const [subTituloSaludOcupacional, setSubTituloSaludOcupacional] = React.useState({
         Tipo: 'subTituloSaludOcupacional',
         texto_campo: ''
@@ -65,35 +65,35 @@ const SaludOcupacional = () => {
     })
 
     const [isFetching, setIsFetching] = useState(true);
-    
+
 
     useEffect(() => {
-        if(isFetching){
-        const FetchCargarInfo = async () => {
-            try{
-            console.log("Hola");
-            var info = await  Services.getSaludOcupacional();
-            setTituloSaludOcupacional({ ...tituloSaludOcupacional, texto_campo: info[0].texto_campo });
-            setTextoQueEsSaludOcupacional({ ...textoQueEsSaludOcupacional, texto_campo: info[1].texto_campo });
-            setPorqueImporta({ ...porqueImporta, texto_campo: info[2].texto_campo });
-            setTextoPorqueImporta({ ...textoPorqueImporta, texto_campo: info[3].texto_campo });
-            setSubTituloSaludOcupacional({ ...subTituloSaludOcupacional, texto_campo: info[4].texto_campo });
-            setTituloItem1SaludOcupacional({ ...tituloItem1SaludOcupacional, texto_campo: info[5].texto_campo });
-            setTituloItem2SaludOcupacional({ ...tituloItem2SaludOcupacional, texto_campo: info[6].texto_campo });
-            setTituloItem3SaludOcupacional({ ...tituloItem3SaludOcupacional, texto_campo: info[7].texto_campo });
-            setTextoItem1SaludOcupacional({ ...textoItem1SaludOcupacional, texto_campo: info[8].texto_campo });
-            setTextoItem2SaludOcupacional({ ...textoItem2SaludOcupacional, texto_campo: info[9].texto_campo });
-            setTextoItem3SaludOcupacional({ ...textoItem3SaludOcupacional, texto_campo: info[10].texto_campo });
+        if (isFetching) {
+            const FetchCargarInfo = async () => {
+                try {
+                    console.log("Hola");
+                    var info = await Services.getSaludOcupacional();
+                    setTituloSaludOcupacional({ ...tituloSaludOcupacional, texto_campo: info[0].texto_campo });
+                    setTextoQueEsSaludOcupacional({ ...textoQueEsSaludOcupacional, texto_campo: info[1].texto_campo });
+                    setPorqueImporta({ ...porqueImporta, texto_campo: info[2].texto_campo });
+                    setTextoPorqueImporta({ ...textoPorqueImporta, texto_campo: info[3].texto_campo });
+                    setSubTituloSaludOcupacional({ ...subTituloSaludOcupacional, texto_campo: info[4].texto_campo });
+                    setTituloItem1SaludOcupacional({ ...tituloItem1SaludOcupacional, texto_campo: info[5].texto_campo });
+                    setTituloItem2SaludOcupacional({ ...tituloItem2SaludOcupacional, texto_campo: info[6].texto_campo });
+                    setTituloItem3SaludOcupacional({ ...tituloItem3SaludOcupacional, texto_campo: info[7].texto_campo });
+                    setTextoItem1SaludOcupacional({ ...textoItem1SaludOcupacional, texto_campo: info[8].texto_campo });
+                    setTextoItem2SaludOcupacional({ ...textoItem2SaludOcupacional, texto_campo: info[9].texto_campo });
+                    setTextoItem3SaludOcupacional({ ...textoItem3SaludOcupacional, texto_campo: info[10].texto_campo });
 
 
-            }catch(error){
-                console.log("Error fetching info");
+                } catch (error) {
+                    console.log("Error fetching info");
+                }
             }
+            FetchCargarInfo();
+            setIsFetching(false);
         }
-        FetchCargarInfo();
-        setIsFetching(false);
-    }
-},[]);
+    }, []);
     return (
         <div className="scrollable-page2">
             <Topbar />
@@ -102,63 +102,49 @@ const SaludOcupacional = () => {
             </div>
             <div className="empty-space-top1"></div>
 
-
-            <div className="salud_desc-container">
-                <h2>{tituloSaludOcupacional.texto_campo}</h2>
-                <p>
-                    {textoQueEsSaludOcupacional.texto_campo}
-                </p>
+            <div className="salud-container">
+                <div className="salud_desc-container">
+                    <h2>{tituloSaludOcupacional.texto_campo}</h2>
+                    <p>{textoQueEsSaludOcupacional.texto_campo}</p>
+                </div>
+                <div className="salud-impor-container">
+                    <h2>{porqueImporta.texto_campo}</h2>
+                    <p>{textoPorqueImporta.texto_campo}</p>
+                </div>
             </div>
-
-            <div className="salud_impor-container">
-                <h2>{porqueImporta.texto_campo}</h2>
-                <p>
-                {textoPorqueImporta.texto_campo}
-                </p>
-            </div>
-
             <div className='header2'>
-               {subTituloSaludOcupacional.texto_campo}
+                {subTituloSaludOcupacional.texto_campo}
             </div>
 
-            <div className='containerInfo'>
-                <div style={{ position: 'relative', paddingLeft: '15%', marginTop:'1%' }}>
-                    <h2 style={{fontSize: '2.5rem' }}>{tituloItem1SaludOcupacional.texto_campo}</h2>
+
+            <div class="container-wrapper">
+                <div className='containerInfo'>
+                    <div className='icon-container'>
+                        <FontAwesomeIcon icon={faBriefcaseMedical} style={{ color: '#ffffff', fontSize: '80px' }} />
+                    </div>
+                    <h2>{tituloItem1SaludOcupacional.texto_campo}</h2>
+                    <p>{textoItem1SaludOcupacional.texto_campo}</p>
                 </div>
-                <FontAwesomeIcon icon={faBriefcaseMedical} style={{ color: '#1E60A6', fontSize: '100px', position: 'relative', marginRight: '77%', marginTop: '-7%', marginBottom: '2%'  }} />
-                
-                <div style={{ fontSize: '1.1rem'}}>
-                    <p style={{ marginBottom: '2%'}}>
-                    {textoItem1SaludOcupacional.texto_campo}
-                    </p>
+
+                <div className='containerInfo'>
+                    <div className='icon-container'>
+                        <FontAwesomeIcon icon={faCircleExclamation} style={{ color: '#ffffff', fontSize: '80px' }} />
+                    </div>
+                    <h2>{tituloItem2SaludOcupacional.texto_campo}</h2>
+                    <p>{textoItem2SaludOcupacional.texto_campo}</p>
                 </div>
-            </div>
-            
-            <div className='containerInfo'>
-                <div style={{ position: 'relative', paddingLeft: '10%', marginTop:'1%' }}>
-                    <h2 style={{fontSize: '2.5rem' }}>{tituloItem2SaludOcupacional.texto_campo}</h2>
-                </div>
-                <FontAwesomeIcon icon={faCircleExclamation} style={{ color: '#1E60A6', fontSize: '100px', position: 'relative', marginRight: '77%', marginTop: '-7%', marginBottom: '2%'  }} />
-                
-                <div style={{ fontSize: '1.1rem'}}>
-                    <p style={{ marginBottom: '2%'}}>
-                    {textoItem2SaludOcupacional.texto_campo}
-                    </p>
+
+                <div className='containerInfo'>
+                    <div className='icon-container'>
+                        <FontAwesomeIcon icon={faHouseMedicalFlag} style={{ color: '#ffffff', fontSize: '80px' }} />
+                    </div>
+                    <h2>{tituloItem3SaludOcupacional.texto_campo}</h2>
+                    <p>{textoItem3SaludOcupacional.texto_campo}</p>
                 </div>
             </div>
 
-            <div className='containerInfo'>
-                <div style={{ position: 'relative', paddingLeft: '15%', marginTop:'1%' }}>
-                    <h2 style={{fontSize: '2.5rem' }}>{tituloItem3SaludOcupacional.texto_campo}</h2>
-                </div>
-                <FontAwesomeIcon icon={faHouseMedicalFlag} style={{ color: '#1E60A6', fontSize: '100px', position: 'relative', marginRight: '74%', marginTop: '-7%', marginBottom: '2%'  }} />
-                
-                <div style={{ fontSize: '1.1rem'}}>
-                    <p style={{ marginBottom: '2%'}}>
-                   {textoItem3SaludOcupacional.texto_campo}
-                    </p>
-                </div>
-            </div>
+
+
 
 
 
