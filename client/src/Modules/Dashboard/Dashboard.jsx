@@ -174,7 +174,7 @@ const Dashboard = () => {
 
                 const scheduled = appointments.filter(appointment => appointment.estado === "Pendiente");
                 const previous = appointments.filter(appointment => appointment.estado !== "Pendiente");
-                
+
                 setSchAppointments(scheduled.reverse());
                 setPrevAppointments(previous.reverse());
                 setLastAppointment(previous.slice(-1));
@@ -183,7 +183,7 @@ const Dashboard = () => {
             }
         }
 
-        
+
         fetchAppointments();
         fetchExpediente();
     }, [id]);
