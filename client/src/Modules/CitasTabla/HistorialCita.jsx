@@ -174,7 +174,7 @@ function HistorialCita() {
                             </div>
                         </div>
                     </div>
-                    <button className='appointment-history-button' onClick={() => submitEdit()}>
+                    <button className='appointment-history-end-button' onClick={() => submitEdit()}>
                         Terminar Cita
                     </button>
                 </div>

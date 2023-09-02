@@ -234,7 +234,7 @@
     margin-top: 35px;
 }
 
-.appointment-history-button {
+.appointment-history-end-button {
     background-color: #1560f2;
     color: white;
     height: 60px;
@@ -244,6 +244,10 @@
     font-family: 'Inter';
     font-weight: 800;
     border: none;
+}
+
+.appointment-history-end-button:hover {
+    background-color: #3f79ee
 }
 
 .appointment-details-container {
