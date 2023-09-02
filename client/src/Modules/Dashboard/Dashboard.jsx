@@ -95,7 +95,6 @@ const Dashboard = () => {
     const [enfermedades, setEnfermadades] = useState(['Enfermedad 1', 'Enfermedad 2', 'Enfermedad 3', 'Enfermedad 4']);
     const [schAppointments, setSchAppointments] = useState([]);
     const [prevAppointments, setPrevAppointments] = useState([]);
-
     const [lastAppointment, setLastAppointment] = useState({});
 
     moment.locale('es');
@@ -131,17 +130,10 @@ const Dashboard = () => {
 
     useEffect(() => {
 
-
-
         const fetchExpediente = async () => {
             try {
                 const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
-                console.log(expedienteData);
                 setExpediente(expedienteData);
-
-                const citas = await ExpedientesService.getCitasOneExpediente(id);
-                console.log(citas)
-
 
                 setPatient(prevPatient => ({
                     ...prevPatient,
@@ -177,7 +169,7 @@ const Dashboard = () => {
 
                 setSchAppointments(scheduled.reverse());
                 setPrevAppointments(previous.reverse());
-                setLastAppointment(previous.slice(-1));
+                setLastAppointment(previous.at(0));
             } catch (error) {
                 console.log(error);
             }
