@@ -82,6 +82,11 @@
     flex: none;
     order: 0;
     flex-grow: 0;
+    cursor: pointer;
+}
+
+.perfil:hover {
+    background-color: #3f79ee;
 }
 
 .nombre {
