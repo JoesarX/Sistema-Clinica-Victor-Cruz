@@ -9,29 +9,21 @@ import TopBar from '../Home/Topbar.jsx';
 import ExpedientesService from '../../Services/ExpedientesService';
 import UsuariosService from '../../Services/UsuariosService';
 import IniciarSesion from '../Home/IniciarSesion.jsx';
-
 import swal from 'sweetalert';
-
 import CitasService from '../../Services/CitasService';
-
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import { Box, Button, Radio, RadioGroup, FormControlLabel } from '@mui/material'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-
 import { Delete, Edit } from '@mui/icons-material'
-
 import { IconButton } from '@mui/material';
 import Citas from '../CitasTabla/CitasTabla';
-
 import { CorporateFareTwoTone } from '@mui/icons-material';
-
 
 const LandingPage = () => {
     const isLoggedIn = localStorage.getItem("100");
@@ -50,19 +42,15 @@ const LandingPage = () => {
     const [perfil, setPerfil] = useState({});
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
-
     const [idd, setID] = useState(null);
     const [selectMail, setMail] = useState([]);
     const [citaD, setCitaD] = useState([]);
     const [selectedNombre, setSelectedNombre] = useState('Ver Todas');
-
-
+    const [selectedNombre2, setSelectedNombre2] = useState('Ver Todas');
     const [Expedientess, setExpedientess] = useState({
         idpaciente: '',
         nombre: '',
         edad: '',
-
-
     });
 
     const [cita, setCita] = useState({
@@ -71,6 +59,7 @@ const LandingPage = () => {
         estado: '',
         idpaciente: '',
         correouser: '',
+        nombre: '',
         altura: null,
         peso: null,
         temperatura: null,
@@ -84,6 +73,7 @@ const LandingPage = () => {
         cita.estado = null;
         cita.idpaciente = null;
         cita.correouser = null;
+        cita.nombre = null;
         cita.fecha = new Date();
         cita.hora = null;
         setFecha(dayjs());
@@ -102,7 +92,8 @@ const LandingPage = () => {
     };
 
     const [Usuarios, setUsuarios] = useState([]);
-
+    const [selectedUserId, setSelectedUserId] = useState(null);
+    const [selectedUserId2, setSelectedUserId2] = useState(null);
     const [fecha, setFecha] = useState(dayjs());
     const [hora, setHora] = useState(null);
 
@@ -138,16 +129,6 @@ const LandingPage = () => {
         fetchExpedientes();
 
         let cont = 0;
-
-
-        const citasFiltradas = data.filter(cita => {
-            if (selectedNombre === 'Ver Todas') {
-                return true;
-            }
-            return cita.description === selectedNombre;
-        });
-        setSchAppointments(citasFiltradas);
-
         if (isSubmitting2) {
             fetchExpedientes();
         }
@@ -157,27 +138,20 @@ const LandingPage = () => {
     const toggleModal22 = async (id) => {
         setID(id);
         console.log(idd)
-
         try {
             const citaData = await CitasService.getOneCita(id);
             console.log(citaData)
-
             const selectedIdPaciente2 = Expedientes.find((expediente) => expediente.idpaciente === citaData.idpaciente);
             setExpedientess(selectedIdPaciente2)
             console.log(selectedIdPaciente2)
             console.log("HELLOOOOO")
-
             const selectedCorreoUser2 = Usuarios.find((usuario) => usuario.correouser === citaData.correouser);
             setMail(selectedCorreoUser2)
             setCitaD([citaData])
             setCita(citaData);
-
-
             cita.idcita = citaData.idcita;
-
             cita.nombre_persona = citaData.nombre_persona;
             cita.estado = citaData.estado;
-
             cita.idpaciente = citaData.idpaciente;
             cita.correouser = citaData.correouser;
             cita.altura = citaData.altura;
@@ -187,16 +161,11 @@ const LandingPage = () => {
             cita.presion = citaData.presion;
             setHora(citaData.hora);
             setFecha(dayjs(citaData.fecha));
-
-
-
         } catch (error) {
-            // Handle the error
+
         }
         setIsModalOpen1(!isModalOpen1);
         setIsSubmitting2(false);
-        //window.location.reload();
-        //cleanCita();
     };
 
     let contador = 0;
@@ -221,7 +190,6 @@ const LandingPage = () => {
         presion: '',
     })
 
-
     const [patient, setPatient] = useState({
         idpaciente: '',
         nombre: '',
@@ -240,7 +208,6 @@ const LandingPage = () => {
         temperatura: '',
         ritmo_cardiaco: '',
         presion: '',
-
         medicalHistory: {
             allergies: ['Alergia 1', 'Alergia 2'],
             basicConditions: ['Enfermedad 1', 'Enfermedad 2'],
@@ -297,11 +264,8 @@ const LandingPage = () => {
     const [usuarios, setUsuarioss] = useState([]);
 
     useEffect(() => {
-
-        //validación login
         if (!isLoggedIn) {
-            // Redirigir si no se cumple la verificación
-            navigate("/iniciarsesion"); // Redirige a la página de inicio de sesión
+            navigate("/iniciarsesion");
         }
         const fetchPerfil = async () => {
             try {
@@ -318,6 +282,28 @@ const LandingPage = () => {
             } catch (error) {
                 console.log(error);
             }
+            const futuraCita = await CitasService.getUserExpCitas(correo);
+            //console.log("FUTURA CITA: " + futuraCita[0].nombre);
+            const validar_Futura = futuraCita.filter(futuraCita => futuraCita.estado === "Pendiente");
+            const validar_Pasadas = futuraCita.filter(futuraCita => futuraCita.estado === "Terminada" || futuraCita.estado === "Expirada");
+            const uniqueCitas = Array.from(new Set(validar_Futura.map(cita => cita.idcita)))
+                .map(idcita => validar_Futura.find(cita => cita.idcita === idcita));
+            setData(uniqueCitas.map((cita) => ({
+                id: cita.idcita,
+                date: cita.fecha,
+                time: cita.hora,
+                description: cita.nombre_persona,
+                idpaciente: cita.idpaciente
+            })))
+            const uniqueCitas2 = Array.from(new Set(validar_Pasadas.map(cita => cita.idcita)))
+                .map(idcita => validar_Pasadas.find(cita => cita.idcita === idcita));
+            setData2(uniqueCitas2.map((cita) => ({
+                id: cita.idcita,
+                date: cita.fecha,
+                time: cita.hora,
+                description: cita.nombre_persona,
+                idpaciente: cita.idpaciente
+            })))
         }
         const fetchUsuarios = async () => {
             const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
@@ -328,7 +314,6 @@ const LandingPage = () => {
     }, [isLoggedIn]);
 
     const performActionsAfterModalClose = () => {
-
         if (!isLoggedIn) {
             navigate("/iniciarsesion");
             return;
@@ -341,49 +326,33 @@ const LandingPage = () => {
                 const expedienteData = await UsuariosService.getOneUser(email);
                 console.log(expedienteData)
                 const futuraCita = await CitasService.getUserExpCitas(email[0]);
-
                 console.log(futuraCita);
-                // futuraCita=futuraCita.filter(futuraCita=>futuraCita.estado=== "Pendiente");
                 const validar_Futura = futuraCita.filter(futuraCita => futuraCita.estado === "Pendiente");
                 const validar_Pasadas = futuraCita.filter(futuraCita => futuraCita.estado === "Terminada" || futuraCita.estado === "Expirada");
-                setData(validar_Futura.map((cita) => ({
+                const uniqueCitas = Array.from(new Set(validar_Futura.map(cita => cita.idcita)))
+                    .map(idcita => validar_Futura.find(cita => cita.idcita === idcita));
+                setData(uniqueCitas.map((cita) => ({
                     id: cita.idcita,
                     date: cita.fecha,
                     time: cita.hora,
-                    description: cita.nombre_persona
+                    description: cita.nombre_persona,
+                    idpaciente: cita.idpaciente
                 })))
-
-                //para citas pasadas
-                setData2(validar_Pasadas.map((cita) => ({
+                const uniqueCitas2 = Array.from(new Set(validar_Pasadas.map(cita => cita.idcita)))
+                    .map(idcita => validar_Pasadas.find(cita => cita.idcita === idcita));
+                setData2(uniqueCitas2.map((cita) => ({
                     id: cita.idcita,
                     date: cita.fecha,
                     time: cita.hora,
-                    description: cita.nombre_persona
+                    description: cita.nombre_persona,
+                    idpaciente: cita.idpaciente
                 })))
                 console.log(data);
                 setSchAppointments(data);
                 setCFuturas(data);
                 console.log(cFuturas);
-
-                // console.log( futuraCita[0].fecha)
-                // console.log( futuraCita[0].hora)
-                // console.log( futuraCita[0].nombre_persona)
-                //  setSchAppointments(futuraCita=>({
-                //      ...futuraCita,
-                //      date: futuraCita.fecha,
-                //     time :futuraCita.hora ,
-                //     description : futuraCita.nombre_persona
-
-                //  }));
                 console.log(schAppointments);
-
-                // schAppointments.description=futuraCita.nombre_persona;
-                // schAppointments.time=futuraCita.hora;
-                // schAppointments.date=futuraCita.fecha;
-
                 console.log("info citas " + schAppointments);
-
-
                 console.log("Citas Futuas: " + futuraCita.idcita);
                 console.log("DATA OBTENIDA POR QUERY: " + expedienteData);
                 setExpediente(expedienteData);
@@ -446,7 +415,6 @@ const LandingPage = () => {
     const formatAppointmentTime = (timeString) => {
         const [hours, minutes] = timeString.split(':');
         const date = new Date(0, 0, 0, hours, minutes);
-
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     };
 
@@ -524,20 +492,17 @@ const LandingPage = () => {
                     // Handle the error
                 }
             };
-
             fetchAvailableTimes();
         }
     }, [cita.fecha, fecha]);
 
     const EditHandler = async (e) => {
         console.log(cita)
-
         e.preventDefault();
         try {
             if (validations()) {
                 const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora, cita.idcita);
                 const isAvailable = availableResponse.available;
-
                 if (!isAvailable) {
                     swal("La hora que ha seleccionado ya ha sido ocupada.", {
                         icon: "warning",
@@ -550,7 +515,6 @@ const LandingPage = () => {
                     if (cita.estado === "Cancelar Cita") {
                         cita.estado = "Cancelada";
                     }
-
                     submitEditCita();
                 }
             }
@@ -567,8 +531,6 @@ const LandingPage = () => {
 
     const submitEditCita = async () => {
         try {
-
-
             if (cita.estado === "Cancelada") {
                 await CitasService.editCitasUser(idd, cita);
                 swal("Cita Editada Exitosamente!.", {
@@ -576,17 +538,13 @@ const LandingPage = () => {
                 });
             } else {
                 await CitasService.editCitas(idd, cita);
-
                 swal("Cita Editada Exitosamente!.", {
                     icon: "success",
                 });
             }
-
-
             toggleModal22();
             window.location.reload();
             cleanCita();
-
         } catch (error) {
 
         }
@@ -678,7 +636,6 @@ const LandingPage = () => {
         console.log(cita)
     }
 
-
     const handleDateChange = async (date) => {
         setFecha(date);
         const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format date using dayjs
@@ -689,6 +646,68 @@ const LandingPage = () => {
         setAvailableTimes(times);
     };
 
+
+    const [filteredFuturaCita, setFilteredFuturaCita] = useState([]);
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const email = [correo, "AYUDA"];
+                const futuraCitaResponse = await CitasService.getUserExpCitas(email[0]);
+                const futuraCitaFiltrada = futuraCitaResponse.filter(cita => {
+                    if (selectedNombre === 'Ver Todas') {
+                        return cita.estado === 'Pendiente';
+                    }
+                    return cita.estado === 'Pendiente' && cita.idpaciente === selectedUserId;
+                });
+                const uniqueCitas = Array.from(new Set(futuraCitaFiltrada.map(cita => cita.idcita)))
+                    .map(idcita => futuraCitaFiltrada.find(cita => cita.idcita === idcita));
+                setFilteredFuturaCita(uniqueCitas);
+                const newData = uniqueCitas.map(cita => ({
+                    id: cita.idcita,
+                    date: cita.fecha,
+                    time: cita.hora,
+                    description: cita.nombre_persona,
+                    idpaciente: cita.idpaciente
+                }));
+                setData(newData);
+            } catch (error) {
+                console.error('Error al obtener las citas:', error);
+            }
+        }
+        console.log("SE EJECTUDO FETCH DATA")
+        fetchData();
+    }, [selectedNombre]);
+
+    const [filteredPasadaCita, setFilteredPasadaCita] = useState([]);
+    useEffect(() => {
+        async function fetchData2() {
+            try {
+                const email = [correo, "AYUDA"];
+                const pasadaCitaResponse = await CitasService.getUserExpCitas(email[0]);
+                const pasadaCitaFiltrada = pasadaCitaResponse.filter(cita => {
+                    if (selectedNombre2 === 'Ver Todas') {
+                        return cita.estado === 'Terminada' || cita.estado === 'Expirada';
+                    }
+                    return cita.estado === 'Terminada' || cita.estado === 'Expirada' && cita.idpaciente === selectedUserId2;
+                });
+                const uniqueCitas = Array.from(new Set(pasadaCitaFiltrada.map(cita => cita.idcita)))
+                    .map(idcita => pasadaCitaFiltrada.find(cita => cita.idcita === idcita));
+                setFilteredPasadaCita(uniqueCitas);
+                const newData = uniqueCitas.map(cita => ({
+                    id: cita.idcita,
+                    date: cita.fecha,
+                    time: cita.hora,
+                    description: cita.nombre_persona,
+                    nombre: cita.nombre,
+                    idpaciente: cita.idpaciente
+                }));
+                setData2(newData);
+            } catch (error) {
+                console.error('Error al obtener las citas:', error);
+            }
+        }
+        fetchData2();
+    }, [selectedNombre2]);
 
 
     return (
@@ -763,8 +782,16 @@ const LandingPage = () => {
                         <div className='box-title appointments-title'>Citas Agendadas
                             <Autocomplete
                                 value={selectedNombre}
-                                onChange={(event, newValue) => setSelectedNombre(newValue)}
                                 options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
+                                onChange={(event, newValue) => {
+                                    setSelectedNombre(newValue);
+                                    const selectedUser = usuarios.find(usuario => usuario.nombre === newValue);
+                                    if (selectedUser) {
+                                        setSelectedUserId(selectedUser.idPaciente);
+                                    } else {
+                                        setSelectedUserId(null);
+                                    }
+                                }}
                                 renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
                                 sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
                             />
@@ -787,11 +814,19 @@ const LandingPage = () => {
                         </div>
                         <div className='box-title appointments-title'>Citas Previas
                             <Autocomplete
-                                value={selectedNombre}
-                                onChange={(event, newValue) => setSelectedNombre(newValue)}
+                                value={selectedNombre2}
                                 options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
+                                onChange={(event, newValue) => {
+                                    setSelectedNombre2(newValue);
+                                    const selectedUser = usuarios.find(usuario => usuario.nombre === newValue);
+                                    if (selectedUser) {
+                                        setSelectedUserId2(selectedUser.idPaciente);
+                                    } else {
+                                        setSelectedUserId2(null);
+                                    }
+                                }}
                                 renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
-                                sx={{ marginLeft: '15%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
+                                sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
                             />
                         </div>
                         <div className='appointments'>
