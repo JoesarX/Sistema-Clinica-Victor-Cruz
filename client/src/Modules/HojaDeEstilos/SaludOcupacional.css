@@ -118,7 +118,7 @@
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
-    margin: 6rem 4rem; /* Agrega un margen a los lados para separarlos horizontalmente */
+    margin: 5rem 3rem; /* Agrega un margen a los lados para separarlos horizontalmente */
     max-width: 1000px;
     height: auto;
     display: flex;
@@ -126,16 +126,19 @@
     align-items: center;
     text-align: center;
     transition: transform 0.5s ease; 
+    font-family: 'Montserrat';
 }
 
 .salud-container h2 {
     font-size: 35px;
     margin-bottom: 1.5rem;
     color: #333;
+    margin-bottom: 5%;
 }
 
 .salud-container p {
     font-size: 20px;
+    margin-top: 8%;
     color: #555;
     line-height: 1.6;
     margin: 0 5%;
@@ -148,4 +151,33 @@
 
 .salud-container > div:hover {
   transform: translateY(-5px); /* Mueve el contenedor hacia arriba en hover */
+}
+
+/* Estilo para el botón */
+.contact-button-container {
+  text-align: center;
+  margin-bottom: 5%;
+}
+
+.contact-button {
+  background-color: #1E60A6;
+  color: #fff;
+  border: none;
+  padding: 25px 45px; /* Ajusta el relleno aquí para hacer el botón más largo */
+  border-radius: 10px;
+  font-size: 22px; /* Ajusta el tamaño de la fuente aquí */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-family: 'Montserrat';
+}
+
+/* Efecto de hover */
+.contact-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Efecto de transición */
+.contact-button {
+  transition: background-color 0.3s, transform 0.2s;
 }

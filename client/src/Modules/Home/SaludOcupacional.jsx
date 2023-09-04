@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import '../HojaDeEstilos/SaludOcupacional.css';
 import { useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
 import Footer from './Footer';
+import { AuthContext } from '../AuthContext.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcaseMedical } from '@fortawesome/free-solid-svg-icons';
@@ -10,10 +11,21 @@ import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { faHouseMedicalFlag } from '@fortawesome/free-solid-svg-icons';
 import Services from '../../Services/texto_cmdService';
 
-import { useEffect, useCallback } from 'react'
-import DoctorImg from '../Imagenes/doctorPhoto.jpg'
+import { faEdit, faSave, faTimes, faGear } from '@fortawesome/free-solid-svg-icons';
+
+
 
 const SaludOcupacional = () => {
+
+    const [showButtons, setShowButtons] = useState(false);
+
+    const handleToggleButtonClick = () => {
+        setShowButtons((prevShowButtons) => !prevShowButtons);
+    };
+
+    const { userType, isLoggedIn } = useContext(AuthContext);
+
+
     const [tituloSaludOcupacional, setTituloSaludOcupacional] = React.useState({
         Tipo: 'tituloSaludOcupacional',
         texto_campo: ''
@@ -67,6 +79,17 @@ const SaludOcupacional = () => {
     const [isFetching, setIsFetching] = useState(true);
 
 
+
+    const navigate = useNavigate();
+
+
+    const handleContactUsClick = () => {
+        navigate('/contactanos');
+    };
+
+
+
+
     useEffect(() => {
         if (isFetching) {
             const FetchCargarInfo = async () => {
@@ -94,6 +117,15 @@ const SaludOcupacional = () => {
             setIsFetching(false);
         }
     }, []);
+
+
+
+    /*  Todo para editar Salud Ocupacional */
+
+    // Variables de estado para el título y la descripción
+
+
+
     return (
         <div className="scrollable-page2">
             <Topbar />
@@ -103,10 +135,12 @@ const SaludOcupacional = () => {
             <div className="empty-space-top1"></div>
 
             <div className="salud-container">
+
                 <div className="salud_desc-container">
                     <h2>{tituloSaludOcupacional.texto_campo}</h2>
                     <p>{textoQueEsSaludOcupacional.texto_campo}</p>
                 </div>
+
                 <div className="salud-impor-container">
                     <h2>{porqueImporta.texto_campo}</h2>
                     <p>{textoPorqueImporta.texto_campo}</p>
@@ -144,11 +178,9 @@ const SaludOcupacional = () => {
             </div>
 
 
-
-
-
-
-
+            <div class="contact-button-container">
+                <button class="contact-button" onClick={handleContactUsClick}>Contáctanos Aqui!</button>
+            </div>
             <div className="empty-space-bottom1"></div>
             <Footer />
         </div>
