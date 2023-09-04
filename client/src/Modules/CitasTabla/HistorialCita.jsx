@@ -8,58 +8,64 @@ import './HistorialCita.css';
 import CitasService from '../../Services/CitasService';
 
 import swal from 'sweetalert';
-let contRows = 0;
 
 
 
-function MedicamentoRow({ onDelete }) {
+function MedicamentoRow({ data, onDelete, onUpdate }) {
+    const handleDataChange = (e, field) => {
+        const updatedData = { ...data, [field]: e.target.value };
+        onUpdate(updatedData);
+    };
 
     return (
-        <div className='Mediv'>
+        <div className="Mediv">
             <div className="row mb-3">
                 <div className="col-md-3">
-                    <h6 className='headers'>Medicamento</h6>
+                    <h6 className="headers">Medicamento</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Medicamento"
-                        //onChange={(e) => setMedicamento(e.target.value)}
-
+                        value={data.medicamento}
+                        onChange={(e) => handleDataChange(e, 'medicamento')}
                     />
                 </div>
                 <div className="col-md-2">
-                    <h6 className='headers'>Cantidad</h6>
+                    <h6 className="headers">Cantidad</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Cantidad"
-                      //  onChange={(e) => setCantidad(e.target.value)}
+                        value={data.cantidad}
+                        onChange={(e) => handleDataChange(e, 'cantidad')}
                     />
                 </div>
                 <div className="col-md-3">
-                    <h6 className='headers'>Frecuencia</h6>
+                    <h6 className="headers">Frecuencia</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Frecuencia"
-                      //  onChange={(e) => setFrecuencia(e.target.value)}
+                        value={data.frecuencia}
+                        onChange={(e) => handleDataChange(e, 'frecuencia')}
                     />
                 </div>
                 <div className="col-md-3">
-                    <h6 className='headers'>Duración</h6>
+                    <h6 className="headers">Duración</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Duración"
-                      //  onChange={(e) => setDuración(e.target.value)}
+                        value={data.duracion}
+                        onChange={(e) => handleDataChange(e, 'duracion')}
                     />
                 </div>
-                <div className="col-md-1 d-flex justify-content-center">
-                    {onDelete && (
-                        <button onClick={onDelete} className="delete-button">
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    )}
+                <div className='col-md-1'>
+                {onDelete && (
+                    <button onClick={onDelete} className="delete-button">
+                        <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                )}
                 </div>
             </div>
         </div>
@@ -72,7 +78,7 @@ function HistorialCita() {
     const [showIncapacity, setShowIncapacity] = useState(false);
     const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
-   
+
     const [peso, setNewPeso] = useState(null);
     const [altura, setNewAltura] = useState(null);
     const [temp, setNewTemp] = useState(null);
@@ -88,23 +94,6 @@ function HistorialCita() {
     const [FechaInicial, setFechaInicial] = useState(null);
     const [Dias, setDias] = useState(null);
     const [Comentarios, setComentarios] = useState(null);
-
-// const [medicamento, setMedicamento] = useState([]);
-// const [cantidad, setCantidad] = useState([]);
-// const [frecuencia, setFrecuencia] =useState([]);
-// const [duración, setDuración] = useState([]);
-
-
-    const [recetas, setRecetas] = useState([]);
-
-    // const agregarRecetas = (cantRow) => {
-    //     let i=0;
-    //     for(  i == 0;i<cantRow;i++){
-    //     const nuevaReceta = { idCita: id, nombre_medicamento: medicamento[i], dosis: cantidad[i], frecuencia_horas: frecuencia[i], cant_dias: duración[i]};
-    //     setRecetas([...recetas, nuevaReceta]);
-    //     console.log(recetas);
-    //     }
-    // };
 
     useEffect(() => {
         const fetchPaciente = async () => {
@@ -139,8 +128,9 @@ function HistorialCita() {
             paciente.FechaInicial = FechaInicial;
             paciente.Dias = Dias;
             paciente.Comentarios = Comentarios;
+            // aqui agrego los medicamentos ????????????/
+            // paciente.Medicamentos = medicamentosData;
 
-          //  agregarRecetas(contRows);
             await CitasService.editCitas(id, paciente);
             swal("Cita Editada", {
                 icon: "success",
@@ -152,32 +142,39 @@ function HistorialCita() {
     };
     /////////////////////////////////////////////////////////////////////
     //Este es el componente de Medicamento para agregar uno mas a la row 
-    const [medicamentos, setMedicamentos] = useState([
-        { id: 0, component: <MedicamentoRow onDelete={() => deleteMedicamento(0)} /> }
+    const [medicamentosData, setMedicamentosData] = useState([
+        {
+            id: 0,
+            medicamento: "",
+            cantidad: "",
+            frecuencia: "",
+            duracion: "",
+        },
     ]);
 
     const addMedicamentoRow = () => {
-        const newMedicamentoId = medicamentos.length;
-        setMedicamentos(prevMedicamentos => [
-            ...prevMedicamentos,
+        const newMedicamentoId = medicamentosData.length;
+        setMedicamentosData((prevData) => [
+            ...prevData,
             {
                 id: newMedicamentoId,
-                component: <MedicamentoRow onDelete={() => deleteMedicamento(newMedicamentoId)} />
-
-            }
-
+                medicamento: "",
+                cantidad: "",
+                frecuencia: "",
+                duracion: "",
+            },
         ]);
-        contRows++;
     };
 
     const deleteMedicamento = (id) => {
-        setMedicamentos(prevMedicamentos => prevMedicamentos.filter(medicamento => medicamento.id !== id));
-        // medicamento[contRows] = null;
-        // duración[contRows] = null;
-        // frecuencia[contRows] = null;
-        // cantidad[contRows] = null;
-        contRows--;
+        setMedicamentosData((prevData) => prevData.filter((medicamento) => medicamento.id !== id));
     };
+    const updateMedicamentoData = (updatedData, rowId) => {
+        setMedicamentosData((prevData) =>
+            prevData.map((medicamento) => (medicamento.id === rowId ? updatedData : medicamento))
+        );
+    };
+
 
     const formatDate = (date) => {
         var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -348,12 +345,17 @@ function HistorialCita() {
 
 
                             {/* Visualizacion de medicamentos */}
-                            <div>
-                                {medicamentos.map(({ id, component }) => (
-                                    <div key={id}>{component}</div>
-                                ))}
-                                <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
-                            </div>
+                            {medicamentosData.map((rowData) => (
+                                <div key={rowData.id}>
+                                    <MedicamentoRow
+                                        data={rowData}
+                                        onDelete={() => deleteMedicamento(rowData.id)}
+                                        onUpdate={(updatedData) => updateMedicamentoData(updatedData, rowData.id)}
+                                    />
+                                </div>
+                            ))}
+                            <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
+
                             {/* ///////////////////////////// */}
                         </div>
                         <div className="row mb-3">
