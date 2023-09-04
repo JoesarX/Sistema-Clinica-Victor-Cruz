@@ -146,7 +146,7 @@ function HistorialCita() {
         {
             id: 0,
             medicamento: "",
-            cantidad: "",
+            cantidad: 0,
             frecuencia: "",
             duracion: "",
         },
@@ -159,7 +159,7 @@ function HistorialCita() {
             {
                 id: newMedicamentoId,
                 medicamento: "",
-                cantidad: "",
+                cantidad: 0,
                 frecuencia: "",
                 duracion: "",
             },
