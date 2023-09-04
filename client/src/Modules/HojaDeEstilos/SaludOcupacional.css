@@ -145,9 +145,6 @@
     text-align: justify;
 }
 
-.salud-impor-container {
-    order: 1; /* Cambia el orden para que esté a la derecha */
-}
 
 .salud-container > div:hover {
   transform: translateY(-5px); /* Mueve el contenedor hacia arriba en hover */
