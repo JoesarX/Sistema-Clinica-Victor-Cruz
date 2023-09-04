@@ -73,7 +73,8 @@ export const postCitas = async (cita) => {
         throw error;
     }
 };
-
+//editCitaPreclinica
+//export const editCitaPreclinica
 export const editCitasUser = async (id, cita) => {
     try {
         console.log("In Service Edit");
