@@ -1,5 +1,5 @@
-import { faTrash, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect } from 'react';
+import { faTrash, faPlus , faDownload} from '@fortawesome/free-solid-svg-icons'
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,12 @@ import CitasService from '../../Services/CitasService';
 import Services from '../../Services/RecetasService';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
+import { PDFViewer, BlobProvider } from '@react-pdf/renderer';
+
+import ReactDOM from 'react-dom';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 
 function MedicamentoRow({ data, onDelete, onUpdate }) {
     const handleDataChange = (e, field) => {
@@ -73,8 +79,8 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
 ////////////////////////////////////////////////////////////////////////////
 
 function HistorialCita() {
-const navigate = useNavigate();
-    
+    const navigate = useNavigate();
+
     const [showIncapacity, setShowIncapacity] = useState(false);
     const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
@@ -95,7 +101,7 @@ const navigate = useNavigate();
     const [Dias, setDias] = useState(null);
     const [Comentarios, setComentarios] = useState(null);
 
-   
+
 
 
     useEffect(() => {
@@ -115,8 +121,8 @@ const navigate = useNavigate();
     // useEffect(() => {
     //     console.log(paciente); // Log paciente when it changes
     // }, [paciente]);
-    
-        
+
+
     const validacionesSignos = () => {
         if (paciente.altura > 280) {
             swal({
@@ -176,38 +182,38 @@ const navigate = useNavigate();
             paciente.Comentarios = Comentarios;
 
             const recetas = medicamentosData.map((medicamento) => ({
-				nombre_medicamento : medicamento.medicamento,
-				cant_unidades : medicamento.cantidad,
-				frecuencia_horas : medicamento.frecuencia,
-				cant_dias : medicamento.duracion,
-			}));
+                nombre_medicamento: medicamento.medicamento,
+                cant_unidades: medicamento.cantidad,
+                frecuencia_horas: medicamento.frecuencia,
+                cant_dias: medicamento.duracion,
+            }));
 
             // aqui agrego los medicamentos ????????????/
 
             console.log(recetas);
 
             const listaRecetas = {
-				recetasLista: recetas,
-			}
+                recetasLista: recetas,
+            }
             console.log(listaRecetas);
-            if(validacionesSignos()){
+            if (validacionesSignos()) {
                 await CitasService.editCitas(id, paciente);
-                let idcita= id;
-               await Services.postRecetasByCita(idcita,listaRecetas);
+                let idcita = id;
+                await Services.postRecetasByCita(idcita, listaRecetas);
                 swal("Cita Editada", {
                     icon: "success",
                 });
 
                 navigate("/citas_tabla");
             }
-            
-             
-           
-            
-           
+
+
+
+
+
             // window.location.reload();
         } catch (error) {
-            
+
             console.log('Error submitting servicio:', error);
         }
     };
@@ -252,6 +258,77 @@ const navigate = useNavigate();
         return new Date(date).toLocaleDateString("es-HN", datePrefs);
 
     }
+
+
+
+    const generatePDF = (medicamentosData) => {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+
+        // Title: "Dr. Victor Cruz"
+        doc.text('Dr. Victor Cruz', 20, 20);
+
+        // Subtitle: "Medicina Familiar"
+        doc.setFontSize(14);
+        doc.text('Medicina Familiar', 20, 30);
+
+        // Separation Line
+        doc.setLineWidth(0.5);
+        doc.line(20, 40, 190, 40);
+
+        // Patient Information
+        doc.setFontSize(12);
+        doc.text('Paciente:', 20, 50);
+        doc.line(50, 50, 100, 50); // Line for patient name
+        doc.text('Edad:', 120, 50);
+        doc.line(140, 50, 160, 50); // Line for age
+        doc.text('Diagnostico:', 20, 60);
+        doc.line(50, 60, 160, 60); // Line for diagnosis
+        doc.text('Fecha:', 20, 70);
+        doc.line(50, 70, 100, 70); // Line for date
+
+        // Table: Medication Data
+        doc.autoTable({
+            head: [['Medicamento', 'Cantidad', 'Frecuencia', 'Duracion']],
+            body: medicamentosData.map((medication) => [
+                medication.medicamento,
+                medication.cantidad,
+                medication.frecuencia,
+                medication.duracion,
+            ]),
+            startY: 80, // Adjust the vertical position as needed
+        });
+
+
+        doc.setLineWidth(0.5);
+        doc.line(20, doc.internal.pageSize.height - 20, 190, doc.internal.pageSize.height - 20);
+
+        // Signature
+
+        doc.setFontSize(12);
+        doc.text('Firma Dr. Victor Cruz:', 20, 250);
+        doc.line(65, 250, 120, 250); // Line for signature
+        const signatureY = doc.line.previous + 10; // Adjust the vertical position as needed
+
+        const textInFooter = 'Teléfono: +504 2230-3901';
+        doc.setFontSize(10); // Adjust font size as needed
+        const textWidth = doc.getStringUnitWidth(textInFooter) * 10; // Calculate text width
+        const textX = (doc.internal.pageSize.width - textWidth) / 2; // Center text horizontally
+        const textY = doc.internal.pageSize.height - 10; // Position text at the bottom
+        doc.text(textInFooter, 20, textY);
+
+
+
+        // Separation Line at the End
+
+        // Save or download the PDF
+        doc.save('medical_record.pdf');
+    };
+
+    const handleExportPDF = () => {
+        generatePDF(medicamentosData);
+    };
+
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -411,23 +488,28 @@ const navigate = useNavigate();
                                 </div>
                             </div>
                         </div>
-                        <h4 className='headers'>Receta de Medicamentos</h4>
-                        <div className='contenedor'>
+                        <div >
+                            <h4 className='headers'>Receta de Medicamentos</h4>
+                            <div className='contenedor' >
 
 
-                            {/* Visualizacion de medicamentos */}
-                            {medicamentosData.map((rowData) => (
-                                <div key={rowData.id}>
-                                    <MedicamentoRow
-                                        data={rowData}
-                                        onDelete={() => deleteMedicamento(rowData.id)}
-                                        onUpdate={(updatedData) => updateMedicamentoData(updatedData, rowData.id)}
-                                    />
-                                </div>
-                            ))}
-                            <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
+                                {/* Visualizacion de medicamentos */}
+                                {medicamentosData.map((rowData) => (
+                                    <div key={rowData.id}>
+                                        <MedicamentoRow
+                                            data={rowData}
+                                            onDelete={() => deleteMedicamento(rowData.id)}
+                                            onUpdate={(updatedData) => updateMedicamentoData(updatedData, rowData.id)}
+                                        />
+                                    </div>
+                                ))}
 
-                            {/* ///////////////////////////// */}
+                                <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
+                                <button onClick={handleExportPDF}><FontAwesomeIcon icon={faDownload} /></button>
+
+
+                                {/* ///////////////////////////// */}
+                            </div>
                         </div>
                         <div className="row mb-3">
                             <div className='headers_TA'>
