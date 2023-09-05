@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Topbar from './Topbar';
 import Footer from './Footer';
 import { AuthContext } from '../AuthContext.js';
-
+import swal from 'sweetalert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcaseMedical } from '@fortawesome/free-solid-svg-icons';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
@@ -134,6 +134,58 @@ const SaludOcupacional = () => {
             const trimmedTitle = editedTitle.trim();
             const trimmedDescription = editedDescription.trim();
 
+           // Validaciones
+           if (trimmedTitle === "") {
+            swal("¡Error! El título no puede quedar en blanco.", {
+                icon: "error",
+            });
+            return;
+        }
+
+        if (trimmedDescription === "") {
+            swal("¡Error! La descripcion no puede quedar en blanco.", {
+                icon: "error",
+            });
+            return;
+        }
+
+
+        // Check if the description ends with a period
+        if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
+            swal("¡Error! La descripción debe terminar con un punto.", {
+                icon: "error",
+            });
+            return;
+        }
+
+        // Check if title starts with an uppercase letter and is within 25 characters
+        if (
+            trimmedTitle.length > 35
+        ) {
+
+            swal("Asegúrate de que el título inicie con mayúscula y que no exceda los 35 caracteres.", {
+                icon: "error",
+            });
+            return;
+        }
+
+        // Check if there are more than one consecutive spaces in title or description
+        if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
+
+            swal("Error, No se permiten más de un espacio consecutivo en el texto.", {
+                icon: "error",
+            });
+            return;
+        }
+
+        // Check if the description has more than 80 characters
+        if (trimmedDescription.length > 350) {
+            swal("Error, La descripción no puede exceder los 350 caracteres.", {
+                icon: "error",
+            });
+            return;
+        }
+           
             console.log("Este es el titulo:" + TipoTitulo.texto_campo);
 
             TipoTitulo.texto_campo = trimmedTitle;
@@ -146,7 +198,6 @@ const SaludOcupacional = () => {
             setEditable(false);
             setEditedTitle(trimmedTitle);
             setEditedDescription(trimmedDescription);
-            window.location.reload(true);
         };
 
         const handleCancel = () => {
@@ -280,28 +331,80 @@ const SaludOcupacional = () => {
             const TituloOriginal = TipoTitulo.texto_campo;
             const trimmedTitle = editedTitle.trim();
             const trimmedDescription = editedDescription.trim();
+        
+            // Validaciones
+            if (trimmedTitle === "") {
+                swal("¡Error! El título no puede quedar en blanco.", {
+                    icon: "error",
+                });
+                return;
+            }
 
+            if (trimmedDescription === "") {
+                swal("¡Error! La descripcion no puede quedar en blanco.", {
+                    icon: "error",
+                });
+                return;
+            }
+
+
+            // Check if the description ends with a period
+            if (trimmedDescription.charAt(trimmedDescription.length - 1) !== ".") {
+                swal("¡Error! La descripción debe terminar con un punto.", {
+                    icon: "error",
+                });
+                return;
+            }
+
+            // Check if title starts with an uppercase letter and is within 25 characters
+            if (
+                !/^[A-Z]/.test(trimmedTitle) ||
+                trimmedTitle.length > 25
+            ) {
+
+                swal("Asegúrate de que el título inicie con mayúscula y que no exceda los 25 caracteres.", {
+                    icon: "error",
+                });
+                return;
+            }
+
+            // Check if there are more than one consecutive spaces in title or description
+            if (/\s{2,}/.test(trimmedTitle) || /\s{2,}/.test(trimmedDescription)) {
+
+                swal("Error, No se permiten más de un espacio consecutivo en el texto.", {
+                    icon: "error",
+                });
+                return;
+            }
+
+            // Check if the description has more than 80 characters
+            if (trimmedDescription.length > 400) {
+                swal("Error, La descripción no puede exceder los 400 caracteres.", {
+                    icon: "error",
+                });
+                return;
+            }
+        
             console.log("Este es el titulo:" + TipoTitulo.texto_campo);
-
+        
             TipoTitulo.texto_campo = trimmedTitle;
-
+        
             console.log("Este es el titulo original:" + TituloOriginal);
             await Services.editText(TipoTitulo);
             TipoDesc.texto_campo = trimmedDescription;
             await Services.editText(TipoDesc);
-
+        
             setEditable(false);
             setEditedTitle(trimmedTitle);
             setEditedDescription(trimmedDescription);
-            window.location.reload(true);
         };
-
+        
         const handleCancel = () => {
             setEditable(false);
             setEditedTitle(title);
             setEditedDescription(description);
         };
-
+        
         const handleTitleChange = (e) => {
             // Capitalize the first letter of the title
             const value = e.target.value;
@@ -310,9 +413,8 @@ const SaludOcupacional = () => {
             } else {
                 setEditedTitle(value.charAt(0).toUpperCase() + value.slice(1));
             }
-
         };
-
+        
         const handleDescriptionChange = (e) => {
             // Capitalize the first letter of the description
             const value = e.target.value;
@@ -322,6 +424,8 @@ const SaludOcupacional = () => {
                 setEditedDescription(value.charAt(0).toUpperCase() + value.slice(1));
             }
         };
+        
+        
 
         useEffect(() => {
             if (isFetching) {
