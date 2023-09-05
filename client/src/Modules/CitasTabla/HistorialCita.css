@@ -40,7 +40,7 @@
     padding-top: 1.5%;
 }
 
-.infoGeneral {
+.appointment-patient-information {
     display: flex;
     flex-direction: row;
     align-items: left;
@@ -89,7 +89,7 @@
     background-color: #3f79ee;
 }
 
-.nombre {
+.appointment-history-nombre {
     width: 700px;
     height: moz-fit-content;
     font-family: 'Inter';

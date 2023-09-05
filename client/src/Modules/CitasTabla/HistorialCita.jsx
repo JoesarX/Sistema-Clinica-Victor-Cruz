@@ -336,7 +336,7 @@ function HistorialCita() {
         <div className='scrollable-page1'>
             <NavBar />
             <div className='main'>
-                <div className="infoGeneral">
+                <div className="appointment-patient-information">
                     <div className='profile-picture-and-edit'>
                         <div className='perfil'>
                             <FontAwesomeIcon icon={faUser} className='iconoUser' />
@@ -344,7 +344,7 @@ function HistorialCita() {
                     </div>
                     <div className='patient-info-vert-align'>
                         <div class='appointment-details-container'>
-                            <h2 className="nombre">
+                            <h2 className="appointment-history-nombre">
                                 {paciente && paciente.nombre}
                             </h2>
                             <div className='appointment-reason-container'>
