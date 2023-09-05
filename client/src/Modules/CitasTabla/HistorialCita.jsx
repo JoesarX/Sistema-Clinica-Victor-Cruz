@@ -1,5 +1,5 @@
 import { faTrash, faPlus , faDownload} from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,9 +9,7 @@ import CitasService from '../../Services/CitasService';
 import Services from '../../Services/RecetasService';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
-import { PDFViewer, BlobProvider } from '@react-pdf/renderer';
 
-import ReactDOM from 'react-dom';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -65,7 +63,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         onChange={(e) => handleDataChange(e, 'duracion')}
                     />
                 </div>
-                <div className='col-md-1'>
+                <div className='d-flex col-md-1 align-items-center'>
                     {onDelete && (
                         <button onClick={onDelete} className="delete-button">
                             <FontAwesomeIcon icon={faTrash} />
@@ -108,7 +106,6 @@ function HistorialCita() {
         const fetchPaciente = async () => {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
-
                 setPaciente(response);
                 console.log("RESPONSE:", response);
             } catch (error) {

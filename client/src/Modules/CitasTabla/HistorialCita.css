@@ -43,14 +43,18 @@
 .appointment-patient-information {
     display: flex;
     flex-direction: row;
-    align-items: left;
-    justify-content: left;
+    align-items: center;
+    justify-content: flex-start;
     padding-left: 3%;
     height: min-content;
     gap: 20px;
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .profile-picture-and-edit {
@@ -90,7 +94,7 @@
 }
 
 .appointment-history-nombre {
-    width: 700px;
+    width: initial;
     height: moz-fit-content;
     font-family: 'Inter';
     font-style: normal;
@@ -99,7 +103,7 @@
     display: flex;
     color: #464646;
     margin-bottom: 0px;
-     /* TEMPORALLL */
+    /* TEMPORALLL */
     /* background-color: rgb(255, 0, 0, 0.3);
     background-size: 10px 10px;
     background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
@@ -134,22 +138,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 25px;
+    
+    height: min-content;
     width: max-content;
+
     line-height: 25px;
+
     text-align: center;
     vertical-align: middle;
+
     padding-right: 10px;
     padding-left: 10px;
     padding-top: auto;
     padding-bottom: auto;
-    background: #C8DAFF;
+
     border-radius: 20px;
+    
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
     font-size: 100%;
+    
+    background-color: #C8DAFF;
     color: #1560F2;
+
+    user-select: none;
 }
 
 .appointment-reason-container.date {
@@ -193,7 +206,11 @@
     margin-top: 20px;
     margin-bottom: 20px;
 
-    font-family: 'Inter'
+    font-family: 'Inter';
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .nav-button-container a {
@@ -227,16 +244,20 @@
 
     border-top: 2px solid #5e5e5e;
 }
+
 /* Falta responsiveness de estos css */
-.contenedor{
+/* ya estan gay -pedro */
+.contenedor {
     background-color: #fff;
     padding: 10px;
     border-radius: 10px;
 }
+
 .delete-button {
-    width: 30px; 
+    margin-top: 30px;
+    width: 40px;
     height: 40px;
-    margin-top: 35px;
+    border-radius: 100%;
 }
 
 .appointment-history-end-button {
@@ -264,39 +285,32 @@
 
 /* /////////////////////////////// */
 
-@media only screen and (min-width: 820px) and (max-width: 950px) {
-    .space-between-text {
-        flex-direction: column;
-        justify-content: left;
-        align-items: flex-start;
-    }
-}
-
-@media only screen and (max-width: 600px) {
-    .infoGeneral {
+@media only screen and (max-width: 950px) {
+    .appointment-patient-information {
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 5px;
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 10px;
+        padding-right: 10px;
         padding-top: 20px;
         padding-bottom: 20px;
     }
 
-    .infoGeneral>* {
-        text-align: center;
+    .space-between-text {
+        /* text-align: center;
         justify-content: center;
-        align-items: center;
-    }
-
-    .nombre {
-        justify-content: center;
-        text-align: center;
+        align-items: center; */
+        width: 100%;
     }
 
     .nav-button-container {
         justify-content: center;
+        gap: 10px;
+    }
+
+    .nav-button-container a {
+        text-align: center;
     }
 
 }
