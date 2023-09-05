@@ -200,7 +200,7 @@ const recetasRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-g
+
     //Delete a receta by id
     router.delete("/:id", async (req, res) => {
         try {
