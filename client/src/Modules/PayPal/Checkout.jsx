@@ -7,6 +7,8 @@ import PagosService from '../../Services/PagosService';
 import { Box, Typography, Button } from '@mui/material';
 
 const Checkout = () => {
+    const isLoggedIn = localStorage.getItem("100");
+
     const [show, setShow] = useState(true);
     const [success, setSuccess] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("");
@@ -25,7 +27,7 @@ const Checkout = () => {
                     description: "Sunflower",
                     amount: {
                         currency_code: "USD",
-                        value: (price * 1.035) / 25,
+                        value: (Math.round(((price * 0.035) / 25) * 100) / 100).toFixed(2),
                     },
                 },
             ],
@@ -78,44 +80,57 @@ const Checkout = () => {
         }
     }, [success]);
 
+    useEffect(() => {
+        // Validación login
+        if (!isLoggedIn) {
+            // Redirigir si no se cumple la verificación
+            swal("No cuenta con el permiso de entrar a este apartado.", {
+                icon: "error",
+            });
+            navigate("/"); // Redirige a la página de inicio de sesión
+        }
+    }, [isLoggedIn]);
+
     return (
         <Box sx={{ backgroundColor: '#1E60A6', height: '100%', display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ margin: '50px auto', maxWidth: 600, textAlign: 'center', backgroundColor: 'lightgrey', borderRadius: 5,padding: 3 }}>
-
+            <Box sx={{ margin: '25px auto', maxWidth: 600, textAlign: 'center', backgroundColor: ' #E4EBF9', borderRadius: 5, padding: 3 }}>
+                <Typography variant="h5" sx={{ my: 2, fontWeight: 'bold' }}>
+                    {/* Pago de Consulta en Linea */}
+                    PAGO DE CONSULTA EN LINEA
+                </Typography>
                 <img
                     src="https://www.healthcarefinancenews.com/sites/healthcarefinancenews.com/files/styles/companion_top/public/patient-payment-stock-712_15.jpg?itok=o0QcaMhg"
                     alt="Product"
                     width="100%"
-                    display="block"
+                    display="fixed"
+                    border-radius="5px"
                 />
 
-                <Typography variant="h5" sx={{ my: 2 }}>
-                    PAGO DE CONSULTA EN LINEA
-                </Typography>
 
-                <Box sx={{ background: '#eee', p: 2 }}>
+
+                <Box sx={{ background: '#fff', p: 2 }}>
                     <Typography>
-                        Pago de Consulta para el dia 12/12/2021 a las 12:00
+                        Pago de Consulta a nombre de Josue Edgardo Espinal Ara para el dia 12/12/2021 a las 12:30 pm.
                     </Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom: '1px solid #ccc' }}>
                     <Typography>Subtotal:</Typography>
-                    <Typography>Lps.{price}</Typography>
+                    <Typography>Lps. {(Math.round((price) * 100) / 100).toFixed(2)}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom: '1px solid #ccc' }}>
                     <Typography>Tarifa pago en linea:</Typography>
-                    <Typography>Lps.{price * 0.035}</Typography>
+                    <Typography>Lps. {(Math.round((price * 0.035) * 100) / 100).toFixed(2)}</Typography>
                 </Box>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', p: 2 }}>
-                    <Typography>Total:</Typography>
-                    <Typography>Lps.{price * 1.035}</Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', p: 3 }}>
+                    <Typography sx={{ fontWeight: 'bold', color: '#1E60A6', fontSize: "18px" }}>Total:</Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: "18px" }}>Lps. {(Math.round((price * 1.035) * 100) / 100).toFixed(2)}</Typography>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', p: 2, paddingTop:1}}>
-                    <Typography>Total en Dolares:</Typography>
-                    <Typography>$ {(price * 1.035) / 25}</Typography>
-                </Box>
+                {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', p: 3, paddingTop:1}}>
+                    <Typography sx={{fontWeight: 'bold'}}>Total en Dolares:</Typography>
+                    <Typography sx={{fontWeight: 'bold'}}>$ {(price * 1.035) / 25}</Typography>
+                </Box> */}
                 <PayPalScriptProvider options={{ "client-id": CLIENT_ID }}>
                     <div>
 
