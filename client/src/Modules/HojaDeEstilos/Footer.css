@@ -2,13 +2,13 @@
 
 
 .container {
-    font-family: 'Inter';
+    font-family: 'Montserrat';
     color: white;
     transition: all 0.3 ease;
 }
 
 .custom-footer {
-    font-family: 'Inter';
+    font-family: 'Montserrat';
     color: white;
     transition: all 0.3 ease;
     align-content: center;
@@ -17,7 +17,7 @@
 }
 
 .footer-info {
-    font-family: 'Inter';
+    font-family: 'Montserrat';
     width: 100%;
     justify-content: center;
     justify-items: center;

@@ -13,7 +13,7 @@ import bcrypt from 'bcryptjs';
 import swal from 'sweetalert';
 
 const IniciarSesion = () => {
-    
+
     const yaEsta = localStorage.getItem("400");
     const { isLoggedIn, handleSignIn } = useContext(AuthContext);
     const [email, setEmail] = useState('');
@@ -57,7 +57,7 @@ const IniciarSesion = () => {
             } else if (!isMatch) {
                 swal("Contraseña incorrecta", {
                     icon: "error",
-                  });
+                });
                 console.log("Contraseña incorrecta")
                 flag = false;
                 console.log(flag)
@@ -87,7 +87,7 @@ const IniciarSesion = () => {
         if (emailRegex.test(email) != true) {
             swal("El correo ingresado no tiene un formato valido", {
                 icon: "error",
-              });
+            });
         } else {
             const passUser = await loginUsuarios(email, password);
             console.log(passUser)
@@ -106,7 +106,7 @@ const IniciarSesion = () => {
                         } else if (!isMatch) {
                             swal("Contraseña incorrecta", {
                                 icon: "error",
-                              });
+                            });
                             console.log("Contraseña incorrecta")
                         } else {
                             flag = true;
@@ -116,7 +116,7 @@ const IniciarSesion = () => {
                             navigate("/userpage");
                             swal("Bienvenido", {
                                 icon: "success",
-                              });
+                            });
                             handleSignIn('normal');
                             resolve();
                         }
@@ -130,11 +130,11 @@ const IniciarSesion = () => {
                 if (email === "" || password === "") {
                     swal("Debo llenar todos los campos", {
                         icon: "error",
-                      });
+                    });
                 } else if (await loginMaster(email, password) === true) {
                     swal("Bienvenido Doctor!", {
                         icon: "success",
-                      });
+                    });
                     localStorage.setItem("400", true);
                     localStorage.setItem("correo", email);
                     handleSignIn('master');
@@ -143,7 +143,7 @@ const IniciarSesion = () => {
                 } else if (await loginAdmin(email, password) === true) {
                     swal("Bienvenido", {
                         icon: "success",
-                      });
+                    });
                     handleSignIn('administrador');
                     localStorage.setItem("300", true);
                     localStorage.setItem("correo", email);
@@ -152,7 +152,7 @@ const IniciarSesion = () => {
                 } else {
                     swal("Email o contraseña incorrecta!", {
                         icon: "error",
-                      });
+                    });
                 }
             }
         }
