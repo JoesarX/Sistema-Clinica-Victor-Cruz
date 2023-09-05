@@ -167,7 +167,7 @@ const Dashboard = () => {
                 const scheduled = appointments.filter(appointment => appointment.estado === "Pendiente");
                 const previous = appointments.filter(appointment => appointment.estado !== "Pendiente");
 
-                setSchAppointments(scheduled.reverse());
+                setSchAppointments(scheduled);
                 setPrevAppointments(previous.reverse());
                 if(previous.length > 0) {
                     setLastAppointment(previous.at(0));
