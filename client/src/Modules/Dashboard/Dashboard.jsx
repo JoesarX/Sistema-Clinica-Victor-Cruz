@@ -169,7 +169,9 @@ const Dashboard = () => {
 
                 setSchAppointments(scheduled.reverse());
                 setPrevAppointments(previous.reverse());
-                setLastAppointment(previous.at(0));
+                if(previous.length > 0) {
+                    setLastAppointment(previous.at(0));
+                }
             } catch (error) {
                 console.log(error);
             }
