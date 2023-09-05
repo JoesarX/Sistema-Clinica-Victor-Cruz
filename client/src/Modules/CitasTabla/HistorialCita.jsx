@@ -197,7 +197,7 @@ const navigate = useNavigate();
                 swal("Cita Editada", {
                     icon: "success",
                 });
-
+                //finaliza
                 navigate("/citas_tabla");
             }
             
