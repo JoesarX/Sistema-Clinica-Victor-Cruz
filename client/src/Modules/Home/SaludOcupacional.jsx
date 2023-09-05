@@ -13,6 +13,7 @@ import Services from '../../Services/texto_cmdService';
 
 
 import { faEdit, faSave, faTimes, faGear, faCog } from '@fortawesome/free-solid-svg-icons';
+import { icon } from '@fortawesome/fontawesome-svg-core';
 
 
 
@@ -96,20 +97,8 @@ const SaludOcupacional = () => {
             const FetchCargarInfo = async () => {
                 try {
                     console.log("Hola");
-                    var info = await Services.getSaludOcupacional();
-                    /*setTituloSaludOcupacional({ ...tituloSaludOcupacional, texto_campo: info[0].texto_campo });
-                    setTextoQueEsSaludOcupacional({ ...textoQueEsSaludOcupacional, texto_campo: info[1].texto_campo });
-                    setPorqueImporta({ ...porqueImporta, texto_campo: info[2].texto_campo });
-                    setTextoPorqueImporta({ ...textoPorqueImporta, texto_campo: info[3].texto_campo });*/
+                    var info = await Services.getSaludOcupacional();     
                     setSubTituloSaludOcupacional({ ...subTituloSaludOcupacional, texto_campo: info[4].texto_campo });
-                    setTituloItem1SaludOcupacional({ ...tituloItem1SaludOcupacional, texto_campo: info[5].texto_campo });
-                    setTituloItem2SaludOcupacional({ ...tituloItem2SaludOcupacional, texto_campo: info[6].texto_campo });
-                    setTituloItem3SaludOcupacional({ ...tituloItem3SaludOcupacional, texto_campo: info[7].texto_campo });
-                    setTextoItem1SaludOcupacional({ ...textoItem1SaludOcupacional, texto_campo: info[8].texto_campo });
-                    setTextoItem2SaludOcupacional({ ...textoItem2SaludOcupacional, texto_campo: info[9].texto_campo });
-                    setTextoItem3SaludOcupacional({ ...textoItem3SaludOcupacional, texto_campo: info[10].texto_campo });
-
-
                 } catch (error) {
                     console.log("Error fetching info");
                 }
@@ -128,7 +117,7 @@ const SaludOcupacional = () => {
     const [editAll, setEditAll] = useState(false);
     const [editAll2, setEditAll2] = useState(false);
 
-    /* P*/ 
+    /* P*/
 
     const Parte1Component = ({ title, description, isEditMode, TipoTitulo, TipoDesc }) => {
         const [editable, setEditable] = useState(false);
@@ -215,8 +204,10 @@ const SaludOcupacional = () => {
                             type="text"
                             value={editedTitle}
                             onChange={handleTitleChange}
-                            style={{ width: 'auto',
-                            padding: '10px', maxWidth: '100%',}}
+                            style={{
+                                width: 'auto',
+                                padding: '10px', maxWidth: '100%',
+                            }}
                         />
                     ) : (
                         editedTitle
@@ -257,6 +248,157 @@ const SaludOcupacional = () => {
         );
     };
 
+    /* Para la segunda parte*/
+
+
+    const servicesData = [
+        {
+            id: 1,
+            icon: faBriefcaseMedical
+        },
+        {
+            id: 2,
+            icon: faCircleExclamation
+        },
+        {
+            id: 3,
+            icon: faHouseMedicalFlag
+        }
+    ];
+
+    const Parte2Component = ({ title, description, icon, isEditMode, TipoTitulo, TipoDesc }) => {
+        const [editable, setEditable] = useState(false);
+        const [editedTitle, setEditedTitle] = useState(title);
+        const [editedDescription, setEditedDescription] = useState(description);
+
+        const handleEditToggle = () => {
+            setEditable(!editable);
+        };
+
+        const handleSave = async () => {
+            // Remove extra spaces at the end of title and description
+            const TituloOriginal = TipoTitulo.texto_campo;
+            const trimmedTitle = editedTitle.trim();
+            const trimmedDescription = editedDescription.trim();
+
+            console.log("Este es el titulo:" + TipoTitulo.texto_campo);
+
+            TipoTitulo.texto_campo = trimmedTitle;
+
+            console.log("Este es el titulo original:" + TituloOriginal);
+            await Services.editText(TipoTitulo);
+            TipoDesc.texto_campo = trimmedDescription;
+            await Services.editText(TipoDesc);
+
+            setEditable(false);
+            setEditedTitle(trimmedTitle);
+            setEditedDescription(trimmedDescription);
+            window.location.reload(true);
+        };
+
+        const handleCancel = () => {
+            setEditable(false);
+            setEditedTitle(title);
+            setEditedDescription(description);
+        };
+
+        const handleTitleChange = (e) => {
+            // Capitalize the first letter of the title
+            const value = e.target.value;
+            if (value.length === 0) {
+                setEditedTitle(value);
+            } else {
+                setEditedTitle(value.charAt(0).toUpperCase() + value.slice(1));
+            }
+
+        };
+
+        const handleDescriptionChange = (e) => {
+            // Capitalize the first letter of the description
+            const value = e.target.value;
+            if (value.length === 0) {
+                setEditedDescription(value);
+            } else {
+                setEditedDescription(value.charAt(0).toUpperCase() + value.slice(1));
+            }
+        };
+
+        useEffect(() => {
+            if (isFetching) {
+                const FetchCargarInfo = async () => {
+                    try {
+                        console.log("Hola");
+                        var info = await Services.getSaludOcupacional();
+                        setTituloItem1SaludOcupacional({ ...tituloItem1SaludOcupacional, texto_campo: info[5].texto_campo });
+                        setTituloItem2SaludOcupacional({ ...tituloItem2SaludOcupacional, texto_campo: info[6].texto_campo });
+                        setTituloItem3SaludOcupacional({ ...tituloItem3SaludOcupacional, texto_campo: info[7].texto_campo });
+                        setTextoItem1SaludOcupacional({ ...textoItem1SaludOcupacional, texto_campo: info[8].texto_campo });
+                        setTextoItem2SaludOcupacional({ ...textoItem2SaludOcupacional, texto_campo: info[9].texto_campo });
+                        setTextoItem3SaludOcupacional({ ...textoItem3SaludOcupacional, texto_campo: info[10].texto_campo });
+                    } catch (error) {
+                        console.log("Error fetching info");
+                    }
+                }
+                FetchCargarInfo();
+                setIsFetching(false);
+            }
+        }, []);
+
+
+        return (
+            <div className="containerInfo">
+                <div className='icon-container'>
+                    <FontAwesomeIcon icon={icon} style={{ color: '#ffffff', fontSize: '80px' }} />
+                </div>
+                <h2 >
+                    {editable ? (
+                        <input
+                            type="text"
+                            value={editedTitle}
+                            onChange={handleTitleChange}
+                            style={{
+                                width: '130%',
+                                padding: '10px', maxWidth: '100%',
+                            }}
+                        />
+                    ) : (
+                        editedTitle
+                    )}
+                </h2>
+                <p>
+                    {editable ? (
+                        <textarea
+                            value={editedDescription}
+                            onChange={handleDescriptionChange}
+                            rows={8}
+                            cols={45}
+                            style={{ width: '100%' }}
+                        />
+                    ) : (
+                        editedDescription
+                    )}
+                </p>
+                {isEditMode && (
+                    <div >
+                        {editable ? (
+                            <div >
+                                <button onClick={handleSave}>
+                                    <FontAwesomeIcon icon={faSave} style={{ color: '#1E60A6' }} />
+                                </button>
+                                <button onClick={handleCancel}>
+                                    <FontAwesomeIcon icon={faTimes} style={{ color: '#1E60A6' }} />
+                                </button>
+                            </div>
+                        ) : (
+                            <button onClick={handleEditToggle}>
+                                <FontAwesomeIcon icon={faEdit} style={{ color: '#1E60A6' }} />
+                            </button>
+                        )}
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     // Variables de estado para el título y la descripción
 
@@ -288,64 +430,66 @@ const SaludOcupacional = () => {
                 />
             </div>
             {isLoggedIn && userType !== 'normal' && (
-               <button
-               onClick={() => setEditAll(!editAll)}
-               style={{
-                   width: '50px',  
-                   height: '50px', 
-                   top: '20px', 
-                   marginleft: '5%',
-                   backgroundColor: 'transparent',
-                   border: 'none' ,
-                   cursor: 'pointer',
-               }}
-           >
-               <FontAwesomeIcon icon={faCog} style={{ fontSize: '35px', padding: '5px', color: '#1E60A6' }} />
-           </button>
-           
+                <button
+                    onClick={() => setEditAll(!editAll)}
+                    style={{
+                        width: '50px', height: '50px', top: '20px', marginleft: '5%', backgroundColor: 'transparent', border: 'none', cursor: 'pointer',
+                    }}>
+                    <FontAwesomeIcon icon={faCog} style={{ fontSize: '35px', padding: '5px', color: '#1E60A6' }} />
+                </button>
             )}
+
             <div className='header2'>
                 {subTituloSaludOcupacional.texto_campo}
             </div>
 
 
             <div class="container-wrapper">
-                <div className='containerInfo'>
-                    <div className='icon-container'>
-                        <FontAwesomeIcon icon={faBriefcaseMedical} style={{ color: '#ffffff', fontSize: '80px' }} />
-                    </div>
-                    <h2>{tituloItem1SaludOcupacional.texto_campo}</h2>
-                    <p>{textoItem1SaludOcupacional.texto_campo}</p>
-                </div>
 
-                <div className='containerInfo'>
-                    <div className='icon-container'>
-                        <FontAwesomeIcon icon={faCircleExclamation} style={{ color: '#ffffff', fontSize: '80px' }} />
-                    </div>
-                    <h2>{tituloItem2SaludOcupacional.texto_campo}</h2>
-                    <p>{textoItem2SaludOcupacional.texto_campo}</p>
-                </div>
+                <Parte2Component
+                    title={tituloItem1SaludOcupacional.texto_campo}
+                    description={textoItem1SaludOcupacional.texto_campo}
+                    icon={servicesData[0].icon}
+                    isEditMode={editAll2}
+                    TipoTitulo={tituloItem1SaludOcupacional}
+                    TipoDesc={textoItem1SaludOcupacional}
+                />
 
-                <div className='containerInfo'>
-                    <div className='icon-container'>
-                        <FontAwesomeIcon icon={faHouseMedicalFlag} style={{ color: '#ffffff', fontSize: '80px' }} />
-                    </div>
-                    <h2>{tituloItem3SaludOcupacional.texto_campo}</h2>
-                    <p>{textoItem3SaludOcupacional.texto_campo}</p>
-                </div>
+                <Parte2Component
+                    title={tituloItem2SaludOcupacional.texto_campo}
+                    description={textoItem2SaludOcupacional.texto_campo}
+                    icon={servicesData[1].icon}
+                    isEditMode={editAll2}
+                    TipoTitulo={tituloItem2SaludOcupacional}
+                    TipoDesc={textoItem2SaludOcupacional}
+                />
+
+                <Parte2Component
+                    title={tituloItem3SaludOcupacional.texto_campo}
+                    description={textoItem3SaludOcupacional.texto_campo}
+                    icon={servicesData[2].icon}
+                    isEditMode={editAll2}
+                    TipoTitulo={tituloItem3SaludOcupacional}
+                    TipoDesc={textoItem3SaludOcupacional}
+                />
+
             </div>
+
+            {isLoggedIn && userType !== 'normal' && (
+                <button
+                    onClick={() => setEditAll2(!editAll2)}
+                    style={{
+                        width: '50px', height: '50px', top: '20px', marginleft: '5%', backgroundColor: 'transparent', border: 'none', cursor: 'pointer',
+                    }}>
+                    <FontAwesomeIcon icon={faCog} style={{ fontSize: '35px', padding: '5px', color: '#1E60A6' }} />
+                </button>
+            )}
 
 
             <div class="contact-button-container">
                 <button class="contact-button" onClick={handleContactUsClick}>Contáctanos Aqui!</button>
             </div>
             <div className="empty-space-bottom1"></div>
-
-            {isLoggedIn && userType !== 'normal' && (
-                <button className='buttonG' onClick={handleToggleButtonClick}>
-                <FontAwesomeIcon icon={faGear} />
-            </button>
-            )}
             <Footer />
         </div>
     );
