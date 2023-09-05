@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 //import { storage } from "./firebase";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -262,7 +263,7 @@ const Citas = () => {
 
         if (currentDayOfWeek === 0) {
             daysUntilNextMonday = 1;
-        }else if (currentDayOfWeek === 6) {
+        } else if (currentDayOfWeek === 6) {
             daysUntilNextMonday = 2;
         }
 
@@ -510,7 +511,7 @@ const Citas = () => {
             });
             return false
         } else if (nombre_persona.charAt(0) === ' ') {
-            
+
             swal("El nombre no puede iniciar con un espacio.", {
                 icon: "error",
             });
@@ -609,7 +610,7 @@ const Citas = () => {
                     ...cita,
                     medId: cita.idmed,
                 }));
-                
+
                 const expedientesData = await ExpedientesService.getAllExpedientes();
                 const expedientesFormatted = expedientesData.map((expediente) => ({
                     idpaciente: expediente.idpaciente,
@@ -676,11 +677,16 @@ const Citas = () => {
         //navigate(`/citas_tabla/historial_cita/${id}`);
     }*/
 
-    const handleClick = () => {
-        navigate('/citas_tabla/historial_cita/');
-    }
+    const handleClick = (id) => {
+        console.log(id);
+        navigate(`/citas_tabla/historial_cita/${id}`);
+    };
 
-    const getActionButtons = (estado) => {
+    /*const handleClick = () => {
+        navigate('/citas_tabla/historial_cita/');
+    }*/
+
+    const getActionButtons = (estado, id) => {
 
         if (estado === 'Pendiente') {
             return (
@@ -690,23 +696,22 @@ const Citas = () => {
             );
         }
 
-        if (estado === 'En Curso') {
+        if (estado === 'En Progreso') {
             return (
                 <>
-                    <Button variant="warning">
-                        <FontAwesomeIcon icon={faTimes} />
-                    </Button>
+                    
 
-                    <Button variant="info" onClick={handleClick}>
+                    <Button variant="info" onClick={() => handleClick(id)}>
                         <FontAwesomeIcon icon={faFile} />
                     </Button>
+                    
                 </>
             )
         }
 
         if (estado === 'Terminada') {
             return (
-                <Button variant="info" onClick={handleClick}>
+                <Button variant="info" onClick={() => handleClick(id)}>
                     <FontAwesomeIcon icon={faFile} />
                 </Button>
             )
@@ -745,7 +750,7 @@ const Citas = () => {
                                             <IconButton onClick={() => handleDeleteCitasClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
-                                            {getActionButtons(params.row.estado)}
+                                            {getActionButtons(params.row.estado, params.id)}
                                         </>
 
                                     )
@@ -791,7 +796,7 @@ const Citas = () => {
                                     onChange={(event, newValue) => {
                                         cita.idpaciente = newValue?.idpaciente;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="ID Paciente"/>}
+                                    renderInput={(params) => <TextField {...params} label="ID Paciente" />}
                                     ListboxProps={
                                         {
                                             style: {
@@ -809,7 +814,7 @@ const Citas = () => {
                                     onChange={(event, newValue) => {
                                         cita.correouser = newValue?.correouser;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="Correo User"/>}
+                                    renderInput={(params) => <TextField {...params} label="Correo User" />}
                                     ListboxProps={
                                         {
                                             style: {
@@ -918,7 +923,7 @@ const Citas = () => {
 
                                         }}
                                         renderInput={(params) => (
-                                            <TextField {...params} label="ID Paciente"/>
+                                            <TextField {...params} label="ID Paciente" />
                                         )}
                                         ListboxProps={
                                             {

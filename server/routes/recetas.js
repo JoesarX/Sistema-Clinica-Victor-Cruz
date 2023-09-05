@@ -62,7 +62,7 @@ const recetasRouter = (pool) => {
                 req.body.nombre_medicamento,
                 req.body.dosis,
                 req.body.cant_dias,
-                req.body.frequencia_horas,
+                req.body.frecuencia_horas,
                 req.body.cant_unidades,
                 req.body.notas_adicionales
             ];
@@ -83,20 +83,22 @@ const recetasRouter = (pool) => {
             const idcita = req.params.idcita;
 
             const connection = await pool.getConnection();
-
+            console.log("Esto es id Cita "+ idcita);
+            
             for (const recetaUnica of recetasLista) {
-                const { nombre_medicamento, dosis, cant_dias, frequencia_horas, cant_unidades, notas_adicionales } = recetaUnica;
+                const { nombre_medicamento, dosis, cant_dias, frecuencia_horas, cant_unidades, notas_adicionales } = recetaUnica;
                 const q =
-                    "INSERT INTO `recetas` (`idcita`, `nombre_medicamento`, `dosis`, `cant_dias`, `frequencia_horas`, `cant_unidades`, `notas_adicionales`)  VALUES (?)";
+                    "INSERT INTO `recetas` (`idcita`, `nombre_medicamento`, `dosis`, `cant_dias`, `frecuencia_horas`, `cant_unidades`, `notas_adicionales`)  VALUES (?)";
                 const values = [
                     idcita,
                     nombre_medicamento,
                     dosis,
                     cant_dias,
-                    frequencia_horas,
+                    frecuencia_horas,
                     cant_unidades,
                     notas_adicionales
                 ];
+                
                 await connection.query(q, [values]);
             }
 
@@ -156,18 +158,18 @@ const recetasRouter = (pool) => {
                 nombre_medicamento,
                 dosis,
                 cant_dias,
-                frequencia_horas,
+                frecuencia_horas,
                 cant_unidades,
                 notas_adicionales
             } = req.body;
             const q =
-                "UPDATE recetas SET idcita = ?, nombre_medicamento = ?, dosis = ?, cant_dias = ?, frequencia_horas = ?, cant_unidades = ?, notas_adicionales = ? WHERE idreceta = ?";
+                "UPDATE recetas SET idcita = ?, nombre_medicamento = ?, dosis = ?, cant_dias = ?, frecuencia_horas = ?, cant_unidades = ?, notas_adicionales = ? WHERE idreceta = ?";
             const values = [
                 idcita,
                 nombre_medicamento,
                 dosis,
                 cant_dias,
-                frequencia_horas,
+                frecuencia_horas,
                 cant_unidades,
                 notas_adicionales,
                 id
@@ -198,7 +200,7 @@ const recetasRouter = (pool) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-
+g
     //Delete a receta by id
     router.delete("/:id", async (req, res) => {
         try {
