@@ -63,7 +63,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         onChange={(e) => handleDataChange(e, 'duracion')}
                     />
                 </div>
-                <div className='d-flex col-md-1 align-items-center'>
+                <div className='d-flex col-md-1 align-items-center mobile-align'>
                     {onDelete && (
                         <button onClick={onDelete} className="delete-button">
                             <FontAwesomeIcon icon={faTrash} />

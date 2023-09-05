@@ -356,6 +356,14 @@
     input {
         max-width: 100%;
     }
+
+    .mobile-align {
+        justify-content: center;
+    }
+
+    .mobile-align > * {
+        margin-top: 5px;
+    }
 }
 
 @media (max-width: 576px) {
