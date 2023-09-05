@@ -53,6 +53,9 @@ export const postRecetasByCita = async (idcita, recetasLista) => {
     try {
         console.log("In Service postRecetasByCita. Idcita: ", idcita)
         const res = await axios.post(`${API_URL}/recetas/cita/${idcita}`, recetasLista);
+        console.log(idcita);
+        console.log(recetasLista);
+
         return res.data;
     } catch (error) {
         console.log('Error posting receta:', error);

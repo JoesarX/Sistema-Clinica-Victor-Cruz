@@ -25,7 +25,7 @@ const expedientesRouter = (pool) => {
             const connection = await pool.getConnection();
             const email = req.params.correo;
             const sqlSelect = "select E.* from Expedientes E left join Usuarios U on E.correo = U.correouser where E.correo = ?"
-            const [rows, fields] = await connection.query(sqlSelect,email);
+            const [rows, fields] = await connection.query(sqlSelect, email);
             connection.release();
             res.json(rows);
             console.log("Get User Expedientes call successful");
@@ -40,7 +40,7 @@ const expedientesRouter = (pool) => {
             const correo = req.params.correo;
             const connection = await pool.getConnection();
             const q = `
-            SELECT idpaciente, nombre 
+            SELECT idpaciente, nombre, edad
             FROM expedientes 
             WHERE correo = ?
           `;
@@ -48,7 +48,8 @@ const expedientesRouter = (pool) => {
             const data = rows.map(row => {
                 return {
                     idPaciente: row.idpaciente,
-                    nombre: row.nombre
+                    nombre: row.nombre,
+                    edad: row.edad
                 }
             })
             connection.release();
@@ -125,7 +126,7 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
 
-            const sqlSelect = "SELECT * from citas WHERE idpaciente = " + req.params.id;
+            const sqlSelect = "SELECT * from citas as c WHERE idpaciente = " + req.params.id + " ORDER BY c.fecha, c.hora";
 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
