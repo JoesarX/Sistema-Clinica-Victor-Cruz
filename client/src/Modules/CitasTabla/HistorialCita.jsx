@@ -9,48 +9,63 @@ import CitasService from '../../Services/CitasService';
 
 import swal from 'sweetalert';
 
-function MedicamentoRow({ onDelete }) {
+
+
+function MedicamentoRow({ data, onDelete, onUpdate }) {
+    const handleDataChange = (e, field) => {
+        const updatedData = { ...data, [field]: e.target.value };
+        onUpdate(updatedData);
+    };
+
     return (
-        <div className='Mediv'>
+        <div className="Mediv">
             <div className="row mb-3">
                 <div className="col-md-3">
-                    <h6 className='headers'>Medicamento</h6>
+                    <h6 className="headers">Medicamento</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Medicamento"
+                        value={data.medicamento}
+                        onChange={(e) => handleDataChange(e, 'medicamento')}
                     />
                 </div>
                 <div className="col-md-2">
-                    <h6 className='headers'>Cantidad</h6>
+                    <h6 className="headers">Cantidad</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Cantidad"
+                        value={data.cantidad}
+                        onChange={(e) => handleDataChange(e, 'cantidad')}
                     />
                 </div>
                 <div className="col-md-3">
-                    <h6 className='headers'>Frecuencia</h6>
+                    <h6 className="headers">Frecuencia</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Frecuencia"
+                        value={data.frecuencia}
+                        onChange={(e) => handleDataChange(e, 'frecuencia')}
                     />
                 </div>
                 <div className="col-md-3">
-                    <h6 className='headers'>Duración</h6>
+                    <h6 className="headers">Duración</h6>
                     <input
                         className="input-bg"
                         type="text"
                         placeholder="Duración"
+                        value={data.duracion}
+                        onChange={(e) => handleDataChange(e, 'duracion')}
                     />
                 </div>
-                <div className="col-md-1 d-flex justify-content-center">
-                    {onDelete && (
-                        <button onClick={onDelete} className="delete-button">
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    )}
+                <div className='col-md-1'>
+                {onDelete && (
+                    <button onClick={onDelete} className="delete-button">
+                        <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                )}
                 </div>
             </div>
         </div>
@@ -63,11 +78,22 @@ function HistorialCita() {
     const [showIncapacity, setShowIncapacity] = useState(false);
     const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
+
     const [peso, setNewPeso] = useState(null);
     const [altura, setNewAltura] = useState(null);
     const [temp, setNewTemp] = useState(null);
     const [ritmo, setNewRitmo] = useState(null);
     const [presion, setNewPresion] = useState(null);
+    const [Diagnostico, setDiagnostico] = useState(null);
+    const [Estudios, setEstudios] = useState(null);
+    const [Procedimientos, setProcedimientos] = useState(null);
+    const [Instrucciones, setInstrucciones] = useState(null);
+    const [MedicamentosActuales, setMedicamentosActuales] = useState(null);
+
+    const [Tipo_Incapacidad, setTipo_Incapacidad] = useState(null);
+    const [FechaInicial, setFechaInicial] = useState(null);
+    const [Dias, setDias] = useState(null);
+    const [Comentarios, setComentarios] = useState(null);
 
     useEffect(() => {
         const fetchPaciente = async () => {
@@ -93,6 +119,18 @@ function HistorialCita() {
             paciente.temperatura = temp;
             paciente.ritmo_cardiaco = ritmo;
             paciente.presion = presion;
+            paciente.Diagnostico = Diagnostico;
+            paciente.Estudios = Estudios;
+            paciente.Procedimientos = Procedimientos;
+            paciente.Instrucciones = Instrucciones;
+            paciente.MedicamentosActuales = MedicamentosActuales;
+            paciente.Tipo_Incapacidad = Tipo_Incapacidad;
+            paciente.FechaInicial = FechaInicial;
+            paciente.Dias = Dias;
+            paciente.Comentarios = Comentarios;
+            // aqui agrego los medicamentos ????????????/
+            // paciente.Medicamentos = medicamentosData;
+
             await CitasService.editCitas(id, paciente);
             swal("Cita Editada", {
                 icon: "success",
@@ -104,28 +142,44 @@ function HistorialCita() {
     };
     /////////////////////////////////////////////////////////////////////
     //Este es el componente de Medicamento para agregar uno mas a la row 
-    const [medicamentos, setMedicamentos] = useState([
-        { id: 0, component: <MedicamentoRow onDelete={() => deleteMedicamento(0)} /> }
+    const [medicamentosData, setMedicamentosData] = useState([
+        {
+            id: 0,
+            medicamento: "",
+            cantidad: 0,
+            frecuencia: "",
+            duracion: "",
+        },
     ]);
 
     const addMedicamentoRow = () => {
-        const newMedicamentoId = medicamentos.length;
-        setMedicamentos(prevMedicamentos => [
-            ...prevMedicamentos,
+        const newMedicamentoId = medicamentosData.length;
+        setMedicamentosData((prevData) => [
+            ...prevData,
             {
                 id: newMedicamentoId,
-                component: <MedicamentoRow onDelete={() => deleteMedicamento(newMedicamentoId)} />
-            }
+                medicamento: "",
+                cantidad: 0,
+                frecuencia: "",
+                duracion: "",
+            },
         ]);
     };
 
     const deleteMedicamento = (id) => {
-        setMedicamentos(prevMedicamentos => prevMedicamentos.filter(medicamento => medicamento.id !== id));
+        setMedicamentosData((prevData) => prevData.filter((medicamento) => medicamento.id !== id));
     };
+    const updateMedicamentoData = (updatedData, rowId) => {
+        setMedicamentosData((prevData) =>
+            prevData.map((medicamento) => (medicamento.id === rowId ? updatedData : medicamento))
+        );
+    };
+
 
     const formatDate = (date) => {
         var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return new Date(date).toLocaleDateString("es-HN", datePrefs);
+
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -196,8 +250,8 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    value={paciente && paciente.altura}
-                                    placeholder="Altura"
+                                    // value={paciente && paciente.altura}
+                                    placeholder={paciente && paciente.altura}
                                     onChange={(e) => setNewAltura(e.target.value)}
                                 />
                             </div>
@@ -206,8 +260,8 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    value={paciente && paciente.peso}
-                                    placeholder="Peso"
+                                    //value={paciente && paciente.peso}
+                                    placeholder={paciente && paciente.peso}
                                     onChange={(e) => setNewPeso(e.target.value)}
                                 />
                             </div>
@@ -216,8 +270,9 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    value={paciente && paciente.temperatura}
-                                    placeholder="Temperatura"
+                                    // value={paciente && paciente.temperatura}
+
+                                    placeholder={paciente && paciente.temperatura}
                                     onChange={(e) => setNewTemp(e.target.value)}
                                 />
                             </div>
@@ -226,8 +281,8 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    value={paciente && paciente.ritmo_cardiaco}
-                                    placeholder="Ritmo Cardíaco"
+                                    //value={paciente && paciente.ritmo_cardiaco}
+                                    placeholder={paciente && paciente.ritmo_cardiaco}
                                     onChange={(e) => setNewRitmo(e.target.value)}
                                 />
                             </div>
@@ -236,8 +291,8 @@ function HistorialCita() {
                                 <input
                                     className="input-bg"
                                     type="text"
-                                    value={paciente && paciente.presion}
-                                    placeholder="Presión Arterial"
+                                    //  value={paciente && paciente.presion}
+                                    placeholder={paciente && paciente.presion}
                                     onChange={(e) => setNewPresion(e.target.value)}
                                 />
                             </div>
@@ -256,6 +311,7 @@ function HistorialCita() {
                                         className="input-bg"
                                         type="text"
                                         placeholder="Nombre o Código"
+                                        onChange={(e) => setDiagnostico(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -266,6 +322,7 @@ function HistorialCita() {
                                         className="input-bg"
                                         type="text"
                                         placeholder="Estudios de Laboratorio e Imagenología"
+                                        onChange={(e) => setEstudios(e.target.value)}
                                     />
                                 </div>
                             </div>
@@ -278,29 +335,27 @@ function HistorialCita() {
                                         className="input-bg"
                                         type="text"
                                         placeholder="Procedimientos"
+                                        onChange={(e) => setProcedimientos(e.target.value)}
                                     />
                                 </div>
                             </div>
                         </div>
                         <h4 className='headers'>Receta de Medicamentos</h4>
                         <div className='contenedor'>
-                            <div className="row mb-3">
-                                <div className="col-md-3">
-                                    <input
-                                        className="input-bg"
-                                        type="text"
-                                        placeholder="Buscar Medicamentos"
-                                    />
-                                </div>
-                            </div>
+
 
                             {/* Visualizacion de medicamentos */}
-                            <div>
-                                {medicamentos.map(({ id, component }) => (
-                                    <div key={id}>{component}</div>
-                                ))}
-                                <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
-                            </div>
+                            {medicamentosData.map((rowData) => (
+                                <div key={rowData.id}>
+                                    <MedicamentoRow
+                                        data={rowData}
+                                        onDelete={() => deleteMedicamento(rowData.id)}
+                                        onUpdate={(updatedData) => updateMedicamentoData(updatedData, rowData.id)}
+                                    />
+                                </div>
+                            ))}
+                            <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
+
                             {/* ///////////////////////////// */}
                         </div>
                         <div className="row mb-3">
@@ -311,6 +366,7 @@ function HistorialCita() {
                                         className="form-control input-bg"
                                         rows="5"
                                         placeholder="Escriba aquí"
+                                        onChange={(e) => setInstrucciones(e.target.value)}
                                     ></textarea>
                                 </div>
                             </div>
@@ -320,6 +376,7 @@ function HistorialCita() {
                                     className="form-control input-bg"
                                     rows="5"
                                     placeholder="Escriba aquí"
+                                    onChange={(e) => setMedicamentosActuales(e.target.value)}
                                 ></textarea>
                             </div>
                         </div>
@@ -343,37 +400,36 @@ function HistorialCita() {
                         <div class='contenedor'>
                             <h4 class='headers'>Tipo</h4>
                             <div className="btn-group my-2" role="group">
-                                <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off" />
+                                <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off"
+                                    onChange={(e) => setTipo_Incapacidad("Laboral")} />
                                 <label className="btn btn-outline-dark" htmlFor="laboral">Laboral</label>
 
-                                <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off" />
+                                <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off"
+                                    onChange={(e) => setTipo_Incapacidad("Deportiva")} />
                                 <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
 
-                                <input type="radio" className="btn-check" name="btnradio" id="transporte" autoComplete="off" />
-                                <label className="btn btn-outline-dark" htmlFor="transporte">Transporte</label>
-
-                                <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off" />
+                                <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off"
+                                    onChange={(e) => setTipo_Incapacidad("Otra")} />
                                 <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
                             </div>
 
                             <div class="row mb-3">
                                 <div class="form-group col-md-6">
                                     <label htmlFor="fechaInicial" class="form-label">Fecha Inicial</label>
-                                    <input type="date" class="form-control" id="fechaInicial" />
+                                    <input type="date" class="form-control" id="fechaInicial" onChange={(e) => setFechaInicial(e.target.value)} />
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label htmlFor="diasDescanso" class="form-label">Días de Descanso</label>
-                                    <select class="form-select" id="diasDescanso">
-                                        <option value="1">1 día</option>
-                                        <option value="2">2 días</option>
-                                        <option value="3">3 días</option>
-                                    </select>
+                                    <input class="input-bg" id="diasDescanso"
+                                        type="number"
+                                        placeholder="Días"
+                                        onChange={(e) => setDias(e.target.value)} />
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="form-group col-md-12">
                                     <label htmlFor="comentarios" class="form-label">Comentarios</label>
-                                    <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"></textarea>
+                                    <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí" onChange={(e) => setComentarios(e.target.value)}></textarea>
                                 </div>
                             </div>
                         </div>

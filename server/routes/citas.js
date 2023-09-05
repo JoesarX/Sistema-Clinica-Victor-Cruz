@@ -283,11 +283,21 @@ const citasRouter = (pool, transporter) => {
                 peso,
                 temperatura,
                 ritmo_cardiaco,
-                presion
+                presion,
+                Diagnostico,
+                Estudios,
+                Procedimientos,
+                Instrucciones,
+                MedicamentosActuales,
+                Tipo_Incapacidad,
+                FechaInicial,
+                Dias,
+                Comentarios
+                
             } = req.body;
 
             const q =
-                "UPDATE citas SET nombre_persona = ?, estado = ?, idpaciente = ?, correouser = ?, fecha = ?, hora = ?, altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ? WHERE idcita = ?";
+                "UPDATE citas SET nombre_persona = ?, estado = ?, idpaciente = ?, correouser = ?, fecha = ?, hora = ?, altura = ?, peso = ?, temperatura = ?, ritmo_cardiaco = ?, presion = ?,Diagnostico = ?, Estudios = ?, Procedimientos = ?, Instrucciones = ?, MedicamentosActuales = ?, Tipo_Incapacidad = ?, FechaInicial = ?, Dias = ?, Comentarios = ? WHERE idcita = ?";
 
             const values = [
                 nombre_persona,
@@ -300,8 +310,18 @@ const citasRouter = (pool, transporter) => {
                 peso,
                 temperatura,
                 ritmo_cardiaco,
-                presion,
+                presion, Diagnostico,
+                Estudios,
+                Procedimientos,
+                Instrucciones,
+                MedicamentosActuales,
+                Tipo_Incapacidad,
+                FechaInicial,
+                Dias,
+                Comentarios,
                 id
+
+                
             ];
 
             await connection.query(q, values);
