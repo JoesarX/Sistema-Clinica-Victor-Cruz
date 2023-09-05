@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+const API_URL = 'http://localhost:8000';
+//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 //============================================== G E T S ==================================================================
 export const getAllRecetas = async () => {
@@ -53,6 +53,9 @@ export const postRecetasByCita = async (idcita, recetasLista) => {
     try {
         console.log("In Service postRecetasByCita. Idcita: ", idcita)
         const res = await axios.post(`${API_URL}/recetas/cita/${idcita}`, recetasLista);
+        console.log(idcita);
+        console.log(recetasLista);
+
         return res.data;
     } catch (error) {
         console.log('Error posting receta:', error);

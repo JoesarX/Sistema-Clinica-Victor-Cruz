@@ -6,10 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import './HistorialCita.css';
 import CitasService from '../../Services/CitasService';
-
+import Services from '../../Services/RecetasService';
 import swal from 'sweetalert';
-
-
+import { useNavigate } from 'react-router-dom';
 
 function MedicamentoRow({ data, onDelete, onUpdate }) {
     const handleDataChange = (e, field) => {
@@ -61,11 +60,11 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                     />
                 </div>
                 <div className='col-md-1'>
-                {onDelete && (
-                    <button onClick={onDelete} className="delete-button">
-                        <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                )}
+                    {onDelete && (
+                        <button onClick={onDelete} className="delete-button">
+                            <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
@@ -74,7 +73,8 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
 ////////////////////////////////////////////////////////////////////////////
 
 function HistorialCita() {
-
+const navigate = useNavigate();
+    
     const [showIncapacity, setShowIncapacity] = useState(false);
     const { id } = useParams();
     const [paciente, setPaciente] = useState(null);
@@ -95,10 +95,14 @@ function HistorialCita() {
     const [Dias, setDias] = useState(null);
     const [Comentarios, setComentarios] = useState(null);
 
+   
+
+
     useEffect(() => {
         const fetchPaciente = async () => {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
+
                 setPaciente(response);
                 console.log("RESPONSE:", response);
             } catch (error) {
@@ -111,6 +115,48 @@ function HistorialCita() {
     // useEffect(() => {
     //     console.log(paciente); // Log paciente when it changes
     // }, [paciente]);
+    
+        
+    const validacionesSignos = () => {
+        if (paciente.altura > 280) {
+            swal({
+                title: "Error al ingresar datos",
+                text: "La altura ingresada no es válida",
+                icon: "error"
+            });
+            return false;
+        }
+        if (paciente.peso > 250) {
+            swal({
+                title: "Error al ingresar datos",
+                text: "El peso ingresado no es válido",
+                icon: "error"
+            });
+            return false;
+        }
+        if (paciente.temperatura > 50 || paciente.temperatura < 31.2) {
+            swal({
+                title: "Error al ingresar datos",
+                text: "La temperatura ingresada no es válida",
+                icon: "error"
+            });
+            return false;
+        }
+
+        const regexFinal = /\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
+
+        if (!regexFinal.test(paciente.presion)) {
+            swal({
+                title: "Error al ingresar datos",
+                text: "El ritmo cardíaco no es válido",
+                icon: "error"
+            });
+            return false;
+        }
+        if (paciente.presion)
+            return true;
+
+    }
 
     const submitEdit = async () => {
         try {
@@ -128,15 +174,40 @@ function HistorialCita() {
             paciente.FechaInicial = FechaInicial;
             paciente.Dias = Dias;
             paciente.Comentarios = Comentarios;
-            // aqui agrego los medicamentos ????????????/
-            // paciente.Medicamentos = medicamentosData;
 
-            await CitasService.editCitas(id, paciente);
-            swal("Cita Editada", {
-                icon: "success",
-            });
+            const recetas = medicamentosData.map((medicamento) => ({
+				nombre_medicamento : medicamento.medicamento,
+				cant_unidades : medicamento.cantidad,
+				frecuencia_horas : medicamento.frecuencia,
+				cant_dias : medicamento.duracion,
+			}));
+
+            // aqui agrego los medicamentos ????????????/
+
+            console.log(recetas);
+
+            const listaRecetas = {
+				recetasLista: recetas,
+			}
+            console.log(listaRecetas);
+            if(validacionesSignos()){
+                await CitasService.editCitas(id, paciente);
+                let idcita= id;
+               await Services.postRecetasByCita(idcita,listaRecetas);
+                swal("Cita Editada", {
+                    icon: "success",
+                });
+
+                navigate("/citas_tabla");
+            }
+            
+             
+           
+            
+           
             // window.location.reload();
         } catch (error) {
+            
             console.log('Error submitting servicio:', error);
         }
     };
@@ -146,7 +217,7 @@ function HistorialCita() {
         {
             id: 0,
             medicamento: "",
-            cantidad: 0,
+            cantidad: "",
             frecuencia: "",
             duracion: "",
         },
@@ -159,7 +230,7 @@ function HistorialCita() {
             {
                 id: newMedicamentoId,
                 medicamento: "",
-                cantidad: 0,
+                cantidad: "",
                 frecuencia: "",
                 duracion: "",
             },

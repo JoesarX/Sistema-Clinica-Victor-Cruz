@@ -83,7 +83,8 @@ const recetasRouter = (pool) => {
             const idcita = req.params.idcita;
 
             const connection = await pool.getConnection();
-
+            console.log("Esto es id Cita "+ idcita);
+            
             for (const recetaUnica of recetasLista) {
                 const { nombre_medicamento, dosis, cant_dias, frecuencia_horas, cant_unidades, notas_adicionales } = recetaUnica;
                 const q =
@@ -97,6 +98,7 @@ const recetasRouter = (pool) => {
                     cant_unidades,
                     notas_adicionales
                 ];
+                
                 await connection.query(q, [values]);
             }
 
