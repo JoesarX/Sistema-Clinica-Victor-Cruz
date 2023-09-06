@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 
 import RecetasService from '../../Services/RecetasService';
-
+import Services from '../../Services/PreciosService';
 const PrescriptionManagement = () => {
     const [recetas, setRecetas] = useState([]);
     const citaId = 504; // Replace with the desired cita_id
@@ -19,7 +19,7 @@ const PrescriptionManagement = () => {
     };
 
     const postRecetasByCita = async () => {
-        const listaRecetas = {
+      /*  const listaRecetas = {
             recetasLista: [
                 {
                     "nombre_medicamento": "Prueba en vivo 1",
@@ -54,11 +54,21 @@ const PrescriptionManagement = () => {
             await getRecetasByCita()
         } catch (error) {
             console.error('Error creating prescriptions:', error);
-        }
+        }*/
+        const precioValue =  {
+            
+                nombre_servicio : "Examen oral",
+                precio : 500
+            
+        };
+        
+
+        await  Services.postPrecios(precioValue);
+
     };
 
     const editRecetasByCita = async () => {
-        const updatedRecetas = {
+       /* const updatedRecetas = {
             recetasLista: [
                 {
                     "idreceta": recetas[0].idreceta, 
@@ -96,17 +106,30 @@ const PrescriptionManagement = () => {
             await getRecetasByCita();
         } catch (error) {
             console.error('Error updating prescriptions:', error);
-        }
+        }*/
+
+        const precioValue =  {
+            id : 134,
+            nombre_servicio : "Examen bucal",
+            precio : 500
+        
+    };
+    
+
+    await Services.editPrecios(precioValue);
+
     };
 
     const deleteRecetasByCita = async () => {
-        try {
+       /* try {
             await RecetasService.deleteRecetasByCita(citaId);
             console.log('Prescriptions deleted successfully.');
             setRecetas([]);
         } catch (error) {
             console.error('Error deleting prescriptions:', error);
-        }
+        }*/
+
+        await Services.deletePrecios(164);
     };
 
     useEffect(() => {
