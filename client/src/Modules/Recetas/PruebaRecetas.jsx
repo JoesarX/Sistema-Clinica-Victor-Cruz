@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 
 import RecetasService from '../../Services/RecetasService';
+import FacturasService from '../../Services/FacturasService';
 import Services from '../../Services/PreciosService';
 const PrescriptionManagement = () => {
     const [recetas, setRecetas] = useState([]);
@@ -19,117 +20,133 @@ const PrescriptionManagement = () => {
     };
 
     const postRecetasByCita = async () => {
-      /*  const listaRecetas = {
-            recetasLista: [
-                {
-                    "nombre_medicamento": "Prueba en vivo 1",
-                    "dosis": "uwu",
-                    "cant_dias": 11,
-                    "frequencia_horas": 1,
-                    "cant_unidades": null,
-                    "notas_adicionales": "ogo"
-                },
-                {
-                    "nombre_medicamento": "Prueba en vivo 2",
-                    "dosis": "uwu",
-                    "cant_dias": 11,
-                    "frequencia_horas": 1,
-                    "cant_unidades": null,
-                    "notas_adicionales": "ogo"
-                },
-                {
-                    "nombre_medicamento": "Prueba en vivo 3",
-                    "dosis": "uwu",
-                    "cant_dias": 11,
-                    "frequencia_horas": 1,
-                    "cant_unidades": null,
-                    "notas_adicionales": "ogo"
-                },
-            ]
-        }
-
-        try {
-            console.log("Post recetas. citaId: ", citaId, "newRecetas: ", listaRecetas)
-            await RecetasService.postRecetasByCita(citaId, listaRecetas);
-            await getRecetasByCita()
-        } catch (error) {
-            console.error('Error creating prescriptions:', error);
-        }*/
-        const precioValue =  {
-            
-                nombre_servicio : "Examen oral",
-                precio : 500
-            
+        /*  const listaRecetas = {
+              recetasLista: [
+                  {
+                      "nombre_medicamento": "Prueba en vivo 1",
+                      "dosis": "uwu",
+                      "cant_dias": 11,
+                      "frequencia_horas": 1,
+                      "cant_unidades": null,
+                      "notas_adicionales": "ogo"
+                  },
+                  {
+                      "nombre_medicamento": "Prueba en vivo 2",
+                      "dosis": "uwu",
+                      "cant_dias": 11,
+                      "frequencia_horas": 1,
+                      "cant_unidades": null,
+                      "notas_adicionales": "ogo"
+                  },
+                  {
+                      "nombre_medicamento": "Prueba en vivo 3",
+                      "dosis": "uwu",
+                      "cant_dias": 11,
+                      "frequencia_horas": 1,
+                      "cant_unidades": null,
+                      "notas_adicionales": "ogo"
+                  },
+              ]
+          }
+  
+          try {
+              console.log("Post recetas. citaId: ", citaId, "newRecetas: ", listaRecetas)
+              await RecetasService.postRecetasByCita(citaId, listaRecetas);
+              await getRecetasByCita()
+          } catch (error) {
+              console.error('Error creating prescriptions:', error);
+          }*/
+        // const precioValue =  {
+        //         nombre_servicio : "Examen oral",
+        //         precio : 500
+        // };
+        // await  Services.postPrecios(precioValue);
+        const factura = {
+            nombre_paciente: "Juan",
+            isPagada: 0,
+            idCita: 1884,
+            total: 500,
         };
-        
-
-        await  Services.postPrecios(precioValue);
+        await FacturasService.postFactura(factura);
 
     };
 
     const editRecetasByCita = async () => {
-       /* const updatedRecetas = {
-            recetasLista: [
-                {
-                    "idreceta": recetas[0].idreceta, 
-                    "nombre_medicamento": "Prueba en vivo 1 Editada",
-                    "dosis": "uwu",
-                    "cant_dias": 11,
-                    "frequencia_horas": 1,
-                    "cant_unidades": null,
-                    "notas_adicionales": "ogo"
-                },
-                {
-                    "idreceta": recetas[1].idreceta,
-                    "nombre_medicamento": "Prueba en vivo 2",
-                    "dosis": "uwu",
-                    "cant_dias": 11,
-                    "frequencia_horas": 1,
-                    "cant_unidades": null,
-                    "notas_adicionales": "ogo"
-                },
-                {
-                    "idreceta": recetas[2].idreceta,
-                    "nombre_medicamento": "Prueba en vivo 3 Editada",
-                    "dosis": "uwu",
-                    "cant_dias": 11,
-                    "frequencia_horas": 1,
-                    "cant_unidades": null,
-                    "notas_adicionales": "ogo"
-                },
-            ]
-        }
+        /* const updatedRecetas = {
+             recetasLista: [
+                 {
+                     "idreceta": recetas[0].idreceta, 
+                     "nombre_medicamento": "Prueba en vivo 1 Editada",
+                     "dosis": "uwu",
+                     "cant_dias": 11,
+                     "frequencia_horas": 1,
+                     "cant_unidades": null,
+                     "notas_adicionales": "ogo"
+                 },
+                 {
+                     "idreceta": recetas[1].idreceta,
+                     "nombre_medicamento": "Prueba en vivo 2",
+                     "dosis": "uwu",
+                     "cant_dias": 11,
+                     "frequencia_horas": 1,
+                     "cant_unidades": null,
+                     "notas_adicionales": "ogo"
+                 },
+                 {
+                     "idreceta": recetas[2].idreceta,
+                     "nombre_medicamento": "Prueba en vivo 3 Editada",
+                     "dosis": "uwu",
+                     "cant_dias": 11,
+                     "frequencia_horas": 1,
+                     "cant_unidades": null,
+                     "notas_adicionales": "ogo"
+                 },
+             ]
+         }
+ 
+         try {
+             await RecetasService.editRecetasByCita(citaId, updatedRecetas);
+             console.log('Prescriptions updated successfully.');
+             await getRecetasByCita();
+         } catch (error) {
+             console.error('Error updating prescriptions:', error);
+         }*/
 
-        try {
-            await RecetasService.editRecetasByCita(citaId, updatedRecetas);
-            console.log('Prescriptions updated successfully.');
-            await getRecetasByCita();
-        } catch (error) {
-            console.error('Error updating prescriptions:', error);
-        }*/
+        // const precioValue = {
+        //     id: 134,
+        //     nombre_servicio: "Examen bucal",
+        //     precio: 500
 
-        const precioValue =  {
-            id : 134,
-            nombre_servicio : "Examen bucal",
-            precio : 500
+        // };
+
+
+        // await Services.editPrecios(precioValue);
+
+
+        const factura = {
+            nombre_paciente: "Juan Editado",
+            isPagada: 1,
+            total: 999,
+        };
+
+
+        await FacturasService.editFacturaByCita(1884,factura);
         
-    };
-    
-
-    await Services.editPrecios(precioValue);
 
     };
 
     const deleteRecetasByCita = async () => {
-       /* try {
-            await RecetasService.deleteRecetasByCita(citaId);
-            console.log('Prescriptions deleted successfully.');
-            setRecetas([]);
-        } catch (error) {
-            console.error('Error deleting prescriptions:', error);
-        }*/
+        /* try {
+             await RecetasService.deleteRecetasByCita(citaId);
+             console.log('Prescriptions deleted successfully.');
+             setRecetas([]);
+         } catch (error) {
+             console.error('Error deleting prescriptions:', error);
+         }*/
 
-        await Services.deletePrecios(164);
+        // await Services.deletePrecios(164);
+
+        await FacturasService.deleteFacturaByCita(1884);
     };
 
     useEffect(() => {
