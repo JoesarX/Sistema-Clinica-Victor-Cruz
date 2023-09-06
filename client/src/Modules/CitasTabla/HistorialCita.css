@@ -123,7 +123,7 @@
     color: #737373;
 }
 
-.space-between-text {
+.space-between-text-appointment {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -365,7 +365,7 @@
     }
 
     /* Add your responsive styles here */
-    .infoGeneral {
+    .appointment-patient-information {
         flex-direction: column;
         justify-content: center;
         align-items: center;
