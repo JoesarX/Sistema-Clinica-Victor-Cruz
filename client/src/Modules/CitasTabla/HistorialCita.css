@@ -243,7 +243,11 @@
 }
 
 /* Falta responsiveness de estos css */
+<<<<<<< Updated upstream
 /* ya estan gay -pedro */
+=======
+/* Default styles for .contenedor, .delete-button, .appointment-history-end-button, .appointment-details-container */
+>>>>>>> Stashed changes
 .contenedor {
     background-color: #fff;
     padding: 10px;
@@ -270,7 +274,7 @@
 }
 
 .appointment-history-end-button:hover {
-    background-color: #3f79ee
+    background-color: #3f79ee;
 }
 
 .appointment-details-container {
@@ -280,10 +284,99 @@
     gap: 20px;
 }
 
+<<<<<<< Updated upstream
 /* /////////////////////////////// */
 
 @media only screen and (max-width: 950px) {
     .appointment-patient-information {
+=======
+/* Responsive styles for screens between 820px and 950px */
+@media only screen and (min-width: 820px) and (max-width: 950px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
+    .space-between-text {
+        flex-direction: column;
+        justify-content: left;
+        align-items: flex-start;
+    }
+}
+
+/* Responsive styles for screens up to 600px width */
+@media only screen and (max-width: 600px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
+    .infoGeneral {
+>>>>>>> Stashed changes
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -294,8 +387,13 @@
         padding-bottom: 20px;
     }
 
+<<<<<<< Updated upstream
     .space-between-text {
         /* text-align: center;
+=======
+    .infoGeneral > * {
+        text-align: center;
+>>>>>>> Stashed changes
         justify-content: center;
         align-items: center; */
         width: 100%;
@@ -313,10 +411,47 @@
     .appointment-reason-container {
         height: 100%;
     }
-
 }
 
+/* Responsive styles for screens with max height of 768px */
 @media only screen and (max-height: 768px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
     .patient-section {
         gap: 10px;
         height: 92%;
@@ -341,10 +476,47 @@
     .patient-info-vert-align {
         gap: 0px;
     }
-
 }
 
+/* Responsive styles for screens up to 768px width */
 @media (max-width: 768px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
     .img-fluid {
         max-width: 150px;
     }
@@ -366,7 +538,45 @@
     }
 }
 
+/* Responsive styles for screens up to 576px width */
 @media (max-width: 576px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
     .img-fluid {
         max-width: 120px;
     }
