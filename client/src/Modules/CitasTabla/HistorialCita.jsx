@@ -1,5 +1,5 @@
 import { faTrash, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -176,8 +176,9 @@ function HistorialCita() {
             paciente.MedicamentosActuales = MedicamentosActuales;
             paciente.Tipo_Incapacidad = Tipo_Incapacidad;
             paciente.FechaInicial = FechaInicial;
-            paciente.Dias = Dias;
+            paciente.Dias = Dias + " " + TipoTiempo;
             paciente.Comentarios = Comentarios;
+            paciente.estado = "Terminada";
 
             const recetas = medicamentosData.map((medicamento) => ({
                 nombre_medicamento: medicamento.medicamento,
@@ -197,7 +198,12 @@ function HistorialCita() {
             if (validacionesSignos()) {
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
-                await Services.postRecetasByCita(idcita, listaRecetas);
+                if (recetas[0].nombre_medicamento === '') {
+                   
+                } else {
+                    await Services.postRecetasByCita(idcita, listaRecetas);
+                   
+                }
                 swal("Cita Editada", {
                     icon: "success",
                 });
