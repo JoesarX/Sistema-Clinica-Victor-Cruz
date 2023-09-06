@@ -1,10 +1,5 @@
-<<<<<<< Updated upstream
-import { faTrash, faPlus , faDownload} from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect } from 'react';
-=======
 import { faTrash, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect, useRef } from 'react';
->>>>>>> Stashed changes
+import { useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

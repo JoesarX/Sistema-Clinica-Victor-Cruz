@@ -243,11 +243,7 @@
 }
 
 /* Falta responsiveness de estos css */
-<<<<<<< Updated upstream
 /* ya estan gay -pedro */
-=======
-/* Default styles for .contenedor, .delete-button, .appointment-history-end-button, .appointment-details-container */
->>>>>>> Stashed changes
 .contenedor {
     background-color: #fff;
     padding: 10px;
@@ -284,12 +280,6 @@
     gap: 20px;
 }
 
-<<<<<<< Updated upstream
-/* /////////////////////////////// */
-
-@media only screen and (max-width: 950px) {
-    .appointment-patient-information {
-=======
 /* Responsive styles for screens between 820px and 950px */
 @media only screen and (min-width: 820px) and (max-width: 950px) {
     /* Default styles */
@@ -376,7 +366,6 @@
 
     /* Add your responsive styles here */
     .infoGeneral {
->>>>>>> Stashed changes
         flex-direction: column;
         justify-content: center;
         align-items: center;
@@ -387,15 +376,7 @@
         padding-bottom: 20px;
     }
 
-<<<<<<< Updated upstream
     .space-between-text {
-        /* text-align: center;
-=======
-    .infoGeneral > * {
-        text-align: center;
->>>>>>> Stashed changes
-        justify-content: center;
-        align-items: center; */
         width: 100%;
     }
 
