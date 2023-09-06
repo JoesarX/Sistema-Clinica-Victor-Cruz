@@ -1,5 +1,5 @@
-import { faTrash, faPlus , faDownload} from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect, useRef } from 'react';
+import { faTrash, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,9 +9,7 @@ import CitasService from '../../Services/CitasService';
 import Services from '../../Services/RecetasService';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
-import { PDFViewer, BlobProvider } from '@react-pdf/renderer';
 
-import ReactDOM from 'react-dom';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -65,7 +63,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         onChange={(e) => handleDataChange(e, 'duracion')}
                     />
                 </div>
-                <div className='col-md-1'>
+                <div className='d-flex col-md-1 align-items-center mobile-align'>
                     {onDelete && (
                         <button onClick={onDelete} className="delete-button">
                             <FontAwesomeIcon icon={faTrash} />
@@ -99,6 +97,7 @@ function HistorialCita() {
     const [Tipo_Incapacidad, setTipo_Incapacidad] = useState(null);
     const [FechaInicial, setFechaInicial] = useState(null);
     const [Dias, setDias] = useState(null);
+    const [TipoTiempo, setTipoTiempo] = useState(null);
     const [Comentarios, setComentarios] = useState(null);
 
 
@@ -108,7 +107,6 @@ function HistorialCita() {
         const fetchPaciente = async () => {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
-
                 setPaciente(response);
                 console.log("RESPONSE:", response);
             } catch (error) {
@@ -178,8 +176,9 @@ function HistorialCita() {
             paciente.MedicamentosActuales = MedicamentosActuales;
             paciente.Tipo_Incapacidad = Tipo_Incapacidad;
             paciente.FechaInicial = FechaInicial;
-            paciente.Dias = Dias;
+            paciente.Dias = Dias + " " + TipoTiempo;
             paciente.Comentarios = Comentarios;
+            paciente.estado = "Terminada";
 
             const recetas = medicamentosData.map((medicamento) => ({
                 nombre_medicamento: medicamento.medicamento,
@@ -199,7 +198,12 @@ function HistorialCita() {
             if (validacionesSignos()) {
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
-                await Services.postRecetasByCita(idcita, listaRecetas);
+                if (recetas[0].nombre_medicamento === '') {
+                   
+                } else {
+                    await Services.postRecetasByCita(idcita, listaRecetas);
+                   
+                }
                 swal("Cita Editada", {
                     icon: "success",
                 });
@@ -259,7 +263,13 @@ function HistorialCita() {
 
     }
 
-
+    function getCurrentDate() {
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Adding 1 to month as it's zero-based
+        const day = String(currentDate.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
     const generatePDF = (medicamentosData) => {
         const doc = new jsPDF();
@@ -336,7 +346,7 @@ function HistorialCita() {
         <div className='scrollable-page1'>
             <NavBar />
             <div className='main'>
-                <div className="infoGeneral">
+                <div className="appointment-patient-information">
                     <div className='profile-picture-and-edit'>
                         <div className='perfil'>
                             <FontAwesomeIcon icon={faUser} className='iconoUser' />
@@ -344,7 +354,7 @@ function HistorialCita() {
                     </div>
                     <div className='patient-info-vert-align'>
                         <div class='appointment-details-container'>
-                            <h2 className="nombre">
+                            <h2 className="appointment-history-nombre">
                                 {paciente && paciente.nombre}
                             </h2>
                             <div className='appointment-reason-container'>
@@ -551,7 +561,7 @@ function HistorialCita() {
                     </div>
                     {showIncapacity && (
                         <div class='contenedor'>
-                            <h4 class='headers'>Tipo</h4>
+                            <h4 class='headers'>Tipo de Incapacidad</h4>
                             <div className="btn-group my-2" role="group">
                                 <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off"
                                     onChange={(e) => setTipo_Incapacidad("Laboral")} />
@@ -561,22 +571,41 @@ function HistorialCita() {
                                     onChange={(e) => setTipo_Incapacidad("Deportiva")} />
                                 <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
 
+                                <input type="radio" className="btn-check" name="btnradio" id="academica" autoComplete="off"
+                                    onChange={(e) => setTipo_Incapacidad("Academica")} />
+                                <label className="btn btn-outline-dark" htmlFor="academica">Academica</label>
+
                                 <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off"
                                     onChange={(e) => setTipo_Incapacidad("Otra")} />
                                 <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
                             </div>
 
                             <div class="row mb-3">
-                                <div class="form-group col-md-6">
-                                    <label htmlFor="fechaInicial" class="form-label">Fecha Inicial</label>
-                                    <input type="date" class="form-control" id="fechaInicial" onChange={(e) => setFechaInicial(e.target.value)} />
+                                <div className="form-group col-md-6">
+                                    <label htmlFor="fechaInicial" className="form-label">Fecha Inicial</label>
+                                    <input
+                                        type="date"
+                                        className="form-control"
+                                        id="fechaInicial"
+                                        onChange={(e) => setFechaInicial(e.target.value)}
+                                        value={getCurrentDate()} // Set the default value to the current date
+                                    />
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label htmlFor="diasDescanso" class="form-label">Días de Descanso</label>
+
+                                <div class="form-group col-md-3">
+                                    <label htmlFor="diasDescanso" class="form-label">Cantidad</label>
                                     <input class="input-bg" id="diasDescanso"
                                         type="number"
-                                        placeholder="Días"
+                                        placeholder="1"
                                         onChange={(e) => setDias(e.target.value)} />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label htmlFor="tiempo" class="form-label">Tipo</label>
+                                    <select class="input-bg" id="tiempo" onChange={(e) => setTipoTiempo(e.target.value)}>
+                                        <option value="dias">Días</option>
+                                        <option value="semanas">Semanas</option>
+                                        <option value="meses">Meses</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="row mb-3">
