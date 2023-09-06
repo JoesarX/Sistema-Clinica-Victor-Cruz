@@ -199,10 +199,10 @@ function HistorialCita() {
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
                 if (recetas[0].nombre_medicamento === '') {
-                   
+
                 } else {
                     await Services.postRecetasByCita(idcita, listaRecetas);
-                   
+
                 }
                 swal("Cita Editada", {
                     icon: "success",
@@ -338,7 +338,10 @@ function HistorialCita() {
     const handleExportPDF = () => {
         generatePDF(medicamentosData);
     };
-
+    
+    const handleProfileClick = () => {
+        navigate(`/expedientes/dashboard/${paciente.idpaciente}`)
+    }
 
     ////////////////////////////////////////////////////////////////////////////
 
@@ -348,7 +351,7 @@ function HistorialCita() {
             <div className='main'>
                 <div className="appointment-patient-information">
                     <div className='profile-picture-and-edit'>
-                        <div className='perfil'>
+                        <div className='perfil' onClick={handleProfileClick}>
                             <FontAwesomeIcon icon={faUser} className='iconoUser' />
                         </div>
                     </div>
@@ -364,12 +367,12 @@ function HistorialCita() {
                                 {paciente && formatDate(paciente.fecha)}
                             </div>
                         </div>
-                        <div className='space-between-text'>
+                        <div className='space-between-text-appointment'>
                             <p className="smallText">
                                 {paciente && paciente.numid}
                             </p>
                         </div>
-                        <div className='space-between-text'>
+                        <div className='space-between-text-appointment'>
                             <p className="smallText">
                                 {paciente && formatDate(paciente.fecha_nacimiento)}
                             </p>
@@ -377,7 +380,7 @@ function HistorialCita() {
                                 {paciente && paciente.edad} años
                             </p>
                         </div>
-                        <div className='space-between-text'>
+                        <div className='space-between-text-appointment'>
                             <p className="smallText">
                                 {paciente && (paciente.sexo === "M") ? 'Masculino' : 'Femenino'}
                             </p>
