@@ -63,6 +63,7 @@ const Citas = () => {
     const [Expedientes, setExpedientes] = useState([]);
     const [Usuarios, setUsuarios] = useState([]);
 
+    const [idActual, setidActual] = useState(null);
     // const handleSelectedCitasClick = (id) => {
     //     setSelectedCitaId(id);
     //     setOpenPopup(true);
@@ -685,9 +686,7 @@ const Citas = () => {
         navigate(`/citas_tabla/historial_cita/${id}`);
     };
 
-    /*const handleClick = () => {
-        navigate('/citas_tabla/historial_cita/');
-    }*/
+
 
     const getActionButtons = (estado, id) => {
 
@@ -702,10 +701,13 @@ const Citas = () => {
         if (estado === 'En Progreso') {
             return (
                 <>
-                    
-                    <IconButton onClick={handleClick}>
+
+
+                    <IconButton onClick={() => handleClick(id)}>
                         <DescriptionIcon />
                     </IconButton>
+
+
                 </>
             )
         }
@@ -713,9 +715,12 @@ const Citas = () => {
         if (estado === 'Terminada') {
             return (
 
-                <IconButton onClick={handleClick}>
+
+                <IconButton onClick={() => handleClick(id)}>
                     <DescriptionIcon />
                 </IconButton>
+
+
             )
         }
     };
@@ -750,16 +755,21 @@ const Citas = () => {
                                     flex: 2,
                                     renderCell: (params) => (
                                         <>
+
                                             <IconButton onClick={() => toggleModal2(params.id)}>
                                                 <Edit />
                                             </IconButton>
                                             <IconButton onClick={() => handleDeleteCitasClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
-                                            {getActionButtons(params.row.estado)}
-                                            <IconButton onClick={() => handleFacturas( params.id)}>
+                                            <IconButton onClick={() => handleFacturas(params.id)}>
                                                 <ReceiptIcon />
                                             </IconButton>
+                                            
+
+
+
+                                            {getActionButtons(params.row.estado, params.id)}
                                         </>
                                     )
                                 },
