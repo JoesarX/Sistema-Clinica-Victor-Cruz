@@ -3,6 +3,57 @@
   border: #E4EBF9;
   background-color: #E4EBF9;
 }
+
+/* ////////////// */
+.modal-container-carrusel {
+  max-width: 100%;
+  width: 90%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-height: 100vh;
+  padding: 20px;
+  background-color: #E4EBF9;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.carrusel-list-item {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .modal-container-carrusel {
+    max-width: 768px;
+  }
+
+  .carrusel-list-item {
+    width: 48%; /* Adjust the width as needed */
+  }
+}
+
+@media (min-width: 992px) {
+  .carrusel-list-item {
+    width: 31%; /* Adjust the width as needed */
+  }
+}
+
+
+/* ////////////// */
+.customFileButton{
+  border-radius: 8px;
+  width: 50%;
+  font-size: 20px;
+  color: #FFF;
+  justify-content: center;
+  justify-items: center;
+  border: 0px;
+  height: 7%;
+  margin: 5%;
+}
+
 .custom-hr {
   border: none; 
   border-top: 1px solid #000000; 
@@ -13,7 +64,15 @@
 .dataListBox{
   width: 100%;
 }
+.textAF {
+  font-size: 1em; /* Adjust font size for smaller screens */
+}
 .carrusel-list-container{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
 }
 .carrusel-list {
@@ -56,7 +115,6 @@
 }
 .buttonEE {
   position: relative;
-  left: 30%;
   padding: 10px 20px;
   margin: 5px;
   border: none;
@@ -413,20 +471,10 @@
   width: 30%;
   height: 92%;
   max-width: 1600px;
-  overflow: hidden;
+  overflow-y: scroll;
 }
 
-.modal-container-carrusel {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-height: 100vh;
-  padding: 20px;
-  background-color: #E4EBF9;
-  border-radius: 10px;
-}
+
 
 .modified-crudGrid {
   background-color: rgb(227, 235, 248);
@@ -438,6 +486,9 @@
   border: none;
   flex-direction: column;
   
+}
+.textC {
+  font-size: 2em; /* Adjust font size for smaller screens */
 }
 
 .carrusel-crud-image-img {
@@ -461,7 +512,12 @@
     padding-bottom: 20px;
     gap: 40px;
   }
-
+  .textC {
+    font-size: 1.5em; /* Adjust font size for smaller screens */
+  }
+  .textAF {
+    font-size: 0.7em; /* Adjust font size for smaller screens */
+  }
   .service-container {
     display: flex;
     flex-direction: row;
@@ -511,7 +567,12 @@
     margin-top: 0px;
     flex-direction: column;
   }
-
+  .textAF {
+    font-size: 0.5em; /* Adjust font size for smaller screens */
+  }
+  .textC {
+    font-size: 1em; /* Adjust font size for smaller screens */
+  }
   .content-header.align-left {
     justify-content: center;
     text-align: center;
@@ -551,7 +612,12 @@
     margin-top: 20px;
     gap: 80px;
   }
-
+  .textC {
+    font-size: 1.5em; /* Adjust font size for smaller screens */
+  }
+  .textAF {
+    font-size: 0.4em; /* Adjust font size for smaller screens */
+  }
   .home-about-us-container {
     flex-direction: column;
     overflow-x: hidden;
@@ -595,6 +661,10 @@
   .content-header-banner {
     flex-direction: column;
     text-align: center;
+  }
+
+  .textC {
+    font-size: 1.2em; /* Adjust font size for smaller screens */
   }
 
   .content-header {
