@@ -4,13 +4,13 @@
     width: 100%;
 }
 
-.scrollable-page1 {
+.scrollable-pageee {
     background-color: #E4EBF9;
     overflow-y: auto;
     scroll-behavior: smooth;
 }
 
-.main {
+.maine {
     margin: 2%;
     background-color: #E4EBF9;
 }
