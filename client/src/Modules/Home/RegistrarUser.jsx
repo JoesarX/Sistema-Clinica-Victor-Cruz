@@ -10,6 +10,19 @@ import bcrypt from 'bcryptjs';
 import swal from 'sweetalert';
 
 const RegistrarUser = () => {
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+
+  const validateRetype = (password) => {
+    if (password === '' && confirmPassword === '') {
+      return false;
+    }
+    return password === confirmPassword;
+  };
+
 
   const validations = () => {
     const { correouser, nombre, edad, pregunta, respuesta, password } = user
@@ -50,7 +63,7 @@ const RegistrarUser = () => {
       });
       return false
     }
-    if (!validateCapital && !validateLength && !validateSpecial && !validateNumber) {
+    if (!validateCapital && !validateLength && !validateSpecial && !validateNumber && !validateRetype) {
       return false;
     }
 
@@ -63,6 +76,7 @@ const RegistrarUser = () => {
   };
 
   // MAGIA DE REGEX WOWWWWWW
+
   const validateCapital = (password) => {
     return /[A-Z]/.test(password);
   };
@@ -100,7 +114,6 @@ const RegistrarUser = () => {
     const hashedPass = bcrypt.hashSync(password, 10);
 
     setUser((prevState) => ({ ...prevState, [e.target.name]: hashedPass }))
-
   };
 
   const handleSubmit = async e => {
@@ -181,6 +194,36 @@ const RegistrarUser = () => {
               name='password'
               ref={passie}
               onChange={(e) => handlePassword(e)}
+              required
+            />
+          </div>
+          <div className="form-group" style={{ display: 'flex', alignItems: 'center', marginBottom: '0px' }}>
+            <label htmlFor="confirmPassword">Confirmar Contraseña*</label>
+            {confirmPassword !== '' && (
+              <React.Fragment>
+                <FontAwesomeIcon
+                  icon={validateRetype(passwordd) ? faCircleCheck : faCircleXmark}
+                  className={`iconn ${validateRetype(passwordd) ? 'validd' : ''}`}
+                  style={{ marginLeft: '20px', fontSize: '16px' }}
+                />
+                {validateRetype(passwordd) ? (
+                  <span style={{ marginLeft: '5px', fontSize: '12px', color: 'green' }}>
+                    Contraseña Coincide
+                  </span>
+                ) : (
+                  <span style={{ marginLeft: '5px', fontSize: '12px', color: 'red' }}>
+                    Contraseña No Coincide
+                  </span>
+                )}
+              </React.Fragment>
+            )}
+          </div>
+          <div className='form-group'>
+            <input
+              type="password"
+              id="password"
+              name="confirmPassword"
+              onChange={(e) => handleConfirmPassword(e)}
               required
             />
           </div>
