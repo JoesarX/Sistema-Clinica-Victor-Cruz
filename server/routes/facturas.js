@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-const facturasRouter = (pool) => {
+const facturasRouter = (pool, transporter) => {
 
     //============================================== G E T S ==================================================================
     //Get all facturas
@@ -50,6 +50,24 @@ const facturasRouter = (pool) => {
         }
     });
 
+    router.get("/facturas-with-cita/:id", async (req, res) => {
+        try {
+            console.log("Entro");
+            const connection = await pool.getConnection();
+            const sqlSelect = 
+                "SELECT f.idFactura, f.nombre_paciente, f.idCita, f.isPagada, f.total, DATE_FORMAT(c.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
+                + "f.metodoPago, f.rtn, f.correo "
+                + " FROM facturas f INNER JOIN citas c ON f.idCita = c.idcita WHERE f.idFactura = " + req.params.id;
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log(`Get factura with id: ${req.params.id} Successful`);
+            res.json(rows[0]);
+        } catch (err) {
+            console.log(`Get factura with id: ${req.params.id} Failed. Error: ${err}`);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
     //============================================== P O S T S ==================================================================
     //Add a new factura
     router.post("/", async (req, res) => {
@@ -70,7 +88,25 @@ const facturasRouter = (pool) => {
                 req.body.rtn,
                 req.body.correo
             ];
-            await connection.query(q, [values]);
+            const [result, _] = await connection.query(q, [values]);
+            // Get the ID of the newly inserted factura
+            const facturaId = result.insertId;
+            // Construct the URL
+            const checkoutURL = `/checkout/${facturaId}`;
+            const mailOptions = {
+                from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                to: req.body.correo,
+                subject: "Factura de Cita Clinica Dr Victor Cruz",
+                text: `Estimado/a ${req.body.nombre_paciente}, Le recordamos el pago a hacerse para la cita: ${req.body.idCita}\n` +
+                    `Con un total de: LPS. ${req.body.total}\n` +
+                    `Puede realizar el pago siguiendo este enlace: https://clinica-victorcruz.netlify.app${checkoutURL} \n` +
+                    `Si tiene alguna duda no dude en contactarnos.\n` +
+                    `¡Que tenga un buen día!\n\n` +
+                    `Atentamente,\n` +
+                    `El equipo de la Clínica Dr. Victor Cruz`,
+
+            };
+            await transporter.sendMail(mailOptions);
             connection.release();
             console.log("Post factura Successfull");
             res.json("Factura añadida exitosamente!");
@@ -134,7 +170,7 @@ const facturasRouter = (pool) => {
             } = req.body;
 
             const q =
-                "UPDATE facturas SET nombre_paciente = ? , idCita = ? , isPagada = ? , total = ? , metodoPago = ? , rtn = ? , correo = ? WHERE idfactura = ?";
+                "UPDATE facturas SET nombre_paciente = ? , idCita = ? , isPagada = ? , total = ? , metodoPago = ? , rtn = ? , correo = ? WHERE idFactura = ?";
             const values = [
                 nombre_paciente,
                 idCita,

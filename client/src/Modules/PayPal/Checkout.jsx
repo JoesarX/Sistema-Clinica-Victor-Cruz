@@ -1,12 +1,32 @@
 import { CLIENT_ID } from '../../Config/config'
 import React, { useState, useEffect } from "react";
+
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import swal from 'sweetalert';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import PagosService from '../../Services/PagosService';
+import FacturasService from '../../Services/FacturasService';
 import { Box, Typography, Button } from '@mui/material';
 
 const Checkout = () => {
+
+    const [factura, setFactura] = useState(null);
+
+    const { id } = useParams();
+
+    useEffect(() => {
+        const fetchFactura = async () => {
+            try {
+                const response = await FacturasService.getOneFacturaWithCita(id);
+                setFactura(response);
+                console.log("RESPONSE:", response);
+            } catch (error) {
+                console.error('Error fetching paciente:', error);
+            }
+        };
+        fetchFactura();
+    }, [id]);
+
     const isLoggedIn = localStorage.getItem("100");
 
     const [show, setShow] = useState(true);
@@ -24,10 +44,10 @@ const Checkout = () => {
             purchase_units: [
                 {
                     //CAMBIAR DESCRIPTION Y VALUE POR LOS QUE SE NECESITEN
-                    description: "Sunflower",
+                    description: "PAGO DE CONSULTA EN LINEA",
                     amount: {
                         currency_code: "USD",
-                        value: (Math.round(((price * 0.035) / 25) * 100) / 100).toFixed(2),
+                        value: (Math.round(((factura.total * 1.035) * 0.041) * 100) / 100).toFixed(2),
                     },
                 },
             ],
@@ -49,13 +69,13 @@ const Checkout = () => {
             const { currency_code, value } = amount;
 
             //CAMBIAR VALUES POR LOS QUE SE NECESITEN Y TAL VEZ IMPLMENTARLO CON USESTATE
-            idcita = 45
-            correouser = "correo@gmail.com"
+            idcita = factura.idCita;
+            correouser = factura.correo;
 
             const dataPay = { "idpago": OrderId, "idpayer": payer_id, "idcita": idcita, "nombre": given_name, "apellido": surname, "correouser": correouser, "correopago": email_address, "country_code": currency_code, "monto_pagado": value }
-
-            await PagosService.postPagos(dataPay)
-
+            factura.isPagada = true;
+            await PagosService.postPagos(dataPay);
+            await FacturasService.editFactura(id, factura);
             setSuccess(true);
         });
     };
@@ -90,6 +110,12 @@ const Checkout = () => {
             navigate("/"); // Redirige a la página de inicio de sesión
         }
     }, [isLoggedIn]);
+    if (factura === null) {
+        // Display a loading indicator or message while fetching data
+        return (
+            <div>Loading...</div>
+        );
+    }
 
     return (
         <Box sx={{ backgroundColor: '#1E60A6', height: '100%', display: 'flex', alignItems: 'center' }}>
@@ -110,22 +136,22 @@ const Checkout = () => {
 
                 <Box sx={{ background: '#fff', p: 2 }}>
                     <Typography>
-                        Pago de Consulta a nombre de Josue Edgardo Espinal Ara para el dia 12/12/2021 a las 12:30 pm.
+                        Pago de Consulta a nombre de {factura.nombre_paciente} para el dia {factura.fecha} a las {factura.hora}.
                     </Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom: '1px solid #ccc' }}>
                     <Typography>Subtotal:</Typography>
-                    <Typography>Lps. {(Math.round((price) * 100) / 100).toFixed(2)}</Typography>
+                    <Typography>Lps. {(Math.round((factura.total) * 100) / 100).toFixed(2)}</Typography>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', p: 1, borderBottom: '1px solid #ccc' }}>
                     <Typography>Tarifa pago en linea:</Typography>
-                    <Typography>Lps. {(Math.round((price * 0.035) * 100) / 100).toFixed(2)}</Typography>
+                    <Typography>Lps. {(Math.round((factura.total * 0.035) * 100) / 100).toFixed(2)}</Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', p: 3 }}>
                     <Typography sx={{ fontWeight: 'bold', color: '#1E60A6', fontSize: "18px" }}>Total:</Typography>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: "18px" }}>Lps. {(Math.round((price * 1.035) * 100) / 100).toFixed(2)}</Typography>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: "18px" }}>Lps. {(Math.round((factura.total * 1.035) * 100) / 100).toFixed(2)}</Typography>
                 </Box>
                 {/* <Box sx={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold', p: 3, paddingTop:1}}>
                     <Typography sx={{fontWeight: 'bold'}}>Total en Dolares:</Typography>

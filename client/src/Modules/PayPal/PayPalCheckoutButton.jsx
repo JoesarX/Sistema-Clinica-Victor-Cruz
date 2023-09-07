@@ -21,7 +21,7 @@ const PayPalCheckoutButton = (props) => {
 
     if (paidFor) {
         // Display success message, modal or redirect user to success page
-        swal("Su pago se efectuo con exito!.", {
+        swal("Su pago se efectuo con exito!", {
             icon: "success",
         });
     }
