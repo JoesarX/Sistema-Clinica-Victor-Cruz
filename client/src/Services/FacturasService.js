@@ -38,6 +38,17 @@ export const getFacturaByCita = async (idCita) => {
     }
 };
 
+export const getOneFacturaWithCita = async (id) => {
+    console.log(id);
+    try {
+        const res = await axios.get(`${API_URL}/facturas/facturas-with-cita/${id}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch factura');
+    }
+};
+
 //============================================== P O S T S ==================================================================
 export const postFactura = async (factura) => {
     try {
@@ -98,6 +109,7 @@ const Services = {
     editFacturaByCita,
     deleteFactura,
     deleteFacturaByCita,
+    getOneFacturaWithCita,
     
     // Other functions
 };

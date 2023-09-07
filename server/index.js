@@ -91,4 +91,4 @@ app.use('/examenes', ExamenesRouter(pool));
 app.use('/recetas', RecetasRouter(pool));
 app.use('/pagos', PagosRouter(pool));
 app.use('/precios', preciosRouter(pool));
-app.use('/facturas', facturasRouter(pool));
+app.use('/facturas', facturasRouter(pool, transporter));

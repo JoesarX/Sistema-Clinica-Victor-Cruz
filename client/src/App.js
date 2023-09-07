@@ -62,7 +62,7 @@ function App() {
 
             <Route path="/prueba-recetas" element={<PruebaRecetas />} />
             {/* <Route path="/PagoPrueba1" element={<PagoPrueba1 />} /> */}
-            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout/:id" element={<Checkout />} />
             <Route path="/factura/:id" element={<Factura />} />
             <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
           </Routes>
