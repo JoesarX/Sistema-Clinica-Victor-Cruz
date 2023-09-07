@@ -21,6 +21,7 @@
   font-weight: 700;
   padding-top: 1.5vh;
   padding-bottom: 1.5vh;
+  font-family: 'Montserrat';
 }
 
 .dragged-service {
@@ -49,7 +50,7 @@
   margin-top: 2vh;
   text-align: center;
   padding: 0.5rem 2rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Montserrat';
 }
 
 .services {
@@ -123,6 +124,7 @@
   overflow-y: clip;
   background-color: #E4EBF9;
   border-radius: 10px;
+  font-family: 'Montserrat';
 }
 .mHeader {
   margin-top: 0px;
@@ -145,6 +147,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: 'Montserrat';
 }
 .cButton:hover {
   background-color: #b84f4f;

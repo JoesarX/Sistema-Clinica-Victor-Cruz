@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API_URL = 'http://localhost:8000';
-//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+// const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllCitas = async () => {
     try {
@@ -144,6 +144,7 @@ export const getUserExpCitas = async (correouser) => {
         throw new Error('Failed to fetch Times');
     }
 };
+
 
 export const getCheckAvailability = async (fecha, hora, idcita = null) => {
     try {

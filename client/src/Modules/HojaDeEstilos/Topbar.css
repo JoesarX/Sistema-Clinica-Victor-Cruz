@@ -10,7 +10,7 @@
 .navbar-brand {
     font-family: 'Montserrat';
     padding: 10px 20px;
-    user-select: none;
+    -webkit-user-select: none;
 }
 
 .nav-item a {

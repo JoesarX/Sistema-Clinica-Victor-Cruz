@@ -112,12 +112,11 @@ const citasRouter = (pool, transporter) => {
     router.get("/citasexpedientes/:correouser", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "select distinct C.idcita, C.nombre_persona, C.estado, C.idpaciente, C.correouser, C.altura, C.peso, C.temperatura, C.ritmo_cardiaco, C.presion, C.fecha, C.hora, C.correoenviado " +
+            const sqlSelect = "select distinct C.idcita, E.nombre, C.nombre_persona, C.estado, C.idpaciente, C.correouser, C.altura, C.peso, C.temperatura, C.ritmo_cardiaco, C.presion, C.fecha, C.hora, C.correoenviado " +
                 "from Usuarios U " +
                 "inner join expedientes E on U.correouser = E.correo " +
                 "inner join Citas C on E.correo = C.correouser " +
                 "where U.correouser = '" + req.params.correouser + "'";
-
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log(`Get citas futuras with correo: ${req.params.correouser} Successfull`)
@@ -194,7 +193,7 @@ const citasRouter = (pool, transporter) => {
                             times: availableTimesFormatted
                         });
                     } else {
-                        for(let i = 0; i < availableTimesFormatted.length; i++) {
+                        for (let i = 0; i < availableTimesFormatted.length; i++) {
                             availableTimes.push({
                                 date: formattedDate,
                                 time: availableTimesFormatted[i]
@@ -240,7 +239,7 @@ const citasRouter = (pool, transporter) => {
             const connection = await pool.getConnection();
             const sqlSelect = 
                 "SELECT c.idcita, c.nombre_persona, c.estado, c.idpaciente, c.correouser, DATE_FORMAT(c.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
-                + "c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, e.edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono "
+                + "c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono "
                 + " FROM citas c INNER JOIN expedientes e ON c.idpaciente = e.idpaciente WHERE c.idcita = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
@@ -333,7 +332,7 @@ const citasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-//edit citas desde el cliente
+    //edit citas desde el cliente
     router.put("/user/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
@@ -386,7 +385,7 @@ const citasRouter = (pool, transporter) => {
 
             await transporter.sendMail(mailOptions);*/
             res.json("Cita actualizada exitosamente!");
-           
+
         } catch (err) {
             console.log(`Update cita with id: ${id} Failed. Error: ${err}`)
             res.status(500).json({ error: "Internal Server Error" });
