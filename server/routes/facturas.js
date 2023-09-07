@@ -93,7 +93,8 @@ const facturasRouter = (pool, transporter) => {
             const facturaId = result.insertId;
             // Construct the URL
             const checkoutURL = `/checkout/${facturaId}`;
-            const mailOptions = {
+           
+                const mailOptions = {
                 from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
                 to: req.body.correo,
                 subject: "Factura de Cita Clinica Dr Victor Cruz",
@@ -106,7 +107,10 @@ const facturasRouter = (pool, transporter) => {
                     `El equipo de la Clínica Dr. Victor Cruz`,
 
             };
-            await transporter.sendMail(mailOptions);
+            if(req.body.correo!==null){
+                await transporter.sendMail(mailOptions);
+            }
+           
             connection.release();
             console.log("Post factura Successfull");
             res.json("Factura añadida exitosamente!");

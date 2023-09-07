@@ -135,6 +135,7 @@ function Factura() {
             setIsv(0);
             setTotal(0);
             setCorreo('')
+            navigate('/citas_tabla');
         } else {
             const errorMessage = Object.values(errors).join('\n');
 
