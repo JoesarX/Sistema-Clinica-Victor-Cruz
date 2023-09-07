@@ -1,0 +1,289 @@
+.scrollable-page {
+    background-color: #E4EBF9;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 20px;
+    height: 91%;
+    width: 100%;
+    margin: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.tabs {
+    font-size: 10px;
+    height: 25px;
+    font-family: 'Inter';
+    font-weight: 600;
+}
+
+.factura-container {
+    display: flex;
+
+    height: 100%;
+    width: 100%;
+    min-width: 98%;
+
+    gap: 5px;
+
+    padding-left: 5px;
+    padding-right: 5px;
+
+    background-color: #E4EBF9;
+    border: 2px solid #C8DAFF;
+    border-radius: 5px;
+    box-shadow: #E4EBF9;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.factura-leftContainer {
+    width: 37%;
+    height: 100%;
+}
+
+.factura-rightContainer {
+    width: 63%;
+    height: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: #C8DAFF;
+}
+
+.addReceipt {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.factura-patientInfo {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    gap: 5px;
+
+    /* TEMPORALLL */
+    /* background-color: rgb(0, 0, 255, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
+.factura-titulo {
+    width: 100%;
+    height: fit-content;
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    color: #939393;
+}
+
+.factura-subtitle {
+    height: fit-content;
+    width: 100%;
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 15px;
+    font-weight: 700;
+    color: #737373;
+}
+
+.tituloFactura {
+    margin-top: 10%;
+    width: 100%;
+    height: fit-content;
+    font-family: 'Inter';
+    font-style: normal;
+    font-size: 26px;
+    font-weight: 700;
+    text-align: center;
+    color: #1560F2;
+}
+
+.factura-smallText {
+    text-align: start;
+    word-spacing: normal;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    color: #737373;
+}
+
+.factura-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.factura-input-bg {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: #fff;
+    transition: background-color 0.2s ease-in-out;
+    align-self: flex-start;
+}
+
+.input-bg:focus {
+    background-color: #C8DAFF;
+}
+
+.button {
+    margin-top: 5%;
+}
+
+.input-field {
+    width: 100%;
+    height: fit-content;
+
+    border-radius: 5px;
+    border: 1px solid black;
+
+    font-size: 12px;
+
+    background-color: #fff;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.preFactura {
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: 900px;
+    overflow: scroll;
+}
+
+.input-field:focus {
+    background-color: #C8DAFF;
+}
+
+.user-search {
+    width: 100%;
+    display: flex;
+}
+
+.user-search.show {
+    width: 100%;
+}
+
+.addUser {
+    margin-left: 5%;
+    align-self: flex-start;
+}
+
+.factura-email {
+    display: flex;
+
+    height: max-content;
+    width: 100%;
+
+    align-items: center;
+    font-size: 14px;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
+.textSearch {
+    margin-right: 16px;
+}
+
+.searchButton {
+    font-size: 10px;
+}
+
+.table {
+    width: 100%;
+    padding-left: 5%;
+    padding-bottom: 5%;
+    padding-right: 5%;
+    padding-top: 1.5%;
+    scrollbar-width: none;
+}
+
+.total {
+    margin-top: -4%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    align-self: flex-end;
+    margin-right: 6%;
+    width: 50%;
+}
+
+.money {
+    font-weight: bold;
+    color: black;
+    font-size: 16px;
+    font-family: 'Inter';
+}
+
+.isv-options {
+    width: 81%;
+    font-weight: bold;
+    color: black;
+    font-size: 16px;
+    font-family: 'Inter';
+}
+
+.factura-radio {
+    margin-right: 7%;
+}
+
+.radioISV {
+    align-self: flex-end;
+}
+
+.factura-montos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    border-radius: 10px;
+    text-transform: capitalize;
+    font-family: 'Inter';
+    background-color: #1976d2;
+}
+
+.factura-subtotal,
+.factura-iva,
+.factura-total {
+    font-weight: 800;
+    color: white;
+    text-align: right;
+    font-size: 26px;
+    width: 100%;
+    padding-right: 5%;
+}
+
+.factura-applyISV {
+    width: 100%;
+    text-align: right;
+    font-size: 26px;
+    padding-right: 5%;
+}
+
+--mo
+
+.factura-checkbox input[type="checkbox"] {
+    margin-right: 10px;
+}

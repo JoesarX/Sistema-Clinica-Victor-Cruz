@@ -7,6 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faPlay, faFile } from '@fortawesome/free-solid-svg-icons';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 
 //GRID
@@ -19,6 +21,7 @@ import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 //ADD MEDICAMENTOS MODAL
 import Modal from '@mui/material/Modal';
@@ -690,9 +693,9 @@ const Citas = () => {
 
         if (estado === 'Pendiente') {
             return (
-                <Button variant="success">
-                    <FontAwesomeIcon icon={faPlay} />
-                </Button>
+                <IconButton >
+                    <PlayCircleIcon />
+                </IconButton>
             );
         }
 
@@ -700,22 +703,25 @@ const Citas = () => {
             return (
                 <>
                     
-
-                    <Button variant="info" onClick={() => handleClick(id)}>
-                        <FontAwesomeIcon icon={faFile} />
-                    </Button>
-                    
+                    <IconButton onClick={handleClick}>
+                        <DescriptionIcon />
+                    </IconButton>
                 </>
             )
         }
 
         if (estado === 'Terminada') {
             return (
-                <Button variant="info" onClick={() => handleClick(id)}>
-                    <FontAwesomeIcon icon={faFile} />
-                </Button>
+
+                <IconButton onClick={handleClick}>
+                    <DescriptionIcon />
+                </IconButton>
             )
         }
+    };
+
+    const handleFacturas = () => {
+        navigate('/factura');
     };
 
     return (
@@ -750,12 +756,13 @@ const Citas = () => {
                                             <IconButton onClick={() => handleDeleteCitasClick(params.row, params.id)}>
                                                 <Delete />
                                             </IconButton>
-                                            {getActionButtons(params.row.estado, params.id)}
+                                            {getActionButtons(params.row.estado)}
+                                            <IconButton onClick={() => handleFacturas()}>
+                                                <ReceiptIcon />
+                                            </IconButton>
                                         </>
-
                                     )
                                 },
-
                             ]}
                             components={{
                                 Toolbar: CustomToolbar,

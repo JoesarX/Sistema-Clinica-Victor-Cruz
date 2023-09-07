@@ -13,6 +13,7 @@ import IniciarSesion from "./Modules/Home/IniciarSesion";
 import Servicios from "./Modules/Home/Servicios";
 import Acercade from "./Modules/Home/Acercade";
 import Laboratorio from "./Modules/Home/Laboratorio";
+import SaludOcupacional from "./Modules/Home/SaludOcupacional";
 import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
@@ -28,6 +29,7 @@ import Examenes from "./Modules/Examenes/Examenes";
 import PruebaRecetas from "./Modules/Recetas/PruebaRecetas";
 import PagoPrueba1 from "./Modules/PayPal/PayPalCheckOut"
 import Checkout from "./Modules/PayPal/Checkout"
+import Factura from "./Modules/PayPal/Factura"
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function App() {
@@ -56,11 +58,12 @@ function App() {
             <Route path="/citas_tabla/historial_cita/:id" element={<HistorialCita />} />
             <Route path="/examenes" element={<Examenes />} />
             <Route path="/laboratorio" element={<Laboratorio />} />
+            <Route path="/salud_ocupacional" element={<SaludOcupacional />} />
 
             <Route path="/prueba-recetas" element={<PruebaRecetas />} />
             {/* <Route path="/PagoPrueba1" element={<PagoPrueba1 />} /> */}
             <Route path="/checkout" element={<Checkout />} />
-
+            <Route path="/factura" element={<Factura />} />
             <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
           </Routes>
         </BrowserRouter>

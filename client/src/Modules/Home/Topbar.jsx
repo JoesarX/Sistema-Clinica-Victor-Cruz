@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import '../HojaDeEstilos/Topbar.css'
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../AuthContext.js';
@@ -25,8 +25,12 @@ const Topbar = () => {
     };
 
     const handleLaboratorio = () => {
-         navigate('/laboratorio');
+        navigate('/laboratorio');
     };
+
+    const handleSaludOcupacional = () => {
+        navigate('/salud_ocupacional');
+   };
 
     const handleServicios = () => {
         navigate('/servicios');
@@ -62,6 +66,10 @@ const Topbar = () => {
         navigate('/examenes');
     };
 
+    const handleFacturas = () => {
+        navigate('/factura');
+    };
+
     const handlePerfil = () => {
         navigate('/userpage');
     };
@@ -88,8 +96,8 @@ const Topbar = () => {
                             < div class="dropdown-item" onClick={handleContactanos}>CONTÁCTANOS</div>
                         </div>
                     </li>
-                    
-                    
+
+
                     <li class="nav-item dropdown">
                         <div class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             SERVICIOS
@@ -97,9 +105,10 @@ const Topbar = () => {
                         <div class="dropdown-menu custom-colors">
                             <div class="dropdown-item" onClick={handleServicios}>CLINICA</div>
                             < div class="dropdown-item" onClick={handleLaboratorio}>LABORATORIO</div>
+                            < div class="dropdown-item" onClick={handleSaludOcupacional}>SALUD OCUPACIONAL</div>
                         </div>
                     </li>
-                    
+
                     <li class="nav-item text" onClick={handleCitaClick}>
                         <div class="nav-link" >AGENDA TU CITA</div>
                     </li>
@@ -117,7 +126,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span style={{fontSize: '18px'}}>{nombre}</span>
+                                            <span style={{ fontSize: '18px' }}>{nombre}</span>
                                         </div>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <div className="dropdown-item" onClick={handlePerfil}>VER PERFIL</div>
@@ -134,7 +143,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <span style={{fontSize: '18px'}}>{nombre}</span>
+                                            <span style={{ fontSize: '18px' }}>{nombre}</span>
                                         </div>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             < div class="dropdown-item" onClick={handleVerDashboard}>VER DASHBOARD</div>
@@ -148,7 +157,7 @@ const Topbar = () => {
                                 <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span style={{fontSize: '18px'}}>{nombre}</span>
+                                            <span style={{ fontSize: '18px' }}>{nombre}</span>
                                         </div>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <div class="dropdown-item" onClick={handleMedicamentos}>MEDICAMENTOS</div>

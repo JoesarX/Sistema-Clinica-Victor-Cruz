@@ -22,6 +22,17 @@ export const getHome = async()=>{
         throw new Error('Failed to fetch home');
     } 
 }
+//traer todo salud ocupacional
+export const getSaludOcupacional = async()=>{
+    try {
+        const res = await axios.get(`${API_URL}/texto_cmd/saludOcupacional`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch home');
+    } 
+}
+//tr
 export const getFooter = async()=>{
     try {
         const res = await axios.get(`${API_URL}/texto_cmd/footer`);
@@ -85,7 +96,8 @@ const text_Services = {
     postText,
     editText,
     deleteText,
-    getHome
+    getHome,
+    getSaludOcupacional
     // Other functions
 };
 
