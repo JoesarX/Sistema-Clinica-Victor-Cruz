@@ -11,7 +11,7 @@ import { Box, Typography, Button } from '@mui/material';
 const Checkout = () => {
 
     const [factura, setFactura] = useState(null);
-
+    
     const { id } = useParams();
 
     useEffect(() => {
@@ -19,7 +19,22 @@ const Checkout = () => {
             try {
                 const response = await FacturasService.getOneFacturaWithCita(id);
                 setFactura(response);
-                console.log("RESPONSE:", response);
+                console.log("RESPONSE:", response.isPagada);
+                if (response.isPagada) {
+                    // Show SweetAlert if factura.isPagada is equal to '1'
+                    console.log("RESPONSE:", response);
+                    swal({
+                        title: 'Pago ya realizado',
+                        text: 'El pago de esta factura ya ha sido procesado.',
+                        icon: 'info',
+                        buttons: {
+                            ok: 'OK',
+                        },
+                    }).then(() => {
+                        // Redirect to the landing page after clicking OK
+                        navigate("/");
+                    });
+                }
             } catch (error) {
                 console.error('Error fetching paciente:', error);
             }
@@ -110,6 +125,7 @@ const Checkout = () => {
             navigate("/"); // Redirige a la página de inicio de sesión
         }
     }, [isLoggedIn]);
+
     if (factura === null) {
         // Display a loading indicator or message while fetching data
         return (
@@ -166,7 +182,7 @@ const Checkout = () => {
                                 createOrder={createOrder}
                                 onApprove={onApprove}
                                 onError={(err) => {
-                                    swal("SHubo un error efectuando el pago.", {
+                                    swal("Hubo un error efectuando el pago.", {
                                         icon: "error",
                                     });
                                 }}
