@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar';
 import './Factura.css';
 import Tabs from '@mui/material/Tabs';
@@ -22,8 +22,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import SaveIcon from '@mui/icons-material/Save';
 import Services from '../../Services/FacturasService';
+import { Payment, Payments } from '@mui/icons-material';
 import swal from 'sweetalert';
 function Factura() {
 
@@ -39,14 +39,15 @@ function Factura() {
     const [nombre, setNombre] = useState(null);
     const [correo, setCorreo] = useState(null);
     const [rtn, setRtn] = useState(null);
-    
+
+    const navigate = useNavigate();
 
     const [addServicio, setAddServicio] = useState({
         servicio: '',
         precio: '',
     });
     const { id } = useParams();
-    
+
     const columns = [
         { id: 'servicio', label: 'Servicio', width: '60%' },
         { id: 'precio', label: 'Precio', width: '30%' },
@@ -73,27 +74,119 @@ function Factura() {
     };
     const factura = {
         nombre_paciente: "",
-        idCita : id,
-        isPagada : "",
-        total : "",
+        idCita: id,
+        isPagada: "",
+        total: "",
         metodoPago: "",
-        rtn : "",
-        correo : ""
-
+        rtn: "",
+        correo: ""
     };
-    const guardarFactura=async ()=>{
-        factura.nombre_paciente=nombre;
-        factura.total=total;
-        factura.metodoPago="paypal";
-        factura.correo=correo;
-        factura.rtn=rtn;
-        
-        console.log(factura);
-        await Services.postFactura(factura);
-        swal("Su factura se creo con exito!", {
-            icon: "success",
-        });
+
+    const validations = (factura_object, online) => {
+        const errors = {};
+
+        if (online) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(factura_object.correo)) {
+                errors.correo = "Correo debe tener un formato válido";
+            }
+        }
+
+        if (factura_object.nombre_paciente === null || factura_object.nombre_paciente.trim().length < 3) {
+            errors.nombre_paciente = "Nombre debe tener al menos 3 caracteres";
+        }
+
+        const rtnRegex = /^[0-9]{14}$/;
+        if (factura_object.rtn !== null && factura_object.rtn.trim() !== "" && !rtnRegex.test(factura_object.rtn)) {
+            errors.rtn = "RTN debe contener exactamente 14 dígitos";
+        }
+
+        if (serviciosSeleccionados.length <= 0) {
+            errors.cantidad_servicios = "Por favor agregar servicios a la factura.";
+        }
+
+        return errors;
+    };
+
+    const guardarFacturaPayPal = async () => {
+
+        const facturaToSend = {
+            ...factura,
+            nombre_paciente: nombre,
+            total: total,
+            metodoPago: "paypal",
+            correo: correo,
+            rtn: rtn,
+        }
+
+        const errors = validations(facturaToSend, true);
+
+        if (Object.keys(errors).length === 0) {
+            await Services.postFactura(facturaToSend);
+            swal({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Factura creada exitosamente',
+            });
+            setNombre('');
+            setRtn('');
+            setServiciosSeleccionados([])
+            setSubtotal(0);
+            setIsv(0);
+            setTotal(0);
+            setCorreo('')
+        } else {
+            const errorMessage = Object.values(errors).join('\n');
+
+            swal({
+                icon: 'error',
+                title: 'Error al ingresar datos',
+                text: errorMessage,
+            });
+        }
     }
+
+    const guardarFacturaEfectivo = async () => {
+
+        const facturaToSend = {
+            ...factura,
+            nombre_paciente: nombre,
+            total: total,
+            metodoPago: "efectivo",
+            correo: correo,
+            rtn: rtn,
+            isPagada: true,
+        }
+
+        const errors = validations(facturaToSend, false);
+
+        if (Object.keys(errors).length === 0) {
+            await Services.postFactura(facturaToSend);
+            swal({
+                icon: 'success',
+                title: 'Éxito',
+                text: 'Factura creada exitosamente',
+            });
+            setNombre('');
+            setRtn('');
+            setServiciosSeleccionados([])
+            setSubtotal(0);
+            setIsv(0);
+            setTotal(0);
+            setCorreo('')
+            navigate('/citas_tabla');
+        } else {
+            const errorMessage = Object.values(errors).join('\n');
+
+            swal({
+                icon: 'error',
+                title: 'Error al ingresar datos',
+                text: errorMessage,
+            });
+        }
+    }
+
+
     useEffect(() => {
         const { subtotal, isv, total } = calcularValores();
         setSubtotal(subtotal);
@@ -111,6 +204,29 @@ function Factura() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     }
+
+    const handleRTNInput = (inputElement) => {
+        let inputValue = inputElement.value
+        inputValue = inputValue.replace(/[^0-9]/g, '');
+
+        if (inputValue.length > 14) {
+            inputValue = inputValue.slice(0, 14);
+        }
+
+        inputElement.value = inputValue;
+        setRtn(inputValue)
+    }
+
+    const handleNameInput = (inputElement) => {
+        let inputValue = inputElement.value;
+
+        if (/^[a-zA-ZÀ-ÿ\s]+$/.test(inputValue)) {
+            setNombre(inputValue);
+        } else {
+            inputValue = inputValue.replace(/[^a-zA-ZÀ-ÿ\s]+/g, '');
+            inputElement.value = inputValue;
+        }
+    };
 
     return (
         <div className='scrollable-page'>
@@ -133,7 +249,8 @@ function Factura() {
                                             type="text"
                                             placeholder="Nombre"
                                             required
-                                            onChange={(e) => setNombre(e.target.value)}
+                                            onChange={(e) => handleNameInput(e.target)}
+                                            value={nombre}
                                         />
                                         <Button onClick={() => setShowUserSearch(!showUserSearch)} variant="text" startIcon={<LinkIcon />}>
                                             Vincular Usuario
@@ -147,9 +264,10 @@ function Factura() {
                                                 transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
                                                 className={`user-search ${showUserSearch ? 'show' : ''}`}>
                                                 <TextField
-                                                    sx={{ mr: 3 , backgroundColor: '#fff'}}
+                                                    sx={{ mr: 3, backgroundColor: '#fff' }}
                                                     placeholder="Correo del usuario"
                                                     onChange={(e) => setCorreo(e.target.value)}
+                                                    value={correo}
                                                     InputProps={{
                                                         startAdornment: (
                                                             <InputAdornment position="start">
@@ -168,7 +286,8 @@ function Factura() {
                                         className="input-field"
                                         type="text"
                                         placeholder="RTN"
-                                        onChange={(e) => setRtn(e.target.value)}
+                                        onChange={(e) => handleRTNInput(e.target)}
+                                        value={rtn}
                                     />
                                 </div>
                                 <h3 className='factura-smallText'>Seleccionar Servicio Brindado</h3>
@@ -219,14 +338,12 @@ function Factura() {
                                     <div className="factura-total">Total: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(total)}</div>
                                 </div>
                                 <div className='factura-applyISV'>
-                                    <label className='factura-checkbox'>
-                                        <input
-                                            type="checkbox"
-                                            checked={aplicarISV}
-                                            onChange={(e) => setAplicarISV(e.target.checked)}
-                                        />
-                                        Aplicar ISV
-                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        checked={aplicarISV}
+                                        onChange={(e) => setAplicarISV(e.target.checked)}
+                                    />
+                                    Aplicar ISV
                                 </div>
                                 <div className='table'>
                                     <TableContainer style={{ height: 166 }}>
@@ -251,10 +368,14 @@ function Factura() {
                                         </Table>
                                     </TableContainer>
                                 </div>
-
-                                <Button variant="contained" startIcon={<SaveIcon />} className='button' onClick={guardarFactura}>
-                                    Efectuar Pago
-                                </Button>
+                                <div class='factura-payment-button-container'>
+                                    <Button variant="contained" startIcon={<Payment />} className='button' onClick={guardarFacturaPayPal}>
+                                        Pago en Línea
+                                    </Button>
+                                    <Button variant="contained" startIcon={<Payments />} className='button' onClick={guardarFacturaEfectivo}>
+                                        Pago en Efectivo
+                                    </Button>
+                                </div>
                             </div>
                         }
                         {value === 1 &&
