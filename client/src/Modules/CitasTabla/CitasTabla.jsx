@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 //import { storage } from "./firebase";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -679,11 +680,16 @@ const Citas = () => {
         //navigate(`/citas_tabla/historial_cita/${id}`);
     }*/
 
-    const handleClick = () => {
-        navigate('/citas_tabla/historial_cita/');
-    }
+    const handleClick = (id) => {
+        console.log(id);
+        navigate(`/citas_tabla/historial_cita/${id}`);
+    };
 
-    const getActionButtons = (estado) => {
+    /*const handleClick = () => {
+        navigate('/citas_tabla/historial_cita/');
+    }*/
+
+    const getActionButtons = (estado, id) => {
 
         if (estado === 'Pendiente') {
             return (
@@ -693,13 +699,10 @@ const Citas = () => {
             );
         }
 
-        if (estado === 'En Curso') {
+        if (estado === 'En Progreso') {
             return (
                 <>
-                    <Button variant="warning">
-                        <FontAwesomeIcon icon={faTimes} />
-                    </Button>
-
+                    
                     <IconButton onClick={handleClick}>
                         <DescriptionIcon />
                     </IconButton>
@@ -709,10 +712,10 @@ const Citas = () => {
 
         if (estado === 'Terminada') {
             return (
+
                 <IconButton onClick={handleClick}>
                     <DescriptionIcon />
                 </IconButton>
-
             )
         }
     };

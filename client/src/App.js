@@ -13,6 +13,7 @@ import IniciarSesion from "./Modules/Home/IniciarSesion";
 import Servicios from "./Modules/Home/Servicios";
 import Acercade from "./Modules/Home/Acercade";
 import Laboratorio from "./Modules/Home/Laboratorio";
+import SaludOcupacional from "./Modules/Home/SaludOcupacional";
 import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
 import Administrador from "./Modules/usuario_admin/administrador";
@@ -54,9 +55,10 @@ function App() {
             <Route path="/userpage" element={<LandingPage />} />
             <Route path="/citas_tabla" element={<CitasTabla />} />
             <Route path="//citas_tabla/citas_expedientes" element={<Citas_Doc />} />
-            <Route path="/citas_tabla/historial_cita" element={<HistorialCita />} />
+            <Route path="/citas_tabla/historial_cita/:id" element={<HistorialCita />} />
             <Route path="/examenes" element={<Examenes />} />
             <Route path="/laboratorio" element={<Laboratorio />} />
+            <Route path="/salud_ocupacional" element={<SaludOcupacional />} />
 
             <Route path="/prueba-recetas" element={<PruebaRecetas />} />
             {/* <Route path="/PagoPrueba1" element={<PagoPrueba1 />} /> */}

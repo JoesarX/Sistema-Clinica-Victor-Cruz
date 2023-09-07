@@ -28,7 +28,8 @@ select {
 
 input[type='text'],
 input[type='email'],
-input[type='password'] {
+input[type='password'],
+input[type= 'confirmPassword'] {
   width: 100%;
   padding: 12px;
   /* border: 1px solid #000 !important; */
@@ -77,7 +78,7 @@ p {
   min-width: 400px;
   text-align: center;
   height: 20em;
-  min-height: 900px;
+  min-height: 1020px;
   margin: 40px auto;
   margin-bottom: 150px;
   font-family: 'Montserrat';
@@ -102,6 +103,8 @@ p {
   font-weight: 500;
   font-family: 'Montserrat';
 }
+
+
 
 @media only screen and (max-width: 400px) {
   .select-normal-height {
@@ -136,6 +139,14 @@ p {
   color: green !important;  
 }
 
+.iconn{
+  display: flex;
+  color: red;
+}
+
+.validd {
+  color: green !important;  
+}
 .spacing {
   padding-right: 10px;
   padding-left: 10px;

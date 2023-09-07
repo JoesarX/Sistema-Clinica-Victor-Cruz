@@ -4,9 +4,10 @@
     width: 100%;
 }
 
-.scrollable-page {
+.scrollable-page1 {
     background-color: #E4EBF9;
     overflow-y: auto;
+    scroll-behavior: smooth;
 }
 
 .main {
@@ -39,34 +40,21 @@
     padding-top: 1.5%;
 }
 
-@media (max-width: 768px) {
-    .img-fluid {
-        max-width: 150px;
-    }
-
-    input {
-        max-width: 100%;
-    }
-}
-
-@media (max-width: 576px) {
-    .img-fluid {
-        max-width: 120px;
-    }
-}
-
-.infoGeneral {
+.appointment-patient-information {
     display: flex;
     flex-direction: row;
-    align-items: left;
-    justify-content: left;
+    align-items: center;
+    justify-content: flex-start;
     padding-left: 3%;
-    height: 100%;
+    height: min-content;
     gap: 20px;
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
-    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .profile-picture-and-edit {
@@ -83,9 +71,8 @@
     flex-direction: column;
     justify-content: left;
     align-items: left;
-    width: 60%;
+    width: 100%;
     gap: 3px;
-    padding-left: 3%;
 }
 
 .perfil {
@@ -99,18 +86,27 @@
     flex: none;
     order: 0;
     flex-grow: 0;
+    cursor: pointer;
 }
 
-.nombre {
-    width: 100%;
+.perfil:hover {
+    background-color: #3f79ee;
+}
+
+.appointment-history-nombre {
+    width: initial;
     height: moz-fit-content;
     font-family: 'Inter';
     font-style: normal;
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 28px;
+    font-weight: 800;
     display: flex;
     color: #464646;
     margin-bottom: 0px;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
 
 .smallText {
@@ -127,15 +123,48 @@
     color: #737373;
 }
 
-.space-between-text {
+.space-between-text-appointment {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     word-wrap: normal;
     padding: 0px;
-    width: 100%;
+    width: 50%;
     height: moz-fit-content;
+}
+
+.appointment-reason-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: min-content;
+    width: max-content;
+
+    text-align: center;
+
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: auto;
+    padding-bottom: auto;
+
+    border-radius: 20px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 100%;
+    
+    background-color: #C8DAFF;
+    color: #1560F2;
+
+    user-select: none;
+}
+
+.appointment-reason-container.date {
+    color: #B98622;
+    background-color: #FFE1A7;
 }
 
 .patient-email-container {
@@ -165,7 +194,131 @@
     font-size: 55px;
 }
 
+.nav-button-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    font-family: 'Inter';
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
+.nav-button-container a {
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 30px;
+    padding: 1px 10px 1px 10px;
+    color: white;
+    background-color: #1560f2;
+    text-decoration: none;
+}
+
+.nav-button-container a:hover {
+    background-color: #3f79ee
+}
+
+.appointment-section-header {
+    font-family: 'Montserrat';
+    font-weight: 600;
+    font-size: 22px;
+}
+
+.preclinic,
+.diagnostic,
+.incapacity {
+    margin-top: 10px;
+    margin-bottom: 5px;
+
+    padding-top: 15px;
+    padding-bottom: 5px;
+
+    border-top: 2px solid #5e5e5e;
+}
+
+/* Falta responsiveness de estos css */
+/* ya estan gay -pedro */
+.contenedor {
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.delete-button {
+    margin-top: 30px;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+
+.appointment-history-end-button {
+    background-color: #1560f2;
+    color: white;
+    height: 60px;
+    width: 250px;
+    border-radius: 5px;
+    font-size: 20px;
+    font-family: 'Inter';
+    font-weight: 800;
+    border: none;
+}
+
+.appointment-history-end-button:hover {
+    background-color: #3f79ee;
+}
+
+.appointment-details-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+/* Responsive styles for screens between 820px and 950px */
 @media only screen and (min-width: 820px) and (max-width: 950px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
     .space-between-text {
         flex-direction: column;
         justify-content: left;
@@ -173,31 +326,113 @@
     }
 }
 
+/* Responsive styles for screens up to 600px width */
 @media only screen and (max-width: 600px) {
-    .infoGeneral {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
+    .appointment-patient-information {
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 5px;
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 10px;
+        padding-right: 10px;
         padding-top: 20px;
         padding-bottom: 20px;
     }
 
-    .infoGeneral>* {
-        text-align: center;
-        justify-content: center;
-        align-items: center;
+    .space-between-text {
+        width: 100%;
     }
 
-    .nombre {
+    .nav-button-container {
         justify-content: center;
+        gap: 10px;
+    }
+
+    .nav-button-container a {
         text-align: center;
+    }
+
+    .appointment-reason-container {
+        height: 100%;
     }
 }
 
+/* Responsive styles for screens with max height of 768px */
 @media only screen and (max-height: 768px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
     .patient-section {
         gap: 10px;
         height: 92%;
@@ -222,5 +457,112 @@
     .patient-info-vert-align {
         gap: 0px;
     }
+}
 
+/* Responsive styles for screens up to 768px width */
+@media (max-width: 768px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
+    .img-fluid {
+        max-width: 150px;
+    }
+
+    .nav-button-container {
+        justify-content: center;
+    }
+
+    input {
+        max-width: 100%;
+    }
+
+    .mobile-align {
+        justify-content: center;
+    }
+
+    .mobile-align > * {
+        margin-top: 5px;
+    }
+}
+
+/* Responsive styles for screens up to 576px width */
+@media (max-width: 576px) {
+    /* Default styles */
+    .contenedor {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .delete-button {
+        width: 30px;
+        height: 40px;
+        margin-top: 35px;
+    }
+
+    .appointment-history-end-button {
+        background-color: #1560f2;
+        color: white;
+        height: 60px;
+        width: 250px;
+        border-radius: 5px;
+        font-size: 20px;
+        font-family: 'Inter';
+        font-weight: 800;
+        border: none;
+    }
+
+    .appointment-history-end-button:hover {
+        background-color: #3f79ee;
+    }
+
+    .appointment-details-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    /* Add your responsive styles here */
+    .img-fluid {
+        max-width: 120px;
+    }
+
+    .nav-button-container {
+        justify-content: center;
+    }
 }

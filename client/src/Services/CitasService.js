@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-//const API_URL = 'http://localhost:8000';
 const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+
 
 export const getAllCitas = async () => {
     try {
@@ -40,6 +40,17 @@ export const getOneCita = async (id) => {
     }
 };
 
+export const getOneCitaWithExpediente = async (id) => {
+    console.log(id);
+    try {
+        const res = await axios.get(`${API_URL}/citas/citas-with-expedientes/${id}`);
+        return res.data;
+    } catch (error) {
+        console.log(error);
+        throw new Error('Failed to fetch cita');
+    }
+};
+
 export const filterCita = async (estado) => {
     try {
         const res = await axios.get(`${API_URL}/citas/filtrarCitasTabla/${estado}`);
@@ -62,7 +73,8 @@ export const postCitas = async (cita) => {
         throw error;
     }
 };
-
+//editCitaPreclinica
+//export const editCitaPreclinica
 export const editCitasUser = async (id, cita) => {
     try {
         console.log("In Service Edit");
@@ -165,7 +177,8 @@ const Services = {
     getCheckAvailability,
     getUserExpCitas,
     getAvailableTimesTwoWeeks,
-    editCitasUser
+    editCitasUser,
+    getOneCitaWithExpediente
     // Other functions
 };
 

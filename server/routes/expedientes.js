@@ -126,7 +126,7 @@ const expedientesRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
 
-            const sqlSelect = "SELECT * from citas WHERE idpaciente = " + req.params.id;
+            const sqlSelect = "SELECT * from citas as c WHERE idpaciente = " + req.params.id + " ORDER BY c.fecha, c.hora";
 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();

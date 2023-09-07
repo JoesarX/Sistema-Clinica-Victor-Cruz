@@ -337,11 +337,6 @@ const Contactanos = () => {
                     </div>
                 </div>
             </section>
-            {isLoggedIn && userType !== 'normal' && (
-                <button className='buttonG' onClick={handleToggleButtonClick}>
-                <FontAwesomeIcon icon={faGear} />
-            </button>
-            )}
             <Footer />
         </div>
     );

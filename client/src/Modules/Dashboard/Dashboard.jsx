@@ -169,7 +169,9 @@ const Dashboard = () => {
 
                 setSchAppointments(scheduled.reverse());
                 setPrevAppointments(previous.reverse());
-                setLastAppointment(previous.at(0));
+                if(previous.length > 0) {
+                    setLastAppointment(previous.at(0));
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -216,10 +218,8 @@ const Dashboard = () => {
     };
 
 
-    const handleUploadFile = (event) => {
-        const file = event.target.files[0];
-        // Lógica para subir el archivo al servidor y actualizar el estado
-        // de los archivos en el paciente
+    const handleAppointmentClick = (idcita) => {
+        navigate(`/citas_tabla/historial_cita/${idcita}`)
     };
 
     {/* Editar Button  */ }
@@ -424,7 +424,7 @@ const Dashboard = () => {
     };
 
     return (
-        <div className='scrollable-page'>
+        <div class='scrollable-page'>
             {userType !== 'normal' && (
 
                 <NavBar />
@@ -432,21 +432,21 @@ const Dashboard = () => {
             {userType === 'normal' && (
                 <>
                     <Topbar />
-                    <button className='botonVolver' onClick={handleVolver}>Volver</button>
+                    <button class='botonVolver' onClick={handleVolver}>Volver</button>
                 </>
             )}
 
 
-            <div className='contenido'>
-                <div className='patient-section'>
+            <div class='contenido'>
+                <div class='patient-section'>
 
-                    <div className="infoGeneral">
-                        <div className='profile-picture-and-edit'>
-                            <div className='perfil'>
+                    <div class="infoGeneral">
+                        <div class='profile-picture-and-edit'>
+                            <div class='perfil'>
                                 <FontAwesomeIcon icon={faUser} className='iconoUser' />
                             </div>
                             {userType !== 'normal' && (
-                                <button onClick={handleOpenEditModal} className='editButton'>Editar</button>
+                                <button onClick={handleOpenEditModal} class='editButton'>Editar</button>
                             )}
                             {isEditModalOpen && (
                                 <EditExpedienteDashboardModal
@@ -456,28 +456,28 @@ const Dashboard = () => {
                             )}
                         </div>
 
-                        <div className='patient-info-vert-align'>
-                            <h2 className="nombre"> {patient.nombre}</h2>
-                            <div className='patient-email-container'>
+                        <div class='patient-info-vert-align'>
+                            <h2 class="nombre"> {patient.nombre}</h2>
+                            <div class='patient-email-container'>
                                 {patient.correo}
                             </div>
-                            <p className="smallText">{patient.numid}</p>
-                            <p className="smallText">{patient.sexo}</p>
-                            <div className='space-between-text'>
-                                <p className="smallText">{patient.fecha_nacimiento}</p>
-                                <p className="smallText">{patient.edad} años</p>
+                            <p class="smallText">{patient.numid}</p>
+                            <p class="smallText">{patient.sexo}</p>
+                            <div class='space-between-text'>
+                                <p class="smallText">{patient.fecha_nacimiento}</p>
+                                <p class="smallText">{patient.edad} años</p>
                             </div>
-                            <div className='space-between-text'>
-                                <p className="smallText">{patient.estado_civil}</p>
-                                <p className="smallText">{patient.ocupacion}</p>
+                            <div class='space-between-text'>
+                                <p class="smallText">{patient.estado_civil}</p>
+                                <p class="smallText">{patient.ocupacion}</p>
                             </div>
-                            <p className="smallText">{patient.address}</p>
+                            <p class="smallText">{patient.address}</p>
                         </div>
                     </div>
 
-                    <div className="vitals">
-                        <div className='box-title'>
-                            <h3 className='histmedtit'>Signos Vitales
+                    <div class="vitals">
+                        <div class='box-title'>
+                            <h3 class='histmedtit'>Signos Vitales
                                 {/* <span>
                                     {isEditingLabel ? (<>
                                         <button onClick={handleSaveChangesSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
@@ -499,8 +499,8 @@ const Dashboard = () => {
                         </div>
                         {/* HEIGHT */}
                         <div class="vital-sign-container height" onClick={toggleVitalsInfo}>
-                            <div style={{ color: '#75BD89' }} className="vital-sign-content">
-                                <span className="vitals-label">
+                            <div style={{ color: '#75BD89' }} class="vital-sign-content">
+                                <span class="vitals-label">
                                     <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
                                     <span
                                     // style={{ marginRight: '220px' }}
@@ -508,13 +508,13 @@ const Dashboard = () => {
                                         Altura
                                     </span>
                                 </span>
-                                <span className='vital-sign-value-align'>
-                                    <span className="vitals-value">
+                                <span class='vital-sign-value-align'>
+                                    <span class="vitals-value">
                                         {isEditingLabel ? (
                                             <div>
                                                 <input
                                                     type="text"
-                                                    className="edit-text-box"
+                                                    class="edit-text-box"
                                                     name="altura"
                                                     style={{ width: '65px' }}
                                                     value={patient.altura}
@@ -523,13 +523,13 @@ const Dashboard = () => {
                                                 />
                                             </div>
                                         ) : (
-                                            <span className="vitals-value">
+                                            <span class="vitals-value">
                                                 {(lastAppointment.altura !== null || lastAppointment.altura !== undefined)
                                                     ? lastAppointment.altura : '-'}
                                             </span>
                                         )}
                                     </span>
-                                    <span className="vitals-value">CM</span>
+                                    <span class="vitals-value">CM</span>
                                 </span>
                             </div>
                             <div class='vitals-history'>
@@ -539,8 +539,8 @@ const Dashboard = () => {
                                             {formatVitalsDate(appointment.fecha)}
                                         </span>
                                         <div class="vitals-history-details">
-                                            <span className='vitals-value'>{appointment.altura}</span>
-                                            <span className='vitals-value'>CM</span>
+                                            <span class='vitals-value'>{appointment.altura}</span>
+                                            <span class='vitals-value'>CM</span>
                                         </div>
                                     </div>
                                 ))}
@@ -549,8 +549,8 @@ const Dashboard = () => {
 
                         {/* WEIGHT */}
                         <div class="vital-sign-container weight" onClick={toggleVitalsInfo}>
-                            <div style={{ color: '#54648D' }} className="vital-sign-content">
-                                <span className="vitals-label">
+                            <div style={{ color: '#54648D' }} class="vital-sign-content">
+                                <span class="vitals-label">
                                     <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
                                     <span
                                     // style={{ marginRight: '280px' }}
@@ -558,13 +558,13 @@ const Dashboard = () => {
                                         Peso
                                     </span>
                                 </span>
-                                <span className='vital-sign-value-align'>
-                                    <span className="vitals-value">
+                                <span class='vital-sign-value-align'>
+                                    <span class="vitals-value">
                                         {isEditingLabel ? (
                                             <div >
                                                 <input
                                                     type="text"
-                                                    className="edit-text-box"
+                                                    class="edit-text-box"
                                                     name="peso"
                                                     style={{ width: '60px' }}
                                                     value={patient.peso}
@@ -573,13 +573,13 @@ const Dashboard = () => {
                                                 />
                                             </div>
                                         ) : (
-                                            <span className="vitals-value">
+                                            <span class="vitals-value">
                                                 {(lastAppointment.peso !== null || lastAppointment.peso !== undefined)
                                                     ? lastAppointment.peso : '-'}
                                             </span>
                                         )}
                                     </span>
-                                    <span className="vitals-value">KG</span>
+                                    <span class="vitals-value">KG</span>
                                 </span>
                             </div>
                             <div class='vitals-history'>
@@ -589,8 +589,8 @@ const Dashboard = () => {
                                             {formatVitalsDate(appointment.fecha)}
                                         </span>
                                         <div class="vitals-history-details">
-                                            <span className='vitals-value'>{appointment.peso}</span>
-                                            <span className='vitals-value'>KG</span>
+                                            <span class='vitals-value'>{appointment.peso}</span>
+                                            <span class='vitals-value'>KG</span>
                                         </div>
                                     </div>
                                 ))}
@@ -600,8 +600,8 @@ const Dashboard = () => {
 
                         {/* TEMPERATURA */}
                         <div class="vital-sign-container temperature" onClick={toggleVitalsInfo}>
-                            <div style={{ color: '#916A9E' }} className="vital-sign-content">
-                                <span className="vitals-label">
+                            <div style={{ color: '#916A9E' }} class="vital-sign-content">
+                                <span class="vitals-label">
                                     <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
                                     <span
                                     // style={{ marginRight: '150px' }}
@@ -609,13 +609,13 @@ const Dashboard = () => {
                                         Temperatura
                                     </span>
                                 </span>
-                                <span className='vital-sign-value-align'>
-                                    <span className="vitals-value">
+                                <span class='vital-sign-value-align'>
+                                    <span class="vitals-value">
                                         {isEditingLabel ? (
                                             <div >
                                                 <input
                                                     type="text"
-                                                    className="edit-text-box"
+                                                    class="edit-text-box"
                                                     name="temperatura"
                                                     style={{ width: '65px' }}
                                                     value={patient.temperatura}
@@ -624,13 +624,13 @@ const Dashboard = () => {
                                                 />
                                             </div>
                                         ) : (
-                                            <span className="vitals-value">
+                                            <span class="vitals-value">
                                                 {(lastAppointment.temperatura !== null || lastAppointment.temperatura !== undefined)
                                                     ? lastAppointment.temperatura : '-'}
                                             </span>
                                         )}
                                     </span>
-                                    <span className="vitals-value">ºC</span>
+                                    <span class="vitals-value">ºC</span>
                                 </span>
                             </div>
                             <div class='vitals-history'>
@@ -640,8 +640,8 @@ const Dashboard = () => {
                                             {formatVitalsDate(appointment.fecha)}
                                         </span>
                                         <div class="vitals-history-details">
-                                            <span className='vitals-value'>{appointment.temperatura}</span>
-                                            <span className='vitals-value'>ºC</span>
+                                            <span class='vitals-value'>{appointment.temperatura}</span>
+                                            <span class='vitals-value'>ºC</span>
                                         </div>
                                     </div>
                                 ))}
@@ -650,8 +650,8 @@ const Dashboard = () => {
 
                         {/* RITMO CARDIACO */}
                         <div class="vital-sign-container heart-rate" onClick={toggleVitalsInfo}>
-                            <div style={{ color: '#AB2525' }} className="vital-sign-content">
-                                <span className="vitals-label">
+                            <div style={{ color: '#AB2525' }} class="vital-sign-content">
+                                <span class="vitals-label">
                                     <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
                                     <span
                                     // style={{ marginRight: '170px' }}
@@ -659,12 +659,12 @@ const Dashboard = () => {
                                         Ritmo Cardiaco
                                     </span>
                                 </span>
-                                <span className='vital-sign-value-align'>
-                                    <span className="vitals-value">
+                                <span class='vital-sign-value-align'>
+                                    <span class="vitals-value">
                                         {isEditingLabel ? (
                                             <div >
                                                 <input
-                                                    className="edit-text-box"
+                                                    class="edit-text-box"
                                                     type="text"
                                                     name="ritmo_cardiaco"
                                                     style={{ width: '60px' }}
@@ -674,13 +674,13 @@ const Dashboard = () => {
                                                 />
                                             </div>
                                         ) : (
-                                            <span className="vitals-value">
+                                            <span class="vitals-value">
                                                 {(lastAppointment.ritmo_cardiaco !== null || lastAppointment.ritmo_cardiaco !== undefined)
                                                     ? lastAppointment.ritmo_cardiaco : '-'}
                                             </span>
                                         )}
                                     </span>
-                                    <span className="vitals-value">ppm</span>
+                                    <span class="vitals-value">ppm</span>
                                 </span>
                             </div>
                             <div class='vitals-history'>
@@ -690,8 +690,8 @@ const Dashboard = () => {
                                             {formatVitalsDate(appointment.fecha)}
                                         </span>
                                         <div class="vitals-history-details">
-                                            <span className='vitals-value'>{appointment.ritmo_cardiaco}</span>
-                                            <span className='vitals-value'>ppm</span>
+                                            <span class='vitals-value'>{appointment.ritmo_cardiaco}</span>
+                                            <span class='vitals-value'>ppm</span>
                                         </div>
                                     </div>
                                 ))}
@@ -700,8 +700,8 @@ const Dashboard = () => {
 
                         {/* PRESION */}
                         <div class="vital-sign-container pressure" onClick={toggleVitalsInfo}>
-                            <div style={{ color: '#AB2525' }} className="vital-sign-content">
-                                <span className="vitals-label">
+                            <div style={{ color: '#AB2525' }} class="vital-sign-content">
+                                <span class="vitals-label">
                                     <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
                                     <span
                                     // style={{ width: '300px', marginRight: '10px' }}
@@ -709,13 +709,13 @@ const Dashboard = () => {
                                         Presión Arterial
                                     </span>
                                 </span>
-                                <span className='vital-sign-value-align'>
-                                    <span className="vitals-value">
+                                <span class='vital-sign-value-align'>
+                                    <span class="vitals-value">
                                         {isEditingLabel ? (
                                             <div>
                                                 <input
                                                     type="text"
-                                                    className="edit-text-box"
+                                                    class="edit-text-box"
                                                     name="presion"
                                                     style={{ width: '80px' }}
                                                     value={patient.presion}
@@ -724,13 +724,13 @@ const Dashboard = () => {
                                                 />
                                             </div>
                                         ) : (
-                                            <span className="vitals-value">
+                                            <span class="vitals-value">
                                                 {(lastAppointment.presion !== null || lastAppointment.presion !== undefined)
                                                     ? lastAppointment.presion : '-'}
                                             </span>
                                         )}
                                     </span>
-                                    <span className="vitals-value">mmHg</span>
+                                    <span class="vitals-value">mmHg</span>
                                 </span>
                             </div>
                             <div class='vitals-history'>
@@ -740,8 +740,8 @@ const Dashboard = () => {
                                             {formatVitalsDate(appointment.fecha)}
                                         </span>
                                         <div class="vitals-history-details">
-                                            <span className='vitals-value'>{appointment.presion}</span>
-                                            <span className='vitals-value'>mmHg</span>
+                                            <span class='vitals-value'>{appointment.presion}</span>
+                                            <span class='vitals-value'>mmHg</span>
                                         </div>
                                     </div>
                                 ))}
@@ -749,20 +749,20 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* <div className="files">
-                        <div className='box-title'>
-                            <h3 className='archivostit'>Archivos</h3>
+                    {/* <div class="files">
+                        <div class='box-title'>
+                            <h3 class='archivostit'>Archivos</h3>
                         </div>
-                        <ul className="file-list">
+                        <ul class="file-list">
                             {patient.files.map((file, index) => (
-                                <div key={index} className='file-item-line'>
-                                    <li className='lifile'>{file}</li>
-                                    {index !== patient.files.length - 1 && <hr className='divider'></hr>}
+                                <div key={index} class='file-item-line'>
+                                    <li class='lifile'>{file}</li>
+                                    {index !== patient.files.length - 1 && <hr class='divider'></hr>}
                                 </div>
                             ))}
                         </ul>
                         {userType !== 'normal' && (
-                            <button className="large-button">
+                            <button class="large-button">
                                 <span>
                                     <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
                                     Subir Archivo
@@ -773,12 +773,12 @@ const Dashboard = () => {
 
                 </div>
 
-                <div className="patient-section">
+                <div class="patient-section">
 
-                    <div className='medHis'>
+                    <div class='medHis'>
 
-                        <div className='box-title'>
-                            <h3 className='histmedtit'>Historial Médico
+                        <div class='box-title'>
+                            <h3 class='histmedtit'>Historial Médico
                                 <span>
                                     {isEditingLabel2 ? (<>
                                         <button onClick={handleSaveChanges2} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
@@ -799,14 +799,14 @@ const Dashboard = () => {
                             </h3>
                         </div>
 
-                        <div className="alergias">
-                            <p className="section-label">Alergias:</p>
-                            <ul className="section-value">
+                        <div class="alergias">
+                            <p class="section-label">Alergias:</p>
+                            <ul class="section-value">
                                 {alergias.map((alergias, index) => (
                                     <li key={index}>
                                         {isEditingLabel2 ? (
                                             <input
-                                                className="edit-text-box small"
+                                                class="edit-text-box small"
                                                 type="text"
                                                 value={alergias}
                                                 style={{ width: '98%' }}
@@ -820,14 +820,14 @@ const Dashboard = () => {
                             </ul>
                         </div>
 
-                        <div className="enfermedades">
-                            <p className="section-label">Enfermedades Base:</p>
-                            <ul className="section-value">
+                        <div class="enfermedades">
+                            <p class="section-label">Enfermedades Base:</p>
+                            <ul class="section-value">
                                 {enfermedades.map((enfermedades, index) => (
                                     <li key={index}>
                                         {isEditingLabel2 ? (
                                             <input
-                                                className="edit-text-box small"
+                                                class="edit-text-box small"
                                                 type="text"
                                                 value={enfermedades}
                                                 style={{ width: '98%' }}
@@ -843,9 +843,9 @@ const Dashboard = () => {
 
                     </div>
 
-                    <div className='medicamentos'>
-                        <div className='box-title'>
-                            <h3 className='medtit'>Medicamentos
+                    <div class='medicamentos'>
+                        <div class='box-title'>
+                            <h3 class='medtit'>Medicamentos
                                 <span>
                                     {isEditingLabel3 ? (
                                         <>
@@ -867,12 +867,12 @@ const Dashboard = () => {
 
                             </h3>
                         </div>
-                        <ul className="section-value">
+                        <ul class="section-value">
                             {medications.map((medication, index) => (
                                 <li key={index}>
                                     {isEditingLabel3 ? (
                                         <input
-                                            className="edit-text-box small"
+                                            class="edit-text-box small"
                                             type="text"
                                             value={medication}
                                             style={{ width: '98%' }}
@@ -888,42 +888,42 @@ const Dashboard = () => {
 
                 </div>
 
-                <div className="patient-section appointments-section">
+                <div class="patient-section appointments-section">
                     {userType !== 'normal' && (
-                        <button className='large-button schedule-date' onClick={handleOnClickAgendarCita}>
+                        <button class='large-button schedule-date' onClick={handleOnClickAgendarCita}>
                             <FontAwesomeIcon icon={faCalendarPlus} />
                             Agendar Cita
                         </button>
 
                     )}
-                    <div className='appointments-container'>
+                    <div class='appointments-container'>
 
-                        <div className='box-title appointments-title'>Citas Agendadas</div>
-                        <div className='appointments'>
+                        <div class='box-title appointments-title'>Citas Agendadas</div>
+                        <div class='appointments'>
                             {schAppointments.map((appointment, index) => (
-                                <div key={index} className='appointment'>
-                                    <div className='appointment-date'>
+                                <div key={index} class='appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                    <div class='appointment-date'>
                                         {formatAppointmentDate(appointment.fecha)}
                                     </div>
-                                    <div className='appointment-details'>
-                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                        <span className='appointment-light-text'>{appointment.estado}</span>
+                                    <div class='appointment-details'>
+                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                        <span class='appointment-light-text'>{appointment.estado}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <div className='box-title appointments-title'>Citas Previas</div>
-                        <div className='appointments'>
+                        <div class='box-title appointments-title'>Citas Previas</div>
+                        <div class='appointments'>
                             {prevAppointments.map((appointment, index) => (
-                                <div key={index} className='appointment prev-appointment'>
-                                    <div className='appointment-date'>
+                                <div key={index} class='appointment prev-appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                    <div class='appointment-date'>
                                         {formatAppointmentDate(appointment.fecha)}
                                     </div>
-                                    <div className='appointment-details'>
+                                    <div class='appointment-details'>
                                         {/* <span>{appointment.description}</span> */}
-                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                        {/* <span className='appointment-light-text'>{appointment.medicalExplanation}</span> */}
-                                        <span className='appointment-light-text'>{appointment.estado}</span>
+                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                        <span class='appointment-light-text'>{appointment.Diagnostico}</span>
+                                        {/* <span class='appointment-light-text'>{appointment.estado}</span> */}
                                     </div>
                                 </div>
                             ))}

@@ -890,27 +890,29 @@ const Home = () => {
                 style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}
                 closeAfterTransition BackdropProps={{ onClick: () => { } }}>
                 <div className='modal-container-carrusel modalServicios-carrusel'>
-                    <h1 style={{ position: 'relative', top: '13%' }}>Carrusel de imágenes</h1>
-                    <div className="button-container" style={{ display: 'flex', paddingTop: '5%', justifyContent: 'center', alignItems: 'center' }}>
-                        <label htmlFor="urlfoto" className="customFileLabel" style={{ marginTop: '5%', marginLeft: '4%', backgroundColor: '#1E60A6', fontWeight: 'bold' }}>
-                            <FontAwesomeIcon icon={faPlus} size="2x" />
-                            Agregar foto</label>
-                        <input
-                            type="file"
-                            onChange={(event) => {
-                                imageUpload = event.target.files[0];
-                                imagePreview = URL.createObjectURL(event.target.files[0]);
+                    <h1 className='textC'>Carrusel de imágenes</h1>
+                    <button className="customFileButton" onClick={() => document.getElementById('urlfoto').click()} style={{ backgroundColor: '#1E60A6'}}>
+                    <span className='textAF'><FontAwesomeIcon icon={faPlus} size="x" />
+                        Agregar foto</span>
+                    </button>
+                    <input
+                        type="file"
+                        onChange={(event) => {
+                            imageUpload = event.target.files[0];
+                            imagePreview = URL.createObjectURL(event.target.files[0]);
 
-                                const selectedFile = event.target.files[0];
-                                if (selectedFile) {
-                                    handleModalSubmit(event);
-                                }
-                            }}
-                            name='urlfoto'
-                            id="urlfoto"
-                            className="customFileInput"
-                        />
-                    </div>
+                            const selectedFile = event.target.files[0];
+                            if (selectedFile) {
+                                handleModalSubmit(event);
+                            }
+                        }}
+                        name='urlfoto'
+                        id="urlfoto"
+                        className="customFileInput"
+                        style={{ display: 'none' }}
+                    />
+
+
                     <button className="cancelButton" onClick={handleModalClose}>
                         <FontAwesomeIcon icon={faTimes} size="2x" />
                     </button>
@@ -934,7 +936,7 @@ const Home = () => {
                                                             src={row.url}
                                                             className={`carrusel-crud-image-img ${row.isVisible ? '' : 'hidden'}`}
                                                             alt={`imagen ${row.idfoto}`}
-                                                            style={{ opacity: row.visibility === 1 ? 1 : 0.1}}
+                                                            style={{ opacity: row.visibility === 1 ? 1 : 0.1 }}
                                                         />
                                                     </div>
                                                     <div className="carrusel-list-item-actions">
