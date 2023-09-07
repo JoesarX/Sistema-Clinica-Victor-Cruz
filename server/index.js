@@ -1,6 +1,8 @@
 import express from "express";
 import mysql from "mysql2/promise";
 import cors from "cors";
+import nodemailer from "nodemailer";
+
 import expedientesRouter from "./routes/expedientes.js"
 import usuariosRouter from "./routes/usuarios.js"
 import adminRouter from "./routes/usuarios_admin.js"
@@ -14,8 +16,10 @@ import AboutUsRouter from "./routes/aboutus.js";
 import ExamenesRouter from "./routes/examenes.js"
 import RecetasRouter from "./routes/recetas.js";
 import PagosRouter from "./routes/pagos.js";
+import serviciosRouter from "./routes/servicios.js";
+import preciosRouter from "./routes/precios.js";
+import facturasRouter from "./routes/facturas.js";
 
-import nodemailer from "nodemailer";
 
 
 const app = express();
@@ -86,3 +90,5 @@ app.use('/examenes', ExamenesRouter(pool));
 
 app.use('/recetas', RecetasRouter(pool));
 app.use('/pagos', PagosRouter(pool));
+app.use('/precios', preciosRouter(pool));
+app.use('/facturas', facturasRouter(pool));
