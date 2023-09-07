@@ -123,6 +123,8 @@ const SaludOcupacional = () => {
         const [editable, setEditable] = useState(false);
         const [editedTitle, setEditedTitle] = useState(title);
         const [editedDescription, setEditedDescription] = useState(description);
+        const MAX_TITLE_LENGTH = 25;
+        const MAX_DESC_LENGTH = 400;
 
         const handleEditToggle = () => {
             setEditable(!editable);
@@ -209,6 +211,13 @@ const SaludOcupacional = () => {
         const handleTitleChange = (e) => {
             // Capitalize the first letter of the title
             const value = e.target.value;
+
+            // Validación de longitud máxima del título
+            if (value.length > MAX_TITLE_LENGTH) {
+                return; // No se permite escribir más allá de la longitud máxima
+            }
+        
+            // Capitalize la primera letra de la palabra
             if (value.length === 0) {
                 setEditedTitle(value);
             } else {
@@ -220,6 +229,11 @@ const SaludOcupacional = () => {
         const handleDescriptionChange = (e) => {
             // Capitalize the first letter of the description
             const value = e.target.value;
+            
+            if (value.length > MAX_DESC_LENGTH) {
+                return; // No se permite escribir más allá de la longitud máxima
+            }
+            
             if (value.length === 0) {
                 setEditedDescription(value);
             } else {
@@ -321,6 +335,8 @@ const SaludOcupacional = () => {
         const [editable, setEditable] = useState(false);
         const [editedTitle, setEditedTitle] = useState(title);
         const [editedDescription, setEditedDescription] = useState(description);
+        const MAX_TITLE_LENGTH = 25;
+        const MAX_DESC_LENGTH = 400;
 
         const handleEditToggle = () => {
             setEditable(!editable);
@@ -406,8 +422,14 @@ const SaludOcupacional = () => {
         };
         
         const handleTitleChange = (e) => {
-            // Capitalize the first letter of the title
             const value = e.target.value;
+
+            // Validación de longitud máxima del título
+            if (value.length > MAX_TITLE_LENGTH) {
+                return; // No se permite escribir más allá de la longitud máxima
+            }
+        
+            // Capitalize la primera letra de la palabra
             if (value.length === 0) {
                 setEditedTitle(value);
             } else {
@@ -418,6 +440,11 @@ const SaludOcupacional = () => {
         const handleDescriptionChange = (e) => {
             // Capitalize the first letter of the description
             const value = e.target.value;
+            
+            if (value.length > MAX_DESC_LENGTH) {
+                return; // No se permite escribir más allá de la longitud máxima
+            }
+
             if (value.length === 0) {
                 setEditedDescription(value);
             } else {
