@@ -114,7 +114,7 @@ const Checkout = () => {
             navigate("/");
         }
     }, [success]);
-
+    /*
     useEffect(() => {
         // Validación login
         if (!isLoggedIn) {
@@ -125,6 +125,7 @@ const Checkout = () => {
             navigate("/"); // Redirige a la página de inicio de sesión
         }
     }, [isLoggedIn]);
+    */
 
     if (factura === null) {
         // Display a loading indicator or message while fetching data
