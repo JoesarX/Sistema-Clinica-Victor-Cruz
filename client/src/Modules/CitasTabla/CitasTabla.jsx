@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faPlay, faFile } from '@fortawesome/free-solid-svg-icons';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 
 
 //GRID
@@ -18,6 +20,7 @@ import { IconButton } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from 'sweetalert';
+import DescriptionIcon from '@mui/icons-material/Description';
 
 //ADD MEDICAMENTOS MODAL
 import Modal from '@mui/material/Modal';
@@ -262,7 +265,7 @@ const Citas = () => {
 
         if (currentDayOfWeek === 0) {
             daysUntilNextMonday = 1;
-        }else if (currentDayOfWeek === 6) {
+        } else if (currentDayOfWeek === 6) {
             daysUntilNextMonday = 2;
         }
 
@@ -510,7 +513,7 @@ const Citas = () => {
             });
             return false
         } else if (nombre_persona.charAt(0) === ' ') {
-            
+
             swal("El nombre no puede iniciar con un espacio.", {
                 icon: "error",
             });
@@ -609,7 +612,7 @@ const Citas = () => {
                     ...cita,
                     medId: cita.idmed,
                 }));
-                
+
                 const expedientesData = await ExpedientesService.getAllExpedientes();
                 const expedientesFormatted = expedientesData.map((expediente) => ({
                     idpaciente: expediente.idpaciente,
@@ -684,9 +687,9 @@ const Citas = () => {
 
         if (estado === 'Pendiente') {
             return (
-                <Button variant="success">
-                    <FontAwesomeIcon icon={faPlay} />
-                </Button>
+                <IconButton >
+                    <PlayCircleIcon />
+                </IconButton>
             );
         }
 
@@ -697,20 +700,25 @@ const Citas = () => {
                         <FontAwesomeIcon icon={faTimes} />
                     </Button>
 
-                    <Button variant="info" onClick={handleClick}>
-                        <FontAwesomeIcon icon={faFile} />
-                    </Button>
+                    <IconButton onClick={handleClick}>
+                        <DescriptionIcon />
+                    </IconButton>
                 </>
             )
         }
 
         if (estado === 'Terminada') {
             return (
-                <Button variant="info" onClick={handleClick}>
-                    <FontAwesomeIcon icon={faFile} />
-                </Button>
+                <IconButton onClick={handleClick}>
+                    <DescriptionIcon />
+                </IconButton>
+
             )
         }
+    };
+
+    const handleFacturas = () => {
+        navigate('/factura');
     };
 
     return (
@@ -746,11 +754,12 @@ const Citas = () => {
                                                 <Delete />
                                             </IconButton>
                                             {getActionButtons(params.row.estado)}
+                                            <IconButton onClick={() => handleFacturas()}>
+                                                <ReceiptIcon />
+                                            </IconButton>
                                         </>
-
                                     )
                                 },
-
                             ]}
                             components={{
                                 Toolbar: CustomToolbar,
@@ -791,7 +800,7 @@ const Citas = () => {
                                     onChange={(event, newValue) => {
                                         cita.idpaciente = newValue?.idpaciente;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="ID Paciente"/>}
+                                    renderInput={(params) => <TextField {...params} label="ID Paciente" />}
                                     ListboxProps={
                                         {
                                             style: {
@@ -809,7 +818,7 @@ const Citas = () => {
                                     onChange={(event, newValue) => {
                                         cita.correouser = newValue?.correouser;
                                     }}
-                                    renderInput={(params) => <TextField {...params} label="Correo User"/>}
+                                    renderInput={(params) => <TextField {...params} label="Correo User" />}
                                     ListboxProps={
                                         {
                                             style: {
@@ -918,7 +927,7 @@ const Citas = () => {
 
                                         }}
                                         renderInput={(params) => (
-                                            <TextField {...params} label="ID Paciente"/>
+                                            <TextField {...params} label="ID Paciente" />
                                         )}
                                         ListboxProps={
                                             {

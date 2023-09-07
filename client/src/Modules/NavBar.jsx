@@ -106,14 +106,6 @@ const NavBar = () => {
                                 </ListItemButton>
                             </ListItem>
                         </Link>
-                        <Link to="/factura" style={{ textDecoration: 'none', color: "white" }}>
-                            <ListItem disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon sx={{ color: "white" }}><ReceiptIcon /></ListItemIcon>
-                                    <ListItemText primary={"Facturas"} />
-                                </ListItemButton>
-                            </ListItem>
-                        </Link>
                         <ListItem disablePadding>
                             <ListItemButton onClick={handleSignOutClick}>
                                 <ListItemIcon sx={{ color: "white" }}><Logout /></ListItemIcon>

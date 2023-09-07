@@ -160,7 +160,6 @@ const Topbar = () => {
                                             <div class="dropdown-item" onClick={handleColaboradores}>COLABORADORES</div>
                                             <div class="dropdown-item" onClick={handleCitas}>CITAS</div>
                                             <div class="dropdown-item" onClick={handleExamenes}>EXAMENES</div>
-                                            <div class="dropdown-item" onClick={handleFacturas}>FACTURAS</div>
                                             <div class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
                                         </div>
                                     </div>
