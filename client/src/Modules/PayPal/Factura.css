@@ -212,20 +212,14 @@
 
 .table {
     width: 100%;
-    padding-left: 5%;
-    padding-bottom: 5%;
-    padding-right: 5%;
-    padding-top: 1.5%;
     scrollbar-width: none;
 }
 
 .total {
-    margin-top: -4%;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     align-self: flex-end;
-    margin-right: 6%;
     width: 50%;
 }
 
@@ -276,14 +270,30 @@
 }
 
 .factura-applyISV {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
     width: 100%;
     text-align: right;
     font-size: 26px;
     padding-right: 5%;
 }
 
---mo
+.valid-input {
+    border-color: greenyellow;
+}
 
-.factura-checkbox input[type="checkbox"] {
-    margin-right: 10px;
+.invalid-input {
+    border-color: red;
+}
+
+.factura-payment-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+
+    gap: 20px;
 }
