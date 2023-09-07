@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar';
 import './Factura.css';
 import Tabs from '@mui/material/Tabs';
@@ -40,6 +40,7 @@ function Factura() {
     const [correo, setCorreo] = useState(null);
     const [rtn, setRtn] = useState(null);
 
+    const navigate = useNavigate();
 
     const [addServicio, setAddServicio] = useState({
         servicio: '',
@@ -173,6 +174,7 @@ function Factura() {
             setIsv(0);
             setTotal(0);
             setCorreo('')
+            navigate('/citas_tabla');
         } else {
             const errorMessage = Object.values(errors).join('\n');
 
