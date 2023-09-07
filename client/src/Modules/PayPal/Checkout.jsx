@@ -6,7 +6,6 @@ import swal from 'sweetalert';
 import { useNavigate, useParams } from 'react-router-dom';
 import PagosService from '../../Services/PagosService';
 import FacturasService from '../../Services/FacturasService';
-import CitasService from '../../Services/CitasService';
 import { Box, Typography, Button } from '@mui/material';
 
 const Checkout = () => {
@@ -74,9 +73,9 @@ const Checkout = () => {
             correouser = factura.correo;
 
             const dataPay = { "idpago": OrderId, "idpayer": payer_id, "idcita": idcita, "nombre": given_name, "apellido": surname, "correouser": correouser, "correopago": email_address, "country_code": currency_code, "monto_pagado": value }
-
-            await PagosService.postPagos(dataPay)
-
+            factura.isPagada = true;
+            await PagosService.postPagos(dataPay);
+            await FacturasService.editFactura(id, factura);
             setSuccess(true);
         });
     };

@@ -99,7 +99,7 @@ const facturasRouter = (pool, transporter) => {
                 subject: "Factura de Cita Clinica Dr Victor Cruz",
                 text: `Estimado/a ${req.body.nombre_paciente}, Le recordamos el pago a hacerse para la cita: ${req.body.idCita}\n` +
                     `Con un total de: LPS. ${req.body.total}\n` +
-                    `Puede realizar el pago siguiendo este enlace: http://localhost:3000${checkoutURL} \n` +
+                    `Puede realizar el pago siguiendo este enlace: https://clinica-victorcruz.netlify.app${checkoutURL} \n` +
                     `Si tiene alguna duda no dude en contactarnos.\n` +
                     `¡Que tenga un buen día!\n\n` +
                     `Atentamente,\n` +
@@ -170,7 +170,7 @@ const facturasRouter = (pool, transporter) => {
             } = req.body;
 
             const q =
-                "UPDATE facturas SET nombre_paciente = ? , idCita = ? , isPagada = ? , total = ? , metodoPago = ? , rtn = ? , correo = ? WHERE idfactura = ?";
+                "UPDATE facturas SET nombre_paciente = ? , idCita = ? , isPagada = ? , total = ? , metodoPago = ? , rtn = ? , correo = ? WHERE idFactura = ?";
             const values = [
                 nombre_paciente,
                 idCita,

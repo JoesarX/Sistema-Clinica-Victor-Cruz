@@ -24,6 +24,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import SaveIcon from '@mui/icons-material/Save';
 import Services from '../../Services/FacturasService';
+import swal from 'sweetalert';
 function Factura() {
 
     const [value, setValue] = useState(0);
@@ -89,6 +90,9 @@ function Factura() {
         
         console.log(factura);
         await Services.postFactura(factura);
+        swal("Su factura se creo con exito!", {
+            icon: "success",
+        });
     }
     useEffect(() => {
         const { subtotal, isv, total } = calcularValores();
