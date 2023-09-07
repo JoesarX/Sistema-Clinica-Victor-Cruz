@@ -161,11 +161,12 @@
 }
 
 .preFactura {
+    padding: 2%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-height: 400px;
+    max-height: 900px;
     overflow: scroll;
 }
 
@@ -176,7 +177,6 @@
 .user-search {
     width: 100%;
     display: flex;
-    background-color: #fff;
 }
 
 .user-search.show {
@@ -215,7 +215,8 @@
     padding-left: 5%;
     padding-bottom: 5%;
     padding-right: 5%;
-    padding-top: 3%;
+    padding-top: 1.5%;
+    scrollbar-width: none;
 }
 
 .total {
@@ -243,7 +244,7 @@
     font-family: 'Inter';
 }
 
-.radio {
+.factura-radio {
     margin-right: 7%;
 }
 
@@ -251,7 +252,38 @@
     align-self: flex-end;
 }
 
-.factura-table-header td {
-    /* TEMPORALLL */
-    height: 10px;
+.factura-montos {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    border-radius: 10px;
+    text-transform: capitalize;
+    font-family: 'Inter';
+    background-color: #1976d2;
+}
+
+.factura-subtotal,
+.factura-iva,
+.factura-total {
+    font-weight: 800;
+    color: white;
+    text-align: right;
+    font-size: 26px;
+    width: 100%;
+    padding-right: 5%;
+}
+
+.factura-applyISV {
+    width: 100%;
+    text-align: right;
+    font-size: 26px;
+    padding-right: 5%;
+}
+
+--mo
+
+.factura-checkbox input[type="checkbox"] {
+    margin-right: 10px;
 }

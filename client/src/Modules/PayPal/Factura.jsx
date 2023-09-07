@@ -116,7 +116,7 @@ function Factura() {
                                                 transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
                                                 className={`user-search ${showUserSearch ? 'show' : ''}`}>
                                                 <TextField
-                                                    sx={{ mr: 3 }}
+                                                    sx={{ mr: 3 , backgroundColor: '#fff'}}
                                                     placeholder="Correo del usuario"
                                                     InputProps={{
                                                         startAdornment: (
@@ -167,7 +167,7 @@ function Factura() {
                                     }}
                                     required
                                 />
-                                <h3 className='factura-smallText'></h3>
+
                                 <Button variant="contained" startIcon={<AddCircleIcon />} className='button' onClick={agregarServicio}>
                                     Agregar
                                 </Button>
@@ -180,6 +180,21 @@ function Factura() {
                     <Box className='factura-rightContainer'>
                         {value === 0 &&
                             <div className='preFactura'>
+                                <div className='factura-montos'>
+                                    <div className="factura-subtotal">Subtotal: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(subtotal)}</div>
+                                    <div className="factura-iva">ISV: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(isv)}</div>
+                                    <div className="factura-total">Total: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(total)}</div>
+                                </div>
+                                <div className='factura-applyISV'>
+                                    <label className='factura-checkbox'>
+                                        <input
+                                            type="checkbox"
+                                            checked={aplicarISV}
+                                            onChange={(e) => setAplicarISV(e.target.checked)}
+                                        />
+                                        Aplicar ISV
+                                    </label>
+                                </div>
                                 <div className='table'>
                                     <TableContainer style={{ height: 166 }}>
                                         <Table stickyHeader >
@@ -203,37 +218,7 @@ function Factura() {
                                         </Table>
                                     </TableContainer>
                                 </div>
-                                <div className="total">
-                                    <div className="money">Subtotal: {subtotal}</div>
-                                    <div className="isv-options">
-                                        <div>
-                                            <label className='radio'>
-                                                <input
-                                                    type="radio"
-                                                    name="isv"
-                                                    value={true}
-                                                    checked={aplicarISV}
-                                                    onChange={() => setAplicarISV(true)}
-                                                />
-                                                Aplicar ISV
-                                            </label>
-                                            <label className='radio'>
-                                                <input
-                                                    type="radio"
-                                                    name="isv"
-                                                    value={false}
-                                                    checked={!aplicarISV}
-                                                    onChange={() => setAplicarISV(false)}
-                                                />
-                                                No aplicar ISV
-                                            </label>
-                                            <label className='radioISV'>
-                                                <div className="money">ISV: {isv}</div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div className="money">Total: {total}</div>
-                                </div>
+
                                 <Button variant="contained" startIcon={<SaveIcon />} className='button'>
                                     Guardar Factura
                                 </Button>
