@@ -307,8 +307,11 @@ const LandingPage = () => {
         }
         const fetchUsuarios = async () => {
             const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
-            setUsuarioss(usuariosObtenidos);
-        }
+            const filteredUsuarios = usuariosObtenidos.filter(usuario => usuario.edad < 18);
+
+            setUsuarioss(filteredUsuarios);
+        };
+
         fetchPerfil();
         fetchUsuarios();
     }, [isLoggedIn]);
@@ -391,8 +394,10 @@ const LandingPage = () => {
         };
         const fetchUsuarios = async () => {
             const usuariosObtenidos = await ExpedientesService.getExpedientes(correo);
-            setUsuarioss(usuariosObtenidos);
+            const filteredUsuarios = usuariosObtenidos.filter(usuario => usuario.edad < 18);
+            setUsuarioss(filteredUsuarios);
         };
+
         fetchPerfil();
         fetchUsuarios();
     };
@@ -420,7 +425,7 @@ const LandingPage = () => {
 
 
     const handleOpenEditModal = () => {
-        
+
         setSelectedUser(user);
         console.log(perfil)
         setIsEditModalOpen(true);
@@ -734,7 +739,7 @@ const LandingPage = () => {
                                     profile={perfil}
                                     onClose={handleCloseEditModal}
                                 />
-                                
+
                             )}
                         </div>
                         <div className='infoP'>
@@ -750,24 +755,26 @@ const LandingPage = () => {
                                     <h3 className='vintit'>Expedientes relacionados al perfil</h3>
                                 </div>
                                 <ul className="evlist">
-                                    {usuarios.map((usuario, index) => {
-                                        return (
-                                            <div key={usuario.idPaciente} className="user-item">
-                                                <li className="user-info">
-                                                    <span className="user-name">{usuario.nombre}</span>
-                                                    <button
-                                                        className="ver-perfil-button"
-                                                        onClick={() => handleViewExpediente(usuario.idPaciente)}
-                                                    >
-                                                        Ver Expediente
-                                                    </button>
-                                                </li>
-
-                                                {index !== usuarios.length - 1 && <hr className="linead" />}
-                                            </div>
-                                        )
-                                    })}
+                                    {usuarios
+                                        .filter(usuario => usuario.edad < 18) 
+                                        .map((usuario, index) => {
+                                            return (
+                                                <div key={usuario.idPaciente} className="user-item">
+                                                    <li className="user-info">
+                                                        <span className="user-name">{usuario.nombre}</span>
+                                                        <button
+                                                            className="ver-perfil-button"
+                                                            onClick={() => handleViewExpediente(usuario.idPaciente)}
+                                                        >
+                                                            Ver Expediente
+                                                        </button>
+                                                    </li>
+                                                    {index !== usuarios.length - 1 && <hr className="linead" />}
+                                                </div>
+                                            );
+                                        })}
                                 </ul>
+
                             </div>
                         </div>
                     </div>

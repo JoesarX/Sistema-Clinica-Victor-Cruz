@@ -1,9 +1,5 @@
 import { faTrash, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
-<<<<<<< HEAD
-import { useState, useEffect, useRef } from 'react';
-=======
 import { useState, useEffect } from 'react';
->>>>>>> f78b2be068e9dce16cea32cd36ea24ac8aab0998
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
