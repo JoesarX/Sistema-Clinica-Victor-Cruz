@@ -720,8 +720,8 @@ const Citas = () => {
         }
     };
 
-    const handleFacturas = () => {
-        navigate('/factura');
+    const handleFacturas = (id) => {
+        navigate(`/factura/${id}`);
     };
 
     return (
@@ -757,7 +757,7 @@ const Citas = () => {
                                                 <Delete />
                                             </IconButton>
                                             {getActionButtons(params.row.estado)}
-                                            <IconButton onClick={() => handleFacturas()}>
+                                            <IconButton onClick={() => handleFacturas( params.id)}>
                                                 <ReceiptIcon />
                                             </IconButton>
                                         </>

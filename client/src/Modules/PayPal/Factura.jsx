@@ -23,7 +23,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import SaveIcon from '@mui/icons-material/Save';
-
+import Services from '../../Services/FacturasService';
 function Factura() {
 
     const [value, setValue] = useState(0);
@@ -34,11 +34,18 @@ function Factura() {
     const [isv, setIsv] = useState(0);
     const [total, setTotal] = useState(0);
     const [showUserSearch, setShowUserSearch] = useState(false);
+
+    const [nombre, setNombre] = useState(null);
+    const [correo, setCorreo] = useState(null);
+    const [rtn, setRtn] = useState(null);
+    
+
     const [addServicio, setAddServicio] = useState({
         servicio: '',
         precio: '',
     });
-
+    const { id } = useParams();
+    
     const columns = [
         { id: 'servicio', label: 'Servicio', width: '60%' },
         { id: 'precio', label: 'Precio', width: '30%' },
@@ -63,7 +70,26 @@ function Factura() {
             setSelectedService('Servicios Disponibles');
         }
     };
+    const factura = {
+        nombre_paciente: "",
+        idCita : id,
+        isPagada : "",
+        total : "",
+        metodoPago: "",
+        rtn : "",
+        correo : ""
 
+    };
+    const guardarFactura=async ()=>{
+        factura.nombre_paciente=nombre;
+        factura.total=total;
+        factura.metodoPago="paypal";
+        factura.correo=correo;
+        factura.rtn=rtn;
+        
+        console.log(factura);
+        await Services.postFactura(factura);
+    }
     useEffect(() => {
         const { subtotal, isv, total } = calcularValores();
         setSubtotal(subtotal);
@@ -103,6 +129,7 @@ function Factura() {
                                             type="text"
                                             placeholder="Nombre"
                                             required
+                                            onChange={(e) => setNombre(e.target.value)}
                                         />
                                         <Button onClick={() => setShowUserSearch(!showUserSearch)} variant="text" startIcon={<LinkIcon />}>
                                             Vincular Usuario
@@ -118,6 +145,7 @@ function Factura() {
                                                 <TextField
                                                     sx={{ mr: 3 , backgroundColor: '#fff'}}
                                                     placeholder="Correo del usuario"
+                                                    onChange={(e) => setCorreo(e.target.value)}
                                                     InputProps={{
                                                         startAdornment: (
                                                             <InputAdornment position="start">
@@ -136,6 +164,7 @@ function Factura() {
                                         className="input-field"
                                         type="text"
                                         placeholder="RTN"
+                                        onChange={(e) => setRtn(e.target.value)}
                                     />
                                 </div>
                                 <h3 className='factura-smallText'>Seleccionar Servicio Brindado</h3>
@@ -219,8 +248,8 @@ function Factura() {
                                     </TableContainer>
                                 </div>
 
-                                <Button variant="contained" startIcon={<SaveIcon />} className='button'>
-                                    Guardar Factura
+                                <Button variant="contained" startIcon={<SaveIcon />} className='button' onClick={guardarFactura}>
+                                    Efectuar Pago
                                 </Button>
                             </div>
                         }
