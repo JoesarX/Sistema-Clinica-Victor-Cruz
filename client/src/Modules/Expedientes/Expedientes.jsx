@@ -663,6 +663,7 @@ const Expedientes = () => {
 
                                        <MobileDatePicker
                                           id="fecha_nacimiento"
+                                          label="Fecha de nacimiento"
                                           defaultValue={dayjs(expediente.fecha_nacimiento)}
                                           onChange={handleDateChange}
                                           renderInput={(params) => <TextField {...params} />}

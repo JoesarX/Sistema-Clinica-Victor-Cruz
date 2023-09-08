@@ -24,6 +24,7 @@ import { Delete, Edit } from '@mui/icons-material'
 import { IconButton } from '@mui/material';
 import Citas from '../CitasTabla/CitasTabla';
 import { CorporateFareTwoTone } from '@mui/icons-material';
+import bcrypt from 'bcryptjs';
 
 const LandingPage = () => {
     const isLoggedIn = localStorage.getItem("100");
@@ -293,7 +294,8 @@ const LandingPage = () => {
                 date: cita.fecha,
                 time: cita.hora,
                 description: cita.nombre_persona,
-                idpaciente: cita.idpaciente
+                idpaciente: cita.idpaciente,
+                estado : cita.estado
             })))
             const uniqueCitas2 = Array.from(new Set(validar_Pasadas.map(cita => cita.idcita)))
                 .map(idcita => validar_Pasadas.find(cita => cita.idcita === idcita));
@@ -302,7 +304,8 @@ const LandingPage = () => {
                 date: cita.fecha,
                 time: cita.hora,
                 description: cita.nombre_persona,
-                idpaciente: cita.idpaciente
+                idpaciente: cita.idpaciente,
+                estado : cita.estado
             })))
         }
         const fetchUsuarios = async () => {
@@ -811,6 +814,7 @@ const LandingPage = () => {
                                     </div>
                                     <div className='appointment-details'>
                                         <span>{appointment.description}</span>
+                                        <span>{appointment.estado}</span>
                                         <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
                                     </div>
                                     <IconButton onClick={() => toggleModal22(appointment.id)}>
@@ -844,6 +848,7 @@ const LandingPage = () => {
                                     </div>
                                     <div className='appointment-details'>
                                         <span>{appointment.description}</span>
+                                        <span>{appointment.estado}</span>
                                         <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
 
                                     </div>

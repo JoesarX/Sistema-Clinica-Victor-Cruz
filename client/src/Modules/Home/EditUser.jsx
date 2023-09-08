@@ -64,14 +64,16 @@ const EditUserInfo = ({ profile, onClose }) => {
         }
 
         if (passChange) {
+            const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
             const editedUser = {
                 nombre: user.nombre,
                 edad: parseInt(user.edad),
                 pregunta: user.preguntaSeguridad,
                 respuesta: user.respuestaSeguridad,
                 oldPassword,
-                newPassword: user.newPassword,
+                newPassword: hashedNewPassword,
             };
+            
             console.log('hellooooo 1')
             console.log(editedUser)
             try {
@@ -90,12 +92,13 @@ const EditUserInfo = ({ profile, onClose }) => {
                 pregunta: user.preguntaSeguridad,
                 respuesta: user.respuestaSeguridad,
                 oldPassword: user.oldPassword,
-                newPassword
+                newPassword:user.oldPassword
             };
             console.log('hellooooo')
             console.log(editedUser)
             try {
                 console.log("CORREO EN EDIT: " + user.correo);
+                
                 await UsuariosService.editusuarios(user.correo, editedUser);
                 swal('Éxito', 'Usuario editado exitosamente', 'success');
                 onClose();
@@ -208,7 +211,7 @@ const EditUserInfo = ({ profile, onClose }) => {
                     className="inputField"
                     name="respuesta"
                     required
-                    value={user.respuesta}
+                    value={user.respuestaSeguridad}
                     onChange={handleModalFieldChange}
                     sx={{ width: '100%', backgroundColor: '#F0F0F0', marginBottom: '16px' }}
                 />
