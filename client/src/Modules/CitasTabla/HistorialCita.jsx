@@ -44,11 +44,11 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                     />
                 </div>
                 <div className="col-md-3">
-                    <h6 className="headers">Frecuencia</h6>
+                    <h6 className="headers">Dosis</h6>
                     <input
                         className="input-bg"
                         type="text"
-                        placeholder="Frecuencia"
+                        placeholder="Dosis"
                         value={data.frecuencia}
                         onChange={(e) => handleDataChange(e, 'frecuencia')}
                     />
@@ -709,7 +709,7 @@ function HistorialCita() {
                     </div>
                     {showIncapacity && (
                         <div class='contenedor'>
-                            <h4 class='headers'>Tipo de Incapacidad</h4>
+                            <h4 class='headers'>Tipo de Ausencia</h4>
                             <div className="btn-group my-2" role="group">
                                 <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off"
                                     onChange={(e) => setTipo_Incapacidad("Laboral")} />
@@ -741,19 +741,11 @@ function HistorialCita() {
                                 </div>
 
                                 <div class="form-group col-md-3">
-                                    <label htmlFor="diasDescanso" class="form-label">Cantidad</label>
+                                    <label htmlFor="diasDescanso" class="form-label">Cantidad de Dias</label>
                                     <input class="input-bg" id="diasDescanso"
                                         type="number"
                                         placeholder="1"
                                         onChange={(e) => setDias(e.target.value)} />
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label htmlFor="tiempo" class="form-label">Tipo</label>
-                                    <select class="input-bg" id="tiempo" onChange={(e) => setTipoTiempo(e.target.value)}>
-                                        <option value="dias">Días</option>
-                                        <option value="semanas">Semanas</option>
-                                        <option value="meses">Meses</option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="row mb-3">
