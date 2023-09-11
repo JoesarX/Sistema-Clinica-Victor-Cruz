@@ -412,7 +412,6 @@ function HistorialCita() {
         doc.text("Horario:", 5, 0.5, { align: "right" });
         doc.text("Lunes a Viernes", 5, 0.65, { align: "right" });
         doc.text("de 8:00 a.m. a 6:00 p.m.", 5, 0.80, { align: "right" });
-        doc.text("Sábado de 8:00 a.m. a 12 m.", 5, 0.95, { align: "right" });
         doc.text("EMERGENCIAS.", 5, 1.1, { align: "right" });
 
 
@@ -421,7 +420,7 @@ function HistorialCita() {
         const fontie = 6;
         //x1,y1  x2,y2
         doc.autoTable({
-            head: [['Medicamento', 'Cantidad', 'Frecuencia', 'Duracion']],
+            head: [['Medicamento', 'Cantidad', 'Dosis', 'Duracion']],
             body: medicamentosData.map((medication) => [
                 medication.medicamento,
                 medication.cantidad,
