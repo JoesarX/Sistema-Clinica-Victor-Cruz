@@ -9,7 +9,7 @@ const medicamentosRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             // const sqlSelect = "SELECT * FROM medicamentos ";
-            const sqlSelect = "SELECT m.idmed, m.nombre, m.stock, m.precio_unitario, m.via,m.dosis,m.urlfoto,c.Nombre_Categoria FROM medicamentos m inner join categorias c where m.id_categoria=c.id"
+            const sqlSelect = "SELECT m.idmed, m.nombre, m.stock, m.precio_unitario, m.via,m.dosis,m.urlfoto,c.Nombre_Categoria FROM medicamentos m left join categorias c ON m.id_categoria = c.id"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log("Get all medicamentos Successfull");
