@@ -886,10 +886,14 @@
 
 .file-item-line {
     width: 98%;
-    /* TEMPORALLL */
-    /* background-color: rgb(0, 255, 0, 0.3);
-    background-size: 10px 10px;
-    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
 }
 
 .lifile {

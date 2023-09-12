@@ -3,7 +3,7 @@ import { AuthContext } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faFile, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
 import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
@@ -169,7 +169,7 @@ const Dashboard = () => {
 
                 setSchAppointments(scheduled.reverse());
                 setPrevAppointments(previous.reverse());
-                if(previous.length > 0) {
+                if (previous.length > 0) {
                     setLastAppointment(previous.at(0));
                 }
             } catch (error) {
@@ -422,6 +422,16 @@ const Dashboard = () => {
             extraInfo.classList.add('expanded');
         }
     };
+
+    const handleDeleteFile = (index) => {
+        ///////////////
+    }
+
+
+    const handleOpenFile = (fileName) => {
+        //////////////////
+    }
+
 
     return (
         <div class='scrollable-page'>
@@ -749,18 +759,32 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    {/* <div class="files">
+                    <div class="files">
                         <div class='box-title'>
                             <h3 class='archivostit'>Archivos</h3>
                         </div>
                         <ul class="file-list">
-                            {patient.files.map((file, index) => (
-                                <div key={index} class='file-item-line'>
-                                    <li class='lifile'>{file}</li>
-                                    {index !== patient.files.length - 1 && <hr class='divider'></hr>}
-                                </div>
-                            ))}
-                        </ul>
+    {patient.files.map((file, index) => (
+        <div key={index} class='file-item-line'>
+            <div class="file-info">
+                <li class='lifile'>{file}</li>
+                <button onClick={() => handleDeleteFile(index)}>
+                    <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
+                </button>
+                <button onClick={() => handleOpenFile(file)}>
+                    <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />
+                </button>
+            </div>
+            {index !== patient.files.length - 1 && (
+                <div class="divider-container">
+                    <hr class='divider'></hr>
+                </div>
+            )}
+        </div>
+    ))}
+</ul>
+
+
                         {userType !== 'normal' && (
                             <button class="large-button">
                                 <span>
@@ -769,7 +793,8 @@ const Dashboard = () => {
                                 </span>
                             </button>
                         )}
-                    </div> */}
+                    </div>
+
 
                 </div>
 
