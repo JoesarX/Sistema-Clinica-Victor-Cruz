@@ -501,6 +501,7 @@ const Expedientes = () => {
                ...expediente,
                pacienteId: expediente.idpaciente,
             }));
+            console.log(expedientesWithId)
             setExpedientes(expedientesWithId);
             console.log(expedientes)
          } catch (error) {

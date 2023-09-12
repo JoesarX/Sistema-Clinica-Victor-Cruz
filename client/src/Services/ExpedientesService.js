@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 
-//const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+const API_URL = 'http://localhost:8000';
+//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 export const getAllExpedientes = async () => {
     try {
@@ -31,6 +31,7 @@ export const getUserExpedients = async (mail) => {
     try {
         const res = await axios.get(`${API_URL}/expedientes/UserExpedients/${mail}`);
         console.log("GG")
+        console.log(res.data)
         return res.data;
     } catch (error) {
         console.log(error);

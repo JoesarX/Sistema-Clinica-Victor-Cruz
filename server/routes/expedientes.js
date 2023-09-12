@@ -22,11 +22,14 @@ const expedientesRouter = (pool) => {
 
     router.get("/UserExpedients/:correo", async (req, res) => {
         try {
+            console.log("Server")
             const connection = await pool.getConnection();
             const email = req.params.correo;
-            const sqlSelect = "select E.* from Expedientes E left join Usuarios U on E.correo = U.correouser where E.correo = ?"
+            const sqlSelect = "select E.idpaciente, E.nombre, TIMESTAMPDIFF(YEAR, E.fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(E.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, E.sexo, E.correo, E.telefono, E.numid, E.estado_civil, E.padecimientos, E.ocupacion from Expedientes E left join Usuarios U on E.correo = U.correouser where E.correo = ?"
             const [rows, fields] = await connection.query(sqlSelect, email);
             connection.release();
+            console.log("Serverr")
+            console.log(rows)
             res.json(rows);
             console.log("Get User Expedientes call successful");
         } catch (err) {

@@ -42,6 +42,7 @@ const LandingPage = () => {
     console.log("ESTE ES EL CORREO: " + correo);
     const [perfil, setPerfil] = useState({});
     const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const [idd, setID] = useState(null);
     const [selectMail, setMail] = useState([]);
@@ -136,6 +137,38 @@ const LandingPage = () => {
 
     }, [isLoggedIn, isSubmitting2]);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const toggleModal = async () => {
+        console.log("HI ADD")
+        setIsModalOpen(!isModalOpen);
+        setIsSubmitting(false);
+        cleanCita();
+
+        const currentDate = new Date();
+        const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+
+        console.log("currentDayOfWeek: ", currentDayOfWeek);
+
+        // Calculate the number of days to add to the current date to reach the next Monday
+        let daysUntilNextMonday = 0
+
+        if (currentDayOfWeek === 0) {
+            daysUntilNextMonday = 1;
+        } else if (currentDayOfWeek === 6) {
+            daysUntilNextMonday = 2;
+        }
+
+        // Create a new date by adding the days to the current date
+        const nextMonday = new Date(currentDate);
+        nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
+        const formattedDate = dayjs(nextMonday).format('YYYY-MM-DD');
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        const fechaAsDayjs = dayjs(formattedDate);
+        setFecha(fechaAsDayjs);
+        setAvailableTimes(times);
+    };
+
     const toggleModal22 = async (id) => {
         setID(id);
         console.log(idd)
@@ -143,6 +176,7 @@ const LandingPage = () => {
             const citaData = await CitasService.getOneCita(id);
             console.log(citaData)
             const selectedIdPaciente2 = Expedientes.find((expediente) => expediente.idpaciente === citaData.idpaciente);
+            console.log(selectedIdPaciente2)
             setExpedientess(selectedIdPaciente2)
             console.log(selectedIdPaciente2)
             console.log("HELLOOOOO")
@@ -295,7 +329,7 @@ const LandingPage = () => {
                 time: cita.hora,
                 description: cita.nombre_persona,
                 idpaciente: cita.idpaciente,
-                estado : cita.estado
+                estado: cita.estado
             })))
             const uniqueCitas2 = Array.from(new Set(validar_Pasadas.map(cita => cita.idcita)))
                 .map(idcita => validar_Pasadas.find(cita => cita.idcita === idcita));
@@ -305,7 +339,7 @@ const LandingPage = () => {
                 time: cita.hora,
                 description: cita.nombre_persona,
                 idpaciente: cita.idpaciente,
-                estado : cita.estado
+                estado: cita.estado
             })))
         }
         const fetchUsuarios = async () => {
@@ -717,6 +751,58 @@ const LandingPage = () => {
         fetchData2();
     }, [selectedNombre2]);
 
+    const submitCita = async () => {
+        // console.log("doneee");
+
+        // console.log("Entra a agregar despues de validaciones");
+        try {
+            await CitasService.postCitas(cita);
+            //
+            console.log(cita)
+            swal("Cita Agregada.", {
+                icon: "success",
+            });
+            toggleModal();
+            window.location.reload();
+        } catch (error) {
+            // Handle error if any
+            // console.log('Error submitting cita:', error);
+        }
+    };
+
+
+    const handleModalSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            cita.estado = "Pendiente";
+            cita.correouser = perfil.correo;
+            if (validations()) {
+                // console.log("Entra a agregar despues de validaciones");
+                // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
+                const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora);;
+                const isAvailable = availableResponse.available;
+                // console.log("isAvailable: " , isAvailable);
+
+                if (!isAvailable) {
+                    swal("La hora que ha seleccionado ya ha sido ocupada.", {
+                        icon: "error",
+                    });
+                    setHora(null);
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate);
+                    setAvailableTimes(times);
+                } else {
+                    submitCita();
+                }
+            }
+        } catch (error) {
+            // Handle error if any
+            // console.log('Error submitting cita:', error);
+        }
+    };
+
+    
+
 
     return (
 
@@ -759,7 +845,7 @@ const LandingPage = () => {
                                 </div>
                                 <ul className="evlist">
                                     {usuarios
-                                        .filter(usuario => usuario.edad < 18) 
+                                        .filter(usuario => usuario.edad < 18)
                                         .map((usuario, index) => {
                                             return (
                                                 <div key={usuario.idPaciente} className="user-item">
@@ -784,7 +870,7 @@ const LandingPage = () => {
 
                 </div>
                 <div className="appointments-section">
-                    <button className='large-button schedule-date'>
+                    <button onClick={toggleModal} className='large-button schedule-date'>
                         <FontAwesomeIcon icon={faCalendarPlus} />
                         Agendar Cita
                     </button>
@@ -966,6 +1052,100 @@ const LandingPage = () => {
                     </div>
                 </div>
             </Modal>
+            <div>
+                <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+
+                    <div className='modalContainer modalCitas'>
+
+
+                        <h2 className="modalHeader">AGREGAR CITA</h2>
+                        <button className="cancelButton" onClick={toggleModal}>
+                            <FontAwesomeIcon icon={faTimes} size="2x" />
+                        </button>
+                        <Box
+                            component="form"//edit modal
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px',
+                                width: '100%', // Added width property
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" onChange={handleModalFieldChange} name='nombre_persona' required />
+                            <Autocomplete
+                                value={Expedientess}
+                                disablePortal
+                                id="idpaciente"
+                                options={Expedientes}
+                                getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
+                                onChange={(event, newValue) => {
+
+                                    cita.idpaciente = newValue?.idpaciente;
+
+                                }}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="ID Paciente" />
+                                )}
+                                ListboxProps={
+                                    {
+                                        style: {
+                                            maxHeight: '220px',
+                                            border: '1px solid BLACK'
+                                        }
+                                    }
+                                }
+                            />
+
+                            
+
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <MobileDatePicker
+                                    id="fecha"
+                                    onChange={handleDateChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                    shouldDisableDate={isWeekday} // Disable weekends
+                                    label="Fecha"
+                                    name='fecha'
+                                    value={fecha}
+                                />
+                            </LocalizationProvider>
+                            <Autocomplete
+                                disablePortal
+                                id="hora"
+                                required
+                                options={availableTimes}
+                                value={hora}
+                                onChange={(event, newValue) => {
+                                    setHora(newValue);
+                                    setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                }}
+                                renderInput={(params) => <TextField {...params} label="Hora
+            " required style={{ marginBottom: '0.45rem' }} />}
+                                ListboxProps={
+                                    {
+                                        style: {
+                                            maxHeight: '300px',
+                                            border: '1px solid BLACK'
+                                        }
+                                    }
+                                }
+                            />
+
+
+                            <Button onClick={handleModalSubmit} variant="contained" style={{
+                                backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                            }}>
+                                Agregar Cita
+                            </Button>
+                        </Box>
+
+                    </div>
+                </Modal>
+
+            </div>
         </div>
     );
 };
