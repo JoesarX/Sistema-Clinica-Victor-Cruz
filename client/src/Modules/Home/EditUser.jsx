@@ -77,7 +77,7 @@ const EditUserInfo = ({ profile, onClose }) => {
             console.log('hellooooo 1')
             console.log(editedUser)
             try {
-                console.log("CORREO EN EDIT: " + user.correo);
+                
                 await UsuariosService.editusuarios(user.correo, editedUser);
                 swal('Éxito', 'Usuario editado exitosamente', 'success');
                 onClose();
@@ -97,7 +97,7 @@ const EditUserInfo = ({ profile, onClose }) => {
             console.log('hellooooo')
             console.log(editedUser)
             try {
-                console.log("CORREO EN EDIT: " + user.correo);
+                
                 
                 await UsuariosService.editusuarios(user.correo, editedUser);
                 swal('Éxito', 'Usuario editado exitosamente', 'success');

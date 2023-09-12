@@ -305,11 +305,11 @@ const Examenes = () => {
             setExameness([examenData]);
             setExamen(examenData);
         } catch (error) {
-            console.log(error);
+            
         }
         setIsEditModalOpen(!isEditModalOpen);
         setIsEditSubmitting(false);
-        console.log(isEditSubmitting);
+        
     };
 
     const closeEditModal = useCallback(() => {
@@ -332,7 +332,7 @@ const Examenes = () => {
                 cleanExamen();
             }
         } catch (error) {
-            console.log('Error submitting examen:', error);
+            
         }
     }, [validations, examen, id, closeEditModal, cleanExamen]);
 
@@ -343,7 +343,7 @@ const Examenes = () => {
             submitEditExamen();
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting examen:', error);
+            
         }
     };
 
@@ -374,7 +374,7 @@ const Examenes = () => {
                 setExamenes(examenesWithId);
             } catch (error) {
                 // Handle error if any
-                console.log("Error fetching examenes:", error);
+                
             }
         };
 

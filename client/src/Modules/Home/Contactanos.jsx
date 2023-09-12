@@ -183,11 +183,11 @@ const Contactanos = () => {
                 const objectNum = ['Footer_Telefono'];
                 var numData;
                 numData = await text_Services.getOneText(objectNum);
-                console.log("Cargar Mision: " + numData[0].texto_campo);
+                
                 setPhone(numData[0].texto_campo);
                 numOBJ.texto_campo = numData[0].texto_campo;
             } catch (error) {
-                console.log("Error fetching Numero de Telefono:", error);
+                
             }
         };
 
@@ -196,11 +196,11 @@ const Contactanos = () => {
                 const objectCorreo = ['Footer_Correo'];
                 var correoData;
                 correoData = await text_Services.getOneText(objectCorreo);
-                console.log("Cargar Correo: " + correoData[0].texto_campo);
+                
                 setEmail(correoData[0].texto_campo);
                 correoOBJ.texto_campo = correoData[0].texto_campo;
             } catch (error) {
-                console.log("Error fetching Correo:", error);
+                
             }
         };
 
@@ -210,11 +210,11 @@ const Contactanos = () => {
                 const objectWha = ['WHA'];
                 var whaData;
                 whaData = await text_Services.getOneText(objectWha);
-                console.log("Cargar Whatsapp: " + whaData[0].texto_campo);
+                
                 setWhatsApp(whaData[0].texto_campo);
                 whaOBJ.texto_campo = whaData[0].texto_campo;
             } catch (error) {
-                console.log("Error fetching Correo:", error);
+                
             }
         };
 

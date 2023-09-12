@@ -47,7 +47,7 @@ const Ficha_Agregar_Categorias = (props) => {
             try {
                 await fetchAllCategories();
             } catch (error) {
-                console.log('Error fetching categories:', error);
+                
             }
         };
 
@@ -97,7 +97,7 @@ const Ficha_Agregar_Categorias = (props) => {
     }, [isLoggedIn, navigate, isSubmitting]);
 
     function handleDeleteCategoriesClick(id) {
-        console.log(id);
+        
         swal({
             title: "¿Estás seguro?",
             text: "Una vez borrado, no podrás recuperar esta categoria.",
@@ -129,7 +129,7 @@ const Ficha_Agregar_Categorias = (props) => {
         try {
             var categoriaInput = document.getElementById("categoriaInput");
             var categoriaValue = categoriaInput.value;
-            console.log("Verificando string: " + categoriaValue);
+            
 
             if ((categoriaValue == "") || (categoriaValue == " ") || (categoriaValue == "   ")) {
                 swal({
@@ -151,9 +151,9 @@ const Ficha_Agregar_Categorias = (props) => {
                 trust = false;
             }
             const verificacion = await CategoriasService.getAllCategories();
-            console.log(verificacion.Nombre_Categoria);
+            
             const existe = verificacion.some((verificacion) => verificacion.Nombre_Categoria === categoriaValue)
-            console.log(existe);
+            
             if (existe) {
                 swal({
                     title: "Error al agregar categoría",
@@ -162,12 +162,12 @@ const Ficha_Agregar_Categorias = (props) => {
                 });
                 trust = false;
             }
-            console.log(categoriaValue);
+            
             if (trust) {
                 var nuevaCategoria = [categoriaValue];
                 const res = await CategoriasService.postCategories(nuevaCategoria)
 
-                console.log(res);
+                
                 swal({
                     title: "Categoria Agregada",
                     text: "Categoria Agregada exitosamente",
@@ -181,13 +181,13 @@ const Ficha_Agregar_Categorias = (props) => {
                 text: "Reportar este error: ".concat(error),
                 icon: "error",
             });
-            console.log(error);
+            
         }
 
     }
     const handleEditCategoryName = async (editedValue, rowId) => {
-        console.log('handle eddit caterogy name: ', editedValue);
-        console.log('handle eddit caterogy id : ', rowId);
+        
+        
         const object = [editedValue, rowId]
         try {
             await CategoriasService.editCategories(rowId, object)
@@ -218,7 +218,7 @@ const Ficha_Agregar_Categorias = (props) => {
             }));
             setCategorias(CategoriesWithId);
         } catch (error) {
-            console.log("Error fetching Categorias:", error);
+            
         }
     };
 
@@ -246,9 +246,9 @@ const Ficha_Agregar_Categorias = (props) => {
         if (apiRef && apiRef.current) {
             const row = apiRef.current.getRow(rowId);
             if (row) {
-                console.log('row found', row);
+                
             } else {
-                console.log('Row not found');
+                
             }
             return row;
         }
@@ -362,13 +362,13 @@ const Ficha_Agregar_Categorias = (props) => {
         };
 
         const saveChanges = async (editedvalue, Row) => {
-            console.log("Esta es la row: " + editedvalue + " " + Row.id);
-            console.log("Esta es la row: " + Row.id);
+            
+            
             if (editedvalue) {
 
                 await handleEditCategoryName(editedvalue, Row.id);
 
-                console.log('Edited Row:', editedvalue);
+                
 
                 const updatedRows = rows.map((row) =>
                     row.id === Row.id ? { ...row, Nombre_Categoria: Row.Nombre_Categoria } : row
@@ -378,7 +378,7 @@ const Ficha_Agregar_Categorias = (props) => {
                 setEditMode(null);
                 setEditedValue('');
             } else {
-                console.log("No entré JAJAJAJA");
+                
             }
         };
 
