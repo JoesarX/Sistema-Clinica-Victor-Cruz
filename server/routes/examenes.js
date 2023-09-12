@@ -12,10 +12,10 @@ const examenesRouter = (pool) => {
             const sqlSelect = "SELECT * FROM examenes"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log("Get all examenes Successfull");
+            
             res.json(rows);
         } catch (err) {
-            console.log("Get all examenes Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -33,10 +33,10 @@ const examenesRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
-            console.log("Post examen Successfull");
+            
             res.json("Examen añadido exitosamente!");
         } catch (err) {
-            console.log("Post examen Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -52,7 +52,7 @@ const examenesRouter = (pool) => {
             console.log(`Get One examen ${req.params.id} Successfull`)
             res.json(rows[0])
         } catch (err) {
-            console.log(`Get One examen ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -67,7 +67,7 @@ const examenesRouter = (pool) => {
             console.log(`Delete examen ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(`Delete examen ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -97,7 +97,7 @@ const examenesRouter = (pool) => {
             console.log(`Update examen ${req.params.id} Successfull`)
             res.json("Examen actualizado exitosamente!");
         } catch (err) {
-            console.log(`Update examen ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

@@ -11,7 +11,7 @@ const CarruselRouter = (pool) => {
             connection.release();
             res.json(rows[0]);
         } catch (err) {
-            console.log(err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -41,7 +41,7 @@ const CarruselRouter = (pool) => {
             connection.release();
             res.json("Imagen añadida exitosamente!");
         } catch (err) {
-            console.log(err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -56,9 +56,9 @@ const CarruselRouter = (pool) => {
             const [updateResult] = await connection.query(updateSql, updateParams);
             connection.release();
             res.json({ rows, updateResult });
-            console.log(`Delete Picture successful for ${req.params.id}`);
+            
         } catch (err) {
-            console.log(`Delete Picture failed for ${req.params.id}. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -73,7 +73,7 @@ const CarruselRouter = (pool) => {
                 orden,
                 visibility,
             } = req.body;
-            console.log(id);
+            
             const q =
                 "UPDATE imagenes SET url = ?, orden = ?, visibility = ? WHERE idfoto = ? && tipo = 'Carrusel'";
 
@@ -87,7 +87,7 @@ const CarruselRouter = (pool) => {
             connection.release();
             res.json("Imagen actualizado exitosamente!");
         } catch (err) {
-            console.log(err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

@@ -12,10 +12,10 @@ const facturasRouter = (pool, transporter) => {
             const sqlSelect = "SELECT * FROM facturas ORDER BY idCita DESC"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log("Get all facturas Successfull");
+            
             res.json(rows);
         } catch (err) {
-            console.log("Get all facturas Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -30,7 +30,7 @@ const facturasRouter = (pool, transporter) => {
             console.log(`Get facturas by idCita ${req.params.id} Successfull`)
             res.json(rows)
         } catch (err) {
-            console.log(`Get facturas by idCita ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -45,14 +45,14 @@ const facturasRouter = (pool, transporter) => {
             console.log(`Get One factura ${req.params.id} Successfull`)
             res.json(rows[0])
         } catch (err) {
-            console.log(`Get One factura ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
 
     router.get("/facturas-with-cita/:id", async (req, res) => {
         try {
-            console.log("Entro");
+            
             const connection = await pool.getConnection();
             const sqlSelect = 
                 "SELECT f.idFactura, f.nombre_paciente, f.idCita, f.isPagada, f.total, DATE_FORMAT(c.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
@@ -60,10 +60,10 @@ const facturasRouter = (pool, transporter) => {
                 + " FROM facturas f INNER JOIN citas c ON f.idCita = c.idcita WHERE f.idFactura = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log(`Get factura with id: ${req.params.id} Successful`);
+            
             res.json(rows[0]);
         } catch (err) {
-            console.log(`Get factura with id: ${req.params.id} Failed. Error: ${err}`);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -112,10 +112,10 @@ const facturasRouter = (pool, transporter) => {
             }
            
             connection.release();
-            console.log("Post factura Successfull");
+            
             res.json("Factura añadida exitosamente!");
         } catch (err) {
-            console.log("Post factura Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -153,7 +153,7 @@ const facturasRouter = (pool, transporter) => {
             console.log(`Update factura by idCita ${req.params.idfactura} Successfull`)
             res.json("Factura actualizada exitosamente!");
         } catch (err) {
-            console.log(`Update factura by idCita ${req.params.idfactura} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -191,7 +191,7 @@ const facturasRouter = (pool, transporter) => {
             console.log(`Update factura ${req.params.idfactura} Successfull`)
             res.json("Factura actualizada exitosamente!");
         } catch (err) {
-            console.log(`Update factura ${req.params.idfactura} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -208,7 +208,7 @@ const facturasRouter = (pool, transporter) => {
             console.log(`Delete factura ${req.params.idCita} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(`Delete factura ${req.params.idCita} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -224,7 +224,7 @@ const facturasRouter = (pool, transporter) => {
             console.log(`Delete factura ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(`Delete factura ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

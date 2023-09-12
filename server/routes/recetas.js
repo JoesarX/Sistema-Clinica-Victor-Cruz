@@ -12,10 +12,10 @@ const recetasRouter = (pool) => {
             const sqlSelect = "SELECT * FROM recetas"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log("Get all recetas Successfull");
+            
             res.json(rows);
         } catch (err) {
-            console.log("Get all recetas Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -30,7 +30,7 @@ const recetasRouter = (pool) => {
             console.log(`Get recetas by idcita ${req.params.id} Successfull`)
             res.json(rows)
         } catch (err) {
-            console.log(`Get recetas by idcita ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -45,7 +45,7 @@ const recetasRouter = (pool) => {
             console.log(`Get One receta ${req.params.id} Successfull`)
             res.json(rows[0])
         } catch (err) {
-            console.log(`Get One receta ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -68,10 +68,10 @@ const recetasRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
-            console.log("Post receta Successfull");
+            
             res.json("Receta añadido exitosamente!");
         } catch (err) {
-            console.log("Post receta Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -83,7 +83,7 @@ const recetasRouter = (pool) => {
             const idcita = req.params.idcita;
 
             const connection = await pool.getConnection();
-            console.log("Esto es id Cita "+ idcita);
+            
             
             for (const recetaUnica of recetasLista) {
                 const { nombre_medicamento, dosis, cant_dias, frecuencia_horas, cant_unidades, notas_adicionales } = recetaUnica;
@@ -103,10 +103,10 @@ const recetasRouter = (pool) => {
             }
 
             connection.release();
-            console.log(`Create recetas for idcita ${req.params.id} Successful`);
+            
             res.json({ message: "Prescriptions created successfully" });
         } catch (err) {
-            console.log(`Create recetas for idcita ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -143,7 +143,7 @@ const recetasRouter = (pool) => {
             console.log(`Update receta ${req.params.idcita} Successfull`)
             res.json("Receta actualizada exitosamente!");
         } catch (err) {
-            console.log(`Update receta ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -180,7 +180,7 @@ const recetasRouter = (pool) => {
             console.log(`Update receta ${req.params.idcita} Successfull`)
             res.json("Receta actualizada exitosamente!");
         } catch (err) {
-            console.log(`Update receta ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -196,7 +196,7 @@ const recetasRouter = (pool) => {
             console.log(`Delete recetas by idcita ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(`Delete recetas by idcita ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -211,7 +211,7 @@ const recetasRouter = (pool) => {
             console.log(`Delete receta ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(`Delete receta ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

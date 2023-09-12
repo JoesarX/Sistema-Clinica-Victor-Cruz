@@ -80,8 +80,8 @@ const IniciarSesion = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Este es el email: " + email);
-        console.log("Esta es la clave: " + password);
+        
+        
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         var flag = false;
         if (emailRegex.test(email) != true) {

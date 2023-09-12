@@ -13,7 +13,7 @@ const misionRouter = (pool) => {
             connection.release();
             res.json(rows[0]);
         } catch (err) {
-            console.log(err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -26,7 +26,7 @@ const misionRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const { id } = req.params;
-            console.log(id);
+            
             const {
                 Tipo, texto_campo
             } = req.body;
@@ -37,13 +37,13 @@ const misionRouter = (pool) => {
                 id
             ];
             console.log(q)
-            console.log(values);
+            
             await connection.query(q, values);
             connection.release();
             res.json("Mision actualizada exitosamente!");
 
         } catch (err) {
-            //console.log(err);
+            //
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

@@ -81,7 +81,7 @@ const AddExpedientesModal = ({ onClose }) => {
         window.location.reload(); // Reload the page
       } catch (error) {
         // Handle error if any
-        console.log('Error submitting expediente:', error);
+        
       }
     }
   };
@@ -235,7 +235,7 @@ const AddExpedientesModal = ({ onClose }) => {
         // setExpedientes((prevState) => [...prevState, expediente]);
       } catch (error) {
         // Handle error if any
-        console.log('Error fetching expedientes:', error);
+        
       }
     };
     fetchAllExpedientes();

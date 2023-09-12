@@ -58,7 +58,7 @@ const Servicios = () => {
 
   const handleModalOpen = () => {
     //Validar que no este en el maximo de servicios
-    console.log("Length: " + serviceData.length);
+    
     if (serviceData.length < 10) {
       setImagePreview(null);
       setModalOpen(true);
@@ -141,7 +141,7 @@ const Servicios = () => {
       if (confirmed) {
         setUpdatedOrdenArray(null);
         fetchAllServicios();
-        console.log(updatedOrdenArray);
+        
       }
     });
   };
@@ -149,7 +149,7 @@ const Servicios = () => {
 
   const updateServiceOrderInDatabase = async () => {
     if (!updatedOrdenArray) {
-      console.log("updatedOrdenArray is null");
+      
       return;
     }
   
@@ -179,8 +179,8 @@ const Servicios = () => {
               const changedService = compareArrays(serviceData, updatedOrdenArray, service.id);
   
               if (changedService) {
-                console.log("Changing service order for ID:", changedService.id);
-                console.log("Updated service data:", changedService);
+                
+                
                 changedService.orden = changedService.copyOrden;
                 //const updatedData = { orden: changedService.copyOrden }; // Prepare the updated data object
   
@@ -197,7 +197,7 @@ const Servicios = () => {
             window.location.reload(); 
           });
         } catch (error) {
-          console.log("Error updating service order:", error);
+          
           swal({
             title: 'Error',
             text: 'Ha ocurrido un error al intentar guardar los cambios.',
@@ -228,7 +228,7 @@ const Servicios = () => {
 
   //Aqui iria la funcion para poder cambiar la visibilidad de los servicios
   const toggleEye = (arrayServicio) => {
-    console.log(arrayServicio);
+    
     toggleServiceVisibility(arrayServicio);
   };
 
@@ -252,7 +252,7 @@ const Servicios = () => {
       window.location.reload();
   
     } catch (error) {
-      console.log('Error submitting servicio:', error);
+      
     }
   };
   
@@ -290,17 +290,17 @@ const Servicios = () => {
         ...servicio,
       }));
       /*
-      console.log(serviciosWithId + "HOLA EDUARDO NOSE");
+      
       serviciosWithId.forEach((servicio) => {
-        console.log(servicio);
+        
       });
       */
       setServiceData(serviciosWithId);
-      console.log(serviceData);
+      
       const filteredServicios = serviciosWithId.filter(servicio => servicio.visibility === 1);
       setServiceDataFlagged(filteredServicios);
       const countVisible = serviciosWithId.filter(item => item.visibility === 1).length;
-      console.log(`Number of objects with visibility set to true: ${countVisible}`);
+      
       if (countVisible < 5) {
         setVisibilityFlag(true);
       }
@@ -309,7 +309,7 @@ const Servicios = () => {
       }
     } catch (error) {
       // Handle error if any
-      console.log("Error fetching servicios:", error);
+      
     }
   };
 
@@ -324,17 +324,17 @@ const Servicios = () => {
   const handleAddNewService = async (event) => {
     event.preventDefault();
     try {
-      console.log("test");
+      
       submitServicio();
     } catch (error) {
       // Handle error if any
-      console.log('Error submitting Servicio:', error);
+      
     }
   }
 
   useEffect(() => {
     if (isSubmitting2) {
-      console.log("test");
+      
       submitServicio();
     }
   }, [isSubmitting2]);
@@ -375,7 +375,7 @@ const Servicios = () => {
       }
     }
 
-    console.log("Entra a agregar despues de validaciones");
+    
     try {
       if (imageUpload != null) {
         const imageUrll = await uploadFile();
@@ -392,7 +392,7 @@ const Servicios = () => {
         servicio.orden = serviceData.length;
         servicio.visibility = visibilityFlag;
       }
-      console.log(servicio);
+      
       await ServiciosService.postServicios(servicio);
       alert('Servicio Agregado');
       handleModalClose();
@@ -400,7 +400,7 @@ const Servicios = () => {
       window.location.reload();
     } catch (error) {
       // Handle error if any
-      console.log('Error submitting Servicio:', error);
+      
     }
   };
 
@@ -409,12 +409,12 @@ const Servicios = () => {
     const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
 
     if (!allowedFormats.includes(file.type)) {
-      console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+      
       return false;
     }
 
     if (file.size > maxSizeInBytes) {
-      console.log('La imagen no debe superar los 5MB de tamaño');
+      
       return false;
     }
     return true;
@@ -431,12 +431,12 @@ const Servicios = () => {
       .then(async (willDelete) => {
         if (willDelete) {
           try {
-            console.log(id);
-            console.log("DELETE THIS URL: " + url);
-            console.log("Orden: " + orden);
+            
+            
+            
             await ServiciosService.deleteServicios(id, orden);
             if (url != null) {
-              console.log("DELETE THIS URL no es null: " + url);
+              
               deleteImg(url);
             }
             swal("Servicio eliminado exitosamente!", {
@@ -469,7 +469,7 @@ const Servicios = () => {
       submitEditServicio();
     } catch (error) {
       // Handle error if any
-      console.log('Error submitting servicio:', error);
+      
     }
   };
 
@@ -480,7 +480,7 @@ const Servicios = () => {
   }, [isSubmitting3]);
 
   const submitEditServicio = async () => {
-    console.log(editedService);
+    
     try {
       const titleRegex = /^(?! )(?!.* {2})(.{5,35})$/;
       if (!titleRegex.test(editedService.title)) {
@@ -512,9 +512,9 @@ const Servicios = () => {
       if (imageUpload != null && imageUpload !== "") {
         if (imageUpload != null) {
           deleteImg(imageEdit);
-          console.log("Elimina imagen");
+          
         }
-        console.log("Image Upload: " + imageUpload);
+        
         const imageUrll = await uploadFile();
         editedService.url = imageUrll;
 
@@ -523,7 +523,7 @@ const Servicios = () => {
           icon: "success",
         });
       } else {
-        console.log("Entro en else de edit");
+        
         await ServiciosService.editServicios(editedService.id, editedService);
         swal("Servicio Editado", {
           icon: "success",
@@ -531,12 +531,12 @@ const Servicios = () => {
       }
       window.location.reload();
     } catch (error) {
-      console.log('Error submitting servicio:', error);
+      
     }
   };
 
   const handleEditService = (service) => {
-    console.log("Entro handleeditservice");
+    
     setImageEdit(service.url);
     setEditedService(service);
     setImagePreview(service.url);

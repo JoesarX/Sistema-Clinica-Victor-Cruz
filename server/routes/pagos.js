@@ -12,10 +12,10 @@ const pagosRouter = (pool) => {
             const sqlSelect = "SELECT * FROM pagos ORDER BY fecha DESC"
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log("Get all pagos Successfull");
+            
             res.json(rows);
         } catch (err) {
-            console.log("Get all pagos Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -30,7 +30,7 @@ const pagosRouter = (pool) => {
             console.log(`Get pagos by correouser ${req.params.id} Successfull`)
             res.json(rows)
         } catch (err) {
-            console.log(`Get pagos by correouser ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -45,7 +45,7 @@ const pagosRouter = (pool) => {
             console.log(`Get One pago ${req.params.id} Successfull`)
             res.json(rows[0])
         } catch (err) {
-            console.log(`Get One pago ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -74,10 +74,10 @@ const pagosRouter = (pool) => {
             ];
             await connection.query(q, [values]);
             connection.release();
-            console.log("Post pago Successfull");
+            
             res.json("Pago añadido exitosamente!");
         } catch (err) {
-            console.log("Post pago Failed. Error: " + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -119,7 +119,7 @@ const pagosRouter = (pool) => {
             console.log(`Update pago ${req.params.idpago} Successfull`)
             res.json("Pago actualizada exitosamente!");
         } catch (err) {
-            console.log(`Update pago ${req.params.idpago} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -136,7 +136,7 @@ const pagosRouter = (pool) => {
             console.log(`Delete pago ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(`Delete pago ${req.params.id} Failed. Error: ` + err);
+            
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
