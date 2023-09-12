@@ -19,10 +19,10 @@ const Checkout = () => {
             try {
                 const response = await FacturasService.getOneFacturaWithCita(id);
                 setFactura(response);
-                console.log("RESPONSE:", response.isPagada);
+                
                 if (response.isPagada) {
                     // Show SweetAlert if factura.isPagada is equal to '1'
-                    console.log("RESPONSE:", response);
+                    
                     swal({
                         title: 'Pago ya realizado',
                         text: 'El pago de esta factura ya ha sido procesado.',
@@ -108,7 +108,7 @@ const Checkout = () => {
             swal("Su pago se efectuo con exito!.", {
                 icon: "success",
             });
-            console.log('Order successful . Your order id is--', OrderId);
+            
 
             //!CAMBIAR EN ALGUN PUNTO A LA PAGINA DEL DASHBOARD DE USUARIO
             navigate("/");

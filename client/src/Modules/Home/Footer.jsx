@@ -233,11 +233,11 @@ const Topbar = () => {
 
                 // var direccionData;
                 // direccionData = await text_Services.getOneText(objectDireccion);
-                // console.log("Cargar Direccion: " + direccionData[0].texto_campo);
+                // 
                 // setAddress(direccionData[0].texto_campo);
                 // direccionOBJ.texto_campo = direccionData[0].texto_campo;
             } catch (error) {
-                console.log("Error fetching Direccion:", error);
+                
             }
         };
 
@@ -246,11 +246,11 @@ const Topbar = () => {
         //         const objectCorreo = ['Footer_Correo'];
         //         var correoData;
         //         correoData = await text_Services.getOneText(objectCorreo);
-        //         console.log("Cargar Correo: " + correoData[0].texto_campo);
+        //         
         //         setEmail(correoData[0].texto_campo);
         //         correoOBJ.texto_campo = correoData[0].texto_campo;
         //     } catch (error) {
-        //         console.log("Error fetching Correo:", error);
+        //         
         //     }
         // };
 
@@ -260,11 +260,11 @@ const Topbar = () => {
         //         const objectNum = ['Footer_Telefono'];
         //         var numData;
         //         numData = await text_Services.getOneText(objectNum);
-        //         console.log("Cargar Numero Telefonico: " + numData[0].texto_campo);
+        //         
         //         setPhone(numData[0].texto_campo);
         //         numOBJ.texto_campo = numData[0].texto_campo;
         //     } catch (error) {
-        //         console.log("Error fetching Numero de Telefono:", error);
+        //         
         //     }
         // };
 
@@ -274,11 +274,11 @@ const Topbar = () => {
         //         const objectCopy = ['copyright'];
         //         var copyData;
         //         copyData = await text_Services.getOneText(objectCopy);
-        //         console.log("Cargar Copyright: " + copyData[0].texto_campo);
+        //         
         //         setYear(copyData[0].texto_campo);
         //         copyOBJ.texto_campo = copyData[0].texto_campo;
         //     } catch (error) {
-        //         console.log("Error fetching Copyright:", error);
+        //         
         //     }
         // };
 

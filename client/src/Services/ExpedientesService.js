@@ -9,18 +9,18 @@ export const getAllExpedientes = async () => {
         const res = await axios.get(`${API_URL}/expedientes`);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch expedientes');
     }
 };
 
 export const getOneExpediente = async (id) => {
-    console.log(id);
+    
     try {
         const res = await axios.get(`${API_URL}/expedientes/${id}`);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch expediente');
     }
 };
@@ -33,57 +33,57 @@ export const getUserExpedients = async (mail) => {
         console.log("GG")
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch expediente');
     }
 };
 export const getOneUser = async (email) => {
-    console.log("este es el email en landing page " + email[0]);
-    console.log("este es el mensaje en landing page " + email[1]);
+    
+    
 };
 
 export const getExpedientes = async (email) => {
 
     try {
         const expedientes = await axios.get(`${API_URL}/expedientes/userpage/${email}`);
-        console.log(JSON.stringify(expedientes));
+        
         return expedientes.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch landing page');
     }
 };
 
 export const getOneExpedienteDashboard = async (id) => {
-    console.log(id);
+    
     try {
         const res = await axios.get(`${API_URL}/expedientes/dashboard/${id}`);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch expediente');
     }
 };
 export const getCitasOneExpediente = async (id) => {
-    console.log(id);
+    
     try {
         const res = await axios.get(`${API_URL}/expedientes/dashboard/cita/${id}`);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch citas from expediente');
     }
 };
 
 export const editExpedientesDashboard = async (id, expediente) => {
     try {
-        console.log("editExpedientes Service");
-        console.log(id);
-        console.log(expediente);
+        
+        
+        
         await axios.put(`${API_URL}/expedientes/dashboard/${id}`, expediente);
 
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to edit expediente');
     }
 };
@@ -93,20 +93,20 @@ export const postExpedientes = async (expediente) => {
         const res = await axios.post(`${API_URL}/expedientes`, expediente);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to post expediente');
     }
 };
 
 export const editExpedientes = async (id, expediente) => {
     try {
-        console.log("editExpedientes Service");
-        console.log(id);
-        console.log(expediente);
+        
+        
+        
         await axios.put(`${API_URL}/expedientes/${id}`, expediente);
 
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to edit expediente');
     }
 };
@@ -116,7 +116,7 @@ export const deleteExpedientes = async (id) => {
         await axios.delete(`${API_URL}/expedientes/${id}`);
 
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to delete expediente');
     }
 };

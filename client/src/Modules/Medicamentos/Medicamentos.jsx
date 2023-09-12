@@ -91,10 +91,10 @@ const Medicamentos = () => {
                 if (willDelete) {
                     try {
                         const url = row.urlfoto
-                        console.log("DELETE THIS URL: " + url);
+                        
                         await MedicamentosService.deleteMedicamentos(id);
                         if (url != null) {
-                            console.log("DELETE THIS URL no es null: " + url);
+                            
                             deleteImg(url);
                         }
                         else {
@@ -237,7 +237,7 @@ const Medicamentos = () => {
         setIsSubmitting(false);
         setImagePreview(null);
         cleanExpediente();
-        console.log(listaCategoriaMedicamentos);
+        
     };
 
 
@@ -254,7 +254,7 @@ const Medicamentos = () => {
             console.log(medicamentoData)
             console.log("medicamento: " + medicamento)
         } catch (error) {
-            console.log(error);
+            
         }
 
         setIsModalOpen1(!isModalOpen1);
@@ -328,7 +328,7 @@ const Medicamentos = () => {
                 .then((snapshot) => getDownloadURL(snapshot.ref))
                 .then((url) => {
                     resolve(url);
-                    //console.log(medicamento);
+                    //
                 })
                 .catch((error) => reject(error));
         });
@@ -338,7 +338,7 @@ const Medicamentos = () => {
         try {
             for (let i = 0; i < listaCategoriaMedicamentos.length; i++) {
                 if (listaCategoriaMedicamentos[i] == valor) {
-                    console.log(idListaCategoriaMedicamentos[i]);
+                    
                     cat = idListaCategoriaMedicamentos[i]
                 }
             }
@@ -354,34 +354,34 @@ const Medicamentos = () => {
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("test");
+            
             submitMedicamento();
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting medicamento:', error);
+            
         }
     };
 
     useEffect(() => {
         if (isSubmitting) {
-            console.log("test");
+            
             submitMedicamento();
         }
     }, [isSubmitting]);
 
     const submitMedicamento = async () => {
         if (validations()) {
-            console.log("Entra a agregar despues de validaciones");
+            
             try {
                 if (imageUpload != null) {
                     const imageUrll = await uploadFile();
-                    console.log(imageUrll);
+                    
                     setMedicamento((prevState) => ({
                         ...prevState,
                         urlfoto: imageUrll,
                     }));
                     medicamento.urlfoto = imageUrll;
-                    console.log(medicamento.urlfoto);
+                    
                 }
                 await MedicamentosService.postMedicamentos(medicamento);
                 swal("Medicamento Agregado!", {
@@ -392,7 +392,7 @@ const Medicamentos = () => {
                 window.location.reload();
             } catch (error) {
                 // Handle error if any
-                console.log('Error submitting medicamento:', error);
+                
             }
         }
     };
@@ -403,7 +403,7 @@ const Medicamentos = () => {
             submitEditMedicamento();
         } catch (error) {
             // Handle error if any
-            console.log('Error submitting medicamento:', error);
+            
         }
     };
 
@@ -416,7 +416,7 @@ const Medicamentos = () => {
     const submitEditMedicamento = async () => {
         try {
             if (validations()) {
-                console.log("Entra a edit despues de validaciones");
+                
                 if (imageUpload != null) {
                     if (medicamento.urlfoto != null) {
                         deleteImg(medicamento.urlfoto);
@@ -445,7 +445,7 @@ const Medicamentos = () => {
                 cleanExpediente();
             }
         } catch (error) {
-            console.log('Error submitting medicamento:', error);
+            
         }
     };
 
@@ -552,7 +552,7 @@ const Medicamentos = () => {
                 return false;
             }
         }
-        console.log("END DE VALIDACINES");
+        
         return true;
     }
 
@@ -561,12 +561,12 @@ const Medicamentos = () => {
         const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
 
         if (!allowedFormats.includes(file.type)) {
-            console.log('La imagen debe estar en formato JPG, JPEG o PNG');
+            
             return false;
         }
 
         if (file.size > maxSizeInBytes) {
-            console.log('La imagen no debe superar los 5MB de tamaño');
+            
             return false;
         }
 
@@ -615,14 +615,14 @@ const Medicamentos = () => {
         if (isModalOpen1) {
             // Run your code here when isModalOpen is true
             setImagePreview(medicamento.urlfoto);
-            console.log('Modal is open!');
+            
         }
     }, [isModalOpen1]);
 
     let buscaError = 0;
     useEffect(() => {
         // Validación login
-        console.log("Este es el error en Med: " + (buscaError++));
+        
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
@@ -642,7 +642,7 @@ const Medicamentos = () => {
                 const medicamentosData = await MedicamentosService.getAllMedicamentos();
                 //Actualizar lista de categorías
                 const nombresCategorias = await CategoriasService.getAllCategories()
-                console.log(medicamentosData);
+                
 
                 if (cont == 0) {
                     listaCategoriaMedicamentos = nombresCategorias.map((nombresCategorias) => nombresCategorias.Nombre_Categoria);
@@ -650,11 +650,11 @@ const Medicamentos = () => {
                     cont++;
                 }
 
-                console.log("No Entré");
+                
 
 
-                console.log(listaCategoriaMedicamentos);
-                console.log(medicamentosData);
+                
+                
 
 
                 const medicamentosWithId = medicamentosData.map((medicamento) => ({
@@ -664,7 +664,7 @@ const Medicamentos = () => {
                 setMedicamentos(medicamentosWithId);
             } catch (error) {
                 // Handle error if any
-                console.log("Error fetching medicamentos:", error);
+                
             }
         };
 
@@ -796,8 +796,8 @@ const Medicamentos = () => {
                                             onChange={(event) => {
                                                 setImageUpload(event.target.files[0]);
                                                 setImagePreview(URL.createObjectURL(event.target.files[0]));
-                                                console.log(imageUpload);
-                                                console.log(imagePreview);
+                                                
+                                                
                                             }}
                                             name='urlfoto'
                                             id="urlfoto"

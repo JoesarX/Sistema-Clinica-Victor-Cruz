@@ -56,14 +56,14 @@ const Citas_Doc = () => {
           const citasData = await CitasService.getAllCitas();
           processEvents(citasData);
         } catch (error) {
-          console.log("Error fetching citas:", error);
+          
         }
       } else {
         try {
           const citasData = await CitasService.filterCita(filter);
           processEvents(citasData);
         } catch (error) {
-          console.log('Error fetching filtered citas:', error);
+          
         }
       }
 

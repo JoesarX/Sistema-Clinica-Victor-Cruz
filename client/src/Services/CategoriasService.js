@@ -8,7 +8,7 @@ export const getAllCategories = async () => {
         const res = await axios.get(`${API_URL}/categorias`);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch categorias');
     }
 };
@@ -20,15 +20,15 @@ export const postCategories = async (categoriaValue) => {
         const res = await axios.post(`${API_URL}/categorias`, categoriaValue);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to post categorias');
     }
 };
 
 export const editCategories = async (id, object) => {
     try {
-        console.log(object);
-        console.log("Este es el id= " + id + " y este es el nombre: " + object[0]);
+        
+        
         await axios.put(`${API_URL}/categorias/${id}`, object);
 
     } catch (error) {
@@ -39,10 +39,10 @@ export const editCategories = async (id, object) => {
 
 export const deleteCategories = async (id) => {
     try {
-        console.log("Este es el id: " + id);
+        
         await axios.delete(`${API_URL}/categorias/${id}`);
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to delete categorias');
     }
 };

@@ -8,7 +8,7 @@ export const getAllusuarios = async () => {
         const res = await axios.get(`${API_URL}/usuarios`);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to fetch usuarios');
     }
 };
@@ -18,7 +18,7 @@ export const postUsuarios = async (usuario) => {
         const res = await axios.post(`${API_URL}/usuarios`, usuario);
         return res.data;
     } catch (error) {
-        console.log(error);
+        
         throw new Error('Failed to post usuario');
     }
 };

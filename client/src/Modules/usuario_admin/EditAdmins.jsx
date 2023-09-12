@@ -60,7 +60,7 @@ const EditAdmins = (props) => {
     };
 
     React.useEffect(() => {
-        console.log(admin);
+        
     }, [admin]);
 
     const handleSelectChange2 = (event) => {
@@ -90,7 +90,7 @@ const EditAdmins = (props) => {
                
                
             };
-            console.log(admin);
+            
             editExpediente();
             swal("Admin Modificado!", {
                 icon: "success",

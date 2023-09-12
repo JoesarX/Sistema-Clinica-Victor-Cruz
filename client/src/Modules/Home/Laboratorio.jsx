@@ -38,7 +38,7 @@ const Laboratorio = () => {
                 setExamenes(examenesWithId);
             } catch (error) {
                 // Handle error if any
-                console.log("Error fetching examenes:", error);
+                
             }
         };
 
