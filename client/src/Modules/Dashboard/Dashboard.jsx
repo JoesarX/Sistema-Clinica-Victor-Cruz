@@ -3,7 +3,7 @@ import { AuthContext } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faFile, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faFile, faTrash, faFilePdf, faFileImage } from '@fortawesome/free-solid-svg-icons';
 import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
 import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
@@ -432,6 +432,22 @@ const Dashboard = () => {
         //////////////////
     }
 
+    const getFileIcon = (fileName) => {
+        const extension = fileName.split('.').pop().toLowerCase();
+
+        switch (extension) {
+            case 'pdf':
+                return <FontAwesomeIcon icon={faFilePdf} style={{ color: '#FF5733', fontSize: '24px' }} />;
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+                return <FontAwesomeIcon icon={faFileImage} style={{ color: '#33AFFF', fontSize: '24px' }} />;
+            // Add more cases for other file types as needed
+            default:
+                return <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />;
+        }
+    }
+
 
     return (
         <div class='scrollable-page'>
@@ -763,26 +779,30 @@ const Dashboard = () => {
                         <div class='box-title'>
                             <h3 class='archivostit'>Archivos</h3>
                         </div>
-                        <ul class="file-list">
-    {patient.files.map((file, index) => (
-        <div key={index} class='file-item-line'>
-            <div class="file-info">
-                <li class='lifile'>{file}</li>
-                <button onClick={() => handleDeleteFile(index)}>
-                    <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
-                </button>
-                <button onClick={() => handleOpenFile(file)}>
-                    <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />
-                </button>
-            </div>
-            {index !== patient.files.length - 1 && (
-                <div class="divider-container">
-                    <hr class='divider'></hr>
-                </div>
-            )}
-        </div>
-    ))}
-</ul>
+                        <ul className="file-list">
+                            {patient.files.map((file, index) => (
+                                <div key={index} className='file-item-line'>
+                                    <div className="file-info">
+                                        <div className="file-icon">
+                                            {getFileIcon(file)} 
+                                        </div>
+                                        <li className='lifile'>{file}</li>
+                                        <button onClick={() => handleDeleteFile(index)}>
+                                            <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
+                                        </button>
+                                        <button onClick={() => handleOpenFile(file)}>
+                                            <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />
+                                        </button>
+                                    </div>
+                                    {index !== patient.files.length - 1 && (
+                                        <div className="divider-container">
+                                            <hr className='divider'></hr>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </ul>
+
 
 
                         {userType !== 'normal' && (
