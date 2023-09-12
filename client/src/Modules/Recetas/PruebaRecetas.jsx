@@ -12,7 +12,7 @@ const PrescriptionManagement = () => {
         try {
             const recetasProvisional = await RecetasService.getRecetasByCita(citaId)
             setRecetas(recetasProvisional);
-            
+            console.log('Recetas:', recetasProvisional);
 
         } catch (error) {
             console.error('Error fetching recetas:', error);
@@ -106,7 +106,7 @@ const PrescriptionManagement = () => {
  
          try {
              await RecetasService.editRecetasByCita(citaId, updatedRecetas);
-             
+             console.log('Prescriptions updated successfully.');
              await getRecetasByCita();
          } catch (error) {
              console.error('Error updating prescriptions:', error);
@@ -138,7 +138,7 @@ const PrescriptionManagement = () => {
     const deleteRecetasByCita = async () => {
         /* try {
              await RecetasService.deleteRecetasByCita(citaId);
-             
+             console.log('Prescriptions deleted successfully.');
              setRecetas([]);
          } catch (error) {
              console.error('Error deleting prescriptions:', error);

@@ -56,7 +56,7 @@ const Citas = () => {
         const citasData = await CitasService.getAvailableTimesTwoWeeks(2);
         processEvents(citasData);
       } catch (error) {
-        
+        console.log("Error fetching citas:", error);
       }
     };
 

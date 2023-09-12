@@ -74,8 +74,8 @@ const Home = () => {
             });
         } else {
             try {
-                
-                
+                console.log(updatedCarrusel);
+                console.log(updatedCarrusel.idfoto);
                 await CarruselService.editCarrusel(updatedCarrusel.idfoto, updatedCarrusel);
                 swal("Visibilidad Editada", {
                     icon: "success",
@@ -88,7 +88,7 @@ const Home = () => {
                 window.location.reload();
             }
             catch (error) {
-                
+                console.log('Error submitting servicio:', error);
             }
         }
     };
@@ -116,10 +116,10 @@ const Home = () => {
                 }));
                 setUpdatedOrdenArray(updatedOrder);
                 setDraggedIndex(index);
-                
-                
-                
-                
+                console.log("Original: ");
+                console.log(CarruselData);
+                console.log("Updated");
+                console.log(updatedOrder);
                 return newData;
             });
         }
@@ -142,13 +142,13 @@ const Home = () => {
             try {
                 await Promise.all(
                     updatedOrdenArray.map(async (carrusel) => {
-                        
+                        console.log(updatedOrdenArray);
                         const changedService = compareArrays(CarruselData, updatedOrdenArray, carrusel.idfoto);
-                        
+                        console.log(changedService);
                         if (changedService) {
 
-                            
-                            
+                            console.log("Changing service order for ID:", changedService.idfoto);
+                            console.log("Updated service data:", changedService);
                             changedService.orden = changedService.copyOrden;
                             await CarruselService.editCarrusel(changedService.idfoto, changedService); // Pass the updated data object
                         }
@@ -160,27 +160,27 @@ const Home = () => {
                 });
                 //window.location.reload();
             } catch (error) {
-                
+                console.log("Error updating imagenes order:", error);
             }
         } else {
-            
+            console.log("updatedOrdenArray is null");
         }
     };
 
     function compareArrays(originalArray, copyArray, serviceId) {
         const originalObj = originalArray.find((obj) => obj.idfoto === serviceId);
         const copyObj = copyArray.find((obj) => obj.idfoto === serviceId);
-        //
-        //
+        //console.log("Original Object:", originalObj);
+        //console.log("Copy Object:", copyObj);
         if (originalObj && copyObj && originalObj.orden !== copyObj.orden) {
-            //
+            //console.log("Order Changed!");
             return {
                 ...originalObj,
                 originalOrden: originalObj.orden,
                 copyOrden: copyObj.orden,
             };
         }
-        //
+        //console.log("No Change.");
         return null;
     }
 
@@ -326,11 +326,11 @@ const Home = () => {
                 });
                 return;
             }
-            
+            console.log("Este es el titulo:" + TipoTitulo.texto_campo);
 
             TipoTitulo.texto_campo = trimmedTitle;
 
-            
+            console.log("Este es el titulo original:" + TituloOriginal);
             await text_Services.editText(TipoTitulo);
             TipoDesc.texto_campo = trimmedDescription;
             await text_Services.editText(TipoDesc);
@@ -373,9 +373,9 @@ const Home = () => {
             if (isFetching) {
                 const fetchTitulos = async () => {
                     try {
-                        
+                        console.log("Entré al fetch");
                         var info = await text_Services.getHome();
-                        
+                        console.log("info: " + info);
                         setTitulo1OBJ({ ...titulo1OBJ, texto_campo: info[0].texto_campo });
                         setTitulo2OBJ({ ...titulo2OBJ, texto_campo: info[1].texto_campo });
                         setTitulo3OBJ({ ...titulo3OBJ, texto_campo: info[2].texto_campo });
@@ -383,14 +383,14 @@ const Home = () => {
                         setdescripcion2OBJ({ ...descripcion2OBJ, texto_campo: info[4].texto_campo });
                         setdescripcion3OBJ({ ...descripcion3OBJ, texto_campo: info[5].texto_campo });
 
-                        
-                        
+                        console.log("HOLAAAAAA");
+                        console.log(isFetching);
                     } catch (error) {
-                        
+                        console.log("Error fetching titles:", error);
                     }
                 };
-                
-                
+                console.log("Error de effect");
+                console.log("Antes:" + isFetching);
                 fetchAllCarruselPics();
                 fetchTitulos();
                 setIsFetching(false);
@@ -474,21 +474,21 @@ const Home = () => {
             const carruselWithId = CarruselArray.map((carrusel) => ({
                 ...carrusel,
             }));
-            
+            console.log(carruselWithId);
             setCarruselData(carruselWithId);
             const filteredCarrusel = carruselWithId.filter(servicio => servicio.visibility === 1);
             setCarruselDataFlagged(filteredCarrusel);
             const countVisible = carruselWithId.filter(item => item.visibility === 1).length;
-            
+            console.log(`Number of objects with visibility set to true: ${countVisible}`);
             if (countVisible < 5) {
                 setVisibilityFlag(true);
             }
             else {
                 setVisibilityFlag(false);
             }
-            
+            console.log(CarruselArray.length);
         } catch (error) {
-            
+            console.log("Error fetching carrusel pictures:", error);
         }
     };
 
@@ -511,7 +511,7 @@ const Home = () => {
                 // Handle any errors if necessary
                 console.error('Error waking up server:', error);
             });
-        
+        console.log('Server is awake!');
     };
 
     const handleCitaClick = () => {
@@ -675,7 +675,7 @@ const Home = () => {
                 .then((snapshot) => getDownloadURL(snapshot.ref))
                 .then((url) => {
                     resolve(url);
-                    //
+                    //console.log(medicamento);
                 })
                 .catch((error) => reject(error));
         });
@@ -690,16 +690,16 @@ const Home = () => {
             return;
         }
         try {
-            
+            console.log("test");
             submitPicture();
         } catch (error) {
             // Handle error if any
-            
+            console.log('Error submitting medicamento:', error);
         }
     };
 
     const submitPicture = async () => {
-        
+        console.log("Entra a agregar despues de validaciones");
         try {
             if (imageUpload != null) {
                 const imageUrl = await uploadFile();
@@ -710,7 +710,7 @@ const Home = () => {
                 }));
                 imagen1.url = imageUrl;
                 imagen1.orden = CarruselData.length;
-                
+                console.log(visibilityFlag);
                 imagen1.visibility = visibilityFlag;
                 await CarruselService.postPicture(imagen1);
                 swal("Imagen de carrusel agregada exitosamente!", {
@@ -722,7 +722,7 @@ const Home = () => {
             setImagePreview(null);
         } catch (error) {
             // Handle error if any
-            
+            console.log('Error submitting medicamento:', error);
         }
     };
 
@@ -735,7 +735,7 @@ const Home = () => {
                 misionOBJ.texto_campo = misionData[0].texto_campo;
                 setMissionText(misionData[0].texto_campo);
             } catch (error) {
-                
+                console.log("Error fetching Mision:", error);
             }
         };
 
@@ -746,7 +746,7 @@ const Home = () => {
                 mapsOBJ.texto_campo = mapsData[0].texto_campo;
                 setMapURL(mapsData[0].texto_campo);
             } catch (error) {
-                
+                console.log("Error fetching Google Maps:", error);
             }
         };
 
@@ -813,7 +813,7 @@ const Home = () => {
                     try {
 
                         await CarruselService.deletePicture(id, orden);
-                        
+                        console.log(url);
                         deleteImg(url);
                         swal("Imagen de carrusel eliminada exitosamente!", {
                             icon: "success",
@@ -875,7 +875,7 @@ const Home = () => {
             method: 'POST',
             body: JSON.stringify(CarruselData)
         });
-        
+        console.log('Cambios guardados!');
     }
     let urlDelete;
 

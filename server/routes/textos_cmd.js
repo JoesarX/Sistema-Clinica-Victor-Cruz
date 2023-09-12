@@ -9,10 +9,10 @@ const textos_cmdRouter = (pool) => {
             const sqlSelect = "SELECT * FROM textos_cmd";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
+            console.log("Get all textos_cmd Successfull");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all textos_cmd Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -24,13 +24,13 @@ const textos_cmdRouter = (pool) => {
             const sqlSelect = "SELECT texto_campo FROM textos_cmd  WHERE Tipo in ('título_servicio1','título_servicio2','título_servicio3','texto_servicio1','texto_servicio2','texto_servicio3')"; 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
-            
+            console.log("Get all textos_cmd Successfull");
+            console.log("Entré al get home");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all textos_cmd Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
-            
+            console.log("Entré al get home error");
         }
     });
     //traer todo saludo ocupacional 
@@ -41,13 +41,13 @@ const textos_cmdRouter = (pool) => {
             ; 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
-            
+            console.log("Get all textos_cmd Successfull");
+            console.log("Entré al get home");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all textos_cmd Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
-            
+            console.log("Entré al get home error");
         }
     });
 
@@ -58,13 +58,13 @@ const textos_cmdRouter = (pool) => {
             const sqlSelect = "SELECT texto_campo FROM textos_cmd  WHERE Tipo in ('Footer_Dirección','Footer_Correo','Footer_Telefono','copyright')"; 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
-            
+            console.log("Get all textos_cmd Successfull");
+            console.log("Entré al get home");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all textos_cmd Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
-            
+            console.log("Entré al get home error");
         }
     });
     //get one text
@@ -77,7 +77,7 @@ const textos_cmdRouter = (pool) => {
             console.log(`Get textos_cmd ${req.params.object} Successfull`)
             res.json(rows);
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -87,9 +87,9 @@ const textos_cmdRouter = (pool) => {
     router.post("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            
-            
-            
+            console.log("req cmdValue: " + req.body.cmdValue);
+            console.log("Body: " + req.body[0] + " " + req.body[1]);
+            console.log("Sin Body: " + req);
             const q =
                 "INSERT INTO `textos_cmd` (`Tipo`,`texto_campo`) VALUES (?)";
             const values =
@@ -98,26 +98,26 @@ const textos_cmdRouter = (pool) => {
 
 
                 ];
-            
+            console.log("Estos son los values: " + values[0] + " " + values[1]);
             await connection.query(q, [values]);
             connection.release();
             res.json("Nuevo campo  añadido exitosamente!");
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
     //delete text
     router.delete("/:id", async (req, res) => {
         try {
-            
+            console.log("Este es el Tipo: " + req.params.id);
             const connection = await pool.getConnection();
             const sqlSelect = "delete FROM textos_cmd where Tipo = '" + req.params.id + "'";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             res.json(rows);
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -127,15 +127,15 @@ const textos_cmdRouter = (pool) => {
         try {
             const connection = await pool.getConnection();
             const { id } = req.params;
-            // 
+            // console.log(id);
             const {
                 editedValue
             } = req.body;
             const q =
                 "UPDATE textos_cmd SET texto_campo = ? WHERE Tipo = ?";
 
-            
-            // 
+            console.log("ReqBody papu;: " + req.body[1] + " " + req.body[0] + " " + req.body.texto_campo);
+            // console.log(req);
             const values = [
                 req.body.texto_campo,
                 req.params.objectTipo
@@ -143,17 +143,17 @@ const textos_cmdRouter = (pool) => {
 
             ];
 
-            /* 
-             
-             */
-            //
-            
+            /* console.log(values);
+             console.log(values[0]);
+             console.log(values[1]);*/
+            //console.log("Esto es params: "+req.params);
+            console.log("Esto es values!!!! : " + values);
             await connection.query(q, values);
             connection.release();
             res.json("Categoría actualizado exitosamente!");
 
         } catch (err) {
-            //
+            //console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

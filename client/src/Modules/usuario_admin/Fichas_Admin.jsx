@@ -7,7 +7,7 @@ import "./FichaColab.css"
 const Popup = (props) => {
   const { open, setOpenPopup, setNombre, setRol, setId, setCorreo, setTelefono, setSexo } = props;
   const [openEditAdmin, setEditAdmin] = useState(false);
-  
+  console.log(props);
   let IconoComponent = null;
   let color = null;
 
@@ -21,8 +21,8 @@ const Popup = (props) => {
   }
   const handleEditClick = () => {
     setEditAdmin(true);
-    
-    
+    console.log("Estoy entrando a edit");
+    console.log(openEditAdmin);
   };
 
   return (

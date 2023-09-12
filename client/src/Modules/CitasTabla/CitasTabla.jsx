@@ -260,7 +260,7 @@ const Citas = () => {
         const currentDate = new Date();
         const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
 
-        
+        console.log("currentDayOfWeek: ", currentDayOfWeek);
 
         // Calculate the number of days to add to the current date to reach the next Monday
         let daysUntilNextMonday = 0
@@ -315,7 +315,7 @@ const Citas = () => {
             cita.presion = citaData.presion;
             setHora(citaData.hora);
             setFecha(dayjs(citaData.fecha));
-            // 
+            // console.log("cita:", citaData);
         } catch (error) {
             // Handle the error
         }
@@ -395,11 +395,11 @@ const Citas = () => {
         try {
             cita.estado = "Pendiente";
             if (validations()) {
-                // 
+                // console.log("Entra a agregar despues de validaciones");
                 // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
                 const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora);;
                 const isAvailable = availableResponse.available;
-                // 
+                // console.log("isAvailable: " , isAvailable);
 
                 if (!isAvailable) {
                     swal("La hora que ha seleccionado ya ha sido ocupada.", {
@@ -415,21 +415,21 @@ const Citas = () => {
             }
         } catch (error) {
             // Handle error if any
-            // 
+            // console.log('Error submitting cita:', error);
         }
     };
 
     useEffect(() => {
         if (isSubmitting) {
-            // 
+            // console.log("test");
             submitCita();
         }
     }, [isSubmitting]);
 
     const submitCita = async () => {
-        // 
+        // console.log("doneee");
 
-        // 
+        // console.log("Entra a agregar despues de validaciones");
         try {
             await CitasService.postCitas(cita);
             //
@@ -440,7 +440,7 @@ const Citas = () => {
             window.location.reload();
         } catch (error) {
             // Handle error if any
-            // 
+            // console.log('Error submitting cita:', error);
         }
 
     };
@@ -465,7 +465,7 @@ const Citas = () => {
                 }
             }
         } catch (error) {
-            
+            console.log('Error submitting cita:', error);
         }
     };
 
@@ -479,7 +479,7 @@ const Citas = () => {
         try {
             await CitasService.editCitas(id, cita);
 
-            // 
+            // console.log('SIUUU');
             swal("Cita Editada Exitosamente!.", {
                 icon: "success",
             });
@@ -636,7 +636,7 @@ const Citas = () => {
                 setUsuarios(usuariosFormatted);
             } catch (error) {
                 // Handle error if any
-                
+                console.log("Error fetching citas:", error);
             }
         };
 
@@ -682,7 +682,7 @@ const Citas = () => {
     }*/
 
     const handleClick = (id) => {
-        
+        console.log(id);
         navigate(`/citas_tabla/historial_cita/${id}`);
     };
 

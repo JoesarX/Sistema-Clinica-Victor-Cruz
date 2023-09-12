@@ -8,7 +8,7 @@ export const getAllId_cmd = async () => {
         const res = await axios.get(`${API_URL}/id_cmd`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch id_cmd');
     }
 };
@@ -20,15 +20,15 @@ export const postId_cmd = async (categoriaValue) => {
         const res = await axios.post(`${API_URL}/id_cmd`, categoriaValue);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to post id_cmd');
     }
 };
 
 export const editId_cmd = async (object) => {
     try {
-        
-        
+        console.log(object);
+        console.log("Este es el id= "+object[0]+" y este es el nombre: "+object[1]);
          await axios.put(`${API_URL}/id_cmd/${object[0]}`, object);
         
     } catch (error) {
@@ -39,10 +39,10 @@ export const editId_cmd = async (object) => {
 
 export const deleteId_cmd = async (id) => {
     try {
-        
+        console.log("Este es el id: " + id);
         await axios.delete(`${API_URL}/id_cmd/${id}`);
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to delete id_cmd');
     }
 };

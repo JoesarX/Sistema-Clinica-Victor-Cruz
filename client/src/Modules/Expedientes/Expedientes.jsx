@@ -221,7 +221,7 @@ const Expedientes = () => {
          setExpedientes(expedientesWithId);
       } catch (error) {
          // Handle error if any
-         
+         console.log("Error fetching expedientes:", error);
       }
    };
    const validations = () => {
@@ -451,7 +451,7 @@ const Expedientes = () => {
          setExpediente(expedienteData);
          console.log(expedienteData)
       } catch (error) {
-         
+         console.log(error);
       }
 
       setIsModalOpen1(!isModalOpen1);
@@ -467,7 +467,7 @@ const Expedientes = () => {
 
    useEffect(() => {
       // Validación login
-      
+      console.log("Este es el error: " + (buscaError++));
       if (userType === 'normal') {
          // Create the overlay element
          const overlay = document.createElement('div');
@@ -505,7 +505,7 @@ const Expedientes = () => {
             console.log(expedientes)
          } catch (error) {
             // Handle error if any
-            
+            console.log("Error fetching expedientes:", error);
          }
       };
 

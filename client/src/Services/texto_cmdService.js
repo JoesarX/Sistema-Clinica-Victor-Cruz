@@ -7,7 +7,7 @@ export const getAll_Text = async () => {
         const res = await axios.get(`${API_URL}/texto_cmd`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch texto_cmd');
     }
 };
@@ -18,7 +18,7 @@ export const getHome = async()=>{
         const res = await axios.get(`${API_URL}/texto_cmd/home`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch home');
     } 
 }
@@ -28,7 +28,7 @@ export const getSaludOcupacional = async()=>{
         const res = await axios.get(`${API_URL}/texto_cmd/saludOcupacional`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch home');
     } 
 }
@@ -38,19 +38,19 @@ export const getFooter = async()=>{
         const res = await axios.get(`${API_URL}/texto_cmd/footer`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch footer');
     } 
 }
 //traer un texto
 export const getOneText = async (object) => {
-    
+    console.log(object);
     try {
         const res = await axios.get(`${API_URL}/texto_cmd/textos/${object}`);
         
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch textos_cmd');
     }
 };
@@ -63,15 +63,15 @@ export const postText = async (object) => {
         const res = await axios.post(`${API_URL}/texto_cmd`, object);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to post textos_cmd');
     }
 };
 
 export const editText = async (object) => {
     try {
-        
-        
+        console.log(object);
+        console.log("Este es el id= "+object.Tipo+" y este es el nombre: "+object.texto_campo);
          await axios.put(`${API_URL}/texto_cmd/${object.Tipo}`, object);
         
     } catch (error) {
@@ -82,10 +82,10 @@ export const editText = async (object) => {
 
 export const deleteText = async (id) => {
     try {
-        
+        console.log("Este es el id: " + id);
         await axios.delete(`${API_URL}/texto_cmd/${id}`);
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to delete textos_cmd');
     }
 };

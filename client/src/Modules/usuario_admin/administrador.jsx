@@ -110,7 +110,7 @@ const Administradores = () => {
          setCel('');
          setSexo('');
          setPassword('');
-         
+         console.log("test boton agregar");
       };
 
       return (
@@ -174,7 +174,7 @@ const Administradores = () => {
 let buscaError=0;
    useEffect(() => {
       //validación login
-      
+      console.log("Este es el error en A: "+(buscaError++));
       if (!isLoggedIn) {
          // Redirigir si no se cumple la verificación
 
@@ -197,7 +197,7 @@ let buscaError=0;
             setAdministradores(administradoresWithId);
          } catch (error) {
             // Handle error if any
-            
+            console.log('Error fetching administradores:', error);
          }
       };
       fetchAllAdministradores();

@@ -12,7 +12,7 @@ export const getVision = async () => {
         return res.data;
 
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch vision');
     }
 };
@@ -23,7 +23,7 @@ export const editVision = async (vision) => {
         console.log(vision)
         await axios.put(`${API_URL}/vision/${'34'}`, vision);
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to edit vision');
     }
 };

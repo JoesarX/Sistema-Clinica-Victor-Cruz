@@ -8,7 +8,7 @@ export const getPicsDoctoryDesc = async () => {
         const res = await axios.get(`${API_URL}/aboutus`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch Pictures');
     }
 };
@@ -19,7 +19,7 @@ export const editImagen = async (id,url) => {
         await axios.put(`${API_URL}/aboutus/${id}`,url);
        
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to edit imagen');
     }
 };

@@ -8,7 +8,7 @@ export const getMision = async () => {
         const res = await axios.get(`${API_URL}/mision`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch Mision');
     }
 };
@@ -19,7 +19,7 @@ export const editMision = async (mision) => {
     try {
         await axios.put(`${API_URL}/mision/${'24'}`, mision);
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to edit mision');
     }
 };

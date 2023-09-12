@@ -8,7 +8,7 @@ export const getPicsCarrusel = async () => {
         const res = await axios.get(`${API_URL}/carrusel`);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to fetch Carrusel Pictures');
     }
 };
@@ -19,7 +19,7 @@ export const editMision = async (mision) => {
     try {
         await axios.put(`${API_URL}/mision/${'24'}`, mision);
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to edit mision');
     }
 };
@@ -29,7 +29,7 @@ export const postPicture = async (carrusel) => {
         const res = await axios.post(`${API_URL}/carrusel`, carrusel);
         return res.data;
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to post picture');
     }
 };
@@ -39,7 +39,7 @@ export const editCarrusel = async (id,carrusel) => {
         await axios.put(`${API_URL}/carrusel/${id}`,carrusel);
        
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to edit picture');
     }
 };
@@ -51,7 +51,7 @@ export const deletePicture = async (id, orden) => {
          await axios.delete(`${API_URL}/carrusel/${id}`, { data: { orden } });
         
     } catch (error) {
-        
+        console.log(error);
         throw new Error('Failed to delete imagen');
     }
 };

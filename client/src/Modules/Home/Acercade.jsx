@@ -345,11 +345,11 @@ const Acercade = () => {
   const handleConfirmarImagen = async (e) => {
     e.preventDefault();
     try {
-      
+      console.log("test");
       submitImagen(true);
     } catch (error) {
       // Handle error if any
-      
+      console.log('Error submitting medicamento:', error);
     }
     setImageUpload(null);
   };
@@ -358,31 +358,31 @@ const Acercade = () => {
   const handleConfirmarDoctorImg = async (e) => {
     e.preventDefault();
     try {
-      
+      console.log("test");
       submitImagen(false);
     } catch (error) {
       // Handle error if any
-      
+      console.log('Error submitting medicamento:', error);
     }
     setImageUpload(null);
   };
 
   const submitImagen = async (flag) => {
-    
-    
-    
+    console.log(flag);
+    console.log("hola" + urlfotoDoc);
+    console.log("hola" + urlfotoDesc);
     if (flag) {
       try {
         if (imageUpload != null) {
           deleteImg(urlfotoDesc);
-          
+          console.log("Elimino foto en firebase");
           const imageUrll = await uploadFile();
           setImages2(() => ({
 
             url: imageUrll,
           }));
           images2.url = imageUrll;
-          
+          console.log("DESC EDITADO");
           await AboutUsService.editImagen(idfotoDesc, images2);
           swal("Imagen Agregado", {
             icon: "success",
@@ -395,20 +395,20 @@ const Acercade = () => {
         }
       } catch (error) {
         // Handle error if any
-        
+        console.log('Error submitting Imagen:', error);
       }
     } else if (!flag) {
       try {
         if (imageUpload != null) {
           deleteImg(urlfotoDoc);
-          
+          console.log("Elimino foto en firebase");
           const imageUrll = await uploadFile();
           setImages2(() => ({
 
             url: imageUrll,
           }));
           images2.url = imageUrll;
-          
+          console.log("DOCTOR EDITADO");
           await AboutUsService.editImagen(idfotoDoc, images2);
           swal("Imagen Agregada", {
             icon: "success",
@@ -421,11 +421,11 @@ const Acercade = () => {
         }
       } catch (error) {
         // Handle error if any
-        
+        console.log('Error submitting Imagen:', error);
       }
     }
     else {
-      
+      console.log("Hay un error");
     }
   }
 
@@ -470,7 +470,7 @@ const Acercade = () => {
     setidfotoDesc(74);
     try {
       const imgsArray = await AboutUsService.getPicsDoctoryDesc();
-      
+      console.log(imgsArray);
 
       ImgsData = imgsArray.map((images) => ({
         idfoto: images.idfoto,
@@ -489,7 +489,7 @@ const Acercade = () => {
       ImgsDataDoc = images[0];
     } catch (error) {
       // Handle error if   any
-      
+      console.log("Error fetching pictures:", error);
     }
   };
 
@@ -500,7 +500,7 @@ const Acercade = () => {
       misionOBJ.texto_campo = misionData[0].texto_campo;
       setMision(misionData[0].texto_campo);
     } catch (error) {
-      
+      console.log("Error fetching Mision:", error);
     }
   };
   const fetchVision = async () => {
@@ -510,7 +510,7 @@ const Acercade = () => {
       visionOBJ.texto_campo = visionData[0].texto_campo;
       setVision(visionData[0].texto_campo);
     } catch (error) {
-      
+      console.log("Error fetching Vision:", error);
     }
   };
 
@@ -521,7 +521,7 @@ const Acercade = () => {
       descriptionOBJ.texto_campo = descData[0].texto_campo;
       setDescription(descData[0].texto_campo);
     } catch (error) {
-      
+      console.log("Error fetching Descripción de empresa:", error);
     }
   }
 
@@ -532,7 +532,7 @@ const Acercade = () => {
       biographyOBJ.texto_campo = descBio[0].texto_campo;
       setBiography(descBio[0].texto_campo);
     } catch (error) {
-      
+      console.log("Error fetching Biography:", error);
     }
   }
 
@@ -543,7 +543,7 @@ const Acercade = () => {
       teamDescOBJ.texto_campo = descTeam[0].texto_campo;
       setTeamDesc(descTeam[0].texto_campo);
     } catch (error) {
-      
+      console.log("Error fetching Team:", error);
     }
   }
   

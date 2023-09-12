@@ -108,7 +108,7 @@ function HistorialCita() {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
                 setPaciente(response);
-                
+                console.log("RESPONSE:", response);
             } catch (error) {
                 console.error('Error fetching paciente:', error);
             }
@@ -117,7 +117,7 @@ function HistorialCita() {
     }, [id]);
 
     // useEffect(() => {
-    //      // Log paciente when it changes
+    //     console.log(paciente); // Log paciente when it changes
     // }, [paciente]);
 
 
@@ -266,12 +266,12 @@ function HistorialCita() {
 
             // aqui agrego los medicamentos ????????????/
 
-            
+            console.log(recetas);
 
             const listaRecetas = {
                 recetasLista: recetas,
             }
-            
+            console.log(listaRecetas);
             if (validacionesSignos()) {
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
@@ -295,7 +295,7 @@ function HistorialCita() {
             // window.location.reload();
         } catch (error) {
 
-            
+            console.log('Error submitting servicio:', error);
         }
     };
     /////////////////////////////////////////////////////////////////////

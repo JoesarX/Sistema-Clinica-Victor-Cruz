@@ -39,7 +39,7 @@ const LandingPage = () => {
     const url = window.location.href;
     const id = url.substring(url.lastIndexOf('/') + 1);
     const correo = localStorage.getItem("correo");
-    
+    console.log("ESTE ES EL CORREO: " + correo);
     const [perfil, setPerfil] = useState({});
     const [isModalOpen1, setIsModalOpen1] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
@@ -89,7 +89,7 @@ const LandingPage = () => {
         setCita((prevCita) => ({ ...prevCita, fecha: formattedDate }));
         const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
         setAvailableTimes(times);
-        
+        console.log(cita);
     };
 
     const [Usuarios, setUsuarios] = useState([]);
@@ -124,7 +124,7 @@ const LandingPage = () => {
                 setUsuarios(usuariosFormatted);
 
             } catch (error) {
-                
+                console.log(error + "FUCK");
             }
         }
         fetchExpedientes();
@@ -281,10 +281,10 @@ const LandingPage = () => {
                 });
 
             } catch (error) {
-                
+                console.log(error);
             }
             const futuraCita = await CitasService.getUserExpCitas(correo);
-            //
+            //console.log("FUTURA CITA: " + futuraCita[0].nombre);
             const validar_Futura = futuraCita.filter(futuraCita => futuraCita.estado === "Pendiente");
             const validar_Pasadas = futuraCita.filter(futuraCita => futuraCita.estado === "Terminada" || futuraCita.estado === "Expirada");
             const uniqueCitas = Array.from(new Set(validar_Futura.map(cita => cita.idcita)))
@@ -332,7 +332,7 @@ const LandingPage = () => {
                 const expedienteData = await UsuariosService.getOneUser(email);
                 console.log(expedienteData)
                 const futuraCita = await CitasService.getUserExpCitas(email[0]);
-                
+                console.log(futuraCita);
                 const validar_Futura = futuraCita.filter(futuraCita => futuraCita.estado === "Pendiente");
                 const validar_Pasadas = futuraCita.filter(futuraCita => futuraCita.estado === "Terminada" || futuraCita.estado === "Expirada");
                 const uniqueCitas = Array.from(new Set(validar_Futura.map(cita => cita.idcita)))
@@ -353,14 +353,14 @@ const LandingPage = () => {
                     description: cita.nombre_persona,
                     idpaciente: cita.idpaciente
                 })))
-                
+                console.log(data);
                 setSchAppointments(data);
                 setCFuturas(data);
-                
-                
-                
-                
-                
+                console.log(cFuturas);
+                console.log(schAppointments);
+                console.log("info citas " + schAppointments);
+                console.log("Citas Futuas: " + futuraCita.idcita);
+                console.log("DATA OBTENIDA POR QUERY: " + expedienteData);
                 setExpediente(expedienteData);
                 setPatient(prevPatient => ({
                     ...prevPatient,
@@ -392,7 +392,7 @@ const LandingPage = () => {
                 });
 
             } catch (error) {
-                
+                console.log(error);
             }
         };
         const fetchUsuarios = async () => {
@@ -527,7 +527,7 @@ const LandingPage = () => {
                 }
             }
         } catch (error) {
-            
+            console.log('Error submitting cita:', error);
         }
     };
 

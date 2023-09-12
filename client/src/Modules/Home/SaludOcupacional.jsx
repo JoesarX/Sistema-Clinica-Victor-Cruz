@@ -96,11 +96,11 @@ const SaludOcupacional = () => {
         if (isFetching) {
             const FetchCargarInfo = async () => {
                 try {
-                    
+                    console.log("Hola");
                     var info = await Services.getSaludOcupacional();     
                     setSubTituloSaludOcupacional({ ...subTituloSaludOcupacional, texto_campo: info[4].texto_campo });
                 } catch (error) {
-                    
+                    console.log("Error fetching info");
                 }
             }
             FetchCargarInfo();
@@ -188,11 +188,11 @@ const SaludOcupacional = () => {
             return;
         }
            
-            
+            console.log("Este es el titulo:" + TipoTitulo.texto_campo);
 
             TipoTitulo.texto_campo = trimmedTitle;
 
-            
+            console.log("Este es el titulo original:" + TituloOriginal);
             await Services.editText(TipoTitulo);
             TipoDesc.texto_campo = trimmedDescription;
             await Services.editText(TipoDesc);
@@ -245,14 +245,14 @@ const SaludOcupacional = () => {
             if (isFetching) {
                 const FetchCargarInfo = async () => {
                     try {
-                        
+                        console.log("Hola");
                         var info = await Services.getSaludOcupacional();
                         setTituloSaludOcupacional({ ...tituloSaludOcupacional, texto_campo: info[0].texto_campo });
                         setTextoQueEsSaludOcupacional({ ...textoQueEsSaludOcupacional, texto_campo: info[1].texto_campo });
                         setPorqueImporta({ ...porqueImporta, texto_campo: info[2].texto_campo });
                         setTextoPorqueImporta({ ...textoPorqueImporta, texto_campo: info[3].texto_campo });
                     } catch (error) {
-                        
+                        console.log("Error fetching info");
                     }
                 }
                 FetchCargarInfo();
@@ -401,11 +401,11 @@ const SaludOcupacional = () => {
                 return;
             }
         
-            
+            console.log("Este es el titulo:" + TipoTitulo.texto_campo);
         
             TipoTitulo.texto_campo = trimmedTitle;
         
-            
+            console.log("Este es el titulo original:" + TituloOriginal);
             await Services.editText(TipoTitulo);
             TipoDesc.texto_campo = trimmedDescription;
             await Services.editText(TipoDesc);
@@ -458,7 +458,7 @@ const SaludOcupacional = () => {
             if (isFetching) {
                 const FetchCargarInfo = async () => {
                     try {
-                        
+                        console.log("Hola");
                         var info = await Services.getSaludOcupacional();
                         setTituloItem1SaludOcupacional({ ...tituloItem1SaludOcupacional, texto_campo: info[5].texto_campo });
                         setTituloItem2SaludOcupacional({ ...tituloItem2SaludOcupacional, texto_campo: info[6].texto_campo });
@@ -467,7 +467,7 @@ const SaludOcupacional = () => {
                         setTextoItem2SaludOcupacional({ ...textoItem2SaludOcupacional, texto_campo: info[9].texto_campo });
                         setTextoItem3SaludOcupacional({ ...textoItem3SaludOcupacional, texto_campo: info[10].texto_campo });
                     } catch (error) {
-                        
+                        console.log("Error fetching info");
                     }
                 }
                 FetchCargarInfo();

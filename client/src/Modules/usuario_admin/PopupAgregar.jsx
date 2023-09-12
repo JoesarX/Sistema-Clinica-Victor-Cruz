@@ -40,7 +40,7 @@ const AddAdmin = (props) => {
     }
 
     React.useEffect(() => {
-        
+        console.log(admin);
     }, [admin]);
 
     const handleSubmit = async e => {

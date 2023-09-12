@@ -13,7 +13,7 @@ const serviciosRouter = (pool) => {
             connection.release();
             res.json(rows);
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -35,7 +35,7 @@ const serviciosRouter = (pool) => {
             connection.release();
             res.json("Servicio añadido exitosamente!");
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -51,7 +51,7 @@ const serviciosRouter = (pool) => {
             connection.release();
             res.json(rows[0])
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -69,7 +69,7 @@ const serviciosRouter = (pool) => {
             //res.json(rows);
             res.json({ rows, updateResult });
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -103,7 +103,7 @@ const serviciosRouter = (pool) => {
             connection.release();
             res.json("Servicio actualizado exitosamente!");
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

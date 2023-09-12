@@ -102,7 +102,7 @@ const Dashboard = () => {
     const fetchExpediente2 = async () => {
         try {
             const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
-            
+            console.log(expedienteData);
             setExpediente(expedienteData);
             setPatient(prevPatient => ({
                 ...prevPatient,
@@ -124,7 +124,7 @@ const Dashboard = () => {
                 presion: expedienteData.presion,
             }));
         } catch (error) {
-            
+            console.log(error);
         }
     };
 
@@ -156,7 +156,7 @@ const Dashboard = () => {
                     presion: expedienteData.presion,
                 }));
             } catch (error) {
-                
+                console.log(error);
             }
         };
 
@@ -173,7 +173,7 @@ const Dashboard = () => {
                     setLastAppointment(previous.at(0));
                 }
             } catch (error) {
-                
+                console.log(error);
             }
         }
 

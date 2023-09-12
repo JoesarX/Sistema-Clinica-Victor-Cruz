@@ -29,13 +29,13 @@ const Prueba = () => {
   const handleAccept1 = async () => {
     // Lógica para traer toda la tabla de id_cmd
    /* const probando1 = await Services.getAllId_cmd();
-    */
+    console.log(probando1);*/
 
     //lógica para traer un texto
     const variable=['WHA'];
    
     const probando1_1 = await text_Services.getOneText(variable);
-    
+    console.log(probando1_1);
   };
 
   const handleAccept2 =async() => {
@@ -43,7 +43,7 @@ const Prueba = () => {
    /* var nuevaCMD = ['WHA1','WHA']
     const probando2 = await Services.editId_cmd(nuevaCMD);
     const probando2_1 = await Services.getAllId_cmd();
-    */
+    console.log(probando2_1);*/
 
     // Lógica editar texto_cmd
     var nuevaCMD = ['+504 3342-4985','WHA']
@@ -58,15 +58,15 @@ const Prueba = () => {
   /*  const variable='WHA';
     const probando3 = await Services.deleteId_cmd(variable);
     const probando3_1 = await Services.getAllId_cmd();
-    
-    
+    console.log(probando3_1);
+    console.log('Botón 3 Aceptado');
     */
     // Lógica Eliminar textos_cmd
     const variable='WHA';
     const probando3 = await text_Services.deleteText(variable);
     const probando3_1 = await text_Services.getAll_Text();
-    
-    
+    console.log(probando3_1);
+    console.log('Botón 3 Aceptado');
   };
 
   const handleAccept4 = async () => {
@@ -74,8 +74,8 @@ const Prueba = () => {
        /* var nuevaCMD2 = ['WHA']
     const probando4 = await Services.postId_cmd(nuevaCMD2);
     const probando4_1 = await Services.getAllId_cmd();
-    
-    
+    console.log(probando4_1);
+    console.log('Botón 4 Aceptado');
 
     */
     // Lógica para el agregar texto_cmd
@@ -83,8 +83,8 @@ const Prueba = () => {
     var nuevaCMD2 = ['WHA','+504 3342-4985']
     const probando4 = await text_Services.postText(nuevaCMD2);
     const probando4_1 = await text_Services.getAll_Text();
-    
-    
+    console.log(probando4_1);
+    console.log('Botón 4 Aceptado');
   };
 
   return (
