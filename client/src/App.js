@@ -14,6 +14,7 @@ import Servicios from "./Modules/Home/Servicios";
 import Acercade from "./Modules/Home/Acercade";
 import Laboratorio from "./Modules/Home/Laboratorio";
 import NotFound404 from "./Modules/Home/NotFound404"
+import Forbidden from "./Modules/Home/Forbidden"
 import SaludOcupacional from "./Modules/Home/SaludOcupacional";
 import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
@@ -65,6 +66,7 @@ function App() {
             {/* <Route path="/PagoPrueba1" element={<PagoPrueba1 />} /> */}
             <Route path="/checkout/:id" element={<Checkout />} />
             <Route path="/factura/:id" element={<Factura />} />
+            <Route path="/prohibido" element={<Forbidden />} />
             <Route path="*" element={<NotFound404/>} />
           </Routes>
         </BrowserRouter>
