@@ -1,4 +1,4 @@
-import { CLIENT_ID } from '../../Config/config'
+//import { CLIENT_ID } from '../../Config/config'
 import React, { useState, useEffect } from "react";
 
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -6,13 +6,26 @@ import swal from 'sweetalert';
 import { useNavigate, useParams } from 'react-router-dom';
 import PagosService from '../../Services/PagosService';
 import FacturasService from '../../Services/FacturasService';
+import KeysService from '../../Services/KeysService'; 
 import { Box, Typography, Button } from '@mui/material';
 
 const Checkout = () => {
-
+    const [keys, setKeys] = useState({});
     const [factura, setFactura] = useState(null);
-    
     const { id } = useParams();
+    
+    useEffect(() => {
+        const fetchPaypalKeys = async () => {
+            try {
+                const response = await KeysService.fetchKeys();
+                setKeys(response);
+            } catch (error) {
+                console.error('Error fetching key:', error);
+            }
+        };
+        fetchPaypalKeys();
+    }, []);
+    
 
     useEffect(() => {
         const fetchFactura = async () => {
@@ -174,7 +187,7 @@ const Checkout = () => {
                     <Typography sx={{fontWeight: 'bold'}}>Total en Dolares:</Typography>
                     <Typography sx={{fontWeight: 'bold'}}>$ {(price * 1.035) / 25}</Typography>
                 </Box> */}
-                <PayPalScriptProvider options={{ "client-id": CLIENT_ID }}>
+                <PayPalScriptProvider options={{ "client-id": keys.apiKey1 }}>
                     <div>
 
                         {show ? (
