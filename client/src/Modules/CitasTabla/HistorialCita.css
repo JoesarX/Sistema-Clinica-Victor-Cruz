@@ -22,14 +22,36 @@
 .input-bg {
     width: 100%;
     padding: 5px;
-    border-radius: 5px;
-    border: 1px solid black;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black; 
+    border-right: 1px solid black;
     background-color: #fff;
     transition: background-color 0.2s ease-in-out;
 }
 
 .input-bg:focus {
     background-color: #C8DAFF;
+}
+
+.input-group > .form-control.input-bg {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-right: none;
+}
+
+.preclinic-labels {
+    height: 100%;
+    background-color: #fff;
+    font-family: 'Inter', sans-serif;
+    border: 1px solid black;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    user-select: none;
 }
 
 .headers {
