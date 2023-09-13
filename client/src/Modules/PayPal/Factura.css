@@ -288,6 +288,13 @@
     border-color: red;
 }
 
+.bind-user-button {
+    background-color: #1976d2;
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: none;
+}
+
 .factura-payment-button-container {
     display: flex;
     justify-content: center;
