@@ -35,21 +35,7 @@ const facturasRouter = (pool, transporter) => {
         }
     });
 
-    //Get a factura by id
-    router.get("/:id", async (req, res) => {
-        try {
-            const connection = await pool.getConnection();
-            const sqlSelect = `SELECT * FROM facturas WHERE idfactura = "${req.params.id}"`;
-            const [rows, fields] = await connection.query(sqlSelect);
-            connection.release();
-            console.log(`Get One factura ${req.params.id} Successfull`)
-            res.json(rows[0])
-        } catch (err) {
-            
-            res.status(500).json({ error: "Internal Server Error" });
-        }
-    });
-
+    //Get a factura by idCita formatted by Adrian
     router.get("/facturas-with-cita/:id", async (req, res) => {
         try {
             
@@ -67,6 +53,59 @@ const facturasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+
+    //Get payments by paypal and cash
+    router.get("/financeMetodoPago", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const sqlSelect = `SELECT metodoPago AS name, Count(metodoPago) AS value FROM facturas WHERE metodoPago IS NOT NULL group by metodoPago ORDER BY name`;
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log(`Get facturas by financeMetodoPago ${req.params.id} Successfull`)
+            res.json(rows)
+        } catch (err) {
+            console.log("Error in get facturas by financeMetodoPago. " + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    //Get payments by month
+    router.get("/financePaymentsByMonth", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            await connection.query(`SET lc_time_names = 'es_ES';`);
+            const sqlSelect = `SELECT DATE_FORMAT(citas.fecha, '%M') AS Mes, SUM(facturas.total) AS Ganancias
+                                FROM facturas INNER JOIN citas ON facturas.idCita = citas.idcita
+                                WHERE facturas.isPagada = 1 AND citas.fecha >= DATE_SUB(CURRENT_DATE, INTERVAL 5 MONTH)
+                                GROUP BY Mes 
+                                ORDER BY citas.fecha;`;
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log(`Get facturas by financeMetodoPago ${req.params.id} Successfull`)
+            res.json(rows)
+        } catch (err) {
+            console.log("Error in get facturas by financeMetodoPago. " + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+
+    //Get a factura by id
+    router.get("/:id", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const sqlSelect = `SELECT * FROM facturas WHERE idfactura = "${req.params.id}"`;
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log(`Get One factura ${req.params.id} Successfull`)
+            res.json(rows[0])
+        } catch (err) {
+            
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    
 
     //============================================== P O S T S ==================================================================
     //Add a new factura
