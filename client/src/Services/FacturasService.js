@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000';
-//const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+//const API_URL = 'http://localhost:8000';
+const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
 
 //============================================== G E T S ==================================================================
 export const getAllFacturas = async () => {
@@ -49,27 +49,6 @@ export const getOneFacturaWithCita = async (id) => {
     }
 };
 
-export const getCountMetodoPago = async () => {
-    
-    try {
-        const res = await axios.get(`${API_URL}/facturas/financeMetodoPago`);
-        return res.data;
-    } catch (error) {
-        
-        throw new Error('Failed to fetch factura');
-    }
-};
-
-export const getProfitByMonth = async () => {
-    
-    try {
-        const res = await axios.get(`${API_URL}/facturas/financePaymentsByMonth`);
-        return res.data;
-    } catch (error) {
-        
-        throw new Error('Failed to fetch factura');
-    }
-};
 
 //============================================== P O S T S ==================================================================
 export const postFactura = async (factura) => {
@@ -132,8 +111,6 @@ const Services = {
     deleteFactura,
     deleteFacturaByCita,
     getOneFacturaWithCita,
-    getCountMetodoPago,
-    getProfitByMonth,
     
     // Other functions
 };
