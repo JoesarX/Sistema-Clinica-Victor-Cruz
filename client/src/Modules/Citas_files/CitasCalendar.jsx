@@ -49,6 +49,16 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
         }
     }, [shouldChangeView, isDoctor]);
 
+    const handleEventClick = (event) => {
+        console.log(event.start)
+        if(isDoctor) {
+            console.log('doctor')
+        }
+        else {
+            console.log('client')
+        }
+    }
+
     return (
         <div class='cal-container'>
             <FullCalendar
@@ -128,6 +138,8 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                 height={'auto'}
 
                 hiddenDays={[0, 6]}
+
+                eventClick={(info) => handleEventClick(info.event)}
 
                 // viewDidMount={handleViewDidMount}
 
