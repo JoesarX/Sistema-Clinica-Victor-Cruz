@@ -25,6 +25,7 @@ import { IconButton } from '@mui/material';
 import Citas from '../CitasTabla/CitasTabla';
 import { CorporateFareTwoTone } from '@mui/icons-material';
 import bcrypt from 'bcryptjs';
+import AddCitaLandingPage from './AddCitaLandingPage';
 
 const LandingPage = () => {
     const isLoggedIn = localStorage.getItem("100");
@@ -801,7 +802,7 @@ const LandingPage = () => {
         }
     };
 
-    
+
 
 
     return (
@@ -1053,98 +1054,11 @@ const LandingPage = () => {
                 </div>
             </Modal>
             <div>
-                <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+                <AddCitaLandingPage
 
-                    <div className='modalContainer modalCitas'>
-
-
-                        <h2 className="modalHeader">AGREGAR CITA</h2>
-                        <button className="cancelButton" onClick={toggleModal}>
-                            <FontAwesomeIcon icon={faTimes} size="2x" />
-                        </button>
-                        <Box
-                            component="form"//edit modal
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                width: '100%', // Added width property
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        >
-                            <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" onChange={handleModalFieldChange} name='nombre_persona' required />
-                            <Autocomplete
-                                value={Expedientess}
-                                disablePortal
-                                id="idpaciente"
-                                options={Expedientes}
-                                getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
-                                onChange={(event, newValue) => {
-
-                                    cita.idpaciente = newValue?.idpaciente;
-
-                                }}
-                                renderInput={(params) => (
-                                    <TextField {...params} label="ID Paciente" />
-                                )}
-                                ListboxProps={
-                                    {
-                                        style: {
-                                            maxHeight: '220px',
-                                            border: '1px solid BLACK'
-                                        }
-                                    }
-                                }
-                            />
-
-                            
-
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <MobileDatePicker
-                                    id="fecha"
-                                    onChange={handleDateChange}
-                                    renderInput={(params) => <TextField {...params} />}
-                                    shouldDisableDate={isWeekday} // Disable weekends
-                                    label="Fecha"
-                                    name='fecha'
-                                    value={fecha}
-                                />
-                            </LocalizationProvider>
-                            <Autocomplete
-                                disablePortal
-                                id="hora"
-                                required
-                                options={availableTimes}
-                                value={hora}
-                                onChange={(event, newValue) => {
-                                    setHora(newValue);
-                                    setCita((prevCita) => ({ ...prevCita, hora: newValue }));
-                                }}
-                                renderInput={(params) => <TextField {...params} label="Hora
-            " required style={{ marginBottom: '0.45rem' }} />}
-                                ListboxProps={
-                                    {
-                                        style: {
-                                            maxHeight: '300px',
-                                            border: '1px solid BLACK'
-                                        }
-                                    }
-                                }
-                            />
-
-
-                            <Button onClick={handleModalSubmit} variant="contained" style={{
-                                backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                            }}>
-                                Agregar Cita
-                            </Button>
-                        </Box>
-
-                    </div>
-                </Modal>
-
+                    isModalOpen={isModalOpen}
+                    toggleModal={() => setIsModalOpen(!isModalOpen)}
+                />
             </div>
         </div>
     );
