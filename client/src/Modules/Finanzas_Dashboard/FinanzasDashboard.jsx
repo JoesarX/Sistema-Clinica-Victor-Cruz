@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar';
 
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend, Tooltip,  AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend, Tooltip, AreaChart, Area, XAxis, YAxis, CartesianGrid } from 'recharts';
 import swal from 'sweetalert';
 
 
@@ -85,47 +85,57 @@ const Finanzas = () => {
                 <div className='headerDiv'>
                     <h1>Finanzas</h1>
                 </div>
-                <div className='dataGridBox' >
-                    <ResponsiveContainer width="50%" height="50%">
-                        <PieChart width={400} height={400}>
-                            <Pie
-                                data={metodoPagoData}
-                                cx="50%"
-                                cy="50%"
-                                labelLine={false}
-                                label={renderCustomizedLabel}
-                                outerRadius={100}
-                                fill="#8884d8"
-                                dataKey="value"
-                            >
-                                {metodoPagoData.map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                ))}
-                            </Pie>
-                            <Legend />
-                            <Tooltip />
-                        </PieChart>
-                    </ResponsiveContainer>
-                    <ResponsiveContainer width="50%" height="50%">
-                        <AreaChart
-                            width={500}
-                            height={400}
-                            data={gananciasMesData}
-                            margin={{
-                                top: 10,
-                                right: 30,
-                                left: 0,
-                                bottom: 0,
-                            }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="Mes" />
-                            <YAxis />
-                            <Tooltip />
-                            <Area type="monotone" dataKey="Ganancias" stroke="#8884d8" fill="#8884d8" />
-                        </AreaChart>
-                    </ResponsiveContainer>
-
+                <div className='dataGridBox' style={{ paddingTop: "10px", display:"flex", flexDirection:"column"}}>
+                    <div style={{ height: "45vh", width: "100%", display:"flex", flexDirection:"row", justifyContent:"space-evenly"}}>
+                        <div style={{ backgroundColor: "white", height: "95%", width:"69%", display:"flex", flexDirection:"column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px" }}>
+                            <h2 style={{ alignSelf: "center" }}>Ganancias por Mes</h2>
+                            <ResponsiveContainer width="100%" height="80%" debounce="1" background="#f5f5f5">
+                                <AreaChart
+                                    // width={500}
+                                    // height={400}
+                                    data={gananciasMesData}
+                                    margin={{
+                                        top: 10,
+                                        right: 30,
+                                        left: 0,
+                                        bottom: 0,
+                                    }}
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="Mes" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Area type="monotone" dataKey="Ganancias" stroke="#8884d8" fill="#8884d8" />
+                                </AreaChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <div style={{ backgroundColor: "white", height: "95%", width:"29%", display:"flex", flexDirection:"column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px" }}>
+                            <h2 style={{ alignSelf: "center"}}>Pagos por cada Medio</h2>
+                            <ResponsiveContainer width="100%" height="80%" debounce="1">
+                                <PieChart height={200}>
+                                    <Pie
+                                        data={metodoPagoData}
+                                        cx="50%"
+                                        cy="50%"
+                                        labelLine={false}
+                                        label={renderCustomizedLabel}
+                                        outerRadius={100}
+                                        fill="#8884d8"
+                                        dataKey="value"
+                                    >
+                                        {metodoPagoData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Legend />
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+                    <div style={{ height: "45vh", width: "100%", display:"flex", flexDirection:"row", justifyContent:"space-evenly"}}>
+                        
+                    </div>
                 </div>
             </div>
         </div>
