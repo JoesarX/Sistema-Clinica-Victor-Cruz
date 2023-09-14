@@ -1,5 +1,7 @@
-require('dotenv').config();
 import express from "express";
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const router = express.Router();
 
@@ -21,4 +23,5 @@ const router = express.Router();
     });
     return router;
   };
+
 export default keysRouter;

@@ -17,6 +17,8 @@ import ExamenesRouter from "./routes/examenes.js"
 import RecetasRouter from "./routes/recetas.js";
 import PagosRouter from "./routes/pagos.js";
 import serviciosRouter from "./routes/servicios.js";
+import KeysRouter from "./routes/keys.js";
+import ArchivosRouter from "./routes/archivos.js";
 import preciosRouter from "./routes/precios.js";
 import facturasRouter from "./routes/facturas.js";
 
@@ -85,7 +87,8 @@ app.use('/servicios', ServiciosRouter(pool));
 app.use('/texto_cmd', textos_cmdRouter(pool));
 app.use('/carrusel', CarruselRouter(pool));
 app.use('/aboutus', AboutUsRouter(pool));
-
+app.use('/keys', KeysRouter(pool));
+app.use('/archivos', ArchivosRouter(pool));
 app.use('/examenes', ExamenesRouter(pool));
 
 app.use('/recetas', RecetasRouter(pool));

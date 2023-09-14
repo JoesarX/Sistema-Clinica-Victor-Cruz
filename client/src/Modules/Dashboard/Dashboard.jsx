@@ -16,7 +16,7 @@ import TopBar from '../Home/Topbar.jsx';
 import moment from 'moment';
 import 'moment/locale/es';
 import swal from 'sweetalert';
-
+import ArchivosService from '../../Services/ArchivosService';
 import ExpedientesService from '../../Services/ExpedientesService';
 import Topbar from '../Home/Topbar.jsx';
 
@@ -96,6 +96,7 @@ const Dashboard = () => {
     const [schAppointments, setSchAppointments] = useState([]);
     const [prevAppointments, setPrevAppointments] = useState([]);
     const [lastAppointment, setLastAppointment] = useState({});
+    const [archivos, setArchivos] = useState({});
 
     moment.locale('es');
 
@@ -162,7 +163,7 @@ const Dashboard = () => {
 
         const fetchAppointments = async () => {
             try {
-                const appointments = await ExpedientesService.getCitasOneExpediente(id)
+                const appointments = await ExpedientesService.getCitasOneExpediente(id);
 
                 const scheduled = appointments.filter(appointment => appointment.estado === "Pendiente");
                 const previous = appointments.filter(appointment => appointment.estado !== "Pendiente");
@@ -175,9 +176,18 @@ const Dashboard = () => {
             } catch (error) {
                 
             }
+        };
+
+        const fetchArchivos = async () => {
+            try {
+                const archivosF = await ArchivosService.getArchivos(id);
+                setArchivos(archivosF);
+            } catch (error) {
+                
+            }
         }
 
-
+        fetchArchivos();
         fetchAppointments();
         fetchExpediente();
     }, [id]);
