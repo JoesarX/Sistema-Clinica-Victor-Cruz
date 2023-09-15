@@ -552,13 +552,10 @@ const Dashboard = () => {
         }
     };
 
-    const authContext = useContext(AuthContext);
-
 
     return (
 
         <div class='scrollable-page'>
-            <PermissionChecker userType={authContext.userType} requiredPermission="admin">
                 {userType !== 'normal' && (
 
                     <NavBar />
@@ -1091,7 +1088,6 @@ const Dashboard = () => {
                     </div>
 
                 </div >
-            </PermissionChecker>
         </div>
 
     );
