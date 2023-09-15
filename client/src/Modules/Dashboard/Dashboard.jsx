@@ -104,7 +104,7 @@ const Dashboard = () => {
     const [schAppointments, setSchAppointments] = useState([]);
     const [prevAppointments, setPrevAppointments] = useState([]);
     const [lastAppointment, setLastAppointment] = useState({});
-    const [archivos, setArchivos] = useState({});
+    const [archivos, setArchivos] = useState([]);
     const [archivoUpload, setArchivoUpload] = useState([]);
     const [archivo, setArchivo] = React.useState({
         filename: '',
