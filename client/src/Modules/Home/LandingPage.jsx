@@ -988,7 +988,7 @@ const LandingPage = () => {
                                 }
                             />
                             <Autocomplete
-                                value={Expedientess}
+                                
                                 disablePortal
                                 id="idpaciente"
                                 options={Expedientes}

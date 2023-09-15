@@ -37,6 +37,7 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
       try {
         const expedientesData = await ExpedientesService.getUserExpedients(correo);
         console.log(expedientesData)
+        
         const expedientesFormatted = expedientesData.map((expediente) => ({
           idpaciente: expediente.idpaciente,
           nombre: expediente.nombre,
@@ -95,7 +96,12 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
     e.preventDefault();
     try {
       cita.estado = "Pendiente";
-      cita.correouser = perfil.correo;
+     // console.log(perfil.correo)
+     if(cita.idpaciente===''){
+      cita.idpaciente=null;
+     }
+     console.log(cita.idpaciente)
+      cita.correouser = correo;
       if (validations()) {
         // console.log("Entra a agregar despues de validaciones");
         // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
@@ -289,17 +295,16 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
         >
           <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" onChange={handleModalFieldChange} name='nombre_persona' required />
           <Autocomplete
-            value={Expedientess}
+           // value={Expedientess}
             disablePortal
             id="idpaciente"
             options={Expedientes}
             getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
             onChange={(event, newValue) => {
               cita.idpaciente = newValue?.idpaciente;
+              console.log(cita)
             }}
-            renderInput={(params) => (
-              <TextField {...params} label="ID Paciente" />
-            )}
+            renderInput={(params) => <TextField {...params} label="ID Paciente" />}
             ListboxProps={
               {
                 style: {
