@@ -196,6 +196,7 @@ const Dashboard = () => {
             try {
                 const archivosF = await ArchivosService.getArchivos(id);
                 setArchivos(archivosF);
+                console.log(archivos);
             } catch (error) {
                 
             }
@@ -264,6 +265,21 @@ const Dashboard = () => {
         });
     };
 
+    const handleFileChange = (event) => {
+        const selectedFile = event.target.files[0];
+        console.log(selectedFile);
+        if (selectedFile != null) {
+            setArchivoUpload(selectedFile);
+        }
+    };
+
+    useEffect(() => {
+        if (archivoUpload !== null) {
+            console.log(archivoUpload);
+            handleAgregarArchivo();
+        }
+    }, [archivoUpload]);
+
     const handleAgregarArchivo = async () => {
         const file = archivoUpload;
         console.log(file);
@@ -275,19 +291,19 @@ const Dashboard = () => {
         try {
             const archivoURL = await uploadFile();
             
-            const updatedArchivo = {
+            setArchivo((prevState) => ({
+                ...prevState,
                 url: archivoURL,
                 filename: archivoUpload.name,
                 filetype: archivoUpload.type,
                 idpaciente: expediente.idpaciente,
-            };
-    
-            // Update the state with the new file information
-            setArchivo(updatedArchivo);
-    
-            // Perform any other operations you need with the updatedArchivo object
-    
-            // Show success message
+            }));
+            archivo.url = archivoURL;
+            archivo.filename = archivoUpload.name;
+            archivo.filetype = archivoUpload.type;
+            archivo.idpaciente = expediente.idpaciente;
+            console.log(archivo);
+            await ArchivosService.postArchivos(archivo);
             swal("Archivo Agregado!", {
                 icon: "success",
             });
@@ -905,11 +921,7 @@ const Dashboard = () => {
                                 <label htmlFor="urlfoto" className="customFileLabel"  >Subir Archivo</label>
                                 <input
                                     type="file"
-                                    onChange={(event) => {
-                                        setArchivoUpload(event.target.files[0]);
-                                        console.log(archivoUpload);
-                                        handleAgregarArchivo();
-                                    }}
+                                    onChange={handleFileChange}
                                     name='urlfoto'
                                     id="urlfoto"
                                     className="customFileInput"
