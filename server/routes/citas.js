@@ -373,7 +373,7 @@ const citasRouter = (pool, transporter) => {
             connection.release();
             console.log(`Update cita with id: ${id} Successfull`)
             /*const mailOptions = {
-                from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@msn.com>',
                 to: "", // Join multiple emails with a comma and space
                 subject: "Cancelación de Cita Clinica Dr Victor Cruz",
                 text: `Estimado Doctor, Le informamos que se ha cancelado la cita  ${nombre_paciente}, del día ${fecha}, a las ${hora}.\n` +
@@ -500,7 +500,7 @@ const citasRouter = (pool, transporter) => {
                     // Mandar Correo
                     if (toEmails.length > 0) {
                         const mailOptions = {
-                            from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                            from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@msn.com>',
                             to: toEmails.join(", "), // Join multiple emails with a comma and space
                             subject: "Recordatorio de Cita Clinica Dr Victor Cruz",
                             text: `Estimado/a ${nombre_persona}, Le recordamos cordialmente de su cita para mañana, ${fecha}, a las ${hora}. Esperamos brindarle el mejor servicio en nuestra clínica.\n` +
@@ -579,3 +579,7 @@ const citasRouter = (pool, transporter) => {
 };
 
 export default citasRouter;
+
+
+
+	

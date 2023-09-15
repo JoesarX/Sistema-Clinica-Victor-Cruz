@@ -104,7 +104,7 @@ const adminDashboardRouter = (pool, transporter) => {
                                 FROM
                                     citas
                                 WHERE
-                                    hora >= DATE_SUB(NOW(), INTERVAL 6 MONTH)
+                                    fecha >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
                                     AND hora >= '07:00:00' -- Start time
                                     AND hora <= '15:30:00' -- End time
                                 GROUP BY
@@ -113,6 +113,19 @@ const adminDashboardRouter = (pool, transporter) => {
                                     hora;`;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
+            const allPossibleTimes = [
+                "7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", 
+                "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM"
+            ];
+            for( let i = 0; i < 18; i++){
+                // console.log("i: " + i + " rows[i].Horario: " + rows[i].Horario + " allPossibleTimes[i]: " + allPossibleTimes[i])
+                if(i >= rows.length) rows.push({Horario: allPossibleTimes[i], Citas_Totales: 0})
+                else if(!rows[i].Horario.includes(allPossibleTimes[i])){
+                    rows.splice(i, 0, {Horario: allPossibleTimes[i], Citas_Totales: 0})
+                }
+                // console.log(rows)
+                // console.log()
+            }
             console.log(`Get adminDashboard by popularTimes ${req.params.id} Successfull`)
             res.json(rows)
         } catch (err) {
