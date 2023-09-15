@@ -3,12 +3,11 @@ import { AuthContext } from '../AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 import '../HojaDeEstilos/Dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faFile, faTrash, faFilePdf, faFileImage } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faFile, faTrash, faFilePdf, faFileImage, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faRulerVertical } from '@fortawesome/free-solid-svg-icons';
 import { faWeightScale } from '@fortawesome/free-solid-svg-icons';
 import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
 import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
 import NavBar from '../NavBar';
@@ -38,7 +37,7 @@ const Dashboard = () => {
 
     const url = window.location.href;
     const id = url.substring(url.lastIndexOf('/') + 1);
-    
+
     const [expediente, setExpediente] = React.useState({
         idpaciente: '',
         nombre: '',
@@ -82,7 +81,6 @@ const Dashboard = () => {
             basicConditions: ['Enfermedad 1', 'Enfermedad 2'],
         },
         medications: ['Medicamento 1', 'Medicamento 2'],
-        files: ['archivo1.pdf', 'archivo2.jpg', 'archivo3.pdf', 'archivo4.pdf', 'archivo5.pdf'],
 
         appointments: [
             {
@@ -117,7 +115,7 @@ const Dashboard = () => {
     const fetchExpediente2 = async () => {
         try {
             const expedienteData = await ExpedientesService.getOneExpedienteDashboard(id);
-            
+
             setExpediente(expedienteData);
             setPatient(prevPatient => ({
                 ...prevPatient,
@@ -139,7 +137,7 @@ const Dashboard = () => {
                 presion: expedienteData.presion,
             }));
         } catch (error) {
-            
+
         }
     };
 
@@ -171,7 +169,7 @@ const Dashboard = () => {
                     presion: expedienteData.presion,
                 }));
             } catch (error) {
-                
+
             }
         };
 
@@ -188,7 +186,7 @@ const Dashboard = () => {
                     setLastAppointment(previous.at(0));
                 }
             } catch (error) {
-                
+
             }
         };
 
@@ -198,7 +196,7 @@ const Dashboard = () => {
                 setArchivos(archivosF);
                 console.log(archivos);
             } catch (error) {
-                
+
             }
         }
 
@@ -287,10 +285,10 @@ const Dashboard = () => {
             console.log("Invalid file or format");
             return;
         }
-    
+
         try {
             const archivoURL = await uploadFile();
-            
+
             setArchivo((prevState) => ({
                 ...prevState,
                 url: archivoURL,
@@ -307,7 +305,7 @@ const Dashboard = () => {
             swal("Archivo Agregado!", {
                 icon: "success",
             });
-    
+
         } catch (error) {
             // Handle error if any
             console.log("Error: " + error);
@@ -543,21 +541,15 @@ const Dashboard = () => {
         //////////////////
     }
 
-    const getFileIcon = (fileName) => {
-        const extension = fileName.split('.').pop().toLowerCase();
-
-        switch (extension) {
-            case 'pdf':
-                return <FontAwesomeIcon icon={faFilePdf} style={{ color: '#FF5733', fontSize: '24px' }} />;
-            case 'jpg':
-            case 'jpeg':
-            case 'png':
-                return <FontAwesomeIcon icon={faFileImage} style={{ color: '#33AFFF', fontSize: '24px' }} />;
-            // Add more cases for other file types as needed
-            default:
-                return <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />;
+    const getFileIcon = (filetype) => {
+        if (filetype.includes('jpeg') || filetype.includes('jpg') || filetype.includes('png')) {
+            return <FontAwesomeIcon icon={faFileImage} style={{ color: '#000', fontSize: '24px' }} />;
+        } else if (filetype.includes('pdf')) {
+            return <FontAwesomeIcon icon={faFilePdf} style={{ color: '#FF0000', fontSize: '24px' }} />;
+        } else {
+            return <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />;
         }
-    }
+    };
 
 
     return (
@@ -891,42 +883,46 @@ const Dashboard = () => {
                             <h3 class='archivostit'>Archivos</h3>
                         </div>
                         <ul className="file-list">
-                            {patient.files.map((file, index) => (
-                                <div key={index} className='file-item-line'>
-                                    <div className="file-info">
-                                        <div className="file-icon">
-                                            {getFileIcon(file)} 
+                            {archivos.map((archivo, index) => (
+                                <React.Fragment key={index}>
+                                    <div className='file-item-line'>
+                                        <div className="file-info">
+                                            <div className="file-icon">
+                                                {getFileIcon(archivo.filetype)}
+                                            </div>
+                                            <li className='lifile'>{archivo.filename}</li>
+                                            <button onClick={() => handleDeleteFile(index)}>
+                                                <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
+                                            </button>
+                                            <button onClick={() => handleOpenFile(archivo)}>
+                                                <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />
+                                            </button>
                                         </div>
-                                        <li className='lifile'>{file}</li>
-                                        <button onClick={() => handleDeleteFile(index)}>
-                                            <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
-                                        </button>
-                                        <button onClick={() => handleOpenFile(file)}>
-                                            <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />
-                                        </button>
                                     </div>
-                                    {index !== patient.files.length - 1 && (
-                                        <div className="divider-container">
-                                            <hr className='divider'></hr>
-                                        </div>
-                                    )}
-                                </div>
+                                    {index !== archivos.length - 1 && <hr className='divider'></hr>}
+                                </React.Fragment>
                             ))}
                         </ul>
-
-
-
                         {userType !== 'normal' && (
-                            <Grid item xs={12} sm={6}>
-                                <label htmlFor="urlfoto" className="customFileLabel"  >Subir Archivo</label>
+                            <div>
+                                <button
+                                    className="CFL"
+                                    onClick={() => document.getElementById('urlfoto').click()}
+                                >
+                                    <span>
+                                        <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
+                                        Subir Archivo
+                                    </span>
+                                </button>
                                 <input
                                     type="file"
                                     onChange={handleFileChange}
                                     name='urlfoto'
                                     id="urlfoto"
                                     className="customFileInput"
+                                    style={{ display: 'none' }}
                                 />
-                            </Grid>
+                            </div>
                         )}
                     </div>
 

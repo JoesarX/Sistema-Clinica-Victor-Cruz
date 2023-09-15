@@ -303,15 +303,27 @@
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 20px;
-    padding-bottom: 10px;
+
 
     width: 100%;
-    height: max-content;
-    max-height: 260px;
-    /* max-height: 290px; */
+    height: 350px;
     background: #F8F8F8;
     border-radius: 10px;
 }
+.CFL {
+    background-color: #87CEFA; /* Mild blue color */
+    color: #FFF; /* White text */
+    border: none;
+    padding: 10px 20px; /* Adjust padding as needed */
+    font-size: 16px; /* Adjust font size as needed */
+    cursor: pointer;
+    border-radius: 5px; /* Rounded corners */
+}
+
+.CFL:hover {
+    background-color: #5F9EA0; /* Darker shade on hover */
+}
+
 
 .archivostit {
     font-family: 'Inter';
@@ -544,11 +556,8 @@
     margin-right: 0px;
     margin-top: 10px;
     margin-bottom: 0px;
-    /* TEMPORALLL */
-    /* background-color: rgb(255, 0, 0, 0.3);
-    background-size: 10px 10px;
-    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
 }
+
 
 .large-button {
     display: flex;
@@ -1036,7 +1045,7 @@
     } */
 
     .files {
-        height: 180px;
+        height: 350px;
     }
 
     .vitals-label {
