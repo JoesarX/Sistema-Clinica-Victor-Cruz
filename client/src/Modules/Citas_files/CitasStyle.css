@@ -301,6 +301,18 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   font-size: 25px;
   font-family: 'Inter';
   text-align: center;
+  font-weight: 600;
+  color: #212529;
+}
+
+.schedule-appointment-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.schedule-appointment-label svg {
+  color: #0056b3;
 }
 
 

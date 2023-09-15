@@ -14,9 +14,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
+import { faCalendar, faClock } from '@fortawesome/free-solid-svg-icons';
 
 
-function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false, date, time}) {
+
+function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false, date, time }) {
   // Your component code goes here, make sure to replace all instances of 'cita' with your props and state as needed
   const isLoggedIn = localStorage.getItem("100");
   const correo = localStorage.getItem("correo");
@@ -114,7 +116,7 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
           console.log(cita)
         }
       }
-      
+
     } catch (error) {
       // Handle error if any
       // console.log('Error submitting cita:', error);
@@ -164,12 +166,12 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
       swal("Debe Agregar una fecha valida", {
         icon: "error",
       });
-      if(!fecha) return false;
+      if (!fecha) return false;
     } else if (fecha.format('YYYY-MM-DD') < dayjs().format('YYYY-MM-DD')) {
       swal("La fecha no puede ser menor a la fecha actual", {
         icon: "error",
       });
-      if(!fecha) return false;
+      if (!fecha) return false;
     } else {
       cita.fecha = fecha.format('YYYY-MM-DD');
     }
@@ -178,7 +180,7 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
       swal("Debe agregar una hora valida", {
         icon: "warning",
       });
-      if(!time) return false;
+      if (!time) return false;
     } else {
       const timeString = cita.hora;
       const [time, meridiem] = timeString.split(" ");
@@ -208,7 +210,7 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
     // console.log("Entra a agregar despues de validaciones");
     try {
 
-      if(time && date) {
+      if (time && date) {
         cita.hora = time;
         cita.fecha = date;
       }
@@ -308,9 +310,13 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
             }
           />
           {fromCalendar ?
-            <div class='schedule-appointment-label'>
-              {formatAppointmentDate(date)} <br/>
-              a la(s)
+            <div class='schedule-appointment-container'>
+              <div class='schedule-appointment-label'>
+                <FontAwesomeIcon icon={faCalendar} />
+              </div>
+              <div class='schedule-appointment-label'>
+                {formatAppointmentDate(date)}
+              </div>
             </div>
             :
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -326,8 +332,13 @@ function AddCitaLandingPage({ isModalOpen, toggleModal, id, fromCalendar = false
             </LocalizationProvider>
           }
           {fromCalendar ?
-            <div class='schedule-appointment-label'>
-              {formatAppointmentTime(time)}
+            <div class='schedule-appointment-container'>
+              <div class='schedule-appointment-label'>
+                <FontAwesomeIcon icon={faClock} />
+              </div>
+              <div class='schedule-appointment-label'>
+                {formatAppointmentTime(time)}
+              </div>
             </div>
             :
             <Autocomplete
