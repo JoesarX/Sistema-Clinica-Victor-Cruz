@@ -1055,7 +1055,6 @@ const LandingPage = () => {
             </Modal>
             <div>
                 <AddCitaLandingPage
-
                     isModalOpen={isModalOpen}
                     toggleModal={() => setIsModalOpen(!isModalOpen)}
                 />

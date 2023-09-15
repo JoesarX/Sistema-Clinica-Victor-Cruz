@@ -256,6 +256,12 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   background-color: rgba(188, 200, 255, 0.2)
 }
 
+.fc-list-day-cushion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 .fc-list-event {
   display: flex;
@@ -263,6 +269,12 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   justify-content: center;
   align-items: center;
   border: 1px solid rgb(230, 230, 230);
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.fc-list-event:hover>td {
+  background-color: rgba(188, 200, 255, 0.8) !important;
 }
 
 .fc-list-event>td {
@@ -273,6 +285,7 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 .fc-list-event>.fc-list-event-title {
   width: 100%;
   height: 40px;
+  user-select: none;
 }
 
 .fc-list-event-title>.event-line-container>.event-line-title-label {
@@ -282,6 +295,14 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 .fc-list-event>.fc-list-event-graphic {
   display: none;
 }
+
+.schedule-appointment-label {
+  align-self: center;
+  font-size: 25px;
+  font-family: 'Inter';
+  text-align: center;
+}
+
 
 
 /* 
