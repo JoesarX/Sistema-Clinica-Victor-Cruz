@@ -15,19 +15,6 @@ const Checkout = () => {
     const { id } = useParams();
     
     useEffect(() => {
-        const fetchPaypalKeys = async () => {
-            try {
-                const response = await KeysService.fetchKeys();
-                setKeys(response);
-            } catch (error) {
-                console.error('Error fetching key:', error);
-            }
-        };
-        fetchPaypalKeys();
-    }, []);
-    
-
-    useEffect(() => {
         const fetchFactura = async () => {
             try {
                 const response = await FacturasService.getOneFacturaWithCita(id);
@@ -52,8 +39,23 @@ const Checkout = () => {
                 console.error('Error fetching paciente:', error);
             }
         };
+        const fetchPaypalKeys = async () => {
+            try {
+                const response = await KeysService.fetchKeys();
+                setKeys(response);
+                console.log(response.clientID);
+            } catch (error) {
+                console.error('Error fetching key:', error);
+            }
+        };
+        
         fetchFactura();
+        fetchPaypalKeys();
     }, [id]);
+
+    useEffect(() => {
+        console.log(keys.clientID);
+    }, [keys]);
 
     const isLoggedIn = localStorage.getItem("100");
 
@@ -187,9 +189,8 @@ const Checkout = () => {
                     <Typography sx={{fontWeight: 'bold'}}>Total en Dolares:</Typography>
                     <Typography sx={{fontWeight: 'bold'}}>$ {(price * 1.035) / 25}</Typography>
                 </Box> */}
-                <PayPalScriptProvider options={{ "client-id": keys.apiKey1 }}>
+                <PayPalScriptProvider options={{ "client-id": keys.clientID}}>
                     <div>
-
                         {show ? (
                             <PayPalButtons
                                 style={{ layout: "vertical" }}

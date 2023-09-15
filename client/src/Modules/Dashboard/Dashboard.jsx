@@ -19,7 +19,15 @@ import swal from 'sweetalert';
 import ArchivosService from '../../Services/ArchivosService';
 import ExpedientesService from '../../Services/ExpedientesService';
 import Topbar from '../Home/Topbar.jsx';
-
+import Grid from '@mui/material/Grid';
+import { storage } from '../../firebase';
+import 'firebase/compat/storage';
+import {
+    ref,
+    uploadBytes,
+    getDownloadURL,
+} from "firebase/storage";
+import { v4 } from "uuid";
 
 const Dashboard = () => {
     const { isLoggedIn, userType } = useContext(AuthContext);
@@ -30,7 +38,7 @@ const Dashboard = () => {
 
     const url = window.location.href;
     const id = url.substring(url.lastIndexOf('/') + 1);
-
+    
     const [expediente, setExpediente] = React.useState({
         idpaciente: '',
         nombre: '',
@@ -97,7 +105,13 @@ const Dashboard = () => {
     const [prevAppointments, setPrevAppointments] = useState([]);
     const [lastAppointment, setLastAppointment] = useState({});
     const [archivos, setArchivos] = useState({});
-
+    const [archivoUpload, setArchivoUpload] = useState([]);
+    const [archivo, setArchivo] = React.useState({
+        filename: '',
+        filetype: '',
+        url: '',
+        idpaciente: '',
+    });
     moment.locale('es');
 
     const fetchExpediente2 = async () => {
@@ -227,6 +241,77 @@ const Dashboard = () => {
         return formattedDate;
     };
 
+    async function uploadFile() {
+
+        return new Promise((resolve, reject) => {
+            // Your file upload logic here
+            // Call resolve with the imageUrl when the upload is complete
+            // Call reject with an error if there's an issue with the upload
+            // For example:
+            if (archivoUpload == null) {
+                //reject(new Error('No file selected for upload'));
+                return null;
+            }
+
+            const imageRef = ref(storage, `images/${archivoUpload.name + v4()}`);
+            uploadBytes(imageRef, archivoUpload)
+                .then((snapshot) => getDownloadURL(snapshot.ref))
+                .then((url) => {
+                    resolve(url);
+                    //
+                })
+                .catch((error) => reject(error));
+        });
+    };
+
+    const handleAgregarArchivo = async () => {
+        const file = archivoUpload;
+        console.log(file);
+        if (!file || !validateImageFormat(file)) {
+            console.log("Invalid file or format");
+            return;
+        }
+    
+        try {
+            const archivoURL = await uploadFile();
+            
+            const updatedArchivo = {
+                url: archivoURL,
+                filename: archivoUpload.name,
+                filetype: archivoUpload.type,
+                idpaciente: expediente.idpaciente,
+            };
+    
+            // Update the state with the new file information
+            setArchivo(updatedArchivo);
+    
+            // Perform any other operations you need with the updatedArchivo object
+    
+            // Show success message
+            swal("Archivo Agregado!", {
+                icon: "success",
+            });
+    
+        } catch (error) {
+            // Handle error if any
+            console.log("Error: " + error);
+        } finally {
+            // Always clear archivoUpload after all operations
+            setArchivoUpload(null);
+        }
+    }
+
+    const validateImageFormat = (file) => {
+        const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+        const maxSizeInBytes = 10 * 1024 * 1024; // 5MB
+        if (!allowedFormats.includes(file.type)) {
+            return false;
+        }
+        if (file.size > maxSizeInBytes) {
+            return false;
+        }
+        return true;
+    };
 
     const handleAppointmentClick = (idcita) => {
         navigate(`/citas_tabla/historial_cita/${idcita}`)
@@ -816,12 +901,20 @@ const Dashboard = () => {
 
 
                         {userType !== 'normal' && (
-                            <button class="large-button">
-                                <span>
-                                    <FontAwesomeIcon icon={faPlus} style={{ color: '#FFF', fontSize: '24px', marginRight: '20px' }} />
-                                    Subir Archivo
-                                </span>
-                            </button>
+                            <Grid item xs={12} sm={6}>
+                                <label htmlFor="urlfoto" className="customFileLabel"  >Subir Archivo</label>
+                                <input
+                                    type="file"
+                                    onChange={(event) => {
+                                        setArchivoUpload(event.target.files[0]);
+                                        console.log(archivoUpload);
+                                        handleAgregarArchivo();
+                                    }}
+                                    name='urlfoto'
+                                    id="urlfoto"
+                                    className="customFileInput"
+                                />
+                            </Grid>
                         )}
                     </div>
 

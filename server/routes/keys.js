@@ -13,7 +13,6 @@ const router = express.Router();
         try {
             const clientID = process.env.REACT_APP_CLIENT_ID;
             const secret = process.env.REACT_APP_SECRET;
-            //const apiKey2 = process.env.API_KEY_2;
             console.log("Get key Successfull");
             res.json({ clientID, secret });
         } catch (err) {
