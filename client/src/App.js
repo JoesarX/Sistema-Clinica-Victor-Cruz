@@ -13,6 +13,8 @@ import IniciarSesion from "./Modules/Home/IniciarSesion";
 import Servicios from "./Modules/Home/Servicios";
 import Acercade from "./Modules/Home/Acercade";
 import Laboratorio from "./Modules/Home/Laboratorio";
+import NotFound404 from "./Modules/Home/NotFound404"
+import Forbidden from "./Modules/Home/Forbidden"
 import SaludOcupacional from "./Modules/Home/SaludOcupacional";
 import RegistrarUser from "./Modules/Home/RegistrarUser";
 import Expedientes from "./Modules/Expedientes/Expedientes";
@@ -68,7 +70,8 @@ function App() {
             <Route path="/factura/:id" element={<Factura />} />
             <Route path="/finanzas" element={<Finanzas />} />
 
-            <Route path="*" element={<p>No encontramos lo que buscas D:</p>} />
+            <Route path="/prohibido" element={<Forbidden />} />
+            <Route path="*" element={<NotFound404/>} />
           </Routes>
         </BrowserRouter>
       </div>

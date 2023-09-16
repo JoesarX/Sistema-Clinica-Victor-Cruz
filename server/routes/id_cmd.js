@@ -9,10 +9,10 @@ const id_cmdRouter = (pool) => {
             const sqlSelect = "SELECT * FROM id_cmd ";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
+            console.log("Get all id_cmd Successfull");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all id_cmd Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -27,10 +27,10 @@ const id_cmdRouter = (pool) => {
 
             await connection.query(q, req.body[0]);
             connection.release();
-            
+            console.log("Post id_cmd Successfull");
             res.json("Nuevo campo  añadido exitosamente!");
         } catch (err) {
-            
+            console.log("Post id_cmd Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -44,7 +44,7 @@ const id_cmdRouter = (pool) => {
             console.log(`Delete id_cmd ${req.params.id} Successfull`)
             res.json(rows);
         } catch (err) {
-            
+            console.log(`Delete id_cmd ${req.params.id} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -72,7 +72,7 @@ const id_cmdRouter = (pool) => {
             res.json("Categoría actualizado exitosamente!");
 
         } catch (err) {
-            
+            console.log(`Put id_cmd ${id} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });

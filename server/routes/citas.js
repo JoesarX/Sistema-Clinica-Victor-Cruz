@@ -11,10 +11,10 @@ const citasRouter = (pool, transporter) => {
             const sqlSelect = "SELECT idcita, nombre_persona, estado, idpaciente, correouser, DATE_FORMAT(fecha, '%Y-%m-%d') AS fecha, DATE_FORMAT(hora, '%l:%i %p') AS hora, altura, peso, temperatura, ritmo_cardiaco, presion FROM citas";
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
+            console.log("Get all citas Successfull");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all citas Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -27,10 +27,10 @@ const citasRouter = (pool, transporter) => {
 
             const [rows, fields] = await connection.query(sqlSelect, [estado]);
             connection.release();
-            
+            console.log("Get all citas Successfull");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all citas Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -48,10 +48,10 @@ const citasRouter = (pool, transporter) => {
             }
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
+            console.log("Get all citas by Filter Successfull");
             res.json(rows);
         } catch (err) {
-            
+            console.log("Get all citas by Filter Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -77,10 +77,10 @@ const citasRouter = (pool, transporter) => {
             ];
             await connection.query(q, [values]);
             connection.release();
-            
+            console.log("Post cita Successfull");
             res.json("Cita añadida exitosamente!");
         } catch (err) {
-            
+            console.log("Post cita Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -100,7 +100,7 @@ const citasRouter = (pool, transporter) => {
             const [rows, fields] = await connection.query(sqlSelect, params);
             connection.release();
             console.log(`Check Availability succesfull for ${fecha} ${hora}`)
-            
+            console.log("Check Availability Result: ", rows[0].count);
             const count = rows[0].count;
             res.json({ available: count === 0 });
         } catch (err) {
@@ -120,7 +120,7 @@ const citasRouter = (pool, transporter) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log(`Get citas futuras with correo: ${req.params.correouser} Successfull`)
-            
+            console.log(rows);
             res.json(rows)
         } catch (err) {
             console.log(`Get cita with correo: ${req.params.correouser} Failed. Error: ${err}`)
@@ -208,10 +208,10 @@ const citasRouter = (pool, transporter) => {
                 currentDate.setDate(currentDate.getDate() + 1);
             }
             connection.release();
-            
+            console.log("Get available times range Successfull");
             res.json(availableTimes);
         } catch (err) {
-            
+            console.log("Get available times range Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -235,7 +235,7 @@ const citasRouter = (pool, transporter) => {
     //Get a cita by id with inner join to expedientes
     router.get("/citas-with-expedientes/:id", async (req, res) => {
         try {
-            
+            console.log("Entro");
             const connection = await pool.getConnection();
             const sqlSelect = 
                 "SELECT c.idcita, c.nombre_persona, c.estado, c.idpaciente, c.correouser, DATE_FORMAT(c.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
@@ -243,10 +243,10 @@ const citasRouter = (pool, transporter) => {
                 + " FROM citas c INNER JOIN expedientes e ON c.idpaciente = e.idpaciente WHERE c.idcita = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
+            console.log(`Get cita with id: ${req.params.id} Successful`);
             res.json(rows[0]);
         } catch (err) {
-            
+            console.log(`Get cita with id: ${req.params.id} Failed. Error: ${err}`);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -512,7 +512,7 @@ const citasRouter = (pool, transporter) => {
                         };
 
                         await transporter.sendMail(mailOptions);
-                        
+                        console.log(`Reminder email sent for ${toEmails.join(", ")}`);
                     }
 
                     // Marcar la cita como enviada
@@ -523,7 +523,7 @@ const citasRouter = (pool, transporter) => {
             connection.release();
             console.log("Send appointment reminders Successfull\n")
         } catch (err) {
-            
+            console.log("Send appointment reminders Failed. Error: " + err);
         }
     };
 
@@ -531,7 +531,7 @@ const citasRouter = (pool, transporter) => {
     const startAppointmentCheckingInterval = () => {
 
         const keepServerAwake = () => {
-            
+            console.log("\nKeeping Server On\n");
         };
         setInterval(keepServerAwake, 10 * 60 * 1000);
 

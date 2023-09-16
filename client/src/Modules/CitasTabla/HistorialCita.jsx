@@ -108,7 +108,7 @@ function HistorialCita() {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
                 setPaciente(response);
-                
+
             } catch (error) {
                 console.error('Error fetching paciente:', error);
             }
@@ -266,12 +266,12 @@ function HistorialCita() {
 
             // aqui agrego los medicamentos ????????????/
 
-            
+
 
             const listaRecetas = {
                 recetasLista: recetas,
             }
-            
+
             if (validacionesSignos()) {
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
@@ -295,7 +295,7 @@ function HistorialCita() {
             // window.location.reload();
         } catch (error) {
 
-            
+
         }
     };
     /////////////////////////////////////////////////////////////////////
@@ -538,68 +538,82 @@ function HistorialCita() {
                     <div className='contenedor'>
                         <div className="row mb-3">
                             <div className="col">
-
-                                 <h4 className='headers'>Altura cm</h4> 
-                                        
-                                
-                                 
-                                <input
-                                    label="CM"
-                                    
-                                    className="input-bg"
-                                    type="text"
-                                    // value={paciente && paciente.altura}
-                                    placeholder={paciente && paciente.altura}
-                                    onChange={(e) => setNewAltura(e.target.value)}
-                                
-                                    
-                                />
+                                <h4 className='headers'>Altura</h4>
+                                <div class="input-group">
+                                    <input
+                                        className="form-control input-bg"
+                                        type="text"
+                                        // value={paciente && paciente.altura}
+                                        placeholder={paciente && paciente.altura}
+                                        onChange={(e) => setNewAltura(e.target.value)}
+                                    />
+                                    <div className="input-group-append">
+                                        <span class="input-group-text preclinic-labels">cm</span>
+                                    </div>
                                 </div>
-                                
-                                
-                            
-                            <div className="col">
-                                <h4 className='headers'>Peso Kg</h4>
-                                <input
-                                    label="Kg"
-                                    className="input-bg"
-                                    type="text"
-                                    //value={paciente && paciente.peso}
-                                    placeholder={paciente && paciente.peso}
-                                    onChange={(e) => setNewPeso(e.target.value)}
-                                />
                             </div>
-                            <div className="col">
-                                <h4 className='headers'>Temperatura °C</h4>
-                                <input
-                                    label="°C"
-                                    className="input-bg"
-                                    type="text"
-                                    // value={paciente && paciente.temperatura}
 
-                                    placeholder={paciente && paciente.temperatura}
-                                    onChange={(e) => setNewTemp(e.target.value)}
-                                />
+
+
+                            <div className="col">
+                                <h4 className='headers'>Peso</h4>
+                                <div class="input-group">
+                                    <input
+                                        className="form-control input-bg"
+                                        type="text"
+                                        //value={paciente && paciente.peso}
+                                        placeholder={paciente && paciente.peso}
+                                        onChange={(e) => setNewPeso(e.target.value)}
+                                    />
+                                    <div className="input-group-append">
+                                        <span class="input-group-text preclinic-labels">kg</span>
+                                    </div>
+                                </div>
                             </div>
                             <div className="col">
-                                <h4 className='headers'>Ritmo Cardíaco ppm</h4>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    //value={paciente && paciente.ritmo_cardiaco}
-                                    placeholder={paciente && paciente.ritmo_cardiaco}
-                                    onChange={(e) => setNewRitmo(e.target.value)}
-                                />
+                                <h4 className='headers'>Temperatura</h4>
+                                <div class="input-group">
+                                    <input
+                                        className="form-control input-bg"
+                                        type="text"
+                                        // value={paciente && paciente.temperatura}
+                                        placeholder={paciente && paciente.temperatura}
+                                        onChange={(e) => setNewTemp(e.target.value)}
+                                    />
+                                    <div className="input-group-append">
+                                        <span class="input-group-text preclinic-labels">ºC</span>
+                                    </div>
+                                </div>
                             </div>
                             <div className="col">
-                                <h4 className='headers'>Presión Arterial mmHg</h4>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    //  value={paciente && paciente.presion}
-                                    placeholder={paciente && paciente.presion}
-                                    onChange={(e) => setNewPresion(e.target.value)}
-                                />
+                                <h4 className='headers'>Ritmo Cardíaco</h4>
+                                <div class="input-group">
+                                    <input
+                                        className="form-control input-bg"
+                                        type="text"
+                                        //value={paciente && paciente.ritmo_cardiaco}
+                                        placeholder={paciente && paciente.ritmo_cardiaco}
+                                        onChange={(e) => setNewRitmo(e.target.value)}
+                                    />
+                                    <div className="input-group-append">
+                                        <span class="input-group-text preclinic-labels">ppm</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col">
+                                <h4 className='headers'>Presión Arterial</h4>
+                                <div class="input-group">
+                                    <input
+                                        className="form-control input-bg"
+                                        type="text"
+                                        //  value={paciente && paciente.presion}
+                                        placeholder={paciente && paciente.presion}
+                                        onChange={(e) => setNewPresion(e.target.value)}
+                                    />
+                                    <div className="input-group-append">
+                                        <span class="input-group-text preclinic-labels">mmHg</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

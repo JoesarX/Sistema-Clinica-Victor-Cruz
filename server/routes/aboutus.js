@@ -11,7 +11,7 @@ const AboutUsRouter = (pool) => {
             connection.release();
             res.json(rows[0]);
         } catch (err) {
-            
+            console.log(err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -37,7 +37,7 @@ const AboutUsRouter = (pool) => {
             console.log(`Update Imagen ${req.params.id} Successfull`)
             res.json("Imagen actualizado exitosamente!");
         } catch (err) {
-            
+            console.log(`Update Imagen ${req.params.id} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
