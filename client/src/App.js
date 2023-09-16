@@ -32,6 +32,9 @@ import PruebaRecetas from "./Modules/Recetas/PruebaRecetas";
 import PagoPrueba1 from "./Modules/PayPal/PayPalCheckOut"
 import Checkout from "./Modules/PayPal/Checkout"
 import Factura from "./Modules/PayPal/Factura"
+
+import Finanzas from "./Modules/Finanzas_Dashboard/FinanzasDashboard";
+
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 function App() {
@@ -61,11 +64,12 @@ function App() {
             <Route path="/examenes" element={<Examenes />} />
             <Route path="/laboratorio" element={<Laboratorio />} />
             <Route path="/salud_ocupacional" element={<SaludOcupacional />} />
-
             <Route path="/prueba-recetas" element={<PruebaRecetas />} />
             {/* <Route path="/PagoPrueba1" element={<PagoPrueba1 />} /> */}
             <Route path="/checkout/:id" element={<Checkout />} />
             <Route path="/factura/:id" element={<Factura />} />
+            <Route path="/finanzas" element={<Finanzas />} />
+
             <Route path="/prohibido" element={<Forbidden />} />
             <Route path="*" element={<NotFound404/>} />
           </Routes>
