@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { useEffect, useState, useCallback } from 'react'
+import React from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -7,8 +7,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import NavBar from '../NavBar';
 
 import {
-    PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend, Tooltip, AreaChart, Area,
-    XAxis, YAxis, ZAxis, CartesianGrid, BarChart, Bar, LineChart, Line, ScatterChart, Scatter, LabelList
+    PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip,
+    XAxis, YAxis, CartesianGrid, BarChart, Bar, ScatterChart, Scatter, LabelList
 } from 'recharts';
 import swal from 'sweetalert';
 
@@ -162,7 +162,7 @@ const Finanzas = () => {
                         value={timeInterval}
                         onChange={handleIntervalChange}
                         row // Display radio buttons horizontally
-                        style={{ position: 'absolute', top: '10px', right: '20px' }}
+                        style={{ position: 'absolute', top: '10px', right: '20px', marginRight: "2%" }}
                     >
                         <FormControlLabel value="1" control={<Radio />} label="1 Mes" />
                         <FormControlLabel value="3" control={<Radio />} label="3 Meses" />
