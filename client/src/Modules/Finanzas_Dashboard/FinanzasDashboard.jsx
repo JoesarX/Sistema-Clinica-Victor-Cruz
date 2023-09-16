@@ -173,9 +173,9 @@ const Finanzas = () => {
                 </div>
                 <div className='dataGridBox' style={{ marginTop: '60px', paddingTop: "10px", display: "flex", flexDirection: "column", width: "95%", marginLeft: "2.5%", marginRight: "2.5%" }}>
                     <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin: "0", padding: "0" }}>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "69%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center" }}>Ganancias por Mes</h2>
-                            <ResponsiveContainer width="100%" height="80%" debounce="1">
+                        <div style={{ backgroundColor: "white", height: "97%", width: "69%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize:"25px" }}>Ganancias por Mes</h2>
+                            <ResponsiveContainer width="100%" height="90%" debounce="1">
                                 <ScatterChart
                                     margin={{
                                         top: 20,
@@ -200,9 +200,9 @@ const Finanzas = () => {
                             </ResponsiveContainer>
 
                         </div>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "29%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center" }}>Pagos por cada Medio</h2>
-                            <ResponsiveContainer width="100%" height="80%" debounce="1">
+                        <div style={{ backgroundColor: "white", height: "97%", width: "29%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize:"25px" }}>Pagos por cada Medio</h2>
+                            <ResponsiveContainer width="100%" height="90%" debounce="1">
                                 <PieChart height={200} width={100}>
                                     <Pie
                                         data={metodoPagoData}
@@ -225,19 +225,18 @@ const Finanzas = () => {
                         </div>
                     </div>
                     <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "22%", display: "flex", flexDirection: "column", justifyContent: "space-around", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ display: "flex", alignSelf: "center", textAlign: "center" }}>Usuarios Totales</h2>
-                            <h1 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize: "120px" }}>{userCountData.TotalUsers}</h1>
-                            <h3 style={{ display: "flex", alignSelf: "center", textAlign: "center", color: "green", fontSize: "25px" }}>
+                        <div style={{ backgroundColor: "white", height: "97%", width: "25%", display: "flex", flexDirection: "column", justifyContent: "space-around", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                            <h2 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize:"25px" }}>Usuarios Totales</h2>
+                            <h1 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize: "110px" }}>{userCountData.TotalUsers}</h1>
+                            <h3 style={{ display: "flex", alignSelf: "center", textAlign: "center", color: "green", fontSize: "21px" }}>
                                 {userCountData.NewUsers} Usuarios Nuevos en {timeInterval} {timeInterval === 1 ? 'Mes' : 'Meses'}
                             </h3>
                         </div>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "32%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center" }}>Citas por Dia</h2>
+                        <div style={{ backgroundColor: "white", height: "97%", width: "30%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize:"25px" }}>Citas por Dia</h2>
                             <ResponsiveContainer width="100%" height="90%" debounce="1">
                                 <BarChart
-                                    width={500}
-                                    height={300}
+
                                     data={popularDayData}
                                     margin={{
                                         top: 5,
@@ -254,17 +253,12 @@ const Finanzas = () => {
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "52%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center" }}>Citas por Hora</h2>
+                        <div style={{ backgroundColor: "white", height: "97%", width: "45%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize:"25px" }}>Citas por Hora</h2>
                             <ResponsiveContainer width="100%" height="90%" debounce="1">
                                 <BarChart
                                     data={popularTimeData}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
+
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="Horario" />
