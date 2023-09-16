@@ -5,6 +5,17 @@ const API_URL = 'http://localhost:8000';
 
 //============================================== G E T S ==================================================================
 
+export const getAll = async (months) => {
+    
+    try {
+        const res = await axios.get(`${API_URL}/adminDashboard/getAll/${months}}`);
+        return res.data;
+    } catch (error) {
+        
+        throw new Error('Failed to fetch adminDashboard');
+    }
+};
+
 export const getCountMetodoPago = async () => {
     
     try {
@@ -61,6 +72,7 @@ const Services = {
     getUserCount,
     getPopularDays,
     getPopularTimes,
+    getAll
     
 };
 

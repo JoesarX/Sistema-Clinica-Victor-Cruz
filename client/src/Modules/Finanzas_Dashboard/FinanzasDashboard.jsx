@@ -1,6 +1,9 @@
 import React, { PureComponent } from 'react'
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import NavBar from '../NavBar';
 
 import {
@@ -19,6 +22,26 @@ const Finanzas = () => {
     const navigate = useNavigate();
     const isLoggedIn = localStorage.getItem("400");
     let cont = 0;
+
+    //========================================================================================================================================================================================================================
+    //* ALL CHARTS
+    const [timeInterval, setTimeInterval] = useState(6);
+    const [fillShade, setFillShade] = useState(2);
+
+    // a list of 5 shades of blue for the charts equally distributed starting with the lightest '#0070BD' to the darkest '#082464'
+    const blueShades = ['#0070BD', '#0059A6', '#00457C', '#00325A', '#082464'];
+
+    const handleIntervalChange = async (event) => {
+        setTimeInterval(event.target.value);
+
+        // const setVal = event.target.value;
+        // const allDatas = await AdminDashboardService.getAll(setVal);
+        // setGananciasMesData(allDatas[0]);
+        // setMetodoPagoData(allDatas[1]);
+        // setUserCountData(allDatas[2]);
+        // setPopularDayData(allDatas[3]);
+        // setPopularTimeData(allDatas[4]);
+    };
 
     //========================================================================================================================================================================================================================
     //* METODO PAGO PIE CHART
@@ -48,31 +71,6 @@ const Finanzas = () => {
     //========================================================================================================================================================================================================================
     //* GANANCIAS POR MES CHART
     const [gananciasMesData, setGananciasMesData] = useState([]);
-    class CustomizedLabel extends PureComponent {
-        render() {
-            const { x, y, stroke, value } = this.props;
-
-            return (
-                <text x={x} y={y - 10} dy={-4} fill={stroke} fontSize={15} textAnchor="middle">
-                    {value}
-                </text>
-            );
-        }
-    }
-
-    class CustomizedAxisTick extends PureComponent {
-        render() {
-            const { x, y, stroke, payload } = this.props;
-
-            return (
-                <g transform={`translate(${x},${y})`}>
-                    <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
-                        {payload.value}
-                    </text>
-                </g>
-            );
-        }
-    }
 
     //========================================================================================================================================================================================================================
     //* CUENTA DE USUARIOS CHART
@@ -102,20 +100,47 @@ const Finanzas = () => {
         //Obtener Data
         const fetchAllValues = async () => {
             try {
-                const metodoPago = await AdminDashboardService.getCountMetodoPago()
-                setMetodoPagoData(metodoPago);
+                // const metodoPago = await AdminDashboardService.getCountMetodoPago()
+                // setMetodoPagoData(metodoPago);
 
-                const gananciasMes = await AdminDashboardService.getProfitByMonth();
-                setGananciasMesData(gananciasMes);
+                // const gananciasMes = await AdminDashboardService.getProfitByMonth();
+                // setGananciasMesData(gananciasMes);
 
-                const userCount = await AdminDashboardService.getUserCount();
-                setUserCountData(userCount);
+                // const userCount = await AdminDashboardService.getUserCount();
+                // setUserCountData(userCount);
 
-                const popularDay = await AdminDashboardService.getPopularDays();
-                setPopularDayData(popularDay);
+                // const popularDay = await AdminDashboardService.getPopularDays();
+                // setPopularDayData(popularDay);
 
-                const popularTime = await AdminDashboardService.getPopularTimes();
-                setPopularTimeData(popularTime);
+                // const popularTime = await AdminDashboardService.getPopularTimes();
+                // setPopularTimeData(popularTime);
+                switch (timeInterval) {
+                    case "1":
+                        setFillShade(0);
+                        break;
+                    case "3":
+                        setFillShade(1);
+                        break;
+                    case "6":
+                        setFillShade(2);
+                        break;
+                    case "12":
+                        setFillShade(3);
+                        break;
+                    case "999":
+                        setFillShade(4);
+                        break;
+                    default:
+                        setFillShade(2);
+                        break;
+                }
+
+                const allDatas = await AdminDashboardService.getAll(timeInterval);
+                setGananciasMesData(allDatas[0]);
+                setMetodoPagoData(allDatas[1]);
+                setUserCountData(allDatas[2]);
+                setPopularDayData(allDatas[3]);
+                setPopularTimeData(allDatas[4]);
 
             } catch (error) {
                 console.log(error)
@@ -124,59 +149,32 @@ const Finanzas = () => {
         fetchAllValues();
 
 
-    }, [isLoggedIn, navigate, cont]);
+    }, [isLoggedIn, navigate, cont, timeInterval]);
 
     return (
-
         <div className='crudGrid'>
             <NavBar />
-            <div style={{ height: '100vh' }}>
-                <div className='headerDiv' style={{ }}>
+            <div style={{ height: '100vh', overflow: 'auto' }}>
+                <div className='headerDiv' style={{ position: 'fixed', width: '100%', zIndex: 1 }}>
                     <h1>Finanzas</h1>
+                    <RadioGroup
+                        name="timeInterval"
+                        value={timeInterval}
+                        onChange={handleIntervalChange}
+                        row // Display radio buttons horizontally
+                        style={{ position: 'absolute', top: '10px', right: '20px' }}
+                    >
+                        <FormControlLabel value="1" control={<Radio />} label="1 Mes" />
+                        <FormControlLabel value="3" control={<Radio />} label="3 Meses" />
+                        <FormControlLabel value="6" control={<Radio />} label="6 Meses" />
+                        <FormControlLabel value="12" control={<Radio />} label="1 Año" />
+                        <FormControlLabel value="999" control={<Radio />} label="Todos los Tiempos" />
+                    </RadioGroup>
                 </div>
-                <div className='dataGridBox' style={{ paddingTop: "10px", display: "flex", flexDirection: "column" }}>
-                    <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "69%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px" }}>
+                <div className='dataGridBox' style={{ marginTop: '60px', paddingTop: "10px", display: "flex", flexDirection: "column", width: "95%", marginLeft: "2.5%", marginRight: "2.5%" }}>
+                    <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin: "0", padding: "0" }}>
+                        <div style={{ backgroundColor: "white", height: "95%", width: "69%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
                             <h2 style={{ alignSelf: "center", textAlign: "center" }}>Ganancias por Mes</h2>
-                            {/* <ResponsiveContainer width="100%" height="80%" debounce="1" background="#f5f5f5">
-                                <AreaChart
-                                    // width={500}
-                                    // height={400}
-                                    data={gananciasMesData}
-                                    margin={{
-                                        top: 10,
-                                        right: 30,
-                                        left: 0,
-                                        bottom: 0,
-                                    }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="Mes" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Area type="monotone" dataKey="Ganancias" stroke="#8884d8" fill="#8884d8" />
-                                </AreaChart>
-                            </ResponsiveContainer> */}
-                            {/* <ResponsiveContainer width="100%" height="100%" debounce="1">
-                                <LineChart
-                                    width={500}
-                                    height={300}
-                                    data={gananciasMesData}
-                                    margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 10,
-                                    }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="Mes" height={60} tick={<CustomizedAxisTick />} />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Line type="monotone" dataKey="Ganancias" stroke="#8884d8" label={<CustomizedLabel />} />
-                                </LineChart>
-                            </ResponsiveContainer> */}
                             <ResponsiveContainer width="100%" height="80%" debounce="1">
                                 <ScatterChart
                                     margin={{
@@ -193,16 +191,16 @@ const Finanzas = () => {
                                     <Scatter
                                         name="A school"
                                         data={gananciasMesData}
-                                        fill="#8884d8"
-                                        line={{ type: "linear", strokeWidth: 2, stroke: "#8884d8" }} // Line configuration
+                                        fill= {blueShades[fillShade]}
+                                        line={{ type: "linear", strokeWidth: 2, stroke: blueShades[fillShade] }} // Line configuration
                                     >
-                                        <LabelList dataKey="Ganancias" dx={5} dy={-15} style={{ fontSize: '16px', fontWeight: 'bold' }}/>
+                                        <LabelList dataKey="Ganancias" dx={5} dy={-15} style={{ fontSize: '16px', fontWeight: 'bold' }} />
                                     </Scatter>
                                 </ScatterChart>
                             </ResponsiveContainer>
 
                         </div>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "29%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px" }}>
+                        <div style={{ backgroundColor: "white", height: "95%", width: "29%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
                             <h2 style={{ alignSelf: "center", textAlign: "center" }}>Pagos por cada Medio</h2>
                             <ResponsiveContainer width="100%" height="80%" debounce="1">
                                 <PieChart height={200} width={100}>
@@ -227,14 +225,16 @@ const Finanzas = () => {
                         </div>
                     </div>
                     <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "22%", display: "flex", flexDirection: "column", justifyContent: "space-around", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px" }}>
+                        <div style={{ backgroundColor: "white", height: "95%", width: "22%", display: "flex", flexDirection: "column", justifyContent: "space-around", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
                             <h2 style={{ display: "flex", alignSelf: "center", textAlign: "center" }}>Usuarios Totales</h2>
                             <h1 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize: "120px" }}>{userCountData.TotalUsers}</h1>
-                            <h3 style={{ display: "flex", alignSelf: "center", textAlign: "center", color: "green", fontSize: "25px" }}>{userCountData.NewUsers} Usuarios Nuevos este Mes</h3>
+                            <h3 style={{ display: "flex", alignSelf: "center", textAlign: "center", color: "green", fontSize: "25px" }}>
+                                {userCountData.NewUsers} Usuarios Nuevos en {timeInterval} {timeInterval === 1 ? 'Mes' : 'Meses'}
+                            </h3>
                         </div>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "32%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px" }}>
+                        <div style={{ backgroundColor: "white", height: "95%", width: "32%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
                             <h2 style={{ alignSelf: "center", textAlign: "center" }}>Citas por Dia</h2>
-                            <ResponsiveContainer width="100%" height="100%" debounce="1">
+                            <ResponsiveContainer width="100%" height="90%" debounce="1">
                                 <BarChart
                                     width={500}
                                     height={300}
@@ -250,14 +250,13 @@ const Finanzas = () => {
                                     <XAxis dataKey="Dia" />
                                     <YAxis />
                                     <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="Citas_Totales" fill="#8884d8" />
+                                    <Bar dataKey="Citas_Totales" fill={blueShades[fillShade]} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
-                        <div style={{ backgroundColor: "white", height: "95%", width: "52%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px" }}>
+                        <div style={{ backgroundColor: "white", height: "95%", width: "52%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
                             <h2 style={{ alignSelf: "center", textAlign: "center" }}>Citas por Hora</h2>
-                            <ResponsiveContainer width="100%" height="100%" debounce="1">
+                            <ResponsiveContainer width="100%" height="90%" debounce="1">
                                 <BarChart
                                     data={popularTimeData}
                                     margin={{
@@ -272,7 +271,7 @@ const Finanzas = () => {
                                     <YAxis />
                                     <Tooltip />
                                     {/* <Legend /> */}
-                                    <Bar dataKey="Citas_Totales" fill="#8884d8" />
+                                    <Bar dataKey="Citas_Totales" fill={blueShades[fillShade]} />
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>
