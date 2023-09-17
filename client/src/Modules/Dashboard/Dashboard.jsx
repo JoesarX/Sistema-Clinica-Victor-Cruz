@@ -25,9 +25,11 @@ import {
     ref,
     uploadBytes,
     getDownloadURL,
+    deleteObject,
+    getStorage,
 } from "firebase/storage";
 import { v4 } from "uuid";
-import PermissionChecker from '../Home/PermissionChecker.jsx';
+
 
 const Dashboard = () => {
     const { isLoggedIn, userType } = useContext(AuthContext);
@@ -533,13 +535,53 @@ const Dashboard = () => {
         }
     };
 
-    const handleDeleteFile = (index) => {
-        ///////////////
+    const handleDeleteFile = (file) => {
+        swal({
+            title: "¿Estás seguro?",
+            text: "Una vez borrado, no podrás recuperar esta información.",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then(async (willDelete) => {
+                if (willDelete) {
+                    try {
+                        const url = file.url;
+                        await ArchivosService.deleteArchivos(file.id);
+                        if (url != null) {
+                            deleteImg(url);
+                        }
+                        else {
+                            window.location.reload();
+                        }
+                        swal("Archivo eliminado exitosamente!", {
+                            icon: "success",
+                        });
+                        window.location.reload();
+                    } catch (error) {
+                        swal("Error al eliminar el archivo. Por favor, inténtalo de nuevo más tarde.", {
+                            icon: "error",
+                        });
+                    }
+                } else {
+                    swal("¡Tu información no se ha borrado!");
+                }
+            });
     }
 
+    const storage = getStorage();
+    const deleteImg = (refUrl) => {
+        const imageRef = ref(storage, refUrl)
+        deleteObject(imageRef)
+            .catch((error) => {
+                console.log("Failed to delete image: ", error)
+            })
+        //window.location.reload();
+    }
 
     const handleOpenFile = (fileName) => {
-        //////////////////
+        //navigate("https://"+fileName.url);
+        window.open(fileName.url);
     }
 
     const getFileIcon = (filetype) => {
@@ -892,7 +934,7 @@ const Dashboard = () => {
                                                     {getFileIcon(archivo.filetype)}
                                                 </div>
                                                 <li className='lifile'>{archivo.filename}</li>
-                                                <button onClick={() => handleDeleteFile(index)}>
+                                                <button onClick={() => handleDeleteFile(archivo)}>
                                                     <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
                                                 </button>
                                                 <button onClick={() => handleOpenFile(archivo)}>
