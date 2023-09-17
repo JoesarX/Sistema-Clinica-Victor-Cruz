@@ -114,6 +114,14 @@ const Finanzas = () => {
 
                 // const popularTime = await AdminDashboardService.getPopularTimes();
                 // setPopularTimeData(popularTime);
+
+                const allDatas = await AdminDashboardService.getAll(timeInterval);
+                setGananciasMesData(allDatas[0]);
+                setMetodoPagoData(allDatas[1]);
+                setUserCountData(allDatas[2]);
+                setPopularDayData(allDatas[3]);
+                setPopularTimeData(allDatas[4]);
+
                 switch (timeInterval) {
                     case "1":
                         setFillShade(0);
@@ -134,13 +142,6 @@ const Finanzas = () => {
                         setFillShade(2);
                         break;
                 }
-
-                const allDatas = await AdminDashboardService.getAll(timeInterval);
-                setGananciasMesData(allDatas[0]);
-                setMetodoPagoData(allDatas[1]);
-                setUserCountData(allDatas[2]);
-                setPopularDayData(allDatas[3]);
-                setPopularTimeData(allDatas[4]);
 
             } catch (error) {
                 console.log(error)
