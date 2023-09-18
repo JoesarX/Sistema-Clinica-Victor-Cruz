@@ -35,29 +35,31 @@ const facturasRouter = (pool, transporter) => {
         }
     });
 
-    //Get a factura by id
-    router.get("/:id", async (req, res) => {
+    //Get a factura by idCita formatted by Adrian
+    router.get("/facturas-with-cita/:id", async (req, res) => {
         try {
+            
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT * FROM facturas WHERE idfactura = "${req.params.id}"`;
+            const sqlSelect = 
+                "SELECT f.idFactura, f.nombre_paciente, f.idCita, f.isPagada, f.total, DATE_FORMAT(c.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
+                + "f.metodoPago, f.rtn, f.correo "
+                + " FROM facturas f INNER JOIN citas c ON f.idCita = c.idcita WHERE f.idFactura = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log(`Get One factura ${req.params.id} Successfull`)
-            res.json(rows[0])
+            
+            res.json(rows[0]);
         } catch (err) {
             console.log(`Get One factura ${req.params.id} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
 
-    router.get("/facturas-with-cita/:id", async (req, res) => {
+
+    //Get a factura by id
+    router.get("/:id", async (req, res) => {
         try {
-            console.log("Entro");
             const connection = await pool.getConnection();
-            const sqlSelect = 
-                "SELECT f.idFactura, f.nombre_paciente, f.idCita, f.isPagada, f.total, DATE_FORMAT(c.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
-                + "f.metodoPago, f.rtn, f.correo "
-                + " FROM facturas f INNER JOIN citas c ON f.idCita = c.idcita WHERE f.idFactura = " + req.params.id;
+            const sqlSelect = `SELECT * FROM facturas WHERE idfactura = "${req.params.id}"`;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log(`Get factura with id: ${req.params.id} Successful`);
@@ -67,6 +69,8 @@ const facturasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+
+    
 
     //============================================== P O S T S ==================================================================
     //Add a new factura
