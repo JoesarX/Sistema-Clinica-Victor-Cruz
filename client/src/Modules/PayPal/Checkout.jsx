@@ -1,4 +1,4 @@
-import { CLIENT_ID } from '../../Config/config'
+//import { CLIENT_ID } from '../../Config/config'
 import React, { useState, useEffect } from "react";
 
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
@@ -6,14 +6,14 @@ import swal from 'sweetalert';
 import { useNavigate, useParams } from 'react-router-dom';
 import PagosService from '../../Services/PagosService';
 import FacturasService from '../../Services/FacturasService';
+import KeysService from '../../Services/KeysService'; 
 import { Box, Typography, Button } from '@mui/material';
 
 const Checkout = () => {
-
+    const [keys, setKeys] = useState({});
     const [factura, setFactura] = useState(null);
-    
     const { id } = useParams();
-
+    
     useEffect(() => {
         const fetchFactura = async () => {
             try {
@@ -39,8 +39,23 @@ const Checkout = () => {
                 console.error('Error fetching paciente:', error);
             }
         };
+        const fetchPaypalKeys = async () => {
+            try {
+                const response = await KeysService.fetchKeys();
+                setKeys(response);
+                console.log(response.clientID);
+            } catch (error) {
+                console.error('Error fetching key:', error);
+            }
+        };
+        
         fetchFactura();
+        fetchPaypalKeys();
     }, [id]);
+
+    useEffect(() => {
+        console.log(keys.clientID);
+    }, [keys]);
 
     const isLoggedIn = localStorage.getItem("100");
 
@@ -174,9 +189,8 @@ const Checkout = () => {
                     <Typography sx={{fontWeight: 'bold'}}>Total en Dolares:</Typography>
                     <Typography sx={{fontWeight: 'bold'}}>$ {(price * 1.035) / 25}</Typography>
                 </Box> */}
-                <PayPalScriptProvider options={{ "client-id": CLIENT_ID }}>
+                <PayPalScriptProvider options={{ "client-id": keys.clientID}}>
                     <div>
-
                         {show ? (
                             <PayPalButtons
                                 style={{ layout: "vertical" }}
