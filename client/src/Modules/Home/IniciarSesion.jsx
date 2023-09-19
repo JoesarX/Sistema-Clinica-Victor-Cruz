@@ -77,6 +77,9 @@ const IniciarSesion = () => {
         }
     };
 
+    const { search } = window.location;
+    const returnUrl = new URLSearchParams(search).get('returnUrl');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -113,7 +116,13 @@ const IniciarSesion = () => {
                             console.log(flag)
                             localStorage.setItem("300", true);
                             localStorage.setItem("correo", email);
-                            navigate("/userpage");
+                            if (returnUrl) {
+                                navigate(returnUrl);
+                            }
+                            else {
+                                navigate("/userpage");
+                            }
+                            
                             swal("Bienvenido", {
                                 icon: "success",
                             });

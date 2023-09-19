@@ -1,5 +1,5 @@
 //import { CLIENT_ID } from '../../Config/config'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import swal from 'sweetalert';
@@ -8,11 +8,14 @@ import PagosService from '../../Services/PagosService';
 import FacturasService from '../../Services/FacturasService';
 import KeysService from '../../Services/KeysService'; 
 import { Box, Typography, Button } from '@mui/material';
+import { AuthContext } from '../AuthContext.js';
 
 const Checkout = () => {
     const [keys, setKeys] = useState({});
     const [factura, setFactura] = useState(null);
     const { id } = useParams();
+
+    const { isLoggedIn } = useContext(AuthContext);
     
     useEffect(() => {
         const fetchFactura = async () => {
@@ -34,6 +37,13 @@ const Checkout = () => {
                         // Redirect to the landing page after clicking OK
                         navigate("/");
                     });
+                }
+                else if (!isLoggedIn) {
+                    navigate("/iniciarsesion?returnUrl=/checkout/"+id);
+                    return null;
+                }
+                else {
+                    
                 }
             } catch (error) {
                 console.error('Error fetching paciente:', error);
@@ -57,7 +67,7 @@ const Checkout = () => {
         console.log(keys.clientID);
     }, [keys]);
 
-    const isLoggedIn = localStorage.getItem("100");
+    //const isLoggedIn = localStorage.getItem("100");
 
     const [show, setShow] = useState(true);
     const [success, setSuccess] = useState(false);
