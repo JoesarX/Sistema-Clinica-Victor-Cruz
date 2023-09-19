@@ -586,11 +586,11 @@ const Dashboard = () => {
 
     const getFileIcon = (filetype) => {
         if (filetype.includes('jpeg') || filetype.includes('jpg') || filetype.includes('png')) {
-            return <FontAwesomeIcon icon={faFileImage} style={{ color: '#000', fontSize: '24px' }} />;
+            return <FontAwesomeIcon icon={faFileImage} style={{ color: '#1560F2', fontSize: '24px' }} />;
         } else if (filetype.includes('pdf')) {
             return <FontAwesomeIcon icon={faFilePdf} style={{ color: '#FF0000', fontSize: '24px' }} />;
         } else {
-            return <FontAwesomeIcon icon={faFile} style={{ color: '#0000FF', fontSize: '24px' }} />;
+            return <FontAwesomeIcon icon={faFile} style={{ color: '#464646', fontSize: '24px' }} />;
         }
     };
 
@@ -929,9 +929,7 @@ const Dashboard = () => {
                             {archivos.map((archivo, index) => (
                                 <React.Fragment key={index}>
                                     <div className='file-item-line'>
-                                        <div className="file-icon">
-                                            {getFileIcon(archivo.filetype)}
-                                        </div>
+                                        {getFileIcon(archivo.filetype)}
                                         <li className='lifile'>{archivo.filename}</li>
                                         <span class="file-interaction-container">
                                             <button class="file-interaction-button" onClick={() => handleOpenFile(archivo)}>
