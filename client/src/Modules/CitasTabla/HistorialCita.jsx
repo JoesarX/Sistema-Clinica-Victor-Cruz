@@ -65,7 +65,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                 </div>
                 <div className='d-flex col-md-1 align-items-center mobile-align'>
                     {onDelete && (
-                        <button onClick={onDelete} className="delete-button">
+                        <button onClick={onDelete} class="delete-button">
                             <FontAwesomeIcon icon={faTrash} />
                         </button>
                     )}
@@ -675,8 +675,10 @@ function HistorialCita() {
                                     </div>
                                 ))}
 
-                                <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
-                                <button onClick={handleExportPDF}><FontAwesomeIcon icon={faDownload} /></button>
+                                <div class="file-interaction-container medicine-interaction">
+                                    <button class='file-interaction-button medicine-interaction' onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
+                                    <button class='file-interaction-button medicine-interaction' onClick={handleExportPDF}><FontAwesomeIcon icon={faDownload} /></button>
+                                </div>
 
 
                                 {/* ///////////////////////////// */}
