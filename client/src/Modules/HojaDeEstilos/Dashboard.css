@@ -265,28 +265,12 @@
     background: #F8F8F8;
     border-radius: 10px;
 }
+
 .contBot {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-
-
-.CFL {
-    background-color: #87CEFA; 
-    color: #FFF; 
-    border: none;
-    padding: 10px 20px; 
-    font-size: 16px; 
-    cursor: pointer;
-    border-radius: 5px; 
-}
-
-.CFL:hover {
-    background-color: #5F9EA0; 
-}
-
 
 .archivostit {
     font-family: 'Inter';
@@ -516,6 +500,11 @@
     border-radius: 5px;
 }
 
+.large-button.file-upload-button {
+    width: 100%;
+    background-color: #1560F2;
+}
+
 .large-button.schedule-date {
     margin-top: 0px;
     margin-bottom: 0px;
@@ -524,12 +513,34 @@
     gap: 20px;
 }
 
-.large-button.schedule-date:hover {
+.large-button.schedule-date:hover,
+.large-button.file-upload-button:hover {
     background-color: #4942E4;
 }
 
 .large-button:hover {
     background-color: #5D9C59;
+}
+
+.file-interaction-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    justify-self: center;
+    align-self: center;
+    align-items: center;
+    
+    padding: 4px 10px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    
+    text-align: center;
+    width: 50%;
+    height: 40px;
+    border: 0px;
+    border-radius: 100%;
 }
 
 .appointments-container {
@@ -795,16 +806,17 @@
     color: #464646;
 }
 
-.file-item-line {
-    width: 98%;
+
+.file-interaction-container {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    justify-self: flex-end;
+    gap: 5px;
 }
 
-.file-info {
+.file-item-line {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
 .lifile {
