@@ -25,6 +25,7 @@ import { IconButton } from '@mui/material';
 import Citas from '../CitasTabla/CitasTabla';
 import { CorporateFareTwoTone } from '@mui/icons-material';
 import bcrypt from 'bcryptjs';
+import AddCitaLandingPage from './AddCitaLandingPage';
 
 const LandingPage = () => {
     const isLoggedIn = localStorage.getItem("100");
@@ -42,6 +43,7 @@ const LandingPage = () => {
     
     const [perfil, setPerfil] = useState({});
     const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const [idd, setID] = useState(null);
     const [selectMail, setMail] = useState([]);
@@ -136,6 +138,38 @@ const LandingPage = () => {
 
     }, [isLoggedIn, isSubmitting2]);
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const toggleModal = async () => {
+        console.log("HI ADD")
+        setIsModalOpen(!isModalOpen);
+        setIsSubmitting(false);
+        cleanCita();
+
+        const currentDate = new Date();
+        const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+
+        console.log("currentDayOfWeek: ", currentDayOfWeek);
+
+        // Calculate the number of days to add to the current date to reach the next Monday
+        let daysUntilNextMonday = 0
+
+        if (currentDayOfWeek === 0) {
+            daysUntilNextMonday = 1;
+        } else if (currentDayOfWeek === 6) {
+            daysUntilNextMonday = 2;
+        }
+
+        // Create a new date by adding the days to the current date
+        const nextMonday = new Date(currentDate);
+        nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
+        const formattedDate = dayjs(nextMonday).format('YYYY-MM-DD');
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        const fechaAsDayjs = dayjs(formattedDate);
+        setFecha(fechaAsDayjs);
+        setAvailableTimes(times);
+    };
+
     const toggleModal22 = async (id) => {
         setID(id);
         console.log(idd)
@@ -143,6 +177,7 @@ const LandingPage = () => {
             const citaData = await CitasService.getOneCita(id);
             console.log(citaData)
             const selectedIdPaciente2 = Expedientes.find((expediente) => expediente.idpaciente === citaData.idpaciente);
+            console.log(selectedIdPaciente2)
             setExpedientess(selectedIdPaciente2)
             console.log(selectedIdPaciente2)
             console.log("HELLOOOOO")
@@ -295,7 +330,7 @@ const LandingPage = () => {
                 time: cita.hora,
                 description: cita.nombre_persona,
                 idpaciente: cita.idpaciente,
-                estado : cita.estado
+                estado: cita.estado
             })))
             const uniqueCitas2 = Array.from(new Set(validar_Pasadas.map(cita => cita.idcita)))
                 .map(idcita => validar_Pasadas.find(cita => cita.idcita === idcita));
@@ -305,7 +340,7 @@ const LandingPage = () => {
                 time: cita.hora,
                 description: cita.nombre_persona,
                 idpaciente: cita.idpaciente,
-                estado : cita.estado
+                estado: cita.estado
             })))
         }
         const fetchUsuarios = async () => {
@@ -717,6 +752,58 @@ const LandingPage = () => {
         fetchData2();
     }, [selectedNombre2]);
 
+    const submitCita = async () => {
+        // console.log("doneee");
+
+        // console.log("Entra a agregar despues de validaciones");
+        try {
+            await CitasService.postCitas(cita);
+            //
+            console.log(cita)
+            swal("Cita Agregada.", {
+                icon: "success",
+            });
+            toggleModal();
+            window.location.reload();
+        } catch (error) {
+            // Handle error if any
+            // console.log('Error submitting cita:', error);
+        }
+    };
+
+
+    const handleModalSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            cita.estado = "Pendiente";
+            cita.correouser = perfil.correo;
+            if (validations()) {
+                // console.log("Entra a agregar despues de validaciones");
+                // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
+                const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora);;
+                const isAvailable = availableResponse.available;
+                // console.log("isAvailable: " , isAvailable);
+
+                if (!isAvailable) {
+                    swal("La hora que ha seleccionado ya ha sido ocupada.", {
+                        icon: "error",
+                    });
+                    setHora(null);
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate);
+                    setAvailableTimes(times);
+                } else {
+                    submitCita();
+                }
+            }
+        } catch (error) {
+            // Handle error if any
+            // console.log('Error submitting cita:', error);
+        }
+    };
+
+
+
 
     return (
 
@@ -759,7 +846,7 @@ const LandingPage = () => {
                                 </div>
                                 <ul className="evlist">
                                     {usuarios
-                                        .filter(usuario => usuario.edad < 18) 
+                                        .filter(usuario => usuario.edad < 18)
                                         .map((usuario, index) => {
                                             return (
                                                 <div key={usuario.idPaciente} className="user-item">
@@ -784,7 +871,7 @@ const LandingPage = () => {
 
                 </div>
                 <div className="appointments-section">
-                    <button className='large-button schedule-date'>
+                    <button onClick={toggleModal} className='large-button schedule-date'>
                         <FontAwesomeIcon icon={faCalendarPlus} />
                         Agendar Cita
                     </button>
@@ -901,7 +988,7 @@ const LandingPage = () => {
                                 }
                             />
                             <Autocomplete
-                                value={Expedientess}
+                                
                                 disablePortal
                                 id="idpaciente"
                                 options={Expedientes}
@@ -966,6 +1053,12 @@ const LandingPage = () => {
                     </div>
                 </div>
             </Modal>
+            <div>
+                <AddCitaLandingPage
+                    isModalOpen={isModalOpen}
+                    toggleModal={() => setIsModalOpen(!isModalOpen)}
+                />
+            </div>
         </div>
     );
 };

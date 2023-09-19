@@ -111,6 +111,7 @@
   justify-content: center;
   gap: 0px;
   padding: 0px 1px 0px 1px;
+  cursor: pointer;
 }
 
 .fc .fc-event-main:hover {
@@ -195,6 +196,8 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 
   margin: 0px;
 
+  user-select: none;
+
   /* width: 100%;
   height: 100%; */
 }
@@ -253,6 +256,12 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   background-color: rgba(188, 200, 255, 0.2)
 }
 
+.fc-list-day-cushion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 .fc-list-event {
   display: flex;
@@ -260,6 +269,12 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
   justify-content: center;
   align-items: center;
   border: 1px solid rgb(230, 230, 230);
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.fc-list-event:hover>td {
+  background-color: rgba(188, 200, 255, 0.8) !important;
 }
 
 .fc-list-event>td {
@@ -270,6 +285,7 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 .fc-list-event>.fc-list-event-title {
   width: 100%;
   height: 40px;
+  user-select: none;
 }
 
 .fc-list-event-title>.event-line-container>.event-line-title-label {
@@ -279,6 +295,26 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 .fc-list-event>.fc-list-event-graphic {
   display: none;
 }
+
+.schedule-appointment-label {
+  align-self: center;
+  font-size: 25px;
+  font-family: 'Inter';
+  text-align: center;
+  font-weight: 600;
+  color: #212529;
+}
+
+.schedule-appointment-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.schedule-appointment-label svg {
+  color: #0056b3;
+}
+
 
 
 /* 

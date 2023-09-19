@@ -6,11 +6,17 @@ import listPlugin from '@fullcalendar/list'
 import esLocale from '@fullcalendar/core/locales/es';
 import { useState, useEffect, useRef } from 'react';
 
+import AddCitaLandingPage from '../Home/AddCitaLandingPage';
+
 const CitasCalendar = ({ events, isDoctor = true }) => {
 
     const calendarRef = useRef(null);
+    const modalRef = useRef(null);
     const [isMobile, setIsMobile] = useState(false);
     const [shouldChangeView, setShouldChangeView] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState('')
+    const [selectedTime, setSelectedTime] = useState('')
 
     useEffect(() => {
         const handleResize = () => {
@@ -48,6 +54,32 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
             }, 0);
         }
     }, [shouldChangeView, isDoctor]);
+
+    const handleEventClick = (event) => {
+        if (isDoctor) {
+            console.log('doctor')
+        }
+        else {
+            const { date, time } = parseCalendarSelectedDate(event.start);
+            setSelectedDate(date);
+            setSelectedTime(time);
+            setIsModalOpen(true);
+        }
+    }
+
+    const parseCalendarSelectedDate = (dateObject) => {
+        const year = dateObject.getFullYear();
+        const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObject.getDate()).padStart(2, '0');
+
+        const hours = String(dateObject.getHours()).padStart(2, '0');
+        const minutes = String(dateObject.getMinutes()).padStart(2, '0');
+
+        const formattedDate = `${year}-${month}-${day}`;
+        const formattedTime = `${hours}:${minutes}`;
+
+        return { date: formattedDate, time: formattedTime };
+    }
 
     return (
         <div class='cal-container'>
@@ -129,6 +161,8 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
 
                 hiddenDays={[0, 6]}
 
+                eventClick={(info) => handleEventClick(info.event)}
+
                 // viewDidMount={handleViewDidMount}
 
                 eventContent={(eventInfo) => (
@@ -143,6 +177,14 @@ const CitasCalendar = ({ events, isDoctor = true }) => {
                         </div>
                     </>
                 )}
+            />
+            <AddCitaLandingPage
+                isModalOpen={isModalOpen}
+                toggleModal={() => setIsModalOpen(!isModalOpen)}
+                fromCalendar={true}
+                ref={modalRef}
+                date={selectedDate}
+                time={selectedTime}
             />
         </div>
     )
