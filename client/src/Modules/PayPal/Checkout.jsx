@@ -16,13 +16,27 @@ const Checkout = () => {
     const { id } = useParams();
 
     const { isLoggedIn } = useContext(AuthContext);
-    
     useEffect(() => {
         const fetchFactura = async () => {
             try {
                 const response = await FacturasService.getOneFacturaWithCita(id);
                 setFactura(response);
-                
+                console.log(localStorage.getItem('correo'));
+                console.log(factura.correo);
+                if (localStorage.getItem('isLoggedIn') !== "true") {
+                    navigate("/iniciarsesion?returnUrl=/checkout/"+id);
+                    return null;
+                }
+
+                if (localStorage.getItem('correo') === factura.correo) {
+                    console.log(localStorage.getItem('correo'));
+                }
+                else {
+                    navigate("/prohibido"); 
+                    console.log("No tiene permiso: "+console.log(localStorage.getItem('correo')));
+                    return null;
+                }
+
                 if (response.isPagada) {
                     // Show SweetAlert if factura.isPagada is equal to '1'
                     
@@ -37,13 +51,6 @@ const Checkout = () => {
                         // Redirect to the landing page after clicking OK
                         navigate("/");
                     });
-                }
-                else if (!isLoggedIn) {
-                    navigate("/iniciarsesion?returnUrl=/checkout/"+id);
-                    return null;
-                }
-                else {
-                    
                 }
             } catch (error) {
                 console.error('Error fetching paciente:', error);
