@@ -47,6 +47,16 @@
 }
 
 
+.ElLista {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+}
+
+.ElLista input {
+    flex: 1; 
+    margin-right: 10px;
+}
 
 .botonVolver {
     background-color: #1e60a6;
