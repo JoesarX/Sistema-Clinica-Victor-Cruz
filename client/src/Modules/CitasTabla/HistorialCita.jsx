@@ -1,5 +1,5 @@
 import { faTrash, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,6 +9,8 @@ import CitasService from '../../Services/CitasService';
 import Services from '../../Services/RecetasService';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -476,8 +478,16 @@ function HistorialCita() {
 
     ////////////////////////////////////////////////////////////////////////////
 
+    const authContext = useContext(AuthContext);
+    const allowSpecialPermission = false;
+
     return (
         <div className='scrollable-pageee'>
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
             <NavBar />
             <div className='maine'>
                 <div className="appointment-patient-information">
@@ -773,6 +783,7 @@ function HistorialCita() {
                 </div>
 
             </div>
+            </PermissionChecker>
         </div>
     );
 }

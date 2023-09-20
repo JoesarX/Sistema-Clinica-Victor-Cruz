@@ -1,9 +1,11 @@
 import React from 'react'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 
 //GRID
 import { Box, Button } from '@mui/material'
@@ -30,7 +32,8 @@ import NavBar from '../NavBar';
 const Examenes = () => {
     //========================================================================================================================================================================================================================
     //LOGIN VALIDATION
-    const isLoggedIn = localStorage.getItem("400");
+    const authContext = useContext(AuthContext);
+    const allowSpecialPermission = false; 
     let cont = 0;
 
     //========================================================================================================================================================================================================================
@@ -353,16 +356,7 @@ const Examenes = () => {
     useEffect(() => {
         console.log("Called useEffect examenData")
         // Validación login
-        if (!isLoggedIn) {
-            // Redirigir si no se cumple la verificación
-            if (cont === 0) {
-                swal("No Cuenta con el permiso de entrar a este apartado.", {
-                    icon: "error",
-                });
-                navigate("/expedientes"); // Redirige a la página de inicio de sesión
-                cont++;
-            }
-        }
+        
 
         const fetchAllExamenes = async () => {
             try {
@@ -406,11 +400,15 @@ const Examenes = () => {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, [isLoggedIn, navigate, isAddSubmitting, cont]);
+    }, [navigate, isAddSubmitting, cont]);
 
     return (
-
         <div className='crudGrid'>
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['administrador', 'master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
             <NavBar />
             <div style={{ height: '100vh' }}>
                 <div className='headerDiv'>
@@ -534,6 +532,7 @@ const Examenes = () => {
                     </Modal>
                 </div>
             </div>
+            </PermissionChecker>
         </div>
     );
 

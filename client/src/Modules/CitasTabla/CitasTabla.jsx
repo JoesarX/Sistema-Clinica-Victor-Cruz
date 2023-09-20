@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 //import { useNavigate } from 'react-router-dom';
 import { Link, useNavigate } from 'react-router-dom';
 //import { storage } from "./firebase";
@@ -9,6 +9,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faPlay, faFile } from '@fortawesome/free-solid-svg-icons';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 
 
 //GRID
@@ -43,6 +45,8 @@ import NavBar from '../NavBar';
 const Citas = () => {
     //========================================================================================================================================================================================================================
     //LOGIN VALIDATION
+    const authContext = useContext(AuthContext);
+const allowSpecialPermission = false;
     const isLoggedIn = localStorage.getItem("400");
     let cont = 0;
     //========================================================================================================================================================================================================================
@@ -732,6 +736,11 @@ const Citas = () => {
     return (
 
         <div className='crudGrid'>
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['administrador', 'master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
             <NavBar />
             <div style={{ height: '100vh' }}>
                 <div className='headerDiv'>
@@ -1035,6 +1044,7 @@ const Citas = () => {
                     setViaF={via}
                 />
             )} */}
+            </PermissionChecker>
         </div>
     );
 
