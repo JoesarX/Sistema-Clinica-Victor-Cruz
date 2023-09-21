@@ -713,7 +713,6 @@ function HistorialCita() {
                             </div>
                             <div >
                                 <h4 className='headers'>Receta de Medicamentos</h4>
-                                <span>{medicamentosData.length}</span>
                                 <div className='contenedor' >
 
 
