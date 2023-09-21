@@ -378,12 +378,12 @@ function HistorialCita() {
         );
     };
 
-
     const formatDate = (date) => {
-        var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
-        const options = { timeZone: 'America/Tegucigalpa' };
-        return new Date(date).toLocaleDateString("es-HN", { ...datePrefs, ...options });
-    }
+        const dateObj = new Date(date);        
+        dateObj.setDate(dateObj.getDate() + 1);
+        const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
+        return dateObj.toLocaleDateString("es-HN", datePrefs);
+    };
 
     function getCurrentDate() {
         const currentDate = new Date();
