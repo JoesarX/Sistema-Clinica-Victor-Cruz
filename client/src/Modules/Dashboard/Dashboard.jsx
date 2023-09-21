@@ -114,6 +114,7 @@ const Dashboard = () => {
         url: '',
         idpaciente: '',
     });
+    const [selectingAppointment, setSelectingAppointment] = useState(false);
     moment.locale('es');
 
     const fetchExpediente2 = async () => {
@@ -347,10 +348,18 @@ const Dashboard = () => {
     const [isChangesSaved3, setIsChangesSaved3] = useState(false);
 
 
-    const handleLabelEdit = () => {
-        setIsEditingLabel(true);
-        setIsChangesSaved(false);
+    const handleSelectingAppointment = () => {
+        setSelectingAppointment(true);
     };
+
+    const handleCancelAppointment = () => {
+        setSelectingAppointment(false);
+    };
+
+    const handleSelectedAppointment = (appointment) => {
+        setSelectingAppointment(false);
+        setLastAppointment(appointment);
+    }
 
     const handleLabelEdit2 = () => {
         setIsEditingLabel2(true);
@@ -630,327 +639,343 @@ const Dashboard = () => {
     return (
 
         <div class='scrollable-page'>
-                {userType !== 'normal' && (
+            {userType !== 'normal' && (
 
-                    <NavBar />
-                )}
-                {userType === 'normal' && (
-                    <>
-                        <Topbar />
-                        <button class='botonVolver' onClick={handleVolver}>Volver</button>
-                    </>
-                )}
+                <NavBar />
+            )}
+            {userType === 'normal' && (
+                <>
+                    <Topbar />
+                    <button class='botonVolver' onClick={handleVolver}>Volver</button>
+                </>
+            )}
 
 
-                <div class='contenido'>
-                    <div class='patient-section'>
+            <div class='contenido'>
+                <div class='patient-section'>
 
-                        <div class="infoGeneral">
-                            <div class='profile-picture-and-edit'>
-                                <div class='perfil'>
-                                    <FontAwesomeIcon icon={faUser} className='iconoUser' />
-                                </div>
-                                {userType !== 'normal' && (
-                                    <button onClick={handleOpenEditModal} class='editButton'>Editar</button>
-                                )}
-                                {isEditModalOpen && (
-                                    <EditExpedienteDashboardModal
-                                        expedientess={expediente}
-                                        onClose={handleCloseEditModal}
-                                    />
-                                )}
+                    <div class="infoGeneral">
+                        <div class='profile-picture-and-edit'>
+                            <div class='perfil'>
+                                <FontAwesomeIcon icon={faUser} className='iconoUser' />
                             </div>
-
-                            <div class='patient-info-vert-align'>
-                                <h2 class="nombre"> {patient.nombre}</h2>
-                                <div class='patient-email-container'>
-                                    {patient.correo}
-                                </div>
-                                <p class="smallText">{patient.numid}</p>
-                                <p class="smallText">{patient.sexo}</p>
-                                <div class='space-between-text'>
-                                    <p class="smallText">{patient.fecha_nacimiento}</p>
-                                    <p class="smallText">{patient.edad} años</p>
-                                </div>
-                                <div class='space-between-text'>
-                                    <p class="smallText">{patient.estado_civil}</p>
-                                    <p class="smallText">{patient.ocupacion}</p>
-                                </div>
-                                <p class="smallText">{patient.address}</p>
-                            </div>
+                            {userType !== 'normal' && (
+                                <button onClick={handleOpenEditModal} class='editButton'>Editar</button>
+                            )}
+                            {isEditModalOpen && (
+                                <EditExpedienteDashboardModal
+                                    expedientess={expediente}
+                                    onClose={handleCloseEditModal}
+                                />
+                            )}
                         </div>
 
-                        <div class="vitals">
-                            <div class='box-title'>
-                                <h3 class='histmedtit'>Signos Vitales
-                                    {/* <span>
-                                    {isEditingLabel ? (<>
-                                        <button onClick={handleSaveChangesSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                            Guardar cambios
+                        <div class='patient-info-vert-align'>
+                            <h2 class="nombre"> {patient.nombre}</h2>
+                            <div class='patient-email-container'>
+                                {patient.correo}
+                            </div>
+                            <p class="smallText">{patient.numid}</p>
+                            <p class="smallText">{patient.sexo}</p>
+                            <div class='space-between-text'>
+                                <p class="smallText">{patient.fecha_nacimiento}</p>
+                                <p class="smallText">{patient.edad} años</p>
+                            </div>
+                            <div class='space-between-text'>
+                                <p class="smallText">{patient.estado_civil}</p>
+                                <p class="smallText">{patient.ocupacion}</p>
+                            </div>
+                            <p class="smallText">{patient.address}</p>
+                        </div>
+                    </div>
+
+                    <div class="vitals">
+                        <div class='box-title'>
+                            <h3 class='histmedtit'>Signos Vitales
+                                <span>
+                                    {!selectingAppointment ? (
+                                        <button onClick={handleSelectingAppointment} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                            Seleccionar Fecha
                                         </button>
-                                        <button onClick={handleCancelarEditSignos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                    ) : (
+                                        <button onClick={handleCancelAppointment} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Cancelar
                                         </button>
-                                    </>
-                                    ) : (
-                                        userType !== 'normal' && (
-                                            <button onClick={handleLabelEdit} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                                Editar
-                                            </button>
-                                        )
+                                    )
+                                    }
+                                </span>
+                            </h3>
+                        </div>
+                        <div class="all-vital-signs-container">
+                            {
+                                selectingAppointment ?
+                                    (
+                                        <div class='vital-signs-appointments-container'>
+                                            {prevAppointments.map((appointment, index) => (
+                                                <div key={index} class='vital-sign-appointment' onClick={() => handleSelectedAppointment(appointment)}>
+                                                    <div class='appointment-date'>
+                                                        {formatAppointmentDate(appointment.fecha)}
+                                                    </div>
+                                                    <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )
+                                    :
+                                    (
+                                        <>
+                                            {/* HEIGHT */}
+                                            <div class="vital-sign-container height" onClick={toggleVitalsInfo}>
+                                                <div style={{ color: '#75BD89' }} class="vital-sign-content">
+                                                    <span class="vitals-label">
+                                                        <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
+                                                        <span
+                                                        // style={{ marginRight: '220px' }}
+                                                        >
+                                                            Altura
+                                                        </span>
+                                                    </span>
+                                                    <span class='vital-sign-value-align'>
+                                                        <span class="vitals-value">
+                                                            {isEditingLabel ? (
+                                                                <div>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="edit-text-box"
+                                                                        name="altura"
+                                                                        style={{ width: '65px' }}
+                                                                        value={patient.altura}
+                                                                        onChange={handleSignosLabelChange}
+                                                                        placeholder='170'
+                                                                    />
+                                                                </div>
+                                                            ) : (
+                                                                <span class="vitals-value">
+                                                                    {(lastAppointment.altura !== null || lastAppointment.altura !== undefined)
+                                                                        ? lastAppointment.altura : '-'}
+                                                                </span>
+                                                            )}
+                                                        </span>
+                                                        <span class="vitals-value">CM</span>
+                                                    </span>
+                                                </div>
+                                                <div class='vitals-history'>
+                                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                                        <div key={index}>
+                                                            <span class='vitals-history-details'>
+                                                                {formatVitalsDate(appointment.fecha)}
+                                                            </span>
+                                                            <div class="vitals-history-details">
+                                                                <span class='vitals-value'>{appointment.altura}</span>
+                                                                <span class='vitals-value'>CM</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* WEIGHT */}
+                                            <div class="vital-sign-container weight" onClick={toggleVitalsInfo}>
+                                                <div style={{ color: '#54648D' }} class="vital-sign-content">
+                                                    <span class="vitals-label">
+                                                        <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
+                                                        <span
+                                                        // style={{ marginRight: '280px' }}
+                                                        >
+                                                            Peso
+                                                        </span>
+                                                    </span>
+                                                    <span class='vital-sign-value-align'>
+                                                        <span class="vitals-value">
+                                                            {isEditingLabel ? (
+                                                                <div >
+                                                                    <input
+                                                                        type="text"
+                                                                        class="edit-text-box"
+                                                                        name="peso"
+                                                                        style={{ width: '60px' }}
+                                                                        value={patient.peso}
+                                                                        onChange={handleSignosLabelChange}
+                                                                        placeholder='63.3'
+                                                                    />
+                                                                </div>
+                                                            ) : (
+                                                                <span class="vitals-value">
+                                                                    {(lastAppointment.peso !== null || lastAppointment.peso !== undefined)
+                                                                        ? lastAppointment.peso : '-'}
+                                                                </span>
+                                                            )}
+                                                        </span>
+                                                        <span class="vitals-value">KG</span>
+                                                    </span>
+                                                </div>
+                                                <div class='vitals-history'>
+                                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                                        <div key={index}>
+                                                            <span class='vitals-history-details'>
+                                                                {formatVitalsDate(appointment.fecha)}
+                                                            </span>
+                                                            <div class="vitals-history-details">
+                                                                <span class='vitals-value'>{appointment.peso}</span>
+                                                                <span class='vitals-value'>KG</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+
+                                            {/* TEMPERATURA */}
+                                            <div class="vital-sign-container temperature" onClick={toggleVitalsInfo}>
+                                                <div style={{ color: '#916A9E' }} class="vital-sign-content">
+                                                    <span class="vitals-label">
+                                                        <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
+                                                        <span
+                                                        // style={{ marginRight: '150px' }}
+                                                        >
+                                                            Temperatura
+                                                        </span>
+                                                    </span>
+                                                    <span class='vital-sign-value-align'>
+                                                        <span class="vitals-value">
+                                                            {isEditingLabel ? (
+                                                                <div >
+                                                                    <input
+                                                                        type="text"
+                                                                        class="edit-text-box"
+                                                                        name="temperatura"
+                                                                        style={{ width: '65px' }}
+                                                                        value={patient.temperatura}
+                                                                        onChange={handleSignosLabelChange}
+                                                                        placeholder='37.2'
+                                                                    />
+                                                                </div>
+                                                            ) : (
+                                                                <span class="vitals-value">
+                                                                    {(lastAppointment.temperatura !== null || lastAppointment.temperatura !== undefined)
+                                                                        ? lastAppointment.temperatura : '-'}
+                                                                </span>
+                                                            )}
+                                                        </span>
+                                                        <span class="vitals-value">ºC</span>
+                                                    </span>
+                                                </div>
+                                                <div class='vitals-history'>
+                                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                                        <div key={index}>
+                                                            <span class='vitals-history-details'>
+                                                                {formatVitalsDate(appointment.fecha)}
+                                                            </span>
+                                                            <div class="vitals-history-details">
+                                                                <span class='vitals-value'>{appointment.temperatura}</span>
+                                                                <span class='vitals-value'>ºC</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* RITMO CARDIACO */}
+                                            <div class="vital-sign-container heart-rate" onClick={toggleVitalsInfo}>
+                                                <div style={{ color: '#AB2525' }} class="vital-sign-content">
+                                                    <span class="vitals-label">
+                                                        <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
+                                                        <span
+                                                        // style={{ marginRight: '170px' }}
+                                                        >
+                                                            Ritmo Cardiaco
+                                                        </span>
+                                                    </span>
+                                                    <span class='vital-sign-value-align'>
+                                                        <span class="vitals-value">
+                                                            {isEditingLabel ? (
+                                                                <div >
+                                                                    <input
+                                                                        class="edit-text-box"
+                                                                        type="text"
+                                                                        name="ritmo_cardiaco"
+                                                                        style={{ width: '60px' }}
+                                                                        value={patient.ritmo_cardiaco}
+                                                                        onChange={handleSignosLabelChange}
+                                                                        placeholder='80'
+                                                                    />
+                                                                </div>
+                                                            ) : (
+                                                                <span class="vitals-value">
+                                                                    {(lastAppointment.ritmo_cardiaco !== null || lastAppointment.ritmo_cardiaco !== undefined)
+                                                                        ? lastAppointment.ritmo_cardiaco : '-'}
+                                                                </span>
+                                                            )}
+                                                        </span>
+                                                        <span class="vitals-value">ppm</span>
+                                                    </span>
+                                                </div>
+                                                <div class='vitals-history'>
+                                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                                        <div key={index}>
+                                                            <span class='vitals-history-details'>
+                                                                {formatVitalsDate(appointment.fecha)}
+                                                            </span>
+                                                            <div class="vitals-history-details">
+                                                                <span class='vitals-value'>{appointment.ritmo_cardiaco}</span>
+                                                                <span class='vitals-value'>ppm</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* PRESION */}
+                                            <div class="vital-sign-container pressure" onClick={toggleVitalsInfo}>
+                                                <div style={{ color: '#AB2525' }} class="vital-sign-content">
+                                                    <span class="vitals-label">
+                                                        <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
+                                                        <span
+                                                        // style={{ width: '300px', marginRight: '10px' }}
+                                                        >
+                                                            Presión Arterial
+                                                        </span>
+                                                    </span>
+                                                    <span class='vital-sign-value-align'>
+                                                        <span class="vitals-value">
+                                                            {isEditingLabel ? (
+                                                                <div>
+                                                                    <input
+                                                                        type="text"
+                                                                        class="edit-text-box"
+                                                                        name="presion"
+                                                                        style={{ width: '80px' }}
+                                                                        value={patient.presion}
+                                                                        onChange={handleSignosLabelChange}
+                                                                        placeholder='120/80'
+                                                                    />
+                                                                </div>
+                                                            ) : (
+                                                                <span class="vitals-value">
+                                                                    {(lastAppointment.presion !== null || lastAppointment.presion !== undefined)
+                                                                        ? lastAppointment.presion : '-'}
+                                                                </span>
+                                                            )}
+                                                        </span>
+                                                        <span class="vitals-value">mmHg</span>
+                                                    </span>
+                                                </div>
+                                                <div class='vitals-history'>
+                                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
+                                                        <div key={index} style={{ borderColor: '#AB2525' }}>
+                                                            <span class='vitals-history-details'>
+                                                                {formatVitalsDate(appointment.fecha)}
+                                                            </span>
+                                                            <div class="vitals-history-details">
+                                                                <span class='vitals-value'>{appointment.presion}</span>
+                                                                <span class='vitals-value'>mmHg</span>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </>
                                     )}
-                                </span> */}
-                                </h3>
-                            </div>
-                            {/* HEIGHT */}
-                            <div class="vital-sign-container height" onClick={toggleVitalsInfo}>
-                                <div style={{ color: '#75BD89' }} class="vital-sign-content">
-                                    <span class="vitals-label">
-                                        <FontAwesomeIcon icon={faRulerVertical} style={{ color: '#75BD89', fontSize: '24px', marginRight: '22px' }} />
-                                        <span
-                                        // style={{ marginRight: '220px' }}
-                                        >
-                                            Altura
-                                        </span>
-                                    </span>
-                                    <span class='vital-sign-value-align'>
-                                        <span class="vitals-value">
-                                            {isEditingLabel ? (
-                                                <div>
-                                                    <input
-                                                        type="text"
-                                                        class="edit-text-box"
-                                                        name="altura"
-                                                        style={{ width: '65px' }}
-                                                        value={patient.altura}
-                                                        onChange={handleSignosLabelChange}
-                                                        placeholder='170'
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <span class="vitals-value">
-                                                    {(lastAppointment.altura !== null || lastAppointment.altura !== undefined)
-                                                        ? lastAppointment.altura : '-'}
-                                                </span>
-                                            )}
-                                        </span>
-                                        <span class="vitals-value">CM</span>
-                                    </span>
-                                </div>
-                                <div class='vitals-history'>
-                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
-                                        <div key={index}>
-                                            <span class='vitals-history-details'>
-                                                {formatVitalsDate(appointment.fecha)}
-                                            </span>
-                                            <div class="vitals-history-details">
-                                                <span class='vitals-value'>{appointment.altura}</span>
-                                                <span class='vitals-value'>CM</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* WEIGHT */}
-                            <div class="vital-sign-container weight" onClick={toggleVitalsInfo}>
-                                <div style={{ color: '#54648D' }} class="vital-sign-content">
-                                    <span class="vitals-label">
-                                        <FontAwesomeIcon icon={faWeightScale} style={{ color: '#54648D', fontSize: '24px', marginRight: '10px' }} />
-                                        <span
-                                        // style={{ marginRight: '280px' }}
-                                        >
-                                            Peso
-                                        </span>
-                                    </span>
-                                    <span class='vital-sign-value-align'>
-                                        <span class="vitals-value">
-                                            {isEditingLabel ? (
-                                                <div >
-                                                    <input
-                                                        type="text"
-                                                        class="edit-text-box"
-                                                        name="peso"
-                                                        style={{ width: '60px' }}
-                                                        value={patient.peso}
-                                                        onChange={handleSignosLabelChange}
-                                                        placeholder='63.3'
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <span class="vitals-value">
-                                                    {(lastAppointment.peso !== null || lastAppointment.peso !== undefined)
-                                                        ? lastAppointment.peso : '-'}
-                                                </span>
-                                            )}
-                                        </span>
-                                        <span class="vitals-value">KG</span>
-                                    </span>
-                                </div>
-                                <div class='vitals-history'>
-                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
-                                        <div key={index}>
-                                            <span class='vitals-history-details'>
-                                                {formatVitalsDate(appointment.fecha)}
-                                            </span>
-                                            <div class="vitals-history-details">
-                                                <span class='vitals-value'>{appointment.peso}</span>
-                                                <span class='vitals-value'>KG</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-
-                            {/* TEMPERATURA */}
-                            <div class="vital-sign-container temperature" onClick={toggleVitalsInfo}>
-                                <div style={{ color: '#916A9E' }} class="vital-sign-content">
-                                    <span class="vitals-label">
-                                        <FontAwesomeIcon icon={faTemperatureLow} style={{ color: '#916A9E', fontSize: '24px', marginRight: '10px' }} />
-                                        <span
-                                        // style={{ marginRight: '150px' }}
-                                        >
-                                            Temperatura
-                                        </span>
-                                    </span>
-                                    <span class='vital-sign-value-align'>
-                                        <span class="vitals-value">
-                                            {isEditingLabel ? (
-                                                <div >
-                                                    <input
-                                                        type="text"
-                                                        class="edit-text-box"
-                                                        name="temperatura"
-                                                        style={{ width: '65px' }}
-                                                        value={patient.temperatura}
-                                                        onChange={handleSignosLabelChange}
-                                                        placeholder='37.2'
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <span class="vitals-value">
-                                                    {(lastAppointment.temperatura !== null || lastAppointment.temperatura !== undefined)
-                                                        ? lastAppointment.temperatura : '-'}
-                                                </span>
-                                            )}
-                                        </span>
-                                        <span class="vitals-value">ºC</span>
-                                    </span>
-                                </div>
-                                <div class='vitals-history'>
-                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
-                                        <div key={index}>
-                                            <span class='vitals-history-details'>
-                                                {formatVitalsDate(appointment.fecha)}
-                                            </span>
-                                            <div class="vitals-history-details">
-                                                <span class='vitals-value'>{appointment.temperatura}</span>
-                                                <span class='vitals-value'>ºC</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* RITMO CARDIACO */}
-                            <div class="vital-sign-container heart-rate" onClick={toggleVitalsInfo}>
-                                <div style={{ color: '#AB2525' }} class="vital-sign-content">
-                                    <span class="vitals-label">
-                                        <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                                        <span
-                                        // style={{ marginRight: '170px' }}
-                                        >
-                                            Ritmo Cardiaco
-                                        </span>
-                                    </span>
-                                    <span class='vital-sign-value-align'>
-                                        <span class="vitals-value">
-                                            {isEditingLabel ? (
-                                                <div >
-                                                    <input
-                                                        class="edit-text-box"
-                                                        type="text"
-                                                        name="ritmo_cardiaco"
-                                                        style={{ width: '60px' }}
-                                                        value={patient.ritmo_cardiaco}
-                                                        onChange={handleSignosLabelChange}
-                                                        placeholder='80'
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <span class="vitals-value">
-                                                    {(lastAppointment.ritmo_cardiaco !== null || lastAppointment.ritmo_cardiaco !== undefined)
-                                                        ? lastAppointment.ritmo_cardiaco : '-'}
-                                                </span>
-                                            )}
-                                        </span>
-                                        <span class="vitals-value">ppm</span>
-                                    </span>
-                                </div>
-                                <div class='vitals-history'>
-                                    {prevAppointments.slice(0, 5).map((appointment, index) => (
-                                        <div key={index}>
-                                            <span class='vitals-history-details'>
-                                                {formatVitalsDate(appointment.fecha)}
-                                            </span>
-                                            <div class="vitals-history-details">
-                                                <span class='vitals-value'>{appointment.ritmo_cardiaco}</span>
-                                                <span class='vitals-value'>ppm</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                        {/* PRESION */}
-                        <div class="vital-sign-container pressure" onClick={toggleVitalsInfo}>
-                            <div style={{ color: '#AB2525' }} class="vital-sign-content">
-                                <span class="vitals-label">
-                                    <FontAwesomeIcon icon={faHeartPulse} style={{ color: '#AB2525', fontSize: '24px', marginRight: '10px' }} />
-                                    <span
-                                    // style={{ width: '300px', marginRight: '10px' }}
-                                    >
-                                        Presión Arterial
-                                    </span>
-                                </span>
-                                <span class='vital-sign-value-align'>
-                                    <span class="vitals-value">
-                                        {isEditingLabel ? (
-                                            <div>
-                                                <input
-                                                    type="text"
-                                                    class="edit-text-box"
-                                                    name="presion"
-                                                    style={{ width: '80px' }}
-                                                    value={patient.presion}
-                                                    onChange={handleSignosLabelChange}
-                                                    placeholder='120/80'
-                                                />
-                                            </div>
-                                        ) : (
-                                            <span class="vitals-value">
-                                                {(lastAppointment.presion !== null || lastAppointment.presion !== undefined)
-                                                    ? lastAppointment.presion : '-'}
-                                            </span>
-                                        )}
-                                    </span>
-                                    <span class="vitals-value">mmHg</span>
-                                </span>
-                            </div>
-                            <div class='vitals-history'>
-                                {prevAppointments.slice(0, 5).map((appointment, index) => (
-                                    <div key={index} style={{ borderColor: '#AB2525' }}>
-                                        <span class='vitals-history-details'>
-                                            {formatVitalsDate(appointment.fecha)}
-                                        </span>
-                                        <div class="vitals-history-details">
-                                            <span class='vitals-value'>{appointment.presion}</span>
-                                            <span class='vitals-value'>mmHg</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
                         </div>
                     </div>
 
@@ -1026,106 +1051,55 @@ const Dashboard = () => {
                             </h3>
                         </div>
 
-                            <div class="alergias">
-                                <p class="section-label">Alergias:</p>
-                                <ul className="section-value">
-                                {isEditingLabel2 && <button onClick={handleAddAlergia}style={{ fontSize: '18px', marginLeft: '1px',border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
-                                    {alergias.map((alergia, index) => (
-                                        <li key={index}>
-                                            {isEditingLabel2 ? (
-                                                <div className='ElLista'>
-                                                    <input
-                                                        className="edit-text-box small"
-                                                        type="text"
-                                                        value={alergia}
-                                                        style={{ width: '98%' }}
-                                                        onChange={(e) => handleAlergiasChange(index, e.target.value)}
-                                                    />
-                                                    <button onClick={() => handleDeleteAlergia(index)} style={{ fontSize: '18px', marginLeft: '1px',border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: 'red' }}><FontAwesomeIcon icon={faTrash} /></button>
-                                                </div>
-                                            ) : (
-                                                alergia
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
-
-
-                            </div>
-
-                            <div class="enfermedades">
-                                <p class="section-label">Enfermedades Base:</p>
-                                
-
-                                <ul className="section-value">
-                                {isEditingLabel2 && (<button onClick={handleAddEnfermedad} style={{ fontSize: '18px', marginLeft: '1px',border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>
-                                )}
-                                    {enfermedades.map((enfermedad, index) => (
-                                        <li key={index}>
-                                            {isEditingLabel2 ? (
-                                                <div className='ElLista'>
-                                                    <input
-                                                        className="edit-text-box small"
-                                                        type="text"
-                                                        value={enfermedad}
-                                                        style={{ width: '98%' }}
-                                                        onChange={(e) => handleEnfermedadesChange(index, e.target.value)}
-                                                    />
-                                                    <button onClick={() => handleDeleteEnfermedad(index)} style={{ fontSize: '18px', marginLeft: '1px',border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: 'red' }}><FontAwesomeIcon icon={faTrash} /></button>
-                                                </div>
-                                            ) : (
-                                                enfermedad
-                                            )}
-                                        </li>
-                                    ))}
-                                </ul>
-
-                            </div>
-
-                        </div>
-
-                        <div class='medicamentos'>
-                            <div class='box-title'>
-                                <h3 class='medtit'>Medicamentos
-                                    <span>
-                                        {isEditingLabel3 ? (
-                                            <>
-                                                <button onClick={handleSaveChanges3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                                    Guardar cambios
-                                                </button>
-                                                <button onClick={() => setIsEditingLabel3(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                                    Cancelar
-                                                </button>
-                                            </>
-                                        ) : (
-                                            userType !== 'normal' && (
-                                                <button onClick={handleLabelEdit3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
-                                                    Editar
-                                                </button>
-                                            )
-                                        )}
-                                    </span>
-
-                                </h3>
-                            </div>
-                            
+                        <div class="alergias">
+                            <p class="section-label">Alergias:</p>
                             <ul className="section-value">
-                            {isEditingLabel3 && <button onClick={handleAddMedication}style={{ fontSize: '18px', marginLeft: '1px',border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
-                                {medications.map((medication, index) => (
+                                {isEditingLabel2 && <button onClick={handleAddAlergia} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
+                                {alergias.map((alergia, index) => (
                                     <li key={index}>
-                                        {isEditingLabel3 ? (
+                                        {isEditingLabel2 ? (
                                             <div className='ElLista'>
                                                 <input
                                                     className="edit-text-box small"
                                                     type="text"
-                                                    value={medication}
+                                                    value={alergia}
                                                     style={{ width: '98%' }}
-                                                    onChange={(e) => handleMedicationChange(index, e.target.value)}
+                                                    onChange={(e) => handleAlergiasChange(index, e.target.value)}
                                                 />
-                                                <button onClick={() => handleDeleteMedication(index)}style={{ fontSize: '18px', marginLeft: '1px',border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: 'red' }}><FontAwesomeIcon icon={faTrash} /></button>
+                                                <button onClick={() => handleDeleteAlergia(index)} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: 'red' }}><FontAwesomeIcon icon={faTrash} /></button>
                                             </div>
                                         ) : (
-                                            medication
+                                            alergia
+                                        )}
+                                    </li>
+                                ))}
+                            </ul>
+
+
+                        </div>
+
+                        <div class="enfermedades">
+                            <p class="section-label">Enfermedades Base:</p>
+
+
+                            <ul className="section-value">
+                                {isEditingLabel2 && (<button onClick={handleAddEnfermedad} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>
+                                )}
+                                {enfermedades.map((enfermedad, index) => (
+                                    <li key={index}>
+                                        {isEditingLabel2 ? (
+                                            <div className='ElLista'>
+                                                <input
+                                                    className="edit-text-box small"
+                                                    type="text"
+                                                    value={enfermedad}
+                                                    style={{ width: '98%' }}
+                                                    onChange={(e) => handleEnfermedadesChange(index, e.target.value)}
+                                                />
+                                                <button onClick={() => handleDeleteEnfermedad(index)} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: 'red' }}><FontAwesomeIcon icon={faTrash} /></button>
+                                            </div>
+                                        ) : (
+                                            enfermedad
                                         )}
                                     </li>
                                 ))}
@@ -1135,52 +1109,103 @@ const Dashboard = () => {
 
                     </div>
 
-                    <div class="patient-section appointments-section">
-                        {userType !== 'normal' && (
-                            <button class='large-button schedule-date' onClick={handleOnClickAgendarCita}>
-                                <FontAwesomeIcon icon={faCalendarPlus} />
-                                Agendar Cita
-                            </button>
+                    <div class='medicamentos'>
+                        <div class='box-title'>
+                            <h3 class='medtit'>Medicamentos
+                                <span>
+                                    {isEditingLabel3 ? (
+                                        <>
+                                            <button onClick={handleSaveChanges3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                                Guardar cambios
+                                            </button>
+                                            <button onClick={() => setIsEditingLabel3(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                                Cancelar
+                                            </button>
+                                        </>
+                                    ) : (
+                                        userType !== 'normal' && (
+                                            <button onClick={handleLabelEdit3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                                Editar
+                                            </button>
+                                        )
+                                    )}
+                                </span>
 
-                        )}
-                        <div class='appointments-container'>
+                            </h3>
+                        </div>
 
-                            <div class='box-title appointments-title'>Citas Agendadas</div>
-                            <div class='appointments'>
-                                {schAppointments.map((appointment, index) => (
-                                    <div key={index} class='appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
-                                        <div class='appointment-date'>
-                                            {formatAppointmentDate(appointment.fecha)}
+                        <ul className="section-value">
+                            {isEditingLabel3 && <button onClick={handleAddMedication} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
+                            {medications.map((medication, index) => (
+                                <li key={index}>
+                                    {isEditingLabel3 ? (
+                                        <div className='ElLista'>
+                                            <input
+                                                className="edit-text-box small"
+                                                type="text"
+                                                value={medication}
+                                                style={{ width: '98%' }}
+                                                onChange={(e) => handleMedicationChange(index, e.target.value)}
+                                            />
+                                            <button onClick={() => handleDeleteMedication(index)} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: 'red' }}><FontAwesomeIcon icon={faTrash} /></button>
                                         </div>
-                                        <div class='appointment-details'>
-                                            <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                            <span class='appointment-light-text'>{appointment.estado}</span>
-                                        </div>
+                                    ) : (
+                                        medication
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <div class="patient-section appointments-section">
+                    {userType !== 'normal' && (
+                        <button class='large-button schedule-date' onClick={handleOnClickAgendarCita}>
+                            <FontAwesomeIcon icon={faCalendarPlus} />
+                            Agendar Cita
+                        </button>
+
+                    )}
+                    <div class='appointments-container'>
+
+                        <div class='box-title appointments-title'>Citas Agendadas</div>
+                        <div class='appointments'>
+                            {schAppointments.map((appointment, index) => (
+                                <div key={index} class='appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                    <div class='appointment-date'>
+                                        {formatAppointmentDate(appointment.fecha)}
                                     </div>
-                                ))}
-                            </div>
-                            <div class='box-title appointments-title'>Citas Previas</div>
-                            <div class='appointments'>
-                                {prevAppointments.map((appointment, index) => (
-                                    <div key={index} class='appointment prev-appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
-                                        <div class='appointment-date'>
-                                            {formatAppointmentDate(appointment.fecha)}
-                                        </div>
-                                        <div class='appointment-details'>
-                                            {/* <span>{appointment.description}</span> */}
-                                            <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                            <span class='appointment-light-text'>{appointment.Diagnostico}</span>
-                                            {/* <span class='appointment-light-text'>{appointment.estado}</span> */}
-                                        </div>
+                                    <div class='appointment-details'>
+                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                        <span class='appointment-light-text'>{appointment.estado}</span>
                                     </div>
-                                ))}
-                            </div>
-
+                                </div>
+                            ))}
+                        </div>
+                        <div class='box-title appointments-title'>Citas Previas</div>
+                        <div class='appointments'>
+                            {prevAppointments.map((appointment, index) => (
+                                <div key={index} class='appointment prev-appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                    <div class='appointment-date'>
+                                        {formatAppointmentDate(appointment.fecha)}
+                                    </div>
+                                    <div class='appointment-details'>
+                                        {/* <span>{appointment.description}</span> */}
+                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                        <span class='appointment-light-text'>{appointment.Diagnostico}</span>
+                                        {/* <span class='appointment-light-text'>{appointment.estado}</span> */}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
                     </div>
 
-                </div >
+                </div>
+
+            </div >
         </div>
 
     );
