@@ -175,10 +175,6 @@
 }
 
 .histmedtit {
-    position: relative;
-    width: 100%;
-    left: 0px;
-
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
@@ -198,6 +194,11 @@
     padding-top: 0px;
     padding-bottom: 0px;
     font-family: 'Inter';
+}
+
+.vital-signs-box-title-container {
+    display: flex;
+    justify-content: space-between;
 }
 
 .box-title.appointments-title {

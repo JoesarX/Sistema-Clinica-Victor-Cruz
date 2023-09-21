@@ -115,6 +115,7 @@ const Dashboard = () => {
         idpaciente: '',
     });
     const [selectingAppointment, setSelectingAppointment] = useState(false);
+    const [diffDate, setDiffDate] = useState(false);
     moment.locale('es');
 
     const fetchExpediente2 = async () => {
@@ -235,12 +236,18 @@ const Dashboard = () => {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     };
 
-    const formatVitalsDate = (dateString) => {
+    const formatVitalsDate = (dateString, verbose=false) => {
         const date = new Date(dateString);
         if (isNaN(date.getTime())) {
             return "DIA NO VALIDO";
         }
-        const options = { month: 'long', day: 'numeric' };
+        let options = { month: 'long', day: 'numeric' };
+        if(verbose) {
+            options = {
+                ...options,
+                year: 'numeric',
+            }
+        }
         const formattedDate = date.toLocaleDateString("es-HN", options);
         return formattedDate;
     };
@@ -336,11 +343,6 @@ const Dashboard = () => {
         navigate(`/citas_tabla/historial_cita/${idcita}`)
     };
 
-    {/* Editar Button  */ }
-
-    const [isEditingLabel, setIsEditingLabel] = useState(false);
-    const [isChangesSaved, setIsChangesSaved] = useState(false);
-
     const [isEditingLabel2, setIsEditingLabel2] = useState(false);
     const [isChangesSaved2, setIsChangesSaved2] = useState(false);
 
@@ -359,6 +361,7 @@ const Dashboard = () => {
     const handleSelectedAppointment = (appointment) => {
         setSelectingAppointment(false);
         setLastAppointment(appointment);
+        setDiffDate(true);
     }
 
     const handleLabelEdit2 = () => {
@@ -371,68 +374,6 @@ const Dashboard = () => {
         setIsChangesSaved3(false);
     };
 
-    const validacionesSignos = () => {
-        if (patient.altura > 280) {
-            swal({
-                title: "Error al ingresar datos",
-                text: "La altura ingresada no es válida",
-                icon: "error"
-            });
-            return false;
-        }
-        if (patient.peso > 250) {
-            swal({
-                title: "Error al ingresar datos",
-                text: "El peso ingresado no es válido",
-                icon: "error"
-            });
-            return false;
-        }
-        if (patient.temperatura > 50 || patient.temperatura < 31.2) {
-            swal({
-                title: "Error al ingresar datos",
-                text: "La temperatura ingresada no es válida",
-                icon: "error"
-            });
-            return false;
-        }
-
-        const regexFinal = /\b([1-9]\d{1,2})\/([1-9]\d{1,2})\b/g;
-
-        if (!regexFinal.test(patient.presion)) {
-            swal({
-                title: "Error al ingresar datos",
-                text: "El ritmo cardíaco no es válido",
-                icon: "error"
-            });
-            return false;
-        }
-        if (patient.presion)
-            return true;
-
-    }
-
-    const handleSaveChangesSignos = () => {
-        console.log(patient.idpaciente)
-
-
-        const editExpediente = async () => {
-            if (validacionesSignos()) {
-                console.log(patient)
-                await ExpedientesService.editExpedientesDashboard(patient.idpaciente, patient);
-                swal({
-                    title: "Expediente editado",
-                    text: "¡Expediente editado satisfactoriamente!",
-                    icon: "success"
-                });
-                setIsEditingLabel(false);
-                setIsChangesSaved(true);
-            }
-        };
-        console.log(patient)
-        editExpediente();
-    };
-
     const handleSaveChanges2 = () => {
         setIsEditingLabel2(false);
         setIsChangesSaved2(true);
@@ -443,52 +384,6 @@ const Dashboard = () => {
         setIsChangesSaved3(true);
     };
 
-    const handleSignosLabelChange = (e) => {
-        const { name, value } = e.target;
-        const wholeNumberRegex = /^\d*$/
-        const decimalRegex = /^\d*\.?\d*$/
-        const fractionRegex = /(?:[1-9][0-9]*|0)\/[1-9][0-9]*/g
-        // setPatient((prevPatient) => ({
-        //     ...prevPatient,
-        //     [name]: value,
-        // }));
-        if (name === 'altura') {
-            if (decimalRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'peso') {
-            if (decimalRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'temperatura') {
-            if (decimalRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'ritmo_cardiaco') {
-            if (wholeNumberRegex.test(value)) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        } else if (name === 'presion') {
-            if (true) {
-                setPatient((prevPatient) => ({
-                    ...prevPatient,
-                    [name]: value,
-                }));
-            }
-        }
-    };
     //Funciones para medicamentos////////////////////////////
     const handleMedicationChange = (index, newValue) => {
         const updatedMedications = [...medications];
@@ -691,7 +586,13 @@ const Dashboard = () => {
 
                     <div class="vitals">
                         <div class='box-title'>
-                            <h3 class='histmedtit'>Signos Vitales
+                            <div class='vital-signs-box-title-container'>
+                                <h3 class='histmedtit'>Signos Vitales</h3>
+                                <span>
+                                    {(!selectingAppointment && diffDate && lastAppointment.fecha !== null && lastAppointment.fecha !== undefined) && (
+                                        formatVitalsDate(lastAppointment.fecha, true)
+                                    )}
+                                </span>
                                 <span>
                                     {!selectingAppointment ? (
                                         <button onClick={handleSelectingAppointment} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
@@ -704,7 +605,8 @@ const Dashboard = () => {
                                     )
                                     }
                                 </span>
-                            </h3>
+
+                            </div>
                         </div>
                         <div class="all-vital-signs-container">
                             {
@@ -737,24 +639,8 @@ const Dashboard = () => {
                                                     </span>
                                                     <span class='vital-sign-value-align'>
                                                         <span class="vitals-value">
-                                                            {isEditingLabel ? (
-                                                                <div>
-                                                                    <input
-                                                                        type="text"
-                                                                        class="edit-text-box"
-                                                                        name="altura"
-                                                                        style={{ width: '65px' }}
-                                                                        value={patient.altura}
-                                                                        onChange={handleSignosLabelChange}
-                                                                        placeholder='170'
-                                                                    />
-                                                                </div>
-                                                            ) : (
-                                                                <span class="vitals-value">
-                                                                    {(lastAppointment.altura !== null || lastAppointment.altura !== undefined)
-                                                                        ? lastAppointment.altura : '-'}
-                                                                </span>
-                                                            )}
+                                                            {(lastAppointment.altura !== null || lastAppointment.altura !== undefined)
+                                                                ? lastAppointment.altura : '-'}
                                                         </span>
                                                         <span class="vitals-value">CM</span>
                                                     </span>
@@ -787,24 +673,8 @@ const Dashboard = () => {
                                                     </span>
                                                     <span class='vital-sign-value-align'>
                                                         <span class="vitals-value">
-                                                            {isEditingLabel ? (
-                                                                <div >
-                                                                    <input
-                                                                        type="text"
-                                                                        class="edit-text-box"
-                                                                        name="peso"
-                                                                        style={{ width: '60px' }}
-                                                                        value={patient.peso}
-                                                                        onChange={handleSignosLabelChange}
-                                                                        placeholder='63.3'
-                                                                    />
-                                                                </div>
-                                                            ) : (
-                                                                <span class="vitals-value">
-                                                                    {(lastAppointment.peso !== null || lastAppointment.peso !== undefined)
-                                                                        ? lastAppointment.peso : '-'}
-                                                                </span>
-                                                            )}
+                                                            {(lastAppointment.peso !== null || lastAppointment.peso !== undefined)
+                                                                ? lastAppointment.peso : '-'}
                                                         </span>
                                                         <span class="vitals-value">KG</span>
                                                     </span>
@@ -838,24 +708,8 @@ const Dashboard = () => {
                                                     </span>
                                                     <span class='vital-sign-value-align'>
                                                         <span class="vitals-value">
-                                                            {isEditingLabel ? (
-                                                                <div >
-                                                                    <input
-                                                                        type="text"
-                                                                        class="edit-text-box"
-                                                                        name="temperatura"
-                                                                        style={{ width: '65px' }}
-                                                                        value={patient.temperatura}
-                                                                        onChange={handleSignosLabelChange}
-                                                                        placeholder='37.2'
-                                                                    />
-                                                                </div>
-                                                            ) : (
-                                                                <span class="vitals-value">
-                                                                    {(lastAppointment.temperatura !== null || lastAppointment.temperatura !== undefined)
-                                                                        ? lastAppointment.temperatura : '-'}
-                                                                </span>
-                                                            )}
+                                                            {(lastAppointment.temperatura !== null || lastAppointment.temperatura !== undefined)
+                                                                ? lastAppointment.temperatura : '-'}
                                                         </span>
                                                         <span class="vitals-value">ºC</span>
                                                     </span>
@@ -888,24 +742,8 @@ const Dashboard = () => {
                                                     </span>
                                                     <span class='vital-sign-value-align'>
                                                         <span class="vitals-value">
-                                                            {isEditingLabel ? (
-                                                                <div >
-                                                                    <input
-                                                                        class="edit-text-box"
-                                                                        type="text"
-                                                                        name="ritmo_cardiaco"
-                                                                        style={{ width: '60px' }}
-                                                                        value={patient.ritmo_cardiaco}
-                                                                        onChange={handleSignosLabelChange}
-                                                                        placeholder='80'
-                                                                    />
-                                                                </div>
-                                                            ) : (
-                                                                <span class="vitals-value">
-                                                                    {(lastAppointment.ritmo_cardiaco !== null || lastAppointment.ritmo_cardiaco !== undefined)
-                                                                        ? lastAppointment.ritmo_cardiaco : '-'}
-                                                                </span>
-                                                            )}
+                                                            {(lastAppointment.ritmo_cardiaco !== null || lastAppointment.ritmo_cardiaco !== undefined)
+                                                                ? lastAppointment.ritmo_cardiaco : '-'}
                                                         </span>
                                                         <span class="vitals-value">ppm</span>
                                                     </span>
@@ -938,24 +776,8 @@ const Dashboard = () => {
                                                     </span>
                                                     <span class='vital-sign-value-align'>
                                                         <span class="vitals-value">
-                                                            {isEditingLabel ? (
-                                                                <div>
-                                                                    <input
-                                                                        type="text"
-                                                                        class="edit-text-box"
-                                                                        name="presion"
-                                                                        style={{ width: '80px' }}
-                                                                        value={patient.presion}
-                                                                        onChange={handleSignosLabelChange}
-                                                                        placeholder='120/80'
-                                                                    />
-                                                                </div>
-                                                            ) : (
-                                                                <span class="vitals-value">
-                                                                    {(lastAppointment.presion !== null || lastAppointment.presion !== undefined)
-                                                                        ? lastAppointment.presion : '-'}
-                                                                </span>
-                                                            )}
+                                                            {(lastAppointment.presion !== null || lastAppointment.presion !== undefined)
+                                                                ? lastAppointment.presion : '-'}
                                                         </span>
                                                         <span class="vitals-value">mmHg</span>
                                                     </span>
