@@ -674,6 +674,8 @@
 
 .appointment-light-text {
     color: #737373;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .perfil {
