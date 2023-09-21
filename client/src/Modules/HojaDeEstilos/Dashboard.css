@@ -199,6 +199,11 @@
 .vital-signs-box-title-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+}
+
+.vital-signs-box-title-container span {
+    text-align: center;
 }
 
 .box-title.appointments-title {
@@ -660,6 +665,11 @@
     flex-direction: column;
     justify-items: center;
     gap: 0px;
+}
+
+.appointment-text {
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .appointment-light-text {

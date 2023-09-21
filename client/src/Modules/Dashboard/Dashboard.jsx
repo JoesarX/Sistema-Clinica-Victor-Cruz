@@ -236,13 +236,13 @@ const Dashboard = () => {
         return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     };
 
-    const formatVitalsDate = (dateString, verbose=false) => {
+    const formatVitalsDate = (dateString, verbose = false) => {
         const date = new Date(dateString);
         if (isNaN(date.getTime())) {
             return "DIA NO VALIDO";
         }
         let options = { month: 'long', day: 'numeric' };
-        if(verbose) {
+        if (verbose) {
             options = {
                 ...options,
                 year: 'numeric',
@@ -602,8 +602,7 @@ const Dashboard = () => {
                                         <button onClick={handleCancelAppointment} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                             Cancelar
                                         </button>
-                                    )
-                                    }
+                                    )}
                                 </span>
 
                             </div>
@@ -1000,8 +999,9 @@ const Dashboard = () => {
                                         {formatAppointmentDate(appointment.fecha)}
                                     </div>
                                     <div class='appointment-details'>
+                                        <span class='appointment-text'>{appointment.nombre_persona}</span>
+                                        <span class='appointment-text'>{appointment.estado}</span>
                                         <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                        <span class='appointment-light-text'>{appointment.estado}</span>
                                     </div>
                                 </div>
                             ))}
@@ -1014,10 +1014,10 @@ const Dashboard = () => {
                                         {formatAppointmentDate(appointment.fecha)}
                                     </div>
                                     <div class='appointment-details'>
-                                        {/* <span>{appointment.description}</span> */}
+                                        <span class='appointment-light-text'>{appointment.nombre_persona}</span>
                                         <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
                                         <span class='appointment-light-text'>{appointment.Diagnostico}</span>
-                                        {/* <span class='appointment-light-text'>{appointment.estado}</span> */}
+                                        {}
                                     </div>
                                 </div>
                             ))}
