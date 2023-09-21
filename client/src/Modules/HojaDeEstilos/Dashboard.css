@@ -35,6 +35,16 @@
 }
 
 
+.ElLista {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+}
+
+.ElLista input {
+    flex: 1; 
+    margin-right: 10px;
+}
 
 .botonVolver {
     background-color: #1e60a6;
@@ -110,7 +120,7 @@
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
-    height: 100%;
+    height: fit-content;
 }
 
 .medicamentos {
@@ -124,7 +134,7 @@
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
-    height: 100%;
+    height: fit-content;
 }
 
 .vitals {
@@ -165,10 +175,6 @@
 }
 
 .histmedtit {
-    position: relative;
-    width: 100%;
-    left: 0px;
-
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
@@ -188,6 +194,16 @@
     padding-top: 0px;
     padding-bottom: 0px;
     font-family: 'Inter';
+}
+
+.vital-signs-box-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vital-signs-box-title-container span {
+    text-align: center;
 }
 
 .box-title.appointments-title {
@@ -318,7 +334,8 @@
 
 .section-value {
     overflow-y: scroll;
-    height: 140px;
+    height: fit-content;
+    max-height: 140px;
     width: 100%;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -327,7 +344,8 @@
 
 .medicamentos .section-value {
     overflow-y: scroll;
-    height: 320px;
+    height: fit-content;
+    max-height: 320px;
     width: 100%;
 }
 
@@ -343,6 +361,10 @@
     display: flex;
     justify-content: center;
     text-align: center;
+}
+
+.all-vital-signs-container {
+    width: 100%;
 }
 
 .vital-sign-container {
@@ -645,6 +667,11 @@
     gap: 0px;
 }
 
+.appointment-text {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
 .appointment-light-text {
     color: #737373;
 }
@@ -839,6 +866,64 @@
     outline: none;
     background-color: transparent;
     width: 300px;
+}
+
+.vital-signs-appointments-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    justify-content: center;
+    justify-items: center;
+
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    row-gap: 10px;
+    column-gap: 5px;
+    
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.vital-sign-appointment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100px;
+    min-height: 100px;
+    max-height: 100px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    /* border: 2px solid #6D9AF0; */
+    border-left: 10px solid #6D9AF0;
+    border-radius: 5px;
+
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
+    color: #464646;
+
+    cursor: pointer;
+
+    font-family: 'Inter';
+    font-size: smaller;
+}
+
+.vital-sign-appointment .appointment-date {
+    font-weight: 600;
+    color: #595959;
+}
+
+.vital-sign-appointment:hover {
+    background-color: #DBDFEA;
 }
 
 ::-webkit-scrollbar {
