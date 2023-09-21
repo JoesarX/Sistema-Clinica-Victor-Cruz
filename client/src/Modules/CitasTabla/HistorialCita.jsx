@@ -105,17 +105,40 @@ function HistorialCita() {
 
 
     useEffect(() => {
+
+        const processAppointmentData = (paciente) => {
+            setNewTemp(paciente.temperatura);
+            setNewRitmo(paciente.ritmo_cardiaco);
+            setNewPeso(paciente.peso);
+            setNewPresion(paciente.presion)
+            setNewAltura(paciente.altura);
+
+            setMedicamentosActuales(paciente.MedicamentosActuales)
+            setInstrucciones(paciente.Instrucciones);
+            setProcedimientos(paciente.Procedimientos);
+            setTipo_Incapacidad(paciente.Tipo_Incapacidad);
+            setFechaInicial(paciente.FechaInicial);
+            setDiagnostico(paciente.Diagnostico);
+            setComentarios(paciente.Comentarios);
+            setDias(paciente.Dias);
+            setEstudios(paciente.Estudios);
+        }
+
         const fetchPaciente = async () => {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
-                if(response.Tipo_Incapacidad || response.FechaInicial) {
+                if (response.Tipo_Incapacidad || response.FechaInicial) {
                     setShowIncapacity(true);
                 }
+                console.log("resp", response);
                 setPaciente(response);
+                if(response){
+                    processAppointmentData(response);
+                }
             } catch (error) {
                 swal({
                     title: "Error al obtener datos del paciente",
-                    text: "Reportar este error: ".append(error),
+                    text: "Error",
                     icon: "error"
                 });
             }
@@ -124,7 +147,8 @@ function HistorialCita() {
             try {
                 const recetaPaciente = await Services.getRecetasByCita(id);
 
-                const medicamentos = recetaPaciente.map((medicamento) => ({
+                const medicamentos = recetaPaciente.map((medicamento, index) => ({
+                    id: index,
                     medicamento: medicamento.nombre_medicamento,
                     cantidad: medicamento.cant_unidades,
                     frecuencia: medicamento.frecuencia_horas,
@@ -301,12 +325,7 @@ function HistorialCita() {
             if (validacionesSignos()) {
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
-                if (recetas[0].nombre_medicamento === '') {
-
-                } else {
-                    await Services.postRecetasByCita(idcita, listaRecetas);
-
-                }
+                await Services.postRecetasByCita(idcita, listaRecetas);
                 swal("Cita Editada", {
                     icon: "success",
                 });
@@ -362,8 +381,8 @@ function HistorialCita() {
 
     const formatDate = (date) => {
         var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(date).toLocaleDateString("es-HN", datePrefs);
-
+        const options = { timeZone: 'America/Tegucigalpa' };
+        return new Date(date).toLocaleDateString("es-HN", { ...datePrefs, ...options });
     }
 
     function getCurrentDate() {
@@ -694,6 +713,7 @@ function HistorialCita() {
                             </div>
                             <div >
                                 <h4 className='headers'>Receta de Medicamentos</h4>
+                                <span>{medicamentosData.length}</span>
                                 <div className='contenedor' >
 
 
