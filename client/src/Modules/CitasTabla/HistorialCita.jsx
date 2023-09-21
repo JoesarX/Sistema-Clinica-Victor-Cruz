@@ -130,7 +130,6 @@ function HistorialCita() {
                 if (response.Tipo_Incapacidad || response.FechaInicial) {
                     setShowIncapacity(true);
                 }
-                console.log("resp", response);
                 setPaciente(response);
                 if (response) {
                     processAppointmentData(response);
