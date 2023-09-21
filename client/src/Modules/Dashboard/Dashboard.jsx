@@ -214,10 +214,13 @@ const Dashboard = () => {
     if (!isLoggedIn) {
         navigate("/iniciarsesion");
     }
+    
     const formatDate = (date) => {
-        var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(date).toLocaleDateString("es-HN", datePrefs);
-    }
+        const dateObj = new Date(date);        
+        dateObj.setDate(dateObj.getDate() + 1);
+        const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
+        return dateObj.toLocaleDateString("es-HN", datePrefs);
+    };
 
     const formatAppointmentDate = (dateString) => {
         const date = new Date(dateString);
