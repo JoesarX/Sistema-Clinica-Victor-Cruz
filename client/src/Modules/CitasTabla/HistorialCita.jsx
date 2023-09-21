@@ -132,7 +132,7 @@ function HistorialCita() {
                 }
                 console.log("resp", response);
                 setPaciente(response);
-                if(response){
+                if (response) {
                     processAppointmentData(response);
                 }
             } catch (error) {
@@ -303,6 +303,10 @@ function HistorialCita() {
             paciente.Procedimientos = Procedimientos;
             paciente.Instrucciones = Instrucciones;
             paciente.MedicamentosActuales = MedicamentosActuales;
+            paciente.Tipo_Incapacidad = null;
+            paciente.FechaInicial = null;
+            paciente.Dias = null;
+            paciente.Comentarios = null;
             if (showIncapacity) {
                 paciente.Tipo_Incapacidad = Tipo_Incapacidad;
                 paciente.FechaInicial = FechaInicial;
@@ -379,7 +383,7 @@ function HistorialCita() {
     };
 
     const formatDate = (date) => {
-        const dateObj = new Date(date);        
+        const dateObj = new Date(date);
         dateObj.setDate(dateObj.getDate() + 1);
         const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return dateObj.toLocaleDateString("es-HN", datePrefs);
