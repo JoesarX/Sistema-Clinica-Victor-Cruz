@@ -23,6 +23,9 @@ import preciosRouter from "./routes/precios.js";
 import facturasRouter from "./routes/facturas.js";
 import adminDashboardRouter from "./routes/adminDashboard.js";
 
+import expedientesMedRouter from "./routes/expedienteMed.js";
+import expedientesAlergiaRouter from "./routes/expedienteAlergia.js";
+import expedientesEnfermedadesRouter from "./routes/expedienteEnfermedad.js";
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -95,4 +98,9 @@ app.use('/recetas', RecetasRouter(pool));
 app.use('/pagos', PagosRouter(pool));
 app.use('/precios', preciosRouter(pool));
 app.use('/facturas', facturasRouter(pool, transporter));
+
 app.use('/adminDashboard', adminDashboardRouter(pool, transporter));
+
+app.use('/expediente_med', expedientesMedRouter(pool, transporter));
+app.use('/expedientes_alergia', expedientesAlergiaRouter(pool, transporter));
+app.use('/expedientes_enfermedad', expedientesEnfermedadesRouter(pool, transporter));
