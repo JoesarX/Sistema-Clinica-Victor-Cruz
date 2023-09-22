@@ -860,6 +860,8 @@
     align-items: center;
     color: #464646;
     width: 100%;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .input {
