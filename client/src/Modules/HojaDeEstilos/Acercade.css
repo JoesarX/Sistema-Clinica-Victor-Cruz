@@ -1,91 +1,3 @@
-@media (max-width: 768px) {
-
-  /* Styles for smaller screens */
-  .about-us-container,
-  .mission-vision-container,
-  .company-description,
-  .person-container,
-  .employee-description {
-    padding: 20px;
-  }
-
-  .company-description,
-  .person-container,
-  .employee-description {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .company-description .image-container,
-  .person-container .person-image {
-    margin-right: 0;
-  }
-
-  .company-description .text-container,
-  .person-container .person-description {
-    text-align: center;
-    margin-top: 20px;
-  }
-
-  .image-container img {
-    width: 200px;
-    height: 200px;
-  }
-
-  .person-image img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease-in-out;
-  }
-}
-
-
-@media (max-width: 540px) {
-
-
-  /* Styles for mobile screens */
-  .mission-vision-container {
-    flex-direction: column;
-  }
-
-  .mission,
-  .vision {
-    flex-basis: 100%;
-    margin-right: 0;
-    margin-bottom: 20px;
-    padding-right: 0;
-  }
-
-  .mission h2,
-  .vision h2 {
-    text-align: center;
-  }
-
-  .mission p,
-  .vision p {
-    text-align: center;
-  }
-
-  /* Rest of the CSS code */
-
-  .image-container img {
-    width: 10px;
-    height: 10px;
-  }
-
-  .person-image img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease-in-out;
-  }
-}
-
 .scrollable-page {
   height: 100vh;
   background-color: #E4EBF9;
@@ -143,6 +55,9 @@
   min-width: 49.5%;
   font-family: 'Montserrat';
 
+  padding-left: 10px;
+  padding-right: 10px;
+
   /* background-color: rgba(47, 37, 176, 0.3);
   background-size: 10px 10px;
   background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
@@ -150,8 +65,8 @@
 
 .about-us-txt-container {
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 
   min-width: 100%;
@@ -159,7 +74,6 @@
 
   gap: 10px;
 
-  padding-right: 50px;
   font-family: 'Montserrat';
 
   /* background-color: rgb(0, 255, 0, 0.3);
@@ -176,7 +90,7 @@
   font-family: 'Montserrat';
 }
 
-.new-text {
+p.new-text {
   justify-self: center;
   text-align: justify;
   text-justify: inter-ideograph;
@@ -186,6 +100,8 @@
   color: #ffffff;
   word-wrap: break-word;
   font-family: 'Montserrat';
+  padding: 0;
+  margin: 0;
 }
 
 .company-description {
@@ -295,7 +211,7 @@
   border-radius: 20px;
 }
 
-.upload-buttons >*:hover {
+.upload-buttons>*:hover {
   background-color: rgb(6, 130, 130);
 }
 
@@ -394,7 +310,7 @@
 
 }
 
-.admin-edit > *  {
+.admin-edit>* {
   font-size: 40px;
   color: #626262;
 
@@ -402,5 +318,98 @@
   font-weight: bolder;
 
   line-height: normal;
+}
 
+@media (max-width: 768px) {
+
+  /* Styles for smaller screens */
+  .about-us-container,
+  .mission-vision-container,
+  .company-description,
+  .person-container,
+  .employee-description {
+    padding: 20px;
+  }
+
+  .company-description,
+  .person-container,
+  .employee-description {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .company-description .image-container,
+  .person-container .person-image {
+    margin-right: 0;
+  }
+
+  .company-description .text-container,
+  .person-container .person-description {
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .image-container img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .person-image img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+  }
+}
+
+
+@media (max-width: 540px) {
+
+  .admin-edit {
+    justify-content: center;
+  }
+
+  .mission-vision-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mission,
+  .vision {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .about-us-txt-container {
+    align-self: auto;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .mission h2,
+  .vision h2 {
+    text-align: center;
+  }
+
+  p.new-text {
+    text-align: justify;
+    padding: 0;
+    margin: 0;
+  }
+
+  .person-image img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+  }
 }
