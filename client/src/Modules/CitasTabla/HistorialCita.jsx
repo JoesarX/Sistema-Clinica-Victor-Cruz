@@ -16,7 +16,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 
-function MedicamentoRow({ data, onDelete, onUpdate }) {
+function MedicamentoRow({ data, onDelete, onUpdate, disabled = false }) {
     const handleDataChange = (e, field) => {
         const updatedData = { ...data, [field]: e.target.value };
         onUpdate(updatedData);
@@ -33,6 +33,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Medicamento"
                         value={data.medicamento}
                         onChange={(e) => handleDataChange(e, 'medicamento')}
+                        disabled={disabled}
                     />
                 </div>
                 <div className="col-md-2">
@@ -43,6 +44,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Cantidad"
                         value={data.cantidad}
                         onChange={(e) => handleDataChange(e, 'cantidad')}
+                        disabled={disabled}
                     />
                 </div>
                 <div className="col-md-3">
@@ -53,6 +55,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Dosis"
                         value={data.frecuencia}
                         onChange={(e) => handleDataChange(e, 'frecuencia')}
+                        disabled={disabled}
                     />
                 </div>
                 <div className="col-md-3">
@@ -63,15 +66,18 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Duración"
                         value={data.duracion}
                         onChange={(e) => handleDataChange(e, 'duracion')}
+                        disabled={disabled}
                     />
                 </div>
-                <div className='d-flex col-md-1 align-items-center mobile-align'>
-                    {onDelete && (
-                        <button onClick={onDelete} class="delete-button">
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    )}
-                </div>
+                {!disabled &&
+                    <div className='d-flex col-md-1 align-items-center mobile-align'>
+                        {onDelete && (
+                            <button disabled={disabled} onClick={onDelete} class="delete-button">
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                        )}
+                    </div>
+                }
             </div>
         </div>
     );
@@ -101,12 +107,14 @@ function HistorialCita() {
     const [Dias, setDias] = useState(null);
     const [Comentarios, setComentarios] = useState(null);
 
-
-
+    const [alreadyFilled, setAlreadyFilled] = useState(false);
 
     useEffect(() => {
 
         const processAppointmentData = (paciente) => {
+
+            setAlreadyFilled(paciente.estado !== 'En Proceso');
+
             setNewTemp(paciente.temperatura);
             setNewRitmo(paciente.ritmo_cardiaco);
             setNewPeso(paciente.peso);
@@ -127,8 +135,10 @@ function HistorialCita() {
         const fetchPaciente = async () => {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
+                console.log(response);
                 if (response.Tipo_Incapacidad || response.FechaInicial) {
                     setShowIncapacity(true);
+                    console.log("YES SHOW INCAPACITY")
                 }
                 setPaciente(response);
                 if (response) {
@@ -576,9 +586,11 @@ function HistorialCita() {
                                 </div>
                             </div>
                         </div>
-                        <button className='appointment-history-end-button' onClick={() => submitEdit()}>
-                            Terminar Cita
-                        </button>
+                        {!alreadyFilled &&
+                            <button className='appointment-history-end-button' onClick={() => submitEdit()}>
+                                Terminar Cita
+                            </button>
+                        }
                     </div>
                     {/* <div className="row align-items-center mb-4"> */}
                     {/* </div> */}
@@ -602,6 +614,7 @@ function HistorialCita() {
                                             // value={paciente && paciente.altura}
                                             value={paciente && paciente.altura}
                                             onChange={(e) => setNewAltura(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                         <div className="input-group-append">
                                             <span class="input-group-text preclinic-labels">cm</span>
@@ -619,6 +632,7 @@ function HistorialCita() {
                                             type="text"
                                             value={paciente && paciente.peso}
                                             onChange={(e) => setNewPeso(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                         <div className="input-group-append">
                                             <span class="input-group-text preclinic-labels">kg</span>
@@ -633,6 +647,7 @@ function HistorialCita() {
                                             type="text"
                                             value={paciente && paciente.temperatura}
                                             onChange={(e) => setNewTemp(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                         <div className="input-group-append">
                                             <span class="input-group-text preclinic-labels">ºC</span>
@@ -647,6 +662,7 @@ function HistorialCita() {
                                             type="text"
                                             value={paciente && paciente.ritmo_cardiaco}
                                             onChange={(e) => setNewRitmo(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                         <div className="input-group-append">
                                             <span class="input-group-text preclinic-labels">ppm</span>
@@ -661,6 +677,7 @@ function HistorialCita() {
                                             type="text"
                                             value={paciente && paciente.presion}
                                             onChange={(e) => setNewPresion(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                         <div className="input-group-append">
                                             <span class="input-group-text preclinic-labels">mmHg</span>
@@ -684,6 +701,7 @@ function HistorialCita() {
                                             placeholder="Nombre o Código"
                                             value={paciente && paciente.Diagnostico}
                                             onChange={(e) => setDiagnostico(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                     </div>
                                 </div>
@@ -696,6 +714,7 @@ function HistorialCita() {
                                             placeholder="Estudios de Laboratorio e Imagenología"
                                             value={paciente && paciente.Estudios}
                                             onChange={(e) => setEstudios(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                     </div>
                                 </div>
@@ -710,6 +729,7 @@ function HistorialCita() {
                                             placeholder="Procedimientos"
                                             value={paciente && paciente.Procedimientos}
                                             onChange={(e) => setProcedimientos(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                     </div>
                                 </div>
@@ -726,12 +746,14 @@ function HistorialCita() {
                                                 data={rowData}
                                                 onDelete={() => deleteMedicamento(rowData.id)}
                                                 onUpdate={(updatedData) => updateMedicamentoData(updatedData, rowData.id)}
+                                                disabled={alreadyFilled}
                                             />
                                         </div>
                                     ))}
 
                                     <div class="file-interaction-container medicine-interaction">
-                                        <button class='file-interaction-button medicine-interaction' onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
+                                        <button class='file-interaction-button medicine-interaction' onClick={addMedicamentoRow}
+                                            disabled={alreadyFilled}><FontAwesomeIcon icon={faPlus} /></button>
                                         <button class='file-interaction-button medicine-interaction' onClick={handleExportPDF}><FontAwesomeIcon icon={faDownload} /></button>
                                     </div>
 
@@ -749,6 +771,7 @@ function HistorialCita() {
                                             placeholder="Escriba aquí"
                                             value={paciente && paciente.Instrucciones}
                                             onChange={(e) => setInstrucciones(e.target.value)}
+                                            disabled={alreadyFilled}
                                         ></textarea>
                                     </div>
                                 </div>
@@ -760,6 +783,7 @@ function HistorialCita() {
                                         placeholder="Escriba aquí"
                                         value={paciente && paciente.MedicamentosActuales}
                                         onChange={(e) => setMedicamentosActuales(e.target.value)}
+                                        disabled={alreadyFilled}
                                     ></textarea>
                                 </div>
                             </div>
@@ -776,6 +800,7 @@ function HistorialCita() {
                                 checked={showIncapacity}
                                 onChange={() => setShowIncapacity(!showIncapacity)}
                                 style={{ transform: 'scale(1.5)', margin: '0 10px' }}
+                                disabled={alreadyFilled}
                             />
 
                         </div>
@@ -783,19 +808,22 @@ function HistorialCita() {
                             <div class='contenedor'>
                                 <h4 class='headers'>Tipo de Ausencia</h4>
                                 <div className="btn-group my-2" role="group">
-                                    <input defaultChecked type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off"
+                                    <input defaultChecked type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off" disabled={alreadyFilled}
                                         onChange={(e) => setTipo_Incapacidad("Laboral")} />
                                     <label className="btn btn-outline-dark" htmlFor="laboral">Laboral</label>
 
                                     <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off"
+                                        disabled={alreadyFilled}
                                         onChange={(e) => setTipo_Incapacidad("Deportiva")} />
                                     <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
 
                                     <input type="radio" className="btn-check" name="btnradio" id="academica" autoComplete="off"
+                                        disabled={alreadyFilled}
                                         onChange={(e) => setTipo_Incapacidad("Academica")} />
                                     <label className="btn btn-outline-dark" htmlFor="academica">Academica</label>
 
                                     <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off"
+                                        disabled={alreadyFilled}
                                         onChange={(e) => setTipo_Incapacidad("Otra")} />
                                     <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
                                 </div>
@@ -809,6 +837,7 @@ function HistorialCita() {
                                             id="fechaInicial"
                                             onChange={(e) => setFechaInicial(e.target.value)}
                                             value={paciente !== null ? paciente.FechaInicial : getCurrentDate()} // Set the default value to the current date
+                                            disabled={alreadyFilled}
                                         />
                                     </div>
 
@@ -818,14 +847,16 @@ function HistorialCita() {
                                             type="number"
                                             placeholder="1"
                                             value={paciente && paciente.Dias}
-                                            onChange={(e) => setDias(e.target.value)} />
+                                            onChange={(e) => setDias(e.target.value)}
+                                            disabled={alreadyFilled} />
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="form-group col-md-12">
                                         <label htmlFor="comentarios" class="form-label">Comentarios</label>
                                         <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"
-                                            value={paciente && paciente.Comentarios} onChange={(e) => setComentarios(e.target.value)}></textarea>
+                                            value={paciente && paciente.Comentarios} onChange={(e) => setComentarios(e.target.value)}
+                                            disabled={alreadyFilled}></textarea>
                                     </div>
                                 </div>
                             </div>
