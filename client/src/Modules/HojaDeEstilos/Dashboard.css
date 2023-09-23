@@ -664,7 +664,10 @@
     display: flex;
     flex-direction: column;
     justify-items: center;
+    max-height: inherit;
     gap: 0px;
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .appointment-text {
@@ -854,9 +857,9 @@
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
-    line-height: 24px;
+    line-height: 15px;
     display: flex;
-    height: 10px;
+    height: auto;
     align-items: center;
     color: #464646;
     width: 100%;
@@ -880,7 +883,7 @@
 
     width: 100%;
     height: 100%;
-    max-height: 300px;
+    max-height: 232.5px;
 
     padding-top: 10px;
     padding-bottom: 10px;
