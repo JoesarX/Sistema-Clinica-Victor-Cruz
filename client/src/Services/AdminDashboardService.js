@@ -65,6 +65,33 @@ export const getPopularTimes = async () => {
     }
 };
 
+export const getFacturas = async () => {
+    try {
+        const res = await axios.get(`${API_URL}/adminDashboard/facturas`);
+        return res.data;
+    } catch (error) {
+        throw new Error('Failed to fetch adminDashboard');
+    }
+};
+
+export const getFacturasMes = async () => {
+    try {
+        const res = await axios.get(`${API_URL}/adminDashboard/facturasMes`);
+        return res.data;
+    } catch (error) {
+        throw new Error('Failed to fetch adminDashboard');
+    }
+};
+
+export const getFacturasAno = async () => {
+    try {
+        const res = await axios.get(`${API_URL}/adminDashboard/facturasAno`);
+        return res.data;
+    } catch (error) {
+        throw new Error('Failed to fetch adminDashboard');
+    }
+};
+
 
 const Services = {
     getCountMetodoPago,
@@ -72,7 +99,10 @@ const Services = {
     getUserCount,
     getPopularDays,
     getPopularTimes,
-    getAll
+    getAll,
+    getFacturas,
+    getFacturasMes,
+    getFacturasAno,
     
 };
 
