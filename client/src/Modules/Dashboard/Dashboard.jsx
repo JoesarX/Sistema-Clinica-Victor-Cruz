@@ -994,35 +994,39 @@ const Dashboard = () => {
                         </button>
                     )}
                     <div class='appointments-container'>
-                        <div class='box-title appointments-title'>Citas Agendadas</div>
-                        <div class='appointments'>
-                            {schAppointments.map((appointment, index) => (
-                                <div key={index} class={`appointment ${userType==='normal' ? 'normal-user':''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
-                                    <div class='appointment-date'>
-                                        {formatAppointmentDate(appointment.fecha)}
+                        <div>
+                            <div class='box-title appointments-title'>Citas Agendadas</div>
+                            <div class='appointments'>
+                                {schAppointments.map((appointment, index) => (
+                                    <div key={index} class={`appointment ${userType === 'normal' ? 'normal-user' : ''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                        <div class='appointment-date'>
+                                            {formatAppointmentDate(appointment.fecha)}
+                                        </div>
+                                        <div class='appointment-details'>
+                                            <span class='appointment-text'>{appointment.nombre_persona}</span>
+                                            <span class='appointment-text'>{appointment.estado}</span>
+                                            <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                        </div>
                                     </div>
-                                    <div class='appointment-details'>
-                                        <span class='appointment-text'>{appointment.nombre_persona}</span>
-                                        <span class='appointment-text'>{appointment.estado}</span>
-                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                        <div class='box-title appointments-title'>Citas Previas</div>
-                        <div class='appointments'>
-                            {prevAppointments.map((appointment, index) => (
-                                <div key={index} class={`appointment prev-appointment ${userType==='normal' ? 'normal-user':''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
-                                    <div class='appointment-date'>
-                                        {formatAppointmentDate(appointment.fecha)}
+                        <div>
+                            <div class='box-title appointments-title'>Citas Previas</div>
+                            <div class='appointments'>
+                                {prevAppointments.map((appointment, index) => (
+                                    <div key={index} class={`appointment prev-appointment ${userType === 'normal' ? 'normal-user' : ''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                        <div class='appointment-date'>
+                                            {formatAppointmentDate(appointment.fecha)}
+                                        </div>
+                                        <div class='appointment-details'>
+                                            <span class='appointment-light-text'>{appointment.nombre_persona}</span>
+                                            <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                            <span class='appointment-light-text'>{appointment.Diagnostico}</span>
+                                        </div>
                                     </div>
-                                    <div class='appointment-details'>
-                                        <span class='appointment-light-text'>{appointment.nombre_persona}</span>
-                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                        <span class='appointment-light-text'>{appointment.Diagnostico}</span>
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
 
                     </div>
