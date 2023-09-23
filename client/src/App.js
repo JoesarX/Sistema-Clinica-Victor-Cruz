@@ -29,15 +29,15 @@ import HistorialCita from "./Modules/CitasTabla/HistorialCita";
 import Examenes from "./Modules/Examenes/Examenes";
 
 import PruebaRecetas from "./Modules/Recetas/PruebaRecetas";
-import PagoPrueba1 from "./Modules/PayPal/PayPalCheckOut"
-import Checkout from "./Modules/PayPal/Checkout"
-import Factura from "./Modules/PayPal/Factura"
+import PagoPrueba1 from "./Modules/PayPal/PayPalCheckOut";
+import Checkout from "./Modules/PayPal/Checkout";
+import Factura from "./Modules/PayPal/Factura";
 
 import Finanzas from "./Modules/Finanzas_Dashboard/FinanzasDashboard";
 import FinanzasTable from "./Modules/Finanzas_Dashboard/FinanzasTable";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-
+import Pauta from "./Modules/pauta";
 function App() {
   return (
     <PayPalScriptProvider options={{ "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID }}>
@@ -71,6 +71,8 @@ function App() {
             <Route path="/factura/:id" element={<Factura />} />
             <Route path="/finanzas" element={<Finanzas />} />
             <Route path="/finanzas_tabla" element={<FinanzasTable />} />
+
+            <Route path="/pauta" element={<Pauta />} />
 
             <Route path="/prohibido" element={<Forbidden />} />
             <Route path="*" element={<NotFound404/>} />

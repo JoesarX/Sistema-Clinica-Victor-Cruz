@@ -11,6 +11,9 @@ import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
 import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
+import Enfermedades from '../../Services/ExpedientesEnfermedadesServices.js'
+import Alergias from '../../Services/ExpedientesAlergiasServices.js'
+import Medicamentos from '../../Services/ExpedientesMedServices.js'
 import NavBar from '../NavBar';
 import TopBar from '../Home/Topbar.jsx';
 import moment from 'moment';
@@ -103,9 +106,15 @@ const Dashboard = () => {
     const [medications, setMedications] = useState([]);
     const [alergias, setAlergias] = useState([]);
     const [enfermedades, setEnfermedades] = useState([]);
+
+    const [updatedMedications, setUpdatedMedications] = useState([]);
+    const [updatedAlergias, setUpdatedAlergias] = useState([]);
+    const [updatedEnfermedades, setUpdatedEnfermedades] = useState([]);
+
     const [schAppointments, setSchAppointments] = useState([]);
     const [prevAppointments, setPrevAppointments] = useState([]);
     const [lastAppointment, setLastAppointment] = useState({});
+
     const [archivos, setArchivos] = useState([]);
     const [archivoUpload, setArchivoUpload] = useState([]);
     const [archivo, setArchivo] = React.useState({
@@ -200,23 +209,62 @@ const Dashboard = () => {
             try {
                 const archivosF = await ArchivosService.getArchivos(id);
                 setArchivos(archivosF);
-                console.log(archivos);
             } catch (error) {
+                swal("Error al obtener archivos", {
+                    icon: "error",
+                });
+            }
+        }
 
+        const fetchMedHis = async () => {
+            try {
+                const allergies = await Alergias.getAllAlergias(id);
+                const medicine = await Medicamentos.getAllMeds(id);
+                const enferm = await Enfermedades.getAllEnfermedades(id);
+
+                console.log('FETCHED: ', medicine);
+
+                const allergiesNEW = allergies.map(item => item.alergia);
+                const medicineNEW = medicine.map(item => item.medicamento);
+                const enfermNEW = enferm.map(item => item.enfermedad);
+
+                setAlergias(allergiesNEW);
+                setMedications(medicineNEW);
+                setEnfermedades(enfermNEW);
+
+                setUpdatedAlergias(allergiesNEW);
+                setUpdatedMedications(medicineNEW);
+                setUpdatedEnfermedades(enfermNEW);
+            } catch (error) {
+                swal("Error al obtener historial médico y medicamentos", {
+                    icon: "error",
+                });
             }
         }
 
         fetchArchivos();
         fetchAppointments();
         fetchExpediente();
+        fetchMedHis();
     }, [id]);
     //validación login
     if (!isLoggedIn) {
         navigate("/iniciarsesion");
     }
-    
+
+    const fetchArchivos = async () => {
+        try {
+            const archivosF = await ArchivosService.getArchivos(id);
+            setArchivos(archivosF);
+        } catch (error) {
+            swal("Error al obtener archivos", {
+                icon: "error",
+            });
+        }
+    }
+
     const formatDate = (date) => {
-        const dateObj = new Date(date);        
+        const dateObj = new Date(date);
         dateObj.setDate(dateObj.getDate() + 1);
         const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return dateObj.toLocaleDateString("es-HN", datePrefs);
@@ -280,7 +328,6 @@ const Dashboard = () => {
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
-        console.log(selectedFile);
         if (selectedFile != null) {
             setArchivoUpload(selectedFile);
         }
@@ -288,16 +335,13 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (archivoUpload !== null) {
-            console.log(archivoUpload);
             handleAgregarArchivo();
         }
     }, [archivoUpload]);
 
     const handleAgregarArchivo = async () => {
         const file = archivoUpload;
-        console.log(file);
         if (!file || !validateImageFormat(file)) {
-            console.log("Invalid file or format");
             return;
         }
 
@@ -315,17 +359,16 @@ const Dashboard = () => {
             archivo.filename = archivoUpload.name;
             archivo.filetype = archivoUpload.type;
             archivo.idpaciente = expediente.idpaciente;
-            console.log(archivo);
             await ArchivosService.postArchivos(archivo);
             swal("Archivo Agregado!", {
                 icon: "success",
             });
-
+            fetchArchivos();
         } catch (error) {
-            // Handle error if any
-            console.log("Error: " + error);
+            swal("Error al cargar archivo. Por favor, intentarlo de nuevo.", {
+                icon: "error",
+            });
         } finally {
-            // Always clear archivoUpload after all operations
             setArchivoUpload(null);
         }
     }
@@ -343,15 +386,13 @@ const Dashboard = () => {
     };
 
     const handleAppointmentClick = (idcita) => {
-        navigate(`/citas_tabla/historial_cita/${idcita}`)
+        if (userType !== 'normal') {
+            navigate(`/citas_tabla/historial_cita/${idcita}`)
+        }
     };
 
-    const [isEditingLabel2, setIsEditingLabel2] = useState(false);
-    const [isChangesSaved2, setIsChangesSaved2] = useState(false);
-
-    const [isEditingLabel3, setIsEditingLabel3] = useState(false);
-    const [isChangesSaved3, setIsChangesSaved3] = useState(false);
-
+    const [isEditingLabelMedHis, setIsEditingLabelMedHis] = useState(false);
+    const [isEditingLabelMed, setIsEditingLabelMed] = useState(false);
 
     const handleSelectingAppointment = () => {
         setSelectingAppointment(true);
@@ -368,79 +409,139 @@ const Dashboard = () => {
     }
 
     const handleLabelEdit2 = () => {
-        setIsEditingLabel2(true);
-        setIsChangesSaved2(false);
+        setIsEditingLabelMedHis(true);
     };
 
     const handleLabelEdit3 = () => {
-        setIsEditingLabel3(true);
-        setIsChangesSaved3(false);
+        setIsEditingLabelMed(true);
     };
 
-    const handleSaveChanges2 = () => {
-        setIsEditingLabel2(false);
-        setIsChangesSaved2(true);
+    const handleCancelMedHis = () => {
+        setIsEditingLabelMedHis(false);
+        setUpdatedAlergias(alergias);
+        setUpdatedEnfermedades(enfermedades);
     };
 
-    const handleSaveChanges3 = () => {
-        setIsEditingLabel3(false);
-        setIsChangesSaved3(true);
+    const handleCancelMedicamentos = () => {
+        setIsEditingLabelMed(false);
+        setUpdatedMedications(medications);
     };
+
+    const handleSaveMedHis = async () => {
+        setIsEditingLabelMedHis(false);
+        await uploadDataMedHis(updatedAlergias.filter(str => str !== ""), updatedEnfermedades.filter(str => str !== ""));
+        setUpdatedAlergias(updatedAlergias.filter(str => str !== ""))
+        setUpdatedEnfermedades(updatedEnfermedades.filter(str => str !== ""))
+        setEnfermedades(updatedEnfermedades);
+        setAlergias(updatedAlergias);
+    };
+
+    const handleSaveMedicamentos = async () => {
+        setIsEditingLabelMed(false);
+        await uploadDataMeds(updatedMedications);
+        setUpdatedMedications(updatedMedications.filter(str => str !== ""))
+        setMedications(updatedMedications);
+    };
+
+    const uploadDataMedHis = async (alergias, enfermedades) => {
+        try {
+            const allergiesOBJ = {
+                alergiaLista: alergias,
+            }
+            const enfOBJ = {
+                enfLista: enfermedades,
+            }
+
+            await Alergias.deleteAllAlergias(id);
+            await Alergias.postAlergiaList(id, allergiesOBJ);
+            await Enfermedades.deleteAllEnfermedades(id);
+            await Enfermedades.postEnfermedadesList(id, enfOBJ);
+
+            swal("Historial Médico actualizado exitosamente", {
+                icon: "success",
+            });
+
+        } catch (error) {
+            swal("Error al actualizar datos de Historial Médico.", {
+                icon: "error",
+            });
+        }
+    }
+
+    const uploadDataMeds = async (medications) => {
+        try {
+            const medicamentosOBJ = {
+                medLista: medications,
+            }
+
+            console.log("MEDICENTOS OBJ", medicamentosOBJ)
+
+            await Medicamentos.deleteAllMeds(id);
+            await Medicamentos.postMedList(id, medicamentosOBJ);
+
+            swal("Medicamentos actualizado exitosamente", {
+                icon: "success",
+            });
+
+        } catch (error) {
+            swal("Error al actualizar datos de Medicamentos.", {
+                icon: "error",
+            });
+        }
+    }
 
     //Funciones para medicamentos////////////////////////////
     const handleMedicationChange = (index, newValue) => {
-        const updatedMedications = [...medications];
-        updatedMedications[index] = newValue;
-        setMedications(updatedMedications);
+        const updMed = [...updatedMedications];
+        updMed[index] = newValue;
+        setUpdatedMedications(updMed);
     };
     const handleAddMedication = () => {
-        setMedications([...medications, '']);
+        setUpdatedMedications([...updatedMedications, '']);
     };
 
     const handleDeleteMedication = (index) => {
-        const updatedMedications = [...medications];
-        updatedMedications.splice(index, 1);
-        setMedications(updatedMedications);
+        const updMed = [...updatedMedications];
+        updMed.splice(index, 1);
+        setUpdatedMedications(updMed);
     };
     /////////////////////////////////////////////////////////
     //Funciones para alergias//////////////////////////
     const handleAddAlergia = () => {
-        setAlergias([...alergias, '']);
+        setUpdatedAlergias([...updatedAlergias, '']);
     };
 
     const handleDeleteAlergia = (index) => {
-        const updatedAlergias = [...alergias];
-        updatedAlergias.splice(index, 1);
-        setAlergias(updatedAlergias);
+        const updAlergias = [...updatedAlergias];
+        updAlergias.splice(index, 1);
+        setUpdatedAlergias(updAlergias);
     };
 
     const handleAlergiasChange = (index, newValue) => {
-        const updatedAlergias = [...alergias];
-        updatedAlergias[index] = newValue;
-        setAlergias(updatedAlergias);
+        const updAlergias = [...updatedAlergias];
+        updAlergias[index] = newValue;
+        setUpdatedAlergias(updAlergias);
     };
     /////////////////////////////////////////////////
     //Funciones para enfermedades//////////////////////////
     const handleEnfermedadesChange = (index, newValue) => {
-        const updatedEnfermedades = [...enfermedades];
-        updatedEnfermedades[index] = newValue;
-        setEnfermedades(updatedEnfermedades);
+        const updEnfermedades = [...updatedEnfermedades];
+        updEnfermedades[index] = newValue;
+        setUpdatedEnfermedades(updEnfermedades);
     };
     const handleAddEnfermedad = () => {
-        setEnfermedades([...enfermedades, '']);
+        setUpdatedEnfermedades([...updatedEnfermedades, '']);
     };
 
     const handleDeleteEnfermedad = (index) => {
-        const updatedEnfermedades = [...enfermedades];
-        updatedEnfermedades.splice(index, 1);
-        setEnfermedades(updatedEnfermedades);
+        const updEnfermedades = [...updatedEnfermedades];
+        updEnfermedades.splice(index, 1);
+        setUpdatedEnfermedades(updEnfermedades);
     };
     ////////////////////////////////////////////////////////
 
     const handleOpenEditModal = () => {
         setSelectedExpediente(expediente);
-        console.log(expediente)
-
         setIsEditModalOpen(true);
     };
 
@@ -513,13 +614,10 @@ const Dashboard = () => {
         const imageRef = ref(storage, refUrl)
         deleteObject(imageRef)
             .catch((error) => {
-                console.log("Failed to delete image: ", error)
             })
-        //window.location.reload();
     }
 
     const handleOpenFile = (fileName) => {
-        //navigate("https://"+fileName.url);
         window.open(fileName.url);
     }
 
@@ -538,7 +636,6 @@ const Dashboard = () => {
 
         <div class='scrollable-page'>
             {userType !== 'normal' && (
-
                 <NavBar />
             )}
             {userType === 'normal' && (
@@ -817,9 +914,11 @@ const Dashboard = () => {
                                             <button class="file-interaction-button" onClick={() => handleOpenFile(archivo)}>
                                                 <FontAwesomeIcon icon={faFile} style={{ color: '#3f79ee', fontSize: '24px' }} />
                                             </button>
-                                            <button class="file-interaction-button" onClick={() => handleDeleteFile(archivo)}>
-                                                <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
-                                            </button>
+                                            {userType !== 'normal' &&
+                                                <button class="file-interaction-button" onClick={() => handleDeleteFile(archivo)}>
+                                                    <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
+                                                </button>
+                                            }
                                         </span>
                                     </div>
                                     {index !== archivos.length - 1 && <hr className='dividerer'></hr>}
@@ -856,11 +955,11 @@ const Dashboard = () => {
                         <div class='box-title'>
                             <h3 class='histmedtit'>Historial Médico
                                 <span>
-                                    {isEditingLabel2 ? (<>
-                                        <button onClick={handleSaveChanges2} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                    {isEditingLabelMedHis ? (<>
+                                        <button onClick={handleSaveMedHis} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
                                             Guardar cambios
                                         </button>
-                                        <button onClick={() => setIsEditingLabel2(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        <button onClick={handleCancelMedHis} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
                                             Cancelar
                                         </button>
                                     </>
@@ -878,10 +977,10 @@ const Dashboard = () => {
                         <div class="alergias">
                             <p class="section-label">Alergias:</p>
                             <ul className="section-value">
-                                {isEditingLabel2 && <button onClick={handleAddAlergia} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
-                                {alergias.map((alergia, index) => (
+                                {isEditingLabelMedHis && <button onClick={handleAddAlergia} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
+                                {updatedAlergias.map((alergia, index) => (
                                     <li key={index}>
-                                        {isEditingLabel2 ? (
+                                        {isEditingLabelMedHis ? (
                                             <div className='ElLista'>
                                                 <input
                                                     className="edit-text-box small"
@@ -907,11 +1006,11 @@ const Dashboard = () => {
 
 
                             <ul className="section-value">
-                                {isEditingLabel2 && (<button onClick={handleAddEnfermedad} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>
+                                {isEditingLabelMedHis && (<button onClick={handleAddEnfermedad} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>
                                 )}
-                                {enfermedades.map((enfermedad, index) => (
+                                {updatedEnfermedades.map((enfermedad, index) => (
                                     <li key={index}>
-                                        {isEditingLabel2 ? (
+                                        {isEditingLabelMedHis ? (
                                             <div className='ElLista'>
                                                 <input
                                                     className="edit-text-box small"
@@ -937,12 +1036,12 @@ const Dashboard = () => {
                         <div class='box-title'>
                             <h3 class='medtit'>Medicamentos
                                 <span>
-                                    {isEditingLabel3 ? (
+                                    {isEditingLabelMed ? (
                                         <>
-                                            <button onClick={handleSaveChanges3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                            <button onClick={handleSaveMedicamentos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                                 Guardar cambios
                                             </button>
-                                            <button onClick={() => setIsEditingLabel3(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                            <button onClick={handleCancelMedicamentos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                                 Cancelar
                                             </button>
                                         </>
@@ -959,10 +1058,10 @@ const Dashboard = () => {
                         </div>
 
                         <ul className="section-value">
-                            {isEditingLabel3 && <button onClick={handleAddMedication} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
-                            {medications.map((medication, index) => (
+                            {isEditingLabelMed && <button onClick={handleAddMedication} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
+                            {updatedMedications.map((medication, index) => (
                                 <li key={index}>
-                                    {isEditingLabel3 ? (
+                                    {isEditingLabelMed ? (
                                         <div className='ElLista'>
                                             <input
                                                 className="edit-text-box small"
@@ -990,40 +1089,41 @@ const Dashboard = () => {
                             <FontAwesomeIcon icon={faCalendarPlus} />
                             Agendar Cita
                         </button>
-
                     )}
                     <div class='appointments-container'>
-
-                        <div class='box-title appointments-title'>Citas Agendadas</div>
-                        <div class='appointments'>
-                            {schAppointments.map((appointment, index) => (
-                                <div key={index} class='appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
-                                    <div class='appointment-date'>
-                                        {formatAppointmentDate(appointment.fecha)}
+                        <div>
+                            <div class='box-title appointments-title'>Citas Agendadas</div>
+                            <div class='appointments'>
+                                {schAppointments.map((appointment, index) => (
+                                    <div key={index} class={`appointment ${userType === 'normal' ? 'normal-user' : ''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                        <div class='appointment-date'>
+                                            {formatAppointmentDate(appointment.fecha)}
+                                        </div>
+                                        <div class='appointment-details'>
+                                            <span class='appointment-text'>{appointment.nombre_persona}</span>
+                                            <span class='appointment-text'>{appointment.estado}</span>
+                                            <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                        </div>
                                     </div>
-                                    <div class='appointment-details'>
-                                        <span class='appointment-text'>{appointment.nombre_persona}</span>
-                                        <span class='appointment-text'>{appointment.estado}</span>
-                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                        <div class='box-title appointments-title'>Citas Previas</div>
-                        <div class='appointments'>
-                            {prevAppointments.map((appointment, index) => (
-                                <div key={index} class='appointment prev-appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
-                                    <div class='appointment-date'>
-                                        {formatAppointmentDate(appointment.fecha)}
+                        <div>
+                            <div class='box-title appointments-title'>Citas Previas</div>
+                            <div class='appointments'>
+                                {prevAppointments.map((appointment, index) => (
+                                    <div key={index} class={`appointment prev-appointment ${userType === 'normal' ? 'normal-user' : ''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                        <div class='appointment-date'>
+                                            {formatAppointmentDate(appointment.fecha)}
+                                        </div>
+                                        <div class='appointment-details'>
+                                            <span class='appointment-light-text'>{appointment.nombre_persona}</span>
+                                            <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
+                                            <span class='appointment-light-text'>{appointment.Diagnostico}</span>
+                                        </div>
                                     </div>
-                                    <div class='appointment-details'>
-                                        <span class='appointment-light-text'>{appointment.nombre_persona}</span>
-                                        <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
-                                        <span class='appointment-light-text'>{appointment.Diagnostico}</span>
-                                        {}
-                                    </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
 
                     </div>

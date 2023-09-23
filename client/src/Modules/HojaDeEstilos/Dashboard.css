@@ -534,7 +534,7 @@
     margin-top: 0px;
     margin-bottom: 0px;
     background-color: #1560F2;
-    width: 95%;
+    width: 100%;
     gap: 20px;
 }
 
@@ -559,7 +559,7 @@
     font-weight: 700;
     
     text-align: center;
-    width: 50%;
+    width: 100%;
     height: 40px;
     border: 0px;
     border-radius: 100%;
@@ -568,10 +568,11 @@
 .appointments-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    justify-content: flex-start;
 
-    padding-left: 10px;
-    padding-right: 10px;
+    /* padding-left: 10px;
+    padding-right: 10px; */
     padding-top: 10px;
     padding-bottom: 10px;
 
@@ -596,12 +597,11 @@
     gap: 10px;
     width: 100%;
     border-radius: 10px;
-    height: 100%;
-    max-height: 370px;
+    height: fit-content;
 
     font-family: 'Inter';
 
-    overflow-y: scroll;
+    overflow-y: auto;
     scrollbar-width: thin;
 }
 
@@ -630,6 +630,10 @@
     background-color: #F8F8F8;
 
     cursor: pointer;
+}
+
+.appointment.normal-user {
+    cursor: default;
 }
 
 .appointment:hover {
@@ -971,6 +975,11 @@
         margin-top: 0px;
     }
 
+    .appointments {
+        max-height: 400px;
+        overflow: auto;
+    }
+
 }
 
 @media only screen and (min-width: 820px) and (max-width: 950px) {
@@ -1018,4 +1027,5 @@
         justify-content: center;
         text-align: center;
     }
+
 }
