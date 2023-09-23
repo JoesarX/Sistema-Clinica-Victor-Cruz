@@ -11,6 +11,9 @@ import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
 import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
+import Enfermedades from '../../Services/ExpedientesEnfermedadesServices.js'
+import Alergias from '../../Services/ExpedientesAlergiasServices.js'
+import Medicamentos from '../../Services/ExpedientesMedServices.js'
 import NavBar from '../NavBar';
 import TopBar from '../Home/Topbar.jsx';
 import moment from 'moment';
@@ -103,9 +106,15 @@ const Dashboard = () => {
     const [medications, setMedications] = useState([]);
     const [alergias, setAlergias] = useState([]);
     const [enfermedades, setEnfermedades] = useState([]);
+
+    const [updatedMedications, setUpdatedMedications] = useState([...medications]);
+    const [updatedAlergias, setUpdatedAlergias] = useState([...alergias]);
+    const [updatedEnfermedades, setUpdatedEnfermedades] = useState([...enfermedades]);
+
     const [schAppointments, setSchAppointments] = useState([]);
     const [prevAppointments, setPrevAppointments] = useState([]);
     const [lastAppointment, setLastAppointment] = useState({});
+
     const [archivos, setArchivos] = useState([]);
     const [archivoUpload, setArchivoUpload] = useState([]);
     const [archivo, setArchivo] = React.useState({
@@ -207,9 +216,27 @@ const Dashboard = () => {
             }
         }
 
+        const fetchMedHis = async () => {
+            try {
+                const allergies = await Alergias.getAllAlergias(id);
+                const medicine = await Medicamentos.getAllMeds(id);
+                const enfermedades = await Enfermedades.getAllEnfermedades(id);
+
+                setAlergias(allergies);
+                setEnfermedades(enfermedades);
+                setMedications(medicine);
+
+            } catch (error) {
+                swal("Error al obtener historial médico y medicamentos", {
+                    icon: "error",
+                });
+            }
+        }
+
         fetchArchivos();
         fetchAppointments();
         fetchExpediente();
+        fetchMedHis();
     }, [id]);
     //validación login
     if (!isLoggedIn) {
@@ -222,6 +249,23 @@ const Dashboard = () => {
             setArchivos(archivosF);
         } catch (error) {
             swal("Error al obtener archivos", {
+                icon: "error",
+            });
+        }
+    }
+
+    const fetchMedHis = async () => {
+        try {
+            const allergies = await Alergias.getAllAlergias(id);
+            const medicine = await Medicamentos.getAllMeds(id);
+            const enfermedades = await Enfermedades.getAllEnfermedades(id);
+
+            setAlergias(allergies);
+            setEnfermedades(enfermedades);
+            setMedications(medicine);
+
+        } catch (error) {
+            swal("Error al obtener historial médico y medicamentos", {
                 icon: "error",
             });
         }
@@ -327,8 +371,11 @@ const Dashboard = () => {
             swal("Archivo Agregado!", {
                 icon: "success",
             });
-
+            fetchArchivos();
         } catch (error) {
+            swal("Error al cargar archivo. Por favor, intentarlo de nuevo.", {
+                icon: "error",
+            });
         } finally {
             setArchivoUpload(null);
         }
@@ -352,12 +399,8 @@ const Dashboard = () => {
         }
     };
 
-    const [isEditingLabel2, setIsEditingLabel2] = useState(false);
-    const [isChangesSaved2, setIsChangesSaved2] = useState(false);
-
-    const [isEditingLabel3, setIsEditingLabel3] = useState(false);
-    const [isChangesSaved3, setIsChangesSaved3] = useState(false);
-
+    const [isEditingLabelMedHis, setIsEditingLabelMedHis] = useState(false);
+    const [isEditingLabelMed, setIsEditingLabelMed] = useState(false);
 
     const handleSelectingAppointment = () => {
         setSelectingAppointment(true);
@@ -374,72 +417,82 @@ const Dashboard = () => {
     }
 
     const handleLabelEdit2 = () => {
-        setIsEditingLabel2(true);
-        setIsChangesSaved2(false);
+        setIsEditingLabelMedHis(true);
     };
 
     const handleLabelEdit3 = () => {
-        setIsEditingLabel3(true);
-        setIsChangesSaved3(false);
+        setIsEditingLabelMed(true);
     };
 
-    const handleSaveChanges2 = () => {
-        setIsEditingLabel2(false);
-        setIsChangesSaved2(true);
+    const handleCancelMedHis = () => {
+        setIsEditingLabelMedHis(false);
+        setUpdatedAlergias(alergias);
+        setUpdatedEnfermedades(enfermedades);
     };
 
-    const handleSaveChanges3 = () => {
-        setIsEditingLabel3(false);
-        setIsChangesSaved3(true);
+    const handleCancelMedicamentos = () => {
+        setIsEditingLabelMed(false);
+        setUpdatedMedications(medications);
+    };
+
+    const handleSaveMedHis = () => {
+        setIsEditingLabelMedHis(false);
+        setAlergias(updatedAlergias);
+        setEnfermedades(updatedEnfermedades);
+    };
+
+    const handleSaveMedicamentos = () => {
+        setIsEditingLabelMed(false);
+        setMedications(updatedMedications);
     };
 
     //Funciones para medicamentos////////////////////////////
     const handleMedicationChange = (index, newValue) => {
-        const updatedMedications = [...medications];
-        updatedMedications[index] = newValue;
-        setMedications(updatedMedications);
+        const updMed = [...updatedMedications];
+        updMed[index] = newValue;
+        setUpdatedMedications(updMed);
     };
     const handleAddMedication = () => {
-        setMedications([...medications, '']);
+        setUpdatedMedications([...updatedMedications, '']);
     };
 
     const handleDeleteMedication = (index) => {
-        const updatedMedications = [...medications];
-        updatedMedications.splice(index, 1);
-        setMedications(updatedMedications);
+        const updMed = [...updatedMedications];
+        updMed.splice(index, 1);
+        setUpdatedMedications(updMed);
     };
     /////////////////////////////////////////////////////////
     //Funciones para alergias//////////////////////////
     const handleAddAlergia = () => {
-        setAlergias([...alergias, '']);
+        setUpdatedAlergias([...updatedAlergias, '']);
     };
 
     const handleDeleteAlergia = (index) => {
-        const updatedAlergias = [...alergias];
-        updatedAlergias.splice(index, 1);
-        setAlergias(updatedAlergias);
+        const updAlergias = [...updatedAlergias];
+        updAlergias.splice(index, 1);
+        setUpdatedAlergias(updAlergias);
     };
 
     const handleAlergiasChange = (index, newValue) => {
-        const updatedAlergias = [...alergias];
-        updatedAlergias[index] = newValue;
-        setAlergias(updatedAlergias);
+        const updAlergias = [...updatedAlergias];
+        updAlergias[index] = newValue;
+        setUpdatedAlergias(updAlergias);
     };
     /////////////////////////////////////////////////
     //Funciones para enfermedades//////////////////////////
     const handleEnfermedadesChange = (index, newValue) => {
-        const updatedEnfermedades = [...enfermedades];
-        updatedEnfermedades[index] = newValue;
-        setEnfermedades(updatedEnfermedades);
+        const updEnfermedades = [...updatedEnfermedades];
+        updEnfermedades[index] = newValue;
+        setUpdatedEnfermedades(updEnfermedades);
     };
     const handleAddEnfermedad = () => {
-        setEnfermedades([...enfermedades, '']);
+        setUpdatedEnfermedades([...updatedEnfermedades, '']);
     };
 
     const handleDeleteEnfermedad = (index) => {
-        const updatedEnfermedades = [...enfermedades];
-        updatedEnfermedades.splice(index, 1);
-        setEnfermedades(updatedEnfermedades);
+        const updEnfermedades = [...updatedEnfermedades];
+        updEnfermedades.splice(index, 1);
+        setUpdatedEnfermedades(updEnfermedades);
     };
     ////////////////////////////////////////////////////////
 
@@ -858,11 +911,11 @@ const Dashboard = () => {
                         <div class='box-title'>
                             <h3 class='histmedtit'>Historial Médico
                                 <span>
-                                    {isEditingLabel2 ? (<>
-                                        <button onClick={handleSaveChanges2} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                    {isEditingLabelMedHis ? (<>
+                                        <button onClick={handleSaveMedHis} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
                                             Guardar cambios
                                         </button>
-                                        <button onClick={() => setIsEditingLabel2(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
+                                        <button onClick={handleCancelMedHis} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold', }}>
                                             Cancelar
                                         </button>
                                     </>
@@ -880,10 +933,10 @@ const Dashboard = () => {
                         <div class="alergias">
                             <p class="section-label">Alergias:</p>
                             <ul className="section-value">
-                                {isEditingLabel2 && <button onClick={handleAddAlergia} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
-                                {alergias.map((alergia, index) => (
+                                {isEditingLabelMedHis && <button onClick={handleAddAlergia} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
+                                {updatedAlergias.map((alergia, index) => (
                                     <li key={index}>
-                                        {isEditingLabel2 ? (
+                                        {isEditingLabelMedHis ? (
                                             <div className='ElLista'>
                                                 <input
                                                     className="edit-text-box small"
@@ -909,11 +962,11 @@ const Dashboard = () => {
 
 
                             <ul className="section-value">
-                                {isEditingLabel2 && (<button onClick={handleAddEnfermedad} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>
+                                {isEditingLabelMedHis && (<button onClick={handleAddEnfermedad} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>
                                 )}
-                                {enfermedades.map((enfermedad, index) => (
+                                {updatedEnfermedades.map((enfermedad, index) => (
                                     <li key={index}>
-                                        {isEditingLabel2 ? (
+                                        {isEditingLabelMedHis ? (
                                             <div className='ElLista'>
                                                 <input
                                                     className="edit-text-box small"
@@ -939,12 +992,12 @@ const Dashboard = () => {
                         <div class='box-title'>
                             <h3 class='medtit'>Medicamentos
                                 <span>
-                                    {isEditingLabel3 ? (
+                                    {isEditingLabelMed ? (
                                         <>
-                                            <button onClick={handleSaveChanges3} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                            <button onClick={handleSaveMedicamentos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                                 Guardar cambios
                                             </button>
-                                            <button onClick={() => setIsEditingLabel3(false)} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
+                                            <button onClick={handleCancelMedicamentos} style={{ fontSize: '15px', marginLeft: '13px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2', fontWeight: 'bold' }}>
                                                 Cancelar
                                             </button>
                                         </>
@@ -961,10 +1014,10 @@ const Dashboard = () => {
                         </div>
 
                         <ul className="section-value">
-                            {isEditingLabel3 && <button onClick={handleAddMedication} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
-                            {medications.map((medication, index) => (
+                            {isEditingLabelMed && <button onClick={handleAddMedication} style={{ fontSize: '18px', marginLeft: '1px', border: 'none', background: 'none', padding: '0', cursor: 'pointer', color: '#1560F2' }}><FontAwesomeIcon icon={faPlus} /></button>}
+                            {updatedMedications.map((medication, index) => (
                                 <li key={index}>
-                                    {isEditingLabel3 ? (
+                                    {isEditingLabelMed ? (
                                         <div className='ElLista'>
                                             <input
                                                 className="edit-text-box small"
