@@ -200,9 +200,10 @@ const Dashboard = () => {
             try {
                 const archivosF = await ArchivosService.getArchivos(id);
                 setArchivos(archivosF);
-                console.log(archivos);
             } catch (error) {
-
+                swal("Error al obtener archivos", {
+                    icon: "error",
+                });
             }
         }
 
@@ -214,9 +215,20 @@ const Dashboard = () => {
     if (!isLoggedIn) {
         navigate("/iniciarsesion");
     }
-    
+
+    const fetchArchivos = async () => {
+        try {
+            const archivosF = await ArchivosService.getArchivos(id);
+            setArchivos(archivosF);
+        } catch (error) {
+            swal("Error al obtener archivos", {
+                icon: "error",
+            });
+        }
+    }
+
     const formatDate = (date) => {
-        const dateObj = new Date(date);        
+        const dateObj = new Date(date);
         dateObj.setDate(dateObj.getDate() + 1);
         const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return dateObj.toLocaleDateString("es-HN", datePrefs);
@@ -280,7 +292,6 @@ const Dashboard = () => {
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
-        console.log(selectedFile);
         if (selectedFile != null) {
             setArchivoUpload(selectedFile);
         }
@@ -288,16 +299,13 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (archivoUpload !== null) {
-            console.log(archivoUpload);
             handleAgregarArchivo();
         }
     }, [archivoUpload]);
 
     const handleAgregarArchivo = async () => {
         const file = archivoUpload;
-        console.log(file);
         if (!file || !validateImageFormat(file)) {
-            console.log("Invalid file or format");
             return;
         }
 
@@ -315,17 +323,13 @@ const Dashboard = () => {
             archivo.filename = archivoUpload.name;
             archivo.filetype = archivoUpload.type;
             archivo.idpaciente = expediente.idpaciente;
-            console.log(archivo);
             await ArchivosService.postArchivos(archivo);
             swal("Archivo Agregado!", {
                 icon: "success",
             });
 
         } catch (error) {
-            // Handle error if any
-            console.log("Error: " + error);
         } finally {
-            // Always clear archivoUpload after all operations
             setArchivoUpload(null);
         }
     }
@@ -343,7 +347,9 @@ const Dashboard = () => {
     };
 
     const handleAppointmentClick = (idcita) => {
-        navigate(`/citas_tabla/historial_cita/${idcita}`)
+        if (userType !== 'normal') {
+            navigate(`/citas_tabla/historial_cita/${idcita}`)
+        }
     };
 
     const [isEditingLabel2, setIsEditingLabel2] = useState(false);
@@ -439,8 +445,6 @@ const Dashboard = () => {
 
     const handleOpenEditModal = () => {
         setSelectedExpediente(expediente);
-        console.log(expediente)
-
         setIsEditModalOpen(true);
     };
 
@@ -513,13 +517,10 @@ const Dashboard = () => {
         const imageRef = ref(storage, refUrl)
         deleteObject(imageRef)
             .catch((error) => {
-                console.log("Failed to delete image: ", error)
             })
-        //window.location.reload();
     }
 
     const handleOpenFile = (fileName) => {
-        //navigate("https://"+fileName.url);
         window.open(fileName.url);
     }
 
@@ -538,7 +539,6 @@ const Dashboard = () => {
 
         <div class='scrollable-page'>
             {userType !== 'normal' && (
-
                 <NavBar />
             )}
             {userType === 'normal' && (
@@ -817,9 +817,11 @@ const Dashboard = () => {
                                             <button class="file-interaction-button" onClick={() => handleOpenFile(archivo)}>
                                                 <FontAwesomeIcon icon={faFile} style={{ color: '#3f79ee', fontSize: '24px' }} />
                                             </button>
-                                            <button class="file-interaction-button" onClick={() => handleDeleteFile(archivo)}>
-                                                <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
-                                            </button>
+                                            {userType !== 'normal' &&
+                                                <button class="file-interaction-button" onClick={() => handleDeleteFile(archivo)}>
+                                                    <FontAwesomeIcon icon={faTrash} style={{ color: '#FF0000', fontSize: '24px' }} />
+                                                </button>
+                                            }
                                         </span>
                                     </div>
                                     {index !== archivos.length - 1 && <hr className='dividerer'></hr>}
@@ -990,10 +992,8 @@ const Dashboard = () => {
                             <FontAwesomeIcon icon={faCalendarPlus} />
                             Agendar Cita
                         </button>
-
                     )}
                     <div class='appointments-container'>
-
                         <div class='box-title appointments-title'>Citas Agendadas</div>
                         <div class='appointments'>
                             {schAppointments.map((appointment, index) => (
@@ -1020,7 +1020,6 @@ const Dashboard = () => {
                                         <span class='appointment-light-text'>{appointment.nombre_persona}</span>
                                         <span class='appointment-light-text'>{formatAppointmentTime(appointment.hora)}</span>
                                         <span class='appointment-light-text'>{appointment.Diagnostico}</span>
-                                        {}
                                     </div>
                                 </div>
                             ))}
