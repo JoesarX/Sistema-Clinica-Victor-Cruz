@@ -8,7 +8,7 @@ const expedientesMedRouter = (pool, transporter) => {
     router.get("/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT id,medicamento FROM expediente_med where idpaciente = "${req.params.idpaciente}"`
+            const sqlSelect = `SELECT id,medicamento FROM expediente_med where idpaciente = ${req.params.idpaciente}`
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log("Get all meds Successfull");
@@ -51,13 +51,12 @@ const expedientesMedRouter = (pool, transporter) => {
             console.log("Esto es idpaciente "+ idpaciente);
             
             for (const medUnico of medLista) {
-                const {idpaciente,medicamento} = medUnico;
+                const medicamento = medUnico;
                 const q =
-                    "INSERT INTO `expediente_med` (idpaciente`,`medicamento`)  VALUES (?)";
+                    "INSERT INTO `expediente_med` (`idpaciente`,`medicamento`)  VALUES (?)";
                 const values = [
                     idpaciente,
                     medicamento
-                    
                 ];
                 
                 await connection.query(q, [values]);
@@ -104,14 +103,14 @@ const expedientesMedRouter = (pool, transporter) => {
         try {
             const { medLista } = req.body; // Assumiendo que el body es un objeto con una propiedad expedientes med que es un array de medicamentos     
             const connection = await pool.getConnection();    
+            const id = re.params.idpaciente
             for (const medUnico of medLista) {
-                const {id,medicamento} = medUnico;
+                const medicamento = medUnico;
                 const q =
                     "update expediente_med SET medicamento = ?  where id = ?";
                 const values = [
                     medicamento,
-                    id //este es el id que es primary key de la tabla
-                    
+                    id
                 ];
                 await connection.query(q, values);
             }

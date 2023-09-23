@@ -31,7 +31,7 @@ export const postOneEnfermedades= async (enfermedad) => {
 
 export const postEnfermedadesList = async (idpaciente, enfermedadesLista) => {
     try {
-        console.log("In Service postRecetasByCita. Idcita: ", idpaciente)
+        console.log("In Service ENFERMEDADES. IDEXPEDIENTE: ", idpaciente, enfermedadesLista)
         const res = await axios.post(`${API_URL}/expedientes_enfermadad/expedientes_enfermadadList/${idpaciente}`, enfermedadesLista);
         
         return res.data;
@@ -72,7 +72,7 @@ export const deleteOneEnfermedad = async (id) => {
 
 export const deleteAllEnfermedades = async (idpaciente) => {
     try {
-        await axios.delete(`${API_URL}/expedientes_enfermadad/expedientes_enfermadad_deleteAll/${idpaciente},`);
+        await axios.delete(`${API_URL}/expedientes_enfermadad/expedientes_enfermadad_deleteAll/${idpaciente}`);
     } catch (error) {
         
         throw new Error('Failed to delete alergias');

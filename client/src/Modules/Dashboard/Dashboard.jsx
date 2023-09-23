@@ -107,9 +107,9 @@ const Dashboard = () => {
     const [alergias, setAlergias] = useState([]);
     const [enfermedades, setEnfermedades] = useState([]);
 
-    const [updatedMedications, setUpdatedMedications] = useState([...medications]);
-    const [updatedAlergias, setUpdatedAlergias] = useState([...alergias]);
-    const [updatedEnfermedades, setUpdatedEnfermedades] = useState([...enfermedades]);
+    const [updatedMedications, setUpdatedMedications] = useState([]);
+    const [updatedAlergias, setUpdatedAlergias] = useState([]);
+    const [updatedEnfermedades, setUpdatedEnfermedades] = useState([]);
 
     const [schAppointments, setSchAppointments] = useState([]);
     const [prevAppointments, setPrevAppointments] = useState([]);
@@ -220,12 +220,21 @@ const Dashboard = () => {
             try {
                 const allergies = await Alergias.getAllAlergias(id);
                 const medicine = await Medicamentos.getAllMeds(id);
-                const enfermedades = await Enfermedades.getAllEnfermedades(id);
+                const enferm = await Enfermedades.getAllEnfermedades(id);
 
-                setAlergias(allergies);
-                setEnfermedades(enfermedades);
-                setMedications(medicine);
+                console.log('FETCHED: ', medicine);
 
+                const allergiesNEW = allergies.map(item => item.alergia);
+                const medicineNEW = medicine.map(item => item.medicamento);
+                const enfermNEW = enferm.map(item => item.enfermedad);
+
+                setAlergias(allergiesNEW);
+                setMedications(medicineNEW);
+                setEnfermedades(enfermNEW);
+
+                setUpdatedAlergias(allergiesNEW);
+                setUpdatedMedications(medicineNEW);
+                setUpdatedEnfermedades(enfermNEW);
             } catch (error) {
                 swal("Error al obtener historial médico y medicamentos", {
                     icon: "error",
@@ -249,23 +258,6 @@ const Dashboard = () => {
             setArchivos(archivosF);
         } catch (error) {
             swal("Error al obtener archivos", {
-                icon: "error",
-            });
-        }
-    }
-
-    const fetchMedHis = async () => {
-        try {
-            const allergies = await Alergias.getAllAlergias(id);
-            const medicine = await Medicamentos.getAllMeds(id);
-            const enfermedades = await Enfermedades.getAllEnfermedades(id);
-
-            setAlergias(allergies);
-            setEnfermedades(enfermedades);
-            setMedications(medicine);
-
-        } catch (error) {
-            swal("Error al obtener historial médico y medicamentos", {
                 icon: "error",
             });
         }
@@ -437,14 +429,63 @@ const Dashboard = () => {
 
     const handleSaveMedHis = () => {
         setIsEditingLabelMedHis(false);
+        uploadDataMedHis(updatedAlergias, updatedEnfermedades);
         setAlergias(updatedAlergias);
         setEnfermedades(updatedEnfermedades);
     };
 
     const handleSaveMedicamentos = () => {
         setIsEditingLabelMed(false);
+        uploadDataMeds(updatedMedications);
         setMedications(updatedMedications);
     };
+
+    const uploadDataMedHis = async (alergias, enfermedades) => {
+        try {
+            const allergiesOBJ = {
+                alergiaLista: alergias,
+            }
+            const enfOBJ = {
+                enfLista: enfermedades,
+            }
+
+            await Alergias.deleteAllAlergias(id);
+            await Alergias.postAlergiaList(id, allergiesOBJ);
+            await Enfermedades.deleteAllEnfermedades(id);
+            await Enfermedades.postEnfermedadesList(id, enfOBJ);
+
+            swal("Historial Médico actualizado exitosamente", {
+                icon: "success",
+            });
+
+        } catch (error) {
+            swal("Error al actualizar datos de Historial Médico.", {
+                icon: "error",
+            });
+        }
+    }
+
+    const uploadDataMeds = async (medications) => {
+        try {
+            const medicamentosOBJ = {
+                medLista: medications,
+            }
+
+            console.log("MEDICENTOS OBJ", medicamentosOBJ)
+
+            await Medicamentos.deleteAllMeds(id);
+            await Medicamentos.postMedList(id, medicamentosOBJ);
+
+            swal("Medicamentos actualizado exitosamente", {
+                icon: "success",
+            });
+
+        } catch (error) {
+            swal("Error al actualizar datos de Medicamentos.", {
+                icon: "error",
+            });
+        }
+    }
 
     //Funciones para medicamentos////////////////////////////
     const handleMedicationChange = (index, newValue) => {

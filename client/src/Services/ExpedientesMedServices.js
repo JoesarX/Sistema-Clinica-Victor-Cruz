@@ -65,7 +65,7 @@ export const editMedList = async (id, med) => {
 //============================================== D E L E T E S ==================================================================
 export const deleteOneMed = async (id) => {
     try {
-        await axios.delete(`${API_URL}/expediente_med/med_paciente_deleteAll/${id}`);
+        await axios.delete(`${API_URL}/expediente_med/med_paciente_delete/${id}`);
     } catch (error) {
         
         throw new Error('Failed to delete med');
@@ -74,7 +74,7 @@ export const deleteOneMed = async (id) => {
 
 export const deleteAllMeds = async (idpaciente) => {
     try {
-        await axios.delete(`${API_URL}/expediente_med/med_paciente_deleteList/${idpaciente}`);
+        await axios.delete(`${API_URL}/expediente_med/med_paciente_deleteAll/${idpaciente}`);
     } catch (error) {
         
         throw new Error('Failed to delete factura');

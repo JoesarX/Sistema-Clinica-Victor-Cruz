@@ -8,7 +8,7 @@ const expedientesEnfermedadesRouter = (pool, transporter) => {
     router.get("/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT id,enfermedad FROM expedientes_enfermadad where idpaciente = "${req.params.idpaciente}"`
+            const sqlSelect = `SELECT id,enfermedad FROM expedientes_enfermadad where idpaciente = ${req.params.idpaciente}`
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log("Get all enfermedades Successfull");
@@ -45,18 +45,18 @@ const expedientesEnfermedadesRouter = (pool, transporter) => {
         try {
             const { enfLista } = req.body; // Assumiendo que el body es un objeto con una propiedad expedientes_alergia que es un array de alergias
             const idpaciente = req.params.idpaciente;
+            console.log("Esto es idpaciente "+ idpaciente);
+            console.log("Esto es la lista ENFERMEDADES:", enfLista)
 
             const connection = await pool.getConnection();
-            console.log("Esto es idpaciente "+ idpaciente);
             
             for (const enfUnico of enfLista) {
-                const {idpaciente,enfermedad} = enfUnico;
+                const enfermedad = enfUnico;
                 const q =
                     "INSERT INTO `expedientes_enfermadad` (`idpaciente`,`enfermedad`)  VALUES (?)";
                 const values = [
                     idpaciente,
                     enfermedad
-                    
                 ];
                 console.log(values);
                 await connection.query(q, [values]);
@@ -128,6 +128,7 @@ const expedientesEnfermedadesRouter = (pool, transporter) => {
     router.delete("/expedientes_enfermadad_deleteAll/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
+            console.log("about to delete:", req.params.idpaciente)
             const sqlSelect = "delete FROM expedientes_enfermadad where idpaciente = " + req.params.idpaciente;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();

@@ -31,7 +31,7 @@ export const postOneAlergia = async (alergia) => {
 
 export const postAlergiaList = async (idpaciente, alergiaLista) => {
     try {
-        console.log("In Service postRecetasByCita. Idcita: ", idpaciente)
+        console.log("In Service ALERGIA. IDEXPEDIENTE: ", idpaciente, alergiaLista)
         const res = await axios.post(`${API_URL}/expedientes_alergia/expedientes_alergiaList/${idpaciente}`, alergiaLista);
         
         return res.data;

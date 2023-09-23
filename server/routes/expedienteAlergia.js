@@ -8,7 +8,7 @@ const expedientesAlergiaRouter = (pool, transporter) => {
     router.get("/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT id,alergia FROM expedientes_alergia where idpaciente = "${req.params.idpaciente}"`
+            const sqlSelect = `SELECT id,alergia FROM expedientes_alergia where idpaciente = ${req.params.idpaciente}`
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log("Get all alergias Successfull");
@@ -49,15 +49,15 @@ const expedientesAlergiaRouter = (pool, transporter) => {
 
             const connection = await pool.getConnection();
             console.log("Esto es idpaciente "+ idpaciente);
-            console.log(alergiaLista);
+            console.log("Esto es la lista ENFERMEDADES:", alergiaLista)
+
             for (const alergiaUnico of alergiaLista) {
-                const {idpaciente,alergia} = alergiaUnico;
+                const alergia = alergiaUnico;
                 const q =
-                    "INSERT INTO `expedientes_alergia` (idpaciente`,alergia`)  VALUES (?)";
+                    "INSERT INTO `expedientes_alergia` (`idpaciente`,`alergia`)  VALUES (?)";
                 const values = [
                     idpaciente,
-                    alergia
-                    
+                    alergia 
                 ];
                
                 await connection.query(q, [values]);
