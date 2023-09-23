@@ -427,16 +427,19 @@ const Dashboard = () => {
         setUpdatedMedications(medications);
     };
 
-    const handleSaveMedHis = () => {
+    const handleSaveMedHis = async () => {
         setIsEditingLabelMedHis(false);
-        uploadDataMedHis(updatedAlergias, updatedEnfermedades);
-        setAlergias(updatedAlergias);
+        await uploadDataMedHis(updatedAlergias.filter(str => str !== ""), updatedEnfermedades.filter(str => str !== ""));
+        setUpdatedAlergias(updatedAlergias.filter(str => str !== ""))
+        setUpdatedEnfermedades(updatedEnfermedades.filter(str => str !== ""))
         setEnfermedades(updatedEnfermedades);
+        setAlergias(updatedAlergias);
     };
 
-    const handleSaveMedicamentos = () => {
+    const handleSaveMedicamentos = async () => {
         setIsEditingLabelMed(false);
-        uploadDataMeds(updatedMedications);
+        await uploadDataMeds(updatedMedications);
+        setUpdatedMedications(updatedMedications.filter(str => str !== ""))
         setMedications(updatedMedications);
     };
 
