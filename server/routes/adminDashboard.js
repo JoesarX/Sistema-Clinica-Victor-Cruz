@@ -13,7 +13,7 @@ const adminDashboardRouter = (pool, transporter) => {
 
             months = parseInt(months);
             let firstGraph = months
-            if(months > 1){
+            if (months > 1) {
                 firstGraph = months - 1
             }
 
@@ -45,7 +45,7 @@ const adminDashboardRouter = (pool, transporter) => {
                             ) AS NewUsers
                             FROM usuarios;`;
             const [rows3, fields3] = await connection.query(sqlSelect3);
-            
+
             //getPopularTimes
             const sqlSelect4 = `SELECT
                                     CASE
@@ -63,7 +63,7 @@ const adminDashboardRouter = (pool, transporter) => {
                                 GROUP BY
                                     DAYOFWEEK(fecha);`;
             const [rows4, fields4] = await connection.query(sqlSelect4);
-            
+
             await connection.query(`SET lc_time_names = 'es_ES';`);
             const sqlSelect5 = `SELECT
                                     DATE_FORMAT(hora, '%h:%i %p') AS Horario,
@@ -80,13 +80,13 @@ const adminDashboardRouter = (pool, transporter) => {
                                     hora;`;
             const [rows5, fields5] = await connection.query(sqlSelect5);
             const allPossibleTimes = [
-                "7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", 
+                "7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
                 "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM"
             ];
-            for( let i = 0; i < 18; i++){
-                if(i >= rows5.length) rows5.push({Horario: allPossibleTimes[i], Citas_Totales: 0})
-                else if(!rows5[i].Horario.includes(allPossibleTimes[i])){
-                    rows5.splice(i, 0, {Horario: allPossibleTimes[i], Citas_Totales: 0})
+            for (let i = 0; i < 18; i++) {
+                if (i >= rows5.length) rows5.push({ Horario: allPossibleTimes[i], Citas_Totales: 0 })
+                else if (!rows5[i].Horario.includes(allPossibleTimes[i])) {
+                    rows5.splice(i, 0, { Horario: allPossibleTimes[i], Citas_Totales: 0 })
                 }
             }
 
@@ -95,6 +95,74 @@ const adminDashboardRouter = (pool, transporter) => {
             res.json([rows1, rows2, rows3[0], rows4, rows5])
         } catch (err) {
             console.log("Error in get adminDashboard by financeMetodoPago. " + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    router.get("/facturas", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const sqlSelect = "SELECT idFactura, nombre_paciente, idCita, CASE WHEN isPagada = 1 THEN 'Pagada' ELSE 'NO Pagada' END AS isPagada, total, metodoPago, rtn, correo,  DATE_FORMAT(created_at, '%Y-%m-%d') as fecha FROM facturas ORDER BY created_at DESC;"
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log("Get all facturas Successfull");
+            res.json(rows);
+        } catch (err) {
+            console.log("Get all facturas Failed. Error: " + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    router.get("/facturasMes", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            await connection.query(`SET lc_time_names = 'es_ES';`);
+            const sqlSelect = `SELECT
+                                    CONCAT(EXTRACT(YEAR FROM created_at), '-', EXTRACT(MONTH FROM created_at)) AS idFactura,
+                                    DATE_FORMAT(created_at, '%M') AS Mes,
+                                    EXTRACT(YEAR FROM created_at) AS Año,
+                                    SUM(CASE WHEN metodoPago = 'Paypal' THEN 1 ELSE 0 END) AS PagosConPaypal,
+                                    SUM(CASE WHEN metodoPago = 'Efectivo' THEN 1 ELSE 0 END) AS PagosEnEfectivo,
+                                    SUM(total) AS TotalLempiras
+                                FROM
+                                    facturas
+                                GROUP BY
+                                    EXTRACT(MONTH FROM created_at),
+                                    EXTRACT(YEAR FROM created_at)
+                                ORDER BY
+                                    EXTRACT(YEAR FROM created_at) DESC, EXTRACT(MONTH FROM created_at) DESC;`
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log("Get all facturas Successfull");
+            res.json(rows);
+        } catch (err) {
+            console.log("Get all facturas Failed. Error: " + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+
+    router.get("/facturasAno", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            await connection.query(`SET lc_time_names = 'es_ES';`);
+            const sqlSelect = `SELECT
+                                    EXTRACT(YEAR FROM created_at) AS idFactura,
+                                    EXTRACT(YEAR FROM created_at) AS Año,
+                                    SUM(CASE WHEN metodoPago = 'Paypal' THEN 1 ELSE 0 END) AS PagosConPaypal,
+                                    SUM(CASE WHEN metodoPago = 'Efectivo' THEN 1 ELSE 0 END) AS PagosEnEfectivo,
+                                    SUM(total) AS TotalLempiras
+                                FROM
+                                    facturas
+                                GROUP BY
+                                    EXTRACT(YEAR FROM created_at)
+                                ORDER BY
+                                    Año DESC`
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log("Get all facturas Successfull");
+            res.json(rows);
+        } catch (err) {
+            console.log("Get all facturas Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -207,14 +275,14 @@ const adminDashboardRouter = (pool, transporter) => {
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             const allPossibleTimes = [
-                "7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", 
+                "7:00 AM", "7:30 AM", "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM",
                 "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM"
             ];
-            for( let i = 0; i < 18; i++){
+            for (let i = 0; i < 18; i++) {
                 // console.log("i: " + i + " rows[i].Horario: " + rows[i].Horario + " allPossibleTimes[i]: " + allPossibleTimes[i])
-                if(i >= rows.length) rows.push({Horario: allPossibleTimes[i], Citas_Totales: 0})
-                else if(!rows[i].Horario.includes(allPossibleTimes[i])){
-                    rows.splice(i, 0, {Horario: allPossibleTimes[i], Citas_Totales: 0})
+                if (i >= rows.length) rows.push({ Horario: allPossibleTimes[i], Citas_Totales: 0 })
+                else if (!rows[i].Horario.includes(allPossibleTimes[i])) {
+                    rows.splice(i, 0, { Horario: allPossibleTimes[i], Citas_Totales: 0 })
                 }
                 // console.log(rows)
                 // console.log()
