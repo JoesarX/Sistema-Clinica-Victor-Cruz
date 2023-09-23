@@ -34,6 +34,7 @@ import Checkout from "./Modules/PayPal/Checkout";
 import Factura from "./Modules/PayPal/Factura";
 
 import Finanzas from "./Modules/Finanzas_Dashboard/FinanzasDashboard";
+import FinanzasTable from "./Modules/Finanzas_Dashboard/FinanzasTable";
 
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Pauta from "./Modules/pauta";
@@ -69,6 +70,7 @@ function App() {
             <Route path="/checkout/:id" element={<Checkout />} />
             <Route path="/factura/:id" element={<Factura />} />
             <Route path="/finanzas" element={<Finanzas />} />
+            <Route path="/finanzas_tabla" element={<FinanzasTable />} />
 
             <Route path="/pauta" element={<Pauta />} />
 
