@@ -31,8 +31,12 @@ const IniciarSesion = () => {
     useEffect(() => {
         // Validación login
         if (yaEsta) {
+            console.log("Entro");
             // Redirigir si no se cumple la verificación
             navigate("/expedientes"); // Redirige a la página de inicio de sesión
+        }
+        else if(localStorage.getItem('isLoggedIn') === "true" && localStorage.getItem('userType') === 'normal') {
+            navigate("/userpage");
         }
     });
 

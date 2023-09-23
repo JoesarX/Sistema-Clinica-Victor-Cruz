@@ -19,27 +19,18 @@ const Checkout = () => {
     useEffect(() => {
         const fetchFactura = async () => {
             try {
-                const response = await FacturasService.getOneFacturaWithCita(id);
-                setFactura(response);
-                console.log(localStorage.getItem('correo'));
-                console.log(factura.correo);
-                if (localStorage.getItem('isLoggedIn') !== "true") {
+                if (localStorage.getItem('isLoggedIn') !== "true" || localStorage.getItem('isLoggedIn') === null) {
                     navigate("/iniciarsesion?returnUrl=/checkout/"+id);
                     return null;
                 }
-
-                if (localStorage.getItem('correo') === factura.correo) {
-                    console.log(localStorage.getItem('correo'));
-                }
-                else {
+                const response = await FacturasService.getOneFacturaWithCita(id);
+                setFactura(response);
+                if (localStorage.getItem('correo') !== response.correo) {
                     navigate("/prohibido"); 
-                    console.log("No tiene permiso: "+console.log(localStorage.getItem('correo')));
                     return null;
                 }
 
                 if (response.isPagada) {
-                    // Show SweetAlert if factura.isPagada is equal to '1'
-                    
                     swal({
                         title: 'Pago ya realizado',
                         text: 'El pago de esta factura ya ha sido procesado.',
@@ -60,7 +51,6 @@ const Checkout = () => {
             try {
                 const response = await KeysService.fetchKeys();
                 setKeys(response);
-                console.log(response.clientID);
             } catch (error) {
                 console.error('Error fetching key:', error);
             }
@@ -69,10 +59,11 @@ const Checkout = () => {
         fetchFactura();
         fetchPaypalKeys();
     }, [id]);
-
+    
     useEffect(() => {
-        console.log(keys.clientID);
-    }, [keys]);
+        console.log(localStorage.getItem('isLoggedIn'));
+    }, [localStorage]);
+    
 
     //const isLoggedIn = localStorage.getItem("100");
 
