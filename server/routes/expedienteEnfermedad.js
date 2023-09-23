@@ -5,16 +5,16 @@ const router = express.Router();
 const expedientesEnfermedadesRouter = (pool, transporter) => {
 
     //Get all expedientes_alergia by idpaciente
-    router.get("/expedientes_enfermadad/:idpaciente", async (req, res) => {
+    router.get("/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT id,enfermedad FROM expedientes_alergia idpaciente = "${req.params.idCita}"`
+            const sqlSelect = `SELECT id,enfermedad FROM expedientes_enfermadad where idpaciente = "${req.params.idpaciente}"`
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log("Get all meds Successfull");
+            console.log("Get all enfermedades Successfull");
             res.json(rows);
         } catch (err) {
-            console.log("Get all meds Failed. Error: " + err);
+            console.log("Get all enfermedades Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -23,12 +23,13 @@ const expedientesEnfermedadesRouter = (pool, transporter) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `expedientes_enfermadad` (`idpaciente,enfermedad`) VALUES (?)";
+                "INSERT INTO `expedientes_enfermadad` (`idpaciente`,`enfermedad`) VALUES (?)";
 
                 const values =[
                     req.body[0],
                     req.body[1]
                 ]
+                console.log(values);
             await connection.query(q,[values]);
             connection.release();
             console.log("Post expedientes_enfermadad Successfull");
@@ -39,26 +40,25 @@ const expedientesEnfermedadesRouter = (pool, transporter) => {
         }
 
     });
-    //add list of expedientes_alergia
-   
-     router.post("/expedientes_enfermadad/:idpaciente", async (req, res) => {
+    //add list of expedientes_Enfermada
+     router.post("/expedientes_enfermadadList/:idpaciente", async (req, res) => {
         try {
-            const { medLista } = req.body; // Assumiendo que el body es un objeto con una propiedad expedientes_alergia que es un array de alergias
+            const { enfLista } = req.body; // Assumiendo que el body es un objeto con una propiedad expedientes_alergia que es un array de alergias
             const idpaciente = req.params.idpaciente;
 
             const connection = await pool.getConnection();
             console.log("Esto es idpaciente "+ idpaciente);
             
-            for (const medUnico of medLista) {
-                const {idpaciente,medicamento} = medUnico;
+            for (const enfUnico of enfLista) {
+                const {idpaciente,enfermedad} = enfUnico;
                 const q =
-                    "INSERT INTO `expedientes_enfermadad` (idpaciente,enfermedad`)  VALUES (?)";
+                    "INSERT INTO `expedientes_enfermadad` (`idpaciente`,`enfermedad`)  VALUES (?)";
                 const values = [
                     idpaciente,
-                    alergia
+                    enfermedad
                     
                 ];
-                
+                console.log(values);
                 await connection.query(q, [values]);
             }
 
@@ -71,8 +71,8 @@ const expedientesEnfermedadesRouter = (pool, transporter) => {
         }
     });
 
-    //update 1 expedientes_alergia
-    router.put("/:idpaciente", async (req, res) => {
+    //update 1 expedientes_enfermadad
+    router.put("/:id", async (req, res) => {
         try {
             const connection = await pool.getConnection();
             const { id } = req.params;
@@ -98,7 +98,7 @@ const expedientesEnfermedadesRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-    //update all medicamentos
+    //update all enfermedades
     router.put("/expedientes_enfermadad_list/:idpaciente", async (req, res) => {
         try {
             const { enfLista } = req.body; // Assumiendo que el body es un objeto con una propiedad expedientes_enfermadad que es un array de enfermedad     

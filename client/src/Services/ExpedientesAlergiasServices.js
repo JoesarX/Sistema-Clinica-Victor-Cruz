@@ -21,7 +21,7 @@ export const getAllAlergias = async (idpaciente) => {
 //============================================== P O S T S ==================================================================
 export const postOneAlergia = async (alergia) => {
     try {
-        const res = await axios.post(`${API_URL}/expedientes_alergia`, med);
+        const res = await axios.post(`${API_URL}/expedientes_alergia`, alergia);
         return res.data;
     } catch (error) {
         
@@ -72,7 +72,7 @@ export const deleteOneAlergia = async (id) => {
 
 export const deleteAllAlergias = async (idpaciente) => {
     try {
-        await axios.delete(`${API_URL}/expedientes_alergia/expedientes_alergia_deleteList/${idpaciente},`);
+        await axios.delete(`${API_URL}/expedientes_alergia/expedientes_alergia_deleteAll/${idpaciente},`);
     } catch (error) {
         
         throw new Error('Failed to delete alergias');

@@ -8,7 +8,7 @@ const expedientesMedRouter = (pool, transporter) => {
     router.get("/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT id,medicamento FROM expediente_med idpaciente = "${req.params.idCita}"`
+            const sqlSelect = `SELECT id,medicamento FROM expediente_med where idpaciente = "${req.params.idpaciente}"`
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log("Get all meds Successfull");
@@ -23,12 +23,13 @@ const expedientesMedRouter = (pool, transporter) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `expediente_med` (`idpaciente,medicamento`) VALUES (?)";
+                "INSERT INTO `expediente_med` (`idpaciente`,`medicamento`) VALUES (?)";
 
                 const values =[
                     req.body[0],
                     req.body[1]
                 ]
+                console.log(values);
             await connection.query(q,[values]);
             connection.release();
             console.log("Post expedientes_med Successfull");
@@ -52,7 +53,7 @@ const expedientesMedRouter = (pool, transporter) => {
             for (const medUnico of medLista) {
                 const {idpaciente,medicamento} = medUnico;
                 const q =
-                    "INSERT INTO `expediente_med` (idpaciente,medicamento`)  VALUES (?)";
+                    "INSERT INTO `expediente_med` (idpaciente`,`medicamento`)  VALUES (?)";
                 const values = [
                     idpaciente,
                     medicamento

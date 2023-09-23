@@ -103,4 +103,4 @@ app.use('/adminDashboard', adminDashboardRouter(pool, transporter));
 
 app.use('/expediente_med', expedientesMedRouter(pool, transporter));
 app.use('/expedientes_alergia', expedientesAlergiaRouter(pool, transporter));
-app.use('/expedientes_enfermedad', expedientesEnfermedadesRouter(pool, transporter));
+app.use('/expedientes_enfermadad', expedientesEnfermedadesRouter(pool, transporter));

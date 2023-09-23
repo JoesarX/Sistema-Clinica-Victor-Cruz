@@ -6,7 +6,7 @@ const API_URL = 'http://localhost:8000';
 //============================================== G E T S ==================================================================
 export const getAllEnfermedades = async (idpaciente) => {
     try {
-        const res = await axios.get(`${API_URL}/expedientes_enfermedad/${idpaciente}`);
+        const res = await axios.get(`${API_URL}/expedientes_enfermadad/${idpaciente}`);
         
         
         return res.data;
@@ -19,9 +19,9 @@ export const getAllEnfermedades = async (idpaciente) => {
 
 
 //============================================== P O S T S ==================================================================
-export const postOneEnfermedades= async (alergia) => {
+export const postOneEnfermedades= async (enfermedad) => {
     try {
-        const res = await axios.post(`${API_URL}/expedientes_enfermedad`, enfermedad);
+        const res = await axios.post(`${API_URL}/expedientes_enfermadad`, enfermedad);
         return res.data;
     } catch (error) {
         
@@ -32,7 +32,7 @@ export const postOneEnfermedades= async (alergia) => {
 export const postEnfermedadesList = async (idpaciente, enfermedadesLista) => {
     try {
         console.log("In Service postRecetasByCita. Idcita: ", idpaciente)
-        const res = await axios.post(`${API_URL}/expedientes_enfermedad/expedientes_enfermadadList/${idpaciente}`, enfermedadesLista);
+        const res = await axios.post(`${API_URL}/expedientes_enfermadad/expedientes_enfermadadList/${idpaciente}`, enfermedadesLista);
         
         return res.data;
     } catch (error) {
@@ -44,7 +44,7 @@ export const postEnfermedadesList = async (idpaciente, enfermedadesLista) => {
 //============================================== P U T S ==================================================================
 export const editOneEnfermedad = async (id, enfermedad) => {
     try {
-        await axios.put(`${API_URL}/expedientes_enfermedad/${id}`, enfermedad);
+        await axios.put(`${API_URL}/expedientes_enfermadad/${id}`, enfermedad);
     } catch (error) {
         
         throw new Error('Failed to edit enfermedad');
@@ -53,7 +53,7 @@ export const editOneEnfermedad = async (id, enfermedad) => {
 
 export const editEnfermedadList = async (id, enfermedad) => {
     try {
-        await axios.put(`${API_URL}/expedientes_enfermedad/expedientes_enfermadad_list/${id}`, enfermedad);
+        await axios.put(`${API_URL}/expedientes_enfermadad/expedientes_enfermadad_list/${id}`, enfermedad);
     } catch (error) {
         
         throw new Error('Failed to edit enfermedad');
@@ -63,7 +63,7 @@ export const editEnfermedadList = async (id, enfermedad) => {
 //============================================== D E L E T E S ==================================================================
 export const deleteOneEnfermedad = async (id) => {
     try {
-        await axios.delete(`${API_URL}/expedientes_enfermedad/expedientes_enfermadad_delete/${id}`);
+        await axios.delete(`${API_URL}/expedientes_enfermadad/expedientes_enfermadad_delete/${id}`);
     } catch (error) {
         
         throw new Error('Failed to delete med');
@@ -72,7 +72,7 @@ export const deleteOneEnfermedad = async (id) => {
 
 export const deleteAllEnfermedades = async (idpaciente) => {
     try {
-        await axios.delete(`${API_URL}/expedientes_enfermedad/expedientes_enfermadad_deleteAll/${idpaciente},`);
+        await axios.delete(`${API_URL}/expedientes_enfermadad/expedientes_enfermadad_deleteAll/${idpaciente},`);
     } catch (error) {
         
         throw new Error('Failed to delete alergias');

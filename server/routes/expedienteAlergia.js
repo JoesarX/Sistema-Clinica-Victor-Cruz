@@ -8,13 +8,13 @@ const expedientesAlergiaRouter = (pool, transporter) => {
     router.get("/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = `SELECT id,alergia FROM expedientes_alergia idpaciente = "${req.params.idCita}"`
+            const sqlSelect = `SELECT id,alergia FROM expedientes_alergia where idpaciente = "${req.params.idpaciente}"`
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log("Get all meds Successfull");
+            console.log("Get all alergias Successfull");
             res.json(rows);
         } catch (err) {
-            console.log("Get all meds Failed. Error: " + err);
+            console.log("Get all alergias Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
@@ -23,12 +23,13 @@ const expedientesAlergiaRouter = (pool, transporter) => {
         try {
             const connection = await pool.getConnection();
             const q =
-                "INSERT INTO `expedientes_alergia` (`idpaciente,alergia`) VALUES (?)";
+                "INSERT INTO `expedientes_alergia` (`idpaciente`,`alergia`) VALUES (?)";
 
                 const values =[
                     req.body[0],
                     req.body[1]
                 ]
+                console.log(values);
             await connection.query(q,[values]);
             connection.release();
             console.log("Post expedientes_alergia Successfull");
@@ -48,17 +49,17 @@ const expedientesAlergiaRouter = (pool, transporter) => {
 
             const connection = await pool.getConnection();
             console.log("Esto es idpaciente "+ idpaciente);
-            
+            console.log(alergiaLista);
             for (const alergiaUnico of alergiaLista) {
                 const {idpaciente,alergia} = alergiaUnico;
                 const q =
-                    "INSERT INTO `expedientes_alergia` (idpaciente,alergia`)  VALUES (?)";
+                    "INSERT INTO `expedientes_alergia` (idpaciente`,alergia`)  VALUES (?)";
                 const values = [
                     idpaciente,
                     alergia
                     
                 ];
-                
+               
                 await connection.query(q, [values]);
             }
 
@@ -128,7 +129,7 @@ const expedientesAlergiaRouter = (pool, transporter) => {
     router.delete("/expedientes_alergia_deleteAll/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "delete FROM expedientes_alergia where idpaciente = " + req.params.idpaciente;
+            const sqlSelect = `delete FROM expedientes_alergia where idpaciente = "${req.params.idpaciente}"`;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
             console.log(`Delete expedientes_alergia by idpaciente ${req.params.idpaciente} Successfull`)
@@ -141,41 +142,42 @@ const expedientesAlergiaRouter = (pool, transporter) => {
 
     
     //delete  by id 
-    router.delete("/expedientes_alergia_delete/:id", async (req, res) => {
+    router.delete("/expedientes_alergia_delete/:idpaciente", async (req, res) => {
         try {
             const connection = await pool.getConnection();
             const sqlSelect = "delete FROM expedientes_alergia where id = " + req.params.idpaciente;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            console.log(`Delete expedientes_alergia by id ${req.params.id} Successfull`)
+            console.log(`Delete expedientes_alergia by id ${req.params.idpaciente} Successfull`)
             res.json(rows);
         } catch (err) {
-            console.log(`Delete expedientes_alergia by id ${req.params.id} Failed. Error: ` + err);
+            console.log(`Delete expedientes_alergia by id ${req.params.idpaciente} Failed. Error: ` + err);
             res.status(500).json({ error: "Internal Server Error" });
         }
-//delete varios 
-        router.delete("/expedientes_alergia_deleteList/:id", async (req, res) => {
-            try {
-                const { alerLista } = req.body; // Assumiendo que el body es un objeto con una propiedad expedientes_alergia que es un array de alergias     
-                const connection = await pool.getConnection();    
-                for (const alerUnico of alerLista) {
-                    const {id} = alerUnico;
-                    const q =
-                        "delete from expedientes_alergia where where id = ?";
-                    const values = [
-                        id //este es el id que es primary key de la tabla
+    
+// //delete varios 
+//         router.delete("/expedientes_alergia_deleteList/:id", async (req, res) => {
+//             try {
+//                 const { alerLista } = req.body; // Assumiendo que el body es un objeto con una propiedad expedientes_alergia que es un array de alergias     
+//                 const connection = await pool.getConnection();    
+//                 for (const alerUnico of alerLista) {
+//                     const {id} = alerUnico;
+//                     const q =
+//                         "delete from expedientes_alergia where where id = ?";
+//                     const values = [
+//                         id //este es el id que es primary key de la tabla
                         
-                    ];
-                    await connection.query(q, values);
-                }
-                connection.release();
+//                     ];
+//                     await connection.query(q, values);
+//                 }
+//                 connection.release();
                
-                res.json({ message: "expedientes_alergia delete successfully" });
-            } catch (err) {
-                res.status(500).json({ error: "Internal Server Error" });
-            }
-        });
-    });
+//                 res.json({ message: "expedientes_alergia delete successfully" });
+//             } catch (err) {
+//                 res.status(500).json({ error: "Internal Server Error" });
+//             }
+//         });
+     });
     return router;
 };
 
