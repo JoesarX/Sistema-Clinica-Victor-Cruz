@@ -997,7 +997,7 @@ const Dashboard = () => {
                         <div class='box-title appointments-title'>Citas Agendadas</div>
                         <div class='appointments'>
                             {schAppointments.map((appointment, index) => (
-                                <div key={index} class='appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                <div key={index} class={`appointment ${userType==='normal' ? 'normal-user':''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
                                     <div class='appointment-date'>
                                         {formatAppointmentDate(appointment.fecha)}
                                     </div>
@@ -1012,7 +1012,7 @@ const Dashboard = () => {
                         <div class='box-title appointments-title'>Citas Previas</div>
                         <div class='appointments'>
                             {prevAppointments.map((appointment, index) => (
-                                <div key={index} class='appointment prev-appointment' onClick={() => handleAppointmentClick(appointment.idcita)}>
+                                <div key={index} class={`appointment prev-appointment ${userType==='normal' ? 'normal-user':''}`} onClick={() => handleAppointmentClick(appointment.idcita)}>
                                     <div class='appointment-date'>
                                         {formatAppointmentDate(appointment.fecha)}
                                     </div>
