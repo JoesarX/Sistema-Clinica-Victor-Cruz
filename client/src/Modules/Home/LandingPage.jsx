@@ -803,7 +803,7 @@ const LandingPage = () => {
 
     return (
 
-        <div className='scrollable-page'>
+        <div className='scrollable-pageee'>
             <PermissionChecker
                 userType={authContext.userType}
                 requiredPermissions={['normal']}

@@ -125,9 +125,12 @@ const Topbar = () => {
                                 // Content for normal user dropdown menu
                                 <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
-                                        <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span style={{ fontSize: '18px' }}>{nombre}</span>
+                                        <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ maxWidth: '100%', whiteSpace: 'normal' }}>
+                                            <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
+                                                {nombre}
+                                            </span>
                                         </div>
+
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <div className="dropdown-item" onClick={handlePerfil}>VER PERFIL</div>
                                             <div className="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
@@ -142,8 +145,10 @@ const Topbar = () => {
                                 // Content for administrator dropdown menu
                                 <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
-                                        <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span style={{ fontSize: '18px' }}>{nombre}</span>
+                                    <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ maxWidth: '100%', whiteSpace: 'normal' }}>
+                                            <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
+                                                {nombre}
+                                            </span>
                                         </div>
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             < div class="dropdown-item" onClick={handleVerDashboard}>VER DASHBOARD</div>
@@ -156,9 +161,13 @@ const Topbar = () => {
                                 // Content for master user dropdown menu
                                 <li className="nav-item dropdown" style={{ width: '200px' }}>
                                     <div className="d-flex justify-content-end">
-                                        <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <span style={{ fontSize: '18px' }}>{nombre}</span>
+                                        <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ maxWidth: '100%', whiteSpace: 'normal' }}>
+                                            <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
+                                                {nombre}
+                                            </span>
                                         </div>
+
+
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             <div class="dropdown-item" onClick={handleMedicamentos}>MEDICAMENTOS</div>
                                             <div class="dropdown-item" onClick={handleExpedientes}>EXPEDIENTES</div>
