@@ -3,7 +3,6 @@ import { AuthContext } from '../Modules/AuthContext.js';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
 import { Menu, Logout, People, Home, Medication, Contacts, CalendarMonth, Biotech, Savings } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import ReceiptIcon from '@mui/icons-material/Receipt';
 
 const NavBar = () => {
     const { isLoggedIn, handleSignOut } = useContext(AuthContext);

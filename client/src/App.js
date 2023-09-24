@@ -71,7 +71,7 @@ function App() {
             <Route path="/finanzas" element={<Finanzas />} />
 
             <Route path="/prohibido" element={<Forbidden />} />
-            <Route path="*" element={<NotFound404/>} />
+            <Route path="*" element={<NotFound404 />} />
           </Routes>
         </BrowserRouter>
       </div>
