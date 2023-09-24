@@ -315,10 +315,18 @@ function Factura() {
                                         value={selectedService}
                                         options={['Consulta General', 'Cirugía Menor', 'Salud Ocupacional', 'Atención Primaria', 'Salubrista', 'Epidemiología']}
                                         onChange={(event, newValue) => {
+                                            let p;
+                                            if(newValue==='Consulta General'){
+                                                p=700;
+                                            }else{
+                                                p=""
+                                            }
                                             setSelectedService(newValue)
                                             setAddServicio({
                                                 ...addServicio,
                                                 servicio: newValue,
+                                                precio: p
+                                                
                                             });
                                         }}
                                         renderInput={(params) => <TextField {...params} />}
