@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar';
+import { faTrash, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Factura.css';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -25,6 +27,9 @@ import TableRow from '@mui/material/TableRow';
 import Services from '../../Services/FacturasService';
 import { Payment, Payments } from '@mui/icons-material';
 import swal from 'sweetalert';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+
 function Factura() {
 
     const [value, setValue] = useState(0);
@@ -229,6 +234,152 @@ function Factura() {
         }
     };
 
+    const generatePDF = (fecha) => {
+        const doc = new jsPDF({
+            orientation: "portrait",
+            unit: "in",
+            format: [11, 8.5]
+        });
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(14);
+        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 0.75,);
+        doc.setFontSize(15)
+        doc.setTextColor(169, 169, 169)
+        doc.text(7, 0.6, "FACTURA");
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0)
+        doc.setFont("helvetica", "normal")
+        doc.text("Colonia Kennedy al final de la Calle Comercial, contiguo a BANRURAL", 0.5, 1);
+        doc.setFont("helvetica", "bold");
+        doc.text("FECHA: ", 5.75, 1);
+        doc.setFont("helvetica", "normal")
+        doc.text(fecha, 6.35, 1);
+        doc.setFont("helvetica", "bold");
+        doc.text("No. DE FACTURA: ", 5.75, 1.25);
+        doc.setFont("helvetica", "normal")
+        doc.text("Tegucigalpa, 11101", 0.5, 1.25);
+        doc.text("Teléfono: 2230-3901, Celular: 9689-4453", 0.5, 1.5);
+        doc.setFont("helvetica", "bold");
+        doc.text("FACTURAR A: ", 0.5, 1.90);
+        doc.setFont("helvetica", "normal")
+        doc.text(nombre, 0.5, 2.05);
+        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 2.20);
+        doc.text("Colonia Kennedy al final de la Calle Comercial, contiguo a BANRURAL", 0.5, 2.35);
+        doc.text("Tegucigalpa, 11101", 0.5, 2.5);
+        doc.text("Teléfono: 2230-3901, Celular: 9689-4453", 0.5, 2.65);
+        const serviceCounts = {};
+        serviciosSeleccionados.forEach((service) => {
+            const serviceName = service.servicio;
+            if (!serviceCounts[serviceName]) {
+                // If the service name doesn't exist, initialize it with a count of 0 and an empty array for prices
+                serviceCounts[serviceName] = {
+                    quantity: 0,
+                    prices: [],
+                };
+            }
+            // Increment the quantity count
+            serviceCounts[serviceName].quantity++;
+            // Add the price to the prices array
+            serviceCounts[serviceName].prices = service.precio;
+
+            // serviceCounts[serviceName].prices.push(service.precio);
+        });
+        const resultArray = Object.keys(serviceCounts).map((serviceName) => ({
+            name: serviceName,
+            quantity: serviceCounts[serviceName].quantity,
+            prices: serviceCounts[serviceName].prices,
+        }));
+        console.log(resultArray);
+        doc.autoTable({
+            head: [['DESCRIPCIÓN', 'CANT', 'PRECIO UNITARIO', 'MONTO'],],
+            body: resultArray.map((service) => [
+                service.name,
+                service.quantity,
+                "L. " + service.prices + ".00",
+                "L. " + service.prices * service.quantity + ".00"
+            ]),
+            styles: {
+                fontSize: 9,
+                halign: 'center',
+
+            },
+            columnStyles: {
+                0: { cellWidth: 4.2, halign: 'left' },
+                1: { cellWidth: 1, halign: 'center' },
+                2: { cellWidth: 1.31, halign: 'right' },
+                3: { cellWidth: 1, halign: 'right' },
+
+            },
+            startY: 2.9,
+            margin: { left: 0.5 },
+            theme: 'striped'
+        });
+        const tableEndY = doc.autoTable.previous.finalY;
+
+        let subtotal = 0;
+
+        for(let i = 0 ; i <serviciosSeleccionados.length; i++){
+            subtotal += parseFloat(serviciosSeleccionados[i].precio);
+        }
+        console.log(serviciosSeleccionados)
+        console.log(subtotal);
+
+         doc.autoTable({
+            theme: 'striped',
+            
+             body:  [
+                ["SUBTOTAL","L. " + subtotal + ".00"],
+                 ["TASA DE IMPUESTO","15%"],
+                 ["ISV","L. " + (subtotal * 0.15) + ".00"],
+                 ["TOTAL","L. " + (subtotal + (subtotal * 0.15)) + ".00"]
+                ],
+             
+ 
+             styles: {
+                 fontSize: 9,
+                 halign: 'left',
+                 border: 0.1,
+                
+             },
+             
+            columnStyles: {
+                 0: { cellWidth: 1.51, halign: 'left' },
+                 1: { cellWidth: 1, halign: 'right' },
+             },
+ 
+             startY: tableEndY,
+             margin: { left: 5.5 },
+             
+         });
+         doc.setFont("helvetica", "bold");
+      
+         doc.text("GRACIAS POR SU CONFIANZA",8.5/2,10, {align: "center"})
+
+       
+          
+        doc.save('Factura_' + nombre + '_' + fecha + '.pdf');
+    };
+
+
+    const fechaInicio = new Date();
+
+    const formatDate = (date) => {
+        console.log(date)
+        var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
+        console.log(new Date(date).toLocaleDateString("es-HN", datePrefs))
+        return new Date(date).toLocaleDateString("es-HN", datePrefs);
+
+    }
+
+
+    const handleExportPDF = () => {
+        // console.log(paciente.fecha)
+        // console.log(formatDate(paciente.fecha))
+        generatePDF(formatDate(fechaInicio));
+    };
+
+
+
     return (
         <div className='scrollable-page'>
             <NavBar />
@@ -375,6 +526,10 @@ function Factura() {
                                     </Button>
                                     <Button variant="contained" startIcon={<Payments />} className='button' onClick={guardarFacturaEfectivo}>
                                         Pago en Efectivo
+                                    </Button>
+                                    <Button variant="contained" className='button' onClick={handleExportPDF}>
+                                        <FontAwesomeIcon icon={faDownload} />
+                                        Descargar Factura
                                     </Button>
                                 </div>
                             </div>
