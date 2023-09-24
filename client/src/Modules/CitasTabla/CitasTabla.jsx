@@ -761,7 +761,7 @@ const allowSpecialPermission = false;
                                 {
                                     field: 'actions',
                                     headerName: '',
-                                    flex: 2,
+                                    flex: 3,
                                     renderCell: (params) => (
                                         <>
 

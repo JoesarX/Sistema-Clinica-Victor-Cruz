@@ -75,7 +75,7 @@ function App() {
             <Route path="/pauta" element={<Pauta />} />
 
             <Route path="/prohibido" element={<Forbidden />} />
-            <Route path="*" element={<NotFound404/>} />
+            <Route path="*" element={<NotFound404 />} />
           </Routes>
         </BrowserRouter>
       </div>
