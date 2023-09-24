@@ -23,10 +23,12 @@ import TableRow from '@mui/material/TableRow';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Services from '../../Services/FacturasService';
 import { Payment, Payments } from '@mui/icons-material';
+
 import swal from 'sweetalert';
 function Factura() {
     const authContext = useContext(AuthContext);
     const allowSpecialPermission = false;
+
     const [value, setValue] = useState(0);
     const [selectedService, setSelectedService] = useState('Servicios Disponibles');
     const [serviciosSeleccionados, setServiciosSeleccionados] = useState([]);
@@ -38,13 +40,28 @@ function Factura() {
     const [rtn, setRtn] = useState(null);
 
     const navigate = useNavigate();
-
+    
     const [addServicio, setAddServicio] = useState({
         servicio: '',
         precio: '',
     });
     const { id } = useParams();
 
+    useEffect( ()  => {
+        const fetchData = async()=>{
+            let data=await Services.getDataByCita(id);
+            console.log(data);
+            setNombre(data[0].nombre);
+            setCorreo(data[0].correouser);
+            console.log(data[0].nombre);
+            console.log(data[0].correouser);
+        }
+        fetchData();
+       
+    }, []);
+
+    
+    
     const columns = [
         { id: 'servicio', label: 'Servicio', width: '60%' },
         { id: 'precio', label: 'Precio', width: '30%' },
@@ -207,9 +224,15 @@ function Factura() {
             setNombre(inputValue);
         } else {
             inputValue = inputValue.replace(/[^a-zA-ZÀ-ÿ\s]+/g, '');
+            if (inputValue.length > 0 && !/^[a-zA-ZÀ-ÿ\s]+$/.test(inputValue.charAt(0))) {
+                inputValue = inputValue.substring(1); // Elimina el primer carácter si no es una letra o espacio
+            }
             inputElement.value = inputValue;
-        }
+            setNombre(inputValue);
+        }  
     };
+
+   
 
     const eliminarServicio = (servicioAEliminar) => {
         const serviciosActualizados = serviciosSeleccionados.filter(servicio => servicio !== servicioAEliminar)
@@ -243,6 +266,7 @@ function Factura() {
                                             type="text"
                                             placeholder="Nombre"
                                             required
+                                            
                                             onChange={(e) => handleNameInput(e.target)}
                                             value={nombre}
                                         />
@@ -291,10 +315,18 @@ function Factura() {
                                         value={selectedService}
                                         options={['Consulta General', 'Cirugía Menor', 'Salud Ocupacional', 'Atención Primaria', 'Salubrista', 'Epidemiología']}
                                         onChange={(event, newValue) => {
+                                            let p;
+                                            if(newValue==='Consulta General'){
+                                                p=700;
+                                            }else{
+                                                p=""
+                                            }
                                             setSelectedService(newValue)
                                             setAddServicio({
                                                 ...addServicio,
                                                 servicio: newValue,
+                                                precio: p
+                                                
                                             });
                                         }}
                                         renderInput={(params) => <TextField {...params} />}
