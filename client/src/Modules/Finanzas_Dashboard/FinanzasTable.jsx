@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import PermissionChecker from '../Home/PermissionChecker.jsx';
 import { AuthContext } from '../AuthContext.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 //GRID
 import { Button } from '@mui/material'
@@ -16,6 +18,9 @@ import { IconButton } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import './EstilosModal.css'
 
 //STYLES
 import AdminDashboardService from '../../Services/AdminDashboardService';
@@ -77,11 +82,16 @@ const Facturas = () => {
         fecha: true,
     });
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedFactura, setSelectedFactura] = useState(null);
+
     const handleMoreInfo = (row) => {
         console.log(row);
         console.log(row.idFactura);
         console.log("More info")
         //agregar modal open
+        setSelectedFactura(row);
+        setIsModalOpen(true);
     }
 
     const updateColumns = (choice) => {
@@ -267,6 +277,59 @@ const Facturas = () => {
                             />
                         </ThemeProvider>
                     </div>
+
+                    <Modal
+                        open={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        aria-labelledby="modal-title"
+                        aria-describedby="modal-description"
+                        closeAfterTransition BackdropProps={{ onClick: () => { } }}
+                    >
+                        <Box className="modal-container">
+                            <button className="cancelButton" onClick={() => setIsModalOpen(false)}>
+                                <FontAwesomeIcon icon={faTimes} size="2x" />
+                            </button>
+
+                            <Box className="titleBox">
+                                <h2 className="modal-title" id="modal-title">
+                                    Información de la Factura
+                                </h2>
+                            </Box>
+                            <Box className="modal-content">
+                                {selectedFactura && (
+                                    <>
+
+                                        <div className="modal-info">
+                                            <span className="modal-info-title">Fecha de Emisión</span>
+                                            <span className="modal-info-description">{selectedFactura.fecha}</span>
+                                        </div>
+                                        <div className="modal-info">
+                                            <span className="modal-info-title">ID de Factura</span>
+                                            <span className="modal-info-description">{selectedFactura.idFactura}</span>
+                                        </div>
+                                        <div className="modal-info">
+                                            <span className="modal-info-title">Paciente</span>
+                                            <span className="modal-info-description">{selectedFactura.nombre_paciente}</span>
+                                        </div>
+                                        <div className="modal-info">
+                                            <span className="modal-info-title">Correo Electrónico</span>
+                                            <span className="modal-info-description">{selectedFactura.correo}</span>
+                                        </div>
+                                        <div className="modal-info">
+                                            <span className="modal-info-title">RTN</span>
+                                            <span className="modal-info-description">{selectedFactura.rtn}</span>
+                                        </div>
+                                        <div className="modal-info">
+                                            <span className="modal-info-title">Método de Pago</span>
+                                            <span className="modal-info-description">{selectedFactura.metodoPago}</span>
+                                        </div>
+                                        <div className="modalTotal" style={{ textAlign: 'right', fontWeight: 'bold', fontSize: '20px' }}>Total: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(selectedFactura.total)}</div>
+                                    </>
+                                )}
+                            </Box>
+                        </Box>
+                    </Modal>
+
                 </div>
             </PermissionChecker>
         </div>
