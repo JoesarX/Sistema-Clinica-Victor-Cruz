@@ -31,8 +31,12 @@ const IniciarSesion = () => {
     useEffect(() => {
         // Validación login
         if (yaEsta) {
+            console.log("Entro");
             // Redirigir si no se cumple la verificación
             navigate("/expedientes"); // Redirige a la página de inicio de sesión
+        }
+        else if(localStorage.getItem('isLoggedIn') === "true" && localStorage.getItem('userType') === 'normal') {
+            navigate("/userpage");
         }
     });
 
@@ -77,6 +81,9 @@ const IniciarSesion = () => {
         }
     };
 
+    const { search } = window.location;
+    const returnUrl = new URLSearchParams(search).get('returnUrl');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -92,6 +99,8 @@ const IniciarSesion = () => {
             const passUser = await loginUsuarios(email, password);
             console.log(passUser)
             var flag = false;
+            localStorage.setItem("100", true);
+            handleSignIn('normal');
             if (passUser === "") {
                 console.log("Not found!")
                 console.log(":()()()")
@@ -111,7 +120,13 @@ const IniciarSesion = () => {
                             console.log(flag)
                             localStorage.setItem("300", true);
                             localStorage.setItem("correo", email);
-                            navigate("/userpage");
+                            if (returnUrl) {
+                                navigate(returnUrl);
+                            }
+                            else {
+                                navigate("/userpage");
+                            }
+                            
                             swal("Bienvenido", {
                                 icon: "success",
                             });

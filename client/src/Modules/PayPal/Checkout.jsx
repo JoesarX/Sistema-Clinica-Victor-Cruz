@@ -1,5 +1,5 @@
 //import { CLIENT_ID } from '../../Config/config'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import swal from 'sweetalert';
@@ -8,21 +8,29 @@ import PagosService from '../../Services/PagosService';
 import FacturasService from '../../Services/FacturasService';
 import KeysService from '../../Services/KeysService'; 
 import { Box, Typography, Button } from '@mui/material';
+import { AuthContext } from '../AuthContext.js';
 
 const Checkout = () => {
     const [keys, setKeys] = useState({});
     const [factura, setFactura] = useState(null);
     const { id } = useParams();
-    
+
+    const { isLoggedIn } = useContext(AuthContext);
     useEffect(() => {
         const fetchFactura = async () => {
             try {
+                if (localStorage.getItem('isLoggedIn') !== "true" || localStorage.getItem('isLoggedIn') === null) {
+                    navigate("/iniciarsesion?returnUrl=/checkout/"+id);
+                    return null;
+                }
                 const response = await FacturasService.getOneFacturaWithCita(id);
                 setFactura(response);
-                
+                if (localStorage.getItem('correo') !== response.correo) {
+                    navigate("/prohibido"); 
+                    return null;
+                }
+
                 if (response.isPagada) {
-                    // Show SweetAlert if factura.isPagada is equal to '1'
-                    
                     swal({
                         title: 'Pago ya realizado',
                         text: 'El pago de esta factura ya ha sido procesado.',
@@ -43,7 +51,6 @@ const Checkout = () => {
             try {
                 const response = await KeysService.fetchKeys();
                 setKeys(response);
-                console.log(response.clientID);
             } catch (error) {
                 console.error('Error fetching key:', error);
             }
@@ -52,12 +59,13 @@ const Checkout = () => {
         fetchFactura();
         fetchPaypalKeys();
     }, [id]);
-
+    
     useEffect(() => {
-        console.log(keys.clientID);
-    }, [keys]);
+        console.log(localStorage.getItem('isLoggedIn'));
+    }, [localStorage]);
+    
 
-    const isLoggedIn = localStorage.getItem("100");
+    //const isLoggedIn = localStorage.getItem("100");
 
     const [show, setShow] = useState(true);
     const [success, setSuccess] = useState(false);
