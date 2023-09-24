@@ -1,67 +1,76 @@
 /* SaludOcupacional.css */
 .scrollable-page2 {
-    height: 100vh;
-    overflow-y: auto;
-    background-color: #E4EBF9;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .header1 {
-    font-size: 4vw !important;
-    color: #ffff !important;
-    background-color: #677a92;
-    box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
-    text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
-    margin-top: 0 !important;
-    justify-content: center !important;
-    display: flex;
-    text-align: center !important;
-    font-weight: 700;
-    padding: 1.5vh 0;
-    margin: 20px 0;
-    font-family: 'Montserrat';
-  }
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #E4EBF9;
+  display: flex;
+  flex-direction: column;
+}
 
-  .header2 {
-    font-size: 58px !important;
-    color: #ffff !important;
-    background-color: #677a92;
-    box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
-    text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
-    margin-top: 0 !important;
-    justify-content: center !important;
-    display: flex;
-    text-align: center !important;
-    font-weight: 200;
-    padding: 35px; /* Aumentar el padding vertical */
-    font-family: 'Montserrat';
-    background-size: 100% auto !important; /* Ajustar el tamaño de fondo al 100% del ancho de la página */
-    width: 100%; /* Abarcar el ancho completo de la página */
+.header1 {
+  font-size: 4vw !important;
+  color: #ffff !important;
+  background-color: #677a92;
+  box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+  text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
+  margin-top: 0 !important;
+  justify-content: center !important;
+  display: flex;
+  text-align: center !important;
+  font-weight: 700;
+  padding: 1.5vh 0;
+  margin: 20px 0;
+  font-family: 'Montserrat';
+}
+
+.header2 {
+  font-size: 58px !important;
+  color: #ffff !important;
+  background-color: #677a92;
+  box-shadow: 0.2em 0.2em 0.5em rgba(0, 0, 0, 0.3);
+  text-shadow: 0.5vw 0.5vw 1vw rgba(0, 0, 0, 0.8);
+  margin-top: 0 !important;
+  justify-content: center !important;
+  display: flex;
+  text-align: center !important;
+  font-weight: 200;
+  padding: 35px;
+  /* Aumentar el padding vertical */
+  font-family: 'Montserrat';
+  background-size: 100% auto !important;
+  /* Ajustar el tamaño de fondo al 100% del ancho de la página */
+  width: 100%;
+  /* Abarcar el ancho completo de la página */
 }
 
 
 /* SaludOcupacional.css */
 .container-wrapper {
   display: flex;
-  flex-wrap: wrap; /* Permitirá que los contenedores se envuelvan cuando el ancho sea insuficiente */
-  justify-content: space-between; /* Espacio uniforme entre los contenedores */
-  margin: 4%; /* Espacio negativo para compensar el margen horizontal en los contenedores internos */
+  flex-wrap: wrap;
+  /* Permitirá que los contenedores se envuelvan cuando el ancho sea insuficiente */
+  justify-content: space-between;
+  /* Espacio uniforme entre los contenedores */
+  margin: 4%;
+  /* Espacio negativo para compensar el margen horizontal en los contenedores internos */
 }
 
 .containerInfo {
-  width: calc(33.33% - 30px); /* Divide el ancho en tres columnas con margen entre ellas */
+  width: calc(33.33% - 30px);
+  /* Divide el ancho en tres columnas con margen entre ellas */
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
-  margin: 3rem 10px; /* Agrega margen vertical y horizontal entre los contenedores */
+  margin: 3rem 10px;
+  /* Agrega margen vertical y horizontal entre los contenedores */
   padding: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   position: relative;
-  transition: transform 0.5s ease; /* Agrega una transición suave a la propiedad transform */
+  transition: transform 0.5s ease;
+  /* Agrega una transición suave a la propiedad transform */
   font-family: 'Montserrat';
 }
 
@@ -85,69 +94,81 @@
 }
 
 .containerInfo .icon-container {
-  width: 150px; /* Reduce el tamaño del círculo del icono */
-  height: 150px; /* Reduce el tamaño del círculo del icono */
+  width: 150px;
+  /* Reduce el tamaño del círculo del icono */
+  height: 150px;
+  /* Reduce el tamaño del círculo del icono */
   background-color: #1E60A6;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: -40px; /* Ajusta la posición vertical del icono */
-  left: 50%; /* Centra el icono horizontalmente */
-  transform: translateX(-50%); /* Centra horizontalmente usando translate */
+  top: -40px;
+  /* Ajusta la posición vertical del icono */
+  left: 50%;
+  /* Centra el icono horizontalmente */
+  transform: translateX(-50%);
+  /* Centra horizontalmente usando translate */
 }
 
 .containerInfo:hover {
-  transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
-  box-shadow: 0.3rem 0.3rem 0.7rem rgba(0, 0, 0, 0.2); /* Cambia la sombra al pasar el mouse */
+  transform: translateY(-5px);
+  /* Efecto de elevación al pasar el mouse */
+  box-shadow: 0.3rem 0.3rem 0.7rem rgba(0, 0, 0, 0.2);
+  /* Cambia la sombra al pasar el mouse */
 }
 
 
 
- /* SaludOcupacional.css */
+/* SaludOcupacional.css */
 .salud-container {
-    display: flex;
-    justify-content: space-between; /* Distribuye los elementos en el espacio disponible */
-    flex-wrap: wrap; /* Si el espacio es insuficiente, los elementos se envuelven en filas */
+  display: flex;
+  justify-content: space-between;
+  /* Distribuye los elementos en el espacio disponible */
+  flex-wrap: wrap;
+  /* Si el espacio es insuficiente, los elementos se envuelven en filas */
 }
 
-.salud-container > div {
-    flex: 1; /* Ocupa igualmente el espacio disponible en la fila */
-    padding: 2.5rem;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
-    margin: 5rem 3rem; /* Agrega un margen a los lados para separarlos horizontalmente */
-    max-width: 1000px;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    transition: transform 0.5s ease; 
-    font-family: 'Montserrat';
+.salud-container>div {
+  flex: 1;
+  /* Ocupa igualmente el espacio disponible en la fila */
+  padding: 2.5rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
+  margin: 5rem 3rem;
+  /* Agrega un margen a los lados para separarlos horizontalmente */
+  max-width: 1000px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.5s ease;
+  font-family: 'Montserrat';
 }
 
 .salud-container h2 {
-    font-size: 35px;
-    margin-bottom: 1.5rem;
-    color: #333;
-    margin-bottom: 5%;
+  font-size: 35px;
+  margin-bottom: 1.5rem;
+  color: #333;
+  margin-bottom: 5%;
 }
 
 .salud-container p {
-    font-size: 20px;
-    margin-top: 8%;
-    color: #555;
-    line-height: 1.6;
-    margin: 0 5%;
-    text-align: justify;
+  font-size: 20px;
+  margin-top: 8%;
+  color: #555;
+  line-height: 1.6;
+  margin: 0 5%;
+  text-align: justify;
 }
 
 
-.salud-container > div:hover {
-  transform: translateY(-5px); /* Mueve el contenedor hacia arriba en hover */
+.salud-container>div:hover {
+  transform: translateY(-5px);
+  /* Mueve el contenedor hacia arriba en hover */
 }
 
 /* Estilo para el botón */
@@ -160,9 +181,11 @@
   background-color: #1E60A6;
   color: #fff;
   border: none;
-  padding: 25px 45px; /* Ajusta el relleno aquí para hacer el botón más largo */
+  padding: 25px 45px;
+  /* Ajusta el relleno aquí para hacer el botón más largo */
   border-radius: 10px;
-  font-size: 22px; /* Ajusta el tamaño de la fuente aquí */
+  font-size: 22px;
+  /* Ajusta el tamaño de la fuente aquí */
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
   font-family: 'Montserrat';
@@ -177,4 +200,52 @@
 /* Efecto de transición */
 .contact-button {
   transition: background-color 0.3s, transform 0.2s;
+}
+
+
+@media only screen and (max-width: 960px) {
+
+  .container-wrapper {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .containerInfo {
+    width: 100%;
+    height: fit-content;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+    margin: 0;
+  }
+
+  .containerInfo h2 {
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .containerInfo p {
+    font-size: 18px;
+    color: #555;
+    justify-content: center;
+    margin: 0;
+  }
+  
+  .containerInfo .icon-container {
+    margin: 0;
+    width: 150px;
+    height: 150px;
+    background-color: #1E60A6;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: static;
+    transform: none;
+  }
+
 }

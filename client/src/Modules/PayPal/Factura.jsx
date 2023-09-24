@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 import { useParams, useNavigate } from 'react-router-dom';
 import NavBar from '../NavBar';
 import './Factura.css';
@@ -26,7 +28,8 @@ import Services from '../../Services/FacturasService';
 import { Payment, Payments } from '@mui/icons-material';
 import swal from 'sweetalert';
 function Factura() {
-
+    const authContext = useContext(AuthContext);
+    const allowSpecialPermission = false;
     const [value, setValue] = useState(0);
     const [aplicarISV, setAplicarISV] = useState(true);
     const [selectedService, setSelectedService] = useState('Servicios Disponibles');
@@ -231,160 +234,166 @@ function Factura() {
 
     return (
         <div className='scrollable-page'>
-            <NavBar />
-            <Box className='main'>
-                <Tabs value={value} onChange={handleChange}>
-                    <Tab icon={<PostAddIcon />} label="Agregar Factura" className='tabs' />
-                    <Tab icon={<PointOfSaleIcon />} label="Procesar Factura" className='tabs' />
-                </Tabs>
-                <Box className='factura-container'>
-                    <Box className='factura-leftContainer'>
-                        {value === 0 &&
-                            <div className='addReceipt'>
-                                <h3 className='factura-titulo'>Factura</h3>
-                                <div className='factura-patientInfo'>
-                                    <h3 className='factura-subtitle'>Información del Paciente</h3>
-                                    <div className='factura-info'>
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['administrador', 'master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
+                <NavBar />
+                <Box className='main'>
+                    <Tabs value={value} onChange={handleChange}>
+                        <Tab icon={<PostAddIcon />} label="Agregar Factura" className='tabs' />
+                        <Tab icon={<PointOfSaleIcon />} label="Procesar Factura" className='tabs' />
+                    </Tabs>
+                    <Box className='factura-container'>
+                        <Box className='factura-leftContainer'>
+                            {value === 0 &&
+                                <div className='addReceipt'>
+                                    <h3 className='factura-titulo'>Factura</h3>
+                                    <div className='factura-patientInfo'>
+                                        <h3 className='factura-subtitle'>Información del Paciente</h3>
+                                        <div className='factura-info'>
+                                            <input
+                                                className="input-field"
+                                                type="text"
+                                                placeholder="Nombre"
+                                                required
+                                                onChange={(e) => handleNameInput(e.target)}
+                                                value={nombre}
+                                            />
+                                            <Button onClick={() => setShowUserSearch(!showUserSearch)} variant="text" startIcon={<LinkIcon />}>
+                                                Vincular Usuario
+                                            </Button>
+                                        </div>
+                                        {showUserSearch && (
+                                            <div className='factura-email'>
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: -20 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    transition={{ duration: 0.6 }}
+                                                    className={`user-search ${showUserSearch ? 'show' : ''}`}>
+                                                    <TextField
+                                                        sx={{ mr: 3, backgroundColor: '#fff' }}
+                                                        placeholder="Correo del usuario"
+                                                        onChange={(e) => setCorreo(e.target.value)}
+                                                        value={correo}
+                                                        InputProps={{
+                                                            startAdornment: (
+                                                                <InputAdornment position="start">
+                                                                    <SearchIcon />
+                                                                </InputAdornment>
+                                                            ),
+                                                        }}
+                                                    />
+                                                    <Button sx={{ fontSize: '13px', height: '46px' }} className='searchButton' variant="contained" startIcon={<AddIcon />}>
+                                                        Agregar Usuario
+                                                    </Button>
+                                                </motion.div>
+                                            </div>
+                                        )}
                                         <input
                                             className="input-field"
                                             type="text"
-                                            placeholder="Nombre"
-                                            required
-                                            onChange={(e) => handleNameInput(e.target)}
-                                            value={nombre}
+                                            placeholder="RTN"
+                                            onChange={(e) => handleRTNInput(e.target)}
+                                            value={rtn}
                                         />
-                                        <Button onClick={() => setShowUserSearch(!showUserSearch)} variant="text" startIcon={<LinkIcon />}>
-                                            Vincular Usuario
+                                    </div>
+                                    <h3 className='factura-smallText'>Seleccionar Servicio Brindado</h3>
+                                    <Autocomplete
+                                        class='factura-input-bg'
+                                        value={selectedService}
+                                        options={['Consulta General', 'Cirugía Menor', 'Salud Ocupacional', 'Atención Primaria', 'Salubrista', 'Epidemiología']}
+                                        onChange={(event, newValue) => {
+                                            setSelectedService(newValue)
+                                            setAddServicio({
+                                                ...addServicio,
+                                                servicio: newValue,
+                                            });
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        sx={{ backgroundColor: '#F0F0F0', width: '90%' }}
+                                    />
+                                    <h3 className='factura-smallText'>Precio del Servicio</h3>
+                                    <input
+                                        className="factura-input-bg"
+                                        type="text"
+                                        placeholder="L."
+                                        value={addServicio.precio}
+                                        onChange={(event) => {
+                                            setAddServicio({
+                                                ...addServicio,
+                                                precio: event.target.value,
+                                            });
+                                        }}
+                                        required
+                                    />
+
+                                    <Button variant="contained" startIcon={<AddCircleIcon />} className='button' onClick={agregarServicio}>
+                                        Agregar
+                                    </Button>
+                                </div>
+                            }
+                            {value === 1 &&
+                                <div>Contenido de Procesar Factura</div>
+                            }
+                        </Box>
+                        <Box className='factura-rightContainer'>
+                            {value === 0 &&
+                                <div className='preFactura'>
+                                    <div className='factura-montos'>
+                                        <div className="factura-subtotal">Subtotal: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(subtotal)}</div>
+                                        <div className="factura-iva">ISV: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(isv)}</div>
+                                        <div className="factura-total">Total: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(total)}</div>
+                                    </div>
+                                    <div className='factura-applyISV'>
+                                        <input
+                                            type="checkbox"
+                                            checked={aplicarISV}
+                                            onChange={(e) => setAplicarISV(e.target.checked)}
+                                        />
+                                        Aplicar ISV
+                                    </div>
+                                    <div className='table'>
+                                        <TableContainer style={{ height: 166 }}>
+                                            <Table stickyHeader >
+                                                <TableHead >
+                                                    <TableRow class='factura-table-header'>
+                                                        {columns.map(col => (
+                                                            <TableCell align='center' sx={{ backgroundColor: "#C8DAFF", fontWeight: "bold" }} key={col.id} style={{ width: col.width }}>
+                                                                {col.label}
+                                                            </TableCell>
+                                                        ))}
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {serviciosSeleccionados.map((row, index) => (
+                                                        <TableRow key={index}>
+                                                            <TableCell>{row.servicio}</TableCell>
+                                                            <TableCell>{row.precio}</TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </div>
+                                    <div class='factura-payment-button-container'>
+                                        <Button variant="contained" startIcon={<Payment />} className='button' onClick={guardarFacturaPayPal}>
+                                            Pago en Línea
+                                        </Button>
+                                        <Button variant="contained" startIcon={<Payments />} className='button' onClick={guardarFacturaEfectivo}>
+                                            Pago en Efectivo
                                         </Button>
                                     </div>
-                                    {showUserSearch && (
-                                        <div className='factura-email'>
-                                            <motion.div
-                                                initial={{ opacity: 0, y: -20 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ duration: 0.6 }}
-                                                className={`user-search ${showUserSearch ? 'show' : ''}`}>
-                                                <TextField
-                                                    sx={{ mr: 3, backgroundColor: '#fff' }}
-                                                    placeholder="Correo del usuario"
-                                                    onChange={(e) => setCorreo(e.target.value)}
-                                                    value={correo}
-                                                    InputProps={{
-                                                        startAdornment: (
-                                                            <InputAdornment position="start">
-                                                                <SearchIcon />
-                                                            </InputAdornment>
-                                                        ),
-                                                    }}
-                                                />
-                                                <Button sx={{ fontSize: '13px', height: '46px' }} className='searchButton' variant="contained" startIcon={<AddIcon />}>
-                                                    Agregar Usuario
-                                                </Button>
-                                            </motion.div>
-                                        </div>
-                                    )}
-                                    <input
-                                        className="input-field"
-                                        type="text"
-                                        placeholder="RTN"
-                                        onChange={(e) => handleRTNInput(e.target)}
-                                        value={rtn}
-                                    />
                                 </div>
-                                <h3 className='factura-smallText'>Seleccionar Servicio Brindado</h3>
-                                <Autocomplete
-                                    class='factura-input-bg'
-                                    value={selectedService}
-                                    options={['Consulta General', 'Cirugía Menor', 'Salud Ocupacional', 'Atención Primaria', 'Salubrista', 'Epidemiología']}
-                                    onChange={(event, newValue) => {
-                                        setSelectedService(newValue)
-                                        setAddServicio({
-                                            ...addServicio,
-                                            servicio: newValue,
-                                        });
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
-                                    sx={{ backgroundColor: '#F0F0F0', width: '90%' }}
-                                />
-                                <h3 className='factura-smallText'>Precio del Servicio</h3>
-                                <input
-                                    className="factura-input-bg"
-                                    type="text"
-                                    placeholder="L."
-                                    value={addServicio.precio}
-                                    onChange={(event) => {
-                                        setAddServicio({
-                                            ...addServicio,
-                                            precio: event.target.value,
-                                        });
-                                    }}
-                                    required
-                                />
-
-                                <Button variant="contained" startIcon={<AddCircleIcon />} className='button' onClick={agregarServicio}>
-                                    Agregar
-                                </Button>
-                            </div>
-                        }
-                        {value === 1 &&
-                            <div>Contenido de Procesar Factura</div>
-                        }
-                    </Box>
-                    <Box className='factura-rightContainer'>
-                        {value === 0 &&
-                            <div className='preFactura'>
-                                <div className='factura-montos'>
-                                    <div className="factura-subtotal">Subtotal: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(subtotal)}</div>
-                                    <div className="factura-iva">ISV: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(isv)}</div>
-                                    <div className="factura-total">Total: {new Intl.NumberFormat('es-HN', { style: 'currency', currency: 'HNL' }).format(total)}</div>
-                                </div>
-                                <div className='factura-applyISV'>
-                                    <input
-                                        type="checkbox"
-                                        checked={aplicarISV}
-                                        onChange={(e) => setAplicarISV(e.target.checked)}
-                                    />
-                                    Aplicar ISV
-                                </div>
-                                <div className='table'>
-                                    <TableContainer style={{ height: 166 }}>
-                                        <Table stickyHeader >
-                                            <TableHead >
-                                                <TableRow class='factura-table-header'>
-                                                    {columns.map(col => (
-                                                        <TableCell align='center' sx={{ backgroundColor: "#C8DAFF", fontWeight: "bold" }} key={col.id} style={{ width: col.width }}>
-                                                            {col.label}
-                                                        </TableCell>
-                                                    ))}
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {serviciosSeleccionados.map((row, index) => (
-                                                    <TableRow key={index}>
-                                                        <TableCell>{row.servicio}</TableCell>
-                                                        <TableCell>{row.precio}</TableCell>
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </div>
-                                <div class='factura-payment-button-container'>
-                                    <Button variant="contained" startIcon={<Payment />} className='button' onClick={guardarFacturaPayPal}>
-                                        Pago en Línea
-                                    </Button>
-                                    <Button variant="contained" startIcon={<Payments />} className='button' onClick={guardarFacturaEfectivo}>
-                                        Pago en Efectivo
-                                    </Button>
-                                </div>
-                            </div>
-                        }
-                        {value === 1 &&
-                            <div>Contenido de Procesar Factura</div>
-                        }
+                            }
+                            {value === 1 &&
+                                <div>Contenido de Procesar Factura</div>
+                            }
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
+            </PermissionChecker>
         </div >
     );
 }

@@ -99,8 +99,6 @@ const IniciarSesion = () => {
             const passUser = await loginUsuarios(email, password);
             console.log(passUser)
             var flag = false;
-            localStorage.setItem("100", true);
-            handleSignIn('normal');
             if (passUser === "") {
                 console.log("Not found!")
                 console.log(":()()()")

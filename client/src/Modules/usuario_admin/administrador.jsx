@@ -1,9 +1,11 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 
-import {Button, Typography } from '@mui/material'
-import { DataGrid, esES} from '@mui/x-data-grid';
+import { Button, Typography } from '@mui/material'
+import { DataGrid, esES } from '@mui/x-data-grid';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarExport } from '@mui/x-data-grid';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -22,6 +24,8 @@ import '../HojaDeEstilos/CrudStyles.css';
 import NavBar from '../NavBar';
 
 const Administradores = () => {
+   const authContext = useContext(AuthContext);
+   const allowSpecialPermission = false;
    const [usuarios_admin, setAdministradores] = useState([]);
    //esto es para el popup
    const [openPopup, setOpenPopup] = useState(false);
@@ -35,10 +39,10 @@ const Administradores = () => {
    const [contraseña, setPassword] = useState('');
    const [selectedAdministradorId, setSelectedAdministradorId] = useState(null);
    const [openEditAdmin, setEditAdmin] = useState(false);
-  
+
    const navigate = useNavigate();
    const isLoggedIn = localStorage.getItem("400");
-   let cont =0;
+   let cont = 0;
    const handleEditAdministradoresClick = (row) => {
 
       setEditAdmin(true);
@@ -110,7 +114,7 @@ const Administradores = () => {
          setCel('');
          setSexo('');
          setPassword('');
-         
+
       };
 
       return (
@@ -171,21 +175,21 @@ const Administradores = () => {
       },
       esES,
    );
-let buscaError=0;
+   let buscaError = 0;
    useEffect(() => {
       //validación login
-      
+
       if (!isLoggedIn) {
          // Redirigir si no se cumple la verificación
 
-         if(cont==0){
+         if (cont == 0) {
             swal("No Cuenta con el permiso de entrar a este apartado!", {
                icon: "warning",
-           });
+            });
             navigate("/expedientes"); // Redirige a la página de inicio de sesiónc
             cont++;
          }
-         
+
       }
       const fetchAllAdministradores = async () => {
          try {
@@ -197,7 +201,7 @@ let buscaError=0;
             setAdministradores(administradoresWithId);
          } catch (error) {
             // Handle error if any
-            
+
          }
       };
       fetchAllAdministradores();
@@ -235,6 +239,11 @@ let buscaError=0;
 
 
       <div className='crudGrid'>
+         <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
          <NavBar />
          <div style={{ height: '100vh' }}>
             <div className='headerDiv'>
@@ -352,7 +361,7 @@ let buscaError=0;
 
             )}
             {openEditAdmin && (
-               <EditAdmins 
+               <EditAdmins
                   openEditAdmin={openEditAdmin}
                   setEditAdmin={setEditAdmin}
                   setNombre={nombre}
@@ -362,11 +371,11 @@ let buscaError=0;
                   setTelefono={cel}
                   setPassword={contraseña}
                   setSexo={sexo}
-                  
-               />) }
+
+               />)}
 
          </div>
-
+         </PermissionChecker>
       </div>);
 
 

@@ -32,6 +32,7 @@
     border-right: 1px solid black;
     background-color: #fff;
     transition: background-color 0.2s ease-in-out;
+    font-family: 'Montserrat';
 }
 
 .input-bg:focus {
@@ -277,6 +278,7 @@
     width: 40px;
     height: 40px;
     border-radius: 100%;
+    box-shadow: none;
 }
 
 .appointment-history-end-button {
@@ -302,6 +304,10 @@
     gap: 20px;
 }
 
+.file-interaction-button.medicine-interaction {
+    width: 40px;
+    height: 40px;
+}
 /* Responsive styles for screens between 820px and 950px */
 @media only screen and (min-width: 820px) and (max-width: 950px) {
     /* Default styles */
