@@ -239,7 +239,7 @@ const citasRouter = (pool, transporter) => {
             const connection = await pool.getConnection();
             const sqlSelect = 
                 "SELECT c.idcita, c.nombre_persona, c.estado, c.idpaciente, c.correouser, DATE_FORMAT(c.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
-                + "c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono "
+                + "c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, c.Diagnostico, c.Estudios, c.Procedimientos, c.Instrucciones, c.MedicamentosActuales, c.Tipo_Incapacidad, c.FechaInicial, c.Dias, c.Comentarios,TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono, c.estado "
                 + " FROM citas c INNER JOIN expedientes e ON c.idpaciente = e.idpaciente WHERE c.idcita = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
@@ -373,7 +373,7 @@ const citasRouter = (pool, transporter) => {
             connection.release();
             console.log(`Update cita with id: ${id} Successfull`)
             /*const mailOptions = {
-                from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@msn.com>',
                 to: "", // Join multiple emails with a comma and space
                 subject: "Cancelación de Cita Clinica Dr Victor Cruz",
                 text: `Estimado Doctor, Le informamos que se ha cancelado la cita  ${nombre_paciente}, del día ${fecha}, a las ${hora}.\n` +
@@ -500,7 +500,7 @@ const citasRouter = (pool, transporter) => {
                     // Mandar Correo
                     if (toEmails.length > 0) {
                         const mailOptions = {
-                            from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                            from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@msn.com>',
                             to: toEmails.join(", "), // Join multiple emails with a comma and space
                             subject: "Recordatorio de Cita Clinica Dr Victor Cruz",
                             text: `Estimado/a ${nombre_persona}, Le recordamos cordialmente de su cita para mañana, ${fecha}, a las ${hora}. Esperamos brindarle el mejor servicio en nuestra clínica.\n` +
@@ -579,3 +579,7 @@ const citasRouter = (pool, transporter) => {
 };
 
 export default citasRouter;
+
+
+
+	

@@ -9,7 +9,8 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 
 import text_Services from '../../Services/texto_cmdService';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useContext } from 'react';
+import { AuthContext } from '../AuthContext';
 
 import 'firebase/compat/storage';
 import { v4 } from "uuid";
@@ -34,7 +35,6 @@ const Acercade = () => {
   //const DOCTOR_IMG = doctor;
 
   const [isEditingPage, setIsEditingPage] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleEditPage = () => {
     if (isEditingLabelBio || isEditingLabelDesc || isEditingLabelMision || isEditingLabelTeam || isEditingLabelVision) {
@@ -54,6 +54,8 @@ const Acercade = () => {
   const [teamDesc, setTeamDesc] = useState(null);
   const [mision, setMision] = useState(null);
   const [vision, setVision] = useState(null);
+
+  const { userType, isLoggedIn } = useContext(AuthContext);
 
   const maxDescriptionCharacters = 512;
   const maxDescriptionCharacters2 = 1024;
@@ -549,12 +551,7 @@ const Acercade = () => {
   
 
   useEffect(() => {
-
-    const fetchAdmin = () => {
-      setIsAdmin(localStorage.getItem("300") || localStorage.getItem("400"));
-    }
-
-    fetchAdmin();
+    
     fetchImgs();
     fetchMision();
     fetchVision();
@@ -581,7 +578,7 @@ const Acercade = () => {
 
       <div className="about-us-container">
 
-        {isAdmin &&
+        {isLoggedIn && userType !== 'normal' &&
           <div class="admin-edit">
             {
               isEditingPage &&

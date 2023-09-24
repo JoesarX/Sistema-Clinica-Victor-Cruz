@@ -30,7 +30,7 @@ const Topbar = () => {
 
     const handleSaludOcupacional = () => {
         navigate('/salud_ocupacional');
-   };
+    };
 
     const handleServicios = () => {
         navigate('/servicios');
@@ -66,8 +66,8 @@ const Topbar = () => {
         navigate('/examenes');
     };
 
-    const handleFacturas = () => {
-        navigate('/factura');
+    const handleFinanzas = () => {
+        navigate('/finanzas');
     };
 
     const handlePerfil = () => {
@@ -165,6 +165,7 @@ const Topbar = () => {
                                             <div class="dropdown-item" onClick={handleColaboradores}>COLABORADORES</div>
                                             <div class="dropdown-item" onClick={handleCitas}>CITAS</div>
                                             <div class="dropdown-item" onClick={handleExamenes}>EXAMENES</div>
+                                            <div class="dropdown-item" onClick={handleFinanzas}>FINANZAS</div>
                                             <div class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
                                         </div>
                                     </div>

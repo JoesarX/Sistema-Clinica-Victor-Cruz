@@ -31,6 +31,7 @@ export const getUserExpedients = async (mail) => {
     try {
         const res = await axios.get(`${API_URL}/expedientes/UserExpedients/${mail}`);
         console.log("GG")
+        console.log(res.data)
         return res.data;
     } catch (error) {
         

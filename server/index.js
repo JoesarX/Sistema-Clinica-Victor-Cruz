@@ -17,10 +17,15 @@ import ExamenesRouter from "./routes/examenes.js"
 import RecetasRouter from "./routes/recetas.js";
 import PagosRouter from "./routes/pagos.js";
 import serviciosRouter from "./routes/servicios.js";
+import KeysRouter from "./routes/keys.js";
+import ArchivosRouter from "./routes/archivos.js";
 import preciosRouter from "./routes/precios.js";
 import facturasRouter from "./routes/facturas.js";
+import adminDashboardRouter from "./routes/adminDashboard.js";
 
-
+import expedientesMedRouter from "./routes/expedienteMed.js";
+import expedientesAlergiaRouter from "./routes/expedienteAlergia.js";
+import expedientesEnfermedadesRouter from "./routes/expedienteEnfermedad.js";
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -85,10 +90,17 @@ app.use('/servicios', ServiciosRouter(pool));
 app.use('/texto_cmd', textos_cmdRouter(pool));
 app.use('/carrusel', CarruselRouter(pool));
 app.use('/aboutus', AboutUsRouter(pool));
-
+app.use('/keys', KeysRouter(pool));
+app.use('/archivos', ArchivosRouter(pool));
 app.use('/examenes', ExamenesRouter(pool));
 
 app.use('/recetas', RecetasRouter(pool));
 app.use('/pagos', PagosRouter(pool));
 app.use('/precios', preciosRouter(pool));
 app.use('/facturas', facturasRouter(pool, transporter));
+
+app.use('/adminDashboard', adminDashboardRouter(pool, transporter));
+
+app.use('/expediente_med', expedientesMedRouter(pool, transporter));
+app.use('/expedientes_alergia', expedientesAlergiaRouter(pool, transporter));
+app.use('/expedientes_enfermadad', expedientesEnfermedadesRouter(pool, transporter));

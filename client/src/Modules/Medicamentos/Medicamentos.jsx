@@ -1,7 +1,9 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './Medicamentos.css';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 import InfoIcon from '@mui/icons-material/Info';
 import FichaMedicamentos from './FichaMedicamentos';
 import Ficha_Agregar_Categorias from './Ficha_Agregar_Categorias';
@@ -62,6 +64,9 @@ const Medicamentos = () => {
     //LOGIN VALIDATION
     const isLoggedIn = localStorage.getItem("400");
     let cont = 0;
+    const authContext = useContext(AuthContext);
+    const allowSpecialPermission = false;
+
     //========================================================================================================================================================================================================================
     //MEDICAMENTOS GRID DATA
     const navigate = useNavigate();
@@ -91,10 +96,10 @@ const Medicamentos = () => {
                 if (willDelete) {
                     try {
                         const url = row.urlfoto
-                        
+
                         await MedicamentosService.deleteMedicamentos(id);
                         if (url != null) {
-                            
+
                             deleteImg(url);
                         }
                         else {
@@ -237,7 +242,7 @@ const Medicamentos = () => {
         setIsSubmitting(false);
         setImagePreview(null);
         cleanExpediente();
-        
+
     };
 
 
@@ -254,7 +259,7 @@ const Medicamentos = () => {
             console.log(medicamentoData)
             console.log("medicamento: " + medicamento)
         } catch (error) {
-            
+
         }
 
         setIsModalOpen1(!isModalOpen1);
@@ -338,7 +343,7 @@ const Medicamentos = () => {
         try {
             for (let i = 0; i < listaCategoriaMedicamentos.length; i++) {
                 if (listaCategoriaMedicamentos[i] == valor) {
-                    
+
                     cat = idListaCategoriaMedicamentos[i]
                 }
             }
@@ -354,34 +359,34 @@ const Medicamentos = () => {
     const handleModalSubmit = async (e) => {
         e.preventDefault();
         try {
-            
+
             submitMedicamento();
         } catch (error) {
             // Handle error if any
-            
+
         }
     };
 
     useEffect(() => {
         if (isSubmitting) {
-            
+
             submitMedicamento();
         }
     }, [isSubmitting]);
 
     const submitMedicamento = async () => {
         if (validations()) {
-            
+
             try {
                 if (imageUpload != null) {
                     const imageUrll = await uploadFile();
-                    
+
                     setMedicamento((prevState) => ({
                         ...prevState,
                         urlfoto: imageUrll,
                     }));
                     medicamento.urlfoto = imageUrll;
-                    
+
                 }
                 await MedicamentosService.postMedicamentos(medicamento);
                 swal("Medicamento Agregado!", {
@@ -392,7 +397,7 @@ const Medicamentos = () => {
                 window.location.reload();
             } catch (error) {
                 // Handle error if any
-                
+
             }
         }
     };
@@ -403,7 +408,7 @@ const Medicamentos = () => {
             submitEditMedicamento();
         } catch (error) {
             // Handle error if any
-            
+
         }
     };
 
@@ -416,7 +421,7 @@ const Medicamentos = () => {
     const submitEditMedicamento = async () => {
         try {
             if (validations()) {
-                
+
                 if (imageUpload != null) {
                     if (medicamento.urlfoto != null) {
                         deleteImg(medicamento.urlfoto);
@@ -445,7 +450,7 @@ const Medicamentos = () => {
                 cleanExpediente();
             }
         } catch (error) {
-            
+
         }
     };
 
@@ -552,7 +557,7 @@ const Medicamentos = () => {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -561,12 +566,12 @@ const Medicamentos = () => {
         const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
 
         if (!allowedFormats.includes(file.type)) {
-            
+
             return false;
         }
 
         if (file.size > maxSizeInBytes) {
-            
+
             return false;
         }
 
@@ -615,14 +620,14 @@ const Medicamentos = () => {
         if (isModalOpen1) {
             // Run your code here when isModalOpen is true
             setImagePreview(medicamento.urlfoto);
-            
+
         }
     }, [isModalOpen1]);
 
     let buscaError = 0;
     useEffect(() => {
         // Validación login
-        
+
         if (!isLoggedIn) {
             // Redirigir si no se cumple la verificación
             if (cont == 0) {
@@ -642,7 +647,7 @@ const Medicamentos = () => {
                 const medicamentosData = await MedicamentosService.getAllMedicamentos();
                 //Actualizar lista de categorías
                 const nombresCategorias = await CategoriasService.getAllCategories()
-                
+
 
                 if (cont == 0) {
                     listaCategoriaMedicamentos = nombresCategorias.map((nombresCategorias) => nombresCategorias.Nombre_Categoria);
@@ -650,11 +655,11 @@ const Medicamentos = () => {
                     cont++;
                 }
 
-                
 
 
-                
-                
+
+
+
 
 
                 const medicamentosWithId = medicamentosData.map((medicamento) => ({
@@ -664,7 +669,7 @@ const Medicamentos = () => {
                 setMedicamentos(medicamentosWithId);
             } catch (error) {
                 // Handle error if any
-                
+
             }
         };
 
@@ -711,264 +716,270 @@ const Medicamentos = () => {
     return (
 
         <div className='crudGrid'>
-            <NavBar />
-            <div style={{ height: '100vh' }}>
-                <div className='headerDiv'>
-                    <h1>Medicamentos</h1>
-                </div>
-                <div className='dataGridBox'>
-                    <ThemeProvider theme={theme}>
-                        <DataGrid
-                            rows={medicamentos}
-                            getRowId={(row) => row.medId}
-                            columns={[
-                                { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
-                                { field: 'Nombre_Categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
-                                { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
-                                { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
-                                { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
-                                { field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header' },
-                                {
-                                    field: 'actions',
-                                    headerName: '',
-                                    flex: 2,
-                                    renderCell: (params) => (
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['administrador', 'master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
+                <NavBar />
+                <div style={{ height: '100vh' }}>
+                    <div className='headerDiv'>
+                        <h1>Medicamentos</h1>
+                    </div>
+                    <div className='dataGridBox'>
+                        <ThemeProvider theme={theme}>
+                            <DataGrid
+                                rows={medicamentos}
+                                getRowId={(row) => row.medId}
+                                columns={[
+                                    { field: 'nombre', headerName: 'Nombre Medicamento', flex: 3, headerClassName: 'column-header' },
+                                    { field: 'Nombre_Categoria', headerName: 'Categoria', flex: 2, headerClassName: 'column-header' },
+                                    { field: 'stock', headerName: 'Inventario', flex: 1, headerClassName: 'column-header' },
+                                    { field: 'precio_unitario', headerName: 'Precio Unitario', flex: 1, headerClassName: 'column-header' },
+                                    { field: 'via', headerName: 'Via', flex: 1, headerClassName: 'column-header' },
+                                    { field: 'dosis', headerName: 'Dosis', flex: 1, headerClassName: 'column-header' },
+                                    {
+                                        field: 'actions',
+                                        headerName: '',
+                                        flex: 2,
+                                        renderCell: (params) => (
 
-                                        <div>
+                                            <div>
 
-                                            <IconButton onClick={() => toggleModal2(params.id)} >
-                                                <Edit />
-                                            </IconButton>
+                                                <IconButton onClick={() => toggleModal2(params.id)} >
+                                                    <Edit />
+                                                </IconButton>
 
 
-                                            <IconButton onClick={() => handleDeleteMedicamentosClick(params.row, params.id)}>
-                                                <Delete />
-                                            </IconButton>
-                                            <IconButton onClick={() => handleSelectedFicha(params.row)}>
+                                                <IconButton onClick={() => handleDeleteMedicamentosClick(params.row, params.id)}>
+                                                    <Delete />
+                                                </IconButton>
+                                                <IconButton onClick={() => handleSelectedFicha(params.row)}>
 
-                                                <InfoIcon />
-                                            </IconButton>
-                                        </div>
-                                    ),
-                                },
-
-                            ]}
-                            components={{
-                                Toolbar: CustomToolbar,
-                            }}
-
-                            columnVisibilityModel={columnVisibilityModel}
-                            onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
-                        />
-                    </ThemeProvider>
-
-                    <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
-                        <div className='modalContainer modalMedicamentos' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                            <div style={{ marginTop: '20px' }}>
-                                <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
-                                <button className="cancelButton" onClick={toggleModal}>
-                                    <FontAwesomeIcon icon={faTimes} size="2x" />
-                                </button>
-                            </div>
-                            <Box
-                                component="form" //edit modal
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '10px',
-                                    width: '100%', // Added width property
-                                    marginBottom: '20px', // Added margin bottom for spacing
-                                }}
-                                noValidate
-                                autoComplete="off"
-                            >
-                                <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
-                                    <Grid item xs={12} sm={6} >
-                                        <div className='Div-imagen'>
-                                            <div className='ImagenWrapper'>
-                                                <img className='Imagen' src={imagePreview} alt="imgPreview" />
-
+                                                    <InfoIcon />
+                                                </IconButton>
                                             </div>
-                                        </div>
-                                        <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
-                                        <input
-                                            type="file"
-                                            onChange={(event) => {
-                                                setImageUpload(event.target.files[0]);
-                                                setImagePreview(URL.createObjectURL(event.target.files[0]));
-                                                
-                                                
-                                            }}
-                                            name='urlfoto'
-                                            id="urlfoto"
-                                            className="customFileInput"
-                                        />
-                                        <label onClick={cancelarFotoA} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
+                                        ),
+                                    },
 
-                                    </Grid>
+                                ]}
+                                components={{
+                                    Toolbar: CustomToolbar,
+                                }}
 
-                                    <Grid item xs={12} sm={6}>
-                                        <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }} />
-                                        <Autocomplete
-                                            disablePortal
-                                            id="categoria"
-                                            required
-                                            options={listaCategoriaMedicamentos}
-                                            onChange={(event, newValue) =>
-                                                setCategoriasID(newValue)
-                                            }
-                                            renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }} />}
-                                        />
-                                        <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required style={{ marginBottom: '0.45rem' }} />
-                                        <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required style={{ marginBottom: '0.45rem' }} />
-                                        <Autocomplete
-                                            disablePortal
-                                            id="via"
-                                            required
-                                            options={listaVias}
-                                            onChange={(event, newValue) =>
-                                                setMedicamento({
-                                                    ...medicamento,
-                                                    via: newValue
-                                                })
-                                            }
-                                            renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }} />}
-                                        />
-                                        <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
-                                    </Grid>
-                                </Grid>
+                                columnVisibilityModel={columnVisibilityModel}
+                                onColumnVisibilityModelChange={(newModel) => setColumnVisibilityModel(newModel)}
+                            />
+                        </ThemeProvider>
 
-                                <Grid container spacing={2} alignItems="center" justifyContent="center">
-
-                                    <Grid item xs={12} sm={6}>
-                                        <Button
-                                            onClick={handleModalSubmit}
-                                            variant="contained"
-                                            className="modalButton"
-                                            type="submit"
-                                            id='crudButton'
-                                        >
-                                            Agregar Medicamento
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </div>
-                    </Modal>
-
-
-                    <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
-
-                        <div className='modalContainer modalMedicamentos' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                            {medicamentoData.map((medicamento) => (
-                                <div className='innerCard' key={medicamento.idmed}>
-
-                                    <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
-                                    <button className="cancelButton" onClick={toggleModal22}>
+                        <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+                            <div className='modalContainer modalMedicamentos' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+                                <div style={{ marginTop: '20px' }}>
+                                    <h2 className="modalHeader">AGREGAR MEDICAMENTO</h2>
+                                    <button className="cancelButton" onClick={toggleModal}>
                                         <FontAwesomeIcon icon={faTimes} size="2x" />
                                     </button>
-                                    <Box
-                                        component="form"//edit modal
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: '10px',
-                                            width: '100%', // Added width property
-                                        }}
-                                        noValidate
-                                        autoComplete="off"
-                                    >
+                                </div>
+                                <Box
+                                    component="form" //edit modal
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '10px',
+                                        width: '100%', // Added width property
+                                        marginBottom: '20px', // Added margin bottom for spacing
+                                    }}
+                                    noValidate
+                                    autoComplete="off"
+                                >
+                                    <Grid container spacing={0} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+                                        <Grid item xs={12} sm={6} >
+                                            <div className='Div-imagen'>
+                                                <div className='ImagenWrapper'>
+                                                    <img className='Imagen' src={imagePreview} alt="imgPreview" />
 
-                                        <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
-                                            <Grid item xs={12} sm={6}>
-                                                <div className='Div-imagen'>
-                                                    <div className='ImagenWrapper'>
-
-                                                        <img className='Imagen' src={imagePreview} alt="imgPreview" />
-                                                    </div>
                                                 </div>
-                                                <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
-                                                <input
-                                                    type="file"
-                                                    onChange={(event) => {
-                                                        setImageUpload(event.target.files[0]);
-                                                        setImagePreview(URL.createObjectURL(event.target.files[0]));
-                                                    }}
-                                                    name='urlfoto'
-                                                    id="urlfoto"
-                                                    className="customFileInput"
-                                                />
-                                                <label onClick={cancelarFotoE} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }} />
-                                                <Autocomplete
-                                                    value={categoriaSelected}
-                                                    disablePortal
-                                                    id="categoria"
+                                            </div>
+                                            <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+                                            <input
+                                                type="file"
+                                                onChange={(event) => {
+                                                    setImageUpload(event.target.files[0]);
+                                                    setImagePreview(URL.createObjectURL(event.target.files[0]));
 
 
-                                                    options={listaCategoriaMedicamentos}
-                                                    onChange={(event, newValue) =>
-                                                        setCategoriasID(newValue)
-                                                    }
-                                                    renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }} />}
-                                                />
-                                                <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' style={{ marginBottom: '0.45rem' }} />
-                                                <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' style={{ marginBottom: '0.45rem' }} />
-                                                <Autocomplete
-                                                    value={viaSelected}
-                                                    disablePortal
-                                                    id="via"
-                                                    required
-                                                    options={listaVias}
-                                                    onChange={(event, newValue) =>
-                                                        setMedicamento({
-                                                            ...medicamento,
-                                                            via: newValue
-                                                        })
+                                                }}
+                                                name='urlfoto'
+                                                id="urlfoto"
+                                                className="customFileInput"
+                                            />
+                                            <label onClick={cancelarFotoA} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
 
-                                                    }
-                                                    renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }} />}
-                                                />
-                                                <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' style={{ marginBottom: '0.45rem' }} />
-                                            </Grid>
                                         </Grid>
 
-                                        <Button onClick={EditHandler} variant="contained" style={{
-                                            backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                            paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                                        }}>
-                                            Editar Medicamento
-                                        </Button>
-                                    </Box>
-                                </div>
-                            ))}
-                        </div>
-                    </Modal>
+                                        <Grid item xs={12} sm={6}>
+                                            <TextField id="nombre" label="Nombre" variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }} />
+                                            <Autocomplete
+                                                disablePortal
+                                                id="categoria"
+                                                required
+                                                options={listaCategoriaMedicamentos}
+                                                onChange={(event, newValue) =>
+                                                    setCategoriasID(newValue)
+                                                }
+                                                renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }} />}
+                                            />
+                                            <TextField id="stock" label="Unidades" variant="outlined" onChange={handleModalFieldChange} name='stock' required style={{ marginBottom: '0.45rem' }} />
+                                            <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" onChange={handleModalFieldChange} name='precio_unitario' required style={{ marginBottom: '0.45rem' }} />
+                                            <Autocomplete
+                                                disablePortal
+                                                id="via"
+                                                required
+                                                options={listaVias}
+                                                onChange={(event, newValue) =>
+                                                    setMedicamento({
+                                                        ...medicamento,
+                                                        via: newValue
+                                                    })
+                                                }
+                                                renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }} />}
+                                            />
+                                            <TextField id="dosis" label="Dosis" variant="outlined" onChange={handleModalFieldChange} name='dosis' required />
+                                        </Grid>
+                                    </Grid>
 
+                                    <Grid container spacing={2} alignItems="center" justifyContent="center">
+
+                                        <Grid item xs={12} sm={6}>
+                                            <Button
+                                                onClick={handleModalSubmit}
+                                                variant="contained"
+                                                className="modalButton"
+                                                type="submit"
+                                                id='crudButton'
+                                            >
+                                                Agregar Medicamento
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                            </div>
+                        </Modal>
+
+
+                        <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+
+                            <div className='modalContainer modalMedicamentos' style={{ maxHeight: '80vh', overflowY: 'auto' }}>
+                                {medicamentoData.map((medicamento) => (
+                                    <div className='innerCard' key={medicamento.idmed}>
+
+                                        <h2 className="modalHeader">EDITAR MEDICAMENTO</h2>
+                                        <button className="cancelButton" onClick={toggleModal22}>
+                                            <FontAwesomeIcon icon={faTimes} size="2x" />
+                                        </button>
+                                        <Box
+                                            component="form"//edit modal
+                                            sx={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '10px',
+                                                width: '100%', // Added width property
+                                            }}
+                                            noValidate
+                                            autoComplete="off"
+                                        >
+
+                                            <Grid container spacing={2} alignItems="center" justifyContent="center" style={{ height: '100%' }}>
+                                                <Grid item xs={12} sm={6}>
+                                                    <div className='Div-imagen'>
+                                                        <div className='ImagenWrapper'>
+
+                                                            <img className='Imagen' src={imagePreview} alt="imgPreview" />
+                                                        </div>
+                                                    </div>
+                                                    <label htmlFor="urlfoto" className="customFileLabel"  >Seleccionar archivo</label>
+                                                    <input
+                                                        type="file"
+                                                        onChange={(event) => {
+                                                            setImageUpload(event.target.files[0]);
+                                                            setImagePreview(URL.createObjectURL(event.target.files[0]));
+                                                        }}
+                                                        name='urlfoto'
+                                                        id="urlfoto"
+                                                        className="customFileInput"
+                                                    />
+                                                    <label onClick={cancelarFotoE} className="customFileLabel" style={{ marginTop: '0.45rem' }}>Eliminar archivo</label>
+                                                </Grid>
+                                                <Grid item xs={12} sm={6}>
+                                                    <TextField id="nombre" label="Nombre" defaultValue={medicamento.nombre} variant="outlined" onChange={handleModalFieldChange} name='nombre' required style={{ marginBottom: '0.45rem' }} />
+                                                    <Autocomplete
+                                                        value={categoriaSelected}
+                                                        disablePortal
+                                                        id="categoria"
+
+
+                                                        options={listaCategoriaMedicamentos}
+                                                        onChange={(event, newValue) =>
+                                                            setCategoriasID(newValue)
+                                                        }
+                                                        renderInput={(params) => <TextField {...params} label="Categoria" required style={{ marginBottom: '0.45rem' }} />}
+                                                    />
+                                                    <TextField id="stock" label="Unidades" variant="outlined" defaultValue={medicamento.stock} onChange={handleModalFieldChange} name='stock' style={{ marginBottom: '0.45rem' }} />
+                                                    <TextField id="precio_unitario" label="Precio Unitario" variant="outlined" defaultValue={medicamento.precio_unitario} onChange={handleModalFieldChange} name='precio_unitario' style={{ marginBottom: '0.45rem' }} />
+                                                    <Autocomplete
+                                                        value={viaSelected}
+                                                        disablePortal
+                                                        id="via"
+                                                        required
+                                                        options={listaVias}
+                                                        onChange={(event, newValue) =>
+                                                            setMedicamento({
+                                                                ...medicamento,
+                                                                via: newValue
+                                                            })
+
+                                                        }
+                                                        renderInput={(params) => <TextField {...params} label="Via" required style={{ marginBottom: '0.45rem' }} />}
+                                                    />
+                                                    <TextField id="dosis" label="Dosis" variant="outlined" defaultValue={medicamento.dosis} onChange={handleModalFieldChange} name='dosis' style={{ marginBottom: '0.45rem' }} />
+                                                </Grid>
+                                            </Grid>
+
+                                            <Button onClick={EditHandler} variant="contained" style={{
+                                                backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                                paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                            }}>
+                                                Editar Medicamento
+                                            </Button>
+                                        </Box>
+                                    </div>
+                                ))}
+                            </div>
+                        </Modal>
+
+
+                    </div>
 
                 </div>
+                {selectedRow && (
+                    <FichaMedicamentos
+                        open={openFicha}
+                        setOpenPopup={setOpenFicha}
+                        setNombreF={nombre}
+                        setCategoriaF={id_categoria}
+                        setPrecioUnitarioF={precioUnitario}
+                        setStockF={stock}
+                        setImagenF={imagen}
+                        setViaF={via}
+                    />
+                )}
+                {selectedModal && (
+                    <Ficha_Agregar_Categorias
+                        open={openCategories}
+                        setOpenPopupC={setOpenCategories}
 
-            </div>
-            {selectedRow && (
-                <FichaMedicamentos
-                    open={openFicha}
-                    setOpenPopup={setOpenFicha}
-                    setNombreF={nombre}
-                    setCategoriaF={id_categoria}
-                    setPrecioUnitarioF={precioUnitario}
-                    setStockF={stock}
-                    setImagenF={imagen}
-                    setViaF={via}
-                />
-            )}
-            {selectedModal && (
-                <Ficha_Agregar_Categorias
-                    open={openCategories}
-                    setOpenPopupC={setOpenCategories}
-
-                />)}
+                    />)}
+            </PermissionChecker>
         </div>
     );
 

@@ -1,0 +1,60 @@
+.not-found-404-container {
+    height: 80%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+    justify-items: center;
+    align-content: center;
+
+    padding-top: 50px;
+    padding-bottom: 50px;
+
+    gap: 10px;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}
+
+.not-found-404-text {
+    text-align: center;
+    font-size: 38px;
+    font-family: 'Inter', sans-serif;
+    line-height: 40px;
+}
+
+.not-found-404-text.not-found-header {
+    color: #1e60a6;
+    font-size: 200px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    line-height: 200px;
+}
+
+.not-found-404-text.forbidden-page-element {
+    color: #ca3674;
+    letter-spacing: -10px;
+}
+
+.forbidden-page-element:not(.not-found-404-text) {
+    height: 150px;
+    width: 150px;
+    color: #ca3674;
+}
+
+.forbidden-icon-header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0px;
+    flex-wrap: wrap;
+    align-content: center;
+    /* TEMPORALLL */
+    /* background-color: rgb(255, 0, 0, 0.3);
+    background-size: 10px 10px;
+    background-image: radial-gradient(circle, #000000 1px, rgba(0, 0, 0, 0) 1px); */
+}

@@ -25,9 +25,13 @@ import { IconButton } from '@mui/material';
 import Citas from '../CitasTabla/CitasTabla';
 import { CorporateFareTwoTone } from '@mui/icons-material';
 import bcrypt from 'bcryptjs';
+import AddCitaLandingPage from './AddCitaLandingPage';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 
 const LandingPage = () => {
-    const isLoggedIn = localStorage.getItem("100");
+    const authContext = useContext(AuthContext);
+    const allowSpecialPermission = true;
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [Expedientes, setExpedientes] = useState([]);
     const [selectedExpediente, setSelectedExpediente] = useState(null);
@@ -39,9 +43,10 @@ const LandingPage = () => {
     const url = window.location.href;
     const id = url.substring(url.lastIndexOf('/') + 1);
     const correo = localStorage.getItem("correo");
-    
+
     const [perfil, setPerfil] = useState({});
     const [isModalOpen1, setIsModalOpen1] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isSubmitting2, setIsSubmitting2] = useState(false);
     const [idd, setID] = useState(null);
     const [selectMail, setMail] = useState([]);
@@ -89,7 +94,7 @@ const LandingPage = () => {
         setCita((prevCita) => ({ ...prevCita, fecha: formattedDate }));
         const times = await CitasService.getAvailableTimes(formattedDate, cita.idcita);
         setAvailableTimes(times);
-        
+
     };
 
     const [Usuarios, setUsuarios] = useState([]);
@@ -124,7 +129,7 @@ const LandingPage = () => {
                 setUsuarios(usuariosFormatted);
 
             } catch (error) {
-                
+
             }
         }
         fetchExpedientes();
@@ -134,7 +139,39 @@ const LandingPage = () => {
             fetchExpedientes();
         }
 
-    }, [isLoggedIn, isSubmitting2]);
+    }, [isSubmitting2]);
+
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const toggleModal = async () => {
+        console.log("HI ADD")
+        setIsModalOpen(!isModalOpen);
+        setIsSubmitting(false);
+        cleanCita();
+
+        const currentDate = new Date();
+        const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+
+        console.log("currentDayOfWeek: ", currentDayOfWeek);
+
+        // Calculate the number of days to add to the current date to reach the next Monday
+        let daysUntilNextMonday = 0
+
+        if (currentDayOfWeek === 0) {
+            daysUntilNextMonday = 1;
+        } else if (currentDayOfWeek === 6) {
+            daysUntilNextMonday = 2;
+        }
+
+        // Create a new date by adding the days to the current date
+        const nextMonday = new Date(currentDate);
+        nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
+        const formattedDate = dayjs(nextMonday).format('YYYY-MM-DD');
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        const fechaAsDayjs = dayjs(formattedDate);
+        setFecha(fechaAsDayjs);
+        setAvailableTimes(times);
+    };
 
     const toggleModal22 = async (id) => {
         setID(id);
@@ -143,6 +180,7 @@ const LandingPage = () => {
             const citaData = await CitasService.getOneCita(id);
             console.log(citaData)
             const selectedIdPaciente2 = Expedientes.find((expediente) => expediente.idpaciente === citaData.idpaciente);
+            console.log(selectedIdPaciente2)
             setExpedientess(selectedIdPaciente2)
             console.log(selectedIdPaciente2)
             console.log("HELLOOOOO")
@@ -265,9 +303,6 @@ const LandingPage = () => {
     const [usuarios, setUsuarioss] = useState([]);
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            navigate("/iniciarsesion");
-        }
         const fetchPerfil = async () => {
             try {
                 const perfilData = await UsuariosService.getOneUser(correo);
@@ -281,7 +316,7 @@ const LandingPage = () => {
                 });
 
             } catch (error) {
-                
+
             }
             const futuraCita = await CitasService.getUserExpCitas(correo);
             //
@@ -295,7 +330,7 @@ const LandingPage = () => {
                 time: cita.hora,
                 description: cita.nombre_persona,
                 idpaciente: cita.idpaciente,
-                estado : cita.estado
+                estado: cita.estado
             })))
             const uniqueCitas2 = Array.from(new Set(validar_Pasadas.map(cita => cita.idcita)))
                 .map(idcita => validar_Pasadas.find(cita => cita.idcita === idcita));
@@ -305,7 +340,7 @@ const LandingPage = () => {
                 time: cita.hora,
                 description: cita.nombre_persona,
                 idpaciente: cita.idpaciente,
-                estado : cita.estado
+                estado: cita.estado
             })))
         }
         const fetchUsuarios = async () => {
@@ -317,13 +352,9 @@ const LandingPage = () => {
 
         fetchPerfil();
         fetchUsuarios();
-    }, [isLoggedIn]);
+    }, []);
 
     const performActionsAfterModalClose = () => {
-        if (!isLoggedIn) {
-            navigate("/iniciarsesion");
-            return;
-        }
         const fetchPerfil = async () => {
             try {
                 console.log("probando cositas")
@@ -332,7 +363,7 @@ const LandingPage = () => {
                 const expedienteData = await UsuariosService.getOneUser(email);
                 console.log(expedienteData)
                 const futuraCita = await CitasService.getUserExpCitas(email[0]);
-                
+
                 const validar_Futura = futuraCita.filter(futuraCita => futuraCita.estado === "Pendiente");
                 const validar_Pasadas = futuraCita.filter(futuraCita => futuraCita.estado === "Terminada" || futuraCita.estado === "Expirada");
                 const uniqueCitas = Array.from(new Set(validar_Futura.map(cita => cita.idcita)))
@@ -353,14 +384,14 @@ const LandingPage = () => {
                     description: cita.nombre_persona,
                     idpaciente: cita.idpaciente
                 })))
-                
+
                 setSchAppointments(data);
                 setCFuturas(data);
-                
-                
-                
-                
-                
+
+
+
+
+
                 setExpediente(expedienteData);
                 setPatient(prevPatient => ({
                     ...prevPatient,
@@ -392,7 +423,7 @@ const LandingPage = () => {
                 });
 
             } catch (error) {
-                
+
             }
         };
         const fetchUsuarios = async () => {
@@ -527,7 +558,7 @@ const LandingPage = () => {
                 }
             }
         } catch (error) {
-            
+
         }
     };
 
@@ -717,255 +748,319 @@ const LandingPage = () => {
         fetchData2();
     }, [selectedNombre2]);
 
+    const submitCita = async () => {
+        // console.log("doneee");
+
+        // console.log("Entra a agregar despues de validaciones");
+        try {
+            await CitasService.postCitas(cita);
+            //
+            console.log(cita)
+            swal("Cita Agregada.", {
+                icon: "success",
+            });
+            toggleModal();
+            window.location.reload();
+        } catch (error) {
+            // Handle error if any
+            // console.log('Error submitting cita:', error);
+        }
+    };
+
+
+    const handleModalSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            cita.estado = "Pendiente";
+            cita.correouser = perfil.correo;
+            if (validations()) {
+                // console.log("Entra a agregar despues de validaciones");
+                // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
+                const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora);;
+                const isAvailable = availableResponse.available;
+                // console.log("isAvailable: " , isAvailable);
+
+                if (!isAvailable) {
+                    swal("La hora que ha seleccionado ya ha sido ocupada.", {
+                        icon: "error",
+                    });
+                    setHora(null);
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate);
+                    setAvailableTimes(times);
+                } else {
+                    submitCita();
+                }
+            }
+        } catch (error) {
+            // Handle error if any
+            // console.log('Error submitting cita:', error);
+        }
+    };
+
+
+
 
     return (
 
         <div className='scrollable-page'>
-            <TopBar />
-            <div className='contenidos'>
-                <div className='pat-fil'>
-                    <div className='patient-sections'>
-                        <div className='profile-picture-and-edits'>
-                            <div className='perfile'>
-                                <FontAwesomeIcon icon={faUser} className='iconoUsers' />
-                            </div>
-                            <div className='buttonBox'>
-                                <button onClick={handleOpenEditModal} className="edit-button">
-                                    <FontAwesomeIcon icon={faPencilAlt} />
-                                </button>
-                                <button className="delete-button" onClick={() => deleteUser(perfil.correo)}>
-                                    <FontAwesomeIcon icon={faTrash} />
-                                </button>
-                            </div>
-                            {isEditModalOpen && (
-                                <EditUserInfo
-                                    profile={perfil}
-                                    onClose={handleCloseEditModal}
-                                />
-
-                            )}
-                        </div>
-                        <div className='infoP'>
-                            <h2 className="nombres">{perfil.nombre}</h2>
-                            <p className='smallTexts'>Correo:  <span className='patient-email-container' style={{ color: '#464646', marginLeft: '10px' }}>{perfil.correo}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Edad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.edad}</span></p>
-                            <hr className="linea" />
-                            <p className="smallTexts">Pregunta de Seguridad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.preguntaSeguridad}</span></p>
-                            <hr className="linea" />
-                            <div className="expedientesV">
-                                <div className='box-title'>
-                                    <h3 className='vintit'>Expedientes relacionados al perfil</h3>
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['normal']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
+                <TopBar />
+                <div className='contenidos'>
+                    <div className='pat-fil'>
+                        <div className='patient-sections'>
+                            <div className='profile-picture-and-edits'>
+                                <div className='perfile'>
+                                    <FontAwesomeIcon icon={faUser} className='iconoUsers' />
                                 </div>
-                                <ul className="evlist">
-                                    {usuarios
-                                        .filter(usuario => usuario.edad < 18) 
-                                        .map((usuario, index) => {
-                                            return (
-                                                <div key={usuario.idPaciente} className="user-item">
-                                                    <li className="user-info">
-                                                        <span className="user-name">{usuario.nombre}</span>
-                                                        <button
-                                                            className="ver-perfil-button"
-                                                            onClick={() => handleViewExpediente(usuario.idPaciente)}
-                                                        >
-                                                            Ver Expediente
-                                                        </button>
-                                                    </li>
-                                                    {index !== usuarios.length - 1 && <hr className="linead" />}
-                                                </div>
-                                            );
-                                        })}
-                                </ul>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div className="appointments-section">
-                    <button className='large-button schedule-date'>
-                        <FontAwesomeIcon icon={faCalendarPlus} />
-                        Agendar Cita
-                    </button>
-                    <div className='appointments-container'>
-                        <div className='box-title appointments-title'>Citas Agendadas
-                            <Autocomplete
-                                value={selectedNombre}
-                                options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
-                                onChange={(event, newValue) => {
-                                    setSelectedNombre(newValue);
-                                    const selectedUser = usuarios.find(usuario => usuario.nombre === newValue);
-                                    if (selectedUser) {
-                                        setSelectedUserId(selectedUser.idPaciente);
-                                    } else {
-                                        setSelectedUserId(null);
-                                    }
-                                }}
-                                renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
-                                sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
-                            />
-                        </div>
-                        <div className='appointments'>
-                            {data.map((appointment, index) => (
-                                <div key={index} className='appointment'>
-                                    <div className='appointment-date'>
-                                        {formatAppointmentDate(appointment.date)}
-                                    </div>
-                                    <div className='appointment-details'>
-                                        <span>{appointment.description}</span>
-                                        <span>{appointment.estado}</span>
-                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
-                                    </div>
-                                    <IconButton onClick={() => toggleModal22(appointment.id)}>
-                                        <Edit />
-                                    </IconButton>
+                                <div className='buttonBox'>
+                                    <button onClick={handleOpenEditModal} className="edit-button">
+                                        <FontAwesomeIcon icon={faPencilAlt} />
+                                    </button>
+                                    <button className="delete-button" onClick={() => deleteUser(perfil.correo)}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </button>
                                 </div>
-                            ))}
-                        </div>
-                        <div className='box-title appointments-title'>Citas Previas
-                            <Autocomplete
-                                value={selectedNombre2}
-                                options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
-                                onChange={(event, newValue) => {
-                                    setSelectedNombre2(newValue);
-                                    const selectedUser = usuarios.find(usuario => usuario.nombre === newValue);
-                                    if (selectedUser) {
-                                        setSelectedUserId2(selectedUser.idPaciente);
-                                    } else {
-                                        setSelectedUserId2(null);
-                                    }
-                                }}
-                                renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
-                                sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
-                            />
-                        </div>
-                        <div className='appointments'>
-                            {data2.map((appointment, index) => (
-                                <div key={index} className='appointment prev-appointment'>
-                                    <div className='appointment-date'>
-                                        {formatAppointmentDate(appointment.date)}
-                                    </div>
-                                    <div className='appointment-details'>
-                                        <span>{appointment.description}</span>
-                                        <span>{appointment.estado}</span>
-                                        <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
+                                {isEditModalOpen && (
+                                    <EditUserInfo
+                                        profile={perfil}
+                                        onClose={handleCloseEditModal}
+                                    />
 
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div >
-            <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
-                <div className='modalContainer modalCitas'>
-                    <div className='innerCard' key={cita.idcita} >
-                        <h2 className="modalHeader">EDITAR CITA</h2>
-                        <button className="cancelButton" onClick={toggleModal22}>
-                            <FontAwesomeIcon icon={faTimes} size="2x" />
-                        </button>
-                        <Box
-                            component="form" //edit modal
-                            sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '10px',
-                                width: '100%', // Added width property
-                            }}
-                            noValidate
-                            autoComplete="off"
-                        >
-
-                            <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" name='nombre_persona' defaultValue={cita.nombre_persona} onChange={handleModalFieldChange} required />
-                            <Autocomplete
-                                value={selectedEstado}
-                                disablePortal
-                                id="estado"
-                                required
-                                options={listaEstado}
-                                defaultValue={cita.estado}
-                                onChange={(event, newValue) =>
-                                    setCita({
-                                        ...cita,
-                                        estado: newValue,
-                                    })
-                                }
-                                renderInput={(params) => <TextField {...params} label="Estado" required />}
-                                ListboxProps={
-                                    {
-                                        style: {
-                                            border: '1px solid BLACK'
-                                        }
-                                    }
-                                }
-                            />
-                            <Autocomplete
-                                value={Expedientess}
-                                disablePortal
-                                id="idpaciente"
-                                options={Expedientes}
-                                getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
-                                onChange={(event, newValue) => {
-
-                                    cita.idpaciente = newValue?.idpaciente;
-
-                                }}
-                                renderInput={(params) => (
-                                    <TextField {...params} label="ID Paciente" />
                                 )}
-                                ListboxProps={
-                                    {
-                                        style: {
-                                            maxHeight: '220px',
-                                            border: '1px solid BLACK'
-                                        }
-                                    }
-                                }
-                            />
+                            </div>
+                            <div className='infoP'>
+                                <h2 className="nombres">{perfil.nombre}</h2>
+                                <p className='smallTexts'>Correo:  <span className='patient-email-container' style={{ color: '#464646', marginLeft: '10px' }}>{perfil.correo}</span></p>
+                                <hr className="linea" />
+                                <p className="smallTexts">Edad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.edad}</span></p>
+                                <hr className="linea" />
+                                <p className="smallTexts">Pregunta de Seguridad: <span style={{ color: '#464646', marginLeft: '10px' }}>{perfil.preguntaSeguridad}</span></p>
+                                <hr className="linea" />
+                                <div className="expedientesV">
+                                    <div className='box-title'>
+                                        <h3 className='vintit'>Expedientes relacionados al perfil</h3>
+                                    </div>
+                                    <ul className="evlist">
+                                        {usuarios
+                                            .filter(usuario => usuario.edad < 18)
+                                            .map((usuario, index) => {
+                                                return (
+                                                    <div key={usuario.idPaciente} className="user-item">
+                                                        <li className="user-info">
+                                                            <span className="user-name">{usuario.nombre}</span>
+                                                            <button
+                                                                className="ver-perfil-button"
+                                                                onClick={() => handleViewExpediente(usuario.idPaciente)}
+                                                            >
+                                                                Ver Expediente
+                                                            </button>
+                                                        </li>
+                                                        {index !== usuarios.length - 1 && <hr className="linead" />}
+                                                    </div>
+                                                );
+                                            })}
+                                    </ul>
 
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <MobileDatePicker
-                                    id="fecha"
-                                    onChange={handleEditDateChange}
-                                    renderInput={(params) => <TextField {...params} />}
-                                    shouldDisableDate={isWeekday} // Disable weekends
-                                    label="Fecha"
-                                    name='fecha'
-                                    value={dayjs(fecha)}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className="appointments-section">
+                        <button onClick={toggleModal} className='large-button schedule-date'>
+                            <FontAwesomeIcon icon={faCalendarPlus} />
+                            Agendar Cita
+                        </button>
+                        <div className='appointments-container'>
+                            <div className='box-title appointments-title'>Citas Agendadas
+                                <Autocomplete
+                                    value={selectedNombre}
+                                    options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
+                                    onChange={(event, newValue) => {
+                                        setSelectedNombre(newValue);
+                                        const selectedUser = usuarios.find(usuario => usuario.nombre === newValue);
+                                        if (selectedUser) {
+                                            setSelectedUserId(selectedUser.idPaciente);
+                                        } else {
+                                            setSelectedUserId(null);
+                                        }
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
+                                    sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
                                 />
-                            </LocalizationProvider>
-                            <Autocomplete
-                                disablePortal
-                                id="hora"
-                                required
-                                options={availableTimes}
-                                value={hora}
-                                onChange={(event, newValue) => {
-                                    setHora(newValue);
-                                    setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                            </div>
+                            <div className='appointments'>
+                                {data.map((appointment, index) => (
+                                    <div key={index} className='appointment'>
+                                        <div className='appointment-date'>
+                                            {formatAppointmentDate(appointment.date)}
+                                        </div>
+                                        <div className='appointment-details'>
+                                            <span>{appointment.description}</span>
+                                            <span>{appointment.estado}</span>
+                                            <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
+                                        </div>
+                                        <IconButton onClick={() => toggleModal22(appointment.id)}>
+                                            <Edit />
+                                        </IconButton>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className='box-title appointments-title'>Citas Previas
+                                <Autocomplete
+                                    value={selectedNombre2}
+                                    options={['Ver Todas', ...usuarios.map(usuario => usuario.nombre)]}
+                                    onChange={(event, newValue) => {
+                                        setSelectedNombre2(newValue);
+                                        const selectedUser = usuarios.find(usuario => usuario.nombre === newValue);
+                                        if (selectedUser) {
+                                            setSelectedUserId2(selectedUser.idPaciente);
+                                        } else {
+                                            setSelectedUserId2(null);
+                                        }
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Filtrar por Nombre" />}
+                                    sx={{ marginLeft: '10%', backgroundColor: '#F0F0F0', width: '60%', marginTop: '3%' }}
+                                />
+                            </div>
+                            <div className='appointments'>
+                                {data2.map((appointment, index) => (
+                                    <div key={index} className='appointment prev-appointment'>
+                                        <div className='appointment-date'>
+                                            {formatAppointmentDate(appointment.date)}
+                                        </div>
+                                        <div className='appointment-details'>
+                                            <span>{appointment.description}</span>
+                                            <span>{appointment.estado}</span>
+                                            <span className='appointment-light-text'>{formatAppointmentTime(appointment.time)}</span>
+
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div >
+                <Modal open={isModalOpen1} onClose={toggleModal22} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
+                    <div className='modalContainer modalCitas'>
+                        <div className='innerCard' key={cita.idcita} >
+                            <h2 className="modalHeader">EDITAR CITA</h2>
+                            <button className="cancelButton" onClick={toggleModal22}>
+                                <FontAwesomeIcon icon={faTimes} size="2x" />
+                            </button>
+                            <Box
+                                component="form" //edit modal
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '10px',
+                                    width: '100%', // Added width property
                                 }}
-                                renderInput={(params) => <TextField {...params} label="Hora
-                                        " required style={{ marginBottom: '0.45rem' }} />}
-                                ListboxProps={
-                                    {
-                                        style: {
-                                            maxHeight: '300px',
-                                            border: '1px solid BLACK'
+                                noValidate
+                                autoComplete="off"
+                            >
+
+                                <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" name='nombre_persona' defaultValue={cita.nombre_persona} onChange={handleModalFieldChange} required />
+                                <Autocomplete
+                                    value={selectedEstado}
+                                    disablePortal
+                                    id="estado"
+                                    required
+                                    options={listaEstado}
+                                    defaultValue={cita.estado}
+                                    onChange={(event, newValue) =>
+                                        setCita({
+                                            ...cita,
+                                            estado: newValue,
+                                        })
+                                    }
+                                    renderInput={(params) => <TextField {...params} label="Estado" required />}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                border: '1px solid BLACK'
+                                            }
                                         }
                                     }
-                                }
-                            />
-                            <Button onClick={EditHandler} variant="contained" style={{
-                                backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
-                                paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
-                            }}>
-                                Editar Cita
-                            </Button>
-                        </Box>
+                                />
+                                <Autocomplete
+
+                                    disablePortal
+                                    id="idpaciente"
+                                    options={Expedientes}
+                                    getOptionLabel={(expediente) => `${expediente.nombre} (${expediente.edad} años)`}
+                                    onChange={(event, newValue) => {
+
+                                        cita.idpaciente = newValue?.idpaciente;
+
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField {...params} label="ID Paciente" />
+                                    )}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                maxHeight: '220px',
+                                                border: '1px solid BLACK'
+                                            }
+                                        }
+                                    }
+                                />
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <MobileDatePicker
+                                        id="fecha"
+                                        onChange={handleEditDateChange}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        shouldDisableDate={isWeekday} // Disable weekends
+                                        label="Fecha"
+                                        name='fecha'
+                                        value={dayjs(fecha)}
+                                    />
+                                </LocalizationProvider>
+                                <Autocomplete
+                                    disablePortal
+                                    id="hora"
+                                    required
+                                    options={availableTimes}
+                                    value={hora}
+                                    onChange={(event, newValue) => {
+                                        setHora(newValue);
+                                        setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Hora
+                                        " required style={{ marginBottom: '0.45rem' }} />}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                maxHeight: '300px',
+                                                border: '1px solid BLACK'
+                                            }
+                                        }
+                                    }
+                                />
+                                <Button onClick={EditHandler} variant="contained" style={{
+                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                }}>
+                                    Editar Cita
+                                </Button>
+                            </Box>
+                        </div>
                     </div>
+                </Modal>
+                <div>
+                    <AddCitaLandingPage
+                        isModalOpen={isModalOpen}
+                        toggleModal={() => setIsModalOpen(!isModalOpen)}
+                    />
                 </div>
-            </Modal>
+            </PermissionChecker>
         </div>
     );
 };

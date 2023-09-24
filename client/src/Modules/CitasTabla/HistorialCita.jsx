@@ -1,5 +1,5 @@
 import { faTrash, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import NavBar from '../NavBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,12 +9,14 @@ import CitasService from '../../Services/CitasService';
 import Services from '../../Services/RecetasService';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 
-function MedicamentoRow({ data, onDelete, onUpdate }) {
+function MedicamentoRow({ data, onDelete, onUpdate, disabled = false }) {
     const handleDataChange = (e, field) => {
         const updatedData = { ...data, [field]: e.target.value };
         onUpdate(updatedData);
@@ -31,6 +33,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Medicamento"
                         value={data.medicamento}
                         onChange={(e) => handleDataChange(e, 'medicamento')}
+                        disabled={disabled}
                     />
                 </div>
                 <div className="col-md-2">
@@ -41,6 +44,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Cantidad"
                         value={data.cantidad}
                         onChange={(e) => handleDataChange(e, 'cantidad')}
+                        disabled={disabled}
                     />
                 </div>
                 <div className="col-md-3">
@@ -51,6 +55,7 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Dosis"
                         value={data.frecuencia}
                         onChange={(e) => handleDataChange(e, 'frecuencia')}
+                        disabled={disabled}
                     />
                 </div>
                 <div className="col-md-3">
@@ -61,15 +66,18 @@ function MedicamentoRow({ data, onDelete, onUpdate }) {
                         placeholder="Duración"
                         value={data.duracion}
                         onChange={(e) => handleDataChange(e, 'duracion')}
+                        disabled={disabled}
                     />
                 </div>
-                <div className='d-flex col-md-1 align-items-center mobile-align'>
-                    {onDelete && (
-                        <button onClick={onDelete} className="delete-button">
-                            <FontAwesomeIcon icon={faTrash} />
-                        </button>
-                    )}
-                </div>
+                {!disabled &&
+                    <div className='d-flex col-md-1 align-items-center mobile-align'>
+                        {onDelete && (
+                            <button disabled={disabled} onClick={onDelete} class="delete-button">
+                                <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                        )}
+                    </div>
+                }
             </div>
         </div>
     );
@@ -97,23 +105,76 @@ function HistorialCita() {
     const [Tipo_Incapacidad, setTipo_Incapacidad] = useState(null);
     const [FechaInicial, setFechaInicial] = useState(null);
     const [Dias, setDias] = useState(null);
-    const [TipoTiempo, setTipoTiempo] = useState(null);
     const [Comentarios, setComentarios] = useState(null);
 
-
-
+    const [alreadyFilled, setAlreadyFilled] = useState(false);
 
     useEffect(() => {
+
+        const processAppointmentData = (paciente) => {
+
+            setAlreadyFilled(paciente.estado !== 'En Proceso');
+
+            setNewTemp(paciente.temperatura);
+            setNewRitmo(paciente.ritmo_cardiaco);
+            setNewPeso(paciente.peso);
+            setNewPresion(paciente.presion)
+            setNewAltura(paciente.altura);
+
+            setMedicamentosActuales(paciente.MedicamentosActuales)
+            setInstrucciones(paciente.Instrucciones);
+            setProcedimientos(paciente.Procedimientos);
+            setTipo_Incapacidad(paciente.Tipo_Incapacidad);
+            setFechaInicial(paciente.FechaInicial);
+            setDiagnostico(paciente.Diagnostico);
+            setComentarios(paciente.Comentarios);
+            setDias(paciente.Dias);
+            setEstudios(paciente.Estudios);
+        }
+
         const fetchPaciente = async () => {
             try {
                 const response = await CitasService.getOneCitaWithExpediente(id);
+                console.log(response);
+                if (response.Tipo_Incapacidad || response.FechaInicial) {
+                    setShowIncapacity(true);
+                    console.log("YES SHOW INCAPACITY")
+                }
                 setPaciente(response);
-                
+                if (response) {
+                    processAppointmentData(response);
+                }
             } catch (error) {
-                console.error('Error fetching paciente:', error);
+                swal({
+                    title: "Error al obtener datos del paciente",
+                    text: "Error",
+                    icon: "error"
+                });
             }
         };
+        const fetchReceta = async () => {
+            try {
+                const recetaPaciente = await Services.getRecetasByCita(id);
+
+                const medicamentos = recetaPaciente.map((medicamento, index) => ({
+                    id: index,
+                    medicamento: medicamento.nombre_medicamento,
+                    cantidad: medicamento.cant_unidades,
+                    frecuencia: medicamento.frecuencia_horas,
+                    duracion: medicamento.cant_dias,
+                }));
+
+                setMedicamentosData(medicamentos);
+            } catch (error) {
+                swal({
+                    title: "Error al obtener receta del paciente",
+                    text: "Reportar este error: ", error,
+                    icon: "error"
+                });
+            }
+        }
         fetchPaciente();
+        fetchReceta();
     }, [id]);
 
     // useEffect(() => {
@@ -228,7 +289,7 @@ function HistorialCita() {
         if (!regexFinal.test(paciente.presion)) {
             swal({
                 title: "Error al ingresar datos",
-                text: "La presion arterial no es valida es válido",
+                text: "La presion arterial no es válida",
                 icon: "error"
             });
             return false;
@@ -251,10 +312,16 @@ function HistorialCita() {
             paciente.Procedimientos = Procedimientos;
             paciente.Instrucciones = Instrucciones;
             paciente.MedicamentosActuales = MedicamentosActuales;
-            paciente.Tipo_Incapacidad = Tipo_Incapacidad;
-            paciente.FechaInicial = FechaInicial;
-            paciente.Dias = Dias + " " + TipoTiempo;
-            paciente.Comentarios = Comentarios;
+            paciente.Tipo_Incapacidad = null;
+            paciente.FechaInicial = null;
+            paciente.Dias = null;
+            paciente.Comentarios = null;
+            if (showIncapacity) {
+                paciente.Tipo_Incapacidad = Tipo_Incapacidad;
+                paciente.FechaInicial = FechaInicial;
+                paciente.Dias = Dias;
+                paciente.Comentarios = Comentarios;
+            }
             paciente.estado = "Terminada";
 
             const recetas = medicamentosData.map((medicamento) => ({
@@ -264,23 +331,14 @@ function HistorialCita() {
                 cant_dias: medicamento.duracion,
             }));
 
-            // aqui agrego los medicamentos ????????????/
-
-            
-
             const listaRecetas = {
                 recetasLista: recetas,
             }
-            
+
             if (validacionesSignos()) {
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
-                if (recetas[0].nombre_medicamento === '') {
-
-                } else {
-                    await Services.postRecetasByCita(idcita, listaRecetas);
-
-                }
+                await Services.postRecetasByCita(idcita, listaRecetas);
                 swal("Cita Editada", {
                     icon: "success",
                 });
@@ -295,7 +353,7 @@ function HistorialCita() {
             // window.location.reload();
         } catch (error) {
 
-            
+
         }
     };
     /////////////////////////////////////////////////////////////////////
@@ -333,12 +391,12 @@ function HistorialCita() {
         );
     };
 
-
     const formatDate = (date) => {
-        var datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(date).toLocaleDateString("es-HN", datePrefs);
-
-    }
+        const dateObj = new Date(date);
+        dateObj.setDate(dateObj.getDate() + 1);
+        const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
+        return dateObj.toLocaleDateString("es-HN", datePrefs);
+    };
 
     function getCurrentDate() {
         const currentDate = new Date();
@@ -476,289 +534,338 @@ function HistorialCita() {
 
     ////////////////////////////////////////////////////////////////////////////
 
+    const authContext = useContext(AuthContext);
+    const allowSpecialPermission = false;
+
     return (
         <div className='scrollable-pageee'>
-            <NavBar />
-            <div className='maine'>
-                <div className="appointment-patient-information">
-                    <div className='profile-picture-and-edit'>
-                        <div className='perfil' onClick={handleProfileClick}>
-                            <FontAwesomeIcon icon={faUser} className='iconoUser' />
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
+                <NavBar />
+                <div className='maine'>
+                    <div className="appointment-patient-information">
+                        <div className='profile-picture-and-edit'>
+                            <div className='perfil' onClick={handleProfileClick}>
+                                <FontAwesomeIcon icon={faUser} className='iconoUser' />
+                            </div>
+                        </div>
+                        <div className='patient-info-vert-align'>
+                            <div class='appointment-details-container'>
+                                <h2 className="appointment-history-nombre">
+                                    {paciente && paciente.nombre}
+                                </h2>
+                                <div className='appointment-reason-container'>
+                                    {paciente && paciente.nombre_persona}
+                                </div>
+                                <div className='appointment-reason-container date'>
+                                    {paciente && formatDate(paciente.fecha)}
+                                </div>
+                            </div>
+                            <div className='space-between-text'>
+                                <p className="smallText">
+                                    {paciente && paciente.numid}
+                                </p>
+                            </div>
+                            <div className='space-between-text'>
+                                <p className="smallText">
+                                    {paciente && formatDate(paciente.fecha_nacimiento)}
+                                </p>
+                                <p className="smallText">
+                                    {paciente && paciente.edad} años
+                                </p>
+                            </div>
+                            <div className='space-between-text'>
+                                <p className="smallText">
+                                    {paciente && (paciente.sexo === "M") ? 'Masculino' : 'Femenino'}
+                                </p>
+                                <div className='smallText'>
+                                    {paciente && paciente.correouser}
+                                </div>
+                            </div>
+                        </div>
+                        {!alreadyFilled &&
+                            <button className='appointment-history-end-button' onClick={() => submitEdit()}>
+                                Terminar Cita
+                            </button>
+                        }
+                    </div>
+                    {/* <div className="row align-items-center mb-4"> */}
+                    {/* </div> */}
+
+                    <div class='nav-button-container'>
+                        <a href="#preclinica">Preclínica</a>
+                        <a href="#diagnostico">Diágnostico y Tratamiento</a>
+                        <a href="#incapacidad">Incapacidad</a>
+                    </div>
+
+                    <div class='preclinic' id='preclinica'>
+                        <h3 className='appointment-section-header'>Preclínica</h3>
+                        <div className='contenedor'>
+                            <div className="row mb-3">
+                                <div className="col">
+                                    <h4 className='headers'>Altura</h4>
+                                    <div class="input-group">
+                                        <input
+                                            className="form-control input-bg"
+                                            type="text"
+                                            // value={paciente && paciente.altura}
+                                            value={paciente && paciente.altura}
+                                            onChange={(e) => setNewAltura(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        />
+                                        <div className="input-group-append">
+                                            <span class="input-group-text preclinic-labels">cm</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div className="col">
+                                    <h4 className='headers'>Peso</h4>
+                                    <div class="input-group">
+                                        <input
+                                            className="form-control input-bg"
+                                            type="text"
+                                            value={paciente && paciente.peso}
+                                            onChange={(e) => setNewPeso(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        />
+                                        <div className="input-group-append">
+                                            <span class="input-group-text preclinic-labels">kg</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col">
+                                    <h4 className='headers'>Temperatura</h4>
+                                    <div class="input-group">
+                                        <input
+                                            className="form-control input-bg"
+                                            type="text"
+                                            value={paciente && paciente.temperatura}
+                                            onChange={(e) => setNewTemp(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        />
+                                        <div className="input-group-append">
+                                            <span class="input-group-text preclinic-labels">ºC</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col">
+                                    <h4 className='headers'>Ritmo Cardíaco</h4>
+                                    <div class="input-group">
+                                        <input
+                                            className="form-control input-bg"
+                                            type="text"
+                                            value={paciente && paciente.ritmo_cardiaco}
+                                            onChange={(e) => setNewRitmo(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        />
+                                        <div className="input-group-append">
+                                            <span class="input-group-text preclinic-labels">ppm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col">
+                                    <h4 className='headers'>Presión Arterial</h4>
+                                    <div class="input-group">
+                                        <input
+                                            className="form-control input-bg"
+                                            type="text"
+                                            value={paciente && paciente.presion}
+                                            onChange={(e) => setNewPresion(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        />
+                                        <div className="input-group-append">
+                                            <span class="input-group-text preclinic-labels">mmHg</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className='patient-info-vert-align'>
-                        <div class='appointment-details-container'>
-                            <h2 className="appointment-history-nombre">
-                                {paciente && paciente.nombre}
-                            </h2>
-                            <div className='appointment-reason-container'>
-                                {paciente && paciente.nombre_persona}
-                            </div>
-                            <div className='appointment-reason-container date'>
-                                {paciente && formatDate(paciente.fecha)}
-                            </div>
-                        </div>
-                        <div className='space-between-text'>
-                            <p className="smallText">
-                                {paciente && paciente.numid}
-                            </p>
-                        </div>
-                        <div className='space-between-text'>
-                            <p className="smallText">
-                                {paciente && formatDate(paciente.fecha_nacimiento)}
-                            </p>
-                            <p className="smallText">
-                                {paciente && paciente.edad} años
-                            </p>
-                        </div>
-                        <div className='space-between-text'>
-                            <p className="smallText">
-                                {paciente && (paciente.sexo === "M") ? 'Masculino' : 'Femenino'}
-                            </p>
-                            <div className='smallText'>
-                                {paciente && paciente.correouser}
-                            </div>
-                        </div>
-                    </div>
-                    <button className='appointment-history-end-button' onClick={() => submitEdit()}>
-                        Terminar Cita
-                    </button>
-                </div>
-                {/* <div className="row align-items-center mb-4"> */}
-                {/* </div> */}
 
-                <div class='nav-button-container'>
-                    <a href="#preclinica">Preclínica</a>
-                    <a href="#diagnostico">Diágnostico y Tratamiento</a>
-                    <a href="#incapacidad">Incapacidad</a>
-                </div>
-
-                <div class='preclinic' id='preclinica'>
-                    <h3 className='appointment-section-header'>Preclínica</h3>
-                    <div className='contenedor'>
-                        <div className="row mb-3">
-                            <div className="col">
-
-                                 <h4 className='headers'>Altura cm</h4> 
-                                        
-                                
-                                 
-                                <input
-                                    label="CM"
-                                    
-                                    className="input-bg"
-                                    type="text"
-                                    // value={paciente && paciente.altura}
-                                    placeholder={paciente && paciente.altura}
-                                    onChange={(e) => setNewAltura(e.target.value)}
-                                
-                                    
-                                />
-                                </div>
-                                
-                                
-                            
-                            <div className="col">
-                                <h4 className='headers'>Peso Kg</h4>
-                                <input
-                                    label="Kg"
-                                    className="input-bg"
-                                    type="text"
-                                    //value={paciente && paciente.peso}
-                                    placeholder={paciente && paciente.peso}
-                                    onChange={(e) => setNewPeso(e.target.value)}
-                                />
-                            </div>
-                            <div className="col">
-                                <h4 className='headers'>Temperatura °C</h4>
-                                <input
-                                    label="°C"
-                                    className="input-bg"
-                                    type="text"
-                                    // value={paciente && paciente.temperatura}
-
-                                    placeholder={paciente && paciente.temperatura}
-                                    onChange={(e) => setNewTemp(e.target.value)}
-                                />
-                            </div>
-                            <div className="col">
-                                <h4 className='headers'>Ritmo Cardíaco ppm</h4>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    //value={paciente && paciente.ritmo_cardiaco}
-                                    placeholder={paciente && paciente.ritmo_cardiaco}
-                                    onChange={(e) => setNewRitmo(e.target.value)}
-                                />
-                            </div>
-                            <div className="col">
-                                <h4 className='headers'>Presión Arterial mmHg</h4>
-                                <input
-                                    className="input-bg"
-                                    type="text"
-                                    //  value={paciente && paciente.presion}
-                                    placeholder={paciente && paciente.presion}
-                                    onChange={(e) => setNewPresion(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class='diagnostic' id='diagnostico'>
-                    <h3 className='appointment-section-header'>Diagnóstico y Tratamiento</h3>
-                    <div className='contenedo'>
-                        <div className="row mb-3">
-                            <div className="col-md-6">
-                                <h4 className='headers'>Diagnóstico</h4>
-                                <div className='contenedor'>
-                                    <input
-                                        className="input-bg"
-                                        type="text"
-                                        placeholder="Nombre o Código"
-                                        onChange={(e) => setDiagnostico(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-md-6">
-                                <h4 className='headers'>Estudios de Gabinete</h4>
-                                <div className='contenedor'>
-                                    <input
-                                        className="input-bg"
-                                        type="text"
-                                        placeholder="Estudios de Laboratorio e Imagenología"
-                                        onChange={(e) => setEstudios(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <h4 className='headers'>Procedimientos</h4>
-                        <div className="row mb-3">
-                            <div className="col">
-                                <div className='contenedor'>
-                                    <input
-                                        className="input-bg"
-                                        type="text"
-                                        placeholder="Procedimientos"
-                                        onChange={(e) => setProcedimientos(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <div >
-                            <h4 className='headers'>Receta de Medicamentos</h4>
-                            <div className='contenedor' >
-
-
-                                {/* Visualizacion de medicamentos */}
-                                {medicamentosData.map((rowData) => (
-                                    <div key={rowData.id}>
-                                        <MedicamentoRow
-                                            data={rowData}
-                                            onDelete={() => deleteMedicamento(rowData.id)}
-                                            onUpdate={(updatedData) => updateMedicamentoData(updatedData, rowData.id)}
+                    <div class='diagnostic' id='diagnostico'>
+                        <h3 className='appointment-section-header'>Diagnóstico y Tratamiento</h3>
+                        <div className='contenedo'>
+                            <div className="row mb-3">
+                                <div className="col-md-6">
+                                    <h4 className='headers'>Diagnóstico</h4>
+                                    <div className='contenedor'>
+                                        <input
+                                            className="input-bg"
+                                            type="text"
+                                            placeholder="Nombre o Código"
+                                            value={paciente && paciente.Diagnostico}
+                                            onChange={(e) => setDiagnostico(e.target.value)}
+                                            disabled={alreadyFilled}
                                         />
                                     </div>
-                                ))}
-
-                                <button onClick={addMedicamentoRow}><FontAwesomeIcon icon={faPlus} /></button>
-                                <button onClick={handleExportPDF}><FontAwesomeIcon icon={faDownload} /></button>
-
-
-                                {/* ///////////////////////////// */}
+                                </div>
+                                <div className="col-md-6">
+                                    <h4 className='headers'>Estudios de Gabinete</h4>
+                                    <div className='contenedor'>
+                                        <input
+                                            className="input-bg"
+                                            type="text"
+                                            placeholder="Estudios de Laboratorio e Imagenología"
+                                            value={paciente && paciente.Estudios}
+                                            onChange={(e) => setEstudios(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className="row mb-3">
-                            <div className='headers_TA'>
-                                <h4 className='headers'>Instrucciones Médicas</h4>
+                            <h4 className='headers'>Procedimientos</h4>
+                            <div className="row mb-3">
+                                <div className="col">
+                                    <div className='contenedor'>
+                                        <input
+                                            className="input-bg"
+                                            type="text"
+                                            placeholder="Procedimientos"
+                                            value={paciente && paciente.Procedimientos}
+                                            onChange={(e) => setProcedimientos(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div >
+                                <h4 className='headers'>Receta de Medicamentos</h4>
+                                <div className='contenedor' >
+
+
+                                    {/* Visualizacion de medicamentos */}
+                                    {medicamentosData.map((rowData) => (
+                                        <div key={rowData.id}>
+                                            <MedicamentoRow
+                                                data={rowData}
+                                                onDelete={() => deleteMedicamento(rowData.id)}
+                                                onUpdate={(updatedData) => updateMedicamentoData(updatedData, rowData.id)}
+                                                disabled={alreadyFilled}
+                                            />
+                                        </div>
+                                    ))}
+
+                                    <div class="file-interaction-container medicine-interaction">
+                                        <button class='file-interaction-button medicine-interaction' onClick={addMedicamentoRow}
+                                            disabled={alreadyFilled}><FontAwesomeIcon icon={faPlus} /></button>
+                                        <button class='file-interaction-button medicine-interaction' onClick={handleExportPDF}><FontAwesomeIcon icon={faDownload} /></button>
+                                    </div>
+
+
+                                    {/* ///////////////////////////// */}
+                                </div>
+                            </div>
+                            <div className="row mb-3">
+                                <div className='headers_TA'>
+                                    <h4 className='headers'>Instrucciones Médicas</h4>
+                                    <div className="form-group">
+                                        <textarea
+                                            className="input-bg"
+                                            rows="5"
+                                            placeholder="Escriba aquí"
+                                            value={paciente && paciente.Instrucciones}
+                                            onChange={(e) => setInstrucciones(e.target.value)}
+                                            disabled={alreadyFilled}
+                                        ></textarea>
+                                    </div>
+                                </div>
+                                <h4 className='headers'>Historial de Medicamentos Actuales</h4>
                                 <div className="form-group">
                                     <textarea
-                                        className="form-control input-bg"
+                                        className="input-bg"
                                         rows="5"
                                         placeholder="Escriba aquí"
-                                        onChange={(e) => setInstrucciones(e.target.value)}
+                                        value={paciente && paciente.MedicamentosActuales}
+                                        onChange={(e) => setMedicamentosActuales(e.target.value)}
+                                        disabled={alreadyFilled}
                                     ></textarea>
                                 </div>
                             </div>
-                            <h4 className='headers'>Historial de Medicamentos Actuales</h4>
-                            <div className="form-group">
-                                <textarea
-                                    className="form-control input-bg"
-                                    rows="5"
-                                    placeholder="Escriba aquí"
-                                    onChange={(e) => setMedicamentosActuales(e.target.value)}
-                                ></textarea>
-                            </div>
                         </div>
                     </div>
-                </div>
-                <div class='incapacity'>
-                    <div class="d-inline-flex mb-3">
-                        <label htmlFor="showIncapacity" id='incapacidad' class='appointment-section-header'>
-                            Agregar Incapacidad
-                        </label>
-                        <input
-                            type="checkbox"
-                            id="showIncapacity"
-                            checked={showIncapacity}
-                            onChange={() => setShowIncapacity(!showIncapacity)}
-                            style={{ transform: 'scale(1.5)', margin: '0 10px' }}
-                        />
+                    <div class='incapacity'>
+                        <div class="d-inline-flex mb-3">
+                            <label htmlFor="showIncapacity" id='incapacidad' class='appointment-section-header'>
+                                Agregar Incapacidad
+                            </label>
+                            <input
+                                type="checkbox"
+                                id="showIncapacity"
+                                checked={showIncapacity}
+                                onChange={() => setShowIncapacity(!showIncapacity)}
+                                style={{ transform: 'scale(1.5)', margin: '0 10px' }}
+                                disabled={alreadyFilled}
+                            />
 
-                    </div>
-                    {showIncapacity && (
-                        <div class='contenedor'>
-                            <h4 class='headers'>Tipo de Ausencia</h4>
-                            <div className="btn-group my-2" role="group">
-                                <input type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off"
-                                    onChange={(e) => setTipo_Incapacidad("Laboral")} />
-                                <label className="btn btn-outline-dark" htmlFor="laboral">Laboral</label>
-
-                                <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off"
-                                    onChange={(e) => setTipo_Incapacidad("Deportiva")} />
-                                <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
-
-                                <input type="radio" className="btn-check" name="btnradio" id="academica" autoComplete="off"
-                                    onChange={(e) => setTipo_Incapacidad("Academica")} />
-                                <label className="btn btn-outline-dark" htmlFor="academica">Academica</label>
-
-                                <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off"
-                                    onChange={(e) => setTipo_Incapacidad("Otra")} />
-                                <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div className="form-group col-md-6">
-                                    <label htmlFor="fechaInicial" className="form-label">Fecha Inicial</label>
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        id="fechaInicial"
-                                        onChange={(e) => setFechaInicial(e.target.value)}
-                                        value={getCurrentDate()} // Set the default value to the current date
-                                    />
-                                </div>
-
-                                <div class="form-group col-md-3">
-                                    <label htmlFor="diasDescanso" class="form-label">Cantidad de Dias</label>
-                                    <input class="input-bg" id="diasDescanso"
-                                        type="number"
-                                        placeholder="1"
-                                        onChange={(e) => setDias(e.target.value)} />
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="form-group col-md-12">
-                                    <label htmlFor="comentarios" class="form-label">Comentarios</label>
-                                    <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí" onChange={(e) => setComentarios(e.target.value)}></textarea>
-                                </div>
-                            </div>
                         </div>
+                        {showIncapacity && (
+                            <div class='contenedor'>
+                                <h4 class='headers'>Tipo de Ausencia</h4>
+                                <div className="btn-group my-2" role="group">
+                                    <input defaultChecked type="radio" className="btn-check" name="btnradio" id="laboral" autoComplete="off" disabled={alreadyFilled}
+                                        onChange={(e) => setTipo_Incapacidad("Laboral")} />
+                                    <label className="btn btn-outline-dark" htmlFor="laboral">Laboral</label>
 
-                    )}
+                                    <input type="radio" className="btn-check" name="btnradio" id="deportiva" autoComplete="off"
+                                        disabled={alreadyFilled}
+                                        onChange={(e) => setTipo_Incapacidad("Deportiva")} />
+                                    <label className="btn btn-outline-dark" htmlFor="deportiva">Deportiva</label>
+
+                                    <input type="radio" className="btn-check" name="btnradio" id="academica" autoComplete="off"
+                                        disabled={alreadyFilled}
+                                        onChange={(e) => setTipo_Incapacidad("Academica")} />
+                                    <label className="btn btn-outline-dark" htmlFor="academica">Academica</label>
+
+                                    <input type="radio" className="btn-check" name="btnradio" id="otra" autoComplete="off"
+                                        disabled={alreadyFilled}
+                                        onChange={(e) => setTipo_Incapacidad("Otra")} />
+                                    <label className="btn btn-outline-dark" htmlFor="otra">Otra</label>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div className="form-group col-md-6">
+                                        <label htmlFor="fechaInicial" className="form-label">Fecha Inicial</label>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="fechaInicial"
+                                            onChange={(e) => setFechaInicial(e.target.value)}
+                                            value={paciente !== null ? paciente.FechaInicial : getCurrentDate()} // Set the default value to the current date
+                                            disabled={alreadyFilled}
+                                        />
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label htmlFor="diasDescanso" class="form-label">Cantidad de Dias</label>
+                                        <input class="input-bg" id="diasDescanso"
+                                            type="number"
+                                            placeholder="1"
+                                            value={paciente && paciente.Dias}
+                                            onChange={(e) => setDias(e.target.value)}
+                                            disabled={alreadyFilled} />
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="form-group col-md-12">
+                                        <label htmlFor="comentarios" class="form-label">Comentarios</label>
+                                        <textarea class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"
+                                            value={paciente && paciente.Comentarios} onChange={(e) => setComentarios(e.target.value)}
+                                            disabled={alreadyFilled}></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        )}
+                    </div>
+
                 </div>
-
-            </div>
+            </PermissionChecker>
         </div>
     );
 }

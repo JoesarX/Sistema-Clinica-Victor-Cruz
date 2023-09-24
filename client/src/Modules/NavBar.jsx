@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../Modules/AuthContext.js';
 import { AppBar, Avatar, Box, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from '@mui/material';
-import { Menu, Logout, People, Home, Medication, Contacts, CalendarMonth, Biotech } from '@mui/icons-material';
+import { Menu, Logout, People, Home, Medication, Contacts, CalendarMonth, Biotech, Savings } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
-import ReceiptIcon from '@mui/icons-material/Receipt';
 
 const NavBar = () => {
     const { isLoggedIn, handleSignOut } = useContext(AuthContext);
@@ -103,6 +102,14 @@ const NavBar = () => {
                                 <ListItemButton>
                                     <ListItemIcon sx={{ color: "white" }}><Biotech /></ListItemIcon>
                                     <ListItemText primary={"Examenes"} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
+                        <Link to="/finanzas" style={{ textDecoration: 'none', color: "white" }}>
+                            <ListItem disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon sx={{ color: "white" }}><Savings /></ListItemIcon>
+                                    <ListItemText primary={"Finanzas"} />
                                 </ListItemButton>
                             </ListItem>
                         </Link>

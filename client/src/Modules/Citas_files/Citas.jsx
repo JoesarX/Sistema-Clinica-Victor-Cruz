@@ -10,6 +10,7 @@ import CitasCalendar from './CitasCalendar';
 const Citas = () => {
 
   const [formattedEvents, setFormattedEvents] = useState([]);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
 
   const processEvents = (receivedCitas) => {
     const events = receivedCitas.map(cita => {
