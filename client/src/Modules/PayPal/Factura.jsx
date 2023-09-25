@@ -127,7 +127,7 @@ function Factura() {
         const errors = validations(facturaToSend, true);
 
         if (Object.keys(errors).length === 0) {
-            await Services.postFactura(facturaToSend);
+            const idie = parseInt(await Services.postFactura(facturaToSend));
             swal({
                 icon: 'success',
                 title: 'Éxito',
@@ -140,6 +140,7 @@ function Factura() {
             setIsv(0);
             setTotal(0);
             setCorreo('')
+            generatePDF(formatDate(fechaInicio),idie);
             navigate('/citas_tabla');
         } else {
             const errorMessage = Object.values(errors).join('\n');
@@ -167,7 +168,8 @@ function Factura() {
         const errors = validations(facturaToSend, false);
 
         if (Object.keys(errors).length === 0) {
-            await Services.postFactura(facturaToSend);
+            const idie = parseInt(await Services.postFactura(facturaToSend));
+            console.log(idie)
             swal({
                 icon: 'success',
                 title: 'Éxito',
@@ -180,6 +182,7 @@ function Factura() {
             setIsv(0);
             setTotal(0);
             setCorreo('')
+            generatePDF(formatDate(fechaInicio),idie);
             navigate('/citas_tabla');
         } else {
             const errorMessage = Object.values(errors).join('\n');
@@ -234,7 +237,9 @@ function Factura() {
         }
     };
 
-    const generatePDF = (fecha) => {
+    const generatePDF = (fecha,idie) => {
+        console.log(idie)
+        const id2 = idie;
         const doc = new jsPDF({
             orientation: "portrait",
             unit: "in",
@@ -242,10 +247,10 @@ function Factura() {
         });
         doc.setFont("helvetica", "bold");
         doc.setFontSize(14);
-        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 0.75,);
+        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 0.75);
         doc.setFontSize(15)
         doc.setTextColor(169, 169, 169)
-        doc.text(7, 0.6, "FACTURA");
+        doc.text("FACTURA",7, 0.6);
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0)
         doc.setFont("helvetica", "normal")
@@ -255,18 +260,25 @@ function Factura() {
         doc.setFont("helvetica", "normal")
         doc.text(fecha, 6.35, 1);
         doc.setFont("helvetica", "bold");
-        doc.text("No. DE FACTURA: ", 5.75, 1.25);
+        doc.text("No. DE FACTURA: " + id2, 5.75, 1.25);
         doc.setFont("helvetica", "normal")
+        
+     
         doc.text("Tegucigalpa, 11101", 0.5, 1.25);
         doc.text("Teléfono: 2230-3901, Celular: 9689-4453", 0.5, 1.5);
         doc.setFont("helvetica", "bold");
-        doc.text("FACTURAR A: ", 0.5, 1.90);
+        
         doc.setFont("helvetica", "normal")
         doc.text(nombre, 0.5, 2.05);
-        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 2.20);
-        doc.text("Colonia Kennedy al final de la Calle Comercial, contiguo a BANRURAL", 0.5, 2.35);
-        doc.text("Tegucigalpa, 11101", 0.5, 2.5);
-        doc.text("Teléfono: 2230-3901, Celular: 9689-4453", 0.5, 2.65);
+        if(rtn !== null){
+            doc.text('RTN: '+rtn, 0.5, 2.20);
+        }else{
+            doc.text("RTN: NA", 0.5, 2.20);
+        }
+        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 2.35);
+        doc.text("Colonia Kennedy al final de la Calle Comercial, contiguo a BANRURAL", 0.5, 2.5);
+        doc.text("Tegucigalpa, 11101", 0.5, 2.65);
+        doc.text("Teléfono: 2230-3901, Celular: 9689-4453", 0.5, 2.8);
         const serviceCounts = {};
         serviciosSeleccionados.forEach((service) => {
             const serviceName = service.servicio;
@@ -310,7 +322,7 @@ function Factura() {
                 3: { cellWidth: 1, halign: 'right' },
 
             },
-            startY: 2.9,
+            startY: 3.05,
             margin: { left: 0.5 },
             theme: 'striped'
         });
@@ -527,10 +539,7 @@ function Factura() {
                                     <Button variant="contained" startIcon={<Payments />} className='button' onClick={guardarFacturaEfectivo}>
                                         Pago en Efectivo
                                     </Button>
-                                    <Button variant="contained" className='button' onClick={handleExportPDF}>
-                                        <FontAwesomeIcon icon={faDownload} />
-                                        Descargar Factura
-                                    </Button>
+                                   
                                 </div>
                             </div>
                         }
