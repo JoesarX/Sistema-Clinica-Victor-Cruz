@@ -32,6 +32,16 @@ const SaludOcupacional = () => {
         Tipo: 'tituloSaludOcupacional',
         texto_campo: ''
     })
+    //////////////////////////////////////////////////////////////
+    const [tituloAuditor, setTituloAuditor] = React.useState({
+        Tipo: 'tituloAuditor',
+        texto_campo: ''
+    })
+    const [textoAuditor, setTextoAuditor] = React.useState({
+        Tipo: 'textoAuditor',
+        texto_campo: ''
+    })
+    //////////////////////////////////////////////////////////////
     const [textoQueEsSaludOcupacional, setTextoQueEsSaludOcupacional] = React.useState({
         Tipo: 'textoQueEsSaludOcupacional',
         texto_campo: ''
@@ -251,6 +261,11 @@ const SaludOcupacional = () => {
                         setTextoQueEsSaludOcupacional({ ...textoQueEsSaludOcupacional, texto_campo: info[1].texto_campo });
                         setPorqueImporta({ ...porqueImporta, texto_campo: info[2].texto_campo });
                         setTextoPorqueImporta({ ...textoPorqueImporta, texto_campo: info[3].texto_campo });
+                        // ///////////////////////////////////////////////////////////////////////////////////////////////
+                        setTituloAuditor({ ...tituloAuditor, texto_campo: info[11].texto_campo });
+                        setTextoAuditor({ ...textoAuditor, texto_campo: info[12].texto_campo });
+                        //////////////////////////////////////////////////////////////////////////////////////////////////
+                        
                     } catch (error) {
                         
                     }
@@ -551,6 +566,13 @@ const SaludOcupacional = () => {
                     isEditMode={editAll}
                     TipoTitulo={tituloSaludOcupacional}
                     TipoDesc={textoQueEsSaludOcupacional}
+                />
+                <Parte1Component
+                    title={tituloAuditor.texto_campo}
+                    description={textoAuditor.texto_campo}
+                    isEditMode={editAll}
+                    TipoTitulo={tituloAuditor}
+                    TipoDesc={textoAuditor}
                 />
                 <Parte1Component
                     title={porqueImporta.texto_campo}

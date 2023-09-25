@@ -239,7 +239,7 @@ const citasRouter = (pool, transporter) => {
             const connection = await pool.getConnection();
             const sqlSelect = 
                 "SELECT c.idcita, c.nombre_persona, c.estado, c.idpaciente, c.correouser, DATE_FORMAT(c.fecha, '%Y-%m-%d') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
-                + "c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono "
+                + "c.altura, c.peso, c.temperatura, c.ritmo_cardiaco, c.presion, c.Diagnostico, c.Estudios, c.Procedimientos, c.Instrucciones, c.MedicamentosActuales, c.Tipo_Incapacidad, c.FechaInicial, c.Dias, c.Comentarios,TIMESTAMPDIFF(YEAR, e.fecha_nacimiento, CURDATE()) AS edad, DATE_FORMAT(e.fecha_nacimiento, '%Y-%m-%d') AS fecha_nacimiento, e.sexo, e.estado_civil, e.ocupacion, e.numid, e.nombre, e.telefono, c.estado "
                 + " FROM citas c INNER JOIN expedientes e ON c.idpaciente = e.idpaciente WHERE c.idcita = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();

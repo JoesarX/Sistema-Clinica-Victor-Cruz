@@ -35,6 +35,16 @@
 }
 
 
+.ElLista {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; 
+}
+
+.ElLista input {
+    flex: 1; 
+    margin-right: 10px;
+}
 
 .botonVolver {
     background-color: #1e60a6;
@@ -110,7 +120,7 @@
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
-    height: 100%;
+    height: fit-content;
 }
 
 .medicamentos {
@@ -124,7 +134,7 @@
     width: 100%;
     background: #F8F8F8;
     border-radius: 10px;
-    height: 100%;
+    height: fit-content;
 }
 
 .vitals {
@@ -165,10 +175,6 @@
 }
 
 .histmedtit {
-    position: relative;
-    width: 100%;
-    left: 0px;
-
     font-family: 'Inter';
     font-style: normal;
     font-weight: 700;
@@ -188,6 +194,16 @@
     padding-top: 0px;
     padding-bottom: 0px;
     font-family: 'Inter';
+}
+
+.vital-signs-box-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.vital-signs-box-title-container span {
+    text-align: center;
 }
 
 .box-title.appointments-title {
@@ -261,32 +277,19 @@
 
 
     width: 100%;
-    height: 300px;
+    height: fit-content;
+
+    max-height: 300px;
+
     background: #F8F8F8;
     border-radius: 10px;
 }
+
 .contBot {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-
-
-.CFL {
-    background-color: #87CEFA; 
-    color: #FFF; 
-    border: none;
-    padding: 10px 20px; 
-    font-size: 16px; 
-    cursor: pointer;
-    border-radius: 5px; 
-}
-
-.CFL:hover {
-    background-color: #5F9EA0; 
-}
-
 
 .archivostit {
     font-family: 'Inter';
@@ -331,7 +334,8 @@
 
 .section-value {
     overflow-y: scroll;
-    height: 140px;
+    height: fit-content;
+    max-height: 140px;
     width: 100%;
     margin-bottom: 10px;
     margin-top: 10px;
@@ -340,7 +344,8 @@
 
 .medicamentos .section-value {
     overflow-y: scroll;
-    height: 320px;
+    height: fit-content;
+    max-height: 320px;
     width: 100%;
 }
 
@@ -356,6 +361,10 @@
     display: flex;
     justify-content: center;
     text-align: center;
+}
+
+.all-vital-signs-container {
+    width: 100%;
 }
 
 .vital-sign-container {
@@ -516,15 +525,21 @@
     border-radius: 5px;
 }
 
+.large-button.file-upload-button {
+    width: 100%;
+    background-color: #1560F2;
+}
+
 .large-button.schedule-date {
     margin-top: 0px;
     margin-bottom: 0px;
     background-color: #1560F2;
-    width: 95%;
+    width: 100%;
     gap: 20px;
 }
 
-.large-button.schedule-date:hover {
+.large-button.schedule-date:hover,
+.large-button.file-upload-button:hover {
     background-color: #4942E4;
 }
 
@@ -532,13 +547,32 @@
     background-color: #5D9C59;
 }
 
+.file-interaction-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    padding: 4px 10px;
+    
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    border: 0px;
+    border-radius: 100%;
+}
+
 .appointments-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    justify-content: flex-start;
 
-    padding-left: 10px;
-    padding-right: 10px;
+    /* padding-left: 10px;
+    padding-right: 10px; */
     padding-top: 10px;
     padding-bottom: 10px;
 
@@ -563,12 +597,11 @@
     gap: 10px;
     width: 100%;
     border-radius: 10px;
-    height: 100%;
-    max-height: 370px;
+    height: fit-content;
 
     font-family: 'Inter';
 
-    overflow-y: scroll;
+    overflow-y: auto;
     scrollbar-width: thin;
 }
 
@@ -597,6 +630,10 @@
     background-color: #F8F8F8;
 
     cursor: pointer;
+}
+
+.appointment.normal-user {
+    cursor: default;
 }
 
 .appointment:hover {
@@ -631,11 +668,21 @@
     display: flex;
     flex-direction: column;
     justify-items: center;
+    max-height: inherit;
     gap: 0px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.appointment-text {
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .appointment-light-text {
     color: #737373;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .perfil {
@@ -795,16 +842,18 @@
     color: #464646;
 }
 
-.file-item-line {
-    width: 98%;
+
+.file-interaction-container {
     display: flex;
+    justify-self: flex-end;
     align-items: center;
-    justify-content: space-between;
+    gap: 5px;
 }
 
-.file-info {
+.file-item-line {
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
 .lifile {
@@ -812,12 +861,14 @@
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
-    line-height: 24px;
+    line-height: 15px;
     display: flex;
-    height: 10px;
+    height: auto;
     align-items: center;
-    color: #000000;
+    color: #464646;
     width: 100%;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .input {
@@ -826,6 +877,64 @@
     outline: none;
     background-color: transparent;
     width: 300px;
+}
+
+.vital-signs-appointments-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    justify-content: center;
+    justify-items: center;
+
+    width: 100%;
+    height: 100%;
+    max-height: 232.5px;
+
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    row-gap: 10px;
+    column-gap: 5px;
+    
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.vital-sign-appointment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100px;
+    min-height: 100px;
+    max-height: 100px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    /* border: 2px solid #6D9AF0; */
+    border-left: 10px solid #6D9AF0;
+    border-radius: 5px;
+
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+
+    color: #464646;
+
+    cursor: pointer;
+
+    font-family: 'Inter';
+    font-size: smaller;
+}
+
+.vital-sign-appointment .appointment-date {
+    font-weight: 600;
+    color: #595959;
+}
+
+.vital-sign-appointment:hover {
+    background-color: #DBDFEA;
 }
 
 ::-webkit-scrollbar {
@@ -846,10 +955,9 @@
     background-color: #555;
 }
 
-@media only screen and (max-width: 820px) {
+@media only screen and (max-width: 1000px) {
     .contenido {
         height: fit-content;
-        gap: 20px;
         align-items: center;
         flex-direction: column;
         margin-bottom: 40px;
@@ -861,6 +969,15 @@
 
     .appointment-date {
         font-size: 28px !important;
+    }
+
+    .patient-section.appointments-section {
+        margin-top: 0px;
+    }
+
+    .appointments {
+        max-height: 400px;
+        overflow: auto;
     }
 
 }
@@ -878,15 +995,26 @@
 }
 
 @media only screen and (max-width: 680px) {
+
+    .contenido {
+        gap: 20px;
+    }
+
+    .medicamentos {
+        margin-bottom: 0;
+    }
+
     .infoGeneral {
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 5px;
-        padding-left: 0px;
-        padding-right: 0px;
+        padding-left: 5px;
+        padding-right: 5px;
         padding-top: 20px;
         padding-bottom: 20px;
+        height: fit-content;
+        max-height: fit-content;
     }
 
     .infoGeneral>* {
@@ -898,68 +1026,6 @@
     .nombre {
         justify-content: center;
         text-align: center;
-    }
-}
-
-@media only screen and (max-height: 768px) {
-
-    .contenido {
-        height: 89vh;
-    }
-
-    .patient-section {
-        gap: 10px;
-        height: 92%;
-    }
-
-    .patient-email-container {
-        font-size: 14px;
-    }
-
-    .nombre {
-        font-size: 22px;
-    }
-
-    .smallText {
-        font-size: 14px;
-    }
-
-    .infoGeneral {
-        height: 180px;
-    }
-
-    .alergias,
-    .enfermedades {
-        height: 140px;
-    }
-
-    .medHis {
-        height: 350px;
-    }
-
-    .medicamentos {
-        height: 260px;
-        padding-bottom: 2px;
-    }
-
-    /* .vitals {
-        height: 280px;
-    } */
-
-    .files {
-        height: 300px;
-    }
-
-    .vitals-label {
-        font-size: 14px;
-    }
-
-    .patient-info-vert-align {
-        gap: 0px;
-    }
-
-    .appointments {
-        height: 400px;
     }
 
 }

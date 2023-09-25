@@ -19,7 +19,20 @@ const facturasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
-
+    //get name and email from user in factura
+    router.get("/idCitaFactura/:id", async (req, res) => {
+        try {
+            const connection = await pool.getConnection();
+            const sqlSelect = `select e.nombre,c.correouser  from expedientes e join citas c on  e.idpaciente = c.idpaciente where c.idcita ="${req.params.id}"`;
+            const [rows, fields] = await connection.query(sqlSelect);
+            connection.release();
+            console.log(`Get One name and email ${req.params.id} Successfull`)
+            res.json(rows)
+        } catch (err) {
+            console.log(`Get One name and email ${req.params.id} Failed. Error: ` + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
     //Get a factura by idCita
     router.get("/cita/:idCita", async (req, res) => {
         try {

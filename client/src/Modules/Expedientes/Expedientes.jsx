@@ -2,6 +2,7 @@ import React from 'react'
 import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import AddExpedientesModal from './AddExpedientesModal.jsx';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
 
 //GRID
 import { Box, Button } from '@mui/material'
@@ -49,7 +50,8 @@ const Expedientes = () => {
    //========================================================================================================================================================================================================================
    //LOGIN VALIDATION
   
-   let { isLoggedIn, userType } = useContext(AuthContext);
+   const authContext = useContext(AuthContext);
+const allowSpecialPermission = false;
 
    //========================================================================================================================================================================================================================
    //EXPEDIENTES GRID DATA
@@ -466,34 +468,6 @@ const Expedientes = () => {
    let buscaError = 0;
 
    useEffect(() => {
-      // Validación login
-      
-      if (userType === 'normal') {
-         // Create the overlay element
-         const overlay = document.createElement('div');
-         overlay.classList.add('custom-o');
-       
-         // Append the overlay to the body
-         document.body.appendChild(overlay);
-       
-         // Display swal with "Acceso restringido" message and custom styling
-         swal({
-           title: "Acceso restringido",
-           text: "",
-           icon: "warning",
-           customClass: {
-             popup: "custom-swal-popup" // Apply custom class to the modal
-           }
-         }).then(() => {
-           // Remove the overlay
-           overlay.remove();
-       
-           // Redirect user to the actual home page
-           navigate("/userpage"); // Replace "/home" with the correct home page path
-         });
-       }
-       
-
       const fetchAllExpedientes = async () => {
          try {
             const expedientesData = await ExpedientesService.getAllExpedientes();
@@ -544,11 +518,16 @@ const Expedientes = () => {
       return () => {
          window.removeEventListener("resize", handleResize);
       };
-   }, [isLoggedIn, navigate, isSubmitting]);
+   }, [navigate, isSubmitting]);
 
 
    return (
       <div className='crudGrid'>
+         <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['administrador', 'master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
          <NavBar />
          <div style={{ height: '100vh' }}>
             <div className='headerDiv'>
@@ -729,6 +708,7 @@ const Expedientes = () => {
 
             </div >
          </div >
+         </PermissionChecker>
       </div >
 
    );
