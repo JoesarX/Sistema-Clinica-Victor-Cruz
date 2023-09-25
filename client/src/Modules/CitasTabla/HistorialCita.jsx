@@ -105,7 +105,7 @@ function HistorialCita() {
 
     const [Tipo_Incapacidad, setTipo_Incapacidad] = useState(null);
     const [FechaInicial, setFechaInicial] = useState(null);
-    const [Dias, setDias] = useState(1);
+    const [Dias, setDias] = useState(0);
     const [Comentarios, setComentarios] = useState(null);
     const fechaInicio = new Date();
 
