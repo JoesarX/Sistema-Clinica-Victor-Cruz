@@ -105,7 +105,7 @@ function HistorialCita() {
 
     const [Tipo_Incapacidad, setTipo_Incapacidad] = useState(null);
     const [FechaInicial, setFechaInicial] = useState(null);
-    const [Dias, setDias] = useState(null);
+    const [Dias, setDias] = useState(1);
     const [Comentarios, setComentarios] = useState(null);
     const fechaInicio = new Date();
 
@@ -126,7 +126,7 @@ function HistorialCita() {
 
         const processAppointmentData = (paciente) => {
 
-            setAlreadyFilled(paciente.estado !== 'En Proceso');
+            setAlreadyFilled(paciente.estado !== 'En Progreso');
 
             setNewTemp(paciente.temperatura);
             setNewRitmo(paciente.ritmo_cardiaco);
@@ -409,7 +409,7 @@ function HistorialCita() {
     const formatDate = (date) => {
 
         const dateObj = new Date(date);
-        dateObj.setDate(dateObj.getDate() + 1);
+        dateObj.setDate(dateObj.getDate() );
         const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return dateObj.toLocaleDateString("es-HN", datePrefs);
     };
@@ -989,6 +989,8 @@ function HistorialCita() {
     };
     const handleExportPDFIncapacity = () => {
 
+        
+
         incapacidad.tipo = Tipo_Incapacidad;
         incapacidad.fecha_inicial = formatDate(paciente.fecha);
         const fechaString = formatDate(fechaInicio);
@@ -1345,46 +1347,37 @@ function HistorialCita() {
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div className="form-group col-md-6">
-                                        <label htmlFor="fechaInicial" className="form-label">Fecha Inicial</label>
-                                        <input
-                                            type="date"
-                                            className="form-control"
-                                            id="fechaInicial"
-                                            onChange={(e) => setFechaInicial(e.target.value)}
-                                            value={paciente !== null ? paciente.FechaInicial : getCurrentDate()} // Set the default value to the current date
-                                            disabled={alreadyFilled}
-                                        />
-                                    </div>
+                                    
 
                                     <div class="form-group col-md-3">
                                         <label htmlFor="diasDescanso" class="form-label">Cantidad de Dias</label>
                                         <input class="input-bg" id="diasDescanso"
                                             type="number"
-                                            placeholder="1"
+                                            placeholder="0"
                                             value={paciente && paciente.Dias}
                                             onChange={(e) => setDias(e.target.value)}
                                             disabled={alreadyFilled} />
                                     </div>
-
+                                </div>
                                 <div class="row mb-3">
                                     <div class="form-group col-md-12">
                                         <label htmlFor="comentarios" class="form-label">Comentarios</label>
-                                        <textarea  maxLength={maxDescriptionCharacters class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"
+                                        <textarea maxLength={maxDescriptionCharacters} class="form-control" id="comentarios" rows="5" placeholder="Escriba aquí"
                                             value={paciente && paciente.Comentarios} onChange={(e) => setComentarios(e.target.value)}
                                             disabled={alreadyFilled}></textarea>
                                     </div>
-<div>
-                                    <button onClick={handleExportPDFIncapacity} ><FontAwesomeIcon icon={faDownload} /></button>
-                                </div>
+                                    <div>
+                                        <button onClick={handleExportPDFIncapacity} ><FontAwesomeIcon icon={faDownload} /></button>
+                                    </div>
                                 </div>
                             </div>
-
                         )}
-                         <div>
-                        <button onClick={handleExportPDFInca} ><FontAwesomeIcon icon={faDownload} /></button>
+                        <div>
+                            <button onClick={handleExportPDFInca} ><FontAwesomeIcon icon={faDownload} /></button>
+                        </div>
+
                     </div>
-                    </div>
+
 
 
                 </div>
