@@ -1,5 +1,5 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material'
 import { TableView } from '@mui/icons-material'
@@ -7,6 +7,9 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import NavBar from '../NavBar';
+import PermissionChecker from '../Home/PermissionChecker.jsx';
+import { AuthContext } from '../AuthContext.js';
+
 
 import {
     PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip,
@@ -24,6 +27,8 @@ const Finanzas = () => {
     const navigate = useNavigate();
     const isLoggedIn = localStorage.getItem("400");
     let cont = 0;
+    const authContext = useContext(AuthContext);
+    const allowSpecialPermission = false;
 
     //========================================================================================================================================================================================================================
     //* ALL CHARTS
@@ -138,144 +143,150 @@ const Finanzas = () => {
 
     return (
         <div className='crudGrid'>
-            <NavBar />
-            <div style={{ height: '100vh', overflow: 'auto' }}>
-                <div className='headerDiv' style={{ position: 'fixed', width: '100%', zIndex: 1, display: 'flex', alignItems: 'center' }}>
-                    <h1>Finanzas</h1>
+            <PermissionChecker
+                userType={authContext.userType}
+                requiredPermissions={['administrador', 'master']}
+                allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
+            >
+                <NavBar />
+                <div style={{ height: '100vh', overflow: 'auto' }}>
+                    <div className='headerDiv' style={{ position: 'fixed', width: '100%', zIndex: 1, display: 'flex', alignItems: 'center' }}>
+                        <h1>Finanzas</h1>
 
-                    <Button
-                        onClick={handleOnClickTabla}
-                        startIcon={<TableView />}
-                        style={{
-                            backgroundColor: 'rgb(27, 96, 241)',
-                            color: 'white',
-                            borderRadius: '10px',
-                            paddingLeft: '15px',
-                            paddingRight: '15px',
-                            position: 'absolute', 
-                            top: '10px', 
-                            right: '10px', 
-                            marginRight: "640px", 
-                        }}
-                    >
-                        Ver Tabla
-                    </Button>
-                    <RadioGroup
-                        name="timeInterval"
-                        value={timeInterval}
-                        onChange={handleIntervalChange}
-                        row // Display radio buttons horizontally
-                        style={{ position: 'absolute', top: '10px', right: '20px', marginRight: "2%", marginLeft: "10px" }}> {/* Adjust the marginLeft here */}
-                        <FormControlLabel value="1" control={<Radio />} label="1 Mes" />
-                        <FormControlLabel value="3" control={<Radio />} label="3 Meses" />
-                        <FormControlLabel value="6" control={<Radio />} label="6 Meses" />
-                        <FormControlLabel value="12" control={<Radio />} label="1 Año" />
-                        <FormControlLabel value="999" control={<Radio />} label="Todos los Tiempos" />
-                    </RadioGroup>
-                </div>
+                        <Button
+                            onClick={handleOnClickTabla}
+                            startIcon={<TableView />}
+                            style={{
+                                backgroundColor: 'rgb(27, 96, 241)',
+                                color: 'white',
+                                borderRadius: '10px',
+                                paddingLeft: '15px',
+                                paddingRight: '15px',
+                                position: 'absolute',
+                                top: '10px',
+                                right: '10px',
+                                marginRight: "640px",
+                            }}
+                        >
+                            Ver Tabla
+                        </Button>
+                        <RadioGroup
+                            name="timeInterval"
+                            value={timeInterval}
+                            onChange={handleIntervalChange}
+                            row // Display radio buttons horizontally
+                            style={{ position: 'absolute', top: '10px', right: '20px', marginRight: "2%", marginLeft: "10px" }}> {/* Adjust the marginLeft here */}
+                            <FormControlLabel value="1" control={<Radio />} label="1 Mes" />
+                            <FormControlLabel value="3" control={<Radio />} label="3 Meses" />
+                            <FormControlLabel value="6" control={<Radio />} label="6 Meses" />
+                            <FormControlLabel value="12" control={<Radio />} label="1 Año" />
+                            <FormControlLabel value="999" control={<Radio />} label="Todos los Tiempos" />
+                        </RadioGroup>
+                    </div>
 
 
-                <div className='dataGridBox' style={{ marginTop: '60px', paddingTop: "10px", display: "flex", flexDirection: "column", width: "95%", marginLeft: "2.5%", marginRight: "2.5%" }}>
-                    <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin: "0", padding: "0" }}>
-                        <div style={{ backgroundColor: "white", height: "97%", width: "69%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Ganancias por Mes</h2>
-                            <ResponsiveContainer width="100%" height="90%" debounce="1">
-                                <ScatterChart
-                                    margin={{
-                                        top: 20,
-                                        right: 20,
-                                        bottom: 20,
-                                        left: 20,
-                                    }}
-                                >
-                                    <CartesianGrid />
-                                    <XAxis dataKey="Mes" name="Mes" />
-                                    <YAxis dataKey="Ganancias" name="Ganancias" unit="Lmp" />
-                                    <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                                    <Scatter
-                                        name="A school"
-                                        data={gananciasMesData}
-                                        fill={blueShades[fillShade]}
-                                        line={{ type: "linear", strokeWidth: 2, stroke: blueShades[fillShade] }} // Line configuration
+                    <div className='dataGridBox' style={{ marginTop: '60px', paddingTop: "10px", display: "flex", flexDirection: "column", width: "95%", marginLeft: "2.5%", marginRight: "2.5%" }}>
+                        <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", margin: "0", padding: "0" }}>
+                            <div style={{ backgroundColor: "white", height: "97%", width: "69%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                                <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Ganancias por Mes</h2>
+                                <ResponsiveContainer width="100%" height="90%" debounce="1">
+                                    <ScatterChart
+                                        margin={{
+                                            top: 20,
+                                            right: 20,
+                                            bottom: 20,
+                                            left: 20,
+                                        }}
                                     >
-                                        <LabelList dataKey="Ganancias" dx={5} dy={-15} style={{ fontSize: '16px', fontWeight: 'bold' }} />
-                                    </Scatter>
-                                </ScatterChart>
-                            </ResponsiveContainer>
+                                        <CartesianGrid />
+                                        <XAxis dataKey="Mes" name="Mes" />
+                                        <YAxis dataKey="Ganancias" name="Ganancias" unit="Lmp" />
+                                        <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+                                        <Scatter
+                                            name="A school"
+                                            data={gananciasMesData}
+                                            fill={blueShades[fillShade]}
+                                            line={{ type: "linear", strokeWidth: 2, stroke: blueShades[fillShade] }} // Line configuration
+                                        >
+                                            <LabelList dataKey="Ganancias" dx={5} dy={-15} style={{ fontSize: '16px', fontWeight: 'bold' }} />
+                                        </Scatter>
+                                    </ScatterChart>
+                                </ResponsiveContainer>
 
+                            </div>
+                            <div style={{ backgroundColor: "white", height: "97%", width: "29%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                                <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Pagos por cada Medio</h2>
+                                <ResponsiveContainer width="100%" height="90%" debounce="1">
+                                    <PieChart height={200} width={100}>
+                                        <Pie
+                                            data={metodoPagoData}
+                                            cx="50%"
+                                            cy="50%"
+                                            labelLine={false}
+                                            label={renderCustomizedLabel}
+                                            outerRadius={"70%"}
+                                            fill="#8884d8"
+                                            dataKey="value"
+                                        >
+                                            {metodoPagoData.map((entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Legend />
+                                        <Tooltip />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
-                        <div style={{ backgroundColor: "white", height: "97%", width: "29%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Pagos por cada Medio</h2>
-                            <ResponsiveContainer width="100%" height="90%" debounce="1">
-                                <PieChart height={200} width={100}>
-                                    <Pie
-                                        data={metodoPagoData}
-                                        cx="50%"
-                                        cy="50%"
-                                        labelLine={false}
-                                        label={renderCustomizedLabel}
-                                        outerRadius={"70%"}
-                                        fill="#8884d8"
-                                        dataKey="value"
+                        <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
+                            <div style={{ backgroundColor: "white", height: "97%", width: "25%", display: "flex", flexDirection: "column", justifyContent: "space-around", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                                <h2 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Usuarios Totales</h2>
+                                <h1 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize: "110px" }}>{userCountData.TotalUsers}</h1>
+                                <h3 style={{ display: "flex", alignSelf: "center", textAlign: "center", color: "green", fontSize: "21px" }}>
+                                    {userCountData.NewUsers} Usuarios Nuevos en {timeInterval} {timeInterval === 1 ? 'Mes' : 'Meses'}
+                                </h3>
+                            </div>
+                            <div style={{ backgroundColor: "white", height: "97%", width: "30%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                                <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Citas por Dia</h2>
+                                <ResponsiveContainer width="100%" height="90%" debounce="1">
+                                    <BarChart
+
+                                        data={popularDayData}
+                                        margin={{
+                                            top: 5,
+                                            right: 30,
+                                            left: 20,
+                                            bottom: 5,
+                                        }}
                                     >
-                                        {metodoPagoData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                        ))}
-                                    </Pie>
-                                    <Legend />
-                                    <Tooltip />
-                                </PieChart>
-                            </ResponsiveContainer>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="Dia" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        <Bar dataKey="Citas_Totales" fill={blueShades[fillShade]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div style={{ backgroundColor: "white", height: "97%", width: "45%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
+                                <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Citas por Hora</h2>
+                                <ResponsiveContainer width="100%" height="90%" debounce="1">
+                                    <BarChart
+                                        data={popularTimeData}
+
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="Horario" />
+                                        <YAxis />
+                                        <Tooltip />
+                                        {/* <Legend /> */}
+                                        <Bar dataKey="Citas_Totales" fill={blueShades[fillShade]} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
                         </div>
                     </div>
-                    <div style={{ height: "45vh", width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly", alignItems: "center" }}>
-                        <div style={{ backgroundColor: "white", height: "97%", width: "25%", display: "flex", flexDirection: "column", justifyContent: "space-around", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Usuarios Totales</h2>
-                            <h1 style={{ display: "flex", alignSelf: "center", textAlign: "center", fontSize: "110px" }}>{userCountData.TotalUsers}</h1>
-                            <h3 style={{ display: "flex", alignSelf: "center", textAlign: "center", color: "green", fontSize: "21px" }}>
-                                {userCountData.NewUsers} Usuarios Nuevos en {timeInterval} {timeInterval === 1 ? 'Mes' : 'Meses'}
-                            </h3>
-                        </div>
-                        <div style={{ backgroundColor: "white", height: "97%", width: "30%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Citas por Dia</h2>
-                            <ResponsiveContainer width="100%" height="90%" debounce="1">
-                                <BarChart
-
-                                    data={popularDayData}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="Dia" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Bar dataKey="Citas_Totales" fill={blueShades[fillShade]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                        <div style={{ backgroundColor: "white", height: "97%", width: "45%", display: "flex", flexDirection: "column", alignSelf: "center", padding: "10px", borderRadius: "20px", margin: "5px", marginTop: "0" }}>
-                            <h2 style={{ alignSelf: "center", textAlign: "center", fontSize: "25px" }}>Citas por Hora</h2>
-                            <ResponsiveContainer width="100%" height="90%" debounce="1">
-                                <BarChart
-                                    data={popularTimeData}
-
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="Horario" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    {/* <Legend /> */}
-                                    <Bar dataKey="Citas_Totales" fill={blueShades[fillShade]} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
                 </div>
-            </div>
+            </PermissionChecker>
         </div>
     );
 

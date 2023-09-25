@@ -47,10 +47,28 @@
 
 /* /////////////////////////////////////////// */
 
-.scrollable-page {
+.scrollable-pageeee {
   background-color: #E4EBF9;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-sizing: border-box;
 }
+
+.contenidoss {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: row;
+  align-items: center; 
+  justify-content: center; 
+  margin: 10px; 
+  padding: 20px; 
+  box-sizing: border-box;
+  gap: 20px;
+}
+
+
 
 .pat-fil {
   width: 50%;
@@ -195,36 +213,15 @@
 }
 
 .appointments-section {
-  max-height: 100%;
-  gap: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 20px;
   height: 100%;
-  width: 40%;
+  width: 50%;
 }
 
-.contenidos {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-evenly;
-  left: 50%;
-  width: 100%;
-  height: 70%;
-  margin: 0%;
-  padding: 0%;
-  margin-top: 10px;
-  margin-bottom: 0px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-}
+
 
 .box-title {
   height: fit-content;
@@ -491,7 +488,7 @@
     margin-top: 200px;
   } */
 }
-@media (max-width: 944px){
+@media (max-width: 904px){
   .pat-fil{
     width: 80%;
   }
@@ -536,8 +533,7 @@
     width: 100%;
   }
 
-  .contenidos {
-    margin-top: 50%;
+  .contenidoss {
     flex-direction: column;
     align-items: stretch;
     padding: 10px;

@@ -7,6 +7,14 @@
     z-index: 5;
 }
 
+.nombreUserL{
+    font-size: 18px;
+}
+.nomLCs{
+    width: 380px;
+}
+
+
 .navbar-brand {
     font-family: 'Montserrat';
     padding: 10px 20px;
@@ -64,11 +72,25 @@
 
 .nav-item-dropdown{
     position: relative;
-    left: -40%;
 }
 
 .dropdown-item{
     font-family: 'Montserrat';
     font-size: medium;
     color: aliceblue;
+}
+.dropdown-menu.custom-colors.independent {
+    position: absolute;
+    top: 100%; 
+    left: 180px;
+    z-index: 1000;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); 
+}
+@media (max-width: 768px) {
+    .nomLCs {
+        width: 200px;
+    }
+    .dropdown-menu.custom-colors.independent {
+        left: 20px;
+    }
 }

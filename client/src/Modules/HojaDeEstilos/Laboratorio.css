@@ -330,4 +330,7 @@
   .buttons button {
     margin: 5px 0;
   }
+  .transaction-button{
+    margin-left: 13%;
+  }
 }

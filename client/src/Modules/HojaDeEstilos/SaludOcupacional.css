@@ -125,21 +125,16 @@
 .salud-container {
   display: flex;
   justify-content: space-between;
-  /* Distribuye los elementos en el espacio disponible */
   flex-wrap: wrap;
-  /* Si el espacio es insuficiente, los elementos se envuelven en filas */
 }
 
 .salud-container>div {
   flex: 1;
-  /* Ocupa igualmente el espacio disponible en la fila */
   padding: 2.5rem;
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0.2rem 0.2rem 0.5rem rgba(0, 0, 0, 0.1);
   margin: 5rem 3rem;
-  /* Agrega un margen a los lados para separarlos horizontalmente */
-  max-width: 1000px;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -160,7 +155,6 @@
   font-size: 20px;
   margin-top: 8%;
   color: #555;
-  line-height: 1.6;
   margin: 0 5%;
   text-align: justify;
 }

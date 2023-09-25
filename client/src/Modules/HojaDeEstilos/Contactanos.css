@@ -46,7 +46,7 @@
 
 @media (max-width: 992px) {
     .medios {
-        height: calc(100vh - 70px);
+       height: calc(100vh - 70px);
     }
 
     .contactos {
@@ -124,13 +124,7 @@ section {
     font-family: 'Montserrat';
 }
 
-.medios {
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: 'Montserrat';
-}
+
 
 .contactos {
     margin-left: 15%;
@@ -145,46 +139,52 @@ section {
     display: flex;
     justify-content: center;
     align-items: top;
-    height: 150px;
-    width: 1000px;
+    flex-wrap: wrap;
 }
 
-.box {
-    text-align: center;
-    margin: 100px;
-    background-color: #C8DAFF;
-    height: 120px;
-    margin-top: 0px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    padding: 10px;
-}
+
 
 .box:hover {
     transform: scale(1.05);
     box-shadow: 0.3em 0.3em 0.5em rgba(0, 0, 0, 0.3)
 }
 
-.cont {
-    display: flex;
-    flex-wrap: wrap;
-}
+
 
 .box {
-    flex: 1 1 300px;
     text-align: center;
+    background-color: #C8DAFF;
+    height: 120px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    padding: 10px;
     margin: 10px;
-}
-
-@media screen and (max-width: 768px) {
+  }
+  .medios {
+    height: 50vh; /* Ensure the element takes at least the full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Montserrat';
+    padding: 10px;
+    box-sizing: border-box; /* Include padding in element's total height */
+  }
+  
+  
+  @media screen and (max-width: 768px) {
     .box {
-        flex-basis: calc(50% - 20px);
+      flex-basis: calc(50% - 20px);
     }
-}
-
-@media screen and (max-width: 480px) {
+  }
+  
+  @media screen and (max-width: 480px) {
     .box {
-        flex-basis: calc(100% - 20px);
+      flex-basis: calc(100% - 20px);
     }
-}
+  }
+  
+  .footer {
+    margin-top: 20px; /* Adjust as needed */
+  }
+  
