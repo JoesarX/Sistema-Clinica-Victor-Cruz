@@ -872,7 +872,7 @@ function HistorialCita() {
             format: [5.5, 4.25]
         });
         const type = incapacidadData.tipo;
-        const initial = incapacidadData.fecha_inicial;
+        const initial = fecha;
         const days = incapacidadData.dias;
         doc.addImage(imageURL, "JPEG", 0.15, 0.15, 1, 1);
 
@@ -905,7 +905,7 @@ function HistorialCita() {
         doc.text("Edad:", 4.25, 1.60);
         doc.text([edad] + "", 4.62, 1.57);
         doc.text("Fecha:", 1.2, 1.90);
-        doc.text([fecha], 2.30, 1.85);
+        doc.text([incapacidadData.fecha_inicial], 2.30, 1.85);
 
         doc.text("Medicina General", 0.15, 1.5);
         doc.text("Control de Embarazo", 0.15, 2);
@@ -994,19 +994,10 @@ function HistorialCita() {
         incapacidad.tipo = Tipo_Incapacidad;
         incapacidad.fecha_inicial = formatDate(paciente.fecha);
         const fechaString = formatDate(fechaInicio);
-        console.log(fechaInicio)
-        console.log(fechaString)
         const originalDate = new Date(fechaInicio);
-        console.log(originalDate)
-        console.log(fechaInicio.getDate())
+        fechaInicio.setDate(originalDate.getDate() + 1);
         originalDate.setDate(fechaInicio.getDate() + parseInt(Dias));
-        console.log(originalDate)
-
-
-
         incapacidad.dias = formatDate(originalDate);
-        console.log(incapacidad.dias)
-
         generatePDFIncapacity(medicamentosData, incapacidad, paciente.nombre, paciente.edad, formatDate(fechaInicio));
     };
 
