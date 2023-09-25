@@ -1086,6 +1086,9 @@ function HistorialCita() {
                                 </div>
                             </div>
                         </div>
+                        <button class='appointment-history-end-button' onClick={handleExportPDFInca}>
+                            Exportar Detalles
+                        </button>
                         {!alreadyFilled &&
                             <button className='appointment-history-end-button' onClick={() => submitEdit()}>
                                 Terminar Cita
@@ -1121,9 +1124,6 @@ function HistorialCita() {
                                         </div>
                                     </div>
                                 </div>
-
-
-
                                 <div className="col">
                                     <h4 className='headers'>Peso</h4>
                                     <div class="input-group">
@@ -1288,7 +1288,7 @@ function HistorialCita() {
                                 </div>
                             </div>
                             <div>
-                                <button onClick={handleExportPDFDiagno} ><FontAwesomeIcon icon={faDownload} /></button>
+                                <button class='file-interaction-button medicine-interaction misc' onClick={handleExportPDFDiagno} ><FontAwesomeIcon icon={faDownload} /></button>
                             </div>
 
                         </div>
@@ -1355,19 +1355,12 @@ function HistorialCita() {
                                             disabled={alreadyFilled}></textarea>
                                     </div>
                                     <div>
-                                        <button onClick={handleExportPDFIncapacity} ><FontAwesomeIcon icon={faDownload} /></button>
+                                        <button class='file-interaction-button medicine-interaction' onClick={handleExportPDFIncapacity} ><FontAwesomeIcon icon={faDownload} /></button>
                                     </div>
                                 </div>
                             </div>
                         )}
-                        <div>
-                            <button onClick={handleExportPDFInca} ><FontAwesomeIcon icon={faDownload} /></button>
-                        </div>
-
                     </div>
-
-
-
                 </div>
             </PermissionChecker>
         </div>

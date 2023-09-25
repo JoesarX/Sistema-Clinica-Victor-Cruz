@@ -328,7 +328,7 @@ const Topbar = () => {
                         )}
                     </div>
                     <div className="col-md-3 col-lg-4 col-xl-3 mx-auto text-center">
-                        <FontAwesomeIcon icon={faEnvelope} />
+                        <FontAwesomeIcon icon={faPhone} />
                         <div className="spacing" />
                         {isEditing1 ? (
                             <>
@@ -357,7 +357,7 @@ const Topbar = () => {
                         )}
                     </div>
                     <div className="col-md-3 col-lg-4 col-xl-3 mx-auto text-center">
-                        <FontAwesomeIcon icon={faPhone} />
+                        <FontAwesomeIcon icon={faEnvelope} />
                         <div className="spacing" />
                         {isEditing2 ? (
                             <>
