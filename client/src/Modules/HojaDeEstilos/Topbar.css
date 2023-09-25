@@ -9,7 +9,14 @@
 
 .nombreUserL{
     font-size: 18px;
-    word-break: break-all;
+}
+.nomLCs{
+    width: 380px;
+}
+@media (max-width: 768px) {
+    .nomLCs {
+        width: 300px;
+    }
 }
 
 .navbar-brand {

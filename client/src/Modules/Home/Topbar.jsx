@@ -113,25 +113,25 @@ const Topbar = () => {
                         <div class="nav-link" >AGENDA TU CITA</div>
                     </li>
                 </ul>
-                <ul class="navbar-nav custom-colors mr-0">
+                <ul class="navbar-nav custom-colors mr-0" >
                     {!isLoggedIn && (
                         <li className="nav-item text">
                             <div class="nav-link" onClick={handleIniciarClick}><FontAwesomeIcon icon={faUser} /> INICIAR SESIÓN</div>
                         </li>
                     )}
                     {isLoggedIn && (
-                        <div>
+                        <div className='nomLCs'  >
                             {userType === 'normal' && (
                                 // Content for normal user dropdown menu
-                                <li className="nav-item dropdown" style={{ width: '200px' }}>
+                                <li className="nav-item dropdown" >
                                     <div className="d-flex justify-content-end">
-                                        <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ maxWidth: '100%', whiteSpace: 'normal' }}>
+                                        <div className="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ whiteSpace: 'normal' }}>
                                             <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
                                                 {nombre}
                                             </span>
                                         </div>
 
-                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
+                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute'}}>
                                             <div className="dropdown-item" onClick={handlePerfil}>VER PERFIL</div>
                                             <div className="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
                                         </div>
@@ -143,13 +143,14 @@ const Topbar = () => {
 
                             {userType === 'administrador' && (
                                 // Content for administrator dropdown menu
-                                <li className="nav-item dropdown" style={{ width: '200px' }}>
+                                <li className="nav-item dropdown" >
                                     <div className="d-flex justify-content-end">
-                                    <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ maxWidth: '100%', whiteSpace: 'normal' }}>
+                                        <div className="nav-link dropdown-toggle" style={{ width: '100px' }} role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
                                                 {nombre}
                                             </span>
                                         </div>
+
                                         <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
                                             < div class="dropdown-item" onClick={handleVerDashboard}>VER DASHBOARD</div>
                                             <div class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
@@ -159,7 +160,7 @@ const Topbar = () => {
                             )}
                             {userType === 'master' && (
                                 // Content for master user dropdown menu
-                                <li className="nav-item dropdown" style={{ width: '200px' }}>
+                                <li className="nav-item dropdown" >
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ maxWidth: '100%', whiteSpace: 'normal' }}>
                                             <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>

@@ -803,14 +803,14 @@ const LandingPage = () => {
 
     return (
 
-        <div className='scrollable-pageee'>
+        <div className='scrollable-pageeee'>
             <PermissionChecker
                 userType={authContext.userType}
-                requiredPermissions={['normal']}
+                requiredPermissions={['normal','administrador','master']}
                 allowSpecialPermission={allowSpecialPermission ? 'specialPermission' : null}
             >
                 <TopBar />
-                <div className='contenidos'>
+                <div className='contenidoss'>
                     <div className='pat-fil'>
                         <div className='patient-sections'>
                             <div className='profile-picture-and-edits'>

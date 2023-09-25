@@ -133,7 +133,7 @@ const SaludOcupacional = () => {
         const [editable, setEditable] = useState(false);
         const [editedTitle, setEditedTitle] = useState(title);
         const [editedDescription, setEditedDescription] = useState(description);
-        const MAX_TITLE_LENGTH = 25;
+        const MAX_TITLE_LENGTH = 46;
         const MAX_DESC_LENGTH = 400;
 
         const handleEditToggle = () => {
@@ -172,10 +172,10 @@ const SaludOcupacional = () => {
 
         // Check if title starts with an uppercase letter and is within 25 characters
         if (
-            trimmedTitle.length > 35
+            trimmedTitle.length > 46
         ) {
 
-            swal("Asegúrate de que el título inicie con mayúscula y que no exceda los 35 caracteres.", {
+            swal("Asegúrate de que el título inicie con mayúscula y que no exceda los 46 caracteres.", {
                 icon: "error",
             });
             return;
@@ -191,7 +191,7 @@ const SaludOcupacional = () => {
         }
 
         // Check if the description has more than 80 characters
-        if (trimmedDescription.length > 350) {
+        if (trimmedDescription.length > 400) {
             swal("Error, La descripción no puede exceder los 350 caracteres.", {
                 icon: "error",
             });
@@ -272,8 +272,10 @@ const SaludOcupacional = () => {
                 }
                 FetchCargarInfo();
                 setIsFetching(false);
+                
             }
         }, []);
+
 
 
         return (
@@ -568,18 +570,19 @@ const SaludOcupacional = () => {
                     TipoDesc={textoQueEsSaludOcupacional}
                 />
                 <Parte1Component
-                    title={tituloAuditor.texto_campo}
-                    description={textoAuditor.texto_campo}
-                    isEditMode={editAll}
-                    TipoTitulo={tituloAuditor}
-                    TipoDesc={textoAuditor}
-                />
-                <Parte1Component
                     title={porqueImporta.texto_campo}
-                    description={textoPorqueImporta.texto_campo}
+                    description={textoPorqueImporta.texto_campo.trim()}
                     isEditMode={editAll}
                     TipoTitulo={porqueImporta}
                     TipoDesc={textoPorqueImporta}
+                />
+                <Parte1Component
+                    title={tituloAuditor.texto_campo}
+                    description={textoAuditor.texto_campo.trim()}
+
+                    isEditMode={editAll}
+                    TipoTitulo={tituloAuditor}
+                    TipoDesc={textoAuditor}
                 />
             </div>
             {isLoggedIn && userType !== 'normal' && (
