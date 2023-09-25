@@ -51,15 +51,15 @@ const facturasRouter = (pool, transporter) => {
     //Get a factura by idCita formatted by Adrian
     router.get("/facturas-with-cita/:id", async (req, res) => {
         try {
-            
+
             const connection = await pool.getConnection();
-            const sqlSelect = 
-                "SELECT f.idFactura, f.nombre_paciente, f.idCita, f.isPagada, f.total, DATE_FORMAT(c.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, " 
+            const sqlSelect =
+                "SELECT f.idFactura, f.nombre_paciente, f.idCita, f.isPagada, f.total, DATE_FORMAT(c.fecha, '%d/%m/%Y') as fecha, DATE_FORMAT(c.hora, '%l:%i %p') AS hora, "
                 + "f.metodoPago, f.rtn, f.correo "
                 + " FROM facturas f INNER JOIN citas c ON f.idCita = c.idcita WHERE f.idFactura = " + req.params.id;
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
-            
+
             res.json(rows[0]);
         } catch (err) {
             console.log(`Get One factura ${req.params.id} Failed. Error: ` + err);
@@ -83,14 +83,14 @@ const facturasRouter = (pool, transporter) => {
         }
     });
 
-    
+
 
     //============================================== P O S T S ==================================================================
     //Add a new factura
     router.post("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            
+
             await connection.query("SET time_zone = 'America/Guatemala'");
             const q =
                 "INSERT INTO `facturas` (`nombre_paciente`, `idCita`, `isPagada`, `total`, `metodoPago`, `rtn`, `correo`)  VALUES (?)";
@@ -110,8 +110,8 @@ const facturasRouter = (pool, transporter) => {
             const facturaId = result.insertId;
             // Construct the URL
             const checkoutURL = `/checkout/${facturaId}`;
-           
-                const mailOptions = {
+
+            const mailOptions = {
                 from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
                 to: req.body.correo,
                 subject: "Factura de Cita Clinica Dr Victor Cruz",
@@ -124,13 +124,13 @@ const facturasRouter = (pool, transporter) => {
                     `El equipo de la Clínica Dr. Victor Cruz`,
 
             };
-            if(req.body.correo!==null){
+            if (req.body.correo !== null) {
                 await transporter.sendMail(mailOptions);
             }
-           
+
             connection.release();
             console.log("Post factura Successfull");
-            res.json("Factura añadida exitosamente!");
+            res.json(facturaId);
         } catch (err) {
             console.log("Post factura Failed. Error: " + err);
             res.status(500).json({ error: "Internal Server Error" });

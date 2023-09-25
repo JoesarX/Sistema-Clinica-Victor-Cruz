@@ -67,7 +67,6 @@ export const postFactura = async (factura) => {
         const res = await axios.post(`${API_URL}/facturas`, factura);
         return res.data;
     } catch (error) {
-        
         throw error;
     }
 };

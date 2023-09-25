@@ -600,7 +600,7 @@ const Acercade = () => {
                   value={mision}
                   style={{ fontSize: '18px', maxHeight: '250px', wordWrap: 'breakWord', width: '100%' }}
                   onChange={handleMisionChange}
-                   maxLength={maxDescriptionCharacters}
+                  maxLength={maxDescriptionCharacters}
                 >
                 </textarea>
                 <div style={{ display: 'flex', flexDirection: 'row', gap: '20px', justifyContent: 'center' }}>
