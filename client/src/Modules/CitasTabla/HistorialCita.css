@@ -308,6 +308,11 @@
     width: 40px;
     height: 40px;
 }
+
+.file-interaction-button.misc {
+    background-color: white;
+}
+
 /* Responsive styles for screens between 820px and 950px */
 @media only screen and (min-width: 820px) and (max-width: 950px) {
     /* Default styles */
