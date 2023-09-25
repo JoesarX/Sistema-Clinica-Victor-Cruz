@@ -699,6 +699,15 @@ const Dashboard = () => {
         const { nombre_persona, estado } = cita
         var lettersRegex = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/;
         //Nombre validations
+        if (userType === 'normal') {
+            console.log(schAppointments.length);
+            if (schAppointments.length !== 0) {
+                swal("Ya tiene una cita Agendada.", {
+                    icon: "error",
+                });
+                return false;
+            }
+        }
         if (nombre_persona === null || nombre_persona === '') {
             swal("Debe Agregarle un nombre a la Cita!", {
                 icon: "error",
@@ -1372,13 +1381,13 @@ const Dashboard = () => {
                         </div>
                 </Modal>
                 <div class="patient-section appointments-section">
-                    {userType !== 'normal' && (
+                    
                         <button class='large-button schedule-date' onClick={toggleModal}>
                             <FontAwesomeIcon icon={faCalendarPlus} />
                             Agendar Cita
                         </button>
                         
-                    )}
+                    
                     <div class='appointments-container'>
                         <div>
                             <div class='box-title appointments-title'>Citas Agendadas</div>
