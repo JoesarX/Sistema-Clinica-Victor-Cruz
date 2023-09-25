@@ -1289,16 +1289,6 @@ function HistorialCita() {
                                     ></textarea>
                                 </div>
                             </div>
-
-                            <h4 className='headers'>Historial de Medicamentos Actuales</h4>
-                            <div className="form-group">
-                                <textarea
-                                    className="form-control input-bg"
-                                    rows="5"
-                                    placeholder="Escriba aquí"
-                                    onChange={(e) => setMedicamentosActuales(e.target.value)}
-                                ></textarea>
-                            </div>
                             <div>
                                 <button onClick={handleExportPDFDiagno} ><FontAwesomeIcon icon={faDownload} /></button>
                             </div>
