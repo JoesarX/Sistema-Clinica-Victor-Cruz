@@ -320,7 +320,7 @@ function Factura() {
         }));
         console.log(resultArray);
         doc.autoTable({
-            head: [['DESCRIPCIÓN', 'CANT', 'PRECIO UNITARIO', 'MONTO'],],
+            head: [['DESCRIPCION', 'CANT', 'PRECIO UNITARIO', 'MONTO'],],
             body: resultArray.map((service) => [
                 service.name,
                 service.quantity,
@@ -357,10 +357,8 @@ function Factura() {
             theme: 'striped',
             
              body:  [
-                ["SUBTOTAL","L. " + subtotal + ".00"],
-                 ["TASA DE IMPUESTO","15%"],
-                 ["ISV","L. " + (subtotal * 0.15) + ".00"],
-                 ["TOTAL","L. " + (subtotal + (subtotal * 0.15)) + ".00"]
+                ["TOTAL","L. " + subtotal + ".00"],
+                
                 ],
              
  
