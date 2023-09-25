@@ -37,7 +37,7 @@ const textos_cmdRouter = (pool) => {
     router.get("/saludOcupacional", async (req, res) => {
         try {
             const connection = await pool.getConnection();
-            const sqlSelect = "SELECT texto_campo FROM textos_cmd  WHERE Tipo in ('tituloSaludOcupacional','textoQueEsSaludOcupacional','porqueImporta','textoPorqueImporta','subTituloSaludOcupacional','tituloItem1SaludOcupacional','tituloItem2SaludOcupacional','tituloItem3SaludOcupacional','textoItem1SaludOcupacional','textoItem2SaludOcupacional','textoItem3SaludOcupacional')"
+            const sqlSelect = "SELECT texto_campo FROM textos_cmd  WHERE Tipo in ('tituloSaludOcupacional','textoQueEsSaludOcupacional','porqueImporta','textoPorqueImporta','subTituloSaludOcupacional','tituloItem1SaludOcupacional','tituloItem2SaludOcupacional','tituloItem3SaludOcupacional','textoItem1SaludOcupacional','textoItem2SaludOcupacional','textoItem3SaludOcupacional','tituloAuditor','textoAuditor')"
             ; 
             const [rows, fields] = await connection.query(sqlSelect);
             connection.release();
