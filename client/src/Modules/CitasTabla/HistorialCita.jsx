@@ -409,7 +409,14 @@ function HistorialCita() {
     const formatDate = (date) => {
 
         const dateObj = new Date(date);
-        dateObj.setDate(dateObj.getDate() );
+        dateObj.setDate(dateObj.getDate() + 1);
+        const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
+        return dateObj.toLocaleDateString("es-HN", datePrefs);
+    };
+    const formatDate2 = (date) => {
+
+        const dateObj = new Date(date);
+        dateObj.setDate(dateObj.getDate());
         const datePrefs = { year: 'numeric', month: 'long', day: 'numeric' };
         return dateObj.toLocaleDateString("es-HN", datePrefs);
     };
@@ -428,7 +435,7 @@ function HistorialCita() {
 
 
         const type = incapacidadData.tipo;
-        const initial = incapacidadData.fecha_inicial;
+        const initial = fecha;
         const days = incapacidadData.dias;
         const doc = new jsPDF({
             orientation: "portrait",
@@ -464,7 +471,7 @@ function HistorialCita() {
         doc.text("Edad:", 6.2, 1.80);
         doc.text([edad] + "", 6.72, 1.77);
         doc.text("Fecha:", 1.5, 2.10);
-        doc.text([fecha], 3.3, 2.05);
+        doc.text([incapacidadData.fecha_inicial], 3.3, 2.05);
 
 
 
@@ -981,11 +988,11 @@ function HistorialCita() {
         incapacidad.fecha_inicial = formatDate(paciente.fecha);
         const fechaString = formatDate(fechaInicio);
         const originalDate = new Date(fechaInicio);
+        fechaInicio.setDate(originalDate.getDate() + 1);
         originalDate.setDate(fechaInicio.getDate() + parseInt(Dias));
-
         incapacidad.dias = formatDate(originalDate);
 
-        generatePDFSummary(medicamentosData, incapacidad, paciente.nombre, paciente.edad, formatDate(fechaInicio));
+        generatePDFSummary(medicamentosData, incapacidad, paciente.nombre, paciente.edad, formatDate2(fechaInicio));
     };
     const handleExportPDFIncapacity = () => {
 
@@ -998,7 +1005,7 @@ function HistorialCita() {
         fechaInicio.setDate(originalDate.getDate() + 1);
         originalDate.setDate(fechaInicio.getDate() + parseInt(Dias));
         incapacidad.dias = formatDate(originalDate);
-        generatePDFIncapacity(medicamentosData, incapacidad, paciente.nombre, paciente.edad, formatDate(fechaInicio));
+        generatePDFIncapacity(medicamentosData, incapacidad, paciente.nombre, paciente.edad, formatDate2(fechaInicio));
     };
 
     const handleExportPDFDiagno = () => {
@@ -1017,7 +1024,7 @@ function HistorialCita() {
         incapacidad.dias = formatDate(originalDate);
         console.log(incapacidad.dias)
 
-        generatePDFDiagno(medicamentosData, incapacidad, paciente.nombre, paciente.edad, formatDate(fechaInicio));
+        generatePDFDiagno(medicamentosData, incapacidad, paciente.nombre, paciente.edad, formatDate2(fechaInicio));
     };
 
     const handleProfileClick = () => {
