@@ -79,7 +79,7 @@
     font-size: medium;
     color: aliceblue;
 }
-.dropdown-menu.custom-colors {
+.dropdown-menu.custom-colors.independent {
     position: absolute;
     top: 100%; 
     left: 180px;
@@ -90,7 +90,7 @@
     .nomLCs {
         width: 200px;
     }
-    .dropdown-menu.custom-colors {
+    .dropdown-menu.custom-colors.independent {
         left: 20px;
     }
 }
