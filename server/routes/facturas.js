@@ -87,6 +87,7 @@ const facturasRouter = (pool, transporter) => {
 
     //============================================== P O S T S ==================================================================
     //Add a new factura
+    let facturaId = 0;
     router.post("/", async (req, res) => {
         try {
             const connection = await pool.getConnection();
@@ -107,26 +108,9 @@ const facturasRouter = (pool, transporter) => {
             ];
             const [result, _] = await connection.query(q, [values]);
             // Get the ID of the newly inserted factura
-            const facturaId = result.insertId;
+            facturaId = result.insertId;
             // Construct the URL
-            const checkoutURL = `/checkout/${facturaId}`;
 
-            const mailOptions = {
-                from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
-                to: req.body.correo,
-                subject: "Factura de Cita Clinica Dr Victor Cruz",
-                text: `Estimado/a ${req.body.nombre_paciente}, Le recordamos el pago a hacerse para la cita: ${req.body.idCita}\n` +
-                    `Con un total de: LPS. ${req.body.total}\n` +
-                    `Puede realizar el pago siguiendo este enlace: https://clinica-victorcruz.netlify.app${checkoutURL} \n` +
-                    `Si tiene alguna duda no dude en contactarnos.\n` +
-                    `¡Que tenga un buen día!\n\n` +
-                    `Atentamente,\n` +
-                    `El equipo de la Clínica Dr. Victor Cruz`,
-
-            };
-            if (req.body.correo !== null) {
-                await transporter.sendMail(mailOptions);
-            }
 
             connection.release();
             console.log("Post factura Successfull");
@@ -136,6 +120,48 @@ const facturasRouter = (pool, transporter) => {
             res.status(500).json({ error: "Internal Server Error" });
         }
     });
+
+    router.post("/sendEmail", async (req, res) => {
+        const checkoutURL = `/checkout/${facturaId}`;
+
+        try {
+            const { pdfData, factura } = req.body;
+            console.log('pdfData:', pdfData);
+            console.log('factura:', factura);
+
+              const mailOptions = {
+                  from: '"Clinica Dr Victor Cruz" <ClinicaVictorCruz@gmail.com>',
+                  to: factura.correo,
+                  subject: "Factura de Cita Clinica Dr Victor Cruz",
+                  text: `Estimado/a ${factura.nombre_paciente}, Le recordamos el pago a hacerse para la cita: ${factura.idCita}\n` +
+                      `Con un total de: LPS. ${factura.total}\n` +
+                      `Puede realizar el pago siguiendo este enlace: https://clinica-victorcruz.netlify.app${checkoutURL} \n` +
+                      `Si tiene alguna duda no dude en contactarnos.\n` +
+                      `¡Que tenga un buen día!\n\n` +
+                      `Atentamente,\n` +
+                      `El equipo de la Clínica Dr. Victor Cruz`,
+                  attachments:[
+                      {
+                          filename: 'factura.pdf',
+                          content: pdfData,
+                      }
+                  ]
+  
+              };
+              if (req.body.correo !== null) {
+                  await transporter.sendMail(mailOptions);
+              }
+
+            res.status(200).send('Email sent successfully');
+        } catch (err) {
+            console.log("Send factura Failed. Error: " + err);
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+
+
+    });
+
+
 
 
     //============================================== P U T S ==================================================================

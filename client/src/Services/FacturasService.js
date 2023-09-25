@@ -110,6 +110,19 @@ export const deleteFacturaByCita = async (idCita) => {
     }
 };
 
+export const sendFactura = async (pdfData,factura) => {
+    console.log(pdfData)
+    console.log(factura)
+    try {
+        await axios.post(`${API_URL}/facturas/sendEmail`, {pdfData,factura});
+    } catch (error) {
+        
+        throw new Error('Failed to send factura');
+    }
+    
+}
+
+
 
 const Services = {
     getAllFacturas,
@@ -122,6 +135,7 @@ const Services = {
     deleteFactura,
     deleteFacturaByCita,
     getOneFacturaWithCita,
+    sendFactura
     
     // Other functions
 };

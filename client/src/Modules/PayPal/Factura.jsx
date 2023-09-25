@@ -151,6 +151,7 @@ function Factura() {
             setTotal(0);
             setCorreo('')
             generatePDF(formatDate(fechaInicio),idie);
+            await Services.sendFactura(pdfData,facturaToSend);
             navigate('/citas_tabla');
         } else {
             const errorMessage = Object.values(errors).join('\n');
@@ -251,6 +252,8 @@ function Factura() {
         backgroundColor: '#062460',
     };
 
+    let pdfData = null;
+
     const generatePDF = (fecha,idie) => {
         console.log(idie)
         const id2 = idie;
@@ -261,7 +264,7 @@ function Factura() {
         });
         doc.setFont("helvetica", "bold");
         doc.setFontSize(14);
-        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 0.75);
+        doc.text("Clinica Medica Dr. Victor Cruz Andino", 0.5, 0.75);
         doc.setFontSize(15)
         doc.setTextColor(169, 169, 169)
         doc.text("FACTURA",7, 0.6);
@@ -279,7 +282,7 @@ function Factura() {
         
      
         doc.text("Tegucigalpa, 11101", 0.5, 1.25);
-        doc.text("Teléfono: 2230-3901, Celular: 9689-4453", 0.5, 1.5);
+        doc.text("Telefono: 2230-3901, Celular: 9689-4453", 0.5, 1.5);
         doc.setFont("helvetica", "bold");
         
         doc.setFont("helvetica", "normal")
@@ -289,10 +292,10 @@ function Factura() {
         }else{
             doc.text("RTN: NA", 0.5, 2.20);
         }
-        doc.text("Clínica Medica Dr. Victor Cruz Andino", 0.5, 2.35);
+        doc.text("Clinica Medica Dr. Victor Cruz Andino", 0.5, 2.35);
         doc.text("Colonia Kennedy al final de la Calle Comercial, contiguo a BANRURAL", 0.5, 2.5);
         doc.text("Tegucigalpa, 11101", 0.5, 2.65);
-        doc.text("Teléfono: 2230-3901, Celular: 9689-4453", 0.5, 2.8);
+        doc.text("Telefono: 2230-3901, Celular: 9689-4453", 0.5, 2.8);
         const serviceCounts = {};
         serviciosSeleccionados.forEach((service) => {
             const serviceName = service.servicio;
@@ -382,7 +385,7 @@ function Factura() {
          doc.text("GRACIAS POR SU CONFIANZA",8.5/2,10, {align: "center"})
 
        
-          
+        pdfData = doc.output();
         doc.save('Factura_' + nombre + '_' + fecha + '.pdf');
     };
 
