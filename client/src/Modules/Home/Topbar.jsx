@@ -123,7 +123,7 @@ const Topbar = () => {
                         <div className='nomLCs'  >
                             {userType === 'normal' && (
                                 // Content for normal user dropdown menu
-                                <li className="nav-item dropdown" >
+                                <li className="nav-item-dropdown" >
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ whiteSpace: 'normal' }}>
                                             <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
@@ -131,7 +131,7 @@ const Topbar = () => {
                                             </span>
                                         </div>
 
-                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute'}}>
+                                        <div className="dropdown-menu custom-colors" >
                                             <div className="dropdown-item" onClick={handlePerfil}>VER PERFIL</div>
                                             <div className="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
                                         </div>
@@ -143,7 +143,7 @@ const Topbar = () => {
 
                             {userType === 'administrador' && (
                                 // Content for administrator dropdown menu
-                                <li className="nav-item dropdown" >
+                                <li className="nav-item-dropdown" >
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" style={{ width: '100px' }} role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
@@ -151,7 +151,7 @@ const Topbar = () => {
                                             </span>
                                         </div>
 
-                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
+                                        <div className="dropdown-menu custom-colors" >
                                             < div class="dropdown-item" onClick={handleVerDashboard}>VER DASHBOARD</div>
                                             <div class="dropdown-item" onClick={handleSignOutClick}>CERRAR SESIÓN</div>
                                         </div>
@@ -160,7 +160,7 @@ const Topbar = () => {
                             )}
                             {userType === 'master' && (
                                 // Content for master user dropdown menu
-                                <li className="nav-item dropdown" >
+                                <li className="nav-item-dropdown" >
                                     <div className="d-flex justify-content-end">
                                         <div className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ maxWidth: '100%', whiteSpace: 'normal' }}>
                                             <span className='nombreUserL' style={{ fontSize: '18px', color: 'white' }}>
@@ -169,7 +169,7 @@ const Topbar = () => {
                                         </div>
 
 
-                                        <div className="dropdown-menu custom-colors" style={{ position: 'absolute' }}>
+                                        <div className="dropdown-menu custom-colors" >
                                             <div class="dropdown-item" onClick={handleMedicamentos}>MEDICAMENTOS</div>
                                             <div class="dropdown-item" onClick={handleExpedientes}>EXPEDIENTES</div>
                                             <div class="dropdown-item" onClick={handleColaboradores}>COLABORADORES</div>
