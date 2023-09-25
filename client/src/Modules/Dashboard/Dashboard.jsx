@@ -11,6 +11,16 @@ import { faTemperatureLow } from '@fortawesome/free-solid-svg-icons';
 import { faHeartPulse } from '@fortawesome/free-solid-svg-icons';
 import { faCalendarPlus } from '@fortawesome/free-regular-svg-icons';
 import EditExpedienteDashboardModal from './EditExpedienteDashboardModal.jsx';
+
+import Modal from '@mui/material/Modal';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Box, Button } from '@mui/material'
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
+
 import Enfermedades from '../../Services/ExpedientesEnfermedadesServices.js'
 import Alergias from '../../Services/ExpedientesAlergiasServices.js'
 import Medicamentos from '../../Services/ExpedientesMedServices.js'
@@ -21,7 +31,9 @@ import 'moment/locale/es';
 import swal from 'sweetalert';
 import ArchivosService from '../../Services/ArchivosService';
 import ExpedientesService from '../../Services/ExpedientesService';
+import CitasService from '../../Services/CitasService';
 import Topbar from '../Home/Topbar.jsx';
+import dayjs from 'dayjs';
 import Grid from '@mui/material/Grid';
 import { storage } from '../../firebase';
 import 'firebase/compat/storage';
@@ -102,6 +114,12 @@ const Dashboard = () => {
             },
         ],
     });
+
+    const [fecha, setFecha] = useState(dayjs());
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [availableTimes, setAvailableTimes] = useState([]);
+    const [hora, setHora] = useState(null);
 
     const [medications, setMedications] = useState([]);
     const [alergias, setAlergias] = useState([]);
@@ -556,9 +574,212 @@ const Dashboard = () => {
     };
 
 
-    const handleOnClickAgendarCita = () => {
-        navigate("/expedientes/dashboard/:expedienteId/cita_expediente")
+//----------------------------------MODAL CITA----------------------------------------------------------
+
+
+    const [cita, setCita] = useState({
+        idcita: '',
+        nombre_persona: '',
+        estado: '',
+        idpaciente: expediente.idpaciente,
+        correouser: expediente.correo,
+        altura: null,
+        peso: null,
+        temperatura: null,
+        ritmo_cardiaco: null,
+        presion: null,
+    });
+
+    const handleModalFieldChange = (e) => {
+        setCita((prevState) => ({ ...prevState, [e.target.name]: e.target.value }))
+    }
+
+    const cleanCita = async () => {
+        cita.nombre_persona = null;
+        cita.estado = null;
+        //cita.idpaciente = expediente.idpaciente;
+        //cita.correouser = expediente.correo;
+        cita.fecha = new Date();
+        cita.hora = null;
+        setFecha(dayjs());
+        setHora(null);
     };
+
+    const handleDateChange = async (date) => {
+        setFecha(date);
+        const formattedDate = date ? dayjs(date).format('YYYY-MM-DD') : ''; // Format date using dayjs
+        setAvailableTimes([]); // Clear availableTimes when date changes
+        setHora(null); // Clear selected hora when date changes
+        setCita((prevCita) => ({ ...prevCita, fecha: formattedDate }));
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        setAvailableTimes(times);
+    };
+
+    const isWeekday = (date) => {
+        const day = date.day();
+        return day == 0 || day == 6; // 0 is Sunday, 6 is Saturday
+    };
+
+    const toggleModal = async () => {
+        setIsModalOpen(!isModalOpen);
+        setIsSubmitting(false);
+        cleanCita();
+
+        const currentDate = new Date();
+        const currentDayOfWeek = currentDate.getDay(); // 0 is Sunday, 1 is Monday, ..., 6 is Saturday
+
+        // Calculate the number of days to add to the current date to reach the next Monday
+        let daysUntilNextMonday = 0
+
+        if (currentDayOfWeek === 0) {
+            daysUntilNextMonday = 1;
+        } else if (currentDayOfWeek === 6) {
+            daysUntilNextMonday = 2;
+        }
+        // Create a new date by adding the days to the current date
+        const nextMonday = new Date(currentDate);
+        nextMonday.setDate(currentDate.getDate() + daysUntilNextMonday);
+        const formattedDate = dayjs(nextMonday).format('YYYY-MM-DD');
+        const times = await CitasService.getAvailableTimes(formattedDate);
+        const fechaAsDayjs = dayjs(formattedDate);
+        setFecha(fechaAsDayjs);
+        setAvailableTimes(times);
+    };
+
+    const handleModalSubmit = async (e) => {
+        cita.idpaciente = expediente.idpaciente;
+        cita.correouser = expediente.correo;
+        console.log(cita);
+        
+        e.preventDefault();
+        try {
+            cita.estado = "Pendiente";
+            if (validations()) {
+                // 
+                // console.log("Fecha: " + cita.fecha + " Hora: " + cita.hora)
+                const availableResponse = await CitasService.getCheckAvailability(cita.fecha, cita.hora);;
+                const isAvailable = availableResponse.available;
+                // 
+
+                if (!isAvailable) {
+                    swal("La hora que ha seleccionado ya ha sido ocupada.", {
+                        icon: "error",
+                    });
+                    setHora(null);
+                    const formattedDate = cita.fecha ? dayjs(cita.fecha).format('YYYY-MM-DD') : ''
+                    const times = await CitasService.getAvailableTimes(formattedDate);
+                    setAvailableTimes(times);
+                } else {
+                    submitCita();
+                }
+            }
+        } catch (error) {
+            // Handle error if any
+            // 
+        }
+        
+    };
+
+    const submitCita = async () => {
+        try {
+            await CitasService.postCitas(cita);
+            swal("Cita Agregada.", {
+                icon: "success",
+            });
+            toggleModal();
+            window.location.reload();
+        } catch (error) {
+            // Handle error if any
+            // 
+        }
+
+    };
+
+    const validations = () => {
+        const { nombre_persona, estado } = cita
+        var lettersRegex = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+        //Nombre validations
+        if (nombre_persona === null || nombre_persona === '') {
+            swal("Debe Agregarle un nombre a la Cita!", {
+                icon: "error",
+            });
+            return false
+        } else if (!nombre_persona.replace(/\s/g, '').length) {
+            swal("El nombre no puede contener solo espacios.", {
+                icon: "error",
+            });
+            return false
+        } else if (nombre_persona.charAt(0) === ' ') {
+
+            swal("El nombre no puede iniciar con un espacio.", {
+                icon: "error",
+            });
+            return false
+        } else if (nombre_persona.charAt(nombre_persona.length - 1) === ' ') {
+            swal("El nombre no puede terminar con un espacio", {
+                icon: "error",
+            });
+            return false
+        } else if (!lettersRegex.test(nombre_persona)) {
+            swal("Nombre invalido, no puede tener numeros ni caracteres especiales como @#$%.", {
+                icon: "error",
+            });
+            return false;
+        }
+
+        if (estado === null || estado === '') {
+            swal("Debe agregar un estado valido.", {
+                icon: "error",
+            });
+            return false;
+        }
+
+        if (fecha === null || fecha === '') {
+            swal("Debe Agregar una fecha valida", {
+                icon: "error",
+            });
+            return false;
+        } else if (fecha.format('YYYY-MM-DD') < dayjs().format('YYYY-MM-DD')) {
+            swal("La fecha no puede ser menor a la fecha actual", {
+                icon: "error",
+            });
+            return false;
+        } else {
+            cita.fecha = fecha.format('YYYY-MM-DD');
+        }
+
+        if (hora === null || hora === '') {
+            swal("Debe agregar una hora valida", {
+                icon: "warning",
+            });
+            return false;
+        } else {
+            const timeString = cita.hora;
+            const [time, meridiem] = timeString.split(" ");
+            const [hourString, minuteString] = time.split(":");
+            const hour = parseInt(hourString, 10);
+            const minute = parseInt(minuteString, 10);
+            let hour24 = hour;
+            // console.log(hour24)
+            // console.log(meridiem)
+            if (meridiem === "PM" && hour != 12) {
+                hour24 += 12;
+            }
+            cita.hora = hour24 + ":" + minuteString + ":00";
+        }
+
+        if (fecha.format('YYYY-MM-DD') == dayjs().format('YYYY-MM-DD') && cita.hora < dayjs().format('HH:mm:ss')) {
+            swal("La hora que ha seleccionado para hoy ya ha pasado.", {
+                icon: "error",
+            });
+            return false;
+        }
+        return true;
+    }
+
+
+//----------------------------------MODAL CITA----------------------------------------------------------
+
 
     const toggleVitalsInfo = (event) => {
         const element = event.currentTarget;
@@ -1082,13 +1303,81 @@ const Dashboard = () => {
                     </div>
 
                 </div>
+                <Modal open={isModalOpen} onClose={toggleModal} closeAfterTransition BackdropProps={{ onClick: () => { } }}>
 
+                        <div className='modalContainer modalCitas'>
+
+
+                            <h2 className="modalHeader">AGREGAR CITA</h2>
+                            <button className="cancelButton" onClick={toggleModal}>
+                                <FontAwesomeIcon icon={faTimes} size="2x" />
+                            </button>
+                            <Box
+                                component="form"//edit modal
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '10px',
+                                    width: '100%', // Added width property
+                                }}
+                                noValidate
+                                autoComplete="off"
+                            >
+                                <TextField id="nombre_persona" label="Nombre de la Cita" variant="outlined" onChange={handleModalFieldChange} name='nombre_persona' required />
+                                <TextField id="id_paciente" label={`ID Paciente: ${expediente.idpaciente}`} variant="outlined" name='id_paciente' disabled={true} InputProps={{readOnly: true,}}/>
+                                <TextField id="correouser" label={`Correo User: ${expediente.correo}`} variant="outlined" name='correouser' disabled={true} InputProps={{readOnly: true,}}/>
+
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <MobileDatePicker
+                                        id="fecha"
+                                        onChange={handleDateChange}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        shouldDisableDate={isWeekday} // Disable weekends
+                                        label="Fecha"
+                                        name='fecha'
+                                        value={fecha}
+                                    />
+                                </LocalizationProvider>
+                                <Autocomplete
+                                    disablePortal
+                                    id="hora"
+                                    required
+                                    options={availableTimes}
+                                    value={hora}
+                                    onChange={(event, newValue) => {
+                                        setHora(newValue);
+                                        setCita((prevCita) => ({ ...prevCita, hora: newValue }));
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label="Hora
+                                    " required style={{ marginBottom: '0.45rem' }} />}
+                                    ListboxProps={
+                                        {
+                                            style: {
+                                                maxHeight: '300px',
+                                                border: '1px solid BLACK'
+                                            }
+                                        }
+                                    }
+                                />
+
+
+                                <Button onClick={handleModalSubmit} variant="contained" style={{
+                                    backgroundColor: 'rgb(27,96,241)', color: 'white', borderRadius: '10px',
+                                    paddingLeft: '10px', paddingRight: '10px', width: '270px', fontSize: '18px', alignSelf: 'center'
+                                }}>
+                                    Agregar Cita
+                                </Button>
+                            </Box>
+
+                        </div>
+                </Modal>
                 <div class="patient-section appointments-section">
                     {userType !== 'normal' && (
-                        <button class='large-button schedule-date' onClick={handleOnClickAgendarCita}>
+                        <button class='large-button schedule-date' onClick={toggleModal}>
                             <FontAwesomeIcon icon={faCalendarPlus} />
                             Agendar Cita
                         </button>
+                        
                     )}
                     <div class='appointments-container'>
                         <div>
