@@ -36,7 +36,10 @@ const IniciarSesion = () => {
             navigate("/expedientes"); // Redirige a la página de inicio de sesión
         }
         else if(localStorage.getItem('isLoggedIn') === "true" && localStorage.getItem('userType') === 'normal') {
-            navigate("/userpage");
+            if(!returnUrl) {
+                navigate("/userpage");
+            }
+            //navigate("/userpage");
         }
     });
 
@@ -99,6 +102,8 @@ const IniciarSesion = () => {
             const passUser = await loginUsuarios(email, password);
             console.log(passUser)
             var flag = false;
+            //localStorage.setItem("100", true);
+            //handleSignIn('normal');
             if (passUser === "") {
                 console.log("Not found!")
                 console.log(":()()()")
@@ -118,17 +123,18 @@ const IniciarSesion = () => {
                             console.log(flag)
                             localStorage.setItem("300", true);
                             localStorage.setItem("correo", email);
+                            handleSignIn('normal');
+                            console.log(returnUrl);
                             if (returnUrl) {
                                 navigate(returnUrl);
                             }
                             else {
                                 navigate("/userpage");
+                                swal("Bienvenido", {
+                                    icon: "success",
+                                });
                             }
-                            
-                            swal("Bienvenido", {
-                                icon: "success",
-                            });
-                            handleSignIn('normal');
+                            //handleSignIn('normal');
                             resolve();
                         }
                     })
