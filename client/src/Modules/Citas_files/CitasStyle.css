@@ -192,12 +192,11 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 
   justify-content: center;
 
-  word-wrap: break-word;
-
   margin: 0px;
 
   user-select: none;
-
+  overflow-y: auto;
+  scrollbar-width: thin;
   /* width: 100%;
   height: 100%; */
 }
@@ -210,12 +209,17 @@ NEW NEW NEW NEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW */
 .event-line-time-label {
   font-weight: 800;
   font-size: 13.5px;
+  line-height: 14px;
 }
 
 .event-line-title-label {
   color: #677a92;
   font-size: 13.5px;
+  line-height: 18px;
   white-space: break-spaces;
+  word-break: break-all;
+  word-wrap: break-word;
+  max-height: max-content;
 }
 
 .event-line-container.user {
