@@ -14,6 +14,7 @@ import { AuthContext } from '../AuthContext.js';
 
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { South } from '@mui/icons-material';
 
 
 function MedicamentoRow({ data, onDelete, onUpdate, disabled = false }) {
@@ -198,12 +199,14 @@ function HistorialCita() {
 
 
     const validacionesSignos = () => {
+        
         if (paciente.altura === null || paciente.altura === "") {
             swal({
                 title: "Error al ingresar datos",
                 text: "La altura ingresada no es válida",
                 icon: "error"
             });
+            paciente.altura="";
             return false;
         }
 
@@ -213,6 +216,7 @@ function HistorialCita() {
                 text: "La altura ingresada no es válida",
                 icon: "error"
             });
+            paciente.altura="";
             return false;
         }
         if (paciente.altura > 280) {
@@ -221,6 +225,7 @@ function HistorialCita() {
                 text: "La altura ingresada no es válida",
                 icon: "error"
             });
+            paciente.altura="";
             return false;
         }
         if (paciente.peso === null || paciente.peso === "") {
@@ -229,6 +234,7 @@ function HistorialCita() {
                 text: "El peso ingresado no es válido",
                 icon: "error"
             });
+            paciente.peso="";
             return false;
         }
 
@@ -238,6 +244,7 @@ function HistorialCita() {
                 text: "El peso ingresado no es válido",
                 icon: "error"
             });
+            paciente.peso="";
             return false;
         }
         if (paciente.peso > 250) {
@@ -246,6 +253,7 @@ function HistorialCita() {
                 text: "El peso ingresado no es válido",
                 icon: "error"
             });
+            paciente.peso="";
             return false;
         }
         if (paciente.temperatura === null || paciente.temperatura === "") {
@@ -254,6 +262,7 @@ function HistorialCita() {
                 text: "La temperatura ingresada no es válida",
                 icon: "error"
             });
+            paciente.temperatura="";
             return false;
         }
 
@@ -263,6 +272,7 @@ function HistorialCita() {
                 text: "La temperatura ingresada no es válida",
                 icon: "error"
             });
+            paciente.temperatura="";
             return false;
         }
         if (paciente.temperatura > 50 || paciente.temperatura < 31.2) {
@@ -271,6 +281,7 @@ function HistorialCita() {
                 text: "La temperatura ingresada no es válida",
                 icon: "error"
             });
+            paciente.temperatura="";
             return false;
         }
         if (paciente.ritmo_cardiaco === null || paciente.ritmo_cardiaco === "") {
@@ -279,6 +290,7 @@ function HistorialCita() {
                 text: "EL ritmo cardiaco ingresado no es válida",
                 icon: "error"
             });
+            paciente.ritmo_cardiaco="";
             return false;
         }
 
@@ -288,6 +300,7 @@ function HistorialCita() {
                 text: "EL ritmo cardiaco ingresado no es válida",
                 icon: "error"
             });
+            paciente.ritmo_cardiaco="";
             return false;
         }
         if (paciente.ritmo_cardiaco < 40 || paciente.ritmo_cardiaco > 140) {
@@ -296,6 +309,7 @@ function HistorialCita() {
                 text: "EL ritmo cardiaco ingresado no es válida",
                 icon: "error"
             });
+            paciente.ritmo_cardiaco="";
             return false;
         }
 
@@ -307,6 +321,7 @@ function HistorialCita() {
                 text: "La presion arterial no es válida",
                 icon: "error"
             });
+            paciente.presion="";
             return false;
         }
         if (paciente.presion)
@@ -337,7 +352,7 @@ function HistorialCita() {
                 paciente.Dias = Dias;
                 paciente.Comentarios = Comentarios;
             }
-            paciente.estado = "Terminada";
+           
 
             const recetas = medicamentosData.map((medicamento) => ({
                 nombre_medicamento: medicamento.medicamento,
@@ -351,6 +366,7 @@ function HistorialCita() {
             }
 
             if (validacionesSignos()) {
+                paciente.estado = "Terminada";
                 await CitasService.editCitas(id, paciente);
                 let idcita = id;
                 await Services.postRecetasByCita(idcita, listaRecetas);
@@ -358,12 +374,17 @@ function HistorialCita() {
                     icon: "success",
                 });
                 //finaliza
+                
+               
                 navigate("/citas_tabla");
+            }else{
+                setAlreadyFilled(false);
             }
 
 
 
-
+            console.log("ABORTEEEEN: "+alreadyFilled);
+            console.log("ESTADOOOO: "+paciente.estado);
 
             // window.location.reload();
         } catch (error) {
@@ -1115,7 +1136,7 @@ function HistorialCita() {
                                             className="form-control input-bg"
                                             type="text"
                                             // value={paciente && paciente.altura}
-                                            value={paciente && paciente.altura}
+                                            value={altura}
                                             onChange={(e) => setNewAltura(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1130,7 +1151,7 @@ function HistorialCita() {
                                         <input
                                             className="form-control input-bg"
                                             type="text"
-                                            value={paciente && paciente.peso}
+                                            value={peso}
                                             onChange={(e) => setNewPeso(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1145,7 +1166,7 @@ function HistorialCita() {
                                         <input
                                             className="form-control input-bg"
                                             type="text"
-                                            value={paciente && paciente.temperatura}
+                                            value={temp}
                                             onChange={(e) => setNewTemp(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1154,13 +1175,14 @@ function HistorialCita() {
                                         </div>
                                     </div>
                                 </div>
+                                
                                 <div className="col">
                                     <h4 className='headers'>Ritmo Cardíaco</h4>
                                     <div class="input-group">
                                         <input
                                             className="form-control input-bg"
                                             type="text"
-                                            value={paciente && paciente.ritmo_cardiaco}
+                                            value={ritmo}
                                             onChange={(e) => setNewRitmo(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1175,7 +1197,7 @@ function HistorialCita() {
                                         <input
                                             className="form-control input-bg"
                                             type="text"
-                                            value={paciente && paciente.presion}
+                                            value={presion}
                                             onChange={(e) => setNewPresion(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1199,7 +1221,7 @@ function HistorialCita() {
                                             className="input-bg"
                                             type="text"
                                             placeholder="Nombre o Código"
-                                            value={paciente && paciente.Diagnostico}
+                                            value={Diagnostico}
                                             onChange={(e) => setDiagnostico(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1212,7 +1234,7 @@ function HistorialCita() {
                                             className="input-bg"
                                             type="text"
                                             placeholder="Estudios de Laboratorio e Imagenología"
-                                            value={paciente && paciente.Estudios}
+                                            value={Estudios}
                                             onChange={(e) => setEstudios(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1227,7 +1249,7 @@ function HistorialCita() {
                                             className="input-bg"
                                             type="text"
                                             placeholder="Procedimientos"
-                                            value={paciente && paciente.Procedimientos}
+                                            value={Procedimientos}
                                             onChange={(e) => setProcedimientos(e.target.value)}
                                             disabled={alreadyFilled}
                                         />
@@ -1269,7 +1291,7 @@ function HistorialCita() {
                                             className="input-bg"
                                             rows="5"
                                             placeholder="Escriba aquí"
-                                            value={paciente && paciente.Instrucciones}
+                                            value={Instrucciones}
                                             onChange={(e) => setInstrucciones(e.target.value)}
                                             disabled={alreadyFilled}
                                         ></textarea>
@@ -1281,7 +1303,7 @@ function HistorialCita() {
                                         className="input-bg"
                                         rows="5"
                                         placeholder="Escriba aquí"
-                                        value={paciente && paciente.MedicamentosActuales}
+                                        value={MedicamentosActuales}
                                         onChange={(e) => setMedicamentosActuales(e.target.value)}
                                         disabled={alreadyFilled}
                                     ></textarea>
