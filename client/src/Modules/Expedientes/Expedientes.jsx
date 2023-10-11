@@ -18,33 +18,25 @@ import moment from 'moment';
 import dayjs from 'dayjs';
 import { AuthContext } from '../AuthContext.js';
 
-
 //modal
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
-
-
 
 //STYLES
 import ExpedientesService from '../../Services/ExpedientesService';
 import './ExpedientesStyle.css';
 import '../HojaDeEstilos/CrudStyles.css';
-
 import NavBar from '../NavBar';
-
 
 const Expedientes = () => {
    //========================================================================================================================================================================================================================
@@ -61,20 +53,14 @@ const allowSpecialPermission = false;
    const [isSubmitting, setIsSubmitting] = useState(false);
    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-
    const [isModalOpen1, setIsModalOpen1] = useState(false);
-
+   
    const toggleModal22 = () => {
-
-
       setIsModalOpen1(!isModalOpen1);
       setIsSubmitting2(false);
    };
 
    const [expedienteData, setExpedientess] = useState([]);
-
-
 
    const theme = createTheme(
       {
@@ -165,7 +151,6 @@ const allowSpecialPermission = false;
    }
    const [isSubmitting2, setIsSubmitting2] = useState(false);
    const handleDateChange = (date) => {
-
       console.log(date)
       setFechaNacimiento(date);
       const formattedDate = date ? date.toISOString().slice(0, 10) : '';
@@ -203,14 +188,9 @@ const allowSpecialPermission = false;
    };
 
    const listaEstadoCivil = ['Soltero/a', 'Casado/a', 'Divorciado/a', 'Viudo/a']
-
-
-
    const [fecha_nacimiento, setFechaNacimiento] = useState(null);
-
    const defaultValue = expediente.sexo;
    const selectedValue2 = expediente.estado_civil;
-
    const [id, setID] = useState(null);
 
    const fetchAllExpedientes2 = async () => {
@@ -386,7 +366,6 @@ const allowSpecialPermission = false;
       fetchAllExpedientes2();
       // window.location.reload();
    };
-
 
    const CustomToolbar = () => {
       const theme = useTheme();
