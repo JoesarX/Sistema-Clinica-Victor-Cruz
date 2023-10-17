@@ -1,6 +1,6 @@
 import axios from 'axios';
 //const API_URL = 'http://localhost:8000';
-const API_URL = 'https://clinicavictorcruzserver.azurewebsites.net';
+const API_URL = 'https://clinicadrvictorcruz.azurewebsites.net';
 
 //traer todas las categorías
 export const getAllCategories = async () => {

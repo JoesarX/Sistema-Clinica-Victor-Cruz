@@ -506,7 +506,7 @@ const Home = () => {
 
     const wakeUpServer = () => {
         // Make a GET request to wake up the server
-        axios.get('https://clinicavictorcruzserver.azurewebsites.net')
+        axios.get('https://clinicadrvictorcruz.azurewebsites.net')
             .catch(error => {
                 // Handle any errors if necessary
                 console.error('Error waking up server:', error);
