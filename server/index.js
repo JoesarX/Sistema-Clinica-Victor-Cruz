@@ -28,8 +28,7 @@ import expedientesAlergiaRouter from "./routes/expedienteAlergia.js";
 import expedientesEnfermedadesRouter from "./routes/expedienteEnfermedad.js";
 
 const app = express();
-const port = process.env.PORT || 8000;
-
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}!`);
