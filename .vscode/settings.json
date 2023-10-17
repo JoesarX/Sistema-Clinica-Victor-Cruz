@@ -2,6 +2,7 @@
     "github.copilot.advanced": {
         
     },
-    "appService.defaultWebAppToDeploy": "/subscriptions/897847ff-b9e3-4402-8aa9-2c5683a7647a/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/serverClinicaVictorCruz",
-    "appService.deploySubpath": "server"
+    "appService.defaultWebAppToDeploy": "/subscriptions/bd35be30-04eb-4115-887d-f4ee7231990c/resourceGroups/DrVictorCruz_group/providers/Microsoft.Web/sites/DrVictorCruz",
+    "appService.deploySubpath": "server",
+    "appService.showBuildDuringDeployPrompt": false
 }
