@@ -158,7 +158,7 @@ const Home = () => {
                     title: 'Orden de Imagenes Editado',
                     icon: 'success',
                 });
-                //window.location.reload();
+                window.location.reload();
             } catch (error) {
                 
             }
