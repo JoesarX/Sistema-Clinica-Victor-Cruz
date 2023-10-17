@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - ClinicaDrVictorCruz
+name: Build and deploy Node.js app to Azure Web App - DrVictorCruz
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'ClinicaDrVictorCruz'
+          app-name: 'DrVictorCruz'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4D3E01F589A949BCA0370BB5E52702BC }}
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_459955aaf6074d6d86b3b87fc3943453 }}
           package: server
