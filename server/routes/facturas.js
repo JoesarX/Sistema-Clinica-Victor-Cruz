@@ -135,7 +135,7 @@ const facturasRouter = (pool, transporter) => {
                   subject: "Factura de Cita Clinica Dr Victor Cruz",
                   text: `Estimado/a ${factura.nombre_paciente}, Le recordamos el pago a hacerse para la cita: ${factura.idCita}\n` +
                       `Con un total de: LPS. ${factura.total}\n` +
-                      `Puede realizar el pago siguiendo este enlace: https://clinica-victorcruz.netlify.app${checkoutURL} \n` +
+                      `Puede realizar el pago siguiendo este enlace: https://clinica-doctor-victor-cruz.netlify.app/${checkoutURL} \n` +
                       `Si tiene alguna duda no dude en contactarnos.\n` +
                       `¡Que tenga un buen día!\n\n` +
                       `Atentamente,\n` +
